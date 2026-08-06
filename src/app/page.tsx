@@ -17,6 +17,10 @@ import { AuthProvider } from '@/components/auth/AuthContext'
 import GlobalNavbar from '@/components/layout/GlobalNavbar'
 import EnhancedLandingPage from '@/components/layout/EnhancedLandingPage'
 import AETHELConnector from '@/components/aethel/AETHELConnector'
+import ScientificConnectorsHub from '@/components/connectors/ScientificConnectorsHub'
+import QueryExecutor from '@/components/query/QueryExecutor'
+import KnowledgeGraph from '@/components/visualization/KnowledgeGraph'
+import DomainWorkflows from '@/components/workflows/DomainWorkflows'
 
 // ============ VIEW MODES ============
 type ViewMode = 'landing' | 'microservices'
@@ -449,7 +453,7 @@ function MicroservicesView({
       <main className="relative z-10 max-w-[1920px] mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           {/* Tab Navigation */}
-          <TabsList className={`grid grid-cols-7 w-full h-14 ${darkMode ? 'bg-black/30 backdrop-blur-xl border border-white/10' : 'bg-white border border-gray-200'}`}>
+          <TabsList className={`grid grid-cols-11 w-full h-14 ${darkMode ? 'bg-black/30 backdrop-blur-xl border border-white/10' : 'bg-white border border-gray-200'} overflow-x-auto`}>
             <TabsTrigger value="dashboard" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-violet-500 data-[state=active]:text-white gap-2">
               📊 Dashboard
             </TabsTrigger>
@@ -470,6 +474,18 @@ function MicroservicesView({
             </TabsTrigger>
             <TabsTrigger value="aethel" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-violet-500 data-[state=active]:text-white gap-2">
               ⚡ AETHEL AI
+            </TabsTrigger>
+            <TabsTrigger value="connectors" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-500 data-[state=active]:text-white gap-2">
+              🔌 Connectors
+            </TabsTrigger>
+            <TabsTrigger value="query" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-cyan-500 data-[state=active]:text-white gap-2">
+              🗄️ Query Engine
+            </TabsTrigger>
+            <TabsTrigger value="knowledge" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white gap-2">
+              🕸️ Knowledge Graph
+            </TabsTrigger>
+            <TabsTrigger value="workflows" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-red-500 data-[state=active]:text-white gap-2">
+              ⚡ Workflows
             </TabsTrigger>
           </TabsList>
 
@@ -1722,6 +1738,26 @@ Our findings suggest...`}
           {/* ======== AETHEL AI TAB ======== */}
           <TabsContent value="aethel" className="space-y-6">
             <AETHELConnector darkMode={darkMode} />
+          </TabsContent>
+
+          {/* ======== SCIENTIFIC CONNECTORS TAB ======== */}
+          <TabsContent value="connectors" className="space-y-6">
+            <ScientificConnectorsHub darkMode={darkMode} />
+          </TabsContent>
+
+          {/* ======== QUERY ENGINE TAB ======== */}
+          <TabsContent value="query" className="space-y-6">
+            <QueryExecutor darkMode={darkMode} />
+          </TabsContent>
+
+          {/* ======== KNOWLEDGE GRAPH TAB ======== */}
+          <TabsContent value="knowledge" className="space-y-6">
+            <KnowledgeGraph darkMode={darkMode} />
+          </TabsContent>
+
+          {/* ======== WORKFLOWS TAB ======== */}
+          <TabsContent value="workflows" className="space-y-6">
+            <DomainWorkflows darkMode={darkMode} />
           </TabsContent>
         </Tabs>
       </main>
