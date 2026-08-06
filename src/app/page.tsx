@@ -1,433 +1,234 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Progress } from '@/components/ui/progress'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Switch } from '@/components/ui/switch'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
-// ============ COMPREHENSIVE ICON SYSTEM ============
-const Icons = {
-  // Core Infrastructure Icons
-  QuantumCore: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <radialGradient id="qCore" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#00ffff" stopOpacity="1"/>
-          <stop offset="40%" stopColor="#8b5cf6" stopOpacity="0.8"/>
-          <stop offset="100%" stopColor="#ec4899" stopOpacity="0"/>
-        </radialGradient>
-        <filter id="qGlow"><feGaussianBlur stdDeviation="3"/></filter>
-      </defs>
-      <circle cx="50" cy="50" r="45" fill="url(#qCore)" filter="url(#qGlow)"/>
-      {[...Array(8)].map((_, i) => {
-        const angle = (i * 45) * Math.PI / 180
-        const x = 50 + Math.cos(angle) * 30
-        const y = 50 + Math.sin(angle) * 30
-        return <circle key={i} cx={x} cy={y} r={5+i%2*2} fill={`hsl(${180+i*20},80%,60%)`}>
-          <animate attributeName="r" values={`${4+i%2};${6+i%2};${4+i%2}`} dur={`${2+i*0.3}s`} repeatCount="indefinite"/>
-        </circle>
-      })}
-      <circle cx="50" cy="50" r="12" fill="white" opacity="0.9">
-        <animate attributeName="r" values="10;14;10" dur="2s" repeatCount="indefinite"/>
-      </circle>
-    </svg>),
+// ============ VIEW MODES ============
+type ViewMode = 'landing' | 'microservices'
 
-  DatabaseCluster: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="dbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#06b6d4"/><stop offset="100%" stopColor="#3b82f6"/>
-        </linearGradient>
-      </defs>
-      {[-15, 0, 15].map((offset, i) => (
-        <g key={i}>
-          <ellipse cx="50" cy={35+offset} rx="35" ry="12" fill="none" stroke="url(#dbGrad)" strokeWidth="2.5" opacity={0.6+i*0.15}/>
-          <path d={`M15 ${35+offset} L15 ${55+offset} A35 12 0 0 0 85 ${55+offset}`} fill="none" stroke="url(#dbGrad)" strokeWidth="2.5" opacity={0.6+i*0.15}/>
-          <ellipse cx="50" cy={55+offset} rx="35" ry="12" fill={`rgba(6,182,212,${0.05+i*0.05})`} stroke="url(#dbGrad)" strokeWidth="2.5" opacity={0.6+i*0.15}/>
-        </g>
-      ))}
-    </svg>),
-
-  DataLake: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="lakeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#0891b2"/><stop offset="100%" stopColor="#1e40af"/>
-        </linearGradient>
-        <pattern id="waves" patternUnits="userSpaceOnUse" width="10" height="10">
-          <path d="M0 5 Q2.5 2 5 5 T10 5" fill="none" stroke="white" strokeWidth="0.5" opacity="0.3"/>
-        </pattern>
-      </defs>
-      <ellipse cx="50" cy="55" rx="45" ry="25" fill="url(#lakeGrad)"/>
-      <ellipse cx="50" cy="55" rx="45" ry="25" fill="url(#waves)">
-        <animateTransform attributeName="transform" type="translate" values="0,0;5,0;0,0" dur="3s" repeatCount="indefinite"/>
-      </ellipse>
-      {/* Data waves */}
-      {[...Array(5)].map((_, i) => (
-        <path key={i} d={`M${10+i*15} ${45-i*3} Q${17+i*15} ${40-i*3} ${25+i*15} ${45-i*3}`} 
-              fill="none" stroke="white" strokeWidth="1" opacity="0.4">
-          <animate attributeName="d" 
-            values={`M${10+i*15} ${45-i*3} Q${17+i*15} ${40-i*3} ${25+i*15} ${45-i*3};
-                    M${10+i*15} ${42-i*3} Q${17+i*15} ${37-i*3} ${25+i*15} ${42-i*3};
-                    M${10+i*15} ${45-i*3} Q${17+i*15} ${40-i*3} ${25+i*15} ${45-i*3}`}
-            dur="2s" repeatCount="indefinite"/>
-        </path>
-      ))}
-    </svg>),
-
-  StreamingPipe: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="streamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#22c55e"/><stop offset="50%" stopColor="#eab308"/><stop offset="100%" stopColor="#ef4444"/>
-        </linearGradient>
-      </defs>
-      {/* Pipe */}
-      <rect x="10" y="42" width="80" height="16" rx="8" fill="none" stroke="url(#streamGrad)" strokeWidth="3"/>
-      {/* Flowing particles */}
-      {[...Array(6)].map((_, i) => (
-        <circle key={i} cy="50" r="4" fill={`hsl(${120-i*20},70%,50%)`}>
-          <animateMotion path="M15,50 L85,50" dur={`${1+i*0.3}s`} repeatCount="indefinite" begin={`${i*0.2}s`}/>
-        </circle>
-      ))}
-      {/* Input/Output */}
-      <circle cx="10" cy="50" r="8" fill="#22c55e" opacity="0.3"/>
-      <circle cx="90" cy="50" r="8" fill="#ef4444" opacity="0.3"/>
-    </svg>),
-
-  ConnectorHub: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <radialGradient id="hubGlow"><stop offset="0%" stopColor="#a855f7" stopOpacity="0.5"/><stop offset="100%" stopColor="transparent"/></radialGradient>
-      </defs>
-      {/* Center hub */}
-      <circle cx="50" cy="50" r="18" fill="#1e1b4b" stroke="#a855f7" strokeWidth="2"/>
-      <circle cx="50" cy="50" r="8" fill="#a855f7">
-        <animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite"/>
-      </circle>
-      {/* Spokes */}
-      {[...Array(8)].map((_, i) => {
-        const angle = (i * 45) * Math.PI / 180
-        const x = 50 + Math.cos(angle) * 38
-        const y = 50 + Math.sin(angle) * 38
-        return (
-          <g key={i}>
-            <line x1="50" y1="50" x2={x} y2={y} stroke="#a855f7" strokeWidth="1.5" opacity="0.5">
-              <animate attributeName="opacity" values="0.3;0.7;0.3" dur={`${1.5+i*0.2}s`} repeatCount="indefinite"/>
-            </line>
-            <circle cx={x} cy={y} r="6" fill="#1e1b4b" stroke={`hsl(${270+i*15},70%,60%)`} strokeWidth="1.5"/>
-          </g>
-        )
-      })}
-      <circle cx="50" cy="50" r="45" fill="url(#hubGlow)"/>
-    </svg>),
-
-  IDECode: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="ideGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#1e293b"/><stop offset="100%" stopColor="#0f172a"/>
-        </linearGradient>
-      </defs>
-      <rect x="10" y="15" width="80" height="70" rx="8" fill="url(#ideGrad)" stroke="#334155" strokeWidth="2"/>
-      {/* Title bar */}
-      <rect x="10" y="15" width="80" height="16" rx="8" fill="#1e293b"/>
-      <circle cx="22" cy="23" r="3" fill="#ef4444"/>
-      <circle cx="32" cy="23" r="3" fill="#eab308"/>
-      <circle cx="42" cy="23" r="3" fill="#22c55e"/>
-      {/* Code lines */}
-      {['const', 'data', '=','await', 'fetch()'].map((text, i) => (
-        <text key={i} x="18" y={42+i*12} fill={['#c084fc','#67e8f9','#f472b6','#fbbf24','#34d399'][i]} 
-              fontSize="8" fontFamily="monospace">{text}</text>
-      ))}
-      {/* Cursor blink */}
-      <rect x="52" y="84" width="2" height="10" fill="#22d3ee">
-        <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
-      </rect>
-    </svg>),
-
-  BlogPublish: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="blogGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#f43f5e"/><stop offset="100%" stopColor="#ec4899"/>
-        </linearGradient>
-      </defs>
-      <rect x="15" y="10" width="70" height="80" rx="6" fill="#fff" stroke="url(#blogGrad)" strokeWidth="2"/>
-      {/* Header */}
-      <rect x="15" y="10" width="70" height="20" rx="6" fill="url(#blogGrad)"/>
-      <text x="50" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">PAPER</text>
-      {/* Content lines */}
-      {[28,38,48,56].map((y, i) => (
-        <line key={i} x1="22" y1={y} x2={78-i*8} y2={y} stroke="#e2e8f0" strokeWidth="2" strokeLinecap="round"/>
-      ))}
-      {/* Image placeholder */}
-      <rect x="22" y="64" width="30" height="18" rx="2" fill="#f1f5f9" stroke="#cbd5e1" strokeWidth="1"/>
-      {/* Publish badge */}
-      <circle cx="72" cy="78" r="10" fill="#22c55e"/>
-      <text x="72" y="81" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">✓</text>
-    </svg>),
-
-  APILayer: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="apiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#3b82f6"/><stop offset="100%" stopColor="#8b5cf6"/>
-        </linearGradient>
-      </defs>
-      {/* REST box */}
-      <rect x="10" y="30" width="35" height="40" rx="4" fill="none" stroke="#3b82f6" strokeWidth="2"/>
-      <text x="27" y="50" textAnchor="middle" fill="#3b82f6" fontSize="9" fontWeight="bold">REST</text>
-      {/* GraphQL box */}
-      <rect x="55" y="30" width="35" height="40" rx="4" fill="none" stroke="#8b5cf6" strokeWidth="2"/>
-      <text x="72" y="46" textAnchor="middle" fill="#8b5cf6" fontSize="7" fontWeight="bold">GraphQL</text>
-      <text x="72" y="58" textAnchor="middle" fill="#8b5cf6" fontSize="7" fontWeight="bold">WS</text>
-      {/* Arrows */}
-      <path d="M45 45 L55 45" stroke="url(#apiGrad)" strokeWidth="2" markerEnd="url(#arrow)"/>
-      <path d="M27 75 L27 85 L50 85 L50 95 M72 75 L72 85 L50 85" stroke="#94a3b8" strokeWidth="1.5" fill="none"/>
-      <defs><marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6Z" fill="url(#apiGrad)"/></marker></defs>
-    </svg>),
-
-  Middleware: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="mwGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#f97316"/><stop offset="50%" stopColor="#eab308"/><stop offset="100%" stopColor="#84cc16"/>
-        </linearGradient>
-      </defs>
-      {/* Layers */}
-      {[
-        { y: 15, label: 'Auth', color: '#f97316' },
-        { y: 32, label: 'Rate', color: '#eab308' },
-        { y: 49, label: 'Cache', color: '#84cc16' },
-        { y: 66, label: 'Log', color: '#22c55e' }
-      ].map((layer, i) => (
-        <g key={i}>
-          <rect x="15" y={layer.y} width="70" height="14" rx="3" fill={`${layer.color}20`} stroke={layer.color} strokeWidth="1.5"/>
-          <text x="50" y={layer.y+10} textAnchor="middle" fill={layer.color} fontSize="8" fontWeight="bold">{layer.label}</text>
-        </g>
-      ))}
-      {/* Vertical flow arrow */}
-      <line x1="90" y1="22" x2="90" y2="73" stroke="url(#mwGrad)" strokeWidth="2" markerEnd="url(#mwArrow)"/>
-      <defs><marker id="mwArrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6Z" fill="#84cc16"/></marker></defs>
-    </svg>),
-
-  FileFormat: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="fileGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#06b6d4"/><stop offset="100%" stopColor="#0ea5e9"/>
-        </linearGradient>
-      </defs>
-      {/* Folder */}
-      <path d="M15 30 L15 80 Q15 85 20 85 L80 85 Q85 85 85 80 L85 35 Q85 30 80 30 L45 30 L40 25 L20 25 Q15 25 15 30Z" 
-            fill="url(#fileGrad)" opacity="0.2" stroke="url(#fileGrad)" strokeWidth="2"/>
-      {/* Files inside */}
-      {[
-        { x: 28, y: 45, ext: '.pq', color: '#22c55e' },
-        { x: 45, y: 50, ext: '.av', color: '#3b82f6' },
-        { x: 62, y: 45, ext: '.orc', color: '#f97316' }
-      ].map((file, i) => (
-        <g key={i}>
-          <rect x={file.x} y={file.y} width="16" height="20" rx="2" fill="white" stroke={file.color} strokeWidth="1.5"/>
-          <text x={file.x+8} y={file.y+14} textAnchor="middle" fill={file.color} fontSize="6" fontWeight="bold">{file.ext}</text>
-        </g>
-      ))}
-    </svg>),
-
-  Satellite: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="satGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#6366f1"/><stop offset="100%" stopColor="#8b5cf6"/>
-        </linearGradient>
-      </defs>
-      {/* Body */}
-      <rect x="35" y="42" width="30" height="18" rx="3" fill="url(#satGrad)"/>
-      {/* Solar panels */}
-      <rect x="10" y="45" width="22" height="12" rx="1" fill="#1e40af" stroke="#3b82f6" strokeWidth="1"/>
-      <rect x="68" y="45" width="22" height="12" rx="1" fill="#1e40af" stroke="#3b82f6" strokeWidth="1"/>
-      {/* Panel lines */}
-      {[13,18,23,71,76,81].map((x, i) => (
-        <line key={i} x1={x} y1="46" x2={x} y2="56" stroke="#60a5fa" strokeWidth="0.5"/>
-      ))}
-      {/* Antenna */}
-      <line x1="50" y1="42" x2="50" y2="32" stroke="#a1a1aa" strokeWidth="2"/>
-      <circle cx="50" cy="30" r="3" fill="#ef4444">
-        <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>
-      </circle>
-      {/* Orbit ring */}
-      <ellipse cx="50" cy="51" rx="45" ry="12" fill="none" stroke="#6366f1" strokeWidth="0.5" strokeDasharray="4 4" opacity="0.5">
-        <animateTransform attributeName="transform" type="rotate" from="0 50 51" to="360 50 51" dur="20s" repeatCount="indefinite"/>
-      </ellipse>
-    </svg>),
-
-  LHCRing: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="lhcGrad"><stop offset="0%" stopColor="#ef4444"/><stop offset="50%" stopColor="#eab308"/><stop offset="100%" stopColor="#22c55e"/></linearGradient>
-      </defs>
-      {/* Ring segments */}
-      {[-60,-30,0,30,60].map((angle, i) => (
-        <g key={i} transform={`rotate(${angle} 50 50)`}>
-          <path d="M50 15 A35 35 0 0 1 85 50" fill="none" stroke={`hsl(${120-i*24},70%,50%)`} strokeWidth="8" strokeLinecap="round" opacity="0.7"/>
-        </g>
-      ))}
-      {/* Center detector */}
-      <circle cx="50" cy="50" r="12" fill="#1f2937" stroke="url(#lhcGrad)" strokeWidth="2"/>
-      <circle cx="50" cy="50" r="6" fill="#ef4444">
-        <animate attributeName="r" values="4;8;4" dur="0.5s" repeatCount="indefinite"/>
-      </circle>
-      {/* Particles */}
-      {[[50,18,'#ef4444'],[82,50,'#eab308'],[50,82,'#22c55e'],[18,50,'#3b82f6']].map(([cx,cy,color], i) => (
-        <circle key={i} cx={cx} cy={cy} r="4" fill={color}>
-          <animateMotion path="M50,50 A35,35 0 0 1 85,50 A35,35 0 0 1 50,85 A35,35 0 0 1 15,50 A35,35 0 0 1 50,15" 
-                       dur="2s" repeatCount="indefinite" begin={`${i*0.5}s`}/>
-        </circle>
-      ))}
-    </svg>),
-
-  GovInstitute: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="govGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#1e40af"/><stop offset="100%" stopColor="#1e3a8a"/>
-        </linearGradient>
-      </defs>
-      {/* Building */}
-      <rect x="25" y="30" width="50" height="50" fill="url(#govGrad)"/>
-      {/* Columns */}
-      {[32,42,52,62,72].map((x, i) => (
-        <rect key={i} x={x} y="38" width="5" height="37" fill="#dbeafe" opacity="0.8"/>
-      ))}
-      {/* Roof */}
-      <polygon points="50,15 15,35 85,35" fill="#1e3a8a"/>
-      {/* Flag */}
-      <line x1="50" y1="15" x2="50" y2="5" stroke="#64748b" strokeWidth="1.5"/>
-      <rect x="51" y="5" width="12" height="8" fill="#3b82f6"/>
-      {/* Steps */}
-      <rect x="20" y="80" width="60" height="4" fill="#94a3b8"/>
-      <rect x="15" y="86" width="70" height="4" fill="#94a3b8"/>
-    </svg>),
-
-  QueryEngine: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="qeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#0ea5e9"/><stop offset="100%" stopColor="#06b6d4"/>
-        </linearGradient>
-      </defs>
-      {/* Magnifying glass over data */}
-      <circle cx="42" cy="45" r="25" fill="none" stroke="url(#qeGrad)" strokeWidth="4"/>
-      <line x1="60" y1="63" x2="80" y2="83" stroke="url(#qeGrad)" strokeWidth="6" strokeLinecap="round"/>
-      {/* Data rows inside */}
-      {['|','|','|'].map((char, i) => (
-        <text key={i} x="28" y={40+i*10} fill="#06b6d4" fontSize="8" fontFamily="monospace" opacity="0.6">{char}████</text>
-      ))}
-      {/* Search sparkles */}
-      {[[65,30],[30,70]].map(([cx,cy], i) => (
-        <g key={i}>
-          <line x1={cx-5} y1={cy} x2={cx+5} y2={cy} stroke="#eab308" strokeWidth="1.5"/>
-          <line x1={cx} y1={cy-5} x2={cx} y2={cy+5} stroke="#eab308" strokeWidth="1.5"/>
-          <animateTransform attributeName="transform" type="rotate" from="0 65 30" to="360 65 30" dur="3s" repeatCount="indefinite"/>
-        </g>
-      ))}
-    </svg>),
-
-  NoSQLDB: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="nosqlGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#10b981"/><stop offset="100%" stopColor="#059669"/>
-        </linearGradient>
-      </defs>
-      {/* Document shape */}
-      <rect x="25" y="15" width="50" height="70" rx="5" fill="white" stroke="url(#nosqlGrad)" strokeWidth="2"/>
-      {/* JSON-like content */}
-      <text x="33" y="32" fill="#10b981" fontSize="7" fontFamily="monospace">{"{"}</text>
-      <text x="38" y="44" fill="#3b82f6" fontSize="6" fontFamily="monospace">"_id":</text>
-      <text x="58" y="44" fill="#eab308" fontSize="6" fontFamily="monospace">"..."</text>
-      <text x="38" y="54" fill="#3b82f6" fontSize="6" fontFamily="monospace">"data":</text>
-      <text x="33" y="66" fill="#10b981" fontSize="7" fontFamily="monospace">{"}"}</text>
-      {/* Curly brace decoration */}
-      <path d="M68 30 Q75 35 68 50 Q75 65 68 70" fill="none" stroke="#10b981" strokeWidth="1.5" opacity="0.5"/>
-    </svg>),
-
-  SparkEngine: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#ff6b35"/><stop offset="50%" stopColor="#f7931e"/><stop offset="100%" stopColor="#ffcc02"/>
-        </linearGradient>
-      </defs>
-      {/* Spark logo hexagon-ish */}
-      <polygon points="50,15 80,32 80,68 50,85 20,68 20,32" fill="url(#sparkGrad)"/>
-      {/* Inner star */}
-      <polygon points="50,30 57,45 73,45 60,55 65,70 50,60 35,70 40,55 27,45 43,45" fill="white" opacity="0.9">
-        <animateTransform attributeName="transform" type="scale" values="1;1.1;1" dur="2s" repeatCount="indefinite"/>
-      </polygon>
-    </svg>),
-
-  KafkaIcon: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="kafkaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#231f20"/><stop offset="100%" stopColor="#000000"/>
-        </linearGradient>
-      </defs>
-      <circle cx="50" cy="50" r="40" fill="url(#kafkaGrad)"/>
-      {/* Kafka lines */}
-      {[...Array(6)].map((_, i) => (
-        <g key={i} transform={`rotate(${i*60} 50 50)`}>
-          <line x1="50" y1="20" x2="50" y2="45" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-          <circle cx="50" cy="18" r="4" fill="white"/>
-        </g>
-      ))}
-      <circle cx="50" cy="50" r="8" fill="white"/>
-    </svg>),
-
-  FlinkStream: () => (
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <defs>
-        <linearGradient id="flinkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#e91e63"/><stop offset="50%" stopColor="#9c27b0"/><stop offset="100%" stopColor="#673ab7"/>
-        </linearGradient>
-      </defs>
-      {/* Flink triangle-ish with stream */}
-      <polygon points="50,15 85,80 15,80" fill="url(#flinkGrad)"/>
-      {/* Stream lines */}
-      <path d="M30 65 Q40 55 50 60 T70 55" fill="none" stroke="white" strokeWidth="2" opacity="0.6">
-        <animate attributeName="d" values="M30 65 Q40 55 50 60 T70 55;M30 60 Q40 65 50 55 T70 60;M30 65 Q40 55 50 60 T70 55" dur="2s" repeatCount="indefinite"/>
-      </path>
-      {/* Triangle cutout */}
-      <polygon points="50,35 65,60 35,60" fill="white" opacity="0.2"/>
-    </svg>),
-
-  // Utility icons
-  Server: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>),
-  Users: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>),
-  Zap: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>),
-  Shield: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>),
-  Cloud: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>),
-  Globe: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" x2="22" y1="12" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>),
-  Lock: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>),
-  CheckCircle: () => (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>),
-  ArrowRight: () => (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>),
-  Github: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>),
-  Rocket: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3-.55 4-2c1.08-1.62 0-5 0-5"/></svg>),
-  Play: () => (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>),
-  Eye: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>),
-  Settings: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>),
-  Layers: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>),
-  Folder: () => (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z"/></svg>),
+// ============ POLYGLOT TECHNOLOGY STACK ============
+const PolyglotStack: Record<string, { name: string; color: string; icon: string; useCase: string; version: string; performance: string }> = {
+  golang: { name: 'Golang', color: '#00ADD8', icon: '⚡', useCase: 'High-performance API Gateway & gRPC Services', version: '1.24', performance: '99.7th percentile latency < 1ms' },
+  elixir: { name: 'Elixir', color: '#4B275F', icon: '✦', useCase: 'Real-time Concurrency & WebSocket Infrastructure', version: '1.17', performance: '2M+ concurrent connections' },
+  python: { name: 'Python', color: '#3776AB', icon: '🐍', useCase: 'ML/AI Pipeline & Scientific Computing Core', version: '3.13', performance: 'NumPy/CUDA accelerated' },
+  scala: { name: 'Scala', color: '#DC322F', icon: '◈', useCase: 'Apache Spark/Flink Streaming Engine', version: '3.4', performance: 'Petabyte-scale stream processing' },
+  rust: { name: 'Rust', color: '#DEA584', icon: '🦀', useCase: 'Query Engine Core & Memory-Safe Compute', version: '1.82', performance: 'Zero-cost abstractions, WebAssembly' },
+  c: { name: 'C', color: '#555555', icon: '⌗', useCase: 'Low-level System Calls & BLAS/LAPACK Integration', version: 'C23', performance: 'Hardware-level optimization' }
 }
 
-// ============ ANIMATED BACKGROUND ============
-function ArchitectureBackground() {
+// ============ AETHEL PLATFORM CONFIGURATION ============
+const AethelConfig = {
+  name: 'AETHEL',
+  fullName: 'Advanced Experimental Theoretical Hypercomputing Emulation Layer',
+  version: 'AETH-1.v2',
+  status: 'connected',
+  capabilities: [
+    'Quantum Circuit Simulation',
+    'Neural Architecture Search',
+    'Automated Hypothesis Generation',
+    'Cross-Domain Knowledge Graph',
+    'Predictive Model Ensemble',
+    'Citation Network Analysis'
+  ],
+  metrics: {
+    inferenceLatency: '12ms',
+    modelAccuracy: '94.7%',
+    knowledgeNodes: '2.4M',
+    activeConnections: '847',
+    computeUnits: '12,450 GPU-hours'
+  }
+}
+
+// ============ MICROSERVICE DEFINITIONS ============
+interface Microservice {
+  id: string
+  name: string
+  category: string
+  technology: string
+  status: 'running' | 'scaling' | 'degraded' | 'stopped'
+  cpu: number
+  memory: number
+  requests: number
+  latency: string
+  uptime: string
+  description: string
+  endpoints: number
+  dependencies: string[]
+}
+
+const Microservices: Microservice[] = [
+  // === CORE INFRASTRUCTURE ===
+  { id: 'api-gateway', name: 'API Gateway', category: 'Core Infrastructure', technology: 'golang', status: 'running', cpu: 34, memory: 52, requests: 145000, latency: '0.8ms', uptime: '99.99%', description: 'High-throughput gRPC/REST gateway with rate limiting and circuit breaking', endpoints: 47, dependencies: ['service-discovery', 'config-server'] },
+  { id: 'service-discovery', name: 'Service Discovery', category: 'Core Infrastructure', technology: 'elixir', status: 'running', cpu: 18, memory: 28, requests: 89000, latency: '0.3ms', uptime: '100%', description: 'Real-time service registry with health checking and DNS-based discovery', endpoints: 12, dependencies: [] },
+  { id: 'config-server', name: 'Configuration Server', category: 'Core Infrastructure', technology: 'rust', status: 'running', cpu: 8, memory: 16, requests: 12000, latency: '0.1ms', uptime: '100%', description: 'Distributed configuration management with hot-reload and encryption', endpoints: 8, dependencies: [] },
+  
+  // === DATA LAYER ===
+  { id: 'query-engine', name: 'BigQuery Engine', category: 'Data Layer', technology: 'rust', status: 'running', cpu: 67, memory: 78, requests: 23000, latency: '45ms', uptime: '99.97%', description: 'Columnar distributed query engine with SQL dialect and ML integration', endpoints: 24, dependencies: ['metadata-service', 'storage-coordinator'] },
+  { id: 'nosql-cluster', name: 'NoSQL Cluster Manager', category: 'Data Layer', technology: 'scala', status: 'scaling', cpu: 45, memory: 62, requests: 67000, latency: '12ms', uptime: '99.95%', description: 'Multi-model NoSQL coordination (Document, Graph, Key-Value, Time-Series)', endpoints: 31, dependencies: ['query-engine'] },
+  { id: 'metadata-service', name: 'Metadata Service', category: 'Data Layer', technology: 'golang', status: 'running', cpu: 22, memory: 34, requests: 45000, latency: '2ms', uptime: '99.99%', description: 'Data catalog with lineage tracking, schema evolution, and governance', endpoints: 18, dependencies: [] },
+  { id: 'storage-coordinator', name: 'Storage Coordinator', category: 'Data Layer', technology: 'python', status: 'running', cpu: 29, memory: 41, requests: 34000, latency: '8ms', uptime: '99.98%', description: 'Multi-format storage orchestration (Parquet, Avro, ORC, Delta Lake)', endpoints: 15, dependencies: [] },
+  
+  // === DATA LAKE ===
+  { id: 'data-lake-ingest', name: 'Data Lake Ingestion', category: 'Data Lake', technology: 'scala', status: 'running', cpu: 56, memory: 72, requests: 18000, latency: '120ms', uptime: '99.9%', description: 'Bulk data ingestion from satellites, LHC, government repositories', endpoints: 22, dependencies: ['schema-registry'] },
+  { id: 'binary-parser', name: 'Binary Data Parser', category: 'Data Lake', technology: 'c', status: 'running', cpu: 41, memory: 35, requests: 28000, latency: '25ms', uptime: '99.95%', description: 'High-performance binary format parsing for scientific instruments', endpoints: 14, dependencies: [] },
+  { id: 'schema-registry', name: 'Schema Registry', category: 'Data Lake', technology: 'golang', status: 'running', cpu: 15, memory: 24, requests: 52000, latency: '1ms', uptime: '100%', description: 'Avro/Protobuf schema management with compatibility checking', endpoints: 11, dependencies: [] },
+  
+  // === STREAMING ===
+  { id: 'kafka-cluster', name: 'Kafka Streaming Hub', category: 'Streaming', technology: 'scala', status: 'running', cpu: 72, memory: 85, requests: 890000, latency: '5ms', uptime: '99.99%', description: 'Distributed event streaming with exactly-once semantics', endpoints: 45, dependencies: ['zookeeper-alt'] },
+  { id: 'flink-processor', name: 'Flink Stream Processor', category: 'Streaming', technology: 'scala', status: 'running', cpu: 58, memory: 68, requests: 156000, latency: '15ms', uptime: '99.97%', description: 'Complex event processing with stateful windowed computations', endpoints: 28, dependencies: ['kafka-cluster'] },
+  { id: 'spark-engine', name: 'Spark Analytics Engine', category: 'Streaming', technology: 'scala', status: 'scaling', cpu: 81, memory: 92, requests: 42000, latency: '200ms', uptime: '99.9%', description: 'Batch and micro-batch processing with MLlib integration', endpoints: 33, dependencies: ['kafka-cluster', 'data-lake-ingest'] },
+  
+  // === CONNECTORS ===
+  { id: 'platform-connector', name: 'Platform Connector Hub', category: 'Connectors', technology: 'python', status: 'running', cpu: 38, memory: 48, requests: 78000, latency: '35ms', uptime: '99.95%', description: 'Universal adapter layer for research platforms (arXiv, PubMed, GitHub, etc.)', endpoints: 67, dependencies: ['cache-layer'] },
+  { id: 'aethel-bridge', name: 'AETHEL Bridge Service', category: 'Connectors', technology: 'elixir', status: 'running', cpu: 44, memory: 56, requests: 23000, latency: '18ms', uptime: '99.98%', description: 'Bidirectional AETHEL platform integration with quantum-classical bridge', endpoints: 19, dependencies: ['platform-connector'] },
+  { id: 'cache-layer', name: 'Distributed Cache Layer', category: 'Connectors', technology: 'rust', status: 'running', cpu: 25, memory: 64, requests: 234000, latency: '0.2ms', uptime: '100%', description: 'Multi-tier caching with intelligent invalidation and prefetching', endpoints: 16, dependencies: [] },
+  
+  // === IDE STUDIO ===
+  { id: 'ide-core', name: 'IDE Studio Core', category: 'IDE Studio', technology: 'python', status: 'running', cpu: 52, memory: 74, requests: 34000, latency: '50ms', uptime: '99.96%', description: 'Browser-based development environment with auto-parsing and IntelliSense', endpoints: 42, dependencies: ['file-processor', 'execution-runtime'] },
+  { id: 'file-processor', name: 'File Auto-Parser', category: 'IDE Studio', technology: 'rust', status: 'running', cpu: 48, memory: 39, requests: 67000, latency: '8ms', uptime: '99.97%', description: 'Automatic file parsing (Jupyter, PDF, CSV, Images) with metadata extraction', endpoints: 24, dependencies: [] },
+  { id: 'execution-runtime', name: 'Execution Runtime', category: 'IDE Studio', technology: 'python', status: 'running', cpu: 63, memory: 82, requests: 19000, latency: '150ms', uptime: '99.94%', description: 'Sandboxed code execution with resource limits and result visualization', endpoints: 18, dependencies: ['container-orchestrator'] },
+  { id: 'collab-service', name: 'Collaboration Service', category: 'IDE Studio', technology: 'elixir', status: 'running', cpu: 31, memory: 45, requests: 89000, latency: '3ms', uptime: '99.99%', description: 'Real-time collaboration with OT/CRDT conflict resolution', endpoints: 21, dependencies: [] },
+  
+  // === PUBLISHING ===
+  { id: 'cms-core', name: 'Publishing CMS', category: 'Publishing', technology: 'golang', status: 'running', cpu: 19, memory: 28, requests: 12000, latency: '12ms', uptime: '100%', description: 'Content management for blogs, whitepapers, and datasets with DOI minting', endpoints: 29, dependencies: ['asset-cdn'] },
+  { id: 'asset-cdn', name: 'Asset CDN', category: 'Publishing', technology: 'rust', status: 'running', cpu: 12, memory: 22, requests: 178000, latency: '15ms', uptime: '100%', description: 'Global content delivery with image optimization and edge caching', endpoints: 14, dependencies: [] },
+  { id: 'doi-service', name: 'DOI Minting Service', category: 'Publishing', technology: 'python', status: 'running', cpu: 8, memory: 15, requests: 3500, latency: '500ms', uptime: '99.99%', description: 'Digital Object Identifier registration and citation tracking', endpoints: 9, dependencies: ['cms-core'] },
+  
+  // === ML/AI ===
+  { id: 'ml-orchestrator', name: 'ML Orchestrator', category: 'AI/ML', technology: 'python', status: 'running', cpu: 76, memory: 88, requests: 8000, latency: '250ms', uptime: '99.9%', description: 'Model training/inference scheduling with GPU pool management', endpoints: 26, dependencies: ['model-registry', 'feature-store'] },
+  { id: 'model-registry', name: 'Model Registry', category: 'AI/ML', technology: 'golang', status: 'running', cpu: 14, memory: 32, requests: 22000, latency: '4ms', uptime: '100%', description: 'Versioned model storage with A/B testing and rollback support', endpoints: 17, dependencies: ['artifact-storage'] },
+  { id: 'feature-store', name: 'Feature Store', category: 'AI/ML', technology: 'scala', status: 'running', cpu: 37, memory: 54, requests: 41000, latency: '8ms', uptime: '99.97%', description: 'Online/offline feature serving with point-in-time correctness', endpoints: 22, dependencies: [] },
+]
+
+// ============ EXTERNAL PLATFORMS ============
+interface ExternalPlatform {
+  id: string
+  name: string
+  category: string
+  status: 'connected' | 'available' | 'configured' | 'error'
+  dataTypes: string[]
+  syncFrequency: string
+  recordsCount: string
+  icon: string
+}
+
+const ExternalPlatforms: ExternalPlatform[] = [
+  { id: 'arxiv', name: 'arXiv', category: 'Preprint Servers', status: 'connected', dataTypes: ['PDF', 'TeX', 'Metadata'], syncFrequency: 'Hourly', recordsCount: '2.4M+', icon: '📄' },
+  { id: 'pubmed', name: 'PubMed Central', category: 'Literature Databases', status: 'connected', dataTypes: ['XML', 'Full Text', 'Citations'], syncFrequency: 'Daily', recordsCount: '35M+', icon: '🧬' },
+  { id: 'github', name: 'GitHub', category: 'Code Repositories', status: 'connected', dataTypes: ['Code', 'Notebooks', 'Datasets'], syncFrequency: 'Real-time', recordsCount: '∞', icon: '💻' },
+  { id: 'zenodo', name: 'Zenodo', category: 'Research Data', status: 'connected', dataTypes: ['Datasets', 'Software', 'Reports'], syncFrequency: 'On-demand', recordsCount: '15M+', icon: '📊' },
+  { id: 'figshare', name: 'Figshare', category: 'Research Data', status: 'available', dataTypes: ['Datasets', 'Figures', 'Media'], syncFrequency: 'Daily', recordsCount: '500K+', icon: '📈' },
+  { id: 'cern-open', name: 'CERN Open Data', category: 'Physics Data', status: 'connected', dataTypes: ['ROOT', 'HEPDATA', 'DAQ'], syncFrequency: 'Weekly', recordsCount: '3.2PB', icon: '⚛️' },
+  { id: 'nasa-pds', name: 'NASA PDS', category: 'Space Data', status: 'configured', dataTypes: ['Imagery', 'Spectra', 'Telemetry'], syncFrequency: 'Daily', recordsCount: '150PB', icon: '🛰️' },
+  { id: 'esa-eo', name: 'ESA Earth Observation', category: 'Satellite Data', status: 'available', dataTypes: ['Sentinel', 'Envisat', 'SMOS'], syncFrequency: 'Hourly', recordsCount: '80PB', icon: '🌍' },
+  { id: 'noaa', name: 'NOAA NCEI', category: 'Climate Data', status: 'connected', dataTypes: ['Climate', 'Oceanic', 'Geophysical'], syncFrequency: 'Hourly', recordsCount: '40PB', icon: '🌊' },
+  { id: 'genbank', name: 'GenBank', category: 'Genomics', status: 'connected', dataTypes: ['Sequences', 'Annotations', 'Structures'], syncFrequency: 'Daily', recordsCount: '250B bp', icon: '🧬' },
+  { id: 'pdb', name: 'Protein Data Bank', category: 'Structural Biology', status: 'connected', dataTypes: ['PDB', 'mmCIF', 'EMDB'], syncFrequency: 'Weekly', recordsCount: '200K+', icon: '🔬' },
+  { id: 'materials-project', name: 'Materials Project', category: 'Materials Science', status: 'available', dataTypes: ['Structures', 'Properties', 'Phase Diagrams'], syncFrequency: 'Weekly', recordsCount: '150K+', icon: '⚗️' },
+  { id: 'world-bank', name: 'World Bank Open Data', category: 'Economic Data', status: 'connected', dataTypes: ['Indicators', 'Time Series', 'GIS'], syncFrequency: 'Monthly', recordsCount: '10K+', icon: '🌐' },
+  { id: 'aethel', name: 'AETHEL Platform', category: 'AI/Hypercompute', status: 'connected', dataTypes: ['Knowledge Graphs', 'Inferences', 'Simulations'], syncFrequency: 'Real-time', recordsCount: '2.4M nodes', icon: '🔮' },
+]
+
+// ============ FILE FORMATS SUPPORTED ============
+const FileFormats = [
+  { name: 'Parquet', extension: '.parquet', category: 'Columnar', engine: 'Arrow', compression: ['Snappy', 'Gzip', 'Zstd', 'LZ4'], useCase: 'Analytics, ML Training', sizeReduction: '75%' },
+  { name: 'Avro', extension: '.avro', category: 'Row-based', engine: 'Native', compression: ['Snappy', 'Deflate', 'Bzip2'], useCase: 'Streaming, Schema Evolution', sizeReduction: '60%' },
+  { name: 'ORC', extension: '.orc', category: 'Columnar', engine: 'Hive', compression: ['Zlib', 'Snappy', 'LZO'], useCase: 'Hadoop Ecosystem', sizeReduction: '73%' },
+  { name: 'Delta Lake', extension: '.delta', category: 'Table Format', engine: 'Spark', compression: ['Snappy', 'Zstd'], useCase: 'ACID Transactions, Time Travel', sizeReduction: '70%' },
+  { name: 'HDF5', extension: '.h5/.hdf5', category: 'Scientific', engine: 'HDF Group', compression: ['Gzip', 'LZF', 'SZip'], useCase: 'Scientific Computing, Arrays', sizeReduction: '65%' },
+  { name: 'NetCDF', extension: '.nc/.nc4', category: 'Scientific', engine: 'UCAR', compression: ['Deflate'], useCase: 'Climate, Oceanography', sizeReduction: '60%' },
+  { name: 'Zarr', extension: '.zarr', category: 'Chunked Array', engine: 'NumPy', compression: ['Blosc', 'Zstd', 'LZMA'], useCase: 'Cloud-Native Arrays', sizeReduction: '70%' },
+  { name: 'FASTQ/FASTA', extension: '.fastq/.fasta', category: 'Bioinformatics', engine: 'BioPython', compression: ['Gzip'], useCase: 'Genomics Sequencing', sizeReduction: '80%' },
+  { name: 'ROOT', extension: '.root', category: 'Physics', engine: 'CERN', compression: ['LZMA', 'Zlib'], useCase: 'HEP Data Analysis', sizeReduction: '68%' },
+  { name: 'GeoTIFF', extension: '.tif/.tiff', category: 'Geospatial', engine: 'GDAL', compression: ['LZW', 'DEFLATE', 'JPEG'], useCase: 'Satellite Imagery', sizeReduction: '55%' },
+  { name: 'MessagePack', extension: '.msgpack', category: 'Binary Serialization', engine: 'Native', compression: ['None'], useCase: 'RPC, Caching', sizeReduction: '40%' },
+  { name: "Cap'n Proto", extension: '.capnp', category: 'Binary Serialization', engine: 'Native', compression: ['None'], useCase: 'High-Performance IPC', sizeReduction: '35%' },
+]
+
+// ============ STREAMING PIPELINE EXAMPLES ============
+const StreamingPipelines = [
+  {
+    id: 'satellite-ingestion',
+    name: 'Satellite Imagery Ingestion',
+    source: 'ESA Sentinel Hub',
+    pipeline: ['Kafka Topic', 'Schema Validation', 'Geo Processing', 'Object Detection', 'Indexing', 'Data Lake'],
+    throughput: '2.4 TB/hr',
+    latency: '< 5min end-to-end',
+    technologies: ['Scala/Kafka', 'Python/GDAL', 'Rust/Parser']
+  },
+  {
+    id: 'genomics-stream',
+    name: 'Real-Time Genomics Pipeline',
+    source: 'Sequencing Instruments',
+    pipeline: ['Flink Source', 'Base Calling', 'Alignment', 'Variant Calling', 'Annotation', 'Knowledge Graph'],
+    throughput: '50 GB/hr',
+    latency: '< 30min',
+    technologies: ['Elixir/Ingest', 'Python/Bio', 'Rust/Index']
+  },
+  {
+    id: 'citation-graph',
+    name: 'Citation Network Analysis',
+    source: 'Crossref + PubMed',
+    pipeline: ['Spark Batch', 'NLP Extraction', 'Entity Resolution', 'Graph Construction', 'Centrality', 'API'],
+    throughput: '1.2M papers/day',
+    latency: 'Daily batch',
+    technologies: ['Scala/Spark', 'Python/NLP', 'Golang/API']
+  },
+  {
+    id: 'aethel-inference',
+    name: 'AETHEL Inference Stream',
+    source: 'AETHEL Platform',
+    pipeline: ['WebSocket', 'Request Queue', 'Model Router', 'Ensemble', 'Result Aggregation', 'Push'],
+    throughput: '10K inferences/sec',
+    latency: '< 20ms p99',
+    technologies: ['Elixir/WS', 'Rust/Router', 'Python/ML']
+  }
+]
+
+// ============ HELPER FUNCTIONS ============
+function getStatusColor(status: string): string {
+  switch (status) {
+    case 'running': return 'bg-emerald-500'
+    case 'scaling': return 'bg-blue-500 animate-pulse'
+    case 'degraded': return 'bg-amber-500'
+    case 'stopped': return 'bg-red-500'
+    default: return 'bg-gray-500'
+  }
+}
+
+function getPlatformStatusColor(status: string): string {
+  switch (status) {
+    case 'connected': return 'bg-emerald-500'
+    case 'configured': return 'bg-blue-500'
+    case 'available': return 'bg-violet-500'
+    case 'error': return 'bg-red-500'
+    default: return 'bg-gray-500'
+  }
+}
+
+// ============ QUANTUM BACKGROUND COMPONENT ============
+interface QuantumBackgroundProps {
+  darkMode: boolean
+  enabled: boolean
+}
+
+function QuantumBackground({ darkMode, enabled }: QuantumBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   
   useEffect(() => {
+    if (!enabled) return
+    
     const canvas = canvasRef.current
     if (!canvas) return
     
@@ -435,84 +236,66 @@ function ArchitectureBackground() {
     if (!ctx) return
     
     let animationId: number
-    let time = 0
+    const particles: Array<{
+      x: number; y: number; vx: number; vy: number; 
+      radius: number; phase: number; frequency: number; amplitude: number
+    }> = []
     
-    const nodes: Array<{x: number; y: number; vx: number; vy: number; size: number; connections: number}> = []
-    
-    const resize = () => {
+    const resizeCanvas = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
     }
     
-    const init = () => {
-      resize()
-      for (let i = 0; i < 60; i++) {
-        nodes.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          size: Math.random() * 2 + 1,
-          connections: 0
-        })
-      }
+    resizeCanvas()
+    window.addEventListener('resize', resizeCanvas)
+    
+    for (let i = 0; i < 80; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        radius: Math.random() * 2 + 1,
+        phase: Math.random() * Math.PI * 2,
+        frequency: 0.01 + Math.random() * 0.02,
+        amplitude: 20 + Math.random() * 40
+      })
     }
     
-    const animate = () => {
-      ctx.fillStyle = 'rgba(2, 6, 23, 0.15)'
+    const animate = (time: number) => {
+      ctx.fillStyle = darkMode ? 'rgba(10, 10, 30, 0.15)' : 'rgba(248, 250, 252, 0.15)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
       
-      time += 0.01
-      
-      // Draw grid
-      ctx.strokeStyle = 'rgba(139, 92, 246, 0.03)'
-      ctx.lineWidth = 1
-      const gridSize = 50
-      for (let x = 0; x < canvas.width; x += gridSize) {
-        for (let y = 0; y < canvas.height; y += gridSize) {
-          ctx.strokeRect(x, y, gridSize, gridSize)
-        }
-      }
-      
-      // Update and draw nodes
-      nodes.forEach((node, i) => {
-        node.x += node.vx
-        node.y += node.vy
+      particles.forEach((p, i) => {
+        p.x += p.vx + Math.sin(time * p.frequency + p.phase) * 0.3
+        p.y += p.vy + Math.cos(time * p.frequency + p.phase) * 0.3
         
-        if (node.x < 0 || node.x > canvas.width) node.vx *= -1
-        if (node.y < 0 || node.y > canvas.height) node.vy *= -1
+        if (p.x < 0) p.x = canvas.width
+        if (p.x > canvas.width) p.x = 0
+        if (p.y < 0) p.y = canvas.height
+        if (p.y > canvas.height) p.y = 0
         
-        // Node glow
-        const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.size * 8)
-        gradient.addColorStop(0, `rgba(6, 182, 212, 0.3)`)
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 3)
+        const hue = (time * 0.02 + i * 5) % 360
+        gradient.addColorStop(0, `hsla(${hue}, 80%, 60%, 0.8)`)
+        gradient.addColorStop(0.5, `hsla(${hue}, 70%, 50%, 0.3)`)
         gradient.addColorStop(1, 'transparent')
+        
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2)
         ctx.fillStyle = gradient
-        ctx.beginPath()
-        ctx.arc(node.x, node.y, node.size * 8, 0, Math.PI * 2)
         ctx.fill()
         
-        // Node core
-        ctx.fillStyle = `hsl(${180 + i * 3}, 70%, 60%)`
-        ctx.beginPath()
-        ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2)
-        ctx.fill()
-        
-        // Connections
-        nodes.slice(i + 1).forEach((other) => {
-          const dx = node.x - other.x
-          const dy = node.y - other.y
+        particles.slice(i + 1).forEach(p2 => {
+          const dx = p.x - p2.x
+          const dy = p.y - p2.y
           const dist = Math.sqrt(dx * dx + dy * dy)
           
           if (dist < 150) {
             ctx.beginPath()
-            ctx.moveTo(node.x, node.y)
-            
-            // Curved connection
-            const midX = (node.x + other.x) / 2 + Math.sin(time + i) * 20
-            const midY = (node.y + other.y) / 2 + Math.cos(time + i) * 20
-            ctx.quadraticCurveTo(midX, midY, other.x, other.y)
-            
-            ctx.strokeStyle = `rgba(139, 92, 246, ${(1 - dist / 150) * 0.2})`
+            ctx.moveTo(p.x, p.y)
+            ctx.lineTo(p2.x, p2.y)
+            ctx.strokeStyle = `hsla(${hue}, 60%, 50%, ${0.15 * (1 - dist / 150)})`
             ctx.lineWidth = 0.5
             ctx.stroke()
           }
@@ -522,719 +305,987 @@ function ArchitectureBackground() {
       animationId = requestAnimationFrame(animate)
     }
     
-    init()
-    animate()
+    animate(0)
     
-    window.addEventListener('resize', resize)
     return () => {
       cancelAnimationFrame(animationId)
-      window.removeEventListener('resize', resize)
+      window.removeEventListener('resize', resizeCanvas)
     }
-  }, [])
+  }, [enabled, darkMode])
+  
+  if (!enabled) return null
   
   return (
     <canvas 
       ref={canvasRef} 
       className="fixed inset-0 pointer-events-none z-0"
-      style={{ background: 'linear-gradient(135deg, #020617 0%, #0f172a 30%, #1e1b4b 60%, #0c0a1e 100%)' }}
+      style={{ opacity: 0.6 }}
     />
   )
 }
 
-// ============ MICROSERVICE CARD COMPONENT ============
-function MicroserviceCard({ 
-  icon, title, subtitle, description, status, metrics, tags, color, delay = 0 
-}: {
-  icon: keyof typeof Icons; title: string; subtitle?: string; description: string;
-  status: 'active' | 'scaling' | 'idle'; metrics?: { label: string; value: string }[];
-  tags?: string[]; color: string; delay?: number
-}) {
-  const [hovered, setHovered] = useState(false)
-  const IconComponent = Icons[icon]
+// ============ MICROSERVICES PLATFORM VIEW ============
+interface MicroservicesViewProps {
+  searchQuery: string
+  setSearchQuery: (q: string) => void
+  selectedService: Microservice | null
+  setSelectedService: (s: Microservice | null) => void
+  activeTab: string
+  setActiveTab: (t: string) => void
+  darkMode: boolean
+  setDarkMode: (d: boolean) => void
+  quantumAnimation: boolean
+  setQuantumAnimation: (q: boolean) => void
+  setViewMode: (v: ViewMode) => void
+}
+
+function MicroservicesView({
+  searchQuery,
+  setSearchQuery,
+  selectedService,
+  setSelectedService,
+  activeTab,
+  setActiveTab,
+  darkMode,
+  setDarkMode,
+  quantumAnimation,
+  setQuantumAnimation,
+  setViewMode
+}: MicroservicesViewProps) {
   
-  const statusColors = {
-    active: 'bg-emerald-500',
-    scaling: 'bg-amber-500',
-    idle: 'bg-slate-500'
-  }
-  
-  const borderColors = {
-    emerald: 'border-emerald-500/30 hover:border-emerald-400/50 hover:shadow-emerald-500/20',
-    cyan: 'border-cyan-500/30 hover:border-cyan-400/50 hover:shadow-cyan-500/20',
-    purple: 'border-purple-500/30 hover:border-purple-400/50 hover:shadow-purple-500/20',
-    pink: 'border-pink-500/30 hover:border-pink-400/50 hover:shadow-pink-500/20',
-    orange: 'border-orange-500/30 hover:border-orange-400/50 hover:shadow-orange-500/20',
-    blue: 'border-blue-500/30 hover:border-blue-400/50 hover:shadow-blue-500/20',
-    green: 'border-green-500/30 hover:border-green-400/50 hover:shadow-green-500/20',
-  }
-  
+  const filteredServices = useMemo(() => {
+    if (!searchQuery) return Microservices
+    const q = searchQuery.toLowerCase()
+    return Microservices.filter(s => 
+      s.name.toLowerCase().includes(q) || 
+      s.category.toLowerCase().includes(q) ||
+      s.technology.toLowerCase().includes(q) ||
+      s.description.toLowerCase().includes(q)
+    )
+  }, [searchQuery])
+
+  const servicesByCategory = useMemo(() => {
+    return filteredServices.reduce((acc, service) => {
+      if (!acc[service.category]) acc[service.category] = []
+      acc[service.category].push(service)
+      return acc
+    }, {} as Record<string, Microservice[]>)
+  }, [filteredServices])
+
   return (
-    <Card 
-      className={`group relative bg-slate-900/60 backdrop-blur-xl border ${borderColors[color] || borderColors.purple} transition-all duration-500 overflow-hidden`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{ 
-        transform: hovered ? 'translateY(-4px) scale(1.02)' : 'translateY(0) scale(1)',
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-      }}
-    >
-      {/* Glow effect */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${
-        color === 'emerald' ? 'from-emerald-500/5 to-transparent' :
-        color === 'cyan' ? 'from-cyan-500/5 to-transparent' :
-        color === 'purple' ? 'from-purple-500/5 to-transparent' :
-        color === 'pink' ? 'from-pink-500/5 to-transparent' :
-        color === 'orange' ? 'from-orange-500/5 to-transparent' :
-        'from-blue-500/5 to-transparent'
-      } opacity-0 group-hover:opacity-100 transition-opacity duration-500`}/>
+    <div className={`min-h-screen transition-colors duration-500 ${darkMode ? 'bg-gradient-to-br from-slate-950 via-purple-950/20 to-slate-900' : 'bg-gradient-to-br from-slate-50 via-purple-50/30 to-white'}`}>
+      {/* Quantum Background Canvas */}
+      <QuantumBackground darkMode={darkMode} enabled={quantumAnimation} />
       
-      <CardContent className="p-5 relative">
-        {/* Header */}
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex items-center gap-3">
-            <div className={`w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300`}>
-              <IconComponent />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-white text-sm">{title}</h3>
-                <span className={`w-2 h-2 rounded-full ${statusColors[status]} animate-pulse`}/>
+      {/* Header Navigation */}
+      <header className="relative z-10 border-b border-white/10 backdrop-blur-xl bg-black/20">
+        <div className="max-w-[1920px] mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 via-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-violet-500/30">
+                  S
+                </div>
+                <div>
+                  <h1 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>SciHub Pro</h1>
+                  <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Microservices Platform</p>
+                </div>
               </div>
-              {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
-            </div>
-          </div>
-          
-          {/* Status indicator */}
-          <Badge variant="outline" className={`text-xs capitalize ${
-            status === 'active' ? 'border-emerald-500/50 text-emerald-400' :
-            status === 'scaling' ? 'border-amber-500/50 text-amber-400' :
-            'border-slate-500/50 text-slate-400'
-          }`}>
-            {status}
-          </Badge>
-        </div>
-        
-        {/* Description */}
-        <p className="text-xs text-slate-400 leading-relaxed mb-3 line-clamp-2">
-          {description}
-        </p>
-        
-        {/* Tags */}
-        {tags && (
-          <div className="flex flex-wrap gap-1 mb-3">
-            {tags.slice(0, 3).map(tag => (
-              <Badge key={tag} variant="secondary" className="text-[10px] px-1.5 py-0 bg-slate-800/50 text-slate-400">
-                {tag}
+              <Badge variant="outline" className="border-emerald-500/50 text-emerald-400 bg-emerald-500/10">
+                v2.0.0 — AETH-1 Integrated
               </Badge>
-            ))}
-            {tags.length > 3 && (
-              <Badge variant="secondary" className="text-[10px] px-1.5 py-0 bg-slate-800/50 text-slate-500">
-                +{tags.length - 3}
-              </Badge>
-            )}
-          </div>
-        )}
-        
-        {/* Metrics */}
-        {metrics && (
-          <div className="grid grid-cols-2 gap-2 pt-3 border-t border-slate-800">
-            {metrics.map(({ label, value }) => (
-              <div key={label} className="text-center">
-                <div className="text-sm font-bold text-white">{value}</div>
-                <div className="text-[10px] text-slate-500">{label}</div>
-              </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  )
-}
-
-// ============ CONNECTOR CARD ============
-function ConnectorCard({ name, category, status, dataSources }: {
-  name: string; category: string; status: 'connected' | 'available' | 'configuring'; dataSources: string[]
-}) {
-  const categoryIcons: Record<string, string> = {
-    'Genomics': '🧬',
-    'Chemistry': '⚗️',
-    'Physics': '🌌',
-    'Public Data': '🌐',
-    'Satellite': '🛰️',
-    'Research': '📚',
-    'Government': '🏛️',
-    'Health': '🏥',
-  }
-  
-  return (
-    <Card className="group bg-slate-900/40 backdrop-blur-sm border border-slate-800/50 hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-1">
-      <CardContent className="p-4">
-        <div className="flex items-center gap-3 mb-2">
-          <span className="text-2xl">{categoryIcons[category] || '🔗'}</span>
-          <div className="flex-1 min-w-0">
-            <h4 className="font-medium text-white text-sm truncate">{name}</h4>
-            <p className="text-[10px] text-slate-500">{category}</p>
-          </div>
-          <span className={`w-2 h-2 rounded-full ${
-            status === 'connected' ? 'bg-emerald-500' :
-            status === 'available' ? 'bg-amber-500' : 'bg-blue-500 animate-pulse'
-          }`}/>
-        </div>
-        
-        <div className="flex flex-wrap gap-1">
-          {dataSources.slice(0, 2).map(ds => (
-            <Badge key={ds} variant="outline" className="text-[9px] px-1 py-0 border-slate-700 text-slate-400">
-              {ds}
-            </Badge>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
-
-// ============ ARCHITECTURE FLOW DIAGRAM ============
-function ArchitectureFlow() {
-  const layers = [
-    { name: 'Client Layer', components: ['Web IDE', 'Notebook', 'CLI', 'Mobile API'], color: 'cyan' },
-    { name: 'API Gateway', components: ['REST', 'GraphQL', 'WebSocket', 'gRPC'], color: 'purple' },
-    { name: 'Middleware', components: ['Auth', 'Rate Limit', 'Cache', 'Logger'], color: 'amber' },
-    { name: 'Microservices', components: ['BioInfo', 'Chemo', 'Physics', 'DataSci', 'Compute'], color: 'pink' },
-    { name: 'Data Layer', components: ['BigQuery Engine', 'PostgreSQL', 'MongoDB', 'Redis', 'Data Lake'], color: 'emerald' },
-    { name: 'Streaming', components: ['Kafka', 'Flink', 'Spark Streaming', 'Connectors'], color: 'blue' },
-    { name: 'Infrastructure', components: ['Kubernetes', 'Docker', 'GPU Cluster', 'Object Storage', 'CDN'], color: 'slate' },
-  ]
-  
-  const colorMap: Record<string, string> = {
-    cyan: 'border-cyan-500/30 bg-cyan-500/5',
-    purple: 'border-purple-500/30 bg-purple-500/5',
-    amber: 'border-amber-500/30 bg-amber-500/5',
-    pink: 'border-pink-500/30 bg-pink-500/5',
-    emerald: 'border-emerald-500/30 bg-emerald-500/5',
-    blue: 'border-blue-500/30 bg-blue-500/5',
-    slate: 'border-slate-500/30 bg-slate-500/5',
-  }
-  
-  return (
-    <div className="space-y-3 max-w-4xl mx-auto">
-      {layers.map((layer, idx) => (
-        <div key={idx} className={`rounded-xl border ${colorMap[layer.color]} p-4 transition-all hover:scale-[1.01]`}>
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <div className="sm:w-36 flex-shrink-0">
-              <div className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${
-                  layer.color === 'cyan' ? 'bg-cyan-400' :
-                  layer.color === 'purple' ? 'bg-purple-400' :
-                  layer.color === 'amber' ? 'bg-amber-400' :
-                  layer.color === 'pink' ? 'bg-pink-400' :
-                  layer.color === 'emerald' ? 'bg-emerald-400' :
-                  layer.color === 'blue' ? 'bg-blue-400' : 'bg-slate-400'
-                }`}/>
-                <h4 className="font-semibold text-white text-sm">{layer.name}</h4>
-              </div>
-            </div>
-            <div className="flex-1 flex flex-wrap gap-2">
-              {layer.components.map(comp => (
-                <Badge key={comp} variant="outline" className="text-xs border-current text-slate-300 hover:bg-white/5 transition-colors"
-                  style={{ borderColor: `${layer.color === 'cyan' ? '#06b6d4' : layer.color === 'purple' ? '#a855f7' : layer.color === 'amber' ? '#f59e0b' : layer.color === 'pink' ? '#ec4899' : layer.color === 'emerald' ? '#10b981' : layer.color === 'blue' ? '#3b82f6' : '#64748b'}40` }}>
-                  {comp}
-                </Badge>
-              ))}
-            </div>
-          </div>
-          {/* Connection to next layer */}
-          {idx < layers.length - 1 && (
-            <div className="flex justify-center mt-2">
-              <div className="w-0.5 h-3 bg-gradient-to-b from-current to-transparent opacity-30"/>
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
-  )
-}
-
-// ============ MAIN DASHBOARD COMPONENT ============
-export default function MicroservicesDashboard() {
-  const [activeTab, setActiveTab] = useState<'overview' | 'services' | 'data' | 'streaming' | 'ide' | 'publish'>('overview')
-  const [selectedService, setSelectedService] = useState<string | null>(null)
-  
-  const tabs = [
-    { id: 'overview', label: 'Overview', icon: 'Layers' },
-    { id: 'services', label: 'Services', icon: 'Server' },
-    { id: 'data', label: 'Data Layer', icon: 'DatabaseCluster' },
-    { id: 'streaming', label: 'Streaming', icon: 'StreamingPipe' },
-    { id: 'ide', label: 'IDE Studio', icon: 'IDECode' },
-    { id: 'publish', label: 'Publish', icon: 'BlogPublish' },
-  ] as const
-  
-  // Microservices definitions
-  const microservices = [
-    // Scientific Tools
-    { icon: 'QueryEngine', title: 'BigQuery Engine', subtitle: 'Distributed SQL Analytics', description: 'Petabyte-scale query engine with columnar storage, automatic partitioning, and ML-powered query optimization. Similar to Google BigQuery but open-source.', status: 'active', color: 'cyan', tags: ['SQL', 'Columnar', 'ML Optimized', 'PB Scale'], metrics: [{ label: 'Queries/sec', value: '50K+' }, { label: 'Latency', value: '<100ms' }] },
-    { icon: 'NoSQLDB', title: 'Document Store', subtitle: 'Flexible Schema Storage', description: 'MongoDB-compatible document database optimized for semi-structured research data, nested experiments, and evolving schemas.', status: 'active', color: 'green', tags: ['MongoDB', 'JSON', 'Flexible Schema', 'Sharding'], metrics: [{ label: 'Documents', value: '10B+' }, { label: 'Ops/sec', value: '100K' }] },
-    { icon: 'DataLake', title: 'Data Lake', subtitle: 'Unified Binary Storage', description: 'S3-compatible object storage for binary data from satellites, LHC, sequencing machines, microscopes, and government datasets. Supports all file formats.', status: 'active', color: 'blue', tags: ['S3', 'Parquet', 'AVRO', 'ORC', 'Binary'], metrics: [{ label: 'Storage', value: '50 PB' }, { label: 'Files', value: '1B+' }] },
-    { icon: 'FileFormat', title: 'Format Converter', subtitle: 'Universal Parser', description: 'Automatic detection and conversion between Parquet, AVRO, ORC, FASTQ, BAM, CIF, PDB, XYZ, and 50+ scientific formats with metadata preservation.', status: 'active', color: 'orange', tags: ['Parquet', 'AVRO', 'ORC', 'FASTQ', 'BAM', 'PDB'], metrics: [{ label: 'Formats', value: '50+' }, { label: 'Throughput', value: '1 GB/s' }] },
-    
-    // Connectors
-    { icon: 'ConnectorHub', title: 'Connector Hub', subtitle: 'External Platform Integration', description: 'Universal connector system for 100+ free platforms: NCBI, EBI, PDB, NASA, ESA, CERN Open Data, World Bank, NOAA, USGS, and more.', status: 'active', color: 'purple', tags: ['NCBI', 'EBI', 'PDB', 'NASA', 'ESA', 'CERN'], metrics: [{ label: 'Connectors', value: '100+' }, { label: 'Sync Rate', value: 'Real-time' }] },
-    { icon: 'Satellite', title: 'Satellite Ingest', subtitle: 'Earth Observation Pipeline', description: 'Direct ingestion from Landsat, Sentinel, MODIS, and commercial satellites. Automatic geospatial indexing and analysis pipelines.', status: 'scaling', color: 'blue', tags: ['Landsat', 'Sentinel', 'MODIS', 'Copernicus', 'EOSDIS'], metrics: [{ label: 'Images/day', value: '100K+' }, { label: 'Storage', value: '5 PB' }] },
-    { icon: 'LHCRing', title: 'HEP Data Pipeline', subtitle: 'High Energy Physics Ingest', description: 'Real-time ingestion from CERN, Fermilab, DESY. ROOT format support, event reconstruction, and particle physics analysis tools.', status: 'active', color: 'pink', tags: ['CERN', 'ROOT', 'HEPData', 'Fermilab', 'DESY'], metrics: [{ label: 'Events/day', value: '1B+' }, { label: 'Raw Data', value: '2 EB' }] },
-    { icon: 'GovInstitute', title: 'Gov Data Gateway', subtitle: 'Government Research Portal', description: 'Aggregated access to NIH, NSF, DOE, EU Horizon, JST, CNRS, and 50+ government-funded research repositories worldwide.', status: 'active', color: 'emerald', tags: ['NIH', 'NSF', 'DOE', 'EU Horizon', 'JST', 'CNRS'], metrics: [{ label: 'Datasets', value: '10M+' }, { label: 'Countries', value: '80+' }] },
-    
-    // Streaming & Processing
-    { icon: 'StreamingPipe', title: 'Stream Processor', subtitle: 'Real-time Event Pipeline', description: 'Apache Kafka + Flink + Spark Streaming unified interface. Process streaming data from IoT sensors, lab equipment, and real-time feeds.', status: 'active', color: 'green', tags: ['Kafka', 'Flink', 'Spark', 'CEP', 'Windowing'], metrics: [{ label: 'Events/sec', value: '1M+' }, { label: 'Latency', value: '<10ms' }] },
-    { icon: 'SparkEngine', title: 'Batch Processor', subtitle: 'Large-scale Analytics', description: 'Apache Spark cluster for batch ML training, ETL jobs, graph processing, and large-scale statistical computations.', status: 'scaling', color: 'orange', tags: ['Spark', 'MLlib', 'GraphX', 'PySpark'], metrics: [{ label: 'Nodes', value: '1000+' }, { label: 'Memory', value: '50 TB' }] },
-    { icon: 'KafkaIcon', title: 'Event Bus', subtitle: 'Message Queue System', description: 'Distributed event streaming platform with exactly-once semantics, schema registry, and 99.999% availability SLA.', status: 'active', color: 'slate', tags: ['Kafka', 'Schema Registry', 'ksqlDB'], metrics: [{ label: 'Topics', value: '10K+' }, { label: 'Msg/sec', value: '5M' }] },
-    { icon: 'FlinkStream', title: 'Stream Analytics', subtitle: 'Complex Event Processing', description: 'Apache Flink for stateful stream processing, time-window analytics, and real-time anomaly detection in research data.', status: 'active', color: 'pink', tags: ['Flink', 'CEP', 'Stateful', 'Exactly-Once'], metrics: [{ label: 'Throughput', value: '2M/s' }, { label: 'State', value: '10 TB' }] },
-    
-    // IDE & Publishing
-    { icon: 'IDECode', title: 'IDE Studio', subtitle: 'AI-Powered Development Environment', description: 'Google AI Studio-inspired IDE with auto-file parsing, inline visualizations, collaborative editing, and integrated publishing workflow.', status: 'active', color: 'cyan', tags: ['Monaco', 'Jupyter', 'AI Assist', 'Collab'], metrics: [{ label: 'Users', value: '50K+' }, { label: 'Sessions', value: '100K/d' }] },
-    { icon: 'BlogPublish', title: 'Publish Hub', subtitle: 'Blogs & White Papers', description: 'Full publishing pipeline for blog posts, preprints, white papers, and datasets. DOI assignment, version control, and citation tracking.', status: 'active', color: 'pink', tags: ['DOI', 'Preprint', 'White Paper', 'Blog'], metrics: [{ label: 'Published', value: '100K+' }, { label: 'Citations', value: '1M+'}] },
-    
-    // API & Middleware
-    { icon: 'APILayer', title: 'API Gateway', subtitle: 'Unified Interface Layer', description: 'REST, GraphQL, WebSocket, and gRPC endpoints with rate limiting, caching, authentication, and request transformation.', status: 'active', color: 'purple', tags: ['REST', 'GraphQL', 'WebSocket', 'gRPC'], metrics: [{ label: 'RPS', value: '500K+' }, { label: 'Uptime', value: '99.99%' }] },
-    { icon: 'Middleware', title: 'Middleware Suite', subtitle: 'Cross-cutting Services', description: 'Authentication (OAuth2/SAML), rate limiting, request logging, caching layer, CORS handling, and API versioning.', status: 'active', color: 'amber', tags: ['Auth', 'Rate Limit', 'Cache', 'Log', 'CORS'], metrics: [{ label: 'Latency', value: '<5ms' }, { label: 'Cache Hit', value: '95%' }] },
-    { icon: 'Shield', title: 'Security Layer', subtitle: 'Compliance & Encryption', description: 'SOC 2 Type II, HIPAA, GDPR compliant. End-to-end encryption, audit logging, vulnerability scanning, and penetration testing.', status: 'active', color: 'emerald', tags: ['SOC2', 'HIPAA', 'GDPR', 'Encryption'], metrics: [{ label: 'Encrypted', value: '100%' }, { label: 'Audits', value: '0 issues' }] },
-  ]
-  
-  // External connectors
-  const externalConnectors = [
-    { name: 'NCBI GenBank', category: 'Genomics', status: 'connected' as const, dataSources: ['Genome', 'SRA', 'GEO', 'PubChem'] },
-    { name: 'European Bioinformatics', category: 'Genomics', status: 'connected' as const, dataSources: ['Ensembl', 'UniProt', 'ArrayExpress', 'BioSamples'] },
-    { name: 'Protein Data Bank', category: 'Chemistry', status: 'connected' as const, dataSources: ['PDB', 'EMDB', 'BMRB'] },
-    { name: 'NASA EOSDIS', category: 'Satellite', status: 'connected' as const, dataSources: ['MODIS', 'ASTER', 'VIIRS', 'GRACE'] },
-    { name: 'ESA Copernicus', category: 'Satellite', status: 'connected' as const, dataSources: ['Sentinel-1/2/3/5P', 'CMEMS'] },
-    { name: 'CERN Open Data', category: 'Physics', status: 'connected' as const, dataSources: ['CMS', 'ATLAS', 'ALICE', 'LHCb'] },
-    { name: 'World Bank Data', category: 'Public Data', status: 'available' as const, dataSources: ['Economics', 'Health', 'Climate'] },
-    { name: 'NIH RePORTER', category: 'Research', status: 'connected' as const, dataSources: ['Grants', 'Publications', 'Patents'] },
-    { name: 'NSF Awards', category: 'Government', status: 'connected' as const, dataSources: ['Awards', 'Citations', 'Outcomes'] },
-    { name: 'DOE OSTI', category: 'Government', status: 'available' as const, dataSources: ['SciTech Connect', 'Data Explorer'] },
-    { name: 'EU Open Data Portal', category: 'Government', status: 'connected' as const, dataSources: ['Research', 'Environment', 'Digital'] },
-    { name: 'NOAA NCEI', category: 'Satellite', status: 'connected' as const, dataSources: ['Climate', 'Ocean', 'Coastal'] },
-    { name: 'USGS EarthExplorer', category: 'Satellite', status: 'available' as const, dataSources: ['Landsat', 'MODIS', 'Radar'] },
-    { name: 'Figshare', category: 'Research', status: 'connected' as const, dataSources: ['Datasets', 'Figures', 'Media'] },
-    { name: 'Zenodo', category: 'Research', status: 'connected' as const, dataSources: ['Software', 'Data', 'Papers'] },
-    { name: 'ClinicalTrials.gov', category: 'Health', status: 'connected' as const, dataSources: ['Trials', 'Results', 'Adverse Events'] },
-  ]
-  
-  return (
-    <main className="min-h-screen bg-slate-950 text-white overflow-x-hidden">
-      <ArchitectureBackground />
-      
-      {/* Header */}
-      <header className="relative z-10 border-b border-white/5 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
-                <Icons.QuantumCore />
-              </div>
-              <div>
-                <h1 className="text-lg font-bold text-white">SciHub Pro</h1>
-                <p className="text-[10px] text-slate-500 tracking-wider uppercase">Microservices Architecture Dashboard</p>
-              </div>
             </div>
             
             <div className="flex items-center gap-4">
-              <Badge variant="outline" className="border-emerald-500/50 text-emerald-400 gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"/>
-                All Systems Operational
-              </Badge>
-              <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
-                <Icons.Settings />
-              </Button>
+              <Input
+                placeholder="Search services, platforms, APIs..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={`w-80 pl-10 ${darkMode ? 'bg-white/5 border-white/10 text-white placeholder:text-gray-500' : 'bg-white border-gray-200'}`}
+              />
+              
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="sm" onClick={() => setDarkMode(!darkMode)} className={darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700'}>
+                      {darkMode ? '☀️' : '🌙'}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Toggle Theme</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="sm" onClick={() => setQuantumAnimation(!quantumAnimation)} className={darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700'}>
+                      ✨
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Toggle Animation</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline" size="sm" onClick={() => setViewMode('landing')} className="border-white/20 text-gray-300 hover:bg-white/10">
+                      ← Landing
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Back to Landing Page</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
         </div>
       </header>
-      
-      {/* Navigation Tabs */}
-      <nav className="relative z-10 border-b border-white/5 bg-slate-950/50 backdrop-blur-sm sticky top-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-1 overflow-x-auto py-3 scrollbar-hide">
-            {tabs.map(tab => {
-              const TabIcon = Icons[tab.icon]
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
-                    activeTab === tab.id
-                      ? 'bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-white border border-purple-500/30'
-                      : 'text-slate-400 hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  <TabIcon />
-                  {tab.label}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      </nav>
-      
+
       {/* Main Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        {/* OVERVIEW TAB */}
-        {activeTab === 'overview' && (
-          <div className="space-y-8">
-            {/* Stats Row */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <main className="relative z-10 max-w-[1920px] mx-auto px-4 py-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          {/* Tab Navigation */}
+          <TabsList className={`grid grid-cols-6 w-full h-14 ${darkMode ? 'bg-black/30 backdrop-blur-xl border border-white/10' : 'bg-white border border-gray-200'}`}>
+            <TabsTrigger value="dashboard" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-violet-500 data-[state=active]:text-white gap-2">
+              📊 Dashboard
+            </TabsTrigger>
+            <TabsTrigger value="architecture" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-violet-500 data-[state=active]:text-white gap-2">
+              🏗️ Architecture
+            </TabsTrigger>
+            <TabsTrigger value="connectors" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-violet-500 data-[state=active]:text-white gap-2">
+              🔌 Connectors
+            </TabsTrigger>
+            <TabsTrigger value="ide-studio" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-violet-500 data-[state=active]:text-white gap-2">
+              💻 IDE Studio
+            </TabsTrigger>
+            <TabsTrigger value="data-lake" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-violet-500 data-[state=active]:text-white gap-2">
+              🏝️ Data Lake
+            </TabsTrigger>
+            <TabsTrigger value="publish" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-violet-500 data-[state=active]:text-white gap-2">
+              📝 Publish
+            </TabsTrigger>
+          </TabsList>
+
+          {/* ======== DASHBOARD TAB ======== */}
+          <TabsContent value="dashboard" className="space-y-6">
+            {/* Key Metrics Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { label: 'Total Services', value: '18', icon: 'Server', color: 'text-cyan-400' },
-                { label: 'Active Connections', value: '100+', icon: 'Globe', color: 'text-purple-400' },
-                { label: 'Data Processed/Day', value: '5 PB', icon: 'DatabaseCluster', color: 'text-emerald-400' },
-                { label: 'Uptime SLA', value: '99.99%', icon: 'Shield', color: 'text-pink-400' },
-              ].map(stat => {
-                const StatIcon = Icons[stat.icon as keyof typeof Icons]
-                return (
-                  <Card key={stat.label} className="bg-slate-900/60 backdrop-blur-sm border border-slate-800/50">
-                    <CardContent className="p-4 flex items-center gap-3">
-                      <StatIcon />
-                      <div>
-                        <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-                        <div className="text-xs text-slate-500">{stat.label}</div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
-            
-            {/* Architecture Diagram */}
-            <section>
-              <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <Icons.Layers /> System Architecture
-              </h2>
-              <ArchitectureFlow />
-            </section>
-            
-            {/* Quick Service Status */}
-            <section>
-              <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <Icons.Zap /> Service Health
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {microservices.slice(0, 8).map(service => (
-                  <MicroserviceCard key={service.title} {...service} />
-                ))}
-              </div>
-            </section>
-          </div>
-        )}
-        
-        {/* SERVICES TAB */}
-        {activeTab === 'services' && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold text-white">All Microservices</h2>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="border-slate-700 text-slate-300">Filter</Button>
-                <Button size="sm" className="bg-gradient-to-r from-purple-500 to-cyan-500">Add Service</Button>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {microservices.map(service => (
-                <MicroserviceCard key={service.title} {...service} />
+                { label: 'Total Services', value: '28', icon: '🔮', change: '+3 this week', positive: true },
+                { label: 'Requests/sec', value: '1.2M', icon: '⚡', change: '+18.2%', positive: true },
+                { label: 'Avg Latency', value: '24ms', icon: '🚀', change: '-12%', positive: true },
+                { label: 'Uptime SLA', value: '99.97%', icon: '✅', change: '+0.02%', positive: true },
+              ].map((metric, i) => (
+                <Card key={i} className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'} hover:border-violet-500/50 transition-all duration-300`}>
+                  <CardContent className="p-5">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-2xl">{metric.icon}</span>
+                      <Badge variant="secondary" className={metric.positive ? 'text-emerald-400 bg-emerald-500/10' : 'text-red-400 bg-red-500/10'}>
+                        {metric.change}
+                      </Badge>
+                    </div>
+                    <div className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{metric.value}</div>
+                    <div className={`text-sm mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{metric.label}</div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
-          </div>
-        )}
-        
-        {/* DATA LAYER TAB */}
-        {activeTab === 'data' && (
-          <div className="space-y-8">
-            {/* Data Architecture Overview */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card className="bg-gradient-to-br from-cyan-500/10 to-transparent border-cyan-500/30">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center">
-                      <Icons.QueryEngine />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-white">BigQuery Engine</h3>
-                      <p className="text-xs text-slate-400">Distributed SQL Analytics</p>
-                    </div>
-                  </div>
-                  <ul className="space-y-2 text-sm text-slate-300">
-                    <li className="flex items-center gap-2"><Icons.CheckCircle className="text-cyan-400"/> Columnar storage optimization</li>
-                    <li className="flex items-center gap-2"><Icons.CheckCircle className="text-cyan-400"/> Auto-partitioning & clustering</li>
-                    <li className="flex items-center gap-2"><Icons.CheckCircle className="text-cyan-400"/> ML-powered query planning</li>
-                    <li className="flex items-center gap-2"><Icons.CheckCircle className="text-cyan-400"/> Petabyte-scale analytics</li>
-                  </ul>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-gradient-to-br from-green-500/10 to-transparent border-green-500/30">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center">
-                      <Icons.NoSQLDB />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-white">Document Store</h3>
-                      <p className="text-xs text-slate-400">Flexible Schema Database</p>
-                    </div>
-                  </div>
-                  <ul className="space-y-2 text-sm text-slate-300">
-                    <li className="flex items-center gap-2"><Icons.CheckCircle className="text-green-400"/> MongoDB-compatible API</li>
-                    <li className="flex items-center gap-2"><Icons.CheckCircle className="text-green-400"/> Nested experiment schemas</li>
-                    <li className="flex items-center gap-2"><Icons.CheckCircle className="text-green-400"/> Horizontal sharding</li>
-                    <li className="flex items-center gap-2"><Icons.CheckCircle className="text-green-400"/> Real-time replication</li>
-                  </ul>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-gradient-to-br from-blue-500/10 to-transparent border-blue-500/30">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                      <Icons.DataLake />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-white">Data Lake</h3>
-                      <p className="text-xs text-slate-400">Unified Binary Storage</p>
-                    </div>
-                  </div>
-                  <ul className="space-y-2 text-sm text-slate-300">
-                    <li className="flex items-center gap-2"><Icons.CheckCircle className="text-blue-400"/> S3-compatible object storage</li>
-                    <li className="flex items-center gap-2"><Icons.CheckCircle className="text-blue-400"/> Satellite imagery ingest</li>
-                    <li className="flex items-center gap-2"><Icons.CheckCircle className="text-blue-400"/> LHC raw event data</li>
-                    <li className="flex items-center gap-2"><Icons.CheckCircle className="text-blue-400"/> Multi-format support</li>
-                  </ul>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-gradient-to-br from-orange-500/10 to-transparent border-orange-500/30">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center">
-                      <Icons.FileFormat />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-white">Format Converter</h3>
-                      <p className="text-xs text-slate-400">Universal Parser Engine</p>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {['Parquet', 'AVRO', 'ORC', 'FASTQ', 'BAM', 'CRAM', 'VCF', 'PDB', 'CIF', 'XYZ', 'MOL2', 'SDF', 'HDF5', 'NetCDF'].map(fmt => (
-                      <Badge key={fmt} variant="outline" className="text-xs border-orange-500/30 text-orange-300">{fmt}</Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-            
-            {/* External Connectors */}
-            <section>
-              <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <Icons.ConnectorHub /> External Platform Connectors
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {externalConnectors.map(connector => (
-                  <ConnectorCard key={connector.name} {...connector} />
-                ))}
-              </div>
-            </section>
-          </div>
-        )}
-        
-        {/* STREAMING TAB */}
-        {activeTab === 'streaming' && (
-          <div className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="bg-gradient-to-br from-amber-500/10 to-transparent border-amber-500/30">
-                <CardContent className="p-6 text-center">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-amber-500/20 flex items-center justify-center">
-                    <Icons.KafkaIcon />
-                  </div>
-                  <h3 className="font-bold text-lg text-white mb-2">Apache Kafka</h3>
-                  <p className="text-sm text-slate-400 mb-4">Distributed event streaming platform</p>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div className="bg-slate-800/50 rounded p-2"><div className="font-bold text-amber-400">10K+</div><div className="text-xs text-slate-500">Topics</div></div>
-                    <div className="bg-slate-800/50 rounded p-2"><div className="font-bold text-amber-400">5M</div><div className="text-xs text-slate-500">Msg/sec</div></div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-gradient-to-br from-pink-500/10 to-transparent border-pink-500/30">
-                <CardContent className="p-6 text-center">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-pink-500/20 flex items-center justify-center">
-                    <Icons.FlinkStream />
-                  </div>
-                  <h3 className="font-bold text-lg text-white mb-2">Apache Flink</h3>
-                  <p className="text-sm text-slate-400 mb-4">Stateful stream processing engine</p>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div className="bg-slate-800/50 rounded p-2"><div className="font-bold text-pink-400">2M/s</div><div className="text-xs text-slate-500">Throughput</div></div>
-                    <div className="bg-slate-800/50 rounded p-2"><div className="font-bold text-pink-400">&lt;10ms</div><div className="text-xs text-slate-500">Latency</div></div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-gradient-to-br from-orange-500/10 to-transparent border-orange-500/30">
-                <CardContent className="p-6 text-center">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-orange-500/20 flex items-center justify-center">
-                    <Icons.SparkEngine />
-                  </div>
-                  <h3 className="font-bold text-lg text-white mb-2">Apache Spark</h3>
-                  <p className="text-sm text-slate-400 mb-4">Unified analytics engine</p>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div className="bg-slate-800/50 rounded p-2"><div className="font-bold text-orange-400">1000+</div><div className="text-xs text-slate-500">Nodes</div></div>
-                    <div className="bg-slate-800/50 rounded p-2"><div className="font-bold text-orange-400">50TB</div><div className="text-xs text-slate-500">Memory</div></div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-            
-            {/* Streaming Architecture Diagram */}
-            <Card className="bg-slate-900/60 border border-slate-800/50">
-              <CardContent className="p-6">
-                <h3 className="font-bold text-white mb-6">Streaming Data Pipeline</h3>
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                  {[
-                    { label: 'Sources', items: ['IoT Sensors', 'Lab Equipment', 'Satellites', 'User Events'], color: 'emerald' },
-                    { label: 'Ingestion', items: ['Kafka Topics', 'Schema Registry', 'Partitioning'], color: 'amber' },
-                    { label: 'Processing', items: ['Flink Jobs', 'Spark Streaming', 'CEP Rules'], color: 'pink' },
-                    { label: 'Output', items: ['Data Lake', 'Analytics DB', 'Dashboards', 'Alerts'], color: 'cyan' },
-                  ].map((stage, idx) => (
-                    <div key={stage.label} className="flex-1 w-full">
-                      <div className={`p-4 rounded-xl bg-${stage.color}-500/10 border border-${stage.color}-500/30`}>
-                        <h4 className={`font-medium text-${stage.color}-400 mb-2`}>{stage.label}</h4>
-                        <ul className="space-y-1">
-                          {stage.items.map(item => (
-                            <li key={item} className="text-xs text-slate-400 flex items-center gap-1">
-                              <span className={`w-1.5 h-1.5 rounded-full bg-${stage.color}-400`}/>{item}
-                            </li>
-                          ))}
-                        </ul>
+
+            {/* Polyglot Stack Showcase */}
+            <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+              <CardHeader>
+                <CardTitle className={`flex items-center gap-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  <span className="text-2xl">⚡</span>
+                  Polyglot Technology Stack
+                  <Badge className="ml-2 bg-gradient-to-r from-cyan-500 to-violet-500">6 Languages</Badge>
+                </CardTitle>
+                <CardDescription className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+                  Each language chosen for its unique strengths in scientific computing workloads
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {Object.entries(PolyglotStack).map(([key, tech]) => (
+                    <div 
+                      key={key}
+                      className={`group relative p-4 rounded-xl border transition-all duration-300 cursor-pointer hover:scale-[1.02] ${
+                        darkMode ? 'bg-white/5 border-white/10 hover:border-white/30' : 'bg-gray-50 border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div 
+                          className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl"
+                          style={{ backgroundColor: `${tech.color}20`, color: tech.color }}
+                        >
+                          {tech.icon}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <h4 className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{tech.name}</h4>
+                            <Badge variant="outline" className="text-xs">{tech.version}</Badge>
+                          </div>
+                          <p className={`text-xs mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{tech.useCase}</p>
+                          <p className="text-xs mt-2 font-mono" style={{ color: tech.color }}>{tech.performance}</p>
+                        </div>
                       </div>
-                      {idx < 3 && (
-                        <div className="hidden md:block text-center text-slate-600 my-2">→</div>
-                      )}
                     </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
-          </div>
-        )}
-        
-        {/* IDE STUDIO TAB */}
-        {activeTab === 'ide' && (
-          <div className="space-y-6">
+
+            {/* Services Overview Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* IDE Preview */}
-              <Card className="lg:col-span-2 bg-slate-900/80 border border-slate-800/50 overflow-hidden">
-                <CardContent className="p-0">
-                  {/* IDE Header */}
-                  <div className="flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-700">
-                    <div className="flex items-center gap-2">
-                      <div className="flex gap-1.5">
-                        <div className="w-3 h-3 rounded-full bg-red-500"/>
-                        <div className="w-3 h-3 rounded-full bg-yellow-500"/>
-                        <div className="w-3 h-3 rounded-full bg-green-500"/>
+              {/* Service List */}
+              <div className="lg:col-span-2">
+                <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+                  <CardHeader>
+                    <CardTitle className={`flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      <span>🔧</span> Live Services ({filteredServices.length})
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[480px] pr-4">
+                      <div className="space-y-2">
+                        {Object.entries(servicesByCategory).map(([category, services]) => (
+                          <div key={category}>
+                            <div className={`sticky top-0 py-2 text-sm font-medium ${darkMode ? 'text-violet-400' : 'text-violet-600'} backdrop-blur-md z-10`}>
+                              {category}
+                            </div>
+                            {services.map((service) => (
+                              <div
+                                key={service.id}
+                                onClick={() => setSelectedService(service)}
+                                className={`group flex items-center gap-4 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
+                                  selectedService?.id === service.id 
+                                    ? 'bg-gradient-to-r from-cyan-500/20 to-violet-500/20 border border-violet-500/30' 
+                                    : darkMode ? 'hover:bg-white/5' : 'hover:bg-gray-50'
+                                }`}
+                              >
+                                <div className={`w-2.5 h-2.5 rounded-full ${getStatusColor(service.status)}`} />
+                                <div className="flex-1 min-w-0">
+                                  <div className={`font-medium text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                                    {service.name}
+                                  </div>
+                                  <div className={`text-xs truncate ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                                    {(PolyglotStack as any)[service.technology]?.icon} {(PolyglotStack as any)[service.technology]?.name}
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-3 text-xs">
+                                  <div className="hidden sm:block">
+                                    <div className={`text-right ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>CPU</div>
+                                    <Progress value={service.cpu} className="w-16 h-1.5" />
+                                  </div>
+                                  <div className="hidden sm:block">
+                                    <div className={`text-right ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>MEM</div>
+                                    <Progress value={service.memory} className="w-16 h-1.5" />
+                                  </div>
+                                  <Badge variant="outline" className="font-mono text-xs">
+                                    {service.latency}
+                                  </Badge>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ))}
                       </div>
-                      <span className="text-xs text-slate-400 ml-2">analysis_pipeline.ipynb</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="text-xs border-cyan-500/50 text-cyan-400">Python 3.11</Badge>
-                      <Badge variant="outline" className="text-xs border-purple-500/50 text-purple-400">GPU Enabled</Badge>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Service Detail Panel */}
+              <div>
+                <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'} sticky top-6`}>
+                  <CardHeader>
+                    <CardTitle className={darkMode ? 'text-white' : 'text-gray-900'}>
+                      {selectedService ? 'Service Details' : 'Select a Service'}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {selectedService ? (
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl"
+                            style={{ backgroundColor: `${(PolyglotStack as any)[selectedService.technology]?.color}20`, color: (PolyglotStack as any)[selectedService.technology]?.color }}
+                          >
+                            {(PolyglotStack as any)[selectedService.technology]?.icon}
+                          </div>
+                          <div>
+                            <h3 className={`font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedService.name}</h3>
+                            <Badge variant="secondary" className="mt-1">{selectedService.category}</Badge>
+                          </div>
+                        </div>
+                        
+                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{selectedService.description}</p>
+                        
+                        <Separator />
+                        
+                        <div className="grid grid-cols-2 gap-3">
+                          {[
+                            { label: 'Status', value: selectedService.status.toUpperCase(), highlight: true },
+                            { label: 'Technology', value: `${(PolyglotStack as any)[selectedService.technology]?.icon} ${(PolyglotStack as any)[selectedService.technology]?.name}` },
+                            { label: 'CPU Usage', value: `${selectedService.cpu}%` },
+                            { label: 'Memory', value: `${selectedService.memory}%` },
+                            { label: 'Requests/s', value: selectedService.requests.toLocaleString() },
+                            { label: 'Latency', value: selectedService.latency },
+                            { label: 'Uptime', value: selectedService.uptime },
+                            { label: 'Endpoints', value: selectedService.endpoints.toString() },
+                          ].map((item, i) => (
+                            <div key={i} className={`p-2 rounded-lg ${darkMode ? 'bg-white/5' : 'bg-gray-50'}`}>
+                              <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>{item.label}</div>
+                              <div className={`font-medium text-sm ${item.highlight ? getStatusColor(selectedService.status).replace('bg-', 'text-') : darkMode ? 'text-white' : 'text-gray-900'}`}>
+                                {item.value}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        
+                        {selectedService.dependencies.length > 0 && (
+                          <>
+                            <Separator />
+                            <div>
+                              <div className={`text-xs mb-2 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Dependencies</div>
+                              <div className="flex flex-wrap gap-1">
+                                {selectedService.dependencies.map(dep => (
+                                  <Badge key={dep} variant="outline" className="text-xs">{dep}</Badge>
+                                ))}
+                              </div>
+                            </div>
+                          </>
+                        )}
+                        
+                        <div className="flex gap-2 pt-2">
+                          <Button size="sm" className="flex-1 bg-gradient-to-r from-cyan-500 to-violet-500 hover:from-cyan-600 hover:to-violet-600">
+                            View Logs
+                          </Button>
+                          <Button size="sm" variant="outline" className={darkMode ? 'border-white/20 text-gray-300' : ''}>
+                            Metrics
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className={`text-center py-12 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                        <div className="text-4xl mb-3">👆</div>
+                        <p>Select a service to view details</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            {/* AETHEL Integration Panel */}
+            <Card className={`relative overflow-hidden ${darkMode ? 'bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-fuchsia-500/10 backdrop-blur-xl border-violet-500/30' : 'bg-gradient-to-br from-violet-50 to-purple-50 border-violet-200'}`}>
+              <div className="absolute top-0 right-0 w-64 h-64 bg-violet-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+              <CardHeader className="relative">
+                <CardTitle className={`flex items-center gap-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-xl animate-pulse">
+                    🔮
+                  </div>
+                  AETHEL Platform Integration
+                  <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+                    ● Connected — {AethelConfig.version}
+                  </Badge>
+                </CardTitle>
+                <CardDescription className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+                  {AethelConfig.fullName} — Advanced AI-powered research augmentation layer
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="relative">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {/* Capabilities */}
+                  <div>
+                    <h4 className={`font-semibold mb-3 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      <span>✨</span> Capabilities
+                    </h4>
+                    <div className="space-y-2">
+                      {AethelConfig.capabilities.map((cap, i) => (
+                        <div key={i} className={`flex items-center gap-2 text-sm p-2 rounded-lg ${darkMode ? 'bg-white/5' : 'bg-white'}`}>
+                          <div className="w-1.5 h-1.5 rounded-full bg-violet-500" />
+                          {cap}
+                        </div>
+                      ))}
                     </div>
                   </div>
                   
-                  {/* IDE Body */}
-                  <div className="flex">
-                    {/* Sidebar */}
-                    <div className="w-48 border-r border-slate-700 p-3 space-y-2 hidden md:block">
-                      <div className="text-xs text-slate-500 uppercase tracking-wider mb-2">Files</div>
-                      {['data/', 'raw/', 'processed/', 'models/', 'notebooks/'].map(item => (
-                        <div key={item} className="flex items-center gap-2 text-xs text-slate-400 hover:text-white cursor-pointer py-1">
-                          <Icons.Folder />{item}
-                        </div>
-                      ))}
-                      <Separator className="my-2 bg-slate-700"/>
-                      {['analysis.ipynb', 'viz.py', 'model.pt', 'results.csv'].map(file => (
-                        <div key={file} className="flex items-center gap-2 text-xs text-slate-300 hover:text-cyan-400 cursor-pointer py-1 pl-2">
-                          {file.endsWith('.ipynb') ? '📓' : file.endsWith('.py') ? '🐍' : file.endsWith('.pt') ? '🤖' : '📊'}{file}
+                  {/* Live Metrics */}
+                  <div>
+                    <h4 className={`font-semibold mb-3 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      <span>📈</span> Live Metrics
+                    </h4>
+                    <div className="grid grid-cols-2 gap-3">
+                      {Object.entries(AethelConfig.metrics).map(([key, value]) => (
+                        <div key={key} className={`p-3 rounded-lg ${darkMode ? 'bg-white/5' : 'bg-white'}`}>
+                          <div className={`text-xs capitalize ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>{key.replace(/([A-Z])/g, ' $1')}</div>
+                          <div className={`font-bold font-mono ${darkMode ? 'text-violet-400' : 'text-violet-600'}`}>{value}</div>
                         </div>
                       ))}
                     </div>
+                  </div>
+                  
+                  {/* Quick Actions */}
+                  <div>
+                    <h4 className={`font-semibold mb-3 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      <span>⚡</span> Quick Actions
+                    </h4>
+                    <div className="space-y-2">
+                      <Button className="w-full justify-start gap-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600">
+                        🔍 Run Inference Query
+                      </Button>
+                      <Button variant="outline" className={`w-full justify-start gap-2 ${darkMode ? 'border-white/20 text-gray-300' : ''}`}>
+                        🧠 Train Custom Model
+                      </Button>
+                      <Button variant="outline" className={`w-full justify-start gap-2 ${darkMode ? 'border-white/20 text-gray-300' : ''}`}>
+                        📊 Export Knowledge Graph
+                      </Button>
+                      <Button variant="outline" className={`w-full justify-start gap-2 ${darkMode ? 'border-white/20 text-gray-300' : ''}`}>
+                        ⚙️ Configure Bridge
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ======== ARCHITECTURE TAB ======== */}
+          <TabsContent value="architecture" className="space-y-6">
+            {/* Interactive Architecture Diagram */}
+            <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+              <CardHeader>
+                <CardTitle className={`flex items-center gap-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  <span className="text-2xl">🏗️</span>
+                  System Architecture Topology
+                  <Badge variant="outline" className="ml-2">Interactive</Badge>
+                </CardTitle>
+                <CardDescription className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+                  Click on any component to explore its role in the ecosystem
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="relative overflow-x-auto pb-4">
+                  <svg viewBox="0 0 1200 700" className="w-full min-w-[900px]" style={{ minHeight: '500px' }}>
+                    <defs>
+                      <linearGradient id="archGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.8"/>
+                        <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.8"/>
+                      </linearGradient>
+                      <linearGradient id="archGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.8"/>
+                        <stop offset="100%" stopColor="#ec4899" stopOpacity="0.8"/>
+                      </linearGradient>
+                      <linearGradient id="archGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#10b981" stopOpacity="0.8"/>
+                        <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.8"/>
+                      </linearGradient>
+                      <filter id="archGlow">
+                        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                        <feMerge>
+                          <feMergeNode in="coloredBlur"/>
+                          <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                      </filter>
+                      <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#6366f1" opacity="0.6"/>
+                      </marker>
+                    </defs>
                     
-                    {/* Editor Area */}
-                    <div className="flex-1 p-4 font-mono text-sm">
-                      <div className="text-slate-500"># Auto-parsed from satellite imagery dataset</div>
-                      <div><span className="text-purple-400">import</span> <span className="text-cyan-400">scihub</span> <span className="text-purple-400">as</span> <span className="text-yellow-400">sh</span></div>
-                      <div className="mt-2"><span className="text-cyan-400">dataset</span> = <span className="text-yellow-400">sh</span>.<span className="text-blue-400">load</span>(<span className="text-emerald-400">'sentinel2_landsat8'</span>)</div>
-                      <div className="mt-2"><span className="text-cyan-400">images</span>, <span className="text-cyan-400">metadata</span> = <span className="text-cyan-400">dataset</span>.<span className="text-blue-400">parse</span>()</div>
-                      <div className="mt-2"><span className="text-slate-500"># Images automatically extracted with thumbnails</span></div>
-                      <div><span className="text-cyan-400">sh</span>.<span className="text-blue-400">display</span>(<span className="text-cyan-400">images</span>[<span className="text-amber-400">0</span>])</div>
-                      
-                      {/* Inline image preview */}
-                      <div className="mt-4 p-3 bg-slate-800/50 rounded-lg border border-slate-700">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Icons.Eye />
-                          <span className="text-xs text-slate-400">Inline Preview • sentinel2_2024_001.tif</span>
+                    {/* Connection Lines */}
+                    <g opacity="0.4">
+                      <line x1="100" y1="100" x2="300" y2="150" stroke="#06b6d4" strokeWidth="2" markerEnd="url(#arrowhead)" strokeDasharray="5,5">
+                        <animate attributeName="stroke-dashoffset" values="0;10" dur="1s" repeatCount="indefinite"/>
+                      </line>
+                      {/* API Gateway to Services */}
+                      <line x1="380" y1="180" x2="550" y2="280" stroke="#8b5cf6" strokeWidth="2" markerEnd="url(#arrowhead)">
+                        <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite"/>
+                      </line>
+                      <line x1="380" y1="180" x2="550" y2="420" stroke="#8b5cf6" strokeWidth="2" markerEnd="url(#arrowhead)">
+                        <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                      </line>
+                      <line x1="380" y1="180" x2="550" y2="560" stroke="#8b5cf6" strokeWidth="2" markerEnd="url(#arrowhead)">
+                        <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite" begin="1s"/>
+                      </line>
+                      {/* Internal Connections */}
+                      <line x1="720" y1="310" x2="850" y2="310" stroke="#10b981" strokeWidth="1.5" markerEnd="url(#arrowhead)"/>
+                      <line x1="720" y1="450" x2="850" y2="450" stroke="#10b981" strokeWidth="1.5" markerEnd="url(#arrowhead)"/>
+                      <line x1="720" y1="590" x2="850" y2="590" stroke="#10b981" strokeWidth="1.5" markerEnd="url(#arrowhead)"/>
+                      {/* To Storage */}
+                      <line x1="1000" y1="310" x2="1080" y2="450" stroke="#ec4899" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                      <line x1="1000" y1="450" x2="1080" y2="450" stroke="#ec4899" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                      <line x1="1000" y1="590" x2="1080" y2="450" stroke="#ec4899" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                      {/* AETHEL Connection */}
+                      <line x1="600" y1="650" x2="600" y2="80" stroke="#a855f7" strokeWidth="3" markerEnd="url(#arrowhead)" strokeDasharray="8,4">
+                        <animate attributeName="stroke-dashoffset" values="0;24" dur="2s" repeatCount="indefinite"/>
+                      </line>
+                    </g>
+                    
+                    {/* Client Layer */}
+                    <g transform="translate(30, 60)">
+                      <rect width="140" height="80" rx="12" fill="url(#archGrad1)" filter="url(#archGlow)" opacity="0.9"/>
+                      <text x="70" y="35" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">Clients</text>
+                      <text x="70" y="52" textAnchor="middle" fill="white" fontSize="9" opacity="0.8">Web • Mobile • CLI • API</text>
+                      <text x="70" y="68" textAnchor="middle" fill="white" fontSize="9" opacity="0.8">IDE Studio • Scripts</text>
+                    </g>
+                    
+                    {/* API Gateway */}
+                    <g transform="translate(260, 130)">
+                      <rect width="160" height="100" rx="12" fill="url(#archGrad1)" filter="url(#archGlow)"/>
+                      <text x="80" y="30" textAnchor="middle" fill="white" fontSize="13" fontWeight="bold">API Gateway</text>
+                      <text x="80" y="50" textAnchor="middle" fill="white" fontSize="10" opacity="0.9">⚡ Golang • gRPC/REST</text>
+                      <text x="80" y="68" textAnchor="middle" fill="white" fontSize="9" opacity="0.8">Rate Limit • Auth • Routing</text>
+                      <text x="80" y="85" textAnchor="middle" fill="white" fontSize="9" opacity="0.8">Circuit Breaker • Load Bal.</text>
+                    </g>
+                    
+                    {/* AETHEL Cloud */}
+                    <g transform="translate(500, 20)">
+                      <ellipse cx="120" cy="40" rx="110" ry="45" fill="none" stroke="#a855f7" strokeWidth="2" strokeDasharray="5,5" opacity="0.6">
+                        <animate attributeName="rx" values="110;115;110" dur="3s" repeatCount="indefinite"/>
+                      </ellipse>
+                      <text x="120" y="35" textAnchor="middle" fill="#a855f7" fontSize="14" fontWeight="bold">🔮 AETHEL</text>
+                      <text x="120" y="52" textAnchor="middle" fill="#a855f7" fontSize="10">AI Hypercompute Layer</text>
+                    </g>
+                    
+                    {/* Service Mesh */}
+                    <g transform="translate(520, 250)">
+                      <rect width="170" height="120" rx="12" fill="url(#archGrad2)" filter="url(#archGlow)"/>
+                      <text x="85" y="25" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">Core Services</text>
+                      <text x="85" y="48" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">✦ Elixir • Discovery</text>
+                      <text x="85" y="65" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">🦀 Rust • Config</text>
+                      <text x="85" y="82" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">⚡ Golang • Cache</text>
+                      <text x="85" y="99" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">✦ Elixir • Collaboration</text>
+                      <text x="85" y="114" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">⌗ C • System Interfaces</text>
+                    </g>
+                    
+                    {/* Data Layer */}
+                    <g transform="translate(520, 390)">
+                      <rect width="170" height="120" rx="12" fill="url(#archGrad3)" filter="url(#archGlow)"/>
+                      <text x="85" y="25" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">Data Layer</text>
+                      <text x="85" y="48" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">🦀 Rust • Query Engine</text>
+                      <text x="85" y="65" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">◈ Scala • NoSQL Cluster</text>
+                      <text x="85" y="82" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">⚡ Golang • Metadata</text>
+                      <text x="85" y="99" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">🐍 Python • Storage Coord.</text>
+                      <text x="85" y="114" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">🦀 Rust • Schema Registry</text>
+                    </g>
+                    
+                    {/* Compute Layer */}
+                    <g transform="translate(520, 530)">
+                      <rect width="170" height="120" rx="12" fill="url(#archGrad1)" filter="url(#archGlow)"/>
+                      <text x="85" y="25" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">Compute &amp; Streaming</text>
+                      <text x="85" y="48" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">◈ Scala • Kafka/Flink</text>
+                      <text x="85" y="65" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">◈ Scala • Spark Engine</text>
+                      <text x="85" y="82" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">🐍 Python • ML Orchestrator</text>
+                      <text x="85" y="99" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">⚡ Golang • Model Registry</text>
+                      <text x="85" y="114" textAnchor="middle" fill="white" fontSize="9" opacity="0.9">◈ Scala • Feature Store</text>
+                    </g>
+                    
+                    {/* Connector Hub */}
+                    <g transform="translate(830, 270)">
+                      <rect width="150" height="90" rx="12" fill="#1e1b4b" stroke="#6366f1" strokeWidth="2"/>
+                      <text x="75" y="28" textAnchor="middle" fill="#c4b5fd" fontSize="11" fontWeight="bold">Connector Hub</text>
+                      <text x="75" y="48" textAnchor="middle" fill="#a5b4fc" fontSize="9">🐍 Python Adapters</text>
+                      <text x="75" y="63" textAnchor="middle" fill="#a5b4fc" fontSize="9">✦ AETHEL Bridge</text>
+                      <text x="75" y="78" textAnchor="middle" fill="#a5b4fc" fontSize="9">14+ Platforms</text>
+                    </g>
+                    
+                    {/* IDE Studio */}
+                    <g transform="translate(830, 400)">
+                      <rect width="150" height="100" rx="12" fill="#134e4a" stroke="#14b8a6" strokeWidth="2"/>
+                      <text x="75" y="25" textAnchor="middle" fill="#5eead4" fontSize="11" fontWeight="bold">IDE Studio</text>
+                      <text x="75" y="45" textAnchor="middle" fill="#99f6e4" fontSize="9">🐍 Python Core</text>
+                      <text x="75" y="60" textAnchor="middle" fill="#99f6e4" fontSize="9">🦀 Rust Parser</text>
+                      <text x="75" y="75" textAnchor="middle" fill="#99f6e4" fontSize="9">✦ Real-time Collab</text>
+                      <text x="75" y="90" textAnchor="middle" fill="#99f6e4" fontSize="9">Auto-parse Files</text>
+                    </g>
+                    
+                    {/* Publishing */}
+                    <g transform="translate(830, 540)">
+                      <rect width="150" height="100" rx="12" fill="#1e1b4b" stroke="#8b5cf6" strokeWidth="2"/>
+                      <text x="75" y="25" textAnchor="middle" fill="#c4b5fd" fontSize="11" fontWeight="bold">Publishing</text>
+                      <text x="75" y="45" textAnchor="middle" fill="#a5b4fc" fontSize="9">⚡ Golang CMS</text>
+                      <text x="75" y="60" textAnchor="middle" fill="#a5b4fc" fontSize="9">🦀 Asset CDN</text>
+                      <text x="75" y="75" textAnchor="middle" fill="#a5b4fc" fontSize="9">🐍 DOI Service</text>
+                      <text x="75" y="90" textAnchor="middle" fill="#a5b4fc" fontSize="9">Blog • Whitepapers</text>
+                    </g>
+                    
+                    {/* Storage Backend */}
+                    <g transform="translate(1040, 390)">
+                      <rect width="140" height="120" rx="12" fill="#0c0a09" stroke="#f97316" strokeWidth="2"/>
+                      <text x="70" y="25" textAnchor="middle" fill="#fed7aa" fontSize="11" fontWeight="bold">Storage Layer</text>
+                      <text x="70" y="48" textAnchor="middle" fill="#fdba74" fontSize="9">PostgreSQL Cluster</text>
+                      <text x="70" y="63" textAnchor="middle" fill="#fdba74" fontSize="9">MongoDB Shards</text>
+                      <text x="70" y="78" textAnchor="middle" fill="#fdba74" fontSize="9">Redis Cache Tier</text>
+                      <text x="70" y="93" textAnchor="middle" fill="#fdba74" fontSize="9">Blob/Object Store</text>
+                      <text x="70" y="108" textAnchor="middle" fill="#fdba74" fontSize="9">Data Lake (S3/GCS)</text>
+                    </g>
+                    
+                    {/* External Sources */}
+                    <g transform="translate(30, 200)">
+                      <rect width="140" height="180" rx="12" fill="none" stroke="#64748b" strokeWidth="1.5" strokeDasharray="4,4"/>
+                      <text x="70" y="20" textAnchor="middle" fill="#94a3b8" fontSize="10" fontWeight="bold">External Sources</text>
+                      <text x="70" y="45" textAnchor="middle" fill="#cbd5e1" fontSize="8">📄 arXiv • PubMed</text>
+                      <text x="70" y="62" textAnchor="middle" fill="#cbd5e1" fontSize="8">💻 GitHub • GitLab</text>
+                      <text x="70" y="79" textAnchor="middle" fill="#cbd5e1" fontSize="8">🛰️ NASA • ESA</text>
+                      <text x="70" y="96" textAnchor="middle" fill="#cbd5e1" fontSize="8">⚛️ CERN • NOAA</text>
+                      <text x="70" y="113" textAnchor="middle" fill="#cbd5e1" fontSize="8">🧬 GenBank • PDB</text>
+                      <text x="70" y="130" textAnchor="middle" fill="#cbd5e1" fontSize="8">🌐 World Bank</text>
+                      <text x="70" y="147" textAnchor="middle" fill="#cbd5e1" fontSize="8">⚗️ Materials Project</text>
+                      <text x="70" y="165" textAnchor="middle" fill="#cbd5e1" fontSize="8">🔮 AETHEL</text>
+                    </g>
+                    
+                    {/* Legend */}
+                    <g transform="translate(30, 420)">
+                      <rect width="160" height="130" rx="8" fill={darkMode ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.8)'}/>
+                      <text x="80" y="20" textAnchor="middle" fill={darkMode ? '#e2e8f0' : '#334155'} fontSize="10" fontWeight="bold">Technology Legend</text>
+                      <text x="15" y="42" fill="#00ADD8" fontSize="9">⚡ Golang</text>
+                      <text x="90" y="42" fill="#4B275F" fontSize="9">✦ Elixir</text>
+                      <text x="15" y="58" fill="#3776AB" fontSize="9">🐍 Python</text>
+                      <text x="90" y="58" fill="#DC322F" fontSize="9">◈ Scala</text>
+                      <text x="15" y="74" fill="#DEA584" fontSize="9">🦀 Rust</text>
+                      <text x="90" y="74" fill="#888888" fontSize="9">⌗ C</text>
+                      <line x1="15" y1="88" x2="145" y2="88" stroke={darkMode ? '#475569' : '#cbd5e1'} strokeWidth="0.5"/>
+                      <text x="80" y="105" textAnchor="middle" fill={darkMode ? '#94a3b8' : '#64748b'} fontSize="8">Animated flows show</text>
+                      <text x="80" y="118" textAnchor="middle" fill={darkMode ? '#94a3b8' : '#64748b'} fontSize="8">real-time data movement</text>
+                    </g>
+                  </svg>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Middleware Stack */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { name: 'API Gateway Middleware', desc: 'Authentication, Rate Limiting, Request Transformation, CORS', tech: 'Golang', icon: '🚪' },
+                { name: 'Service Mesh (Istio)', desc: 'mTLS, Traffic Management, Observability, Policy Enforcement', tech: 'Envoy/XDS', icon: '🕸️' },
+                { name: 'Event Bus', pubsub: 'Publish/Subscribe, Event Sourcing, Dead Letter Queues, Replay', tech: 'Elixir + Kafka', icon: '📨' },
+                { name: 'Cache Middleware', desc: 'Multi-tier Caching, Cache Invalidation, Prefetching, Write-through', tech: 'Rust', icon: '⚡' },
+                { name: 'Circuit Breaker', desc: 'Failure Detection, Fallback Logic, Half-open Recovery, Metrics', tech: 'Golang', icon: '🔌' },
+                { name: 'Observability Stack', desc: 'Distributed Tracing, Metrics Collection, Log Aggregation, Alerting', tech: 'OTel + Prometheus', icon: '📊' },
+              ].map((mw, i) => (
+                <Card key={i} className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'} hover:border-cyan-500/50 transition-all`}>
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3">
+                      <span className="text-2xl">{mw.icon}</span>
+                      <div className="flex-1">
+                        <h4 className={`font-semibold text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{mw.name}</h4>
+                        <p className={`text-xs mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{mw.desc}</p>
+                        <Badge variant="outline" className="mt-2 text-xs">{mw.tech}</Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          {/* ======== CONNECTORS TAB ======== */}
+          <TabsContent value="connectors" className="space-y-6">
+            {/* Platform Connector Marketplace */}
+            <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+              <CardHeader>
+                <CardTitle className={`flex items-center gap-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  <span className="text-2xl">🔌</span>
+                  Research Platform Connectors
+                  <Badge className="bg-gradient-to-r from-cyan-500 to-violet-500">{ExternalPlatforms.length} Platforms</Badge>
+                </CardTitle>
+                <CardDescription className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+                  Unified access to global research data sources — one API to rule them all
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {ExternalPlatforms.map((platform) => (
+                    <div
+                      key={platform.id}
+                      className={`group relative p-4 rounded-xl border transition-all duration-300 cursor-pointer hover:scale-[1.02] ${
+                        darkMode ? 'bg-white/5 border-white/10 hover:border-white/30' : 'bg-gray-50 border-gray-200 hover:border-gray-300'
+                      } ${platform.id === 'aethel' ? 'ring-2 ring-violet-500/50 ring-offset-2 ring-offset-transparent' : ''}`}
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl">{platform.icon}</span>
+                          <div>
+                            <h4 className={`font-semibold text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                              {platform.name}
+                              {platform.id === 'aethel' && <Badge className="ml-2 bg-violet-500/20 text-violet-400 border-violet-500/30 text-xs">AETHEL</Badge>}
+                            </h4>
+                            <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>{platform.category}</p>
+                          </div>
                         </div>
-                        <div className="aspect-video bg-gradient-to-br from-emerald-900/30 to-cyan-900/30 rounded flex items-center justify-center border border-dashed border-slate-600">
-                          <div className="text-center">
-                            <div className="text-3xl mb-2">🛰️</div>
-                            <div className="text-xs text-slate-500">Satellite Imagery<br/>1024×1024 • 4 bands</div>
+                        <div className={`w-2.5 h-2.5 rounded-full ${getPlatformStatusColor(platform.status)}`} />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap gap-1">
+                          {platform.dataTypes.slice(0, 3).map((dt, i) => (
+                            <Badge key={i} variant="secondary" className="text-xs px-1.5 py-0">{dt}</Badge>
+                          ))}
+                          {platform.dataTypes.length > 3 && (
+                            <Badge variant="secondary" className="text-xs px-1.5 py-0">+{platform.dataTypes.length - 3}</Badge>
+                          )}
+                        </div>
+                        
+                        <div className={`flex justify-between text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                          <span>Sync: {platform.syncFrequency}</span>
+                          <span>{platform.recordsCount}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-3 pt-3 border-t border-white/10 flex gap-2">
+                        <Button size="sm" variant="outline" className={`flex-1 text-xs h-7 ${darkMode ? 'border-white/20' : ''}`}>
+                          {platform.status === 'connected' ? 'Manage' : 'Connect'}
+                        </Button>
+                        <Button size="sm" variant="ghost" className="text-xs h-7 px-2">
+                          ⋯
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Streaming Pipelines */}
+            <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+              <CardHeader>
+                <CardTitle className={`flex items-center gap-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  <span className="text-2xl">🔄</span>
+                  Active Streaming Pipelines
+                  <Badge variant="outline">{StreamingPipelines.length} Running</Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {StreamingPipelines.map((pipeline) => (
+                    <div key={pipeline.id} className={`p-4 rounded-xl border ${darkMode ? 'bg-white/5 border-white/10' : 'bg-gray-50 border-gray-200'}`}>
+                      <div className="flex items-center justify-between mb-3">
+                        <div>
+                          <h4 className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{pipeline.name}</h4>
+                          <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Source: {pipeline.source}</p>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <div className="text-right">
+                            <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Throughput</div>
+                            <div className={`font-mono font-bold text-sm ${darkMode ? 'text-cyan-400' : 'text-cyan-600'}`}>{pipeline.throughput}</div>
+                          </div>
+                          <div className="text-right">
+                            <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Latency</div>
+                            <div className={`font-mono font-bold text-sm ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>{pipeline.latency}</div>
                           </div>
                         </div>
                       </div>
+                      
+                      {/* Pipeline Visualization */}
+                      <div className="flex items-center gap-1 overflow-x-auto pb-2">
+                        {pipeline.pipeline.map((step, i) => (
+                          <div key={i} className="flex items-center">
+                            <div className={`px-3 py-1.5 rounded-lg text-xs whitespace-nowrap font-medium ${
+                              i === 0 ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' :
+                              i === pipeline.pipeline.length - 1 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                              darkMode ? 'bg-white/10 text-gray-300 border border-white/20' : 'bg-white text-gray-700 border border-gray-200'
+                            }`}>
+                              {step}
+                            </div>
+                            {i < pipeline.pipeline.length - 1 && (
+                              <svg className="w-4 h-4 mx-1 flex-shrink-0" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="2" className={darkMode ? 'text-gray-600' : 'text-gray-400'}/>
+                              </svg>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      
+                      {/* Technologies Used */}
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {pipeline.technologies.map((tech, i) => (
+                          <Badge key={i} variant="outline" className="text-xs">{tech}</Badge>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ======== IDE STUDIO TAB ======== */}
+          <TabsContent value="ide-studio" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              {/* File Explorer */}
+              <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+                <CardHeader className="pb-3">
+                  <CardTitle className={`text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>📁 Explorer</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <ScrollArea className="h-[500px]">
+                    <div className="space-y-0.5 p-2">
+                      <div className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-white/10 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        📂 Projects
+                      </div>
+                      <div className="ml-4 space-y-0.5">
+                        <div className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-white/10 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                          📁 genomics-analysis
+                        </div>
+                        <div className="ml-4 space-y-0.5">
+                          <div className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-cyan-500/20 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                            📄 sequence_parser.py
+                          </div>
+                          <div className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-cyan-500/20 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                            📄 alignment.ipynb
+                          </div>
+                          <div className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-cyan-500/20 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                            🖼️ coverage_plot.png
+                          </div>
+                        </div>
+                        <div className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-white/10 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                          📁 climate-model
+                        </div>
+                        <div className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-white/10 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                          📁 ml-experiments
+                        </div>
+                      </div>
+                      <div className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-white/10 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        📂 Recent
+                      </div>
+                      <div className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-white/10 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        📂 Shared
+                      </div>
+                    </div>
+                  </ScrollArea>
                 </CardContent>
               </Card>
-              
-              {/* IDE Features */}
+
+              {/* Editor Area */}
+              <div className="lg:col-span-2 space-y-4">
+                {/* Code Editor Mockup */}
+                <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+                  <CardHeader className="pb-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>sequence_parser.py</span>
+                        <Badge variant="outline" className="text-xs">Python 3.13</Badge>
+                        <Badge className="bg-emerald-500/20 text-emerald-400 text-xs">Auto-saved</Badge>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button size="sm" variant="outline" className={`h-7 text-xs ${darkMode ? 'border-white/20' : ''}`}>▶ Run</Button>
+                        <Button size="sm" variant="outline" className={`h-7 text-xs ${darkMode ? 'border-white/20' : ''}`}>⚙ Settings</Button>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className={`rounded-lg p-4 font-mono text-sm leading-relaxed overflow-x-auto ${darkMode ? 'bg-black/50' : 'bg-gray-900'}`}>
+                      <pre className="text-gray-300">
+{`import Bio.SeqIO
+import numpy as np
+from scihub import Dataset, Pipeline
+
+# Auto-parsed from uploaded FASTQ file
+@dataset.input("sample_data.fastq")
+def parse_sequences(file):
+    """Parse genomic sequences with quality scores"""
+    records = Bio.SeqIO.parse(file, "fastquality")
+    return [
+        {
+            "id": r.id,
+            "sequence": str(r.seq),
+            "quality": r.letter_annotations["phred_quality"],
+            "gc_content": calculate_gc(r.seq),
+        }
+        for r in records
+    ]
+
+# Visualized automatically
+@dataset.output("coverage_plot.png")
+def plot_coverage(sequences): ...`}
+                      </pre>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Output/Terminal */}
+                <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+                  <CardHeader className="pb-2">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>Output</span>
+                      <Badge variant="outline" className="text-xs">Terminal</Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className={`rounded-lg p-4 font-mono text-xs space-y-1 ${darkMode ? 'bg-black/50' : 'bg-gray-900 text-green-400'}`}>
+                      <div>$ python sequence_parser.py --input sample_data.fastq</div>
+                      <div className="text-blue-400">[SciHub] Auto-detected FASTQ format (Illumina 1.8+)</div>
+                      <div className="text-blue-400">[SciHub] Found 154,232 sequences</div>
+                      <div className="text-blue-400">[SciHub] Parsing with 4 workers...</div>
+                      <div>{'[████████████████████] 100% 154K/154K [0:03<0:00]'}</div>
+                      <div className="text-emerald-400">✓ Parsed 154,232 sequences (avg length: 151bp)</div>
+                      <div className="text-emerald-400">✓ GC Content: 52.3% ± 4.1%</div>
+                      <div className="text-emerald-400">✓ Quality score: Q30+ (94.2%)</div>
+                      <div className="text-yellow-400">→ Coverage plot generated: coverage_plot.png</div>
+                      <div className="text-gray-500">$ _</div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Side Panel */}
               <div className="space-y-4">
-                <Card className="bg-gradient-to-br from-cyan-500/10 to-transparent border-cyan-500/30">
-                  <CardContent className="p-4">
-                    <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
-                      <Icons.Zap /> AI Assistant
-                    </h4>
-                    <p className="text-xs text-slate-400 mb-3">Context-aware code completion and explanation</p>
-                    <div className="space-y-2">
-                      {['Auto-complete queries', 'Explain code blocks', 'Generate visualizations', 'Debug suggestions'].map(feature => (
-                        <div key={feature} className="flex items-center gap-2 text-xs text-slate-300">
-                          <Icons.CheckCircle className="text-cyan-400"/>{feature}
-                        </div>
-                      ))}
+                {/* AI Assistant */}
+                <Card className={`bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 backdrop-blur-xl border-violet-500/30`}>
+                  <CardHeader className="pb-2">
+                    <CardTitle className={`text-sm flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      🤖 AI Assistant
+                      <Badge className="bg-violet-500/20 text-violet-400 text-xs">AETHEL Powered</Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className={`space-y-3 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <div className="p-3 rounded-lg bg-white/5">
+                        <p>I notice your sequence parser could benefit from parallel processing. Would you like me to optimize it using Rust extensions?</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="outline" className={`flex-1 text-xs h-7 ${darkMode ? 'border-white/20' : ''}`}>Yes, optimize</Button>
+                        <Button size="sm" variant="outline" className={`flex-1 text-xs h-7 ${darkMode ? 'border-white/20' : ''}`}>Explain more</Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
-                
-                <Card className="bg-gradient-to-br from-purple-500/10 to-transparent border-purple-500/30">
-                  <CardContent className="p-4">
-                    <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
-                      <Icons.Users /> Collaboration
-                    </h4>
-                    <p className="text-xs text-slate-400 mb-3">Real-time multi-user editing</p>
-                    <div className="space-y-2">
-                      {['Cursor presence', 'Comments & threads', 'Version history', 'Share links'].map(feature => (
-                        <div key={feature} className="flex items-center gap-2 text-xs text-slate-300">
-                          <Icons.CheckCircle className="text-purple-400"/>{feature}
-                        </div>
-                      ))}
+
+                {/* Preview */}
+                <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+                  <CardHeader className="pb-2">
+                    <CardTitle className={`text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>🖼️ Preview</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className={`aspect-video rounded-lg bg-gradient-to-br from-cyan-500/20 to-violet-500/20 flex items-center justify-center ${darkMode ? 'border border-white/10' : 'border border-gray-200'}`}>
+                      <div className="text-center">
+                        <div className="text-4xl mb-2">📊</div>
+                        <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>coverage_plot.png</p>
+                        <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Auto-generated visualization</p>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
-                
-                <Card className="bg-gradient-to-br from-pink-500/10 to-transparent border-pink-500/30">
-                  <CardContent className="p-4">
-                    <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
-                      <Icons.Cloud /> Compute
-                    </h4>
-                    <p className="text-xs text-slate-400 mb-3">Integrated compute resources</p>
+
+                {/* Dependencies */}
+                <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+                  <CardHeader className="pb-2">
+                    <CardTitle className={`text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>📦 Dependencies</CardTitle>
+                  </CardHeader>
+                  <CardContent>
                     <div className="space-y-2">
-                      {['GPU instances', 'Distributed runs', 'Job scheduling', 'Result caching'].map(feature => (
-                        <div key={feature} className="flex items-center gap-2 text-xs text-slate-300">
-                          <Icons.CheckCircle className="text-pink-400"/>{feature}
+                      {[
+                        { name: 'biopython', version: '1.84', status: 'installed' },
+                        { name: 'numpy', version: '2.0.0', status: 'installed' },
+                        { name: 'scihub-sdk', version: '2.0.0', status: 'installed' },
+                        { name: 'matplotlib', version: '3.9.0', status: 'auto-added' },
+                      ].map((dep, i) => (
+                        <div key={i} className="flex items-center justify-between text-xs">
+                          <span className={darkMode ? 'text-gray-300' : 'text-gray-700'}>{dep.name}</span>
+                          <div className="flex items-center gap-2">
+                            <span className={darkMode ? 'text-gray-500' : 'text-gray-500'}>{dep.version}</span>
+                            <div className={`w-2 h-2 rounded-full ${dep.status === 'installed' ? 'bg-emerald-500' : 'bg-blue-500'}`} />
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -1242,152 +1293,524 @@ export default function MicroservicesDashboard() {
                 </Card>
               </div>
             </div>
-          </div>
-        )}
-        
-        {/* PUBLISH TAB */}
-        {activeTab === 'publish' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Blog Post Editor Preview */}
-              <Card className="bg-slate-900/80 border border-slate-800/50 overflow-hidden">
-                <CardContent className="p-0">
-                  <div className="flex items-center justify-between px-4 py-3 bg-slate-800 border-b border-slate-700">
-                    <span className="text-sm font-medium text-white">New Blog Post</span>
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="ghost" className="text-xs text-slate-400">Save Draft</Button>
-                      <Button size="sm" className="text-xs bg-gradient-to-r from-pink-500 to-purple-500">Publish</Button>
+          </TabsContent>
+
+          {/* ======== DATA LAKE TAB ======== */}
+          <TabsContent value="data-lake" className="space-y-6">
+            {/* Data Sources Overview */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                { label: 'Total Data Stored', value: '2.4 PB', icon: '🏝️', sublabel: 'Across all regions' },
+                { label: 'Files Indexed', value: '847M', icon: '📄', sublabel: 'Searchable metadata' },
+                { label: 'Active Queries', value: '1,234', icon: '🔍', sublabel: 'Running now' },
+                { label: 'Data Ingestion Rate', value: '45 TB/day', icon: '📥', sublabel: 'Avg over 7 days' },
+              ].map((stat, i) => (
+                <Card key={i} className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{stat.icon}</span>
+                      <div>
+                        <div className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{stat.value}</div>
+                        <div className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{stat.label}</div>
+                        <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{stat.sublabel}</div>
+                      </div>
                     </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* File Formats Support */}
+            <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+              <CardHeader>
+                <CardTitle className={`flex items-center gap-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  <span className="text-2xl">📁</span>
+                  Supported File Formats
+                  <Badge className="bg-gradient-to-r from-cyan-500 to-violet-500">{FileFormats.length} Formats</Badge>
+                </CardTitle>
+                <CardDescription className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+                  Native read/write support for scientific and big data formats
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                  {FileFormats.map((format, i) => (
+                    <div
+                      key={i}
+                      className={`p-3 rounded-lg border transition-all hover:scale-[1.02] cursor-pointer ${
+                        darkMode ? 'bg-white/5 border-white/10 hover:border-white/30' : 'bg-gray-50 border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className={`font-semibold text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{format.name}</h4>
+                        <code className={`text-xs px-1.5 py-0.5 rounded ${darkMode ? 'bg-white/10 text-gray-400' : 'bg-gray-200 text-gray-600'}`}>{format.extension}</code>
+                      </div>
+                      <div className={`text-xs mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        <span className="inline-block px-1.5 py-0.5 rounded bg-violet-500/20 text-violet-400 mr-1">{format.category}</span>
+                        Engine: {format.engine}
+                      </div>
+                      <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                        Use: {format.useCase}
+                      </div>
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {format.compression.slice(0, 2).map((c, j) => (
+                          <Badge key={j} variant="secondary" className="text-xs px-1 py-0">{c}</Badge>
+                        ))}
+                      </div>
+                      <div className={`text-xs mt-1 font-medium ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                        Compression: {format.sizeReduction}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* BigQuery-like SQL Interface */}
+            <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+              <CardHeader>
+                <CardTitle className={`flex items-center gap-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  <span className="text-2xl">🔎</span>
+                  Distributed Query Engine
+                  <Badge variant="outline">SQL Compatible</Badge>
+                </CardTitle>
+                <CardDescription className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+                  BigQuery-compatible SQL interface with columnar execution engine (Rust-powered)
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {/* SQL Editor */}
+                  <div className={`rounded-lg p-4 font-mono text-sm ${darkMode ? 'bg-black/50' : 'bg-gray-900'}`}>
+                    <div className="flex items-center gap-2 mb-3 pb-3 border-b border-white/10">
+                      <Badge variant="outline" className="text-xs">SQL Editor</Badge>
+                      <Badge className="bg-emerald-500/20 text-emerald-400 text-xs">Ready</Badge>
+                      <div className="ml-auto flex gap-2">
+                        <Button size="sm" className="h-7 text-xs bg-gradient-to-r from-cyan-500 to-violet-500">▶ Execute</Button>
+                        <Button size="sm" variant="outline" className={`h-7 text-xs ${darkMode ? 'border-white/20' : ''}`}>Format</Button>
+                        <Button size="sm" variant="outline" className={`h-7 text-xs ${darkMode ? 'border-white/20' : ''}`}>Save</Button>
+                      </div>
+                    </div>
+                    <pre className="text-gray-300 overflow-x-auto">
+{`-- Cross-domain query: Find high-impact genomics papers
+-- with available satellite data overlap
+SELECT 
+    p.title,
+    p.authors,
+    p.citation_count,
+    g.species,
+    s.satellite,
+    s.coverage_area
+FROM publications p
+JOIN genomics_datasets g ON p.id = g.paper_id
+LEFT JOIN satellite_data s 
+    ON ST_Intersects(g.location, s.footprint)
+WHERE p.published_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR)
+    AND p.citation_count > 100
+    AND s.resolution <= 10  -- meters
+ORDER BY p.citation_count DESC
+LIMIT 100`}
+                    </pre>
                   </div>
                   
-                  <div className="p-4 space-y-4">
-                    <input 
-                      type="text" 
-                      placeholder="Enter your title..."
-                      className="w-full bg-transparent text-xl font-bold text-white placeholder:text-slate-600 outline-none border-b border-slate-700 pb-2"
-                      defaultValue="Breakthrough: Novel Protein Structure Prediction Method"
+                  {/* Query Results Preview */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>Results (Preview)</h4>
+                      <div className="flex items-center gap-4 text-xs">
+                        <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Rows: 87 of 12,456</span>
+                        <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Time: 2.34s</span>
+                        <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Bytes processed: 4.2 GB</span>
+                        <span className="text-emerald-400 font-medium">Cost: $0.08</span>
+                      </div>
+                    </div>
+                    <div className={`rounded-lg border overflow-hidden ${darkMode ? 'border-white/10' : 'border-gray-200'}`}>
+                      <table className="w-full text-sm">
+                        <thead className={darkMode ? 'bg-white/5' : 'bg-gray-50'}>
+                          <tr>
+                            {['title', 'authors', 'citations', 'species', 'satellite', 'area'].map((col) => (
+                              <th key={col} className={`px-4 py-2 text-left font-medium text-xs uppercase ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{col}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {[
+                            ['CRISPR-Cas9 genome editing...', 'Zhang et al.', '15,432', 'Homo sapiens', 'Sentinel-2', '2,340 km²'],
+                            ['Spatial transcriptomics of...', 'Ståhl et al.', '8,721', 'Mus musculus', 'Landsat 8', '890 km²'],
+                            ['Deep learning for protein...', 'Jumper et al.', '12,056', 'Multiple', 'MODIS', 'Global'],
+                            ['Single-cell atlas of human...', 'Regev et al.', '6,234', 'Homo sapiens', '-', '-'],
+                          ].map((row, i) => (
+                            <tr key={i} className={`border-t ${darkMode ? 'border-white/5 hover:bg-white/5' : 'border-gray-100 hover:bg-gray-50'}`}>
+                              {row.map((cell, j) => (
+                                <td key={j} className={`px-4 py-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{cell}</td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Data Structure Types */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                {
+                  title: 'Structured Data',
+                  icon: '📊',
+                  examples: 'SQL tables, CSV, Parquet, ORC',
+                  sources: 'Databases, Spreadsheets, APIs',
+                  query: 'SQL, BI tools, Direct access',
+                  color: 'from-blue-500 to-cyan-500'
+                },
+                {
+                  title: 'Semi-Structured Data',
+                  icon: '📋',
+                  examples: 'JSON, XML, Avro, Protobuf, YAML',
+                  sources: 'APIs, Logs, Config files, NoSQL',
+                  query: 'JSONPath, XPath, Schema-aware',
+                  color: 'from-violet-500 to-purple-500'
+                },
+                {
+                  title: 'Unstructured Data',
+                  icon: '📁',
+                  examples: 'PDFs, Images, Audio, Video, Binary',
+                  sources: 'Satellites, LHC, Instruments, Papers',
+                  query: 'ML extraction, OCR, Indexing, Embeddings',
+                  color: 'from-orange-500 to-red-500'
+                },
+              ].map((type, i) => (
+                <Card key={i} className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+                  <CardContent className="p-5">
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${type.color} flex items-center justify-center text-2xl mb-4`}>
+                      {type.icon}
+                    </div>
+                    <h3 className={`font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{type.title}</h3>
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Examples</div>
+                        <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>{type.examples}</div>
+                      </div>
+                      <div>
+                        <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Sources</div>
+                        <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>{type.sources}</div>
+                      </div>
+                      <div>
+                        <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Query Methods</div>
+                        <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>{type.query}</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          {/* ======== PUBLISH TAB ======== */}
+          <TabsContent value="publish" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Editor */}
+              <div className="lg:col-span-2 space-y-4">
+                <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className={darkMode ? 'text-white' : 'text-gray-900'}>✍️ Create New Post</CardTitle>
+                        <CardDescription className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Write blog posts, whitepapers, or dataset descriptions</CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        <Badge variant="outline" className="cursor-pointer">Draft</Badge>
+                        <Button size="sm" className="bg-gradient-to-r from-cyan-500 to-violet-500">Publish</Button>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <Input placeholder="Enter title..." className={`text-lg font-semibold ${darkMode ? 'bg-white/5 border-white/10' : ''}`} defaultValue="Advances in Multi-Omics Integration Using SciHub Pro" />
+                    
+                    <div className="flex gap-2">
+                      <select className={`px-3 py-2 rounded-lg text-sm border ${darkMode ? 'bg-white/5 border-white/10 text-gray-300' : 'bg-white border-gray-200'}`}>
+                        <option>📝 Blog Post</option>
+                        <option>📄 Whitepaper</option>
+                        <option>📊 Dataset Description</option>
+                        <option>🔬 Research Note</option>
+                        <option>📣 Announcement</option>
+                      </select>
+                      <select className={`px-3 py-2 rounded-lg text-sm border ${darkMode ? 'bg-white/5 border-white/10 text-gray-300' : 'bg-white border-gray-200'}`}>
+                        <option>Bioinformatics</option>
+                        <option>Cheminformatics</option>
+                        <option>Physics</option>
+                        <option>Materials Science</option>
+                        <option>Machine Learning</option>
+                        <option>Data Engineering</option>
+                      </select>
+                    </div>
+                    
+                    <Textarea 
+                      placeholder="Write your content in Markdown..." 
+                      className={`min-h-[300px] font-mono text-sm ${darkMode ? 'bg-white/5 border-white/10' : ''}`}
+                      defaultValue={`## Abstract
+
+In this study, we demonstrate the capabilities of **SciHub Pro** for integrating multi-omics data streams from heterogeneous sources...
+
+## Introduction
+
+The exponential growth of biological data has created unprecedented challenges...
+
+### Methods
+
+We leveraged the following SciHub Pro components:
+
+1. **Data Lake Ingestion** - Automated collection from GEO, SRA, and PRIDE
+2. **Streaming Pipeline** - Real-time processing via Apache Flink
+3. **Query Engine** - Cross-domain SQL joins across modalities
+4. **IDE Studio** - Collaborative analysis notebooks
+
+## Results
+
+\`\`\`python
+results = scihub.query("""
+    SELECT * FROM multi_omics 
+    WHERE significance < 0.001
+""")
+\`\`\`
+
+## Conclusion
+
+Our findings suggest...`}
                     />
                     
-                    <div className="flex gap-2">
-                      <Badge variant="outline" className="text-xs border-pink-500/30 text-pink-400">Bioinformatics</Badge>
-                      <Badge variant="outline" className="text-xs border-purple-500/30 text-purple-400">Machine Learning</Badge>
-                      <Badge variant="outline" className="text-xs border-cyan-500/30 text-cyan-400">Research</Badge>
-                    </div>
-                    
-                    <div className="prose prose-invert prose-sm max-w-none">
-                      <p className="text-slate-300 text-sm leading-relaxed">
-                        We present a novel approach to protein structure prediction that achieves state-of-the-art accuracy on CASP15 benchmarks...
-                      </p>
-                    </div>
-                    
-                    {/* Embedded content areas */}
-                    <div className="space-y-3">
-                      <div className="p-3 bg-slate-800/50 rounded-lg border border-dashed border-slate-600">
-                        <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
-                          📊 Embed Chart / Visualization
-                        </div>
-                        <div className="h-24 bg-gradient-to-r from-pink-500/10 to-purple-500/10 rounded flex items-center justify-center">
-                          <span className="text-xs text-slate-500">Click to add chart</span>
-                        </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" className={darkMode ? 'border-white/20' : ''}>📎 Attach Files</Button>
+                        <Button variant="outline" size="sm" className={darkMode ? 'border-white/20' : ''}>🖼️ Insert Image</Button>
+                        <Button variant="outline" size="sm" className={darkMode ? 'border-white/20' : ''}>📊 Insert Chart</Button>
+                        <Button variant="outline" size="sm" className={darkMode ? 'border-white/20' : ''}>🔗 Add Citation</Button>
                       </div>
-                      
-                      <div className="p-3 bg-slate-800/50 rounded-lg border border-dashed border-slate-600">
-                        <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
-                          🖼️ Upload Image / Figure
-                        </div>
-                        <div className="h-24 bg-slate-700/30 rounded flex items-center justify-center">
-                          <span className="text-xs text-slate-500">Drop image or click to upload</span>
-                        </div>
-                      </div>
-                      
-                      <div className="p-3 bg-slate-800/50 rounded-lg border border-dashed border-slate-600">
-                        <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
-                          📎 Link Dataset / Code
-                        </div>
-                        <div className="h-16 bg-slate-700/30 rounded flex items-center justify-center">
-                          <span className="text-xs text-slate-500">Attach reproducible artifacts</span>
-                        </div>
+                      <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                        Last saved: 2 minutes ago
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              {/* Publishing Options */}
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Sidebar */}
               <div className="space-y-4">
-                <Card className="bg-gradient-to-br from-pink-500/10 to-transparent border-pink-500/30">
-                  <CardContent className="p-5">
-                    <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-                      <Icons.BlogPublish /> Publishing Options
-                    </h3>
-                    
-                    <div className="space-y-4">
+                {/* DOI Settings */}
+                <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+                  <CardHeader className="pb-3">
+                    <CardTitle className={`text-sm flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      🔖 DOI Settings
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Mint DOI</span>
+                      <Switch defaultChecked />
+                    </div>
+                    <div className={`p-3 rounded-lg text-xs font-mono ${darkMode ? 'bg-white/5 text-gray-400' : 'bg-gray-100 text-gray-600'}`}>
+                      10.8429/scihub.2024.001
+                    </div>
+                    <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>DOI will be registered upon publication</p>
+                  </CardContent>
+                </Card>
+
+                {/* Co-authors */}
+                <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+                  <CardHeader className="pb-3">
+                    <CardTitle className={`text-sm flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      👥 Co-authors
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
                       {[
-                        { type: 'Blog Post', desc: 'Share insights with the community', audience: 'Public', icon: '📝' },
-                        { type: 'Preprint', desc: 'Early dissemination before peer review', audience: 'Public', icon: '📄' },
-                        { type: 'White Paper', desc: 'Comprehensive technical deep-dive', audience: 'Enterprise', icon: '📋' },
-                        { type: 'Dataset', desc: 'Publish data with DOI citation', audience: 'Public', icon: '💾' },
-                      ].map(option => (
-                        <div key={option.type} className="p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-pink-500/30 transition-colors cursor-pointer">
-                          <div className="flex items-center gap-3">
-                            <span className="text-2xl">{option.icon}</span>
-                            <div className="flex-1">
-                              <div className="font-medium text-white text-sm">{option.type}</div>
-                              <div className="text-xs text-slate-400">{option.desc}</div>
-                            </div>
-                            <Badge variant="outline" className="text-xs">{option.audience}</Badge>
+                        { name: 'Dr. Sarah Chen', role: 'Lead Author', avatar: 'SC' },
+                        { name: 'Prof. James Liu', role: 'Co-Author', avatar: 'JL' },
+                        { name: 'Dr. Maria Garcia', role: 'Contributor', avatar: 'MG' },
+                      ].map((author, i) => (
+                        <div key={i} className="flex items-center gap-2">
+                          <Avatar className="w-8 h-8">
+                            <AvatarFallback className="text-xs bg-gradient-to-br from-cyan-500 to-violet-500 text-white">{author.avatar}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <div className={`text-sm font-medium truncate ${darkMode ? 'text-white' : 'text-gray-900'}`}>{author.name}</div>
+                            <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{author.role}</div>
+                          </div>
+                        </div>
+                      ))}
+                      <Button variant="outline" size="sm" className={`w-full text-xs ${darkMode ? 'border-white/20' : ''}`}>+ Add Author</Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Publishing Options */}
+                <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+                  <CardHeader className="pb-3">
+                    <CardTitle className={`text-sm flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      ⚙️ Publishing Options
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Open Access</span>
+                      <Switch defaultChecked />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Peer Review</span>
+                      <Switch />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Allow Comments</span>
+                      <Switch defaultChecked />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Enable Versions</span>
+                      <Switch defaultChecked />
+                    </div>
+                    <Separator />
+                    <div className="flex items-center justify-between">
+                      <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>License</span>
+                      <select className={`text-xs px-2 py-1 rounded border ${darkMode ? 'bg-white/5 border-white/10 text-gray-300' : 'bg-white border-gray-200'}`}>
+                        <option>CC BY 4.0</option>
+                        <option>CC BY-SA 4.0</option>
+                        <option>CC BY-NC 4.0</option>
+                        <option>All Rights Reserved</option>
+                      </select>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Recent Posts */}
+                <Card className={`${darkMode ? 'bg-black/30 backdrop-blur-xl border-white/10' : 'bg-white border-gray-200'}`}>
+                  <CardHeader className="pb-3">
+                    <CardTitle className={`text-sm flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      📚 Recent Publications
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {[
+                        { title: 'Quantum ML Accelerators', date: '2 days ago', views: '1.2K' },
+                        { title: 'CRISPR Analysis Pipeline v2', date: '1 week ago', views: '3.4K' },
+                        { title: 'Climate Data Standards', date: '2 weeks ago', views: '892' },
+                      ].map((post, i) => (
+                        <div key={i} className={`p-2 rounded-lg cursor-pointer hover:bg-white/5 ${darkMode ? '' : 'hover:bg-gray-50'}`}>
+                          <div className={`text-sm font-medium truncate ${darkMode ? 'text-white' : 'text-gray-900'}`}>{post.title}</div>
+                          <div className={`flex justify-between text-xs mt-1 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                            <span>{post.date}</span>
+                            <span>{post.views} views</span>
                           </div>
                         </div>
                       ))}
                     </div>
                   </CardContent>
                 </Card>
-                
-                <Card className="bg-gradient-to-br from-emerald-500/10 to-transparent border-emerald-500/30">
-                  <CardContent className="p-5">
-                    <h3 className="font-bold text-white mb-4">Citation & Impact</h3>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-slate-400">DOI Assignment</span>
-                        <Badge className="bg-emerald-500/20 text-emerald-400 border-0">Auto-generated</Badge>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-slate-400">Citation Tracking</span>
-                        <Badge className="bg-emerald-500/20 text-emerald-400 border-0">CrossRef</Badge>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-slate-400">Altmetric Score</span>
-                        <Badge className="bg-emerald-500/20 text-emerald-400 border-0">Tracked</Badge>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-slate-400">Version Control</span>
-                        <Badge className="bg-emerald-500/20 text-emerald-400 border-0">Git-native</Badge>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
               </div>
             </div>
-          </div>
-        )}
-        
-      </div>
-      
+          </TabsContent>
+        </Tabs>
+      </main>
+
       {/* Footer */}
-      <footer className="relative z-10 border-t border-white/5 mt-12 py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
-            <span>© 2026 SciHub Pro — Microservices Architecture Dashboard</span>
-            <div className="flex items-center gap-4">
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"/>
-                All services operational
-              </span>
-              <span>v2.0.0-quantum</span>
+      <footer className={`relative z-10 border-t mt-12 py-6 ${darkMode ? 'border-white/10 bg-black/20' : 'border-gray-200 bg-gray-50'}`}>
+        <div className="max-w-[1920px] mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 via-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-bold text-sm">
+                S
+              </div>
+              <div>
+                <p className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>SciHub Pro</p>
+                <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>The Scientific GitHub for the Modern Age</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-6 text-sm">
+              <div className="flex items-center gap-2">
+                {Object.entries(PolyglotStack).slice(0, 6).map(([key, tech]) => (
+                  <TooltipProvider key={key}>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <div 
+                          className="w-6 h-6 rounded flex items-center justify-center text-xs cursor-pointer hover:scale-110 transition-transform"
+                          style={{ backgroundColor: `${tech.color}30`, color: tech.color }}
+                        >
+                          {tech.icon}
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{tech.name}: {tech.useCase.split(' ')[0]}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ))}
+              </div>
+            </div>
+            
+            <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+              Powered by AETHEL • {Microservices.length} Microservices • 6 Languages
             </div>
           </div>
         </div>
       </footer>
-    </main>
+    </div>
+  )
+}
+
+// ============ LANDING PAGE VIEW ============
+function LandingPageView({ setViewMode }: { setViewMode: (v: ViewMode) => void }) {
+  return (
+    <div className="min-h-screen bg-slate-950">
+      <div className="max-w-7xl mx-auto px-4 py-20 text-center">
+        <h1 className="text-6xl font-bold mb-6 text-white">
+          SciHub Pro
+        </h1>
+        <p className="text-xl mb-8 text-gray-400">
+          The Scientific GitHub for the Modern Age
+        </p>
+        <Button 
+          size="lg" 
+          onClick={() => setViewMode('microservices')}
+          className="bg-gradient-to-r from-cyan-500 to-violet-500 hover:from-cyan-600 hover:to-violet-600 text-lg px-8"
+        >
+          Enter Platform →
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+// ============ MAIN APPLICATION ============
+export default function SciHubProApp() {
+  const [viewMode, setViewMode] = useState<ViewMode>('microservices')
+  const [selectedService, setSelectedService] = useState<Microservice | null>(null)
+  const [activeTab, setActiveTab] = useState('dashboard')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [darkMode, setDarkMode] = useState(true)
+  const [quantumAnimation, setQuantumAnimation] = useState(true)
+
+  return (
+    <TooltipProvider>
+      {viewMode === 'microservices' ? (
+        <MicroservicesView
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          selectedService={selectedService}
+          setSelectedService={setSelectedService}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          quantumAnimation={quantumAnimation}
+          setQuantumAnimation={setQuantumAnimation}
+          setViewMode={setViewMode}
+        />
+      ) : (
+        <LandingPageView setViewMode={setViewMode} />
+      )}
+    </TooltipProvider>
   )
 }
