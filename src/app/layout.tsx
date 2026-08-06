@@ -14,24 +14,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Z.ai Code Scaffold - AI-Powered Development",
-  description: "Modern Next.js scaffold optimized for AI-powered development with Z.ai. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
-  keywords: ["Z.ai", "Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui", "AI development", "React"],
-  authors: [{ name: "Z.ai Team" }],
+  title: "SciHub Pro - The Scientific GitHub for the Modern Age | Bioinformatics, Cheminformatics & More",
+  description: "Unified open-source platform for scientific computing. Bioinformatics, Cheminformatics, Molecular Modelling, Materials Science — all in one place. Free Community Edition + Enterprise features.",
+  keywords: ["scientific computing", "bioinformatics", "cheminformatics", "molecular modelling", "research platform", "open source science", "computational biology", "drug discovery", "materials science", "GitHub for science", "SciHub Pro"],
+  authors: [{ name: "SciHub Pro Team" }],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/favicon.ico",
   },
   openGraph: {
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
-    url: "https://chat.z.ai",
-    siteName: "Z.ai",
+    title: "SciHub Pro - The Scientific GitHub for the Modern Age",
+    description: "One unified platform for all your scientific computing needs. From sequence analysis to drug discovery.",
+    siteName: "SciHub Pro",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
+    title: "SciHub Pro - Scientific Computing Platform",
+    description: "Democratizing computational research for scientists worldwide.",
   },
 };
 
