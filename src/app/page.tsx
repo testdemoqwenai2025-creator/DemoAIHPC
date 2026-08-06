@@ -13,6 +13,10 @@ import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { AuthProvider } from '@/components/auth/AuthContext'
+import GlobalNavbar from '@/components/layout/GlobalNavbar'
+import EnhancedLandingPage from '@/components/layout/EnhancedLandingPage'
+import AETHELConnector from '@/components/aethel/AETHELConnector'
 
 // ============ VIEW MODES ============
 type ViewMode = 'landing' | 'microservices'
@@ -445,7 +449,7 @@ function MicroservicesView({
       <main className="relative z-10 max-w-[1920px] mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           {/* Tab Navigation */}
-          <TabsList className={`grid grid-cols-6 w-full h-14 ${darkMode ? 'bg-black/30 backdrop-blur-xl border border-white/10' : 'bg-white border border-gray-200'}`}>
+          <TabsList className={`grid grid-cols-7 w-full h-14 ${darkMode ? 'bg-black/30 backdrop-blur-xl border border-white/10' : 'bg-white border border-gray-200'}`}>
             <TabsTrigger value="dashboard" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-violet-500 data-[state=active]:text-white gap-2">
               📊 Dashboard
             </TabsTrigger>
@@ -463,6 +467,9 @@ function MicroservicesView({
             </TabsTrigger>
             <TabsTrigger value="publish" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-violet-500 data-[state=active]:text-white gap-2">
               📝 Publish
+            </TabsTrigger>
+            <TabsTrigger value="aethel" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500 data-[state=active]:to-violet-500 data-[state=active]:text-white gap-2">
+              ⚡ AETHEL AI
             </TabsTrigger>
           </TabsList>
 
@@ -1711,6 +1718,11 @@ Our findings suggest...`}
               </div>
             </div>
           </TabsContent>
+
+          {/* ======== AETHEL AI TAB ======== */}
+          <TabsContent value="aethel" className="space-y-6">
+            <AETHELConnector darkMode={darkMode} />
+          </TabsContent>
         </Tabs>
       </main>
 
@@ -1760,32 +1772,12 @@ Our findings suggest...`}
   )
 }
 
-// ============ LANDING PAGE VIEW ============
-function LandingPageView({ setViewMode }: { setViewMode: (v: ViewMode) => void }) {
-  return (
-    <div className="min-h-screen bg-slate-950">
-      <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-        <h1 className="text-6xl font-bold mb-6 text-white">
-          SciHub Pro
-        </h1>
-        <p className="text-xl mb-8 text-gray-400">
-          The Scientific GitHub for the Modern Age
-        </p>
-        <Button 
-          size="lg" 
-          onClick={() => setViewMode('microservices')}
-          className="bg-gradient-to-r from-cyan-500 to-violet-500 hover:from-cyan-600 hover:to-violet-600 text-lg px-8"
-        >
-          Enter Platform →
-        </Button>
-      </div>
-    </div>
-  )
-}
+// ============ LANDING PAGE VIEW (Now uses Enhanced Component) ============
+// Note: LandingPageView is now replaced by EnhancedLandingPage component
 
 // ============ MAIN APPLICATION ============
 export default function SciHubProApp() {
-  const [viewMode, setViewMode] = useState<ViewMode>('microservices')
+  const [viewMode, setViewMode] = useState<ViewMode>('landing')
   const [selectedService, setSelectedService] = useState<Microservice | null>(null)
   const [activeTab, setActiveTab] = useState('dashboard')
   const [searchQuery, setSearchQuery] = useState('')
@@ -1793,24 +1785,39 @@ export default function SciHubProApp() {
   const [quantumAnimation, setQuantumAnimation] = useState(true)
 
   return (
-    <TooltipProvider>
-      {viewMode === 'microservices' ? (
-        <MicroservicesView
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          selectedService={selectedService}
-          setSelectedService={setSelectedService}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
+    <AuthProvider>
+      <TooltipProvider>
+        {/* Global Navbar - Always Visible */}
+        <GlobalNavbar
           darkMode={darkMode}
           setDarkMode={setDarkMode}
-          quantumAnimation={quantumAnimation}
-          setQuantumAnimation={setQuantumAnimation}
+          viewMode={viewMode}
           setViewMode={setViewMode}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
         />
-      ) : (
-        <LandingPageView setViewMode={setViewMode} />
-      )}
-    </TooltipProvider>
+        
+        {viewMode === 'microservices' ? (
+          <MicroservicesView
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            selectedService={selectedService}
+            setSelectedService={setSelectedService}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            darkMode={darkMode}
+            setDarkMode={setDarkMode}
+            quantumAnimation={quantumAnimation}
+            setQuantumAnimation={setQuantumAnimation}
+            setViewMode={setViewMode}
+          />
+        ) : (
+          <EnhancedLandingPage
+            darkMode={darkMode}
+            onEnterPlatform={() => setViewMode('microservices')}
+          />
+        )}
+      </TooltipProvider>
+    </AuthProvider>
   )
 }
