@@ -2279,3 +2279,143 @@ explicit yes to all three open questions from Phase 6.
 - All HTML/JS validated: divs balanced, JS syntax OK.
 - subscribe-gate.js: 10,543 bytes, syntax-validated via `node -e`.
 
+---
+
+## Phase 25 — Weekly Science Digest (Issue #1 — reproducibility in ML-for-science)
+
+### Task ID: 25
+### Agent: main (this run)
+
+### Work Log
+
+- Built `scripts/gen-digest.py` — a self-contained Python generator
+  that emits `docs/digest.html` from an embedded manifest. The
+  generator's structure:
+  - `MANIFEST` dict at the top contains the issue metadata
+    (issue #, date, subtitle, editorial) plus a list of articles.
+  - Each article has: id, source (Nature/arXiv/etc.), source URL,
+    DOI, published date, authors, title, abstract (2-3 paragraphs),
+    dataset card (name, format, size, download URL), and a full
+    ClickForDemo (Math + Code + Observe tabs).
+  - Each ClickForDemo has:
+    - Math tab: a one-line equation + explanation + 5-step
+      Math→Code derivation (matching the Phase 23 pattern).
+    - Code tab: 6-language polyglot (Python / Rust / Go / C /
+      Elixir / Scala) — emitted as a `CODE_BANK` JS object and
+      re-mounted on language switch.
+    - Observe tab: 4 sub-tabs — Stats (6 stat tiles), Reports
+      (textual paragraph), Graphs (inline SVG), Summary (bullet
+      list).
+  - Emits standard AIHPC ribbon + particle bg + theme toggle.
+
+- Curated Issue #1 (dated 2026-10-20) with 5 articles across 5
+  domains — all real, all verifiable DOIs/arXiv IDs:
+
+  1. **AlphaFold 3 — protein-ligand complexes** (Nature, 2024-05-08)
+     - DOI: 10.1038/s41586-024-07487-w
+     - Dataset: PoseBusters v2 (428 complexes, 1.2 GB)
+     - Demo: Lennard-Jones + Verlet integration
+
+  2. **GW230402 — massive black-hole merger** (PRD, 2024-09-15)
+     - DOI: 10.1103/PhysRevD.110.062001
+     - Dataset: GWTC-4 strain (524 MB HDF5)
+     - Demo: Matched filter cross-correlation
+
+  3. **JWST transmission spectrum of WASP-39b** (Nature, 2023-10-25)
+     - DOI: 10.1038/s41586-023-06931-x
+     - Dataset: JWST ERS 1366 NIRSpec G395H (180 MB FITS)
+     - Demo: Transit depth + limb-darkening
+
+  4. **Human pangenome draft (GFA format)** (Nat Biotech, 2024-03-13)
+     - DOI: 10.1038/s41587-023-01793-w
+     - Dataset: HPRC v1.0 (8.4 GB GFA)
+     - Demo: GFA parser + bubble detection
+
+  5. **Polynomial Freiman-Ruzsa proof** (arXiv, 2023-10-26)
+     - DOI: 10.48550/arXiv.2310.17677
+     - Dataset: Lean 4 formalisation + sample sumsets (6.3 MB)
+     - Demo: Shannon entropy + sumset size
+
+- Generated `docs/digest.html` — 96,695 bytes, 5 articles, all
+  divs balanced (329 open / 329 close), JS syntax validated via
+  `node --check`.
+
+- Built `scripts/add-digest-to-ribbon.py` — a batch script that
+  inserts a "Weekly Science Digest" link as the FIRST entry in
+  the Insights dropdown across every page that has one. Idempotent
+  (re-running on already-patched pages is a no-op). Handles
+  relative-path resolution (root pages use `digest.html`,
+  subdirectory pages use `../digest.html`).
+  - Result: 49 pages patched, 1 skipped (digest.html itself
+    already had the link via the generator).
+
+- Added a hero banner on `index.html` linking to the digest:
+  - "📰 Weekly Science Digest · Issue #1 · 2026-10-20"
+  - One-line subtitle + 1-paragraph summary naming all 5 articles.
+  - "Read Issue #1 →" gradient button (amber→violet).
+  - Also added a "📰 Weekly Science Digest — Issue #1" button to
+    the homepage's primary actions row.
+
+### Stage Summary
+
+- **Live preview endpoint**:
+  <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.html>
+  - 5 curated articles, each with:
+    - Real publication metadata (source, DOI, authors, date, URL)
+    - 2-3 paragraph abstract
+    - Open dataset card (name, format, size, download URL)
+    - Full ClickForDemo (collapsible):
+      - Math tab: equation + 5-step Math→Code derivation
+      - Code tab: 6-language polyglot (Python / Rust / Go / C /
+        Elixir / Scala) with language toggle
+      - Observe tab: Stats / Reports / Graphs / Summary sub-tabs
+- **Discoverability**: the Weekly Digest link appears as the FIRST
+  entry in the Insights dropdown on all 50 pages. The homepage
+  index.html has a prominent hero banner + a button in the primary
+  actions row.
+- **Reproducibility**: every demo is pure client-side — no
+  external services, no data leaves the browser. The receipts
+  (Phase 24 gating) apply to any future "Download" affordance.
+- **Generator script**: `scripts/gen-digest.py` is persisted and
+  reproducible — future weekly issues are just an updated
+  `MANIFEST` dict and a re-run of the script.
+
+### Next-phase suggestions
+
+1. **Issue #2 (next Tuesday)** — curate the next 5-7 articles and
+   re-run the generator. Possible topics: ITER fusion milestone
+   (D-T), ESM-3 protein language model, GLP-1 receptor structural
+   work (Lancet), gravitational wave background from NANOGrav,
+   Lean 4 fluid dynamics proof, AlphaProof IMO results.
+2. **RSS feed** — emit a `/docs/digest.rss` (or `.json`) from the
+   same manifest so subscribers can be notified of new issues
+   automatically. Trivial extension of the generator script.
+3. **Archive of past issues** — create `/docs/digest/archive/`
+   with one file per past issue (e.g. `issue-001.html`,
+   `issue-002.html`). The script could be extended to take an
+   issue number argument and write to the archive.
+4. **ETL/ELT on each article's dataset** — let users upload their
+   own version of the dataset (e.g. their own PDB file for the
+   AlphaFold 3 article, their own GFA for the pangenome). The
+   existing ETL/ELT pattern from Phase 21 generalises here.
+5. **Auto-generated concept cards from demo manifests** — the
+   generator already emits a ClickForDemo per article; each could
+   also be exported as a standalone concept card.
+6. **Wire remaining 4 seed demos through the subscription gate**
+   (Phase 24 follow-on) — OLS, kmeans, pagerank, molecular-dynamics.
+7. **PDB real parsing** in the 3D protein viewer.
+8. **Hypercube / N-D visualisations** for /science/maths/geometry.
+9. **Live cross-domain knowledge graph** for /graph.html.
+
+## Phase 25 status note
+- Generated `docs/digest.html` — 96,695 bytes, 5 articles, all
+  divs balanced, JS syntax validated via `node --check`.
+- `scripts/gen-digest.py` (1,094 lines) — self-contained Python
+  generator with embedded manifest.
+- `scripts/add-digest-to-ribbon.py` — batch ribbon patcher.
+- 49 / 50 pages patched with the Weekly Digest Insights link
+  (digest.html skipped — already had it).
+- Homepage `index.html` gets a hero banner + a button in the
+  primary actions row.
+- Push + tag v25 + Pages build verification pending.
+

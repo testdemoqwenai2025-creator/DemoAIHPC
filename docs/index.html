@@ -843,7 +843,7 @@
           <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="index.html">Home</a><a href="demos.html">Demos</a><a href="dashboard.html">Dashboard</a><a href="graph.html">Knowledge Graph</a><a href="benchmark.html">Agentic Benchmark</a><a href="subscribe.html">Subscribe</a></div></details>
           <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="aethel.html">AETHEL Connector</a><a href="connectors.html">Scientific Connectors Hub</a><a href="query.html">Query Executor</a><a href="graph.html">Knowledge Graph</a><a href="workflows.html">Domain Workflows</a></div></details>
           <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="science-biology.html">Biology Hub</a><a href="science-chemistry.html">Chemistry Hub</a><a href="science-physics.html">Physics Hub</a><a href="science-maths.html">Mathematics Hub</a><a href="science-bioinformatics.html">Bioinformatics</a><a href="science-cheminformatics.html">Cheminformatics</a></div></details>
-          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="concepts.html">Concept Cards</a><a href="concepts/replayable-decision-traces.html">Replayable Decision Traces</a><a href="concepts/provenance-first.html">Provenance-First Computing</a><a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a><a href="concepts/audience-annotations.html">Audience-Specific Annotations</a><a href="concepts/provenance-chain.html">Provenance Chain</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="digest.html">Weekly Science Digest</a><a href="dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="concepts.html">Concept Cards</a><a href="concepts/replayable-decision-traces.html">Replayable Decision Traces</a><a href="concepts/provenance-first.html">Provenance-First Computing</a><a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a><a href="concepts/audience-annotations.html">Audience-Specific Annotations</a><a href="concepts/provenance-chain.html">Provenance Chain</a></div></details>
         </nav>
         <div class="ribbon-actions">
           <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme">
@@ -878,6 +878,11 @@
         >
         <a
           class="btn btn-ghost"
+          href="digest.html"
+          >📰 Weekly Science Digest &mdash; Issue #1</a
+        >
+        <a
+          class="btn btn-ghost"
           href="concepts.html"
           >Browse Concept Cards</a
         >
@@ -894,6 +899,16 @@
           >GitHub repo</a
         >
       </div>
+
+      <!-- ============ WEEKLY DIGEST HERO BANNER ============ -->
+      <section style="margin-top: 48px; padding: 24px; background: linear-gradient(135deg, rgba(245,158,11,0.10) 0%, rgba(139,92,246,0.10) 50%, rgba(6,182,212,0.10) 100%); border: 1px solid rgba(245,158,11,0.3); border-radius: 16px; backdrop-filter: blur(12px); display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 280px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #fbbf24; margin-bottom: 6px;">📰 Weekly Science Digest &middot; Issue #1 &middot; 2026-10-20</div>
+          <h2 style="margin: 0 0 8px; font-size: 22px; color: var(--text); line-height: 1.3;">Reproducibility in ML-for-science — five papers with open datasets and runnable demos</h2>
+          <p style="margin: 0; font-size: 14px; color: var(--text-muted);">Curated this week: AlphaFold 3 (Nature), LIGO-Virgo-KAGRA O4 (PRD), JWST transmission spectrum of WASP-39b (Nature), Human Pangenome draft (Nat Biotech), Polynomial Freiman-Ruzsa proof (arXiv). Each entry ships with the underlying dataset and a 6-language polyglot demo with math→code 5-step derivation.</p>
+        </div>
+        <a href="digest.html" style="display: inline-flex; align-items: center; gap: 6px; padding: 12px 24px; border-radius: 9999px; background: linear-gradient(90deg, #f59e0b, #8b5cf6); color: white; text-decoration: none; font-size: 14px; font-weight: 600;">Read Issue #1 &rarr;</a>
+      </section>
 
       <!-- ============ LIVE DEMO ============ -->
       <section class="demo" id="live-demo">

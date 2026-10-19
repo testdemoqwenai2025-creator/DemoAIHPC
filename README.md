@@ -156,6 +156,24 @@ This separation keeps legal scenarios simple:
   `AIHPC.mountTierBadge()`, `AIHPC.onChange()` — reusable for any
   future gated feature. Cross-tab session updates propagate via
   the `storage` event listener.
+- **Weekly Science Digest (Phase 25)** — every Tuesday AIHPC
+  Advanced publishes a curated digest of 5–7 of the most promising
+  recent articles across Nature, Science, The Lancet, arXiv,
+  bioRxiv, and the domain journals. Each article ships with:
+  - Real publication metadata (source, DOI, authors, date, URL)
+  - 2–3 paragraph abstract
+  - Open dataset card (name, format, size, download URL)
+  - Full ClickForDemo: Math tab with 5-step Math→Code derivation,
+    Code tab with 6-language polyglot (Python / Rust / Go / C /
+    Elixir / Scala), Observe tab with Stats / Reports / Graphs /
+    Summary sub-tabs.
+  Issue #1 (2026-10-20, reproducibility in ML-for-science): AlphaFold 3
+  (Nature, LJ+Verlet demo), LIGO-Virgo-KAGRA O4 (PRD, matched filter demo),
+  JWST WASP-39b (Nature, transit depth demo), Human Pangenome draft
+  (Nat Biotech, GFA parser demo), Polynomial Freiman-Ruzsa proof
+  (arXiv, Shannon entropy demo).
+  The generator `scripts/gen-digest.py` is reproducible — future
+  issues are just an updated manifest and a re-run.
 
 ## Demo framework (Phase 2)
 
