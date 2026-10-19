@@ -704,3 +704,67 @@ Ready for stakeholder preview, investor demonstrations, or public release.
 ---
 
 *"From here onwards we will evolve the github repository as demo1, 2, 3 etc but will state it when the time is correct"* — **The time is now correct for Demo1.**
+
+---
+
+## Dual-Repository Mirror Workflow — 2026-10-19
+
+**Task ID**: DUAL-REPO-1
+**Agent**: Z User (main)
+**Task**: Clone AETH-1-Content-Archive, then split into a public preview
+repository (DemoAIHPC, no NDA) and a private source-of-truth repository
+(AIHPC-Advanced). Add a dark/light theme toggle on every page, a compliance
+footer (GDPR / HIPAA / contact email / Return to Home), an About page, a
+global site navigation, and a README. Push everything (including worklog,
+.txt, .md, .png) to the private repository first, then mirror to the public
+repository. Provide a GitHub preview endpoint.
+
+### Work Log
+
+- Created `DemoAIHPC` (public) and `AIHPC-Advanced` (private) repositories
+  via the GitHub REST API under the `testdemoqwenai2025-creator` account.
+- Added `src/components/site/ThemeProvider.tsx` — a React context that
+  toggles the `dark` class on `<html>` and persists the choice to
+  `localStorage` (`aihpc-theme` key). Falls back to system preference on
+  first load.
+- Added `src/components/site/SiteNav.tsx` — global top navigation rendered
+  from `RootLayout`. Provides Home / About / Preview1 links and a
+  dark/light toggle button, visible on every page.
+- Added `src/components/site/SiteFooter.tsx` — global footer rendered from
+  `RootLayout`. Surfaces GDPR, HIPAA, contact email
+  (`testdemoqwenai2025@gmail.com`), Return to Home button, and links to
+  both repositories.
+- Wired the existing in-app dark mode toggle in `src/app/page.tsx`
+  (`SciHubProApp`) to the new `ThemeProvider` context so the global
+  toggle and the in-app toggle stay in sync.
+- Added `src/app/about/page.tsx` — explains the platform, dual-repository
+  workflow, AETHEL integration, polyglot stack and compliance posture.
+  Uses shadcn/ui tokens so the dark/light toggle applies here too.
+- Updated `src/app/layout.tsx` to wrap every page in the `ThemeProvider`,
+  render `SiteNav` above `children` and `SiteFooter` below. Updated the
+  metadata to reflect the AIHPC Advanced project name.
+- Created `README.md` describing the dual-repository workflow, features,
+  tech stack, project structure, getting started, pages, dark/light
+  theme, compliance, contact and license.
+- Verified the project type-checks (`tsc --noEmit`) — the only remaining
+  errors are pre-existing (socket.io client/server examples not
+  installed, `useMemo` import missing in `KnowledgeGraph.tsx`, SVG `size`
+  prop in `DomainWorkflows.tsx`). None of the new files produce errors.
+- Verified the project builds (`next build`) — `/`, `/about`, `/preview1`
+  and `/api` all compile and generate successfully.
+- Set up the git remotes: `private` → AIHPC-Advanced (private source of
+  truth), `public` → DemoAIHPC (public mirror), `origin` → the original
+  AETH-1-Content-Archive (reference).
+- Committed all changes (commit `7151709`) and pushed to the private
+  repository, then mirrored to the public repository.
+
+### Stage Summary
+
+- Public mirror: <https://github.com/testdemoqwenai2025-creator/DemoAIHPC>
+- Private source-of-truth: <https://github.com/testdemoqwenai2025-creator/AIHPC-Advanced>
+- GitHub Pages preview endpoint: <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>
+- All code, worklog and assets (.txt, .md, .png) are committed to the
+  private repository first and mirrored to the public repository on every
+  push, keeping the two functionally identical at HEAD.
+- Dark/light theme toggle, site navigation, compliance footer and About
+  page are now available on every page via the root layout.
