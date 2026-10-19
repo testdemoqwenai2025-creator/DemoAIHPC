@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Public preview landing page for AIHPC Advanced — scientific computing platform. Public mirror of the private AIHPC-Advanced repository."
+    />
+    <title>AIHPC Advanced — Public Preview</title>
+    <style>
+      :root {
+        --bg: #0b0f1a;
+        --bg-elevated: #121826;
+        --border: #1f2937;
+        --text: #f3f4f6;
+        --text-muted: #9ca3af;
+        --accent: #8b5cf6;
+        --accent-2: #06b6d4;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        background: radial-gradient(
+            1200px 600px at 20% -10%,
+            rgba(139, 92, 246, 0.25),
+            transparent 60%
+          ),
+          radial-gradient(
+            1200px 600px at 100% 0%,
+            rgba(6, 182, 212, 0.18),
+            transparent 55%
+          ),
+          var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+      .container {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 64px 24px 96px;
+      }
+      .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        border: 1px solid var(--border);
+        background: var(--bg-elevated);
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+      }
+      h1 {
+        font-size: 48px;
+        line-height: 1.1;
+        margin: 0 0 16px;
+        letter-spacing: -0.02em;
+        background: linear-gradient(90deg, #fff, #c4b5fd 60%, #67e8f9);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .lead {
+        font-size: 20px;
+        color: var(--text-muted);
+        max-width: 760px;
+        margin: 0 0 40px;
+      }
+      .grid {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        margin-top: 24px;
+      }
+      .card {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 28px;
+        transition: border-color 0.2s ease, transform 0.2s ease;
+      }
+      .card:hover {
+        border-color: rgba(139, 92, 246, 0.55);
+        transform: translateY(-2px);
+      }
+      .card h3 {
+        margin: 0 0 8px;
+        font-size: 18px;
+      }
+      .card p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+      .card a {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 16px;
+        color: var(--accent-2);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .card a:hover {
+        text-decoration: underline;
+      }
+      .actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 18px;
+        border-radius: 9999px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.2s ease, color 0.2s ease, border-color 0.2s
+          ease;
+      }
+      .btn-primary {
+        background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+        color: white;
+        border: 1px solid transparent;
+      }
+      .btn-primary:hover {
+        filter: brightness(1.08);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+      .btn-ghost:hover {
+        border-color: rgba(139, 92, 246, 0.55);
+      }
+      .meta {
+        margin-top: 64px;
+        padding-top: 24px;
+        border-top: 1px solid var(--border);
+        color: var(--text-muted);
+        font-size: 13px;
+      }
+      .meta a {
+        color: var(--text);
+        text-decoration: none;
+      }
+      .meta a:hover {
+        text-decoration: underline;
+      }
+      .compliance {
+        margin-top: 24px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .pill {
+        padding: 4px 10px;
+        border-radius: 9999px;
+        border: 1px solid var(--border);
+        background: var(--bg-elevated);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <span class="badge">Public preview &middot; no NDA required</span>
+      <h1>AIHPC Advanced</h1>
+      <p class="lead">
+        Unified scientific computing platform — bioinformatics,
+        cheminformatics, molecular modelling and materials science behind one
+        polyglot microservices architecture, integrated with the AETHEL
+        hypercomputing emulation layer. This is the public mirror of the
+        private <code>AIHPC-Advanced</code> source-of-truth repository.
+      </p>
+
+      <div class="actions">
+        <a
+          class="btn btn-primary"
+          href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC"
+          target="_blank"
+          rel="noreferrer noopener"
+          >Browse DemoAIHPC on GitHub &rarr;</a
+        >
+        <a
+          class="btn btn-ghost"
+          href="https://github.com/testdemoqwenai2025-creator/AIHPC-Advanced"
+          target="_blank"
+          rel="noreferrer noopener"
+          >Private source-of-truth (NDA required)</a
+        >
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Dual-repository workflow</h3>
+          <p>
+            All code, worklogs and assets live in the private
+            <code>AIHPC-Advanced</code> repository. Every push is mirrored to
+            this public <code>DemoAIHPC</code> repository, keeping the two
+            functionally identical at <code>HEAD</code>.
+          </p>
+          <a
+            href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC#dual-repository-workflow"
+            target="_blank"
+            rel="noreferrer noopener"
+            >Read more &rarr;</a
+          >
+        </div>
+        <div class="card">
+          <h3>AETHEL integration</h3>
+          <p>
+            Quantum circuit simulation, neural architecture search, automated
+            hypothesis generation, a 2.4&nbsp;M-node cross-domain knowledge
+            graph, predictive model ensembles and citation network analysis
+            behind one stable API.
+          </p>
+          <a
+            href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC#features"
+            target="_blank"
+            rel="noreferrer noopener"
+            >Features list &rarr;</a
+          >
+        </div>
+        <div class="card">
+          <h3>Polyglot stack</h3>
+          <p>
+            Golang (API gateway &amp; gRPC), Elixir (real-time &amp;
+            websockets), Python (ML/AI &amp; scientific core), Scala
+            (Spark/Flink streaming), Rust (query engine), C (low-level
+            &amp; BLAS/LAPACK).
+          </p>
+          <a
+            href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC#tech-stack"
+            target="_blank"
+            rel="noreferrer noopener"
+            >Tech stack &rarr;</a
+          >
+        </div>
+        <div class="card">
+          <h3>Dark / light theme</h3>
+          <p>
+            The Next.js app ships with a global theme toggle rendered on every
+            page via the root layout. The choice is persisted to
+            <code>localStorage</code> and applied by toggling the
+            <code>.dark</code> class on <code>&lt;html&gt;</code>.
+          </p>
+          <a
+            href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC#dark--light-theme"
+            target="_blank"
+            rel="noreferrer noopener"
+            >Theme docs &rarr;</a
+          >
+        </div>
+        <div class="card">
+          <h3>Compliance</h3>
+          <p>
+            The public preview does not collect personal data (GDPR) and
+            processes no PHI (HIPAA). DPAs / BAAs are available for enterprise
+            deployments on request.
+          </p>
+          <a
+            href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC#compliance-gdpr--hipaa"
+            target="_blank"
+            rel="noreferrer noopener"
+            >Compliance &rarr;</a
+          >
+        </div>
+        <div class="card">
+          <h3>Contact</h3>
+          <p>
+            For NDA-protected access, enterprise deployment, or general
+            enquiries, contact the team at
+            <a href="mailto:testdemoqwenai2025@gmail.com"
+              >testdemoqwenai2025@gmail.com</a
+            >.
+          </p>
+          <a href="mailto:testdemoqwenai2025@gmail.com">Email us &rarr;</a>
+        </div>
+      </div>
+
+      <div class="compliance">
+        <span class="pill">GDPR</span>
+        <span class="pill">HIPAA</span>
+        <span class="pill">No personal data collected</span>
+        <span class="pill">No PHI processed</span>
+      </div>
+
+      <div class="meta">
+        <p>
+          &copy; 2026 AIHPC Advanced. All rights reserved. &middot; This page
+          is the static landing page served by GitHub Pages from the
+          <code>/docs</code> folder of the
+          <a
+            href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC"
+            target="_blank"
+            rel="noreferrer noopener"
+            >DemoAIHPC</a
+          >
+          repository. The interactive Next.js application lives in the
+          repository root and can be run locally with
+          <code>npm install &amp;&amp; npm run dev</code>.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
