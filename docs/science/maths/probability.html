@@ -69,7 +69,10 @@
       body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; }
       body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <header class="ribbon">
@@ -178,7 +181,34 @@
         <li>Trace the steps for replay.</li>
       </ul>
 
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: Target density π(x) (unnormalised)</strong>
+        <div class="step-math">π(x) ∝ exp(−V(x))   e.g. Boltzmann, posterior</div>
+        <div class="step-explain">MCMC samples from a density known only up to a constant. The acceptance criterion uses the ratio π(x')/π(x) — the normaliser cancels.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Symmetric proposal</strong>
+        <div class="step-math">x' = x + ε · N(0, 1)   →   q(x'|x) = q(x|x')</div>
+        <div class="step-explain">A Gaussian random walk with step size ε. Symmetry (q(x'|x) = q(x|x')) means the proposal's contribution to the acceptance ratio is 1 — simplifying the test.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Acceptance probability</strong>
+        <div class="step-math">α = min(1, π(x') / π(x))</div>
+        <div class="step-explain">If the proposed point is more probable than the current one, accept it. Otherwise, accept with probability equal to the ratio — this is what makes the chain detailed-balanced w.r.t. π.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Sample and accept/reject</strong>
+        <div class="step-math">u ~ Uniform(0, 1);  if u < α: x ← x'  else: stay</div>
+        <div class="step-explain">Draw a uniform random number; if it falls below α, accept the proposal. Otherwise, the chain stays at x — the current state is re-recorded as a sample (important for correct ergodicity).</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Burn-in + thinning → samples</strong>
+        <div class="step-math">discard first B samples;  keep every k-th  →  ~ π(x)</div>
+        <div class="step-explain">Burn-in discards the transient before the chain reaches stationarity. Thinning reduces autocorrelation. The kept samples approximate i.i.d. draws from π — the foundation of Bayesian inference.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/science/maths/probability.html</code>. Next.js route: <code>/science/maths/probability</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

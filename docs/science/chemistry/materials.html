@@ -84,7 +84,10 @@
       body.light .hero .hero-text .h-tag { color: #4b5563; } body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; } body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light pre.code-block, body.light .math-panel .math-eq, body.light .stats-grid .stat, body.light .summary-block { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -164,7 +167,34 @@
           </div>
         </div>
       </div>
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: Point cloud input</strong>
+        <div class="step-math">P = {(x₀,y₀), (x₁,y₁), …, (xₙ,yₙ)}</div>
+        <div class="step-explain">A 2D scatter — e.g. composition-vs-property for a phase-diagram. The convex hull encloses the points that bound the feasible region.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Pick the anchor (lowest y, then lowest x)</strong>
+        <div class="step-math">p₀ = argmin_p (p.y, p.x)</div>
+        <div class="step-explain">The lowest point is guaranteed to be on the hull. Sorting around it by polar angle gives a CCW-ordered candidate list.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Sort by polar angle</strong>
+        <div class="step-math">sort P \ {p₀} by atan2(p.y − p₀.y, p.x − p₀.x)</div>
+        <div class="step-explain">After sorting, a CCW scan visits each candidate once. Collinear points are kept innermost so they get dropped in the next step.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Cross-product turn test</strong>
+        <div class="step-math">cross(b−a, c−a) > 0  →  left turn (keep);  ≤ 0  →  right turn (pop)</div>
+        <div class="step-explain">For three consecutive hull candidates a, b, c: a left turn keeps b on the hull; a right turn (or collinear) means b is inside — pop it. Repeat until the stack is convex.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Graham scan complete</strong>
+        <div class="step-math">hull = stack[0..k]  in CCW order,  O(n log n)</div>
+        <div class="step-explain">The stack-based scan is one pass over the sorted list — O(n). With sorting, total cost is O(n log n). The hull is the vertices of the convex enclosure.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science/chemistry/materials.html</code>. Next.js: <code>/science/chemistry/materials</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

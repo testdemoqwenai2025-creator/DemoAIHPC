@@ -84,7 +84,10 @@
       body.light .hero .hero-text .h-tag { color: #4b5563; } body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; } body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light pre.code-block, body.light .math-panel .math-eq, body.light .stats-grid .stat, body.light .summary-block { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -164,7 +167,34 @@
           </div>
         </div>
       </div>
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: Spectrum model</strong>
+        <div class="step-math">spectrum = [(λ₀, I₀), (λ₁, I₁), …, (λₙ, Iₙ)]</div>
+        <div class="step-explain">An analytical spectrum is an array of (wavelength, intensity) pairs. For chromatography: (retention-time, absorbance). The peak finder returns the indices of local maxima above a threshold.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Discrete derivative</strong>
+        <div class="step-math">I'[i] = (I[i+1] − I[i−1]) / 2</div>
+        <div class="step-explain">A central finite difference gives a noise-tolerant first derivative. Peaks are where I' changes sign from positive to negative.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Sign change → candidate peak</strong>
+        <div class="step-math">if I'[i] > 0 and I'[i+1] < 0: i is a peak</div>
+        <div class="step-explain">A zero-crossing from + to − indicates a local maximum. Each candidate is added to the candidate list — to be filtered next.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Threshold filter</strong>
+        <div class="step-math">peaks = [i for i in candidates if I[i] > threshold]</div>
+        <div class="step-explain">Reject spurious peaks from baseline noise. The threshold is typically 3·σ of the baseline noise, computed as the median absolute deviation.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Sub-sample refinement</strong>
+        <div class="step-math">λ_peak = λ_i + (I[i−1] − I[i+1]) / (2·(I[i−1] − 2·I[i] + I[i+1]))</div>
+        <div class="step-explain">A parabolic interpolation around the discrete maximum gives sub-sample peak location accuracy. This is how analytical instruments achieve 0.01 nm precision from 1 nm sampled data.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science/chemistry/analytical.html</code>. Next.js: <code>/science/chemistry/analytical</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

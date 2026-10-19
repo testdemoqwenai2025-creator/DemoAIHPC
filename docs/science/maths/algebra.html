@@ -84,7 +84,10 @@
       body.light .hero .hero-text .h-tag { color: #4b5563; } body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; } body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light pre.code-block, body.light .math-panel .math-eq, body.light .stats-grid .stat, body.light .summary-block { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -164,7 +167,34 @@
           </div>
         </div>
       </div>
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: The Euclidean recurrence</strong>
+        <div class="step-math">gcd(a, b) = gcd(b, a mod b),  gcd(a, 0) = a</div>
+        <div class="step-explain">The greatest common divisor of a and b equals the gcd of b and a's remainder. This recursive identity is the foundation of modular arithmetic.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Iterative reduction</strong>
+        <div class="step-math">while b ≠ 0:  (a, b) ← (b, a mod b)</div>
+        <div class="step-explain">Rewrite the recursion as a loop to avoid stack growth. Each iteration shrinks the pair — the algorithm terminates in O(log min(a, b)) steps.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Termination and base case</strong>
+        <div class="step-math">b = 0  →  return a</div>
+        <div class="step-explain">When b reaches zero, a holds the gcd. This is the only stopping condition; the algorithm is correct by induction on the size of the inputs.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Extended Euclidean (Bézout)</strong>
+        <div class="step-math">x, y s.t.  a·x + b·y = gcd(a, b)</div>
+        <div class="step-explain">Track two auxiliary recurrences alongside the main one. The result is a witness pair (x, y) for Bézout's identity — surprising but useful.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Application — RSA modular inverse</strong>
+        <div class="step-math">e · d ≡ 1 (mod φ(n))   →   d = e⁻¹ mod φ(n)</div>
+        <div class="step-explain">In RSA, d is the modular inverse of e. Computing it requires extended gcd — the inverse exists iff gcd(e, φ(n)) = 1, and the same algorithm finds it in O(log φ(n)) steps.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science/maths/algebra.html</code>. Next.js: <code>/science/maths/algebra</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

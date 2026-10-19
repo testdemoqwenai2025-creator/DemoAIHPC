@@ -69,7 +69,10 @@
       body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; }
       body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <header class="ribbon">
@@ -169,7 +172,34 @@
         <li>Trace the steps for replay.</li>
       </ul>
 
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: SMILES grammar</strong>
+        <div class="step-math">SMILES = atom | bond | branch '(' SMILES ')' | ring-digit</div>
+        <div class="step-explain">A Simplified Molecular-Input Line-Entry System string is a linear notation for molecular graphs. Atoms are bare element symbols; bonds are `-`, `=`, `#`, `:`; branches use parentheses; rings use digits.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Tokenise</strong>
+        <div class="step-math">tokens = ['C', 'C', '(', '=', 'O', ')', '1', 'C', 'C', '1']</div>
+        <div class="step-explain">Split into atoms, bonds, branch markers, and ring-closure digits. The example `CC(=O)1CC1` is acetic-anhydride-like: two carbons, an aldehyde branch, a ring closure.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Recursive descent parser</strong>
+        <div class="step-math">parse_atom → push vertex;  parse_branch → recurse;  parse_ring → save open digit</div>
+        <div class="step-explain">A recursive-descent parser walks the token list, pushing vertices onto a stack and recording branch points. Open ring digits are saved in a `pending_rings` map keyed by digit.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Bond order and ring closure</strong>
+        <div class="step-math">bond = '-' single, '=' double, '#' triple, ':' aromatic;  ring[digit] → close edge</div>
+        <div class="step-explain">When the same ring digit is seen twice, an edge is drawn between the two atoms. Bond order defaults to single if omitted; aromatic atoms (`c`, `n`) imply aromatic bonds.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Output: molecular graph</strong>
+        <div class="step-math">G = (V, E)  with V = atoms, E = bonds (labelled by order)</div>
+        <div class="step-explain">The result is an explicit graph — ready for ring perception, aromaticity detection, 2D coordinate generation, or 3D embedding. The graph is the canonical form RDKit, OpenBabel, and ChemDraw all use internally.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/science/chemistry/organic.html</code>. Next.js route: <code>/science/chemistry/organic</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

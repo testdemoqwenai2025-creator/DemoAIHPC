@@ -84,7 +84,10 @@
       body.light .hero .hero-text .h-tag { color: #4b5563; } body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; } body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light pre.code-block, body.light .math-panel .math-eq, body.light .stats-grid .stat, body.light .summary-block { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -164,7 +167,34 @@
           </div>
         </div>
       </div>
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: Kinetic and potential energy</strong>
+        <div class="step-math">T = ½ · m · ẋ²   (one particle),  V(q)  (configuration-dependent)</div>
+        <div class="step-explain">Kinetic energy is quadratic in velocities; potential energy is a function of generalised coordinates q. Together they describe the system's energy budget.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: The Lagrangian</strong>
+        <div class="step-math">L(q, q̇) = T − V</div>
+        <div class="step-explain">Subtracting V from T gives a scalar function whose extrema define the equations of motion. L is the input to the variational principle that follows.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Euler-Lagrange equation</strong>
+        <div class="step-math">d/dt (∂L/∂q̇ᵢ) − ∂L/∂qᵢ = 0   for each i</div>
+        <div class="step-explain">Hamilton's principle: the action S = ∫ L dt is stationary on the physical trajectory. The Euler-Lagrange equations are the local form — one second-order ODE per generalised coordinate.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Convert to first-order form</strong>
+        <div class="step-math">pᵢ = ∂L/∂q̇ᵢ,  q̇ᵢ = q̇ᵢ(q, p)  →  ṗ = ∂L/∂q</div>
+        <div class="step-explain">Introduce conjugate momenta p. The second-order system becomes first-order in (q, p) — Hamilton's equations. This is the form the integrator (RK4, Verlet) acts on.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Integrate to get trajectory</strong>
+        <div class="step-math">for t in [t₀, T]:  (q, p) ← integrator_step((q, p), dt)</div>
+        <div class="step-explain">Pick a symplectic integrator (Verlet, leapfrog) to preserve the energy landscape. The result is q(t), p(t) — the trajectory that the Lagrangian implied.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science/physics/mechanics.html</code>. Next.js: <code>/science/physics/mechanics</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

@@ -1961,3 +1961,160 @@ explicit yes to all three open questions from Phase 6.
 - Particle bg applied to 13 legacy pages
 - Molecular-dynamics demo built (5th seed demo)
 - Pages build status: monitoring
+
+---
+
+## Phase 23 — Math→Code derivations on 21 sub-pages + DAG provenance + TemporalGraph port
+
+### Task ID: 23
+### Agent: main (this run)
+
+### Work Log
+
+- Wrote and ran `scripts/gen-math-derivations.py` — a Python generator
+  that adds the geometry.html 5-step derivation pattern to every
+  science sub-page that lacked it. The generator has 21 domain-
+  specific derivations (one per sub-page) covering the algorithm
+  each sub-page is built around (e.g. neighbour-joining for
+  evolutionary, Otsu for imaging, central-dogma for molecular,
+  RK4 for systems, peak-finding for analytical, Verlet for
+  computational, CIF parsing for inorganic, Graham scan for
+  materials, SMILES parsing for organic, Arrhenius for physical,
+  Euclid for algebra, trapezoidal for analysis, Miller-Rabin for
+  number-theory, Metropolis-Hastings for probability, Euler-
+  Lagrange for mechanics, Hadamard for quantum, STFT for sound,
+  N-body for space, Maxwell-Boltzmann for thermo, FFT for waves,
+  and translation for molecular).
+  - For each sub-page:
+    - Injects the 3 CSS rules (.derivation-step, .step-math,
+      .step-explain) just before `</style>` if not present.
+    - Injects the `<h2>Math &rarr; Code derivation</h2>` block + 5
+      `.derivation-step` divs just before the `<div class="meta">`
+      footer.
+  - All 21 sub-pages enriched. (geometry.html already had it.)
+  - Verified div balance across all 22 science pages — 0 bad, 22 OK.
+
+- Upgraded `docs/concepts/provenance-chain.html` from a linear
+  chain (CHAIN array of 7 nodes) to a directed acyclic graph (DAG)
+  with 10 nodes and 12 edges across 5 layers.
+  - Replaced `CHAIN` array with `NODES` + `EDGES` arrays. The new
+    DAG has 2 sources (DNA + motif DB), 4 compute nodes (orf, gc,
+    motif, rna), 2 join nodes (annot, viz), and 1 final receipt.
+    This is the natural shape of a real nucleotide-analysis
+    pipeline, not a contrived linear sequence.
+  - Implemented `computeLayers()` — assigns each node to a layer
+    via longest-path-from-source (sources = layer 0; for non-
+    sources, layer = max(layer(input)+1)). Topological order via
+    Kahn's algorithm (BFS over in-degree zeroing).
+  - SVG layout: nodes positioned in columns by layer (left-to-
+    right); within a column, nodes spaced vertically. Edges are
+    Bezier curves between layers. Layer column labels at top.
+  - Three edge states: `edge` (default, dim), `edge-active`
+    (cyan, currently traversing), `edge-walked` (green, completed).
+    Active edges get an animated flow dot.
+  - The walk traverses nodes in topological order — every node's
+    inputs are guaranteed to have been computed before it is
+    revealed. The trace panel shows `topo N/10` and the node's
+    `inputs: [...]` array (or `source` for layer-0 nodes).
+  - Updated JSON-LD receipt to use `prov:` and `aihpc:` namespaces,
+    emit `aihpc:ProvenanceDAG` type, and include per-node
+    `aihpc:inputs[]` arrays + `aihpc:layer` + `aihpc:topoOrder`
+    for each node. File extension changed to `.jsonld`.
+  - Updated the lead, "What it is", "Where the idea came from",
+    "Why it matters for AIHPC", "How AIHPC implements it", and
+    "Evolution of the subject" sections to reflect DAG semantics
+    (joins, forks, layering, topological order, parallelism on
+    same-layer nodes).
+
+- Ported `docs/dashboard.html` (static HTML on GitHub Pages) to the
+  reusable `<TemporalGraph>` React component in the Next.js route
+  `/dashboard` (src/app/dashboard/page.tsx).
+  - Defined the 10 timesteps of AETHEL evolution with cumulative
+    metrics: nodes, edges, domains, avgConf. The metrics were
+    computed by replaying the applyTimesteps() logic from
+    dashboard.html (e.g. T0 = 9 nodes + 8 edges; T3 = 13 nodes +
+    21 edges + avgConf=0.65; T7 retraction drops edges by 1 and
+    confidence to 0.42; T9 final = 17 nodes + 34 edges + 0.48 conf).
+  - Defined 4 series: nodes (violet), edges/triples (cyan),
+    domains (amber), avgConf (pink).
+  - The Next.js dashboard now renders TemporalGraph inline (auto
+    play=false, height=280), plus the existing static-page link
+    box and the concept-card links.
+  - `next build` clean — 36 routes registered, including /dashboard.
+  - The static GitHub Pages dashboard.html is unchanged — it keeps
+    its bespoke radial-knowledge-graph visualisation. The Next.js
+    route now uses the same React component used by /benchmark.
+
+### Stage Summary
+
+- **Live preview endpoint**: <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>
+  - All 22 science sub-pages now have the Math→Code 5-step
+    derivation block (geometry.html from Phase 16, the other 21
+    from Phase 23). This completes the user's pedagogical
+    directive: "the maths section should express how the code was
+    derived in accordance with the mathematical expression".
+  - Provenance chain concept card upgraded from linear (7 nodes)
+    to DAG (10 nodes, 12 edges, 5 layers). The DAG visualisation
+    reveals nodes in topological order — every input computed
+    before its consumer. JSON-LD receipt now includes `prov:`/
+    `aihpc:` namespaces and per-node `inputs[]` arrays.
+  - Dashboard Next.js route (`/dashboard`) now renders the same
+    10 AETHEL timesteps through the reusable `<TemporalGraph>`
+    React component. The GitHub Pages static dashboard.html is
+    unchanged (it keeps the radial SVG visualisation).
+- **Next.js application**: 36 routes registered. /dashboard joins
+  /benchmark as a route that uses `<TemporalGraph>` — unifying
+  the codebase around one reusable temporal visualisation
+  component.
+- **Generator script**: `scripts/gen-math-derivations.py` is
+  persisted and idempotent — re-running on already-enriched pages
+  is a no-op. New sub-pages can be added by adding an entry to the
+  `DERIVATIONS` dict and re-running.
+
+### Next-phase suggestions
+
+1. **Live subscription gating**: hook the lazy-eval popup and the
+   nucleotide demo to the /subscribe session. The session
+   management is already in place; the demos just need to read it.
+   This makes the "Download Receipt" button tier-gated for real.
+2. **Auto-generated concept cards from demo manifests**: once the
+   demo runner emits a trace + receipt, a concept card could be
+   auto-generated by combining the manifest's annotations with a
+   graph view of its trace.
+3. **PDB real parsing**: extend the 3D protein viewer's PDB
+   uploader to actually parse ATOM records and render real
+   backbone + side chains. The viewer currently renders a
+   procedural α-helix; real PDB parsing would make any user-uploaded
+   structure renderable.
+4. **Hypercube / N-D visualisations**: the geometry.html
+   tesseract is the first N-D viewer; build the 4D projection
+   viewer and hyperspectral image viewer the user asked about.
+5. **Live cross-domain knowledge graph**: implement the full
+   interactive force-directed graph for /graph.html (demos +
+   papers + datasets + AETHEL Suite pages as nodes).
+6. **Math→code derivation generator for demo pages**: extend
+   gen-math-derivations.py to cover the 5 seed demos (OLS,
+   nucleotide, kmeans, pagerank, molecular-dynamics) and the
+   lazy-eval concept card. They already have math panels but
+   not the 5-step derivation block.
+
+## Phase 23 status note
+- Local commit `3ade19f` made — 26 files changed, +1724/−197.
+- Push pending: this session's environment does not have a GitHub
+  PAT available (env / .git-credentials / .netrc all empty).
+  Re-run the push from a PAT-enabled shell:
+  ```
+  cd /home/z/my-project/AETH-1-Content-Archive
+  git push origin HEAD                  # AETH-1-Content-Archive
+  git push private HEAD                  # AIHPC-Advanced (private source)
+  git tag v23 && git push origin v23    # triggers auto-mirror CI
+  ```
+  The auto-mirror CI will then push to DemoAIHPC and trigger the
+  GitHub Pages rebuild automatically.
+- Next.js build verified locally: `next build` clean, 36 routes
+  registered, including `/dashboard` with the embedded
+  `<TemporalGraph>` React component.
+- All 22 science sub-pages have balanced divs (no broken HTML).
+- DAG provenance chain: 10 nodes / 12 edges / 5 layers; the JSON-LD
+  receipt fixture was changed from `.json` to `.jsonld`.
+

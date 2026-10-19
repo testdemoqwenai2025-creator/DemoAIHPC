@@ -69,7 +69,10 @@
       body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; }
       body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <header class="ribbon">
@@ -171,7 +174,34 @@
         <li>Trace the steps for replay.</li>
       </ul>
 
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: The qubit</strong>
+        <div class="step-math">|ψ⟩ = α|0⟩ + β|1⟩,   |α|² + |β|² = 1</div>
+        <div class="step-explain">A qubit is a unit vector in ℂ². Measurement in the computational basis yields |0⟩ with probability |α|² and |1⟩ with probability |β|² — Born's rule.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: The Hadamard matrix</strong>
+        <div class="step-math">H = (1/√2) · [[1, 1], [1, −1]]</div>
+        <div class="step-explain">H is unitary and Hermitian (H = H†, H² = I). It is the gate that creates superposition — the foundation of all quantum algorithms that exploit parallelism.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: H |0⟩ = (|0⟩ + |1⟩) / √2</strong>
+        <div class="step-math">α = 1/√2,  β = 1/√2</div>
+        <div class="step-explain">Starting from the ground state, Hadamard produces an equal superposition of |0⟩ and |1⟩. Each outcome has probability ½ on measurement.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: H |1⟩ = (|0⟩ − |1⟩) / √2</strong>
+        <div class="step-math">α = 1/√2,  β = −1/√2  (a relative phase)</div>
+        <div class="step-explain">The relative minus sign is the quantum phase — there is no classical analogue. Combined with H|0⟩, this lets H map computational basis states to a different orthonormal basis (the Hadamard basis).</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: H² = I — reversibility</strong>
+        <div class="step-math">H · H = I   →   H|ψ⟩ twice gives back |ψ⟩</div>
+        <div class="step-explain">All quantum gates are unitary (and thus reversible). H applied twice returns the original state. This is the foundation of the Deutsch-Jozsa and Grover algorithms — H is the quantum workhorse.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/science/physics/quantum.html</code>. Next.js route: <code>/science/physics/quantum</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

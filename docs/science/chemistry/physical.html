@@ -84,7 +84,10 @@
       body.light .hero .hero-text .h-tag { color: #4b5563; } body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; } body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light pre.code-block, body.light .math-panel .math-eq, body.light .stats-grid .stat, body.light .summary-block { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -164,7 +167,34 @@
           </div>
         </div>
       </div>
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: The Arrhenius equation</strong>
+        <div class="step-math">k = A · exp(−Eₐ / (R·T))</div>
+        <div class="step-explain">The rate constant k depends on the pre-exponential factor A (frequency of collisions), the activation energy Eₐ, the gas constant R = 8.314 J·(mol·K)⁻¹, and absolute temperature T.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Take the logarithm</strong>
+        <div class="step-math">ln k = ln A − Eₐ / (R·T)</div>
+        <div class="step-explain">Log form makes the equation linear in 1/T. Plotting ln k vs 1/T gives a straight line whose slope is −Eₐ/R and whose intercept is ln A.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Linear regression</strong>
+        <div class="step-math">slope = −Eₐ / R   →   Eₐ = −slope · R</div>
+        <div class="step-explain">Given measured (Tᵢ, kᵢ) data, fit a line. The slope recovers Eₐ, the intercept recovers A. This is the textbook method for extracting activation energy from rate data.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Half-life (first-order)</strong>
+        <div class="step-math">t½ = ln(2) / k</div>
+        <div class="step-explain">For first-order reactions (e.g. radioactive decay, unimolecular decomposition), the half-life is independent of starting concentration — a clean closed-form expression.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Extend to non-Arrhenius regimes</strong>
+        <div class="step-math">k(T) = A · T^n · exp(−Eₐ / (R·T))  (modified Arrhenius)</div>
+        <div class="step-explain">For complex reactions (chain branching, surface effects) a T^n pre-factor is added. The modified form fits data across wider temperature ranges — important in combustion and atmospheric chemistry.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science/chemistry/physical.html</code>. Next.js: <code>/science/chemistry/physical</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

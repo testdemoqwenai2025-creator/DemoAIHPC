@@ -113,6 +113,34 @@ This separation keeps legal scenarios simple:
   "Return to Home" button.
 - **Global site navigation** — top ribbon (Platform / AETHEL Suite /
   Science dropdowns) + footer navigation.
+- **Math→Code derivation on every science sub-page (Phase 23)** — all
+  22 `/science/*` sub-pages now carry a 5-step derivation block that
+  shows how the page's algorithm follows from its mathematical
+  expression. The pattern was pioneered on `/science/maths/geometry`
+  (tesseract 4D → 3D → 2D projection chain) and propagated to all
+  other sub-pages by `scripts/gen-math-derivations.py`. Each
+  derivation is domain-specific: neighbour-joining for evolutionary,
+  Otsu for imaging, RK4 for systems, Verlet for computational,
+  Graham scan for materials, SMILES parsing for organic, Arrhenius
+  for physical, Euclid for algebra, trapezoidal for analysis,
+  Miller-Rabin for number-theory, Metropolis-Hastings for
+  probability, Euler-Lagrange for mechanics, Hadamard for quantum,
+  STFT for sound, N-body for space, Maxwell-Boltzmann for thermo,
+  FFT for waves — and the central-dogma codon table for molecular.
+- **DAG provenance chain (Phase 23)** — the
+  `/concepts/provenance-chain` concept card is upgraded from a linear
+  7-node chain to a 10-node directed acyclic graph (DAG) with 5
+  layers, joins, and forks. Layer assignment uses longest-path-from-
+  source; topological traversal uses Kahn's algorithm. The JSON-LD
+  receipt now uses `prov:`/`aihpc:` namespaces and emits per-node
+  `inputs[]` arrays.
+- **`<TemporalGraph>` reusable component (Phase 21+, ported in
+  Phase 23)** — extracted from the static `dashboard.html` in Phase 21
+  and now used by both `/benchmark` (phase metrics over time) and
+  `/dashboard` (AETHEL knowledge-graph evolution). The Next.js
+  `/dashboard` route renders the same 10 timesteps as the GitHub
+  Pages `dashboard.html`, unifying the codebase around a single
+  temporal-visualisation component.
 
 ## Demo framework (Phase 2)
 

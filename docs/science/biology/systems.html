@@ -84,7 +84,10 @@
       body.light .hero .hero-text .h-tag { color: #4b5563; } body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; } body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light pre.code-block, body.light .math-panel .math-eq, body.light .stats-grid .stat, body.light .summary-block { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -164,7 +167,34 @@
           </div>
         </div>
       </div>
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: ODE initial-value problem</strong>
+        <div class="step-math">dy/dt = f(t, y),  y(t₀) = y₀</div>
+        <div class="step-explain">A system of ODEs — e.g. d[Protein]/dt = k_synth − k_degr·[Protein]. The RK4 integrator advances y from t to t+dt with fourth-order accuracy.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Stage 1 — slope at the start</strong>
+        <div class="step-math">k₁ = f(t, y)</div>
+        <div class="step-explain">Compute the slope at the current state. This is the same as one step of forward Euler — a coarse O(dt) approximation.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Stages 2 and 3 — mid-point slopes</strong>
+        <div class="step-math">k₂ = f(t + dt/2, y + dt·k₁/2),  k₃ = f(t + dt/2, y + dt·k₂/2)</div>
+        <div class="step-explain">Use k₁ to estimate the state at the midpoint, then re-evaluate the slope there. Repeat — the second mid-point slope k₃ is more accurate because it uses k₂, not k₁.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Stage 4 — slope at the end</strong>
+        <div class="step-math">k₄ = f(t + dt, y + dt·k₃)</div>
+        <div class="step-explain">Take a full Euler step using k₃, and evaluate the slope there. Now we have four slopes: one at the start, two at the midpoint, one at the end.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Weighted average → next state</strong>
+        <div class="step-math">y(t + dt) = y + (dt/6)·(k₁ + 2·k₂ + 2·k₃ + k₄)</div>
+        <div class="step-explain">Combine the four slopes with weights 1, 2, 2, 1 / 6. This is Simpson's rule applied to integration — the result has local error O(dt⁵) and global error O(dt⁴).</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science/biology/systems.html</code>. Next.js: <code>/science/biology/systems</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

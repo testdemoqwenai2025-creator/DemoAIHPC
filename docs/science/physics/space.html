@@ -69,7 +69,10 @@
       body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; }
       body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <header class="ribbon">
@@ -167,7 +170,34 @@
         <li>Trace the steps for replay.</li>
       </ul>
 
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: Pairwise gravitational force</strong>
+        <div class="step-math">F_ij = G · mᵢ · mⱼ · (rⱼ − rᵢ) / |rⱼ − rᵢ|³</div>
+        <div class="step-explain">Newton's inverse-square law. G is the gravitational constant. The force on body i from body j is a vector pointing from i to j with magnitude G·mᵢ·mⱼ/r².</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Total force on body i</strong>
+        <div class="step-math">Fᵢ = Σ_{j≠i} F_ij   →   O(N²) per step</div>
+        <div class="step-explain">Sum over all other bodies. For N particles, this is N(N−1)/2 pairs per step — the canonical N-body bottleneck. Barnes-Hut and FMM reduce this to O(N log N) and O(N) respectively.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Acceleration</strong>
+        <div class="step-math">aᵢ = Fᵢ / mᵢ</div>
+        <div class="step-explain">Newton's second law. Mass cancels in the gravitational case (a = G·mⱼ·r̂/r²), but keeping it general supports non-gravitational N-body problems (e.g. charged particles, dark-matter sims).</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Kick-drift-kick (leapfrog) integrator</strong>
+        <div class="step-math">v(t + dt/2) = v(t) + ½·a(t)·dt;  x(t+dt) = x(t) + v(t+dt/2)·dt;  v(t+dt) = v(t+dt/2) + ½·a(t+dt)·dt</div>
+        <div class="step-explain">Symplectic leapfrog: half-kick, full drift, half-kick. Energy is conserved over exponentially long times (no secular drift) — essential for orbital mechanics.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Softening to avoid singularity</strong>
+        <div class="step-math">F_ij = G·mᵢ·mⱼ·(rⱼ − rᵢ) / (|rⱼ − rᵢ|² + ε²)^(3/2)</div>
+        <div class="step-explain">When two bodies come close, |r| → 0 makes F diverge. A softening length ε (typically a fraction of the mean inter-particle spacing) bounds the force and prevents numerical blow-up. The simulation runs stably for billions of timesteps.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/science/physics/space.html</code>. Next.js route: <code>/science/physics/space</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

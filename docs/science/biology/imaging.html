@@ -84,7 +84,10 @@
       body.light .hero .hero-text .h-tag { color: #4b5563; } body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; } body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light pre.code-block, body.light .math-panel .math-eq, body.light .stats-grid .stat, body.light .summary-block { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -164,7 +167,34 @@
           </div>
         </div>
       </div>
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: Build a normalised histogram</strong>
+        <div class="step-math">P(i) = h(i) / Σ h,  i ∈ {0, …, 255}</div>
+        <div class="step-explain">For an 8-bit image, count grey-level occurrences h(i), then normalise to probabilities P(i). The histogram is the only input to Otsu's method — no image pixels are touched again.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Sweep a threshold t and split into two classes</strong>
+        <div class="step-math">ω₀(t) = Σ_{i≤t} P(i),  ω₁(t) = 1 − ω₀(t)</div>
+        <div class="step-explain">For every candidate threshold t, the foreground (class 0) is everything ≤ t and the background (class 1) is everything > t. ω₀ and ω₁ are the class probabilities.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Class means μ₀, μ₁ and global mean μ_T</strong>
+        <div class="step-math">μ₀(t) = (1/ω₀) Σ_{i≤t} i·P(i),  μ_T = Σ i·P(i)</div>
+        <div class="step-explain">The mean grey level of each class, weighted by its probability. μ_T is constant for the image; only μ₀ and μ₁ change with t.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Between-class variance</strong>
+        <div class="step-math">σ²_b(t) = ω₀(t)·ω₁(t)·(μ₀(t) − μ₁(t))²</div>
+        <div class="step-explain">Otsu's insight: the threshold that best separates foreground from background maximises the between-class variance — a closed-form, single-pass metric.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Optimal threshold</strong>
+        <div class="step-math">t* = argmax_t σ²_b(t)  →  O(n) for n = 256 grey levels</div>
+        <div class="step-explain">A linear scan over 256 candidates gives the global optimum. The function returns t*, which the renderer uses to binarise the image.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science/biology/imaging.html</code>. Next.js: <code>/science/biology/imaging</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

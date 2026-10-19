@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Provenance Chain — the 'footpath' showing how a result was assembled step-by-step. Every computation produces a chain of evidence; replayable, auditable, citable." />
-    <title>Provenance Chain — AIHPC Advanced Concept Card</title>
+    <meta name="description" content="Provenance Chain — the 'footpath' showing how a result was assembled step-by-step. Modelled as a directed acyclic graph (DAG): every computation produces a graph of evidence — replayable, auditable, citable." />
+    <title>Provenance Chain (DAG) — AIHPC Advanced Concept Card</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
       * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
@@ -51,14 +51,18 @@
       .btn.primary { background: linear-gradient(90deg,#8b5cf6,#06b6d4); border-color: transparent; }
       .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-      /* Chain SVG */
-      svg.chain { width: 100%; height: 320px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; }
-      svg.chain .node-circle { transition: r 0.4s ease, fill 0.4s ease; }
+      /* Chain SVG (DAG-aware layered layout) */
+      svg.chain { width: 100%; height: 380px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; }
+      svg.chain .node-circle { transition: r 0.4s ease, fill 0.4s ease, opacity 0.4s ease; }
       svg.chain .node-label { font: 600 11px ui-sans-serif, system-ui, sans-serif; fill: var(--text); pointer-events: none; }
       svg.chain .node-meta { font: 9px ui-sans-serif, system-ui, sans-serif; fill: var(--text-muted); pointer-events: none; }
-      svg.chain .edge { stroke: rgba(245,158,11,0.4); stroke-width: 1.5; fill: none; }
+      svg.chain .node-kind { font: 8px ui-monospace, Menlo, monospace; fill: var(--text-muted-2); pointer-events: none; text-transform: uppercase; letter-spacing: 0.08em; }
+      svg.chain .edge { stroke: rgba(245,158,11,0.35); stroke-width: 1.5; fill: none; transition: stroke 0.3s ease, stroke-width 0.3s ease; }
       svg.chain .edge-active { stroke: #06b6d4; stroke-width: 2.5; }
+      svg.chain .edge-walked { stroke: rgba(16,185,129,0.6); stroke-width: 2; }
       svg.chain .flow-dot { fill: #06b6d4; }
+      svg.chain .layer-label { font: 9px ui-monospace, Menlo, monospace; fill: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.1em; }
+      svg.chain .legend-row { font: 10px ui-sans-serif, system-ui, sans-serif; fill: var(--text-muted); }
 
       /* Trace panel */
       .trace-panel { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-top: 16px; }
@@ -102,80 +106,95 @@
       <span class="tag">Foundational &middot; footpaths &amp; chains</span>
       <h1>Provenance Chain</h1>
       <p class="lead">
-        Every result has a <em>chain of evidence</em> — the ordered steps
-        that assembled it. The Provenance Chain visualisation renders
-        this chain as a flowing path: each node is a step (input,
-        computation, output, annotation), each edge is the data flow
-        between them. Press play to watch the chain assemble itself
-        step-by-step.
+        Every result has a <em>graph of evidence</em> — the directed
+        acyclic graph (DAG) of steps that assembled it. The Provenance
+        Chain visualisation renders this DAG as a layered flow: each
+        node is a step (input, parse, compute, annotate, output), each
+        edge is a typed data dependency. A node may have multiple inputs
+        (a join) or multiple downstream consumers (a fork). Press play
+        to watch the DAG assemble itself in topological order.
       </p>
 
       <div class="chain-card">
-        <h3>Hypothetical demo: chain for the Nucleotide Analysis result</h3>
+        <h3>Hypothetical demo: provenance DAG for the Nucleotide Analysis result</h3>
         <p class="muted" style="font-size: 13px; margin-top:0;">
-          Press <strong>Walk the chain</strong> to see how a nucleotide
-          analysis result is assembled: sequence → parse → ORF scan →
-          GC plot → motif search → RNA fold → receipt.
+          Press <strong>Walk the DAG</strong> to traverse the provenance
+          graph in topological order. The DNA sequence and the motif
+          database are both inputs; they fork and rejoin through the
+          pipeline, converging at the provenance receipt.
         </p>
         <div class="chain-controls">
-          <button class="btn primary" id="walk-btn">▶ Walk the chain</button>
+          <button class="btn primary" id="walk-btn">▶ Walk the DAG</button>
           <button class="btn" id="step-btn">Step ▶</button>
           <button class="btn" id="reset-btn">↺ Reset</button>
-          <button class="btn" id="receipt-btn" disabled>⬇ Receipt</button>
+          <button class="btn" id="receipt-btn" disabled>⬇ Receipt (JSON-LD)</button>
         </div>
-        <svg class="chain" id="chain-svg" viewBox="0 0 920 320" preserveAspectRatio="xMidYMid meet"></svg>
+        <svg class="chain" id="chain-svg" viewBox="0 0 920 380" preserveAspectRatio="xMidYMid meet"></svg>
         <div class="trace-panel">
-          <h4>Decision trace (the chain walked so far)</h4>
-          <div id="trace-list" style="font-size: 12px; color: var(--text-muted);">Press Walk the chain.</div>
+          <h4>Topological traversal trace (the DAG walked so far)</h4>
+          <div id="trace-list" style="font-size: 12px; color: var(--text-muted);">Press Walk the DAG.</div>
         </div>
       </div>
 
       <h2>What it is</h2>
       <p>
-        A <strong>provenance chain</strong> is a directed path that
-        records how a result was assembled. Unlike the{' '}
+        A <strong>provenance chain</strong> is a directed acyclic graph
+        (DAG) that records how a result was assembled. Unlike the{' '}
         <a href="replayable-decision-traces.html">replayable decision
         trace</a> (which captures the agent&apos;s evolving state), the
-        chain captures the data flow: <em>this dataset fed this parser
-        which produced this intermediate which fed this algorithm
-        which produced this output which was wrapped in this receipt</em>.
-        Every edge is a typed data dependency; every node has a hash.
+        DAG captures the data flow: <em>this dataset and that database
+        fed this parser which forked into three analyses which rejoined
+        at this annotation which converged with this visualization at
+        the final receipt</em>. A node may have multiple inputs (a
+        <em>join</em>) — meaning its computation only fires once all
+        upstream data has arrived. A node may have multiple outputs (a
+        <em>fork</em>) — meaning its result feeds several downstream
+        consumers. Every edge is a typed data dependency; every node
+        has a content-addressed hash.
       </p>
 
       <h2>Where the idea came from</h2>
       <p class="muted">
         The user described the vision as <em>bedrums or footpaths or
         chains how successive scenario was evolve or put together</em>.
-        This is the language of provenance graphs — W3C PROV-O, OPM, the
-        Open Provenance Model — extended with a temporal-flow
-        visualisation. The chain is the temporal-flow view of a
-        provenance graph: nodes laid out left-to-right by creation
-        time, edges animated to show data movement.
+        The natural mathematical structure for this is a DAG — the
+        same structure used by W3C PROV-O, the Open Provenance Model
+        (OPM), Airflow / Prefect / Dagster pipelines, Makefile
+        dependency graphs, and Git&apos;s commit DAG. The layered layout
+        shown above assigns each node to a <em>layer</em> (its longest
+        distance from any source), then places layers left-to-right.
+        Topological traversal — the order in which nodes appear during
+        &quot;Walk the DAG&quot; — guarantees that every node&apos;s inputs
+        have already been computed.
       </p>
 
       <h2>Why it matters for AIHPC</h2>
       <ul>
         <li><strong>Trust.</strong> The viewer can see exactly which steps produced the result they downloaded. No black box.</li>
-        <li><strong>Audit.</strong> The chain is itself a downloadable artifact; a reviewer can replay it offline.</li>
-        <li><strong>Citation.</strong> A paper citing a result cites the chain URL — a content-addressed provenance receipt.</li>
-        <li><strong>Composability.</strong> The chain of demo A can become an input to demo B; the chains concatenate.</li>
-        <li><strong>Failure isolation.</strong> When a result is wrong, the chain tells you which node introduced the error.</li>
+        <li><strong>Audit.</strong> The DAG is itself a downloadable artifact; a reviewer can replay it offline.</li>
+        <li><strong>Citation.</strong> A paper citing a result cites the DAG URL — a content-addressed provenance receipt.</li>
+        <li><strong>Composability.</strong> The DAG of demo A can become one input to demo B&apos;s DAG; the DAGs merge cleanly.</li>
+        <li><strong>Failure isolation.</strong> When a result is wrong, the DAG tells you exactly which node introduced the error — and which downstream nodes are tainted by it.</li>
+        <li><strong>Parallelism.</strong> Nodes in the same layer have no data dependency between them — they can run in parallel. The DAG is the natural unit of work-stealing schedulers.</li>
       </ul>
 
       <h2>How AIHPC implements it</h2>
       <ul>
-        <li><strong>Node format.</strong> <code>{ id, kind: 'input'|'parse'|'compute'|'annotate'|'output', label, dataHash, createdAt }</code></li>
-        <li><strong>Edge format.</strong> <code>{ from, to, kind: 'data'|'metadata', typedAs }</code></li>
-        <li><strong>Visual.</strong> SVG path with nodes positioned left-to-right by createdAt. Animated flow dots traverse each edge in turn when &quot;Walk the chain&quot; is pressed.</li>
-        <li><strong>Receipt.</strong> The whole chain is serialised as JSON-LD with the <code>prov:</code> namespace; downloaded as a Blob alongside the result.</li>
+        <li><strong>Node format.</strong> <code>{ id, kind: 'input'|'parse'|'compute'|'annotate'|'output', label, dataHash, createdAt, layer }</code></li>
+        <li><strong>Edge format.</strong> <code>{ from, to, kind: 'data'|'metadata', typedAs }</code> — many edges can target one node (join) or leave one node (fork).</li>
+        <li><strong>Layer assignment.</strong> Longest-path-from-source: <code>layer(node) = max(layer(input) + 1)</code> for each input, or 0 for sources. O(V+E).</li>
+        <li><strong>Topological order.</strong> Kahn&apos;s algorithm (BFS over in-degree zeroing) — the order in which &quot;Walk the DAG&quot; reveals nodes.</li>
+        <li><strong>Visual.</strong> SVG with nodes positioned in columns by layer; curves between layers. Animated flow dots traverse each edge in topological order.</li>
+        <li><strong>Receipt.</strong> The whole DAG is serialised as JSON-LD with the <code>prov:</code> namespace; each node lists its <code>inputs: []</code> array; downloaded as a Blob alongside the result.</li>
       </ul>
 
       <h2>Evolution of the subject</h2>
       <ul>
-        <li><strong>Today.</strong> The chain visualisation above is a sketch with a hypothetical 7-step nucleotide-analysis chain.</li>
-        <li><strong>Phase 7+.</strong> Every demo runner emits its chain alongside the CSV / FASTA / receipt download.</li>
-        <li><strong>Phase 8+.</strong> Chains compose — a workflow that runs three demos in sequence produces a chain that references each sub-chain by ID.</li>
-        <li><strong>Phase 9+.</strong> Chains are content-addressed and shareable by URL — a citation becomes a one-click replay.</li>
+        <li><strong>Today.</strong> The DAG visualisation above is a sketch with a hypothetical 10-node nucleotide-analysis DAG — 2 inputs, 4 compute, 2 joins, 1 receipt.</li>
+        <li><strong>Phase 7+.</strong> Every demo runner emits its DAG alongside the CSV / FASTA / receipt download.</li>
+        <li><strong>Phase 8+.</strong> DAGs compose — a workflow that runs three demos in sequence produces a DAG that references each sub-DAG by ID; merges are first-class.</li>
+        <li><strong>Phase 9+.</strong> DAGs are content-addressed and shareable by URL — a citation becomes a one-click replay.</li>
+        <li><strong>Phase 10+.</strong> Same-layer nodes are scheduled in parallel by a work-stealing runtime; the DAG becomes the unit of distributed compute.</li>
       </ul>
 
       <div class="meta">
@@ -184,160 +203,301 @@
     </div>
 
     <script>
-      // ---- Chain data (hypothetical nucleotide-analysis chain) ----
-      const CHAIN = [
-        { id: 'input',     label: 'DNA sequence',      meta: '174 bp · E. coli lacZ', color: '#f59e0b' },
-        { id: 'parse',     label: 'Parse + validate', meta: 'alphabet ACGT',        color: '#06b6d4' },
-        { id: 'orf',       label: 'ORF scan',         meta: '6-frame · O(n)',        color: '#10b981' },
-        { id: 'gc',        label: 'GC content',       meta: 'w=20 · sliding',        color: '#06b6d4' },
-        { id: 'motif',     label: 'KMP motif search', meta: '4 motifs · 2 strands',  color: '#8b5cf6' },
-        { id: 'rna',       label: 'Nussinov RNA',     meta: 'O(n³) · first 60 nt',   color: '#ec4899' },
-        { id: 'receipt',   label: 'Provenance receipt', meta: 'JSON-LD · prov: namespace', color: '#f59e0b' },
+      // ============================================================
+      // Provenance DAG data (nucleotide-analysis pipeline)
+      // ============================================================
+      // The DAG has 10 nodes across 5 layers. Two source nodes
+      // (DNA + motif DB) feed a parser which forks into 4 analyses;
+      // motif + orf rejoin at annot; gc + rna rejoin at viz; both
+      // converge at receipt. This is a real pipeline shape, not a
+      // linear chain.
+      // ============================================================
+      const NODES = [
+        { id: 'input',  kind: 'input',    label: 'DNA sequence',       meta: '174 bp · E. coli lacZ',  color: '#f59e0b' },
+        { id: 'db',     kind: 'input',    label: 'Motif DB',           meta: 'TATA, Kozak, EcoRI, polyA', color: '#3b82f6' },
+        { id: 'parse',  kind: 'parse',    label: 'Parse + validate',  meta: 'alphabet ACGT',          color: '#06b6d4' },
+        { id: 'orf',    kind: 'compute',  label: 'ORF scan',           meta: '6-frame · O(n)',         color: '#10b981' },
+        { id: 'gc',     kind: 'compute',  label: 'GC content',         meta: 'w=20 · sliding',         color: '#06b6d4' },
+        { id: 'motif',  kind: 'compute',  label: 'KMP motif search',  meta: '4 motifs · 2 strands',   color: '#8b5cf6' },
+        { id: 'rna',    kind: 'compute',  label: 'Nussinov RNA',      meta: 'O(n³) · first 60 nt',    color: '#ec4899' },
+        { id: 'annot',  kind: 'annotate', label: 'Annotate',          meta: 'join: motif + orf',      color: '#fbbf24' },
+        { id: 'viz',    kind: 'output',   label: 'Visualization',     meta: 'join: gc + rna',         color: '#a78bfa' },
+        { id: 'receipt',kind: 'output',   label: 'Provenance receipt',meta: 'join: annot + viz',      color: '#f59e0b' },
       ];
 
-      const TRACE_REASONS = [
-        'Loaded user-provided DNA sequence.',
-        'Validated alphabet (A/C/G/T only); normalised to uppercase.',
-        'Scanned 6 reading frames (forward + reverse-complement); found ORFs ≥ 30 bp.',
-        'Computed GC% over sliding window (w=20); plotted SVG.',
-        'Searched for TATA box, poly-A signal, Kozak sequence, EcoRI site; both strands.',
-        'Predicted RNA secondary structure via Nussinov DP; traceback gave base-pair set.',
-        'Assembled JSON-LD receipt with manifestHash + input/output hashes + trace entries.',
+      // Directed edges (from -> to). Multiple ins = join; multiple outs = fork.
+      const EDGES = [
+        { from: 'input',  to: 'parse' },
+        { from: 'db',     to: 'motif' },
+        { from: 'parse',  to: 'orf' },
+        { from: 'parse',  to: 'gc' },
+        { from: 'parse',  to: 'motif' },
+        { from: 'parse',  to: 'rna' },
+        { from: 'motif',  to: 'annot' },
+        { from: 'orf',    to: 'annot' },
+        { from: 'gc',     to: 'viz' },
+        { from: 'rna',    to: 'viz' },
+        { from: 'annot',  to: 'receipt' },
+        { from: 'viz',    to: 'receipt' },
       ];
 
-      // ---- Layout: nodes left-to-right ----
-      const W = 920, H = 320, padX = 40, padY = 100;
-      const nodeR = 18;
-      const positions = CHAIN.map((n, i) => ({
-        x: padX + (i / (CHAIN.length - 1)) * (W - 2 * padX),
-        y: H / 2,
-      }));
+      const TRACE_REASONS = {
+        input:   'Loaded user-provided DNA sequence (174 bp, E. coli lacZ fragment).',
+        db:      'Loaded motif database (TATA box, Kozak, EcoRI, poly-A signal — 4 patterns).',
+        parse:   'Validated alphabet (A/C/G/T only); normalised to uppercase; rejected ambiguous IUPAC codes.',
+        orf:     'Scanned 6 reading frames (forward + reverse-complement); found 3 ORFs ≥ 30 bp.',
+        gc:      'Computed GC% over sliding window (w=20); plotted SVG; mean GC = 51.2%.',
+        motif:   'KMP search for 4 motifs on both strands; 2 TATA boxes, 1 EcoRI site, 1 Kozak context.',
+        rna:     'Nussinov DP on first 60 nt; traceback gave 18 base pairs (3 stems, 1 loop).',
+        annot:   'Joined motif hits with ORF coordinates; flagged 1 promoter-proximal TATA box.',
+        viz:     'Joined GC plot with RNA fold overlay; rendered composite SVG figure.',
+        receipt: 'Assembled JSON-LD receipt with prov: namespace, manifestHash, and per-node inputs[] array.',
+      };
 
-      let stepIdx = -1; // -1 = nothing shown yet
+      // ============================================================
+      // Layer assignment (longest path from any source) + topo order
+      // ============================================================
+      const nodeById = Object.fromEntries(NODES.map(n => [n.id, n]));
+      const inEdges = Object.fromEntries(NODES.map(n => [n.id, []]));
+      const outEdges = Object.fromEntries(NODES.map(n => [n.id, []]));
+      EDGES.forEach(e => { inEdges[e.to].push(e.from); outEdges[e.from].push(e.to); });
+
+      // layer(node) = max(layer(input)+1) for each input, or 0 for sources
+      function computeLayers() {
+        const layer = {};
+        // Topological order via Kahn
+        const indeg = Object.fromEntries(NODES.map(n => [n.id, inEdges[n.id].length]));
+        const queue = NODES.filter(n => indeg[n.id] === 0).map(n => n.id);
+        const topo = [];
+        while (queue.length) {
+          const id = queue.shift();
+          topo.push(id);
+          for (const next of outEdges[id]) {
+            indeg[next]--;
+            if (indeg[next] === 0) queue.push(next);
+          }
+        }
+        // Layer assignment in topo order
+        for (const id of topo) {
+          const ins = inEdges[id];
+          layer[id] = ins.length === 0 ? 0 : Math.max(...ins.map(x => layer[x])) + 1;
+        }
+        return { layer, topo };
+      }
+      const { layer, topo } = computeLayers();
+      const maxLayer = Math.max(...Object.values(layer));
+      // Group nodes by layer for vertical layout
+      const layerNodes = Array.from({ length: maxLayer + 1 }, () => []);
+      NODES.forEach(n => layerNodes[layer[n.id]].push(n.id));
+
+      // ============================================================
+      // SVG layout — columns by layer, vertical positions in column
+      // ============================================================
+      const W = 920, H = 380, padL = 60, padR = 60, padT = 50, padB = 40;
+      const colW = (W - padL - padR) / Math.max(maxLayer, 1);
+      const nodeR = 16;
+
+      function posFor(nodeId) {
+        const l = layer[nodeId];
+        const colNodes = layerNodes[l];
+        const i = colNodes.indexOf(nodeId);
+        const x = padL + l * colW;
+        const colH = H - padT - padB;
+        const y = colNodes.length === 1 ? padT + colH / 2
+                  : padT + (i + 0.5) * (colH / colNodes.length);
+        return { x, y };
+      }
+      const positions = Object.fromEntries(NODES.map(n => [n.id, posFor(n.id)]));
+
+      // ============================================================
+      // State: revealedNodes (Set), activeNode (just-revealed), walked
+      // ============================================================
+      let revealIdx = -1;   // index into topo — topo[0..revealIdx] revealed
       let playing = false;
-      let timer = null;
       let lastResult = null;
 
       const svg = document.getElementById('chain-svg');
       const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
+      function isRevealed(id) {
+        if (revealIdx < 0) return false;
+        const revealedCount = revealIdx + 1;
+        return topo.indexOf(id) < revealedCount;
+      }
+      function activeNodeId() {
+        if (revealIdx < 0 || revealIdx >= topo.length) return null;
+        return topo[revealIdx];
+      }
+
       function render() {
         const parts = [];
-        // Edges (animated path)
-        for (let i = 0; i < CHAIN.length - 1; i++) {
-          const p1 = positions[i], p2 = positions[i+1];
-          const visible = i < stepIdx + 1;
-          const active = i === stepIdx;
-          const cls = active ? 'edge edge-active' : 'edge';
-          const opacity = visible ? 1 : 0.15;
-          const mx = (p1.x + p2.x) / 2, my = (p1.y + p2.y) - 8;
-          parts.push(`<path class="${cls}" d="M ${p1.x} ${p1.y} Q ${mx} ${my} ${p2.x} ${p2.y}" opacity="${opacity}"/>`);
-          // Flow dot if active
-          if (active) {
-            parts.push(`<circle class="flow-dot" cx="${p1.x + (p2.x - p1.x) * 0.5}" cy="${my + 8}" r="4"><animate attributeName="cx" from="${p1.x}" to="${p2.x}" dur="0.6s" repeatCount="1"/><animate attributeName="cy" from="${p1.y}" to="${p2.y}" dur="0.6s" repeatCount="1"/></circle>`);
-          }
+        const activeId = activeNodeId();
+
+        // Layer column labels at top
+        for (let l = 0; l <= maxLayer; l++) {
+          const x = padL + l * colW;
+          parts.push(`<text class="layer-label" x="${x}" y="20" text-anchor="middle">layer ${l}</text>`);
         }
-        // Nodes
-        CHAIN.forEach((n, i) => {
-          const p = positions[i];
-          const visible = i <= stepIdx + 1;
-          const isActive = i === stepIdx + 1;
-          const r = visible ? nodeR : 0;
-          const fill = visible ? n.color : 'rgba(148,163,184,0.3)';
-          parts.push(`<circle class="node-circle" cx="${p.x}" cy="${p.y}" r="${r}" fill="${fill}" opacity="${visible ? 1 : 0.3}"/>`);
-          if (visible) {
-            parts.push(`<text class="node-label" x="${p.x}" y="${p.y - 28}" text-anchor="middle">${n.label}</text>`);
-            parts.push(`<text class="node-meta" x="${p.x}" y="${p.y + 38}" text-anchor="middle">${n.meta}</text>`);
+
+        // Edges
+        EDGES.forEach((e, idx) => {
+          const p1 = positions[e.from], p2 = positions[e.to];
+          const fromRevealed = isRevealed(e.from);
+          const toRevealed = isRevealed(e.to);
+          const isActive = (e.to === activeId) && fromRevealed;
+          const isWalked = fromRevealed && toRevealed;
+          let cls = 'edge';
+          if (isActive) cls = 'edge edge-active';
+          else if (isWalked) cls = 'edge edge-walked';
+          const opacity = fromRevealed ? 1 : 0.18;
+          // Bezier curve from p1 to p2 — control points at midpoint
+          const mx = (p1.x + p2.x) / 2;
+          const c1x = mx, c1y = p1.y;
+          const c2x = mx, c2y = p2.y;
+          parts.push(`<path class="${cls}" d="M ${p1.x} ${p1.y} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${p2.x} ${p2.y}" opacity="${opacity}"/>`);
+          // Flow dot on active edge
+          if (isActive) {
+            parts.push(`<circle class="flow-dot" cx="${p1.x}" cy="${p1.y}" r="4"><animate attributeName="cx" from="${p1.x}" to="${p2.x}" dur="0.5s" repeatCount="1"/><animate attributeName="cy" from="${p1.y}" to="${p2.y}" dur="0.5s" repeatCount="1"/></circle>`);
           }
         });
+
+        // Nodes
+        NODES.forEach(n => {
+          const p = positions[n.id];
+          const revealed = isRevealed(n.id);
+          const isActive = n.id === activeId;
+          const r = revealed ? (isActive ? nodeR + 3 : nodeR) : 4;
+          const fill = revealed ? n.color : 'rgba(148,163,184,0.25)';
+          const opacity = revealed ? 1 : 0.25;
+          const stroke = isActive ? '#06b6d4' : 'none';
+          const strokeWidth = isActive ? 3 : 0;
+          parts.push(`<circle class="node-circle" cx="${p.x}" cy="${p.y}" r="${r}" fill="${fill}" opacity="${opacity}"${stroke !== 'none' ? ` stroke="${stroke}" stroke-width="${strokeWidth}"` : ''}/>`);
+          if (revealed) {
+            parts.push(`<text class="node-kind" x="${p.x}" y="${p.y - 32}" text-anchor="middle">${n.kind}</text>`);
+            parts.push(`<text class="node-label" x="${p.x}" y="${p.y - 22}" text-anchor="middle">${n.label}</text>`);
+            parts.push(`<text class="node-meta" x="${p.x}" y="${p.y + 30}" text-anchor="middle">${n.meta}</text>`);
+          }
+        });
+
         svg.innerHTML = parts.join('');
       }
 
       function renderTrace() {
         const el = document.getElementById('trace-list');
-        if (stepIdx < 0) {
-          el.innerHTML = 'Press Walk the chain.';
+        if (revealIdx < 0) {
+          el.innerHTML = 'Press Walk the DAG.';
           return;
         }
-        const walked = CHAIN.slice(0, stepIdx + 1);
-        el.innerHTML = walked.map((n, i) => `
-          <div class="trace-row ${i === stepIdx ? 'active' : ''}">
-            <span class="step">step ${i+1}/${CHAIN.length}</span>
-            <strong>${n.label}</strong> &middot; <span style="color: var(--text-muted-2); font-size: 11px;">${n.meta}</span>
-            <div class="reason">${TRACE_REASONS[i]}</div>
-          </div>
-        `).join('');
+        const walked = topo.slice(0, revealIdx + 1);
+        el.innerHTML = walked.map((id, i) => {
+          const n = nodeById[id];
+          const ins = inEdges[id];
+          const inputStr = ins.length === 0
+            ? '<span style="color: var(--text-muted-2); font-size: 11px;">source</span>'
+            : '<span style="color: var(--accent-2); font-size: 11px;">inputs: ' + ins.join(', ') + '</span>';
+          return `
+            <div class="trace-row ${i === revealIdx ? 'active' : ''}">
+              <span class="step">topo ${i+1}/${topo.length}</span>
+              <strong>${n.label}</strong> &middot; <span style="color: var(--text-muted-2); font-size: 11px;">${n.meta}</span>
+              <div style="margin-top: 3px;">${inputStr}</div>
+              <div class="reason">${TRACE_REASONS[id]}</div>
+            </div>
+          `;
+        }).join('');
       }
 
       async function walk() {
         if (playing) return;
         playing = true;
-        document.getElementById('walk-btn').textContent = '⏸ Walking…';
-        document.getElementById('walk-btn').disabled = true;
-        // Reset and walk through
-        for (let i = -1; i < CHAIN.length; i++) {
-          stepIdx = i;
+        const btn = document.getElementById('walk-btn');
+        btn.textContent = '⏸ Walking…';
+        btn.disabled = true;
+        for (let i = -1; i < topo.length; i++) {
+          revealIdx = i;
           render();
           renderTrace();
-          await sleep(550);
+          await sleep(450);
         }
-        // Final state: show all nodes, receipt button enabled
-        stepIdx = CHAIN.length - 1;
+        revealIdx = topo.length - 1;
         render();
         renderTrace();
-        document.getElementById('walk-btn').textContent = '✓ Walked';
-        document.getElementById('walk-btn').disabled = false;
+        btn.textContent = '✓ Walked';
+        btn.disabled = false;
         document.getElementById('receipt-btn').disabled = false;
-        lastResult = { chain: CHAIN, walkedAt: new Date().toISOString() };
+        lastResult = { walkedAt: new Date().toISOString() };
         playing = false;
       }
 
       function step() {
         if (playing) return;
-        if (stepIdx >= CHAIN.length - 1) return;
-        stepIdx++;
+        if (revealIdx >= topo.length - 1) return;
+        revealIdx++;
         render();
         renderTrace();
-        if (stepIdx === CHAIN.length - 1) {
+        if (revealIdx === topo.length - 1) {
           document.getElementById('receipt-btn').disabled = false;
-          lastResult = { chain: CHAIN, walkedAt: new Date().toISOString() };
+          lastResult = { walkedAt: new Date().toISOString() };
         }
       }
 
       function reset() {
         if (playing) return;
-        stepIdx = -1;
-        document.getElementById('walk-btn').textContent = '▶ Walk the chain';
+        revealIdx = -1;
+        const btn = document.getElementById('walk-btn');
+        btn.textContent = '▶ Walk the DAG';
         document.getElementById('receipt-btn').disabled = true;
         lastResult = null;
         render();
         renderTrace();
       }
 
+      function hashFor(id) {
+        // Deterministic pseudo-hash from the node id
+        const s = id + '|' + nodeById[id].label + '|' + nodeById[id].meta;
+        let h = 0;
+        for (let i = 0; i < s.length; i++) {
+          h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+        }
+        const hex = (h >>> 0).toString(16).padStart(8, '0');
+        return 'sha256:' + (hex + hex + hex + hex).slice(0, 16);
+      }
+
       function downloadReceipt() {
         if (!lastResult) return;
+        // JSON-LD receipt with prov: namespace and per-node inputs[] array
         const receipt = {
-          '@context': 'https://aihpc.advanced/prov/v1',
-          '@type': 'ProvenanceChain',
-          walkedAt: lastResult.walkedAt,
-          chain: lastResult.chain.map((n, i) => ({
-            '@id': `aihpc:chain/step/${i+1}`,
-            '@type': n.id,
-            label: n.label,
-            meta: n.meta,
-            dataHash: 'sha256:' + btoa(n.label + i).replace(/=/g,'').slice(0,16),
-            createdAt: lastResult.walkedAt,
+          '@context': {
+            'prov': 'http://www.w3.org/ns/prov#',
+            'aihpc': 'https://aihpc.advanced/prov/v1#',
+            'xsd': 'http://www.w3.org/2001/XMLSchema#',
+          },
+          '@type': 'aihpc:ProvenanceDAG',
+          '@id': 'aihpc:dag/' + Date.now(),
+          walkedAt: { '@type': 'xsd:dateTime', '@value': lastResult.walkedAt },
+          nodes: NODES.map((n, i) => ({
+            '@id': `aihpc:dag/node/${n.id}`,
+            '@type': `aihpc:${n.kind}`,
+            'rdfs:label': n.label,
+            'aihpc:meta': n.meta,
+            'aihpc:layer': { '@type': 'xsd:integer', '@value': layer[n.id] },
+            'aihpc:topoOrder': { '@type': 'xsd:integer', '@value': topo.indexOf(n.id) + 1 },
+            'aihpc:dataHash': hashFor(n.id),
+            'aihpc:createdAt': { '@type': 'xsd:dateTime', '@value': lastResult.walkedAt },
+            'aihpc:inputs': inEdges[n.id].map(inId => ({ '@id': `aihpc:dag/node/${inId}` })),
           })),
-          edges: lastResult.chain.slice(0, -1).map((n, i) => ({
-            from: `aihpc:chain/step/${i+1}`,
-            to: `aihpc:chain/step/${i+2}`,
-            kind: 'data',
+          edges: EDGES.map(e => ({
+            '@type': 'aihpc:DataDependency',
+            'prov:wasDerivedFrom': { '@id': `aihpc:dag/node/${e.from}` },
+            'prov:wasGeneratedBy': { '@id': `aihpc:dag/node/${e.to}` },
           })),
+          layers: maxLayer + 1,
+          nodesTotal: NODES.length,
+          edgesTotal: EDGES.length,
         };
         const blob = new Blob([JSON.stringify(receipt, null, 2)], { type: 'application/ld+json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url; a.download = 'aihpc-provenance-chain-' + Date.now() + '.json';
+        a.href = url; a.download = 'aihpc-provenance-dag-' + Date.now() + '.jsonld';
         document.body.appendChild(a); a.click(); a.remove();
         URL.revokeObjectURL(url);
       }

@@ -69,7 +69,10 @@
       body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; }
       body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <header class="ribbon">
@@ -165,7 +168,34 @@
         <li>Trace the steps for replay.</li>
       </ul>
 
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: The discrete Fourier transform (DFT)</strong>
+        <div class="step-math">X[k] = Σ_{n=0}^{N−1} x[n] · exp(−i·2π·k·n / N),  k = 0, …, N−1</div>
+        <div class="step-explain">The DFT maps N samples in time to N frequency bins. Each X[k] is a complex number encoding amplitude and phase of frequency k/N cycles per sample.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Direct computation is O(N²)</strong>
+        <div class="step-math">for each k:  Σ over n  →  N² complex multiplications</div>
+        <div class="step-explain">The direct DFT is quadratic — for N = 1024, that's a million operations; for N = 10⁶, a trillion. The FFT makes this tractable.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Cooley-Tukey divide-and-conquer</strong>
+        <div class="step-math">split x into even-indexed (xₑ) and odd-indexed (xₒ);  recurse</div>
+        <div class="step-explain">Write the DFT as a sum over even and odd indices. X[k] = E[k] + W_N^k · O[k], where E and O are the (N/2)-point DFTs of the even and odd subsequences. Recurse down to length 1.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: The butterfly operation</strong>
+        <div class="step-math">X[k]       = E[k] + W_N^k · O[k]   X[k + N/2] = E[k] − W_N^k · O[k]</div>
+        <div class="step-explain">The two outputs share a common sub-expression. The butterfly computes both with one complex multiplication and one addition — half the work of two independent DFTs. This is the FFT's core saving.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Complexity is O(N log N)</strong>
+        <div class="step-math">T(N) = 2·T(N/2) + O(N)  →  O(N log N)</div>
+        <div class="step-explain">Master theorem: T(N) = 2·T(N/2) + Θ(N) gives O(N log N). For N = 10⁶, that's 20 million operations instead of a trillion — a 50,000× speedup. The FFT underlies MP3, JPEG, MRI, 5G, and SDR.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/science/physics/waves.html</code>. Next.js route: <code>/science/physics/waves</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

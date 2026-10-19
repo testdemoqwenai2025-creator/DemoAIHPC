@@ -84,7 +84,10 @@
       body.light .hero .hero-text .h-tag { color: #4b5563; } body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; } body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light pre.code-block, body.light .math-panel .math-eq, body.light .stats-grid .stat, body.light .summary-block { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -164,7 +167,34 @@
           </div>
         </div>
       </div>
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: Frame the signal</strong>
+        <div class="step-math">x_m[n] = x[m·hop + n]  for 0 ≤ n < N</div>
+        <div class="step-explain">Slice the input into overlapping frames of length N, advanced by `hop` samples. Overlap (typically N/2) is what makes the reconstruction smooth.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Apply a window</strong>
+        <div class="step-math">x̃_m[n] = x_m[n] · w[n],   w[n] = ½ − ½·cos(2πn/(N−1))</div>
+        <div class="step-explain">A Hann window (raised-cosine) tapers the frame edges to zero, reducing spectral leakage. Without a window, the DFT sees abrupt frame boundaries as discontinuities — smearing the spectrum.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: DFT of each frame</strong>
+        <div class="step-math">X_m[k] = Σₙ x̃_m[n] · exp(−i·2π·k·n / N),  k = 0, …, N−1</div>
+        <div class="step-explain">Compute the discrete Fourier transform of each windowed frame. X_m[k] is the complex amplitude of frequency bin k in frame m. An FFT makes this O(N log N).</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Magnitude spectrogram</strong>
+        <div class="step-math">S[m, k] = |X_m[k]|   →   optionally 10·log₁₀(S²)</div>
+        <div class="step-explain">Take the magnitude (discard phase for visualisation). The 2D array S[m, k] is the spectrogram: time on one axis, frequency on the other. Log-scale is conventional for audio.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Inverse STFT (reconstruction)</strong>
+        <div class="step-math">x̂[m·hop + n] += (1/W) · ÎFFT(X_m)[n]   with overlap-add</div>
+        <div class="step-explain">To invert: take IFFT of each frame, apply the inverse window (or use a dual window), and overlap-add. The constant 1/W (W = Σ window² at hop) normalises the overlapping windows to unity gain.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science/physics/sound.html</code>. Next.js: <code>/science/physics/sound</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

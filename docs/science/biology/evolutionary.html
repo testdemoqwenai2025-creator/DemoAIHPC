@@ -84,7 +84,10 @@
       body.light .hero .hero-text .h-tag { color: #4b5563; } body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; } body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light pre.code-block, body.light .math-panel .math-eq, body.light .stats-grid .stat, body.light .summary-block { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -164,7 +167,34 @@
           </div>
         </div>
       </div>
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: Pairwise sequence distance</strong>
+        <div class="step-math">D[i,j] = Hamming(seq[i], seq[j]) / length</div>
+        <div class="step-explain">Start with n homologous sequences and compute an n × n matrix D of normalised Hamming distances. This is the input to the neighbour-joining algorithm.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: The Q-matrix transformation</strong>
+        <div class="step-math">Q[i,j] = (n − 2)·D[i,j] − Σ_k D[i,k] − Σ_k D[j,k]</div>
+        <div class="step-explain">Q corrects for the average distance each taxon has to all others. It is the heart of neighbour-joining — the pair (i,j) minimising Q is the next pair to join.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Choose the pair to merge</strong>
+        <div class="step-math">(i*, j*) = argmin_{i<j} Q[i,j]</div>
+        <div class="step-explain">The pair with the smallest Q is the closest under the corrected distance. They become a new internal node u in the tree.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Compute branch lengths from u to i and j</strong>
+        <div class="step-math">δ(i,u) = ½·D[i,j] + (Σ_k D[i,k] − Σ_k D[j,k]) / (2·(n − 2))</div>
+        <div class="step-explain">Splits the distance D[i,j] between the two children, adjusted by how far each one is from everything else. δ(j,u) = D[i,j] − δ(i,u).</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Reduce the matrix and recurse</strong>
+        <div class="step-math">D[u,k] = (D[i,k] + D[j,k] − D[i,j]) / 2, then n ← n − 1</div>
+        <div class="step-explain">Replace i and j with the new node u, halving the matrix. Recurse until n = 2 — the result is an unrooted tree whose branch lengths are the δ values accumulated above.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science/biology/evolutionary.html</code>. Next.js: <code>/science/biology/evolutionary</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

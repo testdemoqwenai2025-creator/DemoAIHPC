@@ -84,7 +84,10 @@
       body.light .hero .hero-text .h-tag { color: #4b5563; } body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; } body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light pre.code-block, body.light .math-panel .math-eq, body.light .stats-grid .stat, body.light .summary-block { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -164,7 +167,34 @@
           </div>
         </div>
       </div>
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: Partition the interval</strong>
+        <div class="step-math">h = (b − a) / n,  xᵢ = a + i·h,  i = 0, …, n</div>
+        <div class="step-explain">Divide [a, b] into n equal subintervals of width h. The composite trapezoidal rule sums a trapezoid area per subinterval.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Per-interval trapezoid</strong>
+        <div class="step-math">Aᵢ = h · (f(xᵢ) + f(xᵢ₊₁)) / 2</div>
+        <div class="step-explain">Approximate f on [xᵢ, xᵢ₊₁] by the straight line between its endpoints. The area under the line is the trapezoid area.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Sum — the composite rule</strong>
+        <div class="step-math">I ≈ (h/2) · [f(a) + 2·Σᵢ₌₁ⁿ⁻¹ f(xᵢ) + f(b)]</div>
+        <div class="step-explain">Adjacent trapezoids share an edge, so interior points are counted twice with weight ½. The endpoints are counted once each.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Error analysis</strong>
+        <div class="step-math">E = −(b − a)³ / (12·n²) · f''(ξ),  ξ ∈ [a, b]</div>
+        <div class="step-explain">The trapezoidal rule has error O(h²) — second-order. For smooth f, doubling n quarters the error. For periodic f, the rule is spectrally accurate (clamped error).</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Richardson extrapolation → Simpson's rule</strong>
+        <div class="step-math">S = (4·I(h/2) − I(h)) / 3  =  O(h⁴)</div>
+        <div class="step-explain">Apply Richardson extrapolation to the trapezoidal rule with h and h/2. The result is Simpson's rule — fourth-order accurate and a staple of scientific computing.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science/maths/analysis.html</code>. Next.js: <code>/science/maths/analysis</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

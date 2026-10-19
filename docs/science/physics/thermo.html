@@ -84,7 +84,10 @@
       body.light .hero .hero-text .h-tag { color: #4b5563; } body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; } body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light pre.code-block, body.light .math-panel .math-eq, body.light .stats-grid .stat, body.light .summary-block { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -164,7 +167,34 @@
           </div>
         </div>
       </div>
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: The Maxwell-Boltzmann speed distribution</strong>
+        <div class="step-math">f(v) = 4π · (m / (2πkT))^(3/2) · v² · exp(−mv² / (2kT))</div>
+        <div class="step-explain">The probability density for the speed v of a molecule of mass m at temperature T. k is Boltzmann's constant. f(v) dv is the probability of finding a molecule with speed in [v, v+dv].</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Most-probable speed v_p</strong>
+        <div class="step-math">v_p = √(2kT / m)   ←  df/dv = 0</div>
+        <div class="step-explain">Differentiate f(v), set to zero, solve. The most-probable speed is the mode of the distribution — the peak of the curve.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Mean speed ⟨v⟩</strong>
+        <div class="step-math">⟨v⟩ = ∫ v · f(v) dv = √(8kT / (πm))</div>
+        <div class="step-explain">The expectation of v under f. This is the speed that appears in mean-free-path and collision-rate formulas in kinetic theory.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: RMS speed v_rms</strong>
+        <div class="step-math">v_rms = √(⟨v²⟩) = √(3kT / m)</div>
+        <div class="step-explain">The root-mean-square speed comes from the second moment. ⟨v²⟩ = 3kT/m is the equipartition theorem — ½m⟨v²⟩ = (3/2)kT is the average kinetic energy per particle in 3D.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Connect to the ideal-gas law</strong>
+        <div class="step-math">P·V = N·k·T   (N particles, 3D)</div>
+        <div class="step-explain">PV = NkT follows directly from ⟨v²⟩ and the momentum-transfer argument. The Maxwell-Boltzmann distribution is the kinetic underpinning of the macroscopic ideal-gas law — statistical mechanics explains thermodynamics.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science/physics/thermo.html</code>. Next.js: <code>/science/physics/thermo</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>

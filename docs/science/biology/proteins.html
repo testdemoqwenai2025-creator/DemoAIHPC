@@ -99,7 +99,10 @@
       body.light .lead, body.light .muted, body.light ul, body.light .meta { color: #4b5563; }
       body.light code { background: #f3f4f6; border-color: #e5e7eb; }
       body.light .ribbon-btn-primary { color: white; }
-    </style>
+          .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+</style>
   </head>
   <body>
     <header class="ribbon">
@@ -182,7 +185,34 @@
         <li><strong>Pyodide + BioPython</strong> — parse PDB in Python via BioPython (loaded via Pyodide), pass geometry to Three.js.</li>
       </ul>
 
-      <div class="meta">
+            <h2>Math &rarr; Code derivation</h2>
+      <div class="derivation-step">
+        <strong>Step 1: Parse PDB ATOM records</strong>
+        <div class="step-math">for line in pdb: if line[0:4]=='ATOM': (x,y,z) = line[30:54]</div>
+        <div class="step-explain">PDB files list one ATOM record per atom with fixed-width columns. Columns 31-38, 39-46, 47-54 hold x, y, z in Ångström. Parse them once and store as 3D vectors.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Identify the backbone</strong>
+        <div class="step-math">backbone = [a for a in atoms if a.name in ('N','CA','C','O')]</div>
+        <div class="step-explain">Every residue contributes four backbone atoms: N, Cα, C, O. Selecting these gives a one-atom-per-residue simplification for the cartoon ribbon.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Torsion angles φ and ψ</strong>
+        <div class="step-math">φ = dihedral(Cᵢ₋₁, Nᵢ, Cαᵢ, Cᵢ),  ψ = dihedral(Nᵢ, Cαᵢ, Cᵢ, Nᵢ₊₁)</div>
+        <div class="step-explain">Each residue's conformation is captured by two dihedral angles. Dihedral(a,b,c,d) uses the triple cross-product of (b-a),(c-b),(d-c) — six subtractions and two cross products.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Ramachandran plot — favoured regions</strong>
+        <div class="step-math">P(φ, ψ) = high in α-helix / β-sheet basins, low elsewhere</div>
+        <div class="step-explain">Empirically, 98% of residues fall in 3 regions of (φ,ψ) space. The plot is the diagnostic for protein structure quality — outliers are geometry errors or rare conformations.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Cartoon ribbon — spline through Cα positions</strong>
+        <div class="step-math">ribbon(t) = CatmullRom([Cα₀, …, Cₙ], t)</div>
+        <div class="step-explain">A Catmull-Rom spline interpolates the Cα positions smoothly, giving the ribbon backbone seen in molecular graphics. Cross-section orientation follows the peptide plane; the result is the iconic cartoon-rendered protein.</div>
+      </div>
+
+<div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/science/biology/proteins.html</code>. Next.js route: <code>/science/biology/proteins</code>. Three.js loaded from <code>cdn.jsdelivr.net</code> (open-source CDN; no server-side compute). Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>
