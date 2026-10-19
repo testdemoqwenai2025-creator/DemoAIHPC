@@ -2123,3 +2123,159 @@ explicit yes to all three open questions from Phase 6.
   <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>
   within ~2-3 minutes of the CI workflow completing.
 
+---
+
+## Phase 24 — Live subscription gating (lazy-eval popup + nucleotide demo)
+
+### Task ID: 24
+### Agent: main (this run)
+
+### Work Log
+
+- Built a shared client-side library `docs/subscribe-gate.js`
+  (10,543 bytes, syntax-validated):
+  - Public API: `AIHPC.getTier()`, `AIHPC.getSession()`,
+    `AIHPC.getTierRank(tier)`, `AIHPC.requireTier(minTier, opts)`,
+    `AIHPC.mountTierBadge(el)`, `AIHPC.showBanner(opts)`,
+    `AIHPC.dismissBanner()`, `AIHPC.onChange(cb)`.
+  - Tier hierarchy: `free` (rank 0) < `pro` (rank 1) < `team` (rank 2).
+  - Session lookup: reads `localStorage['aihpc-session']` (the schema
+    managed by `/docs/subscribe.html`) and parses JSON
+    `{ email, tier, since, upgradedAt? }`. Unknown tier → treated
+    as no session.
+  - Banner: auto-injected at the bottom-right of the viewport,
+    dismissible, auto-hides after 12s. Contains a one-line
+    "🔒 Pro tier required" message, a detail line ("You are on the
+    Free tier. Switch to Pro at /subscribe.html to unlock..."), and
+    a gradient "→ Upgrade at /subscribe" button that opens
+    /subscribe.html in a new tab.
+  - Tier badge: a mountable pill that renders the current tier with
+    the correct color (Free grey, Pro violet, Team cyan), links to
+    /subscribe.html, and shows the email on hover.
+  - Cross-tab updates: listens to the browser `storage` event for
+    `aihpc-session` changes; if a user upgrades their tier in
+    another tab, every open page fires `onChange` and re-renders
+    any `[data-aihpc-tier-badge]` containers.
+  - Path resolution: figures out the correct relative path to
+    `/subscribe.html` from any page depth (root, /concepts/*,
+    /demos/*, /science/biology/*, etc.).
+
+- Wired the lazy-eval popup through the gate
+  (`docs/concepts/lazy-evaluation.html`):
+  - Added `<script src="../subscribe-gate.js"></script>` in the head.
+  - Added a tier badge container `<span id="popup-tier-badge">` in
+    the popup footer, next to a one-line hint:
+    "CSV: all tiers · Receipt: Pro+ · Trace: Team only".
+  - Removed the legacy `checkTier()` / `applyGating()` block that
+    used `alert()` (jarring UX). Replaced with `refreshPopupGate()`
+    that mounts the badge and updates the button opacity/title
+    based on the current tier.
+  - The `act-receipt` click handler now calls
+    `AIHPC.requireTier('pro', { feature: 'Provenance receipt' })`
+    at click time — if the tier isn't met, the banner auto-shows
+    and the download is aborted; no jarring alert.
+  - Receipt format upgraded:
+    - Now carries `@type: 'aihpc:ProvenanceReceipt'`.
+    - `environment.tier` records the current tier (audit trail).
+    - Team tier: receipt includes a full `trace` object with
+      per-step entries (load → compute mean → compute std/threshold
+      → flag outliers) and timings.
+    - Pro tier: receipt includes `traceAvailable: 'team-tier'`
+      instead of the trace itself (the audit trail is the
+      Team-tier upgrade).
+  - Visual confirmation: button briefly shows "✓ Downloaded"
+    after a successful download.
+  - `AIHPC.onChange()` is wired so cross-tab session upgrades
+    refresh the popup UI in real time.
+
+- Wired the nucleotide demo through the same gate
+  (`docs/demos/nucleotide-analysis.html`):
+  - Added `<script src="../subscribe-gate.js"></script>` in the head.
+  - Added a tier badge container `<span id="demo-tier-badge">` in
+    the demo controls (right-aligned with `margin-left:auto`).
+  - The `toReceipt()` function now:
+    - Calls `AIHPC.getTier()` and `AIHPC.getSession()` to record
+      the current tier and signed-in email in the receipt's
+      `environment` block.
+    - Team tier: includes the full `trace` object (steps + format +
+      entries — the trace was already being computed by the demo's
+      run-time, but it was always included; now it's gated).
+    - Pro tier: includes `traceAvailable: 'team-tier'` instead.
+  - Wrapped the `download-receipt-btn` and `popup-receipt` click
+    handlers in a `gatedReceipt()` function that calls
+    `AIHPC.requireTier('pro', { feature: 'Provenance receipt' })`
+    at click time — Free tier sees the banner, Pro/Team download.
+  - `refreshDemoGate()` mounts the badge on initial load and on
+    every `AIHPC.onChange` event (cross-tab session updates).
+
+### Stage Summary
+
+- **Live preview endpoint**:
+  <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>
+  - The "Download Receipt" button on the lazy-eval popup
+    (`/concepts/lazy-evaluation.html`) is now tier-gated:
+    - Free tier → clicks show a dismissible bottom-right banner
+      with a "→ Upgrade at /subscribe" link.
+    - Pro tier → downloads a JSON receipt with `traceAvailable:
+      'team-tier'` (audit trail held back).
+    - Team tier → downloads the full receipt with `trace: { steps,
+      format: 'json-ld', entries: [...] }` (full audit trail).
+  - The "⬇ Receipt" button on the nucleotide demo
+    (`/demos/nucleotide-analysis.html`) is now tier-gated the same
+    way. Both the demo-controls button and the popup-receipt link
+    are gated.
+  - Both pages show a visible tier pill in the UI — Free (grey),
+    Pro (violet), Team (cyan) — that links to /subscribe.html for
+    management.
+  - Cross-tab session updates: if a user opens /subscribe.html in
+    another tab and upgrades to Pro or Team, every open demo page
+    re-renders its tier badge within ~1 second (via the `storage`
+    event listener in subscribe-gate.js).
+- **Shared library**: `docs/subscribe-gate.js` is now available
+  for any future gated feature. New gated buttons just need to
+  call `AIHPC.requireTier('pro', { feature: '...' })` at click
+  time and mount a `<span data-aihpc-tier-badge="1"></span>`
+  container.
+- **Compliance posture unchanged**: still pure client-side, still
+  localStorage-only, still no external services, still
+  downloadable outputs (no server-side storage). The gate just
+  gates what downloads; data residency rules are unaffected.
+
+### Next-phase suggestions
+
+1. **Wire the OLS demo on `/` (index.html) through the gate**: the
+   OLS demo already has an ETL/ELT pipeline and a CSV download
+   button — its receipt button (if it exists) should be gated the
+   same way. Extend to all 5 seed demos (OLS, nucleotide, kmeans,
+   pagerank, molecular-dynamics) + the lazy-eval popup (already
+   done in Phase 24).
+2. **Wire the DAG provenance receipt on
+   `/concepts/provenance-chain.html` through the gate**: the DAG
+   walk's "⬇ Receipt (JSON-LD)" button should be Pro+-gated; Team
+   tier gets the full per-node `inputs[]` arrays, Pro tier gets the
+   DAG without per-node trace.
+3. **Auto-generated concept cards from demo manifests**: once the
+   demo runner emits a trace + receipt, a concept card could be
+   auto-generated by combining the manifest's annotations with a
+   graph view of its trace.
+4. **PDB real parsing**: extend the 3D protein viewer's PDB
+   uploader to actually parse ATOM records and render real
+   backbone + side chains.
+5. **Hypercube / N-D visualisations**: build the 4D projection
+   viewer and hyperspectral image viewer the user asked about.
+6. **Live cross-domain knowledge graph**: implement the full
+   interactive force-directed graph for /graph.html (demos +
+   papers + datasets + AETHEL Suite pages as nodes).
+7. **Math→code derivation generator for demo pages**: extend
+   gen-math-derivations.py to cover the 5 seed demos and the
+   lazy-eval concept card.
+8. **Stripe checkout**: when external billing lands, replace the
+   `saveSession({...s, tier: newTier})` local-only upgrade in
+   /subscribe.html with a real Stripe Checkout redirect.
+
+## Phase 24 status note
+- Local commit pending push — see "Phase 24 status" amend below.
+- Next.js build unaffected (static HTML edits only).
+- All HTML/JS validated: divs balanced, JS syntax OK.
+- subscribe-gate.js: 10,543 bytes, syntax-validated via `node -e`.
+

@@ -141,6 +141,7 @@
       body.light .btn:not(.primary) { color: #18181b; }
       body.light pre.code-block { color: #18181b; }
     </style>
+    <script src="../subscribe-gate.js"></script>
   </head>
   <body>
     <header class="ribbon">
@@ -272,7 +273,8 @@
             <button class="btn" id="random-btn">🎲 Random DNA (120 bp)</button>
             <button class="btn" id="download-fasta-btn" disabled>⬇ FASTA</button>
             <button class="btn" id="download-genbank-btn" disabled>⬇ GenBank</button>
-            <button class="btn" id="download-receipt-btn" disabled>⬇ Receipt</button>
+            <button class="btn" id="download-receipt-btn" disabled title="Pro tier required — sign in at /subscribe.html">⬇ Receipt</button>
+            <span data-aihpc-tier-badge="1" id="demo-tier-badge" style="margin-left:auto;"></span>
           </div>
           <!-- ETL/ELT: Bring your own sequence -->
           <div style="margin-top: 10px; padding: 10px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;">
@@ -924,8 +926,14 @@
       function toReceipt() {
         if (!lastResult) return '';
         const { seq, orfs, motifResults, gc, rnaPairs, trace } = lastResult;
-        return JSON.stringify({
+        // Phase 24: Team tier gets the full audit trace embedded in
+        // the receipt; Pro tier gets the receipt without trace
+        // (audit trail is the Team-tier upgrade).
+        const tier = (window.AIHPC && AIHPC.getTier()) || 'free';
+        const session = (window.AIHPC && AIHPC.getSession()) || {};
+        const base = {
           '@context': 'https://aihpc.advanced/prov/v1',
+          '@type': 'aihpc:ProvenanceReceipt',
           manifestHash: 'sha256:' + btoa(seq.slice(0, 24)).replace(/=/g,'').slice(0, 24),
           manifest: { id: 'nucleotide-analysis', language: 'javascript', runtime: 'browser', dataResidency: 'downloadable' },
           input: { sequence: seq, length: seq.length, source: 'user-input (default: E. coli lacZ fragment)' },
@@ -935,9 +943,14 @@
             motifHits: motifResults.reduce((s, r) => s + r.total, 0),
             rnaPairs: rnaPairs,
           },
-          trace: { steps: trace.length, format: 'json-ld', entries: trace },
-          environment: { client: 'browser', timestamp: new Date().toISOString() },
-        }, null, 2);
+          environment: { client: 'browser', timestamp: new Date().toISOString(), tier: tier, signedInAs: session.email || 'anonymous' },
+        };
+        if (tier === 'team') {
+          base.trace = { steps: trace.length, format: 'json-ld', entries: trace };
+        } else {
+          base.traceAvailable = 'team-tier';
+        }
+        return JSON.stringify(base, null, 2);
       }
       function downloadBlob(filename, content, mime) {
         const blob = new Blob([content], { type: mime });
@@ -966,10 +979,21 @@
       });
       document.getElementById('download-fasta-btn').addEventListener('click', () => downloadBlob('aihpc-nucleotide-' + Date.now() + '.fasta', toFASTA(), 'text/x-fasta;charset=utf-8'));
       document.getElementById('download-genbank-btn').addEventListener('click', () => downloadBlob('aihpc-nucleotide-' + Date.now() + '.gb', toGenBank(), 'text/x-genbank;charset=utf-8'));
-      document.getElementById('download-receipt-btn').addEventListener('click', () => downloadBlob('aihpc-receipt-' + Date.now() + '.json', toReceipt(), 'application/json'));
+      // Phase 24: Receipt is gated to Pro+ tier; Team tier gets the
+      // full audit trace embedded. Free tier sees a banner with a
+      // link to /subscribe.html. The check is at click time, so
+      // cross-tab upgrades take effect immediately.
+      function gatedReceipt() {
+        if (!lastResult) return;
+        if (!window.AIHPC || !AIHPC.requireTier('pro', { feature: 'Provenance receipt' })) {
+          return; // banner auto-shown by requireTier
+        }
+        downloadBlob('aihpc-receipt-' + Date.now() + '.json', toReceipt(), 'application/json');
+      }
+      document.getElementById('download-receipt-btn').addEventListener('click', gatedReceipt);
       document.getElementById('popup-fasta').addEventListener('click', () => downloadBlob('aihpc-nucleotide-' + Date.now() + '.fasta', toFASTA(), 'text/x-fasta;charset=utf-8'));
       document.getElementById('popup-genbank').addEventListener('click', () => downloadBlob('aihpc-nucleotide-' + Date.now() + '.gb', toGenBank(), 'text/x-genbank;charset=utf-8'));
-      document.getElementById('popup-receipt').addEventListener('click', () => downloadBlob('aihpc-receipt-' + Date.now() + '.json', toReceipt(), 'application/json'));
+      document.getElementById('popup-receipt').addEventListener('click', gatedReceipt);
       document.getElementById('popup-close').addEventListener('click', () => document.getElementById('popup-overlay').classList.remove('open'));
       document.getElementById('popup-overlay').addEventListener('click', (e) => { if (e.target.id === 'popup-overlay') e.target.classList.remove('open'); });
 
@@ -1113,6 +1137,18 @@ result = reverse_complement(${JSON.stringify(seq)})
         lastResult = null;
         ['download-fasta-btn','download-genbank-btn','download-receipt-btn'].forEach(id => document.getElementById(id).disabled = true);
       });
+
+      // ---- Subscription gating (live, Phase 24) ----
+      // Mount the tier badge in the demo controls; refresh when the
+      // session changes (e.g. user upgrades in another tab). The
+      // actual download gate is enforced at click time inside
+      // gatedReceipt() above.
+      function refreshDemoGate() {
+        const badge = document.getElementById('demo-tier-badge');
+        if (badge && window.AIHPC) AIHPC.mountTierBadge(badge);
+      }
+      refreshDemoGate();
+      if (window.AIHPC) AIHPC.onChange(refreshDemoGate);
 
       // ---- Ribbon theme toggle ----
       (function setupRibbonTheme() {

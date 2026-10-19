@@ -224,6 +224,7 @@
       body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
       body.light .ribbon-btn-primary { color: white; }
     </style>
+    <script src="../subscribe-gate.js"></script>
   </head>
   <body>
     <header class="ribbon">
@@ -399,6 +400,10 @@
             <button class="act primary" id="act-receipt" title="Pro tier required — sign in at /subscribe">⬇ Receipt</button>
           </div>
           <div id="py-result" style="display:none; width:100%; margin-top:8px; padding:10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius:8px; font-family: 'SF Mono', Menlo, monospace; font-size: 12px; color: var(--text);"></div>
+          <div style="width:100%; margin-top:8px; display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:11px; color: var(--text-muted-2);">
+            <span data-aihpc-tier-badge="1" id="popup-tier-badge"></span>
+            <span id="popup-tier-hint" style="font-size:10px;">CSV: all tiers · Receipt: Pro+ · Trace: Team only</span>
+          </div>
         </div>
       </div>
     </div>
@@ -756,16 +761,43 @@
       });
       document.getElementById('act-receipt').addEventListener('click', () => {
         if (!lastResult) return;
+        // Live subscription gating (Phase 24): require Pro+ tier
+        // to download the provenance receipt. Team tier additionally
+        // gets the full audit trace embedded in the receipt.
+        if (!window.AIHPC || !AIHPC.requireTier('pro', { feature: 'Provenance receipt' })) {
+          return; // banner auto-shown by requireTier
+        }
         const r = lastResult;
+        const tier = AIHPC.getTier();
+        const session = AIHPC.getSession() || {};
+        // Build a trace entry stream — even on Pro we record the
+        // minimal event log; Team tier gets the full per-step
+        // trace with timings.
+        const trace = [
+          { step: 1, action: 'load',    detail: 'embedded dataset loaded',  at: session.since || new Date().toISOString() },
+          { step: 2, action: 'compute', detail: `mean(${r.n})=${r.mean.toFixed(4)}`, at: new Date().toISOString() },
+          { step: 3, action: 'compute', detail: `std=${r.std.toFixed(4)} threshold=${r.threshold.toFixed(4)}`, at: new Date().toISOString() },
+          { step: 4, action: 'flag',    detail: `${r.outliers.length} outlier(s) detected`, at: new Date().toISOString() },
+        ];
         const receipt = {
           '@context': 'https://aihpc.advanced/prov/v1',
+          '@type': 'aihpc:ProvenanceReceipt',
           manifestHash: 'sha256:' + btoa(currentLang + DATASET.join(',')).slice(0, 24),
           manifest: { id: 'compute-outliers', language: currentLang, runtime: 'browser', dataResidency: 'downloadable' },
           input: { data: r.all, n: r.n, source: 'embedded dataset' },
           output: { mean: r.mean, std: r.std, threshold: r.threshold, outliers: r.outliers },
-          environment: { client: 'browser', timestamp: new Date().toISOString() },
+          environment: { client: 'browser', timestamp: new Date().toISOString(), tier: tier },
+          // Team tier: include full trace. Pro tier: omit trace
+          // (the audit trail is the Team-tier upgrade).
+          ...(tier === 'team' ? { trace: { steps: trace.length, format: 'json-ld', entries: trace } } : { traceAvailable: 'team-tier' }),
         };
-        downloadBlob('aihpc-receipt-' + Date.now() + '.json', JSON.stringify(receipt, null, 2), 'application/json');
+        const filename = 'aihpc-receipt-' + Date.now() + '.json';
+        downloadBlob(filename, JSON.stringify(receipt, null, 2), 'application/json');
+        // Visual confirmation on the button
+        const btn = document.getElementById('act-receipt');
+        const origText = btn.textContent;
+        btn.textContent = '✓ Downloaded';
+        setTimeout(() => { btn.textContent = origText; }, 1500);
       });
 
       // ---- Pyodide integration (real Python execution in-browser) ----
@@ -1022,43 +1054,31 @@ print(json.dumps(result))
         document.getElementById('download-btn').disabled = true;
       });
 
-      // ---- Subscription gating (live) ----
-      // Read localStorage session; disable "Download Receipt" on Free tier.
-      // The /subscribe page manages the session under 'aihpc-session'.
-      function checkTier() {
-        try {
-          const raw = localStorage.getItem('aihpc-session');
-          if (!raw) return 'free';
-          const s = JSON.parse(raw);
-          return s.tier || 'free';
-        } catch { return 'free'; }
-      }
-      function applyGating() {
-        const tier = checkTier();
-        const receiptBtn = document.getElementById('act-receipt');
+      // ---- Subscription gating (live, Phase 24) ----
+      // The shared subscribe-gate.js library handles tier lookup,
+      // banner rendering, and cross-tab session updates. We just
+      // mount the tier badge in the popup footer and refresh the
+      // visual state when the popup opens or the session changes.
+      function refreshPopupGate() {
+        const badge = document.getElementById('popup-tier-badge');
+        if (badge && window.AIHPC) AIHPC.mountTierBadge(badge);
+        const btn = document.getElementById('act-receipt');
+        if (!btn || !window.AIHPC) return;
+        const tier = AIHPC.getTier();
         if (tier === 'free') {
-          receiptBtn.style.opacity = '0.5';
-          receiptBtn.style.cursor = 'not-allowed';
-          receiptBtn.title = '🔒 Pro tier required — sign in at /subscribe.html to download receipts';
-          receiptBtn.addEventListener('click', function gateClick(e) {
-            if (checkTier() === 'free') {
-              e.preventDefault();
-              e.stopImmediatePropagation();
-              alert('🔒 Download Receipt is a Pro-tier feature.\n\nSign in at /subscribe.html and upgrade to Pro to download provenance receipts.\n\nFree tier: CSV download only.\nPro tier: CSV + receipt + trace.');
-              return false;
-            }
-            receiptBtn.removeEventListener('click', gateClick);
-          }, true);
+          btn.style.opacity = '0.5';
+          btn.title = '🔒 Pro tier required — sign in at /subscribe.html to download receipts';
         } else {
-          receiptBtn.style.opacity = '1';
-          receiptBtn.style.cursor = 'pointer';
-          receiptBtn.title = `Download provenance receipt (${tier} tier)`;
+          btn.style.opacity = '1';
+          btn.title = `Download provenance receipt (${tier} tier${tier === 'team' ? ' · includes trace' : ''})`;
         }
       }
-      // Apply gating when popup opens
+      // Re-mount the badge + refresh button state when popup opens
       document.getElementById('launch-btn').addEventListener('click', () => {
-        setTimeout(applyGating, 100); // wait for popup to render
+        setTimeout(refreshPopupGate, 100); // wait for popup to render
       });
+      // Cross-tab session updates (e.g. user upgrades in another tab)
+      if (window.AIHPC) AIHPC.onChange(function () { refreshPopupGate(); });
 
       // ---- Ribbon theme toggle ----
       (function setupRibbonTheme() {

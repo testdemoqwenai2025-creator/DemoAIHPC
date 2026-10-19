@@ -141,6 +141,21 @@ This separation keeps legal scenarios simple:
   `/dashboard` route renders the same 10 timesteps as the GitHub
   Pages `dashboard.html`, unifying the codebase around a single
   temporal-visualisation component.
+- **Live subscription gating (Phase 24)** — the "Download Receipt"
+  buttons on the lazy-eval popup and the nucleotide demo now read
+  the `/subscribe` session (stored in `localStorage` under
+  `aihpc-session`) and tier-gate the download:
+  - **Free** tier → clicks show a dismissible bottom-right banner
+    with a "→ Upgrade at /subscribe" link.
+  - **Pro** tier → downloads a JSON receipt with
+    `traceAvailable: 'team-tier'` (audit trail held back).
+  - **Team** tier → downloads the full receipt with
+    `trace: { steps, format, entries }` (per-step audit trail).
+  The shared `docs/subscribe-gate.js` library exposes
+  `AIHPC.requireTier()`, `AIHPC.getTier()`, `AIHPC.getSession()`,
+  `AIHPC.mountTierBadge()`, `AIHPC.onChange()` — reusable for any
+  future gated feature. Cross-tab session updates propagate via
+  the `storage` event listener.
 
 ## Demo framework (Phase 2)
 
