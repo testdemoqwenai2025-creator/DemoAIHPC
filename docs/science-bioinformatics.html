@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Bioinformatics Hub — AIHPC Advanced. BLAST, sequence alignment, phylogenetics, structural bioinformatics. Modern AI for bioinformatics." />
+    <title>Bioinformatics Hub — AIHPC Advanced Science</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; position: relative; overflow-x: hidden; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.3; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid #2a3548; border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .badge { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 24px; backdrop-filter: blur(8px); }
+      h1 { font-size: 40px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#a7f3d0 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 760px; margin: 0 0 40px; }
+      .hero { position: relative; margin: 0 0 32px; height: 220px; border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(6,182,212,0.1) 50%, rgba(139,92,246,0.15) 100%); border: 1px solid rgba(16,185,129,0.25); backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 60px rgba(16,185,129,0.1); }
+      .hero svg { width: 100%; height: 100%; }
+      .hero .hero-text { position: absolute; top: 50%; left: 32px; transform: translateY(-50%); max-width: 380px; pointer-events: none; }
+      .hero .hero-text .h-tag { font-size: 11px; color: rgba(167,243,208,0.9); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 6px; }
+      .hero .hero-text .h-title { font-size: 20px; font-weight: 700; color: white; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+      .hero .hero-text .h-sub { font-size: 13px; color: rgba(243,244,246,0.8); margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+      .cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-top: 24px; }
+      .card { background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.2); border-radius: 16px; padding: 24px; text-decoration: none; color: var(--text); display: flex; flex-direction: column; gap: 8px; transition: border-color 0.2s ease, transform 0.2s ease; backdrop-filter: blur(12px); }
+      .card:hover { border-color: rgba(16,185,129,0.55); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 40px rgba(16,185,129,0.1); }
+      .card .tag { font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .card h2 { margin: 0; font-size: 20px; }
+      .card p { margin: 0; color: var(--text-muted); font-size: 14px; flex: 1; }
+      .card .tools { font-size: 12px; color: var(--accent-2); font-weight: 600; }
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+      body.light { background: #fafafa; color: #18181b; }
+      body.light #particle-canvas { opacity: 0.1; }
+      body.light .card, body.light .badge { background: rgba(255,255,255,0.6); backdrop-filter: blur(12px); border-color: #e5e7eb; }
+      body.light .lead, body.light .meta { color: #4b5563; }
+      body.light .hero { background: linear-gradient(135deg, rgba(16,185,129,0.05) 0%, rgba(6,182,212,0.04) 50%, rgba(139,92,246,0.05) 100%); }
+      body.light .hero .hero-text .h-tag { color: #4b5563; } body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; } body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
+      body.light .ribbon-btn-primary { color: white; }
+    </style>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="index.html">Home</a><a href="demos.html">Demos</a><a href="dashboard.html">Dashboard</a><a href="graph.html">Knowledge Graph</a><a href="benchmark.html">Benchmark</a><a href="subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="science-biology.html">Biology</a><a href="science-chemistry.html">Chemistry</a><a href="science-physics.html">Physics</a><a href="science-maths.html">Maths</a><a href="science-bioinformatics.html">Bioinformatics</a><a href="science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="concepts.html">Concept Cards</a><a href="concepts/replayable-decision-traces.html">Replayable Traces</a><a href="concepts/provenance-first.html">Provenance-First</a><a href="concepts/lazy-evaluation.html">Lazy Evaluation</a><a href="concepts/cross-domain-graph.html">Cross-Domain Graph</a><a href="concepts/audience-annotations.html">Audience</a><a href="concepts/provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <span class="badge">Science Hub &middot; Bioinformatics</span>
+      <h1>Bioinformatics</h1>
+      <div class="hero">
+        <svg viewBox="0 0 1000 220" preserveAspectRatio="xMidYMid slice">
+          <g opacity="0.08" stroke="#10b981" stroke-width="0.5"><line x1="0" y1="40" x2="1000" y2="40"/><line x1="0" y1="80" x2="1000" y2="80"/><line x1="0" y1="120" x2="1000" y2="120"/><line x1="0" y1="160" x2="1000" y2="160"/></g>
+          <g font-family="SF Mono, monospace" font-size="12" font-weight="700" text-anchor="middle"><text x="30" y="40" fill="#f59e0b">A</text><text x="55" y="40" fill="#10b981">C</text><text x="80" y="40" fill="#ef4444">G</text><text x="105" y="40" fill="#3b82f6">T</text><text x="130" y="40" fill="#f59e0b">A</text><text x="155" y="40" fill="#10b981">C</text><text x="30" y="80" fill="#f59e0b">A</text><text x="55" y="80" fill="#10b981">C</text><text x="80" y="80" fill="#ef4444">G</text><text x="105" y="80" fill="#3b82f6">T</text><text x="30" y="120" fill="#3b82f6">T</text><text x="55" y="120" fill="#f59e0b">A</text><text x="80" y="120" fill="#10b981">C</text><text x="105" y="120" fill="#ef4444">G</text><text x="130" y="120" fill="#3b82f6">T</text><text x="30" y="160" fill="#ef4444">G</text><text x="55" y="160" fill="#3b82f6">T</text><text x="80" y="160" fill="#f59e0b">A</text><text x="105" y="160" fill="#10b981">C</text></g>
+          <line x1="20" y1="50" x2="160" y2="50" stroke="#10b981" stroke-width="0.5" opacity="0.3"/><line x1="20" y1="90" x2="115" y2="90" stroke="#06b6d4" stroke-width="0.5" opacity="0.3"/><line x1="20" y1="130" x2="140" y2="130" stroke="#8b5cf6" stroke-width="0.5" opacity="0.3"/><line x1="20" y1="170" x2="115" y2="170" stroke="#ec4899" stroke-width="0.5" opacity="0.3"/>
+          <text x="200" y="110" font-size="11" fill="#10b981" font-family="SF Mono">MSA</text>
+          <g transform="translate(280, 60)" opacity="0.7"><circle cx="0" cy="0" r="8" fill="#10b981"/><circle cx="40" cy="-30" r="6" fill="#06b6d4"/><circle cx="-40" cy="-30" r="6" fill="#8b5cf6"/><circle cx="60" cy="20" r="5" fill="#ec4899"/><circle cx="-60" cy="20" r="5" fill="#f59e0b"/><line x1="0" y1="0" x2="40" y2="-30" stroke="rgba(255,255,255,0.3)"/><line x1="0" y1="0" x2="-40" y2="-30" stroke="rgba(255,255,255,0.3)"/><line x1="0" y1="0" x2="60" y2="20" stroke="rgba(255,255,255,0.3)"/><line x1="0" y1="0" x2="-60" y2="20" stroke="rgba(255,255,255,0.3)"/><line x1="40" y1="-30" x2="60" y2="20" stroke="rgba(255,255,255,0.2)"/><line x1="-40" y1="-30" x2="-60" y2="20" stroke="rgba(255,255,255,0.2)"/></g>
+          <text x="400" y="110" font-size="11" fill="#06b6d4" font-family="SF Mono">→ Phylogenetic tree</text>
+          <g transform="translate(650, 60)" opacity="0.7"><line x1="0" y1="40" x2="-40" y2="-10" stroke="#10b981" stroke-width="1.5"/><line x1="0" y1="40" x2="40" y2="-10" stroke="#06b6d4" stroke-width="1.5"/><line x1="-40" y1="-10" x2="-60" y2="-40" stroke="#8b5cf6" stroke-width="1"/><line x1="40" y1="-10" x2="20" y2="-40" stroke="#ec4899" stroke-width="1"/><line x1="40" y1="-10" x2="60" y2="-40" stroke="#f59e0b" stroke-width="1"/><circle cx="0" cy="40" r="3" fill="#10b981"/><circle cx="-40" cy="-10" r="3" fill="#06b6d4"/><circle cx="40" cy="-10" r="3" fill="#06b6d4"/></g>
+          <g opacity="0.4" fill="#10b981"><circle cx="80" cy="200" r="1"/><circle cx="380" cy="200" r="1"/><circle cx="680" cy="200" r="1"/><circle cx="900" cy="200" r="1"/></g>
+        </svg>
+        <div class="hero-text">
+          <p class="h-tag">Bioinformatics &middot; sequence to structure</p>
+          <p class="h-title">Sequence &rarr; MSA &rarr; Tree &rarr; Structure</p>
+          <p class="h-sub">BLAST, alignment, phylogenetics, structural bioinformatics.</p>
+        </div>
+      </div>
+      <p class="lead">Modern AI for bioinformatics — sequence alignment, phylogenetic tree construction, BLAST-style search, protein structure prediction. Inspired by the public research ecosystem (AlphaFold, BLAST, BioPython, Nextstrain).</p>
+      <div class="cards">
+        <a class="card" href="demos/nucleotide-analysis.html"><span class="tag">Live demo</span><h2>BLAST-style search</h2><p>Local sequence alignment via Smith-Waterman. Paste a query, search against an embedded database. Pure client-side.</p><span class="tools">Tools: Smith-Waterman, BLOSUM62, KMP</span></a>
+        <a class="card" href="science/biology/molecular.html"><span class="tag">Demo card</span><h2>Multiple Sequence Alignment</h2><p>Progressive MSA (ClustalW-style). Align 5+ sequences, view coloured alignment, compute conservation scores.</p><span class="tools">Tools: Needleman-Wunsch, ClustalW, Pyodide</span></a>
+        <a class="card" href="science/biology/evolutionary.html"><span class="tag">Demo card</span><h2>Phylogenetic Trees</h2><p>Neighbor-Joining + Jukes-Cantor distances. Visualise the tree, bootstrap support, branch lengths.</p><span class="tools">Tools: NJ, JC distance, tree SVG</span></a>
+        <a class="card" href="science/biology/proteins.html"><span class="tag">Live demo</span><h2>3D Structure Viewer</h2><p>Three.js viewer for PDB structures. Drag to rotate, scroll to zoom. Download PDB as Blob.</p><span class="tools">Tools: Three.js, PDB parser, OrbitControls</span></a>
+        <a class="card" href="demos.html"><span class="tag">Coming soon</span><h2>RNA-seq pipeline</h2><p>Differential expression analysis. Count matrix → DESeq2-style → volcano plot. Pure client-side via Pyodide.</p><span class="tools">Tools: Pyodide, numpy, matplotlib</span></a>
+        <a class="card" href="demos.html"><span class="tag">Coming soon</span><h2>Genome browser</h2><p>Interactive genome track viewer. BED/GFF parsing, gene tracks, coverage plots.</p><span class="tools">Tools: Pyodide, pysam, IGV-style</span></a>
+      </div>
+      <div class="meta"><p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science-bioinformatics.html</code>. Next.js: <code>/science/bioinformatics</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p></div>
+    </div>
+    <script>
+      (function(){const c=document.getElementById('particle-canvas'),x=c.getContext('2d');let W,H,P=[];const N=60,cols=['#06b6d4','#8b5cf6','#ec4899'];function r(){W=c.width=innerWidth;H=c.height=innerHeight}r();addEventListener('resize',r);for(let i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,W,H);for(let i=0;i<N;i++){for(let j=i+1;j<N;j++){const d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<100){x.strokeStyle='rgba(139,92,246,'+.12*(1-d/100)+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke()}}}for(const p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;x.fillStyle=p.c;x.globalAlpha=.5;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill()}x.globalAlpha=1;requestAnimationFrame(s)}s()})();
+      (function(){const K='aihpc-theme';const b=document.body,r=document.querySelector('.ribbon'),i=document.getElementById('ribbon-theme-icon');function a(t){if(t==='light'){b.classList.add('light');r&&r.classList.add('light');i.textContent='☀'}else{b.classList.remove('light');r&&r.classList.remove('light');i.textContent='🌙'}}let d='dark';try{const s=localStorage.getItem(K);if(s==='light'||s==='dark')d=s;else if(matchMedia('(prefers-color-scheme:light)').matches)d='light'}catch(e){}a(d);document.getElementById('ribbon-theme-toggle').addEventListener('click',()=>{const n=b.classList.contains('light')?'dark':'light';a(n);try{localStorage.setItem(K,n)}catch(e){}})})();
+    </script>
+  </body>
+</html>
