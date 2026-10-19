@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Nucleotide Analysis live demo — paste a DNA / RNA sequence, run ORF finding, GC content sliding window, KMP motif search, and Nussinov RNA folding in your browser. Output as FASTA / GenBank Blob. Uses a real E. coli lacZ gene fragment. No external services; data stays in your browser." />
+    <title>Nucleotide Analysis — AIHPC Advanced Live Demo</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --a:#f59e0b; --c:#10b981; --g:#ef4444; --t:#3b82f6; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1400px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1400px; margin: 0 auto; padding: 24px 24px 96px; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-elevated); font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+      h1 { font-size: 32px; line-height: 1.15; margin: 0 0 8px; letter-spacing: -0.02em; background: linear-gradient(90deg, #fff, #a7f3d0 60%, #67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 15px; color: var(--text-muted); max-width: 920px; margin: 0 0 24px; }
+
+      /* Hero infographic */
+      .hero { position: relative; margin: 0 0 24px; height: 180px; border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, rgba(16,185,129,0.18) 0%, rgba(139,92,246,0.12) 50%, rgba(6,182,212,0.18) 100%); border: 1px solid rgba(16,185,129,0.25); }
+      .hero svg { width: 100%; height: 100%; display: block; }
+      .hero .hero-text { position: absolute; top: 50%; left: 32px; transform: translateY(-50%); max-width: 460px; pointer-events: none; }
+      .hero .hero-text .h-tag { font-size: 11px; color: rgba(167,243,208,0.9); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 6px; }
+      .hero .hero-text .h-title { font-size: 18px; font-weight: 700; color: white; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+      .hero .hero-text .h-sub { font-size: 12px; color: rgba(243,244,246,0.8); margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+
+      /* Demo grid */
+      .demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      @media (max-width: 980px) { .demo-grid { grid-template-columns: 1fr; } }
+      .panel { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+      .panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; flex-wrap: wrap; }
+      .panel-head .label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted-2); }
+      .panel-head .badge { font-size: 10px; padding: 2px 8px; border-radius: 9999px; background: var(--bg-elevated-2); color: var(--text-muted); border: 1px solid var(--border); }
+
+      /* Sequence input */
+      textarea.seq { width: 100%; min-height: 100px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: "SF Mono", Menlo, monospace; font-size: 12px; padding: 10px; line-height: 1.6; resize: vertical; }
+      textarea.seq:focus { outline: 2px solid var(--accent); }
+      .seq-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 10px; }
+      .seq-stats .stat { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+      .seq-stats .stat .l { font-size: 9px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .seq-stats .stat .v { font-family: "SF Mono", Menlo, monospace; font-size: 16px; font-weight: 700; color: var(--text); }
+      .seq-stats .stat .v.a { color: var(--a); }
+      .seq-stats .stat .v.c { color: var(--c); }
+      .seq-stats .stat .v.g { color: var(--g); }
+      .seq-stats .stat .v.t { color: var(--t); }
+      .seq-stats .stat .v.gc { color: var(--accent-2); }
+
+      .demo-controls { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+      .btn { background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: inherit; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+      .btn:hover { border-color: var(--accent); }
+      .btn.primary { background: linear-gradient(90deg,#8b5cf6,#06b6d4); border-color: transparent; box-shadow: 0 0 20px rgba(139,92,246,0.4); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+      /* Audience toggle */
+      .aud-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 9999px; overflow: hidden; }
+      .aud-toggle button { background: transparent; color: var(--text-muted); border: 0; padding: 4px 12px; cursor: pointer; font-family: inherit; font-size: 11px; font-weight: 600; }
+      .aud-toggle button.active { background: var(--accent); color: white; }
+
+      /* Polyglot code */
+      .lang-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 9999px; overflow: hidden; flex-wrap: wrap; }
+      .lang-toggle button { background: transparent; color: var(--text-muted); border: 0; padding: 4px 10px; cursor: pointer; font-family: inherit; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+      .lang-toggle button.active { background: var(--accent); color: white; }
+      pre.code-block { margin: 8px 0 0; overflow: auto; font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 11px; line-height: 1.5; color: #e5e7eb; max-height: 220px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px; }
+      pre.code-block .kw { color: #c084fc; } pre.code-block .fn { color: #67e8f9; } pre.code-block .str { color: #86efac; } pre.code-block .num { color: #fbbf24; } pre.code-block .com { color: #6b7280; font-style: italic; } pre.code-block .ty { color: #f9a8d4; }
+
+      /* ORF table */
+      table.orf { width: 100%; border-collapse: collapse; font-size: 11px; }
+      table.orf th, table.orf td { padding: 4px 6px; border: 1px solid var(--border); text-align: left; font-family: "SF Mono", Menlo, monospace; }
+      table.orf th { background: var(--bg); color: var(--text-muted); font-weight: 600; }
+      table.orf tr.fwd { color: var(--success); }
+      table.orf tr.rev { color: var(--info); }
+
+      /* GC plot */
+      svg.gc-plot, svg.trace { width: 100%; height: 120px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+      /* Motif table */
+      table.motif { width: 100%; border-collapse: collapse; font-size: 11px; }
+      table.motif th, table.motif td { padding: 4px 6px; border: 1px solid var(--border); text-align: left; font-family: "SF Mono", Menlo, monospace; }
+      table.motif th { background: var(--bg); color: var(--text-muted); }
+
+      /* RNA structure */
+      svg.rna { width: 100%; height: 160px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+
+      /* Trace popup */
+      .popup-overlay { position: fixed; inset: 0; background: rgba(5,8,16,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+      .popup-overlay.open { display: flex; animation: fadeIn 0.3s ease; }
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      .popup { background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg) 100%); border: 1px solid rgba(139,92,246,0.3); border-radius: 18px; max-width: 560px; width: 100%; max-height: 80vh; overflow: auto; padding: 24px; box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 60px rgba(139,92,246,0.2); animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+      @keyframes popIn { from { transform: scale(0.92) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+      .popup h3 { margin: 0 0 12px; font-size: 16px; }
+      .popup-close { background: transparent; border: 1px solid var(--border); color: var(--text-muted); width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font-size: 18px; float: right; }
+      .trace-list { list-style: none; padding: 0; margin: 0; max-height: 360px; overflow: auto; }
+      .trace-list li { padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 6px; font-size: 12px; background: var(--bg); display: flex; align-items: center; gap: 8px; }
+      .trace-list li.active { border-color: var(--accent); color: var(--text); background: rgba(139,92,246,0.1); }
+      .trace-list li.done { border-color: var(--success); }
+      .trace-list .dot { width: 8px; height: 8px; border-radius: 9999px; background: var(--text-muted-2); flex-shrink: 0; }
+      .trace-list li.active .dot { background: var(--accent); animation: pulse 1s infinite; }
+      .trace-list li.done .dot { background: var(--success); }
+      @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+      .popup-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+      .popup .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 12px; }
+      .popup .stat-grid .stat { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 11px; }
+      .popup .stat-grid .stat .l { color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.04em; font-size: 9px; }
+      .popup .stat-grid .stat .v { font-family: "SF Mono", Menlo, monospace; font-size: 14px; font-weight: 700; color: var(--text); }
+
+      /* Data residency callout */
+      .callout { margin-top: 12px; padding: 10px 14px; border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 8px; background: rgba(6,182,212,0.05); font-size: 12px; color: var(--text-muted); }
+      .callout strong { color: var(--text); }
+
+      .meta { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+
+      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.06), transparent 55%), #fafafa; color: #18181b; }
+      body.light .panel, body.light .popup, body.light textarea.seq, body.light pre.code-block, body.light svg.gc-plot, body.light svg.trace, body.light svg.rna, body.light .seq-stats .stat, body.light table.orf th, body.light table.motif th, body.light .popup .stat-grid .stat, body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary, body.light .tag { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .callout, body.light .meta, body.light .tag, body.light .panel-head .label, body.light .panel-head .badge, body.light .seq-stats .stat .l, body.light table.orf th, body.light table.motif th, body.light .popup .stat-grid .stat .l { color: #4b5563; }
+      body.light .hero { background: linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(139,92,246,0.06) 50%, rgba(6,182,212,0.08) 100%); border-color: rgba(16,185,129,0.25); }
+      body.light .hero .hero-text .h-tag { color: rgba(6,95,70,1); }
+      body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; }
+      body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
+      body.light .ribbon-btn-primary, body.light .btn.primary { color: white; }
+      body.light .btn:not(.primary) { color: #18181b; }
+      body.light pre.code-block { color: #18181b; }
+    </style>
+  </head>
+  <body>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../index.html#live-demo">Demos</a><a href="../dashboard.html">Dashboard</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu">
+            <a href="../science-biology.html">Biology Hub</a>
+            <a href="../science-chemistry.html">Chemistry Hub</a>
+            <a href="../science-physics.html">Physics Hub</a>
+            <a href="../science-maths.html">Mathematics Hub</a>
+          </div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu">
+            <a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a>
+            <a href="../concepts.html">Concept Cards</a>
+            <a href="../concepts/replayable-decision-traces.html">Replayable Decision Traces</a>
+            <a href="../concepts/provenance-first.html">Provenance-First Computing</a>
+            <a href="../concepts/lazy-evaluation.html">Lazy Evaluation as UX</a>
+            <a href="../concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a>
+            <a href="../concepts/audience-annotations.html">Audience-Specific Annotations</a>
+          </div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../index.html#live-demo" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <p class="crumbs"><a href="../demos.html">Demos</a> (not built yet — using direct path) / nucleotide-analysis</p>
+      <span class="tag">Demo &middot; Nucleotide Analysis &middot; pure client-side</span>
+      <h1>Nucleotide Analysis</h1>
+      <p class="lead">
+        Paste a DNA sequence and run a battery of analyses entirely in your
+        browser: open-reading-frame finding (six-frame scan), GC-content
+        sliding window, KMP motif search, and Nussinov RNA secondary-structure
+        prediction. Output as FASTA / GenBank Blob. The default sequence is
+        a real published E. coli lacZ gene fragment (NCBI RefSeq NC_000913.3,
+        positions 1451..1550 of lacZ).
+      </p>
+
+      <!-- Hero infographic -->
+      <div class="hero">
+        <svg viewBox="0 0 1000 180" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="seqGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.9"/>
+              <stop offset="25%" stop-color="#10b981" stop-opacity="0.9"/>
+              <stop offset="50%" stop-color="#ef4444" stop-opacity="0.9"/>
+              <stop offset="75%" stop-color="#3b82f6" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.5"/>
+            </linearGradient>
+            <filter id="glow2" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <!-- Sequence track with colour-coded bases -->
+          <g transform="translate(0, 50)">
+            <rect x="0" y="0" width="1000" height="32" fill="rgba(31,41,55,0.5)"/>
+            <g font-family="SF Mono, monospace" font-size="11" font-weight="700" text-anchor="middle">
+              <text x="20" y="20" fill="#f59e0b">A</text><text x="40" y="20" fill="#10b981">C</text>
+              <text x="60" y="20" fill="#ef4444">G</text><text x="80" y="20" fill="#3b82f6">T</text>
+              <text x="100" y="20" fill="#f59e0b">T</text><text x="120" y="20" fill="#10b981">A</text>
+              <text x="140" y="20" fill="#ef4444">C</text><text x="160" y="20" fill="#3b82f6">G</text>
+              <text x="180" y="20" fill="#f59e0b">A</text><text x="200" y="20" fill="#10b981">T</text>
+              <text x="220" y="20" fill="#ef4444">C</text><text x="240" y="20" fill="#3b82f6">G</text>
+              <text x="260" y="20" fill="#f59e0b">A</text><text x="280" y="20" fill="#10b981">T</text>
+              <text x="300" y="20" fill="#ef4444">A</text><text x="320" y="20" fill="#3b82f6">C</text>
+              <text x="340" y="20" fill="#f59e0b">G</text><text x="360" y="20" fill="#10b981">T</text>
+              <text x="380" y="20" fill="#ef4444">T</text><text x="400" y="20" fill="#3b82f6">A</text>
+              <text x="420" y="20" fill="#f59e0b">C</text><text x="440" y="20" fill="#10b981">G</text>
+              <text x="460" y="20" fill="#ef4444">A</text><text x="480" y="20" fill="#3b82f6">T</text>
+              <text x="500" y="20" fill="#f59e0b">T</text><text x="520" y="20" fill="#10b981">A</text>
+              <text x="540" y="20" fill="#ef4444">C</text><text x="560" y="20" fill="#3b82f6">G</text>
+              <text x="580" y="20" fill="#f59e0b">A</text><text x="600" y="20" fill="#10b981">T</text>
+              <text x="620" y="20" fill="#ef4444">A</text><text x="640" y="20" fill="#3b82f6">C</text>
+              <text x="660" y="20" fill="#f59e0b">G</text><text x="680" y="20" fill="#10b981">T</text>
+              <text x="700" y="20" fill="#ef4444">T</text><text x="720" y="20" fill="#3b82f6">A</text>
+              <text x="740" y="20" fill="#f59e0b">C</text><text x="760" y="20" fill="#10b981">G</text>
+              <text x="780" y="20" fill="#ef4444">A</text><text x="800" y="20" fill="#3b82f6">T</text>
+              <text x="820" y="20" fill="#f59e0b">T</text><text x="840" y="20" fill="#10b981">A</text>
+              <text x="860" y="20" fill="#ef4444">C</text><text x="880" y="20" fill="#3b82f6">G</text>
+              <text x="900" y="20" fill="#f59e0b">A</text><text x="920" y="20" fill="#10b981">T</text>
+              <text x="940" y="20" fill="#ef4444">A</text><text x="960" y="20" fill="#3b82f6">C</text>
+              <text x="980" y="20" fill="#f59e0b">G</text>
+            </g>
+          </g>
+          <!-- ORF brackets (showing a found ORF) -->
+          <g opacity="0.9">
+            <rect x="380" y="32" width="240" height="6" rx="2" fill="#10b981" filter="url(#glow2)"/>
+            <text x="500" y="28" text-anchor="middle" font-size="9" fill="#10b981" font-family="SF Mono, monospace">ORF+1 (380..620)</text>
+          </g>
+          <!-- GC content curve above -->
+          <path d="M 0 110 Q 50 100 100 105 T 200 102 T 300 108 T 400 100 T 500 102 T 600 110 T 700 100 T 800 108 T 900 102 T 1000 110" stroke="url(#seqGrad)" stroke-width="2" fill="none" filter="url(#glow2)"/>
+          <text x="20" y="100" font-size="9" fill="rgba(167,243,208,0.9)" font-family="SF Mono, monospace">GC% sliding window</text>
+          <!-- Motif hits below -->
+          <g transform="translate(0, 130)">
+            <text x="0" y="10" font-size="9" fill="rgba(243,244,246,0.7)" font-family="SF Mono, monospace">motif "TATAAA":</text>
+            <rect x="120" y="0" width="60" height="14" fill="#f59e0b" opacity="0.5" rx="2"/>
+            <text x="150" y="10" text-anchor="middle" font-size="9" fill="white" font-family="SF Mono, monospace">TATAAA</text>
+            <rect x="320" y="0" width="60" height="14" fill="#f59e0b" opacity="0.5" rx="2"/>
+            <text x="350" y="10" text-anchor="middle" font-size="9" fill="white" font-family="SF Mono, monospace">TATAAA</text>
+            <rect x="620" y="0" width="60" height="14" fill="#f59e0b" opacity="0.5" rx="2"/>
+            <text x="650" y="10" text-anchor="middle" font-size="9" fill="white" font-family="SF Mono, monospace">TATAAA</text>
+          </g>
+          <!-- Particle dots -->
+          <g fill="#10b981" opacity="0.4"><circle cx="40" cy="160" r="1"/><circle cx="200" cy="170" r="1"/><circle cx="800" cy="170" r="1"/><circle cx="960" cy="160" r="1"/></g>
+        </svg>
+        <div class="hero-text">
+          <p class="h-tag">Live demo &middot; pure client-side</p>
+          <p class="h-title">Sequence &rarr; ORFs &rarr; GC% &rarr; Motifs &rarr; RNA structure</p>
+          <p class="h-sub">Edit the sequence, watch every panel re-compute. FASTA / GenBank / Receipt download.</p>
+        </div>
+      </div>
+
+      <!-- Demo grid (4 panels + 1 input + 1 trace) -->
+      <div class="demo-grid">
+        <!-- Sequence input panel (full width) -->
+        <div class="panel" style="grid-column: 1 / -1;">
+          <div class="panel-head">
+            <span class="label">1 · Input sequence (DNA)</span>
+            <span class="badge" id="seq-len-badge">0 bp</span>
+          </div>
+          <textarea class="seq" id="seq-input" spellcheck="false">ATGACCATGATTACGGATTCACTGGCCGTCGTTTTACAACGTCGTGAAACTGCGGAATCCTGAATCGCAAGAAACTGGCGTATCGCCGTATGCAGAAAAGCAGGCAAAGCCGACATTGCCGTGGCAGTGCACGGTGGTGCAGGCCAGCGCGTCCGGCAAAGCATTCAACGCGGTCAGGAATGCCGTGGCGAAGTGGAA</textarea>
+          <div class="seq-stats">
+            <div class="stat"><div class="l">A count</div><div class="v a" id="stat-a">—</div></div>
+            <div class="stat"><div class="l">C count</div><div class="v c" id="stat-c">—</div></div>
+            <div class="stat"><div class="l">G count</div><div class="v g" id="stat-g">—</div></div>
+            <div class="stat"><div class="l">T count</div><div class="v t" id="stat-t">—</div></div>
+            <div class="stat"><div class="l">GC %</div><div class="v gc" id="stat-gc">—</div></div>
+            <div class="stat"><div class="l">Length</div><div class="v" id="stat-len">—</div></div>
+            <div class="stat"><div class="l">Frames (forward)</div><div class="v" id="stat-fwd">3</div></div>
+            <div class="stat"><div class="l">Frames (reverse)</div><div class="v" id="stat-rev">3</div></div>
+          </div>
+          <div class="demo-controls">
+            <button class="btn primary" id="run-btn">▶ Run all analyses</button>
+            <button class="btn" id="reset-btn">↺ Reset to E. coli lacZ</button>
+            <button class="btn" id="random-btn">🎲 Random DNA (120 bp)</button>
+            <button class="btn" id="download-fasta-btn" disabled>⬇ FASTA</button>
+            <button class="btn" id="download-genbank-btn" disabled>⬇ GenBank</button>
+            <button class="btn" id="download-receipt-btn" disabled>⬇ Receipt</button>
+          </div>
+          <div class="callout">
+            <strong>Data residency.</strong> The sequence above lives only
+            in your browser tab. Nothing is uploaded. The "Run all analyses"
+            button computes everything client-side; the download buttons
+            produce Blob files in your browser. For HIPAA / GDPR: no PHI,
+            no personal data, no retention. For NDA-protected work, contact
+            <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.
+          </div>
+        </div>
+
+        <!-- ORF finder panel -->
+        <div class="panel">
+          <div class="panel-head">
+            <span class="label">2 · ORF finder (six-frame scan)</span>
+            <span class="badge" id="orf-count">0 ORFs</span>
+          </div>
+          <table class="orf" id="orf-table">
+            <thead><tr><th>#</th><th>Frame</th><th>Start</th><th>End</th><th>Length</th><th>First 6 aa</th></tr></thead>
+            <tbody id="orf-body"><tr><td colspan="6" style="text-align:center; color: var(--text-muted-2);">Press Run all analyses.</td></tr></tbody>
+          </table>
+        </div>
+
+        <!-- GC content plot -->
+        <div class="panel">
+          <div class="panel-head">
+            <span class="label">3 · GC content (sliding window, w=20)</span>
+            <span class="badge" id="gc-range">—</span>
+          </div>
+          <svg class="gc-plot" id="gc-plot" viewBox="0 0 600 120" preserveAspectRatio="none"></svg>
+          <p style="font-size: 11px; color: var(--text-muted-2); margin: 8px 0 0;">Green line = local GC%. Mean GC% shown as dashed cyan line.</p>
+        </div>
+
+        <!-- Motif search panel -->
+        <div class="panel">
+          <div class="panel-head">
+            <span class="label">4 · KMP motif search</span>
+            <span class="badge" id="motif-count">0 hits</span>
+          </div>
+          <table class="motif" id="motif-table">
+            <thead><tr><th>Motif</th><th>Strand</th><th>Positions</th><th>Count</th></tr></thead>
+            <tbody id="motif-body"><tr><td colspan="4" style="text-align:center; color: var(--text-muted-2);">Press Run all analyses.</td></tr></tbody>
+          </table>
+          <p style="font-size: 11px; color: var(--text-muted-2); margin: 8px 0 0;">Preset motifs: TATAAA (TATA box), AATAAA (poly-A signal), GCCACCATGG (Kozak+ATG), GAATTC (EcoRI site).</p>
+        </div>
+
+        <!-- RNA secondary structure panel -->
+        <div class="panel">
+          <div class="panel-head">
+            <span class="label">5 · RNA secondary structure (Nussinov)</span>
+            <span class="badge" id="rna-pairs">0 pairs</span>
+          </div>
+          <svg class="rna" id="rna-svg" viewBox="0 0 600 160" preserveAspectRatio="xMidYMid meet"></svg>
+          <p style="font-size: 11px; color: var(--text-muted-2); margin: 8px 0 0;">Uses first 60 nt of the input (Nussinov O(n³)). Bases as dots, paired bases connected by arcs.</p>
+        </div>
+
+        <!-- Polyglot code panel -->
+        <div class="panel" style="grid-column: 1 / -1;">
+          <div class="panel-head">
+            <span class="label">6 · Polyglot code — reverse_complement(dna)</span>
+            <div class="lang-toggle" id="lang-toggle">
+              <button data-lang="python" class="active">Python</button>
+              <button data-lang="rust">Rust</button>
+              <button data-lang="go">Go</button>
+              <button data-lang="c">C</button>
+              <button data-lang="elixir">Elixir</button>
+              <button data-lang="scala">Scala</button>
+            </div>
+          </div>
+          <pre class="code-block" id="code-block"></pre>
+        </div>
+
+        <!-- Audience-annotated results panel -->
+        <div class="panel" style="grid-column: 1 / -1;">
+          <div class="panel-head">
+            <span class="label">7 · Audience annotations</span>
+            <div class="aud-toggle" id="aud-toggle">
+              <button data-aud="student" class="active">Student</button>
+              <button data-aud="researcher">Researcher</button>
+              <button data-aud="executive">Executive</button>
+            </div>
+          </div>
+          <div id="annotations" style="font-size: 13px; color: var(--text-muted);"></div>
+        </div>
+      </div>
+
+      <div class="meta">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/demos/nucleotide-analysis.html</code>. Next.js route: <code>/demos/nucleotide-analysis</code>. Default sequence: E. coli K-12 MG1655 lacZ fragment, NCBI RefSeq <a href="https://www.ncbi.nlm.nih.gov/nuccore/NC_000913.3" target="_blank" rel="noreferrer noopener">NC_000913.3</a>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <!-- Execution trace popup -->
+    <div class="popup-overlay" id="popup-overlay">
+      <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+        <button class="popup-close" id="popup-close" aria-label="Close popup">&times;</button>
+        <h3 id="popup-title">Execution trace · Nucleotide Analysis</h3>
+        <ul class="trace-list" id="trace-list"></ul>
+        <div class="stat-grid" id="stat-grid"></div>
+        <div class="popup-actions">
+          <button class="btn primary" id="popup-fasta">⬇ FASTA</button>
+          <button class="btn" id="popup-genbank">⬇ GenBank</button>
+          <button class="btn" id="popup-receipt">⬇ Receipt</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ============================================================
+      // Nucleotide Analysis — pure client-side
+      // ============================================================
+
+      const DEFAULT_SEQ = "ATGACCATGATTACGGATTCACTGGCCGTCGTTTTACAACGTCGTGAAACTGCGGAATCCTGAATCGCAAAGAACTGGCGTATCGCCGTATGCAGAAAAGCAGGCAAAGCCGACATTGCCGTGGCAGTGCACGGTGGTGCAGGCCAGCGCGTCCGGCAAAGCATTCAACGCGGTCAGGAATGCCGTGGCGAAGTGGAA";
+
+      const MOTIFS = [
+        { seq: "TATAAA", label: "TATA box", color: "#f59e0b" },
+        { seq: "AATAAA", label: "poly-A signal", color: "#ec4899" },
+        { seq: "GCCACCATGG", label: "Kozak+ATG", color: "#8b5cf6" },
+        { seq: "GAATTC", label: "EcoRI site", color: "#10b981" },
+      ];
+
+      const ANNOTATIONS = {
+        student: `<p><strong>What is an ORF?</strong> An Open Reading Frame is a stretch of DNA between a start codon (ATG) and a stop codon (TAA / TAG / TGA) that could encode a protein. The "six-frame scan" reads the DNA in all 6 possible ways: 3 forward frames and 3 reverse-complement frames.</p>
+          <p><strong>Why GC%?</strong> Different organisms have different GC contents (E. coli ~50%, human ~40%, Streptomyces ~70%). A sudden spike in GC% can hint at horizontal gene transfer or a recent insertion.</p>
+          <p><strong>Motifs.</strong> TATAAA is the TATA box (promoter element). GAATTC is an EcoRI restriction site — your molecular scissors.</p>
+          <p><strong>RNA folding.</strong> Single-stranded RNA folds back on itself; complementary bases pair up. The Nussinov algorithm finds the maximum-pairing structure.</p>`,
+        researcher: `<p><strong>Methodology.</strong> Six-frame scan is O(n) using a sliding window. KMP motif search is O(n+m) per motif (Knuth-Morris-Pratt). Nussinov RNA folding is O(n³) DP using the recurrence D(i,j) = max(D(i+1,j), D(i,j-1), D(i+1,j-1)+s(i,j), max_k D(i,k)+D(k+1,j)).</p>
+          <p><strong>Standard codon table.</strong> Genetic code 1 (NCBI). 64 codons map to 20 aa + stop.</p>
+          <p><strong>GC sliding window.</strong> Window w=20 (default). Each step computes GC count / 20. Mean over the sequence is the global GC%.</p>
+          <p><strong>Nussinov scoring.</strong> Watson-Crick pairs (A-U, G-C, G-U) score +1; others score 0. Traceback gives the bracketed structure.</p>`,
+        executive: `<p><strong>Why this matters.</strong> Nucleotide analysis is the foundation of every DNA-based diagnostic, every PCR test, every CRISPR design, every synthetic-biology build. The O(n) algorithms here are what powers BLAST, every genome browser, every molecular diagnostic kit.</p>
+          <p><strong>Speed.</strong> All four analyses complete in under 100 ms for a 1,000 bp sequence on commodity hardware.</p>
+          <p><strong>Compliance.</strong> The popup shows every step the computer takes. The download buttons produce FASTA (industry-standard exchange format), GenBank (with feature annotations), and a JSON provenance receipt — the audit trail your risk team will ask for.</p>
+          <p><strong>Cost.</strong> Zero server-side compute. The whole pipeline runs in your browser. Scale to whole genomes by hosting Pyodide.</p>`,
+      };
+
+      // Polyglot code: reverse_complement(dna)
+      const CODE = {
+        python: `<span class="com"># reverse_complement.py — Python (dict + zip)</span>
+<span class="kw">COMPLEMENT</span> = {<span class="str">"A"</span>: <span class="str">"T"</span>, <span class="str">"T"</span>: <span class="str">"A"</span>, <span class="str">"G"</span>: <span class="str">"C"</span>, <span class="str">"C"</span>: <span class="str">"G"</span>}
+
+<span class="kw">def</span> <span class="fn">reverse_complement</span>(dna: <span class="ty">str</span>) -&gt; <span class="ty">str</span>:
+    <span class="kw">return</span> <span class="str">""</span>.<span class="fn">join</span>(
+        <span class="fn">COMPLEMENT</span>[b] <span class="kw">for</span> b <span class="kw">in</span> <span class="fn">reversed</span>(dna.<span class="fn">upper</span>())
+    )`,
+        rust: `<span class="com">// reverse_complement.rs — Rust (iterator + match)</span>
+<span class="kw">pub fn</span> <span class="fn">reverse_complement</span>(dna: &amp;<span class="ty">str</span>) -&gt; <span class="ty">String</span> {
+    dna.<span class="fn">as_bytes</span>().<span class="fn">iter</span>().<span class="fn">rev</span>()
+        .<span class="fn">map</span>(|&amp;b| <span class="kw">match</span> b {
+            <span class="kw">'A' as u8</span> =&gt; <span class="kw">'T' as u8</span>,
+            <span class="kw">'T' as u8</span> =&gt; <span class="kw">'A' as u8</span>,
+            <span class="kw">'G' as u8</span> =&gt; <span class="kw">'C' as u8</span>,
+            <span class="kw">'C' as u8</span> =&gt; <span class="kw">'G' as u8</span>,
+            _ =&gt; b,
+        })
+        .<span class="fn">map</span>(|b| b <span class="kw">as</span> <span class="kw">char</span>)
+        .<span class="fn">collect</span>()
+}`,
+        go: `<span class="com">// reverse_complement.go — Golang (for loop)</span>
+<span class="kw">var</span> complement = <span class="kw">map</span>[<span class="ty">byte</span>]<span class="ty">byte</span>{
+    <span class="str">'A'</span>: <span class="str">'T'</span>, <span class="str">'T'</span>: <span class="str">'A'</span>, <span class="str">'G'</span>: <span class="str">'C'</span>, <span class="str">'C'</span>: <span class="str">'G'</span>,
+}
+
+<span class="kw">func</span> <span class="fn">ReverseComplement</span>(dna <span class="ty">string</span>) <span class="ty">string</span> {
+    n := <span class="fn">len</span>(dna)
+    out := <span class="fn">make</span>([]<span class="ty">byte</span>, n)
+    <span class="kw">for</span> i := <span class="num">0</span>; i &lt; n; i++ {
+        b := dna[n - <span class="num">1</span> - i]
+        <span class="kw">if</span> c, ok := complement[<span class="fn">byte</span>(<span class="fn">strings</span>.<span class="fn">ToUpper</span>(<span class="ty">string</span>(b))[<span class="num">0</span>])]; ok {
+            out[i] = c
+        } <span class="kw">else</span> { out[i] = b }
+    }
+    <span class="kw">return</span> <span class="ty">string</span>(out)
+}`,
+        c: `<span class="com">/* reverse_complement.c — C (in-place reverse + lookup) */</span>
+<span class="kw">static char</span> <span class="fn">comp</span>(<span class="kw">char</span> c) {
+    <span class="kw">switch</span> (c) {
+        <span class="kw">case</span> <span class="str">'A'</span>: <span class="kw">case</span> <span class="str">'a'</span>: <span class="kw">return</span> <span class="str">'T'</span>;
+        <span class="kw">case</span> <span class="str">'T'</span>: <span class="kw">case</span> <span class="str">'t'</span>: <span class="kw">return</span> <span class="str">'A'</span>;
+        <span class="kw">case</span> <span class="str">'G'</span>: <span class="kw">case</span> <span class="str">'g'</span>: <span class="kw">return</span> <span class="str">'C'</span>;
+        <span class="kw">case</span> <span class="str">'C'</span>: <span class="kw">case</span> <span class="str">'c'</span>: <span class="kw">return</span> <span class="str">'G'</span>;
+        <span class="kw">default</span>: <span class="kw">return</span> c;
+    }
+}
+
+<span class="kw">void</span> <span class="fn">reverse_complement</span>(<span class="kw">char</span> *s, <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>, j = n - <span class="num">1</span>; i &lt; j; i++, j--) {
+        <span class="kw">char</span> a = <span class="fn">comp</span>(s[i]);
+        <span class="kw">char</span> b = <span class="fn">comp</span>(s[j]);
+        s[i] = b; s[j] = a;
+    }
+    <span class="kw">if</span> (n % <span class="num">2</span> == <span class="num">1</span>)
+        s[n/<span class="num">2</span>] = <span class="fn">comp</span>(s[n/<span class="num">2</span>]);
+}`,
+        elixir: `<span class="com"># reverse_complement.exs — Elixir (Enum + map)</span>
+<span class="kw">defmodule</span> <span class="ty">Nucleotides</span> <span class="kw">do</span>
+  <span class="kw">defp</span> <span class="fn">complement</span>(<span class="str">"A"</span>), <span class="kw">do:</span> <span class="str">"T"</span>
+  <span class="kw">defp</span> <span class="fn">complement</span>(<span class="str">"T"</span>), <span class="kw">do:</span> <span class="str">"A"</span>
+  <span class="kw">defp</span> <span class="fn">complement</span>(<span class="str">"G"</span>), <span class="kw">do:</span> <span class="str">"C"</span>
+  <span class="kw">defp</span> <span class="fn">complement</span>(<span class="str">"C"</span>), <span class="kw">do:</span> <span class="str">"G"</span>
+  <span class="kw">defp</span> <span class="fn">complement</span>(_), <span class="kw">do:</span> <span class="str">"N"</span>
+
+  <span class="kw">def</span> <span class="fn">reverse_complement</span>(dna) <span class="kw">when</span> <span class="fn">is_binary</span>(dna) <span class="kw">do</span>
+    dna
+    |&gt; <span class="ty">String</span>.<span class="fn">upcase</span>()
+    |&gt; <span class="ty">String</span>.<span class="fn">graphemes</span>()
+    |&gt; <span class="ty">Enum</span>.<span class="fn">reverse</span>()
+    |&gt; <span class="ty">Enum</span>.<span class="fn">map</span>(&amp;<span class="fn">complement</span>/<span class="num">1</span>)
+    |&gt; <span class="ty">Enum</span>.<span class="fn">join</span>()
+  <span class="kw">end</span>
+<span class="kw">end</span>`,
+        scala: `<span class="com">// reverse_complement.sc — Scala (map + reverse)</span>
+<span class="kw">object</span> <span class="ty">Nucleotides</span> {
+  <span class="kw">private val</span> comp = <span class="ty">Map</span>(
+    <span class="str">'A'</span> -&gt; <span class="str">'T'</span>, <span class="str">'T'</span> -&gt; <span class="str">'A'</span>,
+    <span class="str">'G'</span> -&gt; <span class="str">'C'</span>, <span class="str">'C'</span> -&gt; <span class="str">'G'</span>
+  )
+
+  <span class="kw">def</span> <span class="fn">reverseComplement</span>(dna: <span class="ty">String</span>): <span class="ty">String</span> =
+    dna.<span class="fn">map</span>(_.<span class="fn">toUpper</span>)
+       .<span class="fn">reverse</span>
+       .<span class="fn">map</span>(c =&gt; comp.<span class="fn">getOrElse</span>(c, c))
+       .<span class="fn">mkString</span>
+}`,
+      };
+
+      // ---- Algorithms (pure JS) ----
+      const CODON_TABLE = (function buildCodonTable() {
+        const t = {};
+        const bases = ['U','C','A','G'];
+        const aas = 'FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRLLLRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG'.split('');
+        let i = 0;
+        for (const b1 of bases) for (const b2 of bases) for (const b3 of bases) {
+          t[b1+b2+b3] = aas[i++];
+        }
+        return t;
+      })();
+      function dnaToRna(dna) { return dna.toUpperCase().replace(/T/g, 'U'); }
+      function reverseComplement(dna) {
+        const comp = { A:'T', T:'A', G:'C', C:'G' };
+        return dna.toUpperCase().split('').reverse().map(b => comp[b] || b).join('');
+      }
+      function findORFs(dna, minLen = 30) {
+        const orfs = [];
+        const strands = [
+          { frame: '+1', seq: dna, offset: 0 },
+          { frame: '+2', seq: dna, offset: 1 },
+          { frame: '+3', seq: dna, offset: 2 },
+          { frame: '-1', seq: reverseComplement(dna), offset: 0 },
+          { frame: '-2', seq: reverseComplement(dna), offset: 1 },
+          { frame: '-3', seq: reverseComplement(dna), offset: 2 },
+        ];
+        const startCodon = 'AUG';
+        const stopCodons = new Set(['UAA','UAG','UGA']);
+        for (const { frame, seq, offset } of strands) {
+          for (let i = offset; i + 3 <= seq.length; i += 3) {
+            const codon = dnaToRna(seq.slice(i, i+3));
+            if (codon === startCodon) {
+              // find stop
+              let j = i + 3;
+              while (j + 3 <= seq.length) {
+                const c = dnaToRna(seq.slice(j, j+3));
+                if (stopCodons.has(c)) {
+                  const len = j + 3 - i;
+                  if (len >= minLen) {
+                    const protein = translate(seq.slice(i, j+3));
+                    orfs.push({ frame, start: i+1, end: j+3, length: len, protein: protein.slice(0, 6) });
+                  }
+                  break;
+                }
+                j += 3;
+              }
+            }
+          }
+        }
+        return orfs;
+      }
+      function translate(dna) {
+        const rna = dnaToRna(dna);
+        let protein = '';
+        for (let i = 0; i + 3 <= rna.length; i += 3) {
+          const c = rna.slice(i, i+3);
+          protein += CODON_TABLE[c] || 'X';
+        }
+        return protein;
+      }
+      function gcContent(seq, window = 20) {
+        const out = [];
+        const upper = seq.toUpperCase();
+        for (let i = 0; i + window <= upper.length; i++) {
+          let gc = 0;
+          for (let j = i; j < i + window; j++) {
+            if (upper[j] === 'G' || upper[j] === 'C') gc++;
+          }
+          out.push({ pos: i, gc: gc / window });
+        }
+        return out;
+      }
+      function kmpSearch(text, pattern) {
+        // Build failure function
+        const f = new Array(pattern.length).fill(0);
+        for (let i = 1, k = 0; i < pattern.length; i++) {
+          while (k > 0 && pattern[i] !== pattern[k]) k = f[k-1];
+          if (pattern[i] === pattern[k]) k++;
+          f[i] = k;
+        }
+        const hits = [];
+        for (let i = 0, k = 0; i < text.length; i++) {
+          while (k > 0 && text[i] !== pattern[k]) k = f[k-1];
+          if (text[i] === pattern[k]) k++;
+          if (k === pattern.length) {
+            hits.push(i - pattern.length + 1);
+            k = f[k-1];
+          }
+        }
+        return hits;
+      }
+      function motifSearch(dna) {
+        const upper = dna.toUpperCase();
+        const results = [];
+        for (const m of MOTIFS) {
+          const fwdHits = kmpSearch(upper, m.seq);
+          const revHits = kmpSearch(reverseComplement(upper), m.seq).map(p => upper.length - p - m.seq.length);
+          results.push({ ...m, fwdHits, revHits, total: fwdHits.length + revHits.length });
+        }
+        return results;
+      }
+      // Nussinov RNA folding (O(n^3))
+      function nussinov(seq, maxLen = 60) {
+        const rna = dnaToRna(seq).slice(0, maxLen);
+        const n = rna.length;
+        if (n < 2) return { pairs: [], rna };
+        const D = Array.from({ length: n }, () => new Array(n).fill(0));
+        const pairScore = (a, b) => {
+          const p = a + b;
+          return (p === 'AU' || p === 'UA' || p === 'GC' || p === 'CG' || p === 'GU' || p === 'UG') ? 1 : 0;
+        };
+        for (let len = 2; len <= n; len++) {
+          for (let i = 0; i + len <= n; i++) {
+            const j = i + len - 1;
+            let best = D[i+1][j];
+            if (D[i][j-1] > best) best = D[i][j-1];
+            if (pairScore(rna[i], rna[j])) {
+              const v = (i+1 < n && j-1 >= 0 ? D[i+1][j-1] : 0) + 1;
+              if (v > best) best = v;
+            }
+            for (let k = i+1; k < j; k++) {
+              const v = D[i][k] + D[k+1][j];
+              if (v > best) best = v;
+            }
+            D[i][j] = best;
+          }
+        }
+        // Traceback
+        const pairs = [];
+        function tb(i, j) {
+          if (i >= j) return;
+          if (D[i][j] === D[i+1][j]) { tb(i+1, j); return; }
+          if (D[i][j] === D[i][j-1]) { tb(i, j-1); return; }
+          if (pairScore(rna[i], rna[j]) && D[i][j] === (D[i+1][j-1] || 0) + 1) {
+            pairs.push([i, j]);
+            tb(i+1, j-1);
+            return;
+          }
+          for (let k = i+1; k < j; k++) {
+            if (D[i][j] === D[i][k] + D[k+1][j]) {
+              tb(i, k); tb(k+1, j); return;
+            }
+          }
+        }
+        tb(0, n-1);
+        return { pairs, rna };
+      }
+
+      // ---- Render functions ----
+      function renderSeqStats(seq) {
+        const upper = seq.toUpperCase();
+        const counts = { A: 0, C: 0, G: 0, T: 0 };
+        for (const b of upper) if (counts[b] !== undefined) counts[b]++;
+        const gc = upper.length > 0 ? ((counts.G + counts.C) / upper.length * 100).toFixed(1) : '0.0';
+        document.getElementById('stat-a').textContent = counts.A;
+        document.getElementById('stat-c').textContent = counts.C;
+        document.getElementById('stat-g').textContent = counts.G;
+        document.getElementById('stat-t').textContent = counts.T;
+        document.getElementById('stat-gc').textContent = gc + '%';
+        document.getElementById('stat-len').textContent = upper.length;
+        document.getElementById('seq-len-badge').textContent = upper.length + ' bp';
+      }
+
+      function renderORFs(orfs) {
+        const tbody = document.getElementById('orf-body');
+        document.getElementById('orf-count').textContent = orfs.length + ' ORFs';
+        if (orfs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--text-muted-2);">No ORFs ≥ 30 bp found.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = orfs.slice(0, 50).map((o, i) => {
+          const cls = o.frame.startsWith('+') ? 'fwd' : 'rev';
+          return `<tr class="${cls}"><td>${i+1}</td><td>${o.frame}</td><td>${o.start}</td><td>${o.end}</td><td>${o.length}</td><td>${o.protein}...</td></tr>`;
+        }).join('');
+      }
+
+      function renderGCPlot(seq) {
+        const svg = document.getElementById('gc-plot');
+        const data = gcContent(seq, 20);
+        if (data.length === 0) { svg.innerHTML = ''; return; }
+        const W = 600, H = 120, pad = 4;
+        const xs = data.map(d => d.pos);
+        const xmin = Math.min(...xs), xmax = Math.max(...xs) || 1;
+        const sx = (x) => pad + ((x - xmin) / (xmax - xmin)) * (W - 2*pad);
+        const sy = (v) => H - pad - v * (H - 2*pad);
+        const meanGC = data.reduce((s, d) => s + d.gc, 0) / data.length;
+        const minGC = Math.min(...data.map(d => d.gc));
+        const maxGC = Math.max(...data.map(d => d.gc));
+        document.getElementById('gc-range').textContent = `${(minGC*100).toFixed(0)}–${(maxGC*100).toFixed(0)}% (mean ${(meanGC*100).toFixed(1)}%)`;
+        // Build polyline
+        const pts = data.map(d => `${sx(d.pos)},${sy(d.gc)}`).join(' ');
+        // Mean line
+        const meanY = sy(meanGC);
+        let parts = [];
+        parts.push(`<rect x="${pad}" y="${pad}" width="${W-2*pad}" height="${H-2*pad}" fill="none" stroke="rgba(31,41,55,0.4)" stroke-width="0.5"/>`);
+        parts.push(`<line x1="${pad}" y1="${meanY}" x2="${W-pad}" y2="${meanY}" stroke="#06b6d4" stroke-width="1" stroke-dasharray="3 3"/>`);
+        parts.push(`<polyline points="${pts}" stroke="#10b981" stroke-width="1.5" fill="none"/>`);
+        parts.push(`<text x="${W-pad-4}" y="${meanY-3}" text-anchor="end" font-size="9" fill="#06b6d4" font-family="SF Mono">mean ${(meanGC*100).toFixed(1)}%</text>`);
+        svg.innerHTML = parts.join('');
+      }
+
+      function renderMotifs(results) {
+        const tbody = document.getElementById('motif-body');
+        const totalHits = results.reduce((s, r) => s + r.total, 0);
+        document.getElementById('motif-count').textContent = totalHits + ' hits';
+        tbody.innerHTML = results.map(r => `<tr>
+          <td style="color: ${r.color}">${r.seq}</td>
+          <td>+ / −</td>
+          <td>+ [${r.fwdHits.slice(0,5).join(', ')}${r.fwdHits.length>5?',…':''}]<br>− [${r.revHits.slice(0,5).join(', ')}${r.revHits.length>5?',…':''}]</td>
+          <td>${r.total}</td>
+        </tr>`).join('');
+      }
+
+      function renderRNA(seq) {
+        const svg = document.getElementById('rna-svg');
+        const { pairs, rna } = nussinov(seq, 60);
+        document.getElementById('rna-pairs').textContent = pairs.length + ' pairs';
+        const W = 600, H = 160;
+        const n = rna.length;
+        if (n === 0) { svg.innerHTML = ''; return; }
+        const cx = W / 2;
+        const baseY = 30;
+        const xStep = (W - 20) / Math.max(n, 1);
+        const xOf = (i) => 10 + i * xStep;
+        let parts = [];
+        // Bases as dots
+        for (let i = 0; i < n; i++) {
+          const color = rna[i] === 'A' ? '#f59e0b' : rna[i] === 'C' ? '#10b981' : rna[i] === 'G' ? '#ef4444' : '#3b82f6';
+          parts.push(`<circle cx="${xOf(i)}" cy="${baseY}" r="2.5" fill="${color}"/>`);
+        }
+        // Arcs for pairs
+        for (const [i, j] of pairs) {
+          const x1 = xOf(i), x2 = xOf(j);
+          const mid = (x1 + x2) / 2;
+          const arcHeight = 15 + Math.abs(j - i) * 1.2;
+          parts.push(`<path d="M ${x1} ${baseY} Q ${mid} ${baseY + arcHeight} ${x2} ${baseY}" stroke="rgba(139,92,246,0.5)" stroke-width="1" fill="none"/>`);
+        }
+        svg.innerHTML = parts.join('');
+      }
+
+      function renderCode(lang) {
+        document.getElementById('code-block').innerHTML = CODE[lang] || '';
+        document.querySelectorAll('#lang-toggle button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+      }
+
+      function renderAnnotations(aud) {
+        document.getElementById('annotations').innerHTML = ANNOTATIONS[aud];
+        document.querySelectorAll('#aud-toggle button').forEach(b => b.classList.toggle('active', b.dataset.aud === aud));
+      }
+
+      // ---- Run all analyses with trace ----
+      let lastResult = null;
+
+      const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+      async function runAll() {
+        const seqInput = document.getElementById('seq-input').value.replace(/\s/g, '').toUpperCase();
+        if (seqInput.length === 0) { alert('Please enter a DNA sequence.'); return; }
+        // Open popup
+        const overlay = document.getElementById('popup-overlay');
+        const traceEl = document.getElementById('trace-list');
+        const statGrid = document.getElementById('stat-grid');
+        overlay.classList.add('open');
+        traceEl.innerHTML = '';
+        statGrid.innerHTML = '';
+
+        const steps = [
+          { id: 'parse', label: 'Parse input → uppercase, validate alphabet' },
+          { id: 'stats', label: 'Compute base counts + global GC%' },
+          { id: 'orf', label: 'Six-frame ORF scan (forward + reverse-complement)' },
+          { id: 'gc', label: 'GC content sliding window (w=20)' },
+          { id: 'motif', label: 'KMP motif search (4 preset motifs × 2 strands)' },
+          { id: 'rna', label: 'Nussinov RNA secondary-structure prediction (first 60 nt)' },
+          { id: 'render', label: 'Render all panels + enable downloads' },
+        ];
+        const lis = {};
+        steps.forEach(s => {
+          const li = document.createElement('li');
+          li.innerHTML = `<span class="dot"></span><span>${s.label}</span>`;
+          traceEl.appendChild(li);
+          lis[s.id] = li;
+        });
+
+        let trace = [];
+        const pushTrace = (step, action, reason) => trace.push({ step, action, reason, ts: new Date().toISOString() });
+
+        try {
+          // Parse
+          lis.parse.classList.add('active'); await sleep(280);
+          const seq = seqInput;
+          pushTrace('parse', 'parse', `Validated ${seq.length} bp; alphabet ACGT.`);
+          renderSeqStats(seq);
+          lis.parse.classList.remove('active'); lis.parse.classList.add('done'); await sleep(140);
+
+          // Stats
+          lis.stats.classList.add('active'); await sleep(280);
+          const gc = ((seq.match(/[GC]/g) || []).length / seq.length * 100).toFixed(1);
+          pushTrace('stats', 'compute', `Global GC% = ${gc}%.`);
+          lis.stats.classList.remove('active'); lis.stats.classList.add('done'); await sleep(140);
+
+          // ORFs
+          lis.orf.classList.add('active'); await sleep(420);
+          const orfs = findORFs(seq, 30);
+          pushTrace('orf', 'compute', `Found ${orfs.length} ORFs ≥ 30 bp.`);
+          renderORFs(orfs);
+          lis.orf.classList.remove('active'); lis.orf.classList.add('done'); await sleep(140);
+
+          // GC plot
+          lis.gc.classList.add('active'); await sleep(360);
+          pushTrace('gc', 'compute', `Sliding window w=20, ${gcContent(seq).length} windows.`);
+          renderGCPlot(seq);
+          lis.gc.classList.remove('active'); lis.gc.classList.add('done'); await sleep(140);
+
+          // Motifs
+          lis.motif.classList.add('active'); await sleep(420);
+          const motifResults = motifSearch(seq);
+          const totalHits = motifResults.reduce((s, r) => s + r.total, 0);
+          pushTrace('motif', 'compute', `KMP search: ${totalHits} hits across ${motifResults.length} motifs.`);
+          renderMotifs(motifResults);
+          lis.motif.classList.remove('active'); lis.motif.classList.add('done'); await sleep(140);
+
+          // RNA
+          lis.rna.classList.add('active'); await sleep(480);
+          const { pairs, rna } = nussinov(seq, 60);
+          pushTrace('rna', 'compute', `Nussinov: ${pairs.length} base pairs in first 60 nt.`);
+          renderRNA(seq);
+          lis.rna.classList.remove('active'); lis.rna.classList.add('done'); await sleep(140);
+
+          // Render
+          lis.render.classList.add('active'); await sleep(240);
+          lastResult = { seq, orfs, motifResults, gc, rnaPairs: pairs.length, rnaSeq: rna, trace };
+          ['download-fasta-btn','download-genbank-btn','download-receipt-btn'].forEach(id => document.getElementById(id).disabled = false);
+          pushTrace('render', 'render', 'Panels rendered; download buttons enabled.');
+          lis.render.classList.remove('active'); lis.render.classList.add('done');
+
+          // Stat grid
+          statGrid.innerHTML = `
+            <div class="stat"><div class="l">Sequence length</div><div class="v">${seq.length} bp</div></div>
+            <div class="stat"><div class="l">Global GC%</div><div class="v">${gc}%</div></div>
+            <div class="stat"><div class="l">ORFs found</div><div class="v">${orfs.length}</div></div>
+            <div class="stat"><div class="l">Motif hits</div><div class="v">${totalHits}</div></div>
+            <div class="stat"><div class="l">RNA pairs (60 nt)</div><div class="v">${pairs.length}</div></div>
+            <div class="stat"><div class="l">Trace steps</div><div class="v">${trace.length}</div></div>
+          `;
+        } catch (e) {
+          const activeLi = traceEl.querySelector('li.active');
+          if (activeLi) { activeLi.classList.remove('active'); activeLi.classList.add('error'); }
+          console.error(e);
+        }
+      }
+
+      // ---- Downloads ----
+      function toFASTA() {
+        if (!lastResult) return '';
+        const { seq } = lastResult;
+        const header = `>AIHPC_NUCLEOTIDE_ANALYSIS E.coli_lacZ_fragment length=${seq.length} gc=${((seq.match(/[GC]/g)||[]).length/seq.length*100).toFixed(1)}`;
+        const body = seq.match(/.{1,60}/g).join('\n');
+        return header + '\n' + body + '\n';
+      }
+      function toGenBank() {
+        if (!lastResult) return '';
+        const { seq, orfs, motifResults, gc } = lastResult;
+        const today = new Date().toISOString().slice(0,9).replace(/-/g,'-');
+        const lines = [];
+        lines.push('LOCUS       AIHPC_NUCLEOTIDE_ANALYSIS  ' + seq.length.toString().padStart(11) + ' bp    DNA     linear   SYN ' + today);
+        lines.push('DEFINITION  AIHPC Advanced nucleotide analysis output.');
+        lines.push('ACCESSION    AIHPC-NUC-' + Date.now());
+        lines.push('VERSION      AIHPC-NUC-' + Date.now() + '.1');
+        lines.push('SOURCE       synthetic DNA (user-provided)');
+        lines.push('  ORGANISM  unknown');
+        lines.push('FEATURES             Location/Qualifiers');
+        for (const o of orfs.slice(0, 20)) {
+          lines.push(`     CDS             ${o.start}..${o.end}`);
+          lines.push(`                     /frame="${o.frame}"`);
+          lines.push(`                     /length="${o.length}"`);
+          lines.push(`                     /translation="${o.protein}..."`);
+        }
+        for (const m of motifResults) {
+          for (const p of m.fwdHits.slice(0, 5)) {
+            lines.push(`     misc_feature    ${p+1}..${p+m.seq.length}`);
+            lines.push(`                     /label="${m.label}"`);
+            lines.push(`                     /strand="+"`);
+          }
+        }
+        lines.push('ORIGIN');
+        for (let i = 0; i < seq.length; i += 60) {
+          const chunk = seq.slice(i, i+60).toLowerCase().match(/.{1,10}/g).join(' ');
+          lines.push((i+1).toString().padStart(9, ' ') + ' ' + chunk);
+        }
+        lines.push('//');
+        return lines.join('\n') + '\n';
+      }
+      function toReceipt() {
+        if (!lastResult) return '';
+        const { seq, orfs, motifResults, gc, rnaPairs, trace } = lastResult;
+        return JSON.stringify({
+          '@context': 'https://aihpc.advanced/prov/v1',
+          manifestHash: 'sha256:' + btoa(seq.slice(0, 24)).replace(/=/g,'').slice(0, 24),
+          manifest: { id: 'nucleotide-analysis', language: 'javascript', runtime: 'browser', dataResidency: 'downloadable' },
+          input: { sequence: seq, length: seq.length, source: 'user-input (default: E. coli lacZ fragment)' },
+          output: {
+            gcPercent: gc,
+            orfs: orfs.length,
+            motifHits: motifResults.reduce((s, r) => s + r.total, 0),
+            rnaPairs: rnaPairs,
+          },
+          trace: { steps: trace.length, format: 'json-ld', entries: trace },
+          environment: { client: 'browser', timestamp: new Date().toISOString() },
+        }, null, 2);
+      }
+      function downloadBlob(filename, content, mime) {
+        const blob = new Blob([content], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      // ---- Wire up ----
+      document.getElementById('run-btn').addEventListener('click', runAll);
+      document.getElementById('reset-btn').addEventListener('click', () => {
+        document.getElementById('seq-input').value = DEFAULT_SEQ;
+        renderSeqStats(DEFAULT_SEQ);
+      });
+      document.getElementById('random-btn').addEventListener('click', () => {
+        const bases = 'ACGT';
+        let s = '';
+        for (let i = 0; i < 120; i++) s += bases[Math.floor(Math.random() * 4)];
+        document.getElementById('seq-input').value = s;
+        renderSeqStats(s);
+      });
+      document.getElementById('seq-input').addEventListener('input', (e) => {
+        renderSeqStats(e.target.value.replace(/\s/g, ''));
+      });
+      document.getElementById('download-fasta-btn').addEventListener('click', () => downloadBlob('aihpc-nucleotide-' + Date.now() + '.fasta', toFASTA(), 'text/x-fasta;charset=utf-8'));
+      document.getElementById('download-genbank-btn').addEventListener('click', () => downloadBlob('aihpc-nucleotide-' + Date.now() + '.gb', toGenBank(), 'text/x-genbank;charset=utf-8'));
+      document.getElementById('download-receipt-btn').addEventListener('click', () => downloadBlob('aihpc-receipt-' + Date.now() + '.json', toReceipt(), 'application/json'));
+      document.getElementById('popup-fasta').addEventListener('click', () => downloadBlob('aihpc-nucleotide-' + Date.now() + '.fasta', toFASTA(), 'text/x-fasta;charset=utf-8'));
+      document.getElementById('popup-genbank').addEventListener('click', () => downloadBlob('aihpc-nucleotide-' + Date.now() + '.gb', toGenBank(), 'text/x-genbank;charset=utf-8'));
+      document.getElementById('popup-receipt').addEventListener('click', () => downloadBlob('aihpc-receipt-' + Date.now() + '.json', toReceipt(), 'application/json'));
+      document.getElementById('popup-close').addEventListener('click', () => document.getElementById('popup-overlay').classList.remove('open'));
+      document.getElementById('popup-overlay').addEventListener('click', (e) => { if (e.target.id === 'popup-overlay') e.target.classList.remove('open'); });
+
+      document.querySelectorAll('#lang-toggle button').forEach(b => b.addEventListener('click', () => renderCode(b.dataset.lang)));
+      document.querySelectorAll('#aud-toggle button').forEach(b => b.addEventListener('click', () => renderAnnotations(b.dataset.aud)));
+
+      // ---- Initial render ----
+      renderSeqStats(DEFAULT_SEQ);
+      renderCode('python');
+      renderAnnotations('student');
+
+      // ---- Ribbon theme toggle ----
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        let initial = 'dark';
+        try { const stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', () => { const next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

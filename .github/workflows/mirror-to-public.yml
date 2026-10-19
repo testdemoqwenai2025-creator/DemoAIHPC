@@ -1,0 +1,65 @@
+name: Mirror to public on tag push
+
+# Triggered on tag push (safer than every commit on main).
+# Runs a gitleaks secret-scan as a pre-check; if it passes, mirrors
+# the tagged commit to the public DemoAIHPC repository.
+#
+# The public mirror is at https://github.com/testdemoqwenai2025-creator/DemoAIHPC
+# (this is the source that GitHub Pages serves).
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch: # allow manual trigger
+
+permissions:
+  contents: read
+
+jobs:
+  secret-scan:
+    name: Gitleaks pre-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history so gitleaks can scan all commits
+
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Optional: configure with .gitleaks.toml in repo root.
+          # Default config scans for common secret patterns (AWS keys,
+          # GitHub PATs, Stripe keys, etc.) and any *.env / *.key files.
+
+  mirror-to-public:
+    name: Mirror to DemoAIHPC (public)
+    needs: secret-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Mirror push to public repo
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git remote add public "https://x-access-token:${{ secrets.MIRROR_PAT }}@github.com/testdemoqwenai2025-creator/DemoAIHPC.git"
+          git push --force-with-lease public "refs/tags/${GITHUB_REF##*/}:refs/tags/${GITHUB_REF##*/}"
+          git push --force-with-lease public HEAD:main
+
+      - name: Trigger GitHub Pages rebuild
+        run: |
+          curl -sS -X POST \
+            -H "Authorization: token ${{ secrets.MIRROR_PAT }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/testdemoqwenai2025-creator/DemoAIHPC/pages/builds"
+
+      - name: Summary
+        run: |
+          echo "Mirror pushed to DemoAIHPC at tag ${GITHUB_REF##*/}."
+          echo "Public preview will rebuild at https://testdemoqwenai2025-creator.github.io/DemoAIHPC/"

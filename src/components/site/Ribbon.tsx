@@ -106,6 +106,16 @@ const GROUPS: NavGroup[] = [
         desc: 'Replayable decision traces, play / replay / scrub',
       },
       {
+        href: '/graph',
+        label: 'Cross-Domain Knowledge Graph',
+        desc: 'Every artifact as a node · provenance / similarity / inferred edges',
+      },
+      {
+        href: '/benchmark',
+        label: 'Recursive Agentic Benchmark',
+        desc: 'The agent observes itself · trace length / decision quality / rework',
+      },
+      {
         href: '/concepts',
         label: 'Concept Cards',
         desc: 'Deeper thoughts with evolution + hypothetical demos',
@@ -123,7 +133,7 @@ const GROUPS: NavGroup[] = [
       {
         href: '/concepts/lazy-evaluation',
         label: 'Lazy Evaluation as UX',
-        desc: 'The feels-alive property',
+        desc: 'The feels-alive property · 4-panel popup',
       },
       {
         href: '/concepts/cross-domain-graph',
@@ -152,7 +162,7 @@ export function Ribbon() {
   )?.label
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-40 w-full border-b border-violet-500/25 bg-gradient-to-b from-[rgba(7,9,15,0.95)] to-[rgba(11,15,26,0.85)] backdrop-blur supports-[backdrop-filter]:bg-gradient-to-b shadow-[0_1px_0_0_rgba(6,182,212,0.4),0_4px_16px_rgba(0,0,0,0.4)] before:content-[''] before:absolute before:left-0 before:right-0 before:bottom-[-1px] before:h-[2px] before:bg-gradient-to-r before:from-cyan-500 before:via-violet-500 before:to-pink-500 before:opacity-70">
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4">
         {/* Brand */}
         <Link
