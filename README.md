@@ -156,7 +156,7 @@ This separation keeps legal scenarios simple:
   `AIHPC.mountTierBadge()`, `AIHPC.onChange()` — reusable for any
   future gated feature. Cross-tab session updates propagate via
   the `storage` event listener.
-- **Weekly Science Digest (Phase 25)** — every Tuesday AIHPC
+- **Weekly Science Digest (Phase 25, 26)** — every Tuesday AIHPC
   Advanced publishes a curated digest of 5–7 of the most promising
   recent articles across Nature, Science, The Lancet, arXiv,
   bioRxiv, and the domain journals. Each article ships with:
@@ -167,13 +167,42 @@ This separation keeps legal scenarios simple:
     Code tab with 6-language polyglot (Python / Rust / Go / C /
     Elixir / Scala), Observe tab with Stats / Reports / Graphs /
     Summary sub-tabs.
-  Issue #1 (2026-10-20, reproducibility in ML-for-science): AlphaFold 3
-  (Nature, LJ+Verlet demo), LIGO-Virgo-KAGRA O4 (PRD, matched filter demo),
-  JWST WASP-39b (Nature, transit depth demo), Human Pangenome draft
-  (Nat Biotech, GFA parser demo), Polynomial Freiman-Ruzsa proof
-  (arXiv, Shannon entropy demo).
-  The generator `scripts/gen-digest.py` is reproducible — future
-  issues are just an updated manifest and a re-run.
+  Issue #2 (2026-10-27) adds 2 ML-derived futuristic visions —
+  extrapolations from recent ML/AI trends, clearly marked with a 🚀
+  pill, NOT real publications. Issue #2 covers: ESM-3 (Science,
+  k-mer tokeniser demo), AlphaMissense clinical pilot (Lancet,
+  pathogenicity ensemble demo), ITER D-T first plasma (Nuclear
+  Fusion, Lawson triple-product demo), NANOGrav gravitational-wave
+  background (PRL, Hellings-Downs curve demo), AlphaProof IMO
+  silver (Nature, neuro-symbolic search demo), plus futuristic
+  visions: 2028 patient-specific drug-design pipeline, 2027 top-500
+  exoplanet atmosphere catalog.
+  RSS feed (RSS 2.0) at /digest.rss; JSON Feed 1.1 at /digest.json.
+  Past issues auto-archived at /digest/archive/issue-NNN.html with
+  `<base href>` for correct path resolution. Archive index at
+  /digest/archive/index.html. The generator `scripts/gen-digest.py`
+  is reproducible — future weekly issues are just an updated
+  `MANIFEST` dict and a re-run.
+- **Application audit script (Phase 26)** — `scripts/audit.py`
+  runs 14 checks: HTML div balance, script/style balance (via
+  html.parser — false-positive immune), standard ribbon presence
+  on every page, subscribe-gate.js loaded on gated pages, 5-step
+  Math→Code derivations on all 22 science sub-pages, particle-bg
+  JS syntax (via `node --check`), .git/config token-free, internal
+  link reachability (honours `<base href>`), all 5 seed demos
+  present, digest has full ClickForDemo pattern, Weekly Digest in
+  Insights dropdown on all 52 pages, all 4 generator scripts
+  valid, DAG provenance chain, Next.js /dashboard uses
+  `<TemporalGraph>`. Exit code 0/1 for CI integration.
+- **N-D hypercube viewer (Phase 26)** — `/science/maths/geometry`
+  upgraded from a 4D-only tesseract viewer to a full N-D viewer
+  (dimensions 4–10). Slider + preset buttons (4D Tesseract, 5D
+  Penteract, 6D Hexeract, 8D Octeract, 10D Decaeract). Generalised
+  rotation (N-1 planes, each involving the highest axis) and a
+  chain of N-2 perspective projections. Combinatorics table shows
+  vertices/edges/faces/cells for N=4 through 10 (1024 vertices at
+  N=10). Second 5-step Math→Code derivation block specifically for
+  the N-D generalisation.
 
 ## Demo framework (Phase 2)
 

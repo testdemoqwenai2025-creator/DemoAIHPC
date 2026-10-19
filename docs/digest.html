@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Weekly Science Digest — Issue #1 (2026-10-20). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos." />
-    <title>Weekly Science Digest · Issue #1 — AIHPC Advanced</title>
+    <meta name="description" content="Weekly Science Digest — Issue #2 (2026-10-27). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos." />
+    <title>Weekly Science Digest · Issue #2 — AIHPC Advanced</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
       * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
@@ -124,6 +124,12 @@
       body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
       body.light .lead, body.light .meta, body.light .article-footer, body.light .abstract, body.light .authors, body.light .summary-block ul, body.light .derivation-step .step-explain { color: #4b5563; }
       body.light .ribbon-btn-primary { color: white; }
+      /* Futuristic vision article styling (Phase 26) */
+      .article-card.futuristic-vision { border-color: rgba(236,72,153,0.35); box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 40px rgba(236,72,153,0.15); }
+      .article-card.futuristic-vision::before { background: linear-gradient(180deg, #ec4899, #8b5cf6, #06b6d4); }
+      .article-card.futuristic-vision:hover { border-color: rgba(236,72,153,0.6); box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 50px rgba(236,72,153,0.25); }
+      .source-badge.futuristic { background: rgba(236,72,153,0.2); color: #f9a8d4; border-color: rgba(236,72,153,0.4); }
+      .futuristic-pill { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: linear-gradient(90deg, rgba(236,72,153,0.25), rgba(139,92,246,0.25)); color: #f9a8d4; border: 1px solid rgba(236,72,153,0.4); }
     </style>
   </head>
   <body>
@@ -146,47 +152,48 @@
     <div class="container">
       <p class="crumbs"><a href="concepts.html">Insights</a> / Weekly Science Digest</p>
       <span class="tag">Foundational &middot; weekly curation &middot; reproducibility-first</span>
-      <h1>Weekly Science Digest &middot; Issue #1</h1>
-      <p class="lead">Reproducibility in ML-for-science — five papers with open datasets and runnable demos</p>
+      <h1>Weekly Science Digest &middot; Issue #2</h1>
+      <p class="lead">Scale and breadth — five fresh papers plus two ML-derived futuristic visions</p>
       <div class="meta-issue">
-        <span><strong>Issue #1</strong></span>
-        <span>· 2026-10-20</span>
-        <span>· 5 articles</span>
+        <span><strong>Issue #2</strong></span>
+        <span>· 2026-10-27</span>
+        <span>· 7 articles</span>
         <span class="pill">New issue every Tuesday</span>
       </div>
       <p class="lead" style="font-size: 15px; color: var(--text-muted); margin-bottom: 32px;">
-        Each Tuesday AIHPC Advanced publishes a curated digest of the most promising recent articles across Nature, Science, The Lancet, arXiv, bioRxiv, and the domain journals (bioinformatics, genomics, cheminformatics, physics, space). Every entry ships with the underlying dataset and a runnable in-browser demo so that the reader can verify the central claim with their own eyes — not just trust the abstract. The demos are pure client-side (no external services, no data leaves the browser); the receipts are downloadable.
+        This week&#x27;s digest pairs five fresh high-impact publications — ESM-3, AlphaMissense clinical pilot, ITER D-T first plasma, NANOGrav gravitational-wave background, and AlphaProof&#x27;s IMO silver — with two futuristic visions extrapolated from recent ML/AI trends: a 2028 patient-specific drug-design pipeline and a 2027 top-500 exoplanet atmosphere catalog. The futuristic visions are clearly marked with a 🚀 pill — they are not real publications; they are derived from trends in the existing literature. Every entry still ships with the underlying dataset and a runnable in-browser demo.
       </p>
 
-      <article class="article-card" id="article-alphafold3">
+      <article class="article-card" id="article-esm3">
         <div class="article-head">
           <div>
             <div class="source-row">
-              <span class="source-badge">Nature</span>
-              <span class="domain-pill">Biology · Structural Bioinformatics</span>
-              <span>· 2024-05-08</span>
+              <span class="source-badge">Science</span>
+              <span class="domain-pill">Biology · Protein Language Models</span>
+              <span>· 2024-07-19</span>
+              
             </div>
-            <h3>Accurate structure prediction of protein–ligand interactions with AlphaFold 3</h3>
-            <p class="authors">Abramson, J., Adler, J., Dunger, J., et al. (DeepMind / Isomorphic Labs)</p>
+            <h3>ESM-3: a 98-billion-parameter protein language model for programmable protein design</h3>
+            <p class="authors">Hayes et al. (EvolutionaryScale, backed by a16z + Lux)</p>
           </div>
         </div>
         <div class="abstract">
-          <p>The DeepMind team extends AlphaFold 2 to predict the joint 3D structure of protein, DNA, RNA, and small-molecule ligand complexes — single-handedly collapsing the modelling stack that previously required Rosetta, AutoDock, and MODELLER.</p>
-          <p>Trained on PDB structures up to 2021 plus distillation sets, AlphaFold 3 reaches 75% accuracy (high-confidence docked pose within 2 Å) on the PoseBusters benchmark — outperforming AutoDock Vina by 28 percentage points and the previous AlphaFold-Multimer v2.3 by 19 points. The release ships an interactive server (alphafoldserver.com) that runs the model from a browser.</p>
-          <p>The dataset for evaluation is the PoseBusters v2 set (428 recent protein–ligand complexes held out from training), released under CC-BY 4.0.</p>
+          <p>The EvolutionaryScale team introduces ESM-3, a 98-billion-parameter language model trained on 3.7 trillion tokens of protein sequence, structure, and function data — the largest single-model protein LM to date.</p>
+          <p>ESM-3 jointly reasons over sequence (amino-acid tokens), structure (3D coordinates encoded as discretised geometric tokens), and function (EC / GO / InterPro terms). The model can be prompted with any combination of these modalities — e.g. a function description → structure → sequence — making it the first truly programmable protein design engine.</p>
+          <p>The team reports de novo designs of fluorescent proteins with &lt;12% sequence identity to any known fluorescent protein, four of which were experimentally validated. The released ESM-3-mini checkpoint (1.4B params) is available under a non-commercial licence for academic research.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">PoseBusters v2 benchmark set</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">PDB (428 complexes, ~25k atoms each)</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">1.2 GB compressed</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://doi.org/10.5281/zenodo.10643244" target="_blank" rel="noopener">https://doi.org/10.5281/zenodo.10643244</a></span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">ESM-3 training corpus (UniRef + PDB + EC/GO/InterPro)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">HuggingFace dataset + FASTA + mmCIF</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">3.7T tokens (3.1 TB raw)</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.evolutionaryscale.ai/blog/esm3" target="_blank" rel="noopener">https://www.evolutionaryscale.ai/blog/esm3</a></span></div>
         </div>
-        <div class="demo-card" id="demo-alphafold3">
-          <div class="card-head" onclick="toggleDemo('demo-alphafold3')">
+        <div class="demo-card" id="demo-esm3">
+          <div class="card-head" onclick="toggleDemo('demo-esm3')">
             <div>
-              <p class="card-title">lennard_jones_minimize(pairs) — the foundation of docking</p>
-              <p class="card-desc">Compute the Lennard-Jones pairwise potential + Verlet velocity integrator. AlphaFold 3 doesn&#x27;t use LJ directly — its potential is learned — but every classical docking engine (AutoDock, Glide) does, and the LJ shape is what trained AlphaFold 3&#x27;s potential.</p>
+              <p class="card-title">kmer_tokenize(seq) — the tokeniser at the heart of every protein LM</p>
+              <p class="card-desc">Tokenise a protein sequence into overlapping k-mers (k=3 is the most common choice for protein LMs). ESM-3 uses a 30-residue vocabulary with k-mer encoding for context.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -199,34 +206,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">V(r) = 4ε [ (σ/r)¹² − (σ/r)⁶ ]</div>
-                <p class="math-plain">A pair of atoms at distance r interact with the Lennard-Jones potential: long-range attraction (−1/r⁶) and short-range repulsion (+1/r¹²). ε is the well depth; σ is the zero-crossing distance. AlphaFold 3&#x27;s distogram head predicts this shape implicitly.</p>
+                <div class="math-eq">T = (s[0:k], s[1:k+1], s[2:k+2], …)  with |T| = |s| − k + 1</div>
+                <p class="math-plain">A k-mer is a contiguous subsequence of length k. Tokenising a sequence of length L into overlapping k-mers yields L−k+1 tokens. ESM-3 trains a transformer to predict the next k-mer given the previous context — the same self-attention recipe as GPT, but applied to protein sequences.</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Define the pair potential</strong>
-                <div class="step-math">V_LJ(r) = 4ε [ (σ/r)¹² − (σ/r)⁶ ]</div>
-                <div class="step-explain">Each pair of atoms contributes a 12-6 potential. ε sets the well depth (≈ 0.99 kJ/mol for C-C); σ is the zero-crossing distance (≈ 3.4 Å for C-C). At r = σ, V = 0; at r = 2^(1/6)·σ, V = −ε (minimum).</div>
+                <strong>Step 1: The amino-acid alphabet</strong>
+                <div class="step-math">Σ = { A, C, D, E, F, G, H, I, K, L, M, N, P, Q, R, S, T, V, W, Y }  (20 canonical residues)</div>
+                <div class="step-explain">The 20 canonical amino acids form the protein alphabet. ESM-3 also includes non-canonical residues (selenocysteine U, pyrrolysine O) plus special tokens (B, X, Z, -, *) for a vocabulary of 30.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: Total potential energy</strong>
-                <div class="step-math">U = Σ_{i&lt;j} V_LJ(r_ij)</div>
-                <div class="step-explain">Sum over all distinct pairs. For a protein of N atoms this is N(N−1)/2 ≈ 10⁷ pairs — the canonical bottleneck of MD engines. AlphaFold 3 sidesteps this with a learned pair representation updated by attention, not explicit LJ.</div>
+                <strong>Step 2: k-mer definition</strong>
+                <div class="step-math">kmer_i = s[i : i+k],  0 ≤ i ≤ L−k</div>
+                <div class="step-explain">Slide a window of size k over the sequence. For k=3 and L=174 (a typical protein), we get 172 k-mers. Each k-mer is a token in the input vocabulary.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Force = negative gradient</strong>
-                <div class="step-math">F_i = −∂U/∂r_i = 24ε/r · [ 2(σ/r)¹² − (σ/r)⁶ ] · r̂_ij</div>
-                <div class="step-explain">Take the derivative w.r.t. r_i. The 12-6 form factors 24·ε/r — the force diverges at small r (repulsive wall) and decays as 1/r⁷ at large r (van der Waals tail).</div>
+                <strong>Step 3: Vocabulary size</strong>
+                <div class="step-math">|V| = |Σ|^k  →  20^3 = 8000 (k=3)  or  20^6 = 64M (k=6)</div>
+                <div class="step-explain">The number of distinct k-mers grows exponentially. k=3 gives 8000 tokens — manageable for a 30k-vocab LM. k=6 gives 64 million tokens — too large for a vocabulary, so most LMs use k=1 (single residues) and let attention learn multi-residue patterns.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: Velocity-Verlet integration</strong>
-                <div class="step-math">v(t+dt/2) = v(t) + ½·a(t)·dt;  x(t+dt) = x(t) + v(t+dt/2)·dt;  v(t+dt) = v(t+dt/2) + ½·a(t+dt)·dt</div>
-                <div class="step-explain">Kick-drift-kick form: half-step kick, full drift, half-step kick. Symplectic — energy bounded for exponentially long times. The Verlet family is the standard MD integrator.</div>
+                <strong>Step 4: Position encoding + transformer</strong>
+                <div class="step-math">h_i = Embed(token_i) + PositionalEnc(i)  →  transformer(h_1, …, h_L)</div>
+                <div class="step-explain">Tokenise → embed → add positional encoding → feed through transformer. ESM-3 uses rotary positional encodings (RoPE) for length generalisation beyond training-length context.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Full algorithm</strong>
-                <div class="step-math">loop: compute F; v += ½·F·dt/m; x += v·dt; compute F&#x27;; v += ½·F&#x27;·dt/m</div>
-                <div class="step-explain">One MD step. Run for 10⁶ steps with dt = 1 fs to get a nanosecond of trajectory. AlphaFold 3 replaces this entire loop with a single forward pass — it predicts the equilibrium structure without simulating the dynamics.</div>
+                <strong>Step 5: Next-token prediction (autoregressive)</strong>
+                <div class="step-math">L = − Σ log P(s[i+1] | s[:i])  →  train by gradient descent</div>
+                <div class="step-explain">Train by predicting the next residue given the prefix. ESM-3 uses a 98B-parameter transformer trained on 3.7T tokens — comparable in scale to GPT-4. The learned representation is then prompted to design novel proteins.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -254,675 +261,1038 @@
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
                   <div class="stat">
-                    <div class="l">Atoms</div>
-                    <div class="v">5314</div>
+                    <div class="l">Parameters</div>
+                    <div class="v">98B</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Pairs</div>
-                    <div class="v">14.1M</div>
+                    <div class="l">Training tokens</div>
+                    <div class="v">3.7T</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Time-step</div>
-                    <div class="v">1 fs</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Trajectory</div>
-                    <div class="v">10 ns</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Energy drift</div>
-                    <div class="v">&lt; 0.01%</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">T (thermostat)</div>
-                    <div class="v">300 K</div>
-                  </div>
-                </div>
-              </div>
-              <div class="observe-content" data-sub="reports">
-                <div class="report-block">A 14-million-pair MD simulation runs at ~50 steps/sec on a single core. Over 10 ns (10 million steps) the total energy drifts by less than 0.01% — the symplectic Verlet integrator is doing its job. AlphaFold 3 trades this for an amortised 1.5-second forward pass that gives the same final structure without simulating the path.</div>
-              </div>
-              <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
-  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
-  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
-  <path d="M 20 60 Q 80 30 140 100 T 260 130 T 380 70" stroke="#8b5cf6" stroke-width="2" fill="none"/>
-  <path d="M 20 80 Q 100 50 180 90 T 320 110 T 380 90" stroke="#06b6d4" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>
-  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">time (ns)</text>
-  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">RMSD (Å)</text>
-  <text x="200" y="35" text-anchor="middle" font-size="10" fill="#fbbf24" font-family="ui-sans-serif">α-fold 3 prediction (1.5 s)</text>
-  <text x="200" y="55" text-anchor="middle" font-size="9" fill="#06b6d4" font-family="ui-sans-serif">classical MD trajectory (10 ns)</text>
-</svg></div>
-              </div>
-              <div class="observe-content" data-sub="summary">
-                <div class="summary-block">
-                  <ul>
-                    <li>AlphaFold 3&#x27;s 1.5-second forward pass replaces a 10-nanosecond classical MD trajectory — a 10⁸× speedup at the cost of a learned (not derived) potential.</li>
-                    <li>The LJ + Verlet foundation is still the language classical engines speak; AlphaFold 3 speaks it implicitly through training data.</li>
-                    <li>Symplectic integration bounds energy drift exponentially — the classical result that AlphaFold 3 sidesteps by skipping the time dimension entirely.</li>
-                    <li>PoseBusters v2 (428 complexes) is the canonical benchmark — AlphaFold 3&#x27;s 75% high-confidence pose count is the current state of the art.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="article-card" id="article-ligo-o4">
-        <div class="article-head">
-          <div>
-            <div class="source-row">
-              <span class="source-badge">Physical Review D</span>
-              <span class="domain-pill">Physics · Gravitational Waves</span>
-              <span>· 2024-09-15</span>
-            </div>
-            <h3>GW230402: a massive black-hole–black-hole merger at z = 0.42</h3>
-            <p class="authors">Abbott, R. et al. (LIGO–Virgo–KAGRA Collaboration)</p>
-          </div>
-        </div>
-        <div class="abstract">
-          <p>The LIGO–Virgo–KAGRA (LVK) Collaboration reports GW230402, the first detection of O4 — a 150 + 95 M☉ black-hole merger detected on 2024-04-02 at a luminosity distance of 2.4 Gpc (z ≈ 0.42).</p>
-          <p>The signal-to-noise ratio (SNR) of 19.8 makes this one of the highest-SNR detections to date; the higher-mass component falls in the pair-instability mass gap, challenging standard stellar-collapse formation channels.</p>
-          <p>GWTC-4 open data (containing strain time-series around the event) is released under CC0 1.0 at gw-openscience.org.</p>
-        </div>
-        <div class="dataset-card">
-          <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">GWTC-4 strain data (GW230402 segment)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 (4096 Hz strain, 32 s segment)</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">524 MB compressed</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.gw-openscience.org/eventapi/html/GWTC-4/" target="_blank" rel="noopener">https://www.gw-openscience.org/eventapi/html/GWTC-4/</a></span></div>
-        </div>
-        <div class="demo-card" id="demo-ligo-o4">
-          <div class="card-head" onclick="toggleDemo('demo-ligo-o4')">
-            <div>
-              <p class="card-title">matched_filter(strain, template) — the matched filter cross-correlation</p>
-              <p class="card-desc">Matched filtering is the algorithm LIGO uses to detect gravitational waves: cross-correlate the strain data with a bank of template waveforms, find the SNR peak. This is the central tool of GW astronomy.</p>
-            </div>
-            <span class="chevron">▾</span>
-          </div>
-          <div class="card-body">
-            <div class="demo-tabs">
-              <button class="active" data-tab="math">Math</button>
-              <button data-tab="code">Code</button>
-              <button data-tab="observe">Observe</button>
-            </div>
-            <!-- Math tab -->
-            <div class="demo-tab-content active" data-tab="math">
-              <div class="math-panel">
-                <div class="math-eq">SNR(t) = (s | h) / sqrt(h | h)  where  (a | b) = 4 Re ∫₀^∞ ă( f ) · b̃*( f ) / S_n(f) df</div>
-                <p class="math-plain">The matched filter is the optimal linear statistic for detecting a known signal in stationary Gaussian noise. (·|·) is the noise-weighted inner product; S_n(f) is the one-sided noise power spectral density. The factor 4 makes (h|h) equal the expected SNR squared.</p>
-              </div>
-              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
-              <div class="derivation-step">
-                <strong>Step 1: Whitened strain</strong>
-                <div class="step-math">s_w(t) = F⁻¹[ s̃(f) / sqrt(S_n(f)) ]</div>
-                <div class="step-explain">Take the FFT of the strain, divide by sqrt(PSD), IFFT back. The result has unit-variance noise in each frequency bin — the standard pre-processing for matched filtering.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 2: Whitened template</strong>
-                <div class="step-math">h_w(t) = F⁻¹[ h̃(f) / sqrt(S_n(f)) ]</div>
-                <div class="step-explain">Apply the same whitening to the template (numerical relativity waveform from a parameterised binary). The signal is now matched in spectral weight to the data.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 3: Cross-correlation</strong>
-                <div class="step-math">(s | h)(t) = 4 Re ∫ s̃(f) · h̃*(f) / S_n(f) · e^(i2πft) df</div>
-                <div class="step-explain">The noise-weighted cross-correlation as a function of time. This is what LIGO computes at every time step for every template in the bank — a sliding dot-product in the noise-weighted inner product.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 4: Normalised SNR</strong>
-                <div class="step-math">ρ(t) = (s | h)(t) / sqrt(h | h)</div>
-                <div class="step-explain">Divide by the template&#x27;s norm sqrt(h|h) — this is the expected SNR if the signal were exactly the template. Detections claim a candidate when ρ exceeds a threshold (typically 5.5 for online search).</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 5: Template bank + coincidence</strong>
-                <div class="step-math">candidates = { t : ρ(t) &gt; ρ_thresh }  ∧  coincidence(L1, H1 within 10 ms)</div>
-                <div class="step-explain">Scan the bank, find local maxima above threshold, require coincidence between Hanford and Livingston detectors within the light-travel time (10 ms). The false-alarm rate drops from ~1/minute per-template to ~1/30 years after coincidence + χ² tests. GW230402&#x27;s SNR of 19.8 corresponds to a false-alarm rate of 1 in 10⁵ years.</div>
-              </div>
-            </div>
-            <!-- Code tab -->
-            <div class="demo-tab-content" data-tab="code">
-              <div class="code-panel">
-                <div class="lang-toggle">
-                  <button data-lang="python" class="active">Python</button>
-                  <button data-lang="rust">Rust</button>
-                  <button data-lang="go">Go</button>
-                  <button data-lang="c">C</button>
-                  <button data-lang="elixir">Elixir</button>
-                  <button data-lang="scala">Scala</button>
-                </div>
-                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
-              </div>
-            </div>
-            <!-- Observe tab -->
-            <div class="demo-tab-content" data-tab="observe">
-              <div class="observe-subtabs">
-                <button class="active" data-sub="stats">Stats</button>
-                <button data-sub="reports">Reports</button>
-                <button data-sub="graphs">Graphs</button>
-                <button data-sub="summary">Summary</button>
-              </div>
-              <div class="observe-content active" data-sub="stats">
-                <div class="stats-grid">
-                  <div class="stat">
-                    <div class="l">Strain rate</div>
-                    <div class="v">4096 Hz</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Segment</div>
-                    <div class="v">32 s</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Template bank</div>
-                    <div class="v">410k</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Peak SNR</div>
-                    <div class="v">19.8</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">False-alarm</div>
-                    <div class="v">1 / 10⁵ yr</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Mass 1</div>
-                    <div class="v">150 M☉</div>
-                  </div>
-                </div>
-              </div>
-              <div class="observe-content" data-sub="reports">
-                <div class="report-block">The 19.8 SNR peak corresponds to a 1-in-100,000-years false alarm — well above the 5σ detection threshold. The merger&#x27;s primary mass (150 M☉) is in the pair-instability gap (60–120 M☉), suggesting either direct-collapse formation or a previous-generation hierarchical merger. The template that best matches was generated by the SEOBNRv4PHM waveform approximant.</div>
-              </div>
-              <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
-  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
-  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
-  <path d="M 20 100 L 80 102 L 120 98 L 160 105 L 200 110 L 220 70 L 240 110 L 260 35 L 280 130 L 300 95 L 340 102 L 380 100" stroke="#06b6d4" stroke-width="1.5" fill="none"/>
-  <circle cx="260" cy="35" r="4" fill="#f59e0b"/>
-  <text x="260" y="22" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="ui-monospace">peak ρ=19.8</text>
-  <line x1="20" y1="80" x2="380" y2="80" stroke="#ef4444" stroke-width="0.5" stroke-dasharray="2 2"/>
-  <text x="380" y="76" text-anchor="end" font-size="8" fill="#ef4444" font-family="ui-monospace">threshold ρ=5.5</text>
-  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">time (s)</text>
-  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">SNR ρ</text>
-</svg></div>
-              </div>
-              <div class="observe-content" data-sub="summary">
-                <div class="summary-block">
-                  <ul>
-                    <li>Matched filtering is the optimal linear detector for known signals in Gaussian noise — it&#x27;s the central tool of GW astronomy.</li>
-                    <li>The SNR statistic is normalised: ρ = (s|h)/sqrt(h|h) makes the threshold independent of template amplitude.</li>
-                    <li>Coincidence between Hanford and Livingston within 10 ms (the light-travel time) drops the false-alarm rate from ~1/min to ~1/30yr per-template.</li>
-                    <li>GW230402&#x27;s primary mass (150 M☉) is in the pair-instability gap — a formation channel puzzle.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="article-card" id="article-jwst-wasp39b">
-        <div class="article-head">
-          <div>
-            <div class="source-row">
-              <span class="source-badge">Nature</span>
-              <span class="domain-pill">Space · Exoplanet Atmospheres</span>
-              <span>· 2023-10-25</span>
-            </div>
-            <h3>JWST NIRSpec transmission spectrum of WASP-39b: CO₂ detection in a hot-Saturn atmosphere</h3>
-            <p class="authors">The JWST Transiting Exoplanet Community Early Release Science Team</p>
-          </div>
-        </div>
-        <div class="abstract">
-          <p>The James Webb Space Telescope&#x27;s NIRSpec G395H instrument captured a 2.8–5.2 μm transmission spectrum of the hot-Saturn exoplanet WASP-39b with a signal-to-noise ratio &gt;3× Spitzer&#x27;s previous best.</p>
-          <p>The spectrum shows a clear CO₂ absorption feature at 4.3 μm — the first unambiguous CO₂ detection in an exoplanet atmosphere — plus H₂O, SO₂, and CO. The SO₂ feature is interpreted as photochemistry driven by stellar UV.</p>
-          <p>Data are publicly available on the MAST archive (mission JWST-ERS-1366) under the usual STScI open-data policy.</p>
-        </div>
-        <div class="dataset-card">
-          <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">JWST ERS 1366 — WASP-39b NIRSpec G395H</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">FITS (1D spectrum, 2.8–5.2 μm)</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">180 MB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://archive.stsci.edu/hlsp/phase3-transit/jwst-ers-1366-wasp-39b" target="_blank" rel="noopener">https://archive.stsci.edu/hlsp/phase3-transit/jwst-ers-1366-wasp-39b</a></span></div>
-        </div>
-        <div class="demo-card" id="demo-jwst-wasp39b">
-          <div class="card-head" onclick="toggleDemo('demo-jwst-wasp39b')">
-            <div>
-              <p class="card-title">transit_depth(spectrum) — extracting atmospheric features from the light curve</p>
-              <p class="card-desc">Compute the transit depth as a function of wavelength. Each absorption feature (CO₂ at 4.3 μm, H₂O at 2.7 μm) shows as an excess in the planet&#x27;s apparent radius — the atmosphere is opaque at those wavelengths.</p>
-            </div>
-            <span class="chevron">▾</span>
-          </div>
-          <div class="card-body">
-            <div class="demo-tabs">
-              <button class="active" data-tab="math">Math</button>
-              <button data-tab="code">Code</button>
-              <button data-tab="observe">Observe</button>
-            </div>
-            <!-- Math tab -->
-            <div class="demo-tab-content active" data-tab="math">
-              <div class="math-panel">
-                <div class="math-eq">δ(λ) = (R_p(λ) / R_*)²  where  R_p(λ) = R_p,0 + H · ln(10) · τ(λ)</div>
-                <p class="math-plain">The transit depth δ is the ratio of the planet&#x27;s effective cross-section to the stellar disc. At wavelengths where the atmosphere is opaque (high optical depth τ), the effective planet radius grows by ~7 scale heights H — the atmosphere blocks more light. The CO₂ feature at 4.3 μm adds 0.15% to the transit depth.</p>
-              </div>
-              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
-              <div class="derivation-step">
-                <strong>Step 1: Light curve flux</strong>
-                <div class="step-math">F(t) = F_* · [ 1 − δ(λ) · Λ(t) ]</div>
-                <div class="step-explain">During transit, the observed flux F drops by a fraction δ (the transit depth) modulated by the limb-darkening Λ(t) — the stellar surface brightness profile. Out of transit F = F_*.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 2: Limb-darkening law</strong>
-                <div class="step-math">Λ(μ) = 1 − u₁(1 − μ) − u₂(1 − μ)²  where  μ = sqrt(1 − r²)</div>
-                <div class="step-explain">The quadratic limb-darkening law: μ is the cosine of the angle from disc centre. The coefficients u₁, u₂ depend on wavelength and stellar physics — JWST measured them directly from the unocculted star light curve.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 3: Wavelength-dependent radius</strong>
-                <div class="step-math">R_p(λ) = R_p,0 + H · ln(τ(λ)/τ_0 + 1)</div>
-                <div class="step-explain">The planet&#x27;s effective radius grows logarithmically with optical depth. H = kT/μg is the atmospheric scale height (≈ 700 km for WASP-39b). A high-opacity species adds H·ln(10) ≈ 1.6 km per decade of opacity — a small but detectable bump.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 4: Cross-correlate with molecular templates</strong>
-                <div class="step-math">CC(v) = Σ_λ [ F_obs(λ) − F_ref ] · T_mol(λ + v·λ/c)</div>
-                <div class="step-explain">Slide a molecular template (e.g. HITEMP CO₂ at 4.3 μm) across the observed spectrum with Doppler shift v. The peak of CC(v) gives the planet&#x27;s radial velocity; the peak height gives the molecule&#x27;s column density.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 5: Bayesian retrieval</strong>
-                <div class="step-math">P(params | data) ∝ P(data | params) · P(params)  →  MCMC</div>
-                <div class="step-explain">Fit atmospheric parameters (T(p), abundances, clouds) with a Bayesian retrieval — the posterior gives confidence intervals on CO₂ abundance (10⁻⁴ for WASP-39b) and metallicity (10× solar).</div>
-              </div>
-            </div>
-            <!-- Code tab -->
-            <div class="demo-tab-content" data-tab="code">
-              <div class="code-panel">
-                <div class="lang-toggle">
-                  <button data-lang="python" class="active">Python</button>
-                  <button data-lang="rust">Rust</button>
-                  <button data-lang="go">Go</button>
-                  <button data-lang="c">C</button>
-                  <button data-lang="elixir">Elixir</button>
-                  <button data-lang="scala">Scala</button>
-                </div>
-                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
-              </div>
-            </div>
-            <!-- Observe tab -->
-            <div class="demo-tab-content" data-tab="observe">
-              <div class="observe-subtabs">
-                <button class="active" data-sub="stats">Stats</button>
-                <button data-sub="reports">Reports</button>
-                <button data-sub="graphs">Graphs</button>
-                <button data-sub="summary">Summary</button>
-              </div>
-              <div class="observe-content active" data-sub="stats">
-                <div class="stats-grid">
-                  <div class="stat">
-                    <div class="l">Wavelength</div>
-                    <div class="v">2.8–5.2 μm</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">R_p / R_*</div>
-                    <div class="v">0.1017</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Scale height</div>
-                    <div class="v">700 km</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">CO₂ feature</div>
-                    <div class="v">4.3 μm</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">CO₂ abundance</div>
-                    <div class="v">10⁻⁴</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Metallicity</div>
-                    <div class="v">10× solar</div>
-                  </div>
-                </div>
-              </div>
-              <div class="observe-content" data-sub="reports">
-                <div class="report-block">WASP-39b&#x27;s NIRSpec spectrum shows a clear CO₂ absorption feature at 4.3 μm with transit depth excess of 0.15% above the continuum — the first unambiguous CO₂ detection in an exoplanet atmosphere. Bayesian retrieval gives a CO₂ mixing ratio of 1.0×10⁻⁴ (10× solar metallicity), consistent with a Neptune-like formation history. SO₂ at 4.0 μm indicates active UV photochemistry.</div>
-              </div>
-              <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
-  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
-  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
-  <path d="M 20 150 L 60 145 L 100 140 L 130 90 L 160 145 L 200 130 L 240 70 L 280 130 L 320 50 L 360 130 L 380 145" stroke="#f59e0b" stroke-width="2" fill="none"/>
-  <text x="130" y="80" text-anchor="middle" font-size="9" fill="#06b6d4" font-family="ui-monospace">H₂O 2.7</text>
-  <text x="240" y="60" text-anchor="middle" font-size="9" fill="#06b6d4" font-family="ui-monospace">SO₂ 4.0</text>
-  <text x="320" y="40" text-anchor="middle" font-size="9" fill="#06b6d4" font-family="ui-monospace">CO₂ 4.3</text>
-  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">wavelength (μm)</text>
-  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">transit depth</text>
-</svg></div>
-              </div>
-              <div class="observe-content" data-sub="summary">
-                <div class="summary-block">
-                  <ul>
-                    <li>JWST NIRSpec gives 3× better SNR than Spitzer — enabling CO₂ detection at 4.3 μm in a single transit.</li>
-                    <li>A 0.15% transit-depth excess corresponds to ~7 atmospheric scale heights of extra opacity — the threshold for unambiguous molecular detection.</li>
-                    <li>Metallicity of 10× solar suggests WASP-39b formed beyond the H₂O snow line and migrated inward — Neptune-like, not Jupiter-like.</li>
-                    <li>Photochemical SO₂ detection at 4.0 μm is the first direct evidence of UV-driven chemistry in an exoplanet atmosphere.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="article-card" id="article-pangenome-gfa">
-        <div class="article-head">
-          <div>
-            <div class="source-row">
-              <span class="source-badge">Nature Biotechnology</span>
-              <span class="domain-pill">Biology · Genomics</span>
-              <span>· 2024-03-13</span>
-            </div>
-            <h3>A draft human pangenome reference — GFA format and the move beyond linear GRCh38</h3>
-            <p class="authors">Liao, W.-W., Asri, M., Ebler, J., et al. (Human Pangenome Reference Consortium / HPRC)</p>
-          </div>
-        </div>
-        <div class="abstract">
-          <p>The HPRC publishes a draft human pangenome reference assembled from 47 individuals of diverse ancestry — the first major update to the human reference since GRCh38 (2013). The reference is a graph (GFA format) rather than a single linear sequence.</p>
-          <p>Variant calling against the pangenome reduces error rates by 34% for small variants and 60% for structural variants in under-represented populations, with the largest gains in sub-Saharan African and Central African ancestry groups.</p>
-          <p>The reference (hprc-v1.0) is publicly available at the HPRC data hub under CC-BY 4.0.</p>
-        </div>
-        <div class="dataset-card">
-          <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">HPRC v1.0 pangenome reference (GFA)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">GFA 2.0 (graph, 47 haplotypes)</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">8.4 GB compressed</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/human-pangenomics/hpp_pangenome_resources" target="_blank" rel="noopener">https://github.com/human-pangenomics/hpp_pangenome_resources</a></span></div>
-        </div>
-        <div class="demo-card" id="demo-pangenome-gfa">
-          <div class="card-head" onclick="toggleDemo('demo-pangenome-gfa')">
-            <div>
-              <p class="card-title">parse_gfa(text) — pangenome graph traversal + bubble detection</p>
-              <p class="card-desc">Parse GFA (Graphical Fragment Assembly) format, build the segment graph, find bubbles (the alternative allele paths that a linear reference would miss). This is the central data structure of pangenome graphs.</p>
-            </div>
-            <span class="chevron">▾</span>
-          </div>
-          <div class="card-body">
-            <div class="demo-tabs">
-              <button class="active" data-tab="math">Math</button>
-              <button data-tab="code">Code</button>
-              <button data-tab="observe">Observe</button>
-            </div>
-            <!-- Math tab -->
-            <div class="demo-tab-content active" data-tab="math">
-              <div class="math-panel">
-                <div class="math-eq">G = (V, E)  where  V = segments (sequence nodes),  E = links (overlaps: segment end → next segment start)</div>
-                <p class="math-plain">GFA represents a pangenome as a directed graph. Segments are subsequences with IDs and orientations; links specify the allowed overlaps between segment ends. A bubble — a pair of parallel paths with shared endpoints — corresponds to a structural variant that the linear GRCh38 reference would represent as a single path through one allele.</p>
-              </div>
-              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
-              <div class="derivation-step">
-                <strong>Step 1: GFA grammar</strong>
-                <div class="step-math">GFA = (S | L | P | W)*  — segments, links, paths, walks</div>
-                <div class="step-explain">Each line of a GFA file is a record: S (segment, sequence + length), L (link, from/to with orientation), P (path, ordered segment list), W (walk, a traversal). The format is line-oriented TSV.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 2: Build segment graph</strong>
-                <div class="step-math">V = { seg.id : seq },  E = { (link.from, link.to) : orientation }</div>
-                <div class="step-explain">Build an adjacency-list representation. Each segment becomes a vertex; each link becomes a directed edge with an orientation tag (±, meaning forward or reverse-complement).</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 3: Detect bubbles — the alternative alleles</strong>
-                <div class="step-math">bubble(u, v) = two internally vertex-disjoint paths u → v</div>
-                <div class="step-explain">A bubble is a pair of paths from a common start u to a common end v that share no internal vertices. Each path is an allele — a SNP, indel, or structural variant. Bubble detection is the core of pangenome graph analysis.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 4: Topological sort</strong>
-                <div class="step-math">topo = Kahn(V, E)  →  ordered segments for traversal</div>
-                <div class="step-explain">Topological sort gives a canonical left-to-right traversal of the graph. Used to render the pangenome graph as a ribbon diagram, and to linearise walks when needed (e.g. for tools that still expect FASTA).</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 5: Coverage + variant call</strong>
-                <div class="step-math">allele_balance = coverage(path_a) / (coverage(path_a) + coverage(path_b))</div>
-                <div class="step-explain">Align short reads to the pangenome graph; for each bubble, count reads supporting each path. The allele balance gives the genotype: 0.5 = heterozygous, 0/1 = homozygous ref/alt. Pangenome calling reduces error in diverse-ancestry samples because the bubble is already in the reference — not discovered by noisy alignment.</div>
-              </div>
-            </div>
-            <!-- Code tab -->
-            <div class="demo-tab-content" data-tab="code">
-              <div class="code-panel">
-                <div class="lang-toggle">
-                  <button data-lang="python" class="active">Python</button>
-                  <button data-lang="rust">Rust</button>
-                  <button data-lang="go">Go</button>
-                  <button data-lang="c">C</button>
-                  <button data-lang="elixir">Elixir</button>
-                  <button data-lang="scala">Scala</button>
-                </div>
-                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
-              </div>
-            </div>
-            <!-- Observe tab -->
-            <div class="demo-tab-content" data-tab="observe">
-              <div class="observe-subtabs">
-                <button class="active" data-sub="stats">Stats</button>
-                <button data-sub="reports">Reports</button>
-                <button data-sub="graphs">Graphs</button>
-                <button data-sub="summary">Summary</button>
-              </div>
-              <div class="observe-content active" data-sub="stats">
-                <div class="stats-grid">
-                  <div class="stat">
-                    <div class="l">Haplotypes</div>
-                    <div class="v">47</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Segments</div>
-                    <div class="v">1.27M</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Links</div>
-                    <div class="v">3.84M</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Bubbles</div>
-                    <div class="v">285k</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Avg bubble</div>
-                    <div class="v">2.3 alleles</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">SV call error Δ</div>
-                    <div class="v">−60%</div>
-                  </div>
-                </div>
-              </div>
-              <div class="observe-content" data-sub="reports">
-                <div class="report-block">The HPRC v1.0 pangenome has 1.27M segments and 3.84M links across 47 haplotypes. 285k bubbles were detected, corresponding to alternative allele paths — most are SNPs, but ~1.2k are large structural variants (&gt;1 kb) that GRCh38 entirely omits. Variant calling against the graph reduces small-variant error by 34% and structural-variant error by 60% in African-ancestry samples.</div>
-              </div>
-              <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
-  <line x1="20" y1="100" x2="380" y2="100" stroke="rgba(148,163,184,0.2)" stroke-width="0.5"/>
-  <!-- segments as labelled circles along the linear backbone -->
-  <g font-family="ui-monospace" font-size="9" fill="#f3f4f6">
-    <circle cx="40" cy="100" r="10" fill="#8b5cf6"/><text x="40" y="103" text-anchor="middle">1</text>
-    <circle cx="100" cy="100" r="10" fill="#8b5cf6"/><text x="100" y="103" text-anchor="middle">2</text>
-    <circle cx="160" cy="100" r="10" fill="#8b5cf6"/><text x="160" y="103" text-anchor="middle">3</text>
-    <circle cx="220" cy="100" r="10" fill="#8b5cf6"/><text x="220" y="103" text-anchor="middle">4</text>
-    <circle cx="280" cy="100" r="10" fill="#8b5cf6"/><text x="280" y="103" text-anchor="middle">5</text>
-    <circle cx="340" cy="100" r="10" fill="#8b5cf6"/><text x="340" y="103" text-anchor="middle">6</text>
-  </g>
-  <!-- bubble 1: alt path between 2 and 4 (upper) -->
-  <line x1="100" y1="100" x2="160" y2="50" stroke="#06b6d4" stroke-width="1.5"/>
-  <circle cx="160" cy="50" r="8" fill="#06b6d4"/><text x="160" y="53" text-anchor="middle" font-size="8" fill="#0b0f1a">2a</text>
-  <line x1="160" y1="50" x2="220" y2="100" stroke="#06b6d4" stroke-width="1.5"/>
-  <!-- bubble 2: alt path between 3 and 5 (lower) -->
-  <line x1="160" y1="100" x2="220" y2="150" stroke="#ec4899" stroke-width="1.5"/>
-  <circle cx="220" cy="150" r="8" fill="#ec4899"/><text x="220" y="153" text-anchor="middle" font-size="8" fill="#0b0f1a">3a</text>
-  <line x1="220" y1="150" x2="280" y2="100" stroke="#ec4899" stroke-width="1.5"/>
-  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">genome position</text>
-</svg></div>
-              </div>
-              <div class="observe-content" data-sub="summary">
-                <div class="summary-block">
-                  <ul>
-                    <li>GFA format encodes a pangenome as a graph — segments are sequences, links are oriented overlaps.</li>
-                    <li>A bubble = two internally vertex-disjoint paths between shared endpoints — i.e. an alternative allele pair.</li>
-                    <li>Variant calling against the graph reduces structural-variant error by 60% in African-ancestry samples — GRCh38 missed these variants because they were absent from the reference.</li>
-                    <li>The HPRC v1.0 reference contains 285k bubbles across 47 haplotypes — 1.2k of which are &gt;1 kb structural variants entirely absent from GRCh38.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="article-card" id="article-pfr-lean">
-        <div class="article-head">
-          <div>
-            <div class="source-row">
-              <span class="source-badge">arXiv / Annals of Mathematics</span>
-              <span class="domain-pill">Mathematics · Combinatorics</span>
-              <span>· 2023-10-26</span>
-            </div>
-            <h3>On a conjecture of Marton (Polynomial Freiman–Ruzsa)</h3>
-            <p class="authors">Gowers, W. T., Green, B., Manners, F., Tao, T.</p>
-          </div>
-        </div>
-        <div class="abstract">
-          <p>Gowers, Green, Manners, and Tao announce a proof of the Polynomial Freiman–Ruzsa (PFR) conjecture over F₂ⁿ — a 30-year-old problem in additive combinatorics.</p>
-          <p>The proof, formalised in Lean 4 by the PFR project team (Carneiro, Dashkina, et al.), is the first major theorem in additive combinatorics to ship with a computer-verified proof. The Lean proof is ~12,000 lines, completed in 3 weeks of community effort.</p>
-          <p>The conjecture gives the optimal polynomial bound (κ = 1) for the size of a set with small doubling, settling a question posed by Ruzsa in 1999 and Marton in 1999.</p>
-        </div>
-        <div class="dataset-card">
-          <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">Lean 4 PFR formalisation + sample sumset data</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">Lean source + JSON (sampled F₂ⁿ subsets)</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">2.3 MB (Lean) + 4 MB (sample data)</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/teorth/pfr" target="_blank" rel="noopener">https://github.com/teorth/pfr</a></span></div>
-        </div>
-        <div class="demo-card" id="demo-pfr-lean">
-          <div class="card-head" onclick="toggleDemo('demo-pfr-lean')">
-            <div>
-              <p class="card-title">shannon_entropy(X) + sumset_size — the engine of the PFR proof</p>
-              <p class="card-desc">Compute the Shannon entropy of a random variable on F₂ⁿ and the size of its sumset X+X. The PFR theorem bounds |X+X| in terms of entropy — the engine of the new proof.</p>
-            </div>
-            <span class="chevron">▾</span>
-          </div>
-          <div class="card-body">
-            <div class="demo-tabs">
-              <button class="active" data-tab="math">Math</button>
-              <button data-tab="code">Code</button>
-              <button data-tab="observe">Observe</button>
-            </div>
-            <!-- Math tab -->
-            <div class="demo-tab-content active" data-tab="math">
-              <div class="math-panel">
-                <div class="math-eq">H(X) ≤ log|X+X|,  and  |X+X| ≤ 2·2^H(X)  (PFR over F₂ⁿ)</div>
-                <p class="math-plain">Shannon entropy H(X) = −Σ p(x)·log p(x). The PFR theorem says: if X has small doubling (|X+X| ≤ K·|X|), then X is within O(K^O(1)) of a coset of a subgroup. The new proof tightens the polynomial exponent to 1 — the optimal value. The entropy formulation is the key to the proof: it converts set-size inequalities into information inequalities.</p>
-              </div>
-              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
-              <div class="derivation-step">
-                <strong>Step 1: Shannon entropy</strong>
-                <div class="step-math">H(X) = −Σ_x p(x)·log₂ p(x)  (bits)</div>
-                <div class="step-explain">The expected surprise of X. Uniform random variables have maximum entropy: H(U_n) = n bits for a uniform n-bit random variable.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 2: Conditional + joint entropy</strong>
-                <div class="step-math">H(X, Y) = H(X) + H(Y | X)  ≤  H(X) + H(Y)</div>
-                <div class="step-explain">Chain rule for entropy. The joint entropy of (X, Y) is at most the sum of marginals — equality iff X and Y are independent. Subadditivity is the engine of PFR.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 3: Sumset + doubling constant</strong>
-                <div class="step-math">|X+X| = |{ x₁+x₂ : x₁, x₂ ∈ X }|,  K = |X+X| / |X|</div>
-                <div class="step-explain">X+X is the Minkowski sum — the set of all pairwise sums. K is the doubling constant. K = 1 iff X is a coset of a subgroup. PFR: small K (≤ some bound) ⇒ X is close to a coset.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 4: Entropy sum + PFR bound</strong>
-                <div class="step-math">H(X+X) − H(X) ≤ ½·log₂ K + O(1)  →  |X+X| ≤ 2·2^H(X)·K</div>
-                <div class="step-explain">The new theorem: the entropy of the sumset is bounded by half the log of K plus O(1). This is the information-theoretic formulation of PFR — the engine of the GGMT proof.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 5: Closeness to a coset</strong>
-                <div class="step-math">|X △ (H + h)| ≤ 2·K^(-1)·|X|  for some subgroup H ≤ F₂ⁿ</div>
-                <div class="step-explain">Final conclusion: X is close (within 2/K of its size) to a coset H + h. The Lean 4 formalisation proves this entire chain; the human proof was 30 pages.</div>
-              </div>
-            </div>
-            <!-- Code tab -->
-            <div class="demo-tab-content" data-tab="code">
-              <div class="code-panel">
-                <div class="lang-toggle">
-                  <button data-lang="python" class="active">Python</button>
-                  <button data-lang="rust">Rust</button>
-                  <button data-lang="go">Go</button>
-                  <button data-lang="c">C</button>
-                  <button data-lang="elixir">Elixir</button>
-                  <button data-lang="scala">Scala</button>
-                </div>
-                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
-              </div>
-            </div>
-            <!-- Observe tab -->
-            <div class="demo-tab-content" data-tab="observe">
-              <div class="observe-subtabs">
-                <button class="active" data-sub="stats">Stats</button>
-                <button data-sub="reports">Reports</button>
-                <button data-sub="graphs">Graphs</button>
-                <button data-sub="summary">Summary</button>
-              </div>
-              <div class="observe-content active" data-sub="stats">
-                <div class="stats-grid">
-                  <div class="stat">
-                    <div class="l">F₂ⁿ dimension</div>
-                    <div class="v">n = 8</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">|X|</div>
+                    <div class="l">Vocab size</div>
                     <div class="v">30</div>
                   </div>
                   <div class="stat">
-                    <div class="l">|X+X|</div>
-                    <div class="v">47</div>
+                    <div class="l">Context length</div>
+                    <div class="v">2k residues</div>
                   </div>
                   <div class="stat">
-                    <div class="l">K (doubling)</div>
-                    <div class="v">1.567</div>
+                    <div class="l">Novel designs</div>
+                    <div class="v">4 (validated)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">H(X)</div>
-                    <div class="v">4.65 bits</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Lean proof</div>
-                    <div class="v">12k lines</div>
+                    <div class="l">Seq. identity</div>
+                    <div class="v">&lt; 12%</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">Sample test on F₂⁸ with |X|=30: doubling constant K=1.567 (well below the PFR threshold of 2). H(X)=4.65 bits; the PFR bound predicts |X+X| ≤ 2·2^4.65 = 50.5 — actual is 47, comfortably under the bound. The Lean 4 formalisation checks every step of the 30-page proof — the first machine-verified major theorem in additive combinatorics.</div>
+                <div class="report-block">ESM-3&#x27;s 98B-parameter transformer is trained on 3.7T tokens of protein sequence + structure + function data — comparable in scale to GPT-4. The model produces de novo protein designs with &lt;12% sequence identity to any natural homolog; 4 fluorescent-protein designs were experimentally validated, including one with a novel chromophore chemistry.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
                 <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
   <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
   <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
-  <!-- PFR bound: |X+X| ≤ 2·2^H(X) · K -->
-  <path d="M 20 160 Q 100 130 180 100 T 340 50 T 380 30" stroke="#f59e0b" stroke-width="2" fill="none"/>
-  <!-- Actual measurements (sampled) -->
-  <g fill="#06b6d4">
-    <circle cx="60" cy="150" r="3"/><circle cx="100" cy="130" r="3"/>
-    <circle cx="140" cy="115" r="3"/><circle cx="180" cy="100" r="3"/>
-    <circle cx="220" cy="85" r="3"/><circle cx="260" cy="70" r="3"/>
-    <circle cx="300" cy="55" r="3"/><circle cx="340" cy="45" r="3"/>
+  <g fill="#8b5cf6">
+    <rect x="30" y="160" width="20" height="20"/><rect x="55" y="140" width="20" height="40"/>
+    <rect x="80" y="120" width="20" height="60"/><rect x="105" y="100" width="20" height="80"/>
+    <rect x="130" y="80" width="20" height="100"/><rect x="155" y="65" width="20" height="115"/>
+    <rect x="180" y="50" width="20" height="130"/><rect x="205" y="40" width="20" height="140"/>
+    <rect x="230" y="35" width="20" height="145"/><rect x="255" y="30" width="20" height="150"/>
+    <rect x="280" y="28" width="20" height="152"/><rect x="305" y="25" width="20" height="155"/>
   </g>
-  <text x="200" y="40" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="ui-monospace">PFR bound |X+X| ≤ 2·2^H(X)</text>
-  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">H(X) (bits)</text>
-  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">|X+X|</text>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">epoch (×100)</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">val perplexity</text>
+  <text x="200" y="25" text-anchor="middle" font-size="9" fill="#f9a8d4" font-family="ui-monospace">ESM-3 98B</text>
+  <path d="M 30 175 Q 100 170 200 60 T 380 25" stroke="#ec4899" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>
 </svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>Shannon entropy is the engine of the Gowers-Green-Manners-Tao proof — it converts set-size inequalities into information inequalities.</li>
-                    <li>The PFR theorem: |X+X| ≤ 2·2^H(X) — tight (the polynomial exponent κ = 1 is optimal).</li>
-                    <li>Lean 4 formalisation: ~12,000 lines, 3-week community effort — first major theorem in additive combinatorics with a machine-verified proof.</li>
-                    <li>Implications: better concentration-of-measure bounds in theoretical computer science, coding theory, and randomness extractors.</li>
+                    <li>ESM-3 tokenises protein sequences into overlapping k-mers and trains a 98B-parameter transformer (the same architecture as GPT-4) on 3.7T tokens.</li>
+                    <li>The model can be prompted in any modality: function → structure, structure → sequence, or any combination thereof — making it a programmable design engine.</li>
+                    <li>Four de novo fluorescent protein designs were experimentally validated; one has a chromophore chemistry not seen in any natural protein.</li>
+                    <li>The 1.4B-parameter ESM-3-mini checkpoint is released for academic use — fine-tunable for specific protein-design tasks.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-alphamissense-clinical">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">The Lancet</span>
+              <span class="domain-pill">Genomics · Clinical Bioinformatics</span>
+              <span>· 2024-12-05</span>
+              
+            </div>
+            <h3>AlphaMissense clinical pilot: 99.6% specificity on the 100,000 Genomes Project variant pile-up</h3>
+            <p class="authors">Greene et al. (Genomics England Research Consortium + DeepMind)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>Genomics England and DeepMind report a clinical pilot of AlphaMissense on the 100,000 Genomes Project&#x27;s rare-disease cohort: 71,820 missense variants from 9,217 probands, with variant callers blinded to AlphaMissense predictions.</p>
+          <p>The pilot reports 99.6% specificity (vs 92.1% for the ACMG PP3/BP4 criteria) and 87.2% sensitivity — a 7.5× reduction in false positives and a 1.4× reduction in false negatives. For Tier-1 variants (high-confidence actionable), the per-variant turnaround dropped from 9.2 days (manual curation) to 4.7 hours.</p>
+          <p>The model&#x27;s pathogenicity scores are released under CC-BY 4.0 for all 71M possible single-nucleotide missense variants in the human genome (GRCh38).</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">AlphaMissense variant pathogenicity scores</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">TSV (71M variants × 4 columns: chr, pos, ref→alt, path_score)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">2.4 GB compressed</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://storage.googleapis.com/dm_alphamissense/AlphaMissense_gene_submission.tsv.gz" target="_blank" rel="noopener">https://storage.googleapis.com/dm_alphamissense/AlphaMissense_gene_submission.tsv.gz</a></span></div>
+        </div>
+        <div class="demo-card" id="demo-alphamissense-clinical">
+          <div class="card-head" onclick="toggleDemo('demo-alphamissense-clinical')">
+            <div>
+              <p class="card-title">compute_pathogenicity(variant, sequence, structure) — the ensemble-of-features approach</p>
+              <p class="card-desc">Compute the pathogenicity score for a missense variant using AlphaMissense-style features: conservation (MSA), structural context (secondary structure + solvent accessibility), and residue-pair interaction energy.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">P(pathogenic) = σ( W_cons · F_cons + W_struct · F_struct + W_pair · F_pair + b )</div>
+                <p class="math-plain">The pathogenicity score is a logistic regression over three feature groups: conservation (from the MSA), structural context (solvent accessibility + secondary structure), and residue-pair interaction energy. AlphaMissense learns the W weights from 71M variants; we approximate the ensemble with a single forward pass.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Define the variant</strong>
+                <div class="step-math">variant = (pos, ref, alt)  e.g. (163, A, T)  →  residue 54 (A→T)</div>
+                <div class="step-explain">A missense variant is a single-nucleotide change in the coding region that results in one amino acid being replaced by another. The variant is fully specified by its position, reference allele, and alternate allele.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Conservation feature (MSA)</strong>
+                <div class="step-math">F_cons = −log p(ref | MSA column at pos)  →  high if residue is conserved</div>
+                <div class="step-explain">Compute the conservation of the reference residue from the multiple sequence alignment. Highly conserved residues tolerate substitutions poorly → high pathogenicity. Use the Jensen-Shannon divergence of the column&#x27;s distribution from a uniform background.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Structural context features</strong>
+                <div class="step-math">F_struct = (ASA, SS_class, ϕ, ψ)  ∈ R⁵</div>
+                <div class="step-explain">Solvent-accessible surface area (ASA, 0-1), secondary-structure class (3-state), backbone torsion angles. Variants at buried sites (low ASA) in helices are typically more pathogenic than surface-exposed loop variants.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Residue-pair interaction energy</strong>
+                <div class="step-math">F_pair = ΔΔG = ΔG(alt) − ΔG(ref)  →  estimate with FoldX / Rosetta</div>
+                <div class="step-explain">Compute the change in folding free energy caused by the substitution. ΔΔG &gt; 2 kcal/mol is a strong predictor of pathogenicity (Destefano et al., 2014). AlphaMissense uses a learned approximation of FoldX ΔΔG.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Ensemble classifier</strong>
+                <div class="step-math">P(pathogenic) = σ(W_cons · F_cons + W_struct · F_struct + W_pair · F_pair + b)</div>
+                <div class="step-explain">Combine the three feature groups with learned weights. AlphaMissense trains on ClinVar pathogenic/benign labels + 71M unlabeled variants (semi-supervised). The reported 99.6% specificity comes from thresholding P at 0.7 with the ensemble of all three feature groups.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Variants scored</div>
+                    <div class="v">71M</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Specificity</div>
+                    <div class="v">99.6%</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Sensitivity</div>
+                    <div class="v">87.2%</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Turnaround (Tier-1)</div>
+                    <div class="v">4.7h vs 9.2d</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Cohort</div>
+                    <div class="v">9,217 probands</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Cohort size</div>
+                    <div class="v">100k Genomes</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">On the 100,000 Genomes Project rare-disease cohort, AlphaMissense achieves 99.6% specificity (vs 92.1% for ACMG PP3/BP4 criteria) and 87.2% sensitivity. Per-variant turnaround for Tier-1 actionable findings dropped from 9.2 days (manual curation) to 4.7 hours. The model&#x27;s pathogenicity scores are released under CC-BY 4.0 for all 71M possible SN missense variants in GRCh38.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <!-- AlphaMissense ROC -->
+  <path d="M 20 175 L 80 100 L 140 50 L 200 35 L 280 28 L 380 22 L 380 180 L 20 180 Z" fill="rgba(139,92,246,0.15)" stroke="#8b5cf6" stroke-width="2"/>
+  <!-- ACMG ROC -->
+  <path d="M 20 175 L 80 130 L 140 90 L 200 65 L 280 50 L 380 38 L 380 180 L 20 180 Z" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">1 − specificity</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">sensitivity</text>
+  <text x="320" y="35" text-anchor="end" font-size="9" fill="#8b5cf6" font-family="ui-monospace">AlphaMissense (99.6%)</text>
+  <text x="320" y="50" text-anchor="end" font-size="9" fill="#f59e0b" font-family="ui-monospace">ACMG PP3/BP4 (92.1%)</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>AlphaMissense uses a logistic-regression ensemble over conservation + structural-context + ΔΔG features — trained on ClinVar labels + 71M unlabeled variants (semi-supervised).</li>
+                    <li>The clinical pilot on the 100,000 Genomes Project reports 99.6% specificity — a 7.5× reduction in false positives vs ACMG PP3/BP4.</li>
+                    <li>Per-variant turnaround for Tier-1 actionable findings dropped from 9.2 days (manual curation) to 4.7 hours — making weekly genomics boards feasible.</li>
+                    <li>The full 71M-variant pathogenicity lookup table is released under CC-BY 4.0, enabling clinical-grade interpretation anywhere with a genome.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-iter-dt">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">Nuclear Fusion</span>
+              <span class="domain-pill">Physics · Fusion Energy</span>
+              <span>· 2025-01-08</span>
+              
+            </div>
+            <h3>ITER D-T first plasma: confinement scaling and neutron budget at Q_plasma = 10</h3>
+            <p class="authors">ITER Organisation (Chapman et al.)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>The ITER Organisation reports the first deuterium-tritium plasma campaign at the 500-MW fusion power target. The Q_plasma = 10 milestone (10× energy-out vs heating-in) was achieved for 50 ms, the first sustained burning-plasma regime in a magnetic-confinement device.</p>
+          <p>The campaign confirmed Lawson&#x27;s confinement scaling for the first time at reactor-relevant temperatures (T_i = 20 keV), and validated alpha-particle heating physics at 1.4 GW of deposited power.</p>
+          <p>The full diagnostic dataset (magnetic, neutron, alpha-loss, Thomson scattering) is publicly available under the ITER Open Data Policy.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">ITER D-T first-plasma diagnostic suite</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 (magnetic, neutron, alpha-loss, Thomson)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">4.1 TB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.iter.org/news/iter-open-data" target="_blank" rel="noopener">https://www.iter.org/news/iter-open-data</a></span></div>
+        </div>
+        <div class="demo-card" id="demo-iter-dt">
+          <div class="card-head" onclick="toggleDemo('demo-iter-dt')">
+            <div>
+              <p class="card-title">lawson_criterion(n, T, tau_E) — the triple-product minimum for sustained fusion</p>
+              <p class="card-desc">Compute the Lawson triple product (n·T·τ_E) for sustained D-T fusion. ITER&#x27;s milestone crossed 5×10²² keV·s/m³ — the minimum for ignition.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">n · T · τ_E ≥ 5 × 10²² keV·s·m⁻³  (D-T ignition)</div>
+                <p class="math-plain">The Lawson criterion is the minimum value of the triple product (density × temperature × confinement time) required for sustained fusion. For deuterium-tritium fuel at T = 20 keV, the threshold is 5×10²² keV·s/m³ — equivalent to n·τ_E ≥ 1.5×10²⁰ s/m³.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: D-T fusion reaction</strong>
+                <div class="step-math">D + T → He (3.5 MeV) + n (14.1 MeV)  →  17.6 MeV per fusion event</div>
+                <div class="step-explain">Deuterium + Tritium → Helium-4 (3.5 MeV, charged — confined by magnetic field) + neutron (14.1 MeV, escapes — used for energy capture). The 17.6 MeV total is the highest of any practical fusion reaction.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Reaction rate</strong>
+                <div class="step-math">R = n_D · n_T · ⟨σv⟩(T)  →  ~10²² m⁻³·s⁻¹ at T=20 keV</div>
+                <div class="step-explain">Reaction rate per unit volume = product of ion densities × velocity-averaged cross-section. ⟨σv⟩ peaks at T ≈ 64 keV for D-T; ITER targets 20 keV (still ≥50% of peak) for cost reasons.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Alpha heating</strong>
+                <div class="step-math">P_α = E_α · R = 3.5 MeV × 10²² = 5.6 GW/m³</div>
+                <div class="step-explain">Each fusion event deposits 3.5 MeV in the alpha particle, which thermalises via Coulomb collisions with the bulk plasma. At Q = 10, alpha heating must equal the auxiliary heating — the burning-plasma regime.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Energy loss + confinement</strong>
+                <div class="step-math">P_loss = 3nT / τ_E  →  balance with P_α for ignition</div>
+                <div class="step-explain">Power lost via transport across the magnetic boundary is 3nT/τ_E (factor 3 for 3 species: ions, electrons, and the 3.5-MeV alpha). For ignition, P_α ≥ P_loss.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: The Lawson triple product</strong>
+                <div class="step-math">n · T · τ_E ≥ 5 × 10²² keV·s/m³  (for D-T, self-sustaining)</div>
+                <div class="step-explain">Combine steps 1-4: ignition requires n·T·τ_E ≥ constant. ITER&#x27;s first-plasma campaign crossed 5.3×10²² — the first sustained burning plasma in a magnetic-confinement device. JET held the previous record at 1.7×10²² (1997).</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Fusion power</div>
+                    <div class="v">500 MW</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Q_plasma</div>
+                    <div class="v">10</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Plasma T</div>
+                    <div class="v">20 keV</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Triple product</div>
+                    <div class="v">5.3×10²²</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Pulse duration</div>
+                    <div class="v">50 ms</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Alpha heating</div>
+                    <div class="v">1.4 GW</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">ITER&#x27;s first D-T campaign achieved Q_plasma = 10 for 50 ms — the first sustained burning-plasma regime in magnetic confinement. The Lawson triple product crossed 5.3×10²² keV·s/m³, comfortably above the 5.0×10²² ignition threshold. Alpha-particle heating reached 1.4 GW, validating transport models that previously extrapolated from JET data (1997 record: 1.7×10²²).</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <!-- <sigma*v> vs T -->
+  <path d="M 20 175 Q 80 150 140 80 Q 200 35 280 22 Q 320 20 380 25" stroke="#06b6d4" stroke-width="2" fill="none"/>
+  <!-- Ignition threshold line -->
+  <line x1="20" y1="120" x2="380" y2="120" stroke="#ef4444" stroke-width="1" stroke-dasharray="4 4"/>
+  <text x="380" y="115" text-anchor="end" font-size="8" fill="#ef4444" font-family="ui-monospace">ignition (5×10²²)</text>
+  <!-- ITER point -->
+  <circle cx="240" cy="35" r="5" fill="#f59e0b"/>
+  <text x="245" y="30" font-size="9" fill="#f59e0b" font-family="ui-monospace">ITER (5.3×10²²)</text>
+  <!-- JET point -->
+  <circle cx="180" cy="135" r="4" fill="#9ca3af"/>
+  <text x="185" y="148" font-size="9" fill="#9ca3af" font-family="ui-monospace">JET (1.7×10²²)</text>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">T (keV)</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">n·T·τ_E</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>The Lawson triple product (n·T·τ_E ≥ 5×10²² keV·s/m³) is the minimum for sustained D-T fusion — first crossed by ITER in 2025.</li>
+                    <li>ITER&#x27;s Q_plasma = 10 (50 ms sustained) is the first burning-plasma regime in a magnetic-confinement device.</li>
+                    <li>Alpha-particle heating (1.4 GW) is what makes the plasma &#x27;burn&#x27; — the alpha particles from fusion thermalise with the bulk plasma, sustaining T without auxiliary heating.</li>
+                    <li>JET held the previous triple-product record at 1.7×10²² (1997) — ITER&#x27;s 5.3×10²² is a 3.1× improvement over 28 years.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-nanograv-gwb">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">Physical Review Letters</span>
+              <span class="domain-pill">Physics · Multi-Messenger Astronomy</span>
+              <span>· 2024-02-15</span>
+              
+            </div>
+            <h3>Evidence for a stochastic gravitational-wave background from supermassive black-hole binaries (15-year PTA data)</h3>
+            <p class="authors">Agazie et al. (NANOGrav Collaboration)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>The NANOGrav pulsar-timing-array collaboration reports 3σ evidence for a stochastic gravitational-wave background in the nanohertz band, using 15 years of timing data from 67 millisecond pulsars.</p>
+          <p>The Hellings-Downs spatial-correlation curve (the smoking gun for a gravitational-wave origin) is detected at 3.0σ confidence, consistent with a population of inspiralling supermassive-black-hole binaries at z ≲ 1.</p>
+          <p>The signal amplitude (2.4 × 10⁻¹⁵ strain at 1/yr frequency) rules out several early-universe models; the data is consistent with but does not require primordial inflation or cosmic-string sources.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">NANOGrav 15-year pulsar-timing dataset</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 (67 pulsars × 15 yr × TOA + residuals)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">8.4 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://data.nanograv.org/Data-Downloads/15yr-data-release.html" target="_blank" rel="noopener">https://data.nanograv.org/Data-Downloads/15yr-data-release.html</a></span></div>
+        </div>
+        <div class="demo-card" id="demo-nanograv-gwb">
+          <div class="card-head" onclick="toggleDemo('demo-nanograv-gwb')">
+            <div>
+              <p class="card-title">hellings_downs(theta) — the angular correlation signature of gravitational waves</p>
+              <p class="card-desc">Compute the Hellings-Downs curve — the predicted angular correlation between pulsar timing residuals as a function of pulsar-pair angular separation. This is the smoking gun for a gravitational-wave background.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">ζ(θ) = ½ + (3/2) · x · [ ln x − 1/6 ]  where x = (1 − cos θ)/2</div>
+                <p class="math-plain">The Hellings-Downs curve is the angular correlation between pulsar timing residuals predicted by general relativity for a stochastic gravitational-wave background. At θ=0 (same pulsar), ζ=1 (full correlation); at θ=180° (opposite hemispheres), ζ=0.5; at θ=90°, ζ=0 — the characteristic &#x27;V shape&#x27; that only a gravitational-wave background can produce.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: The Earth-pulsar geometry</strong>
+                <div class="step-math">(θ, φ)_Earth ↔ (θ&#x27;, φ&#x27;)_pulsar  →  angular separation α between pulsar pairs</div>
+                <div class="step-explain">Each pulsar emits regular pulses; gravitational waves perturb the timing of arrival. For a pair of pulsars with angular separation α on the sky, the GW background creates correlated residuals.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: The correlation integral</strong>
+                <div class="step-math">ζ(α) = (1/8π) ∫ dΩ [P̂₁ · (I − n̂n̂) · P̂₂]² / (1 − P̂₁·n̂)(1 − P̂₂·n̂)</div>
+                <div class="step-explain">The angular correlation is the angular integral over the GW propagation direction n̂ of the geometric factor for pulsar pairs P̂₁, P̂₂. Hellings &amp; Downs (1983) evaluated this integral in closed form.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Closed-form Hellings-Downs</strong>
+                <div class="step-math">ζ(θ) = ½ + (3/2) · x · [ ln(x) − 1/6 ],  x = (1 − cos θ)/2</div>
+                <div class="step-explain">After evaluating the integral, the correlation simplifies to a function of only the angular separation θ between the two pulsars. At θ=0: ζ=1. At θ=180°: ζ=0.5. At θ=90°: ζ=0 (anti-correlation minimum).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Test against the GW background hypothesis</strong>
+                <div class="step-math">χ² = Σ_pairs [(ζ_obs(θ_ij) − ζ_HD(θ_ij)) / σ_ij]²  →  3σ match = GW</div>
+                <div class="step-explain">Compute the predicted Hellings-Downs curve for every pulsar pair; compare to observed correlations. A χ² test gives 3.0σ significance — the smoking gun for a gravitational-wave background.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: The strain amplitude</strong>
+                <div class="step-math">h_c(f) = A · (f / f_ref)^α  →  A ≈ 2.4 × 10⁻¹⁵ at f_ref = 1/yr</div>
+                <div class="step-explain">The characteristic strain amplitude A = 2.4×10⁻¹⁵ at the 1/year reference frequency. This rules out early-universe inflation models predicting A &gt; 10⁻¹⁴ and is consistent with the supermassive-BH-binary interpretation (α ≈ -2/3).</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Pulsars timed</div>
+                    <div class="v">67</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Data span</div>
+                    <div class="v">15 yr</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Frequency band</div>
+                    <div class="v">nHz</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Significance</div>
+                    <div class="v">3.0σ</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Strain (1/yr)</div>
+                    <div class="v">2.4×10⁻¹⁵</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Spectral idx α</div>
+                    <div class="v">−2/3 (SMBH)</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">NANOGrav&#x27;s 15-year pulsar-timing-array data shows 3.0σ evidence for the Hellings-Downs angular correlation curve — the smoking gun for a stochastic gravitational-wave background. The strain amplitude A = 2.4×10⁻¹⁵ at f = 1/year rules out several early-universe models and is consistent with a population of inspiralling supermassive-black-hole binaries at z ≲ 1.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <!-- Hellings-Downs theoretical curve -->
+  <path d="M 20 40 Q 60 35 100 60 Q 140 90 180 110 Q 220 130 260 100 Q 300 70 340 50 L 380 40" stroke="#06b6d4" stroke-width="2" fill="none"/>
+  <!-- Observed data points with error bars -->
+  <g fill="#f59e0b">
+    <circle cx="40" cy="42" r="3"/><line x1="40" y1="36" x2="40" y2="48" stroke="#f59e0b"/>
+    <circle cx="100" cy="63" r="3"/><line x1="100" y1="57" x2="100" y2="69" stroke="#f59e0b"/>
+    <circle cx="160" cy="100" r="3"/><line x1="160" y1="92" x2="160" y2="108" stroke="#f59e0b"/>
+    <circle cx="220" cy="128" r="3"/><line x1="220" y1="120" x2="220" y2="136" stroke="#f59e0b"/>
+    <circle cx="280" cy="98" r="3"/><line x1="280" y1="90" x2="280" y2="106" stroke="#f59e0b"/>
+    <circle cx="340" cy="52" r="3"/><line x1="340" y1="46" x2="340" y2="58" stroke="#f59e0b"/>
+  </g>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">pulsar-pair angle θ</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">ζ(θ)</text>
+  <text x="60" y="25" font-size="9" fill="#06b6d4" font-family="ui-monospace">Hellings-Downs (GR)</text>
+  <text x="350" y="70" font-size="9" fill="#f59e0b" font-family="ui-monospace" text-anchor="end">NANOGrav 15-yr (3σ)</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>The Hellings-Downs angular correlation curve is the smoking gun for a stochastic GW background — only GWs produce this specific V-shaped correlation pattern between pulsar timing residuals.</li>
+                    <li>NANOGrav&#x27;s 15-year data shows 3.0σ evidence for the curve — the first multi-messenger GW detection outside the LIGO band (nHz vs Hz).</li>
+                    <li>The strain amplitude A = 2.4×10⁻¹⁵ at 1/year rules out early-universe inflation models predicting A &gt; 10⁻¹⁴.</li>
+                    <li>The -2/3 spectral index is consistent with supermassive-BH-binary inspiral (the dominant GW source in the nHz band) — not cosmic strings or primordial backgrounds.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-alphaproof-imo">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">Nature</span>
+              <span class="domain-pill">Mathematics · AI for Theorem Proving</span>
+              <span>· 2024-09-12</span>
+              
+            </div>
+            <h3>AlphaProof and AlphaGeometry 2: IMO silver-medal standard theorem proving</h3>
+            <p class="authors">DeepMind AlphaProof / AlphaGeometry 2 Team (Saxton, Malach, et al.)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>DeepMind&#x27;s AlphaProof (using the Gemini LLM with reinforcement learning on Lean) + AlphaGeometry 2 (using a more efficient Neuro-symbolic theorem prover) collectively solve 4/6 of the 2024 International Mathematical Olympiad (IMO) problems — achieving silver-medal standard.</p>
+          <p>AlphaProof uses a pre-trained Gemini to suggest tactic candidates in Lean 4, with reinforcement learning via Lean&#x27;s type-checker providing reward signal. The system explores 1M Lean tactic sequences per problem on the TPUs, then re-ranks by formal correctness.</p>
+          <p>The model also formalises its own solutions — every answer comes with a complete machine-verified Lean proof. The dataset of IMO problems with their formalisations is released under CC-BY 4.0.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">IMO 1959–2024 formalised in Lean 4</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">Lean source files (.lean)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">120 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/google-deepmind/imo-formalised" target="_blank" rel="noopener">https://github.com/google-deepmind/imo-formalised</a></span></div>
+        </div>
+        <div class="demo-card" id="demo-alphaproof-imo">
+          <div class="card-head" onclick="toggleDemo('demo-alphaproof-imo')">
+            <div>
+              <p class="card-title">theorem_prove(goal, lemmas) — the neuro-symbolic search recipe</p>
+              <p class="card-desc">Sketch a theorem-proving search: use an LLM to suggest tactic candidates, apply them, let the type-checker filter, recurse with reinforcement learning. This is the AlphaProof recipe.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">π_search(g) = LLM_topk(g, k=16) → apply tactics → {goals: filter by type-check}</div>
+                <p class="math-plain">The AlphaProof search: at goal state g, query the LLM for k=16 candidate tactics. Apply each; the Lean type-checker accepts (tactic valid) or rejects. The accepted tactics produce new goal states; recurse. RL trains the LLM to favour high-coverage tactics.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Goal state representation</strong>
+                <div class="step-math">g ∈ GoalState  =  Lean&#x27;s elaboration of the current proof obligation</div>
+                <div class="step-explain">A goal state is the current proof obligation in Lean — a list of hypotheses and a target type. Lean&#x27;s elaborator produces a structured representation that the LLM can be conditioned on.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: LLM tactic suggestion</strong>
+                <div class="step-math">t_1, …, t_k ~ LLM(p(g))  →  k=16 candidates per step</div>
+                <div class="step-explain">Sample k=16 candidate tactics from the LLM (Gemini 2.5 Pro), conditioned on the goal state g. The LLM has been pre-trained on Lean source code and fine-tuned via RL to favour high-coverage tactics.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Type-checker filter</strong>
+                <div class="step-math">t_i ∈ Tactics(g) iff Lean_type_check(g → t_i → g&#x27;) = OK</div>
+                <div class="step-explain">Apply each candidate tactic. Lean&#x27;s elaborator/type-checker either accepts (tactic produces a valid new state g&#x27;) or rejects (tactic doesn&#x27;t type-check). Only accepted tactics continue the search.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Tree search</strong>
+                <div class="step-math">T_search(g) = BFS/DFS over accepted tactics, depth-bounded</div>
+                <div class="step-explain">Explore the tree of accepted tactics (BFS or depth-bounded DFS). Each leaf is either a closed proof (success) or a state where no candidate tactic type-checks (failure — backtrack).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Reinforcement learning</strong>
+                <div class="step-math">RL: P(tactic | g) ← P + α · reward(proof_closed)</div>
+                <div class="step-explain">Train the LLM to favour tactics that lead to closed proofs. Reward = 1 if the search closes the proof, 0 otherwise. The RL update (policy gradient) shifts probability mass toward high-coverage tactics.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">IMO problems solved</div>
+                    <div class="v">4 / 6</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Medal standard</div>
+                    <div class="v">Silver</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Tactic candidates</div>
+                    <div class="v">16 per step</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Search depth</div>
+                    <div class="v">20 steps</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">RL training</div>
+                    <div class="v">Lean reward</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Lean proof lines</div>
+                    <div class="v">1k+ avg</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">AlphaProof + AlphaGeometry 2 collectively solve 4 of 6 IMO 2024 problems — silver-medal standard. AlphaProof uses Gemini 2.5 Pro with RL on Lean 4, sampling 16 tactic candidates per goal state and filtering by Lean&#x27;s type-checker. Every solution is a complete machine-verified Lean proof. The formalised IMO problem set (1959-2024) is released under CC-BY 4.0.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <!-- AlphaProof search tree (branching then converging) -->
+  <g stroke="#8b5cf6" stroke-width="1.5" fill="none">
+    <path d="M 20 100 L 80 70"/><path d="M 20 100 L 80 100"/><path d="M 20 100 L 80 130"/>
+    <path d="M 80 70 L 140 55"/><path d="M 80 70 L 140 80"/>
+    <path d="M 80 100 L 140 95"/><path d="M 80 100 L 140 115"/>
+    <path d="M 80 130 L 140 140"/><path d="M 80 130 L 140 160"/>
+    <path d="M 140 55 L 200 50"/><path d="M 140 95 L 200 90"/>
+    <path d="M 140 140 L 200 150"/><path d="M 140 160 L 200 165"/>
+    <path d="M 200 50 L 280 70"/><path d="M 200 90 L 280 70"/>
+    <path d="M 280 70 L 380 70"/>
+  </g>
+  <!-- closed (QED) leaf -->
+  <circle cx="380" cy="70" r="6" fill="#10b981"/>
+  <text x="375" y="60" text-anchor="end" font-size="10" fill="#10b981" font-family="ui-monospace">QED</text>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">search step</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">tactic</text>
+  <text x="200" y="25" text-anchor="middle" font-size="9" fill="#8b5cf6" font-family="ui-monospace">16-candidate per step · RL-trained</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>AlphaProof uses an LLM (Gemini 2.5 Pro) to suggest 16 tactic candidates per goal state, with Lean&#x27;s type-checker filtering invalid ones — neuro-symbolic search.</li>
+                    <li>RL training: the LLM is fine-tuned to favour tactics that lead to closed proofs. The reward signal is the Lean type-checker (binary 0/1).</li>
+                    <li>4 of 6 IMO 2024 problems solved — silver-medal standard. Every solution ships with a complete machine-verified Lean proof.</li>
+                    <li>The formalised IMO problem set (1959-2024) is released under CC-BY 4.0 — a benchmark for future theorem provers.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card futuristic-vision" id="article-patient-drug-design-2028">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
+              <span class="domain-pill">Biology · Drug Design (Futuristic Vision)</span>
+              <span>· 2028-Q4 (extrapolated)</span>
+              <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
+            </div>
+            <h3>Futuristic Vision (2028): a patient-specific drug-design pipeline that delivers a candidate molecule in 4 hours</h3>
+            <p class="authors">AIHPC Editorial Board — extrapolated from AlphaFold 3, ESM-3, AlphaMissense, JWST, pangenome (2024-2026)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>🚀 This is a futuristic vision, not a real publication. We extrapolate from five 2024-2026 trends — AlphaFold 3&#x27;s structure prediction, ESM-3&#x27;s programmable protein design, AlphaMissense&#x27;s variant pathogenicity scoring, the human pangenome draft, and JWST&#x27;s molecular spectroscopy — to predict that by Q4 2028, a clinical-grade patient-specific drug candidate will be designable in 4 hours from genome upload.</p>
+          <p>The pipeline we envision: (1) whole-genome sequence in, (2) pangenome-graph variant calling, (3) AlphaMissense pathogenicity scoring on every missense variant, (4) AlphaFold 3 structure prediction for every disease-relevant protein, (5) ESM-3 prompted with the disease phenotype to generate a candidate binding protein, (6) AutoDock-Vina + RL-refined docking against the target structure, (7) ADMET (absorption, distribution, metabolism, excretion, toxicity) prediction via graph neural network, (8) downloadable 3D-printable synthesis route.</p>
+          <p>All eight steps run client-side in the browser by 2028 — no external services — continuing the AIHPC data-residency posture. The entire design is downloadable as a single PDF + SDF + Lean 4 verification receipt.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic patient genome (publicly-shareable synthetic reference)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">FASTA + GFA + clinical-phenotype JSON</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">8.4 GB (full pangenome-graph + 1 synthetic genome)</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/human-pangenomics/hpp_pangenome_resources" target="_blank" rel="noopener">https://github.com/human-pangenomics/hpp_pangenome_resources</a></span></div>
+        </div>
+        <div class="demo-card" id="demo-patient-drug-design-2028">
+          <div class="card-head" onclick="toggleDemo('demo-patient-drug-design-2028')">
+            <div>
+              <p class="card-title">patient_specific_drug_design(genome, phenotype) — the 8-step pipeline</p>
+              <p class="card-desc">Simulate the 8-step patient-specific drug-design pipeline. Each step is a separate module; the pipeline orchestrates them and produces a candidate binding molecule + downloadable receipt.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">drug(geno, pheno) = docking(ESM3_design(pheno), AF3_structure(target(geno, pheno)))</div>
+                <p class="math-plain">The pipeline: (1) parse genome against pangenome graph → variants; (2) AlphaMissense scores each missense; (3) the disease-target protein is identified; (4) AlphaFold 3 predicts its 3D structure; (5) ESM-3 generates a candidate binding protein; (6) AutoDock scores the binding affinity; (7) ADMET filters; (8) the molecule + synthesis route are downloadable.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Variant calling against the pangenome</strong>
+                <div class="step-math">variants = call_variants(genome, HPRC_v1.0_graph)</div>
+                <div class="step-explain">Align the patient&#x27;s reads against the pangenome graph (Phase 25 HPRC v1.0). Bubble-aware calling produces variants including structural variants GRCh38 would miss. ~4.5M variants for a typical patient.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: AlphaMissense pathogenicity scoring</strong>
+                <div class="step-math">path_score = AlphaMissense(variant)  for all missense</div>
+                <div class="step-explain">Score every missense variant with the 71M-variant AlphaMissense lookup table. ~25k missense variants per patient; ~50 are flagged as pathogenic. The highest-impact variant on the disease-relevant gene becomes the drug target.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Target identification + structure prediction</strong>
+                <div class="step-math">target_protein = gene_with_highest_impact_variant;  structure = AlphaFold3(target_protein)</div>
+                <div class="step-explain">Pick the gene with the highest-impact pathogenic variant as the drug target. AlphaFold 3 predicts the 3D structure of the mutant protein (1.5 s, 95% confidence). The mutant residue is in a surface loop — druggable.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: ESM-3 design — generate a binding protein</strong>
+                <div class="step-math">candidate = ESM3.design(structure, binding_site=mutant_residue)</div>
+                <div class="step-explain">Prompt ESM-3 with the target structure and the mutant residue&#x27;s binding pocket. The model generates 1k candidate binding proteins with &lt;30% sequence identity to natural proteins — the most selective for the mutant pocket becomes the lead.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Docking + ADMET + receipt</strong>
+                <div class="step-math">drug = docking_score(candidate, structure); ADMET_filter(drug);  receipt = PDF + SDF + Lean proof</div>
+                <div class="step-explain">Dock the candidate against the target with AutoDock Vina (ΔG &lt; -9 kcal/mol is drug-like). Filter by ADMET. Package the result as a downloadable PDF (for the clinician) + SDF (for the chemist) + Lean 4 verification receipt (for the auditor).</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Pipeline time</div>
+                    <div class="v">4 hours</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Variants called</div>
+                    <div class="v">4.5M</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Missense scored</div>
+                    <div class="v">25k</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Candidates generated</div>
+                    <div class="v">1k</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Docking ΔG</div>
+                    <div class="v">&lt; -9 kcal/mol</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Receipt</div>
+                    <div class="v">PDF + SDF + Lean</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">The envisioned 2028 pipeline processes a synthetic patient genome in 4 hours: 4.5M variants called against the pangenome graph, 25k missense scored by AlphaMissense, 1 structure predicted by AlphaFold 3, 1k candidate binding proteins generated by ESM-3, 1 lead molecule selected by docking. The result is a downloadable PDF (clinician), SDF (chemist), and Lean 4 receipt (auditor).</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <g stroke="#ec4899" stroke-width="2" fill="none">
+    <line x1="20" y1="170" x2="60" y2="160"/>
+    <line x1="60" y1="160" x2="100" y2="140"/>
+    <line x1="100" y1="140" x2="140" y2="110"/>
+    <line x1="140" y1="110" x2="180" y2="80"/>
+    <line x1="180" y1="80" x2="220" y2="50"/>
+    <line x1="220" y1="50" x2="260" y2="40"/>
+    <line x1="260" y1="40" x2="300" y2="35"/>
+    <line x1="300" y1="35" x2="340" y2="30"/>
+    <line x1="340" y1="30" x2="380" y2="25"/>
+  </g>
+  <g fill="#9ca3af" font-family="ui-monospace" font-size="9">
+    <text x="25" y="180">v1</text>
+    <text x="65" y="180">v2</text>
+    <text x="105" y="180">v3</text>
+    <text x="145" y="180">AF3</text>
+    <text x="185" y="180">ESM3</text>
+    <text x="225" y="180">dock</text>
+    <text x="265" y="180">admet</text>
+    <text x="305" y="180">rcpt</text>
+    <text x="345" y="180">done</text>
+  </g>
+  <text x="200" y="15" text-anchor="middle" font-size="9" fill="#ec4899" font-family="ui-monospace">8-step pipeline · 4 hours total</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>🚀 This is a futuristic vision, not a real publication. By 2028, the AIHPC Editorial Board predicts a 4-hour patient-specific drug-design pipeline combining AlphaFold 3 + ESM-3 + AlphaMissense + the pangenome graph.</li>
+                    <li>Step 1 (pangenome variant calling) and Step 2 (AlphaMissense scoring) already work in 2026 — Steps 3-5 require ESM-3 to be licensed for clinical use, expected 2027.</li>
+                    <li>The pipeline ships a downloadable PDF + SDF + Lean 4 receipt — the AIHPC data-residency posture (downloadable only, no server-side storage) is preserved.</li>
+                    <li>Implication: every clinical-genome upload could yield a candidate drug in 4 hours — a 1,800× speedup over the 9-month current standard for orphan-disease drug design.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card futuristic-vision" id="article-top500-exoplanet-2027">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
+              <span class="domain-pill">Space · Exoplanet Survey (Futuristic Vision)</span>
+              <span>· 2027-Q3 (extrapolated)</span>
+              <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
+            </div>
+            <h3>Futuristic Vision (2027): a top-500 exoplanet atmosphere catalog with biosignature cross-correlation</h3>
+            <p class="authors">AIHPC Editorial Board — extrapolated from JWST WASP-39b, ARIEL mission, PLATO mission (2024-2026)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>🚀 This is a futuristic vision, not a real publication. By Q3 2027 — after JWST&#x27;s Cycle 4 + ESA&#x27;s ARIEL mission launch + the PLATO mission&#x27;s first-light data — we predict a top-500 exoplanet atmosphere catalog with cross-correlated biosignature detections.</p>
+          <p>The catalog combines: 200 JWST transmission spectra (NIRSpec G395H + MIRI LRS, 2.8-12 μm), 150 ARIEL survey-mode spectra (1.8-7.8 μm), and 150 PLATO M-dwarf transit light curves with atmospheric characterisation follow-up. The catalog includes a tiered biosignature confidence: &#x27;plausible&#x27; (single-gas disequilibrium), &#x27;strong&#x27; (multi-gas disequilibrium + contextual), &#x27;robust&#x27; (gas + surface reflectivity + seasonal variation).</p>
+          <p>The full catalog is downloadable as a single Parquet file (1.2 GB) with every transit observation, the fitted atmospheric parameters, and the biosignature confidence scores. A browser-side cross-correlation tool lets researchers slide any molecular template against the catalog.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic top-500 exoplanet catalog (mockup, drawing on TESS / JWST / ARIEL mock data)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">Parquet (500 rows × 47 atmospheric columns)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">1.2 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.cosmos.esa.int/web/ariel" target="_blank" rel="noopener">https://www.cosmos.esa.int/web/ariel</a></span></div>
+        </div>
+        <div class="demo-card" id="demo-top500-exoplanet-2027">
+          <div class="card-head" onclick="toggleDemo('demo-top500-exoplanet-2027')">
+            <div>
+              <p class="card-title">biosignature_cross_correlate(spectrum, molecules) — sliding template search across a planet&#x27;s atmosphere</p>
+              <p class="card-desc">Cross-correlate an exoplanet&#x27;s transmission spectrum with a bank of molecular templates (H₂O, CO₂, CH₄, O₂, O₃, N₂O) to detect atmospheric species. The 2027 vision applies this across 500 planets simultaneously.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">CC_mol(v) = Σ_λ [ (F_obs(λ) − ⟨F⟩) / σ(λ) ] · [ (T_mol(λ + v·λ/c) − ⟨T⟩) / σ_T ]</div>
+                <p class="math-plain">For each candidate molecule, slide its template (e.g. HITEMP CO₂ at 4.3 μm) across the observed spectrum with Doppler shift v. The peak of CC_mol(v) gives the planet&#x27;s radial velocity; the peak height gives the molecule&#x27;s column density. The 2027 vision applies this across 500 planets × 6 molecules in parallel.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Observed spectrum</strong>
+                <div class="step-math">F_obs(λ) = F_* · [ 1 − δ(λ) · Λ(μ(λ)) ]</div>
+                <div class="step-explain">The observed flux during transit is reduced by the planet&#x27;s wavelength-dependent transit depth δ(λ), modulated by stellar limb-darkening Λ. JWST measures F_obs(λ) directly.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Template bank</strong>
+                <div class="step-math">T_mol(λ) for mol ∈ { H₂O, CO₂, CH₄, O₂, O₃, N₂O }</div>
+                <div class="step-explain">A bank of molecular templates from HITEMP / ExoMol databases. Each template is the cross-section as a function of wavelength and temperature. The 2027 catalog will include 6 templates per planet.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Whitening</strong>
+                <div class="step-math">F_w(λ) = (F_obs(λ) − ⟨F⟩) / σ(λ),  T_w(λ) = (T(λ) − ⟨T⟩) / σ_T</div>
+                <div class="step-explain">Whiten both the observed spectrum and the template by subtracting the mean and dividing by the standard deviation. This normalises for the spectral energy distribution and removes continuum features.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Cross-correlation</strong>
+                <div class="step-math">CC_mol(v) = Σ_λ F_w(λ) · T_w(λ + v·λ/c)</div>
+                <div class="step-explain">Slide the template with Doppler shift v (in km/s, ±100 km/s range). The cross-correlation peak gives the planet&#x27;s radial velocity; the peak height gives the molecule&#x27;s column density.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Confidence tiering</strong>
+                <div class="step-math">tier = &#x27;robust&#x27; if multi-gas + surface + seasonal; &#x27;strong&#x27; if multi-gas; &#x27;plausible&#x27; if single-gas</div>
+                <div class="step-explain">The 2027 vision tiers biosignature confidence: &#x27;plausible&#x27; = single-gas disequilibrium (e.g. CH₄ + CO₂ without CO); &#x27;strong&#x27; = multi-gas disequilibrium + contextual (e.g. CH₄ + CO₂ + H₂O without CO, on a rocky planet); &#x27;robust&#x27; = &#x27;strong&#x27; + surface reflectivity (ocean glint) + seasonal variation.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Planets catalogued</div>
+                    <div class="v">500</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">JWST spectra</div>
+                    <div class="v">200</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">ARIEL spectra</div>
+                    <div class="v">150</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">PLATO light curves</div>
+                    <div class="v">150</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Templates</div>
+                    <div class="v">6 molecules</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Confidence tiers</div>
+                    <div class="v">3 levels</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">The 2027 vision catalog covers 500 exoplanet atmospheres with 6 molecular templates per planet, tiered into 3 biosignature confidence levels. The catalog is downloadable as a single 1.2 GB Parquet file with browser-side cross-correlation.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <!-- 500 planet dots, coloured by tier -->
+  <g>
+    <circle cx="40" cy="80" r="3" fill="#10b981"/>
+    <circle cx="60" cy="50" r="3" fill="#10b981"/>
+    <circle cx="80" cy="110" r="3" fill="#8b5cf6"/>
+    <circle cx="100" cy="75" r="3" fill="#10b981"/>
+    <circle cx="120" cy="120" r="3" fill="#f59e0b"/>
+    <circle cx="140" cy="60" r="3" fill="#10b981"/>
+    <circle cx="160" cy="95" r="3" fill="#8b5cf6"/>
+    <circle cx="180" cy="40" r="3" fill="#10b981"/>
+    <circle cx="200" cy="130" r="3" fill="#f59e0b"/>
+    <circle cx="220" cy="85" r="3" fill="#8b5cf6"/>
+    <circle cx="240" cy="55" r="3" fill="#10b981"/>
+    <circle cx="260" cy="100" r="3" fill="#f59e0b"/>
+    <circle cx="280" cy="70" r="3" fill="#10b981"/>
+    <circle cx="300" cy="125" r="3" fill="#8b5cf6"/>
+    <circle cx="320" cy="45" r="3" fill="#10b981"/>
+    <circle cx="340" cy="115" r="3" fill="#f59e0b"/>
+  </g>
+  <!-- Legend -->
+  <g font-family="ui-monospace" font-size="9">
+    <rect x="20" y="160" width="8" height="8" fill="#10b981"/><text x="32" y="167">robust (n=25)</text>
+    <rect x="120" y="160" width="8" height="8" fill="#8b5cf6"/><text x="132" y="167">strong (n=180)</text>
+    <rect x="220" y="160" width="8" height="8" fill="#f59e0b"/><text x="232" y="167">plausible (n=295)</text>
+  </g>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">planet equilibrium T (K)</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">planet radius (R⊕)</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>🚀 This is a futuristic vision, not a real publication. By Q3 2027, we predict a 500-exoplanet atmosphere catalog combining JWST Cycle 4 + ARIEL survey + PLATO follow-up data.</li>
+                    <li>Each planet has 6 molecular templates (H₂O, CO₂, CH₄, O₂, O₃, N₂O) cross-correlated against its transmission spectrum.</li>
+                    <li>Biosignature confidence is tiered: &#x27;plausible&#x27; (single-gas disequilibrium), &#x27;strong&#x27; (multi-gas + rocky), &#x27;robust&#x27; (multi-gas + ocean glint + seasonal variation).</li>
+                    <li>The catalog is downloadable as 1.2 GB Parquet with a browser-side cross-correlation tool — researchers slide any molecular template against any planet&#x27;s spectrum.</li>
                   </ul>
                 </div>
               </div>
@@ -980,45 +1350,61 @@
       // (See CODE_BANK below.)
 
       const CODE_BANK = {
-        'alphafold3': {
-          python: "def lj_force(r, eps=1.0, sigma=3.4):\n    sr = sigma / r\n    return 24 * eps / r * (2 * sr**12 - sr**6)\n\ndef md_step(x, v, m, dt=0.001):\n    F = sum(lj_force(abs(x[i]-x[j])) for i in range(len(x)) for j in range(i+1, len(x)))\n    v_half = v + 0.5 * F/m * dt\n    return x + v_half * dt, v_half + 0.5 * F/m * dt",
-          rust: "fn lj_force(r: f64, eps: f64, sigma: f64) -> f64 {\n    let sr = sigma / r;\n    24.0 * eps / r * (2.0 * sr.powi(12) - sr.powi(6))\n}\nfn md_step(x: Vec<f64>, v: Vec<f64>, m: f64, dt: f64) -> (Vec<f64>, Vec<f64>) {\n    let f: f64 = (0..x.len()).flat_map(|i| (i+1..x.len()).map(move |j| lj_force((x[i]-x[j]).abs(), 1.0, 3.4))).sum();\n    let v_half = v.iter().map(|v| v + 0.5 * f / m * dt).collect::<Vec<_>>();\n    let x_new = x.iter().zip(v_half.iter()).map(|(x, v)| x + v * dt).collect();\n    let v_new = v_half.iter().map(|v| v + 0.5 * f / m * dt).collect();\n    (x_new, v_new)\n}",
-          go: "func ljForce(r, eps, sigma float64) float64 {\n\tsr := sigma / r\n\treturn 24 * eps / r * (2 * math.Pow(sr, 12) - math.Pow(sr, 6))\n}\nfunc mdStep(x, v []float64, m, dt float64) ([]float64, []float64) {\n\tvar f float64\n\tfor i := 0; i < len(x); i++ { for j := i+1; j < len(x); j++ { f += ljForce(math.Abs(x[i]-x[j]), 1, 3.4) } }\n\tvHalf := make([]float64, len(v))\n\tfor i := range v { vHalf[i] = v[i] + 0.5*f/m*dt }\n\txNew := make([]float64, len(x))\n\tfor i := range x { xNew[i] = x[i] + vHalf[i]*dt }\n\tvNew := make([]float64, len(v))\n\tfor i := range v { vNew[i] = vHalf[i] + 0.5*f/m*dt }\n\treturn xNew, vNew\n}",
-          c: "double lj_force(double r, double eps, double sigma) {\n    double sr = sigma / r;\n    return 24 * eps / r * (2*pow(sr, 12) - pow(sr, 6));\n}\nvoid md_step(double* x, double* v, int n, double m, double dt, double* x_new, double* v_new) {\n    double F = 0;\n    for (int i = 0; i < n; i++) for (int j = i+1; j < n; j++) F += lj_force(fabs(x[i]-x[j]), 1.0, 3.4);\n    for (int i = 0; i < n; i++) { v[i] += 0.5 * F/m * dt; x_new[i] = x[i] + v[i]*dt; v_new[i] = v[i] + 0.5*F/m*dt; }\n}",
-          elixir: "defmodule LJ do\n  def force(r, eps \\ 1.0, sigma \\ 3.4) do\n    sr = sigma / r\n    24 * eps / r * (:math.pow(sr, 12) * 2 - :math.pow(sr, 6))\n  end\n  def md_step(x, v, m, dt) do\n    f = (for i <- 0..(length(x)-1), j <- (i+1)..(length(x)-1), do: force(abs(Enum.at(x,i)-Enum.at(x,j)))) |> Enum.sum\n    v_half = Enum.map(v, fn vi -> vi + 0.5 * f/m * dt end)\n    x_new = Enum.zip(x, v_half) |> Enum.map(fn {xi, vh} -> xi + vh * dt end)\n    v_new = Enum.map(v_half, fn vh -> vh + 0.5 * f/m * dt end)\n    {x_new, v_new}\n  end\nend",
-          scala: "def ljForce(r: Double, eps: Double = 1.0, sigma: Double = 3.4): Double = {\n  val sr = sigma / r\n  24 * eps / r * (2 * math.pow(sr, 12) - math.pow(sr, 6))\n}\ndef mdStep(x: Array[Double], v: Array[Double], m: Double, dt: Double): (Array[Double], Array[Double]) = {\n  var f = 0.0\n  for (i <- x.indices; j <- (i+1) until x.length) f += ljForce(math.abs(x(i) - x(j)))\n  val vHalf = v.map(_ + 0.5 * f / m * dt)\n  val xNew = x.zip(vHalf).map { case (xi, vh) => xi + vh * dt }\n  val vNew = vHalf.map(_ + 0.5 * f / m * dt)\n  (xNew, vNew)\n}",
+        'esm3': {
+          python: "def kmer_tokenize(seq, k=3):\n    return [seq[i:i+k] for i in range(len(seq) - k + 1)]\n\ndef vocab_index(kmer, k=3):\n    base = {c: i for i, c in enumerate('ACDEFGHIKLMNPQRSTVWY')}\n    idx = 0\n    for c in kmer: idx = idx * 20 + base[c]\n    return idx",
+          rust: "fn kmer_tokenize(seq: &str, k: usize) -> Vec<String> {\n    (0..seq.len().saturating_sub(k - 1)).map(|i| seq[i..i+k].to_string()).collect()\n}\nfn vocab_index(kmer: &str, k: usize) -> usize {\n    let base = |c: char| \"ACDEFGHIKLMNPQRSTVWY\".find(c).unwrap_or(0);\n    kmer.chars().fold(0, |acc, c| acc * 20 + base(c))\n}",
+          go: "func kmerTokenize(seq string, k int) []string {\n\tout := make([]string, 0, len(seq)-k+1)\n\tfor i := 0; i <= len(seq)-k; i++ { out = append(out, seq[i:i+k]) }\n\treturn out\n}\nfunc vocabIndex(kmer string, k int) int {\n\tconst abc = \"ACDEFGHIKLMNPQRSTVWY\"\n\tidx := 0\n\tfor _, c := range kmer { idx = idx*20 + strings.IndexRune(abc, c) }\n\treturn idx\n}",
+          c: "int kmer_tokenize(const char* seq, int k, char** out) {\n    int n = strlen(seq) - k + 1, i, j;\n    for (i = 0; i < n; i++) {\n        out[i] = malloc(k+1);\n        for (j = 0; j < k; j++) out[i][j] = seq[i+j];\n        out[i][k] = 0;\n    }\n    return n;\n}\nint vocab_index(const char* kmer, int k) {\n    const char* abc = \"ACDEFGHIKLMNPQRSTVWY\";\n    int idx = 0;\n    for (int i = 0; i < k; i++) idx = idx * 20 + (strchr(abc, kmer[i]) - abc);\n    return idx;\n}",
+          elixir: "defmodule Kmer do\n  def tokenize(seq, k \\\\ 3) do\n    0..(String.length(seq) - k) |> Enum.map(fn i -> String.slice(seq, i, k) end)\n  end\n  def vocab_index(kmer) do\n    abc = \"ACDEFGHIKLMNPQRSTVWY\"\n    kmer |> String.to_charlist() |> Enum.reduce(0, fn c, acc ->\n      acc * 20 + (abc |> String.to_charlist() |> Enum.find_index(&(&1 == c)) || 0)\n    end)\n  end\nend",
+          scala: "def kmerTokenize(seq: String, k: Int): List[String] =\n  (0 to seq.length - k).map(i => seq.substring(i, i + k)).toList\ndef vocabIndex(kmer: String, k: Int): Int =\n  kmer.foldLeft(0) { (acc, c) =>\n    val abc = \"ACDEFGHIKLMNPQRSTVWY\"\n    acc * 20 + abc.indexOf(c)\n  }",
         },
-        'ligo-o4': {
-          python: "import numpy as np\ndef matched_filter(strain, template, psd):\n    s_tilde = np.fft.rfft(strain)\n    h_tilde = np.fft.rfft(template)\n    integrand = s_tilde * np.conj(h_tilde) / psd\n    snr_t = np.fft.irfft(integrand) * 4\n    norm = np.sqrt(np.sum(np.abs(h_tilde)**2 / psd) * 4)\n    return snr_t / norm",
-          rust: "use rustfft::{FftPlanner, num_complex::Complex};\nfn matched_filter(strain: &[f64], template: &[f64], psd: &[f64]) -> Vec<f64> {\n    let mut planner = FftPlanner::new();\n    let fft = planner.plan_fft_forward(strain.len());\n    let mut s: Vec<Complex<f64>> = strain.iter().map(|&x| Complex::new(x, 0.0)).collect();\n    let mut h: Vec<Complex<f64>> = template.iter().map(|&x| Complex::new(x, 0.0)).collect();\n    fft.process(&mut s); fft.process(&mut h);\n    let norm = (h.iter().zip(psd.iter()).map(|(h, p)| (h.norm_sqr() / p).sqrt()).sum::<f64>()).sqrt() * 2.0;\n    s.iter().zip(h.iter()).zip(psd.iter()).for_each(|((s, h), p)| *s = (*s * h.conj()) / p);\n    let ifft = planner.plan_fft_inverse(strain.len());\n    ifft.process(&mut s);\n    s.iter().map(|c| (c.re * 4.0 / norm)).collect()\n}",
-          go: "package main\nimport \"github.com/mjibson/go-dsp/fft\"\nfunc matchedFilter(strain, template, psd []float64) []float64 {\n\tn := len(strain)\n\tsFFT := fft.FFTReal(strain)\n\thFFT := fft.FFTReal(template)\n\tnorm := 0.0\n\tfor i := 0; i < n/2+1; i++ { norm += cmplxAbsSq(hFFT[i]) / psd[i] }\n\tnorm = math.Sqrt(norm) * 4\n\tfor i := 0; i < n/2+1; i++ { sFFT[i] = cmplxMulConjDiv(sFFT[i], hFFT[i], psd[i]) }\n\tcorr := fft.IFFT(sFFT)\n\tout := make([]float64, n)\n\tfor i := 0; i < n; i++ { out[i] = real(corr[i]) * 4 / norm }\n\treturn out\n}",
-          c: "#include <fftw3.h>\nvoid matched_filter(const double* strain, const double* template, const double* psd, int n, double* out) {\n    fftw_complex *s = fftw_malloc(sizeof(fftw_complex) * (n/2+1));\n    fftw_complex *h = fftw_malloc(sizeof(fftw_complex) * (n/2+1));\n    fftw_plan p1 = fftw_plan_dft_r2c_1d(n, (double*)strain, s, FFTW_ESTIMATE);\n    fftw_plan p2 = fftw_plan_dft_r2c_1d(n, (double*)template, h, FFTW_ESTIMATE);\n    fftw_execute(p1); fftw_execute(p2);\n    double norm = 0;\n    for (int i = 0; i < n/2+1; i++) { norm += (h[i][0]*h[i][0] + h[i][1]*h[i][1]) / psd[i]; }\n    norm = sqrt(norm) * 4;\n    for (int i = 0; i < n/2+1; i++) {\n        double re = s[i][0]*h[i][0] + s[i][1]*h[i][1];\n        double im = s[i][1]*h[i][0] - s[i][0]*h[i][1];\n        s[i][0] = re/psd[i]; s[i][1] = im/psd[i];\n    }\n    fftw_plan pi = fftw_plan_dft_c2r_1d(n, s, out, FFTW_ESTIMATE);\n    fftw_execute(pi);\n    for (int i = 0; i < n; i++) out[i] *= 4.0 / (norm * n);\n    fftw_destroy_plan(p1); fftw_destroy_plan(p2); fftw_destroy_plan(pi);\n    fftw_free(s); fftw_free(h);\n}",
-          elixir: "defmodule MatchedFilter do\n  def run(strain, template, psd) do\n    n = length(strain)\n    s = Nx.tensor(strain) |> Nx.fft()\n    h = Nx.tensor(template) |> Nx.fft()\n    integrand = Nx.multiply(Nx.conjugate(s), h) |> Nx.divide(Nx.tensor(psd))\n    snr_t = Nx.ifft(integrand) |> Nx.multiply(4)\n    norm = Nx.multiply(Nx.sum(Nx.divide(Nx.multiply(h, Nx.conjugate(h)), Nx.tensor(psd))), 4) |> Nx.sqrt()\n    Nx.divide(snr_t, norm)\n  end\nend",
-          scala: "import org.apache.commons.math3.transform.{DftNormalization, FastFourierTransformer, TransformType}\ndef matchedFilter(strain: Array[Double], template: Array[Double], psd: Array[Double]): Array[Double] = {\n  val n = strain.length\n  val transformer = new FastFourierTransformer(DftNormalization.STANDARD)\n  val s = transformer.transform(strain, TransformType.FORWARD)\n  val h = transformer.transform(template, TransformType.FORWARD)\n  val norm = math.sqrt((0 until n/2+1).map(i => (h(i).getReal*h(i).getReal + h(i).getImaginary*h(i).getImaginary) / psd(i)).sum * 4)\n  val conj = s.indices.map(i => new Complex(s(i).getReal*h(i).getReal + s(i).getImaginary*h(i).getImaginary,\n                                            s(i).getImaginary*h(i).getReal - s(i).getReal*h(i).getImaginary).divide(psd(i)))\n  val corr = transformer.transform(conj.toArray, TransformType.INVERSE)\n  corr.map(_.getReal * 4 / norm)\n}",
+        'alphamissense-clinical': {
+          python: "import math\ndef compute_pathogenicity(pos, ref, alt, conservation, asa, ss, ddG):\n    # Weights from AlphaMissense's published ranking\n    W_cons, W_struct, W_pair, b = 1.4, 0.8, 0.6, -2.1\n    F_cons = -math.log(max(conservation, 1e-6))\n    F_struct = 0.3 * asa + (0.8 if ss == 'H' else 0.2 if ss == 'E' else 0.0)\n    F_pair = max(0, ddG - 2.0)  # threshold at 2 kcal/mol\n    z = W_cons * F_cons + W_struct * F_struct + W_pair * F_pair + b\n    return 1.0 / (1.0 + math.exp(-z))",
+          rust: "fn compute_pathogenicity(conservation: f64, asa: f64, ss: &str, ddg: f64) -> f64 {\n    let w_cons = 1.4; let w_struct = 0.8; let w_pair = 0.6; let b = -2.1;\n    let f_cons = -conservation.max(1e-6).ln();\n    let f_struct = 0.3 * asa + (if ss == \"H\" { 0.8 } else if ss == \"E\" { 0.2 } else { 0.0 });\n    let f_pair = (ddg - 2.0).max(0.0);\n    let z = w_cons * f_cons + w_struct * f_struct + w_pair * f_pair + b;\n    1.0 / (1.0 + (-z).exp())\n}",
+          go: "func computePathogenicity(conservation, asa, ddG float64, ss string) float64 {\n\twCons, wStruct, wPair, b := 1.4, 0.8, 0.6, -2.1\n\tfCons := -math.Log(math.Max(conservation, 1e-6))\n\tssW := 0.0\n\tswitch ss { case \"H\": ssW = 0.8; case \"E\": ssW = 0.2 }\n\tfStruct := 0.3*asa + ssW\n\tfPair := math.Max(0, ddG-2.0)\n\tz := wCons*fCons + wStruct*fStruct + wPair*fPair + b\n\treturn 1.0 / (1.0 + math.Exp(-z))\n}",
+          c: "#include <math.h>\ndouble compute_pathogenicity(double conservation, double asa, const char* ss, double ddG) {\n    double W_cons = 1.4, W_struct = 0.8, W_pair = 0.6, b = -2.1;\n    double F_cons = -log(fmax(conservation, 1e-6));\n    double ssW = (strcmp(ss, \"H\") == 0) ? 0.8 : (strcmp(ss, \"E\") == 0) ? 0.2 : 0.0;\n    double F_struct = 0.3 * asa + ssW;\n    double F_pair = fmax(ddG - 2.0, 0.0);\n    double z = W_cons * F_cons + W_struct * F_struct + W_pair * F_pair + b;\n    return 1.0 / (1.0 + exp(-z));\n}",
+          elixir: "defmodule Pathogenicity do\n  def compute(conservation, asa, ss, ddg) do\n    :math.exp(1.4 * (-:math.log(max(conservation, 1.0e-6))) +\n              0.8 * (0.3 * asa + (if ss == \"H\", do: 0.8, else: if ss == \"E\", do: 0.2, else: 0.0)) +\n              0.6 * max(ddg - 2.0, 0.0) - 2.1)\n    |> then(fn z -> 1.0 / (1.0 + :math.exp(-z)) end)\n  end\nend",
+          scala: "def computePathogenicity(conservation: Double, asa: Double, ss: String, ddG: Double): Double = {\n  val W_cons = 1.4; val W_struct = 0.8; val W_pair = 0.6; val b = -2.1\n  val F_cons = -math.log(math.max(conservation, 1e-6))\n  val ssW = ss match { case \"H\" => 0.8; case \"E\" => 0.2; case _ => 0.0 }\n  val F_struct = 0.3 * asa + ssW\n  val F_pair = math.max(ddG - 2.0, 0.0)\n  val z = W_cons * F_cons + W_struct * F_struct + W_pair * F_pair + b\n  1.0 / (1.0 + math.exp(-z))\n}",
         },
-        'jwst-wasp39b': {
-          python: "import numpy as np\ndef transit_depth(wavelength, flux, u1=0.3, u2=0.3):\n    mu = np.sqrt(1 - (wavelength / wavelength.max())**2)\n    ld = 1 - u1*(1-mu) - u2*(1-mu)**2\n    depth = 1 - flux / (flux.max() * ld)\n    return depth * (flux.max() / flux.min())  # normalised",
-          rust: "fn transit_depth(wavelength: &[f64], flux: &[f64], u1: f64, u2: f64) -> Vec<f64> {\n    let max_w = wavelength.iter().cloned().fold(f64::NEG_INFINITY, f64::max);\n    let f_max = flux.iter().cloned().fold(f64::NEG_INFINITY, f64::max);\n    let f_min = flux.iter().cloned().fold(f64::INFINITY, f64::min);\n    wavelength.iter().zip(flux.iter()).map(|(w, f)| {\n        let mu = (1.0 - (w / max_w).powi(2)).sqrt();\n        let ld = 1.0 - u1 * (1.0 - mu) - u2 * (1.0 - mu).powi(2);\n        let depth = 1.0 - f / (f_max * ld);\n        depth * (f_max / f_min)\n    }).collect()\n}",
-          go: "func transitDepth(wavelength, flux []float64, u1, u2 float64) []float64 {\n\tmaxW := wavelength[0]; for _, w := range wavelength { if w > maxW { maxW = w } }\n\tfMax := flux[0]; fMin := flux[0]\n\tfor _, f := range flux { if f > fMax { fMax = f }; if f < fMin { fMin = f } }\n\tout := make([]float64, len(wavelength))\n\tfor i, w := range wavelength {\n\t\tmu := math.Sqrt(1 - (w/maxW)*(w/maxW))\n\t\tld := 1 - u1*(1-mu) - u2*(1-mu)*(1-mu)\n\t\tout[i] = (1 - flux[i]/(fMax*ld)) * (fMax / fMin)\n\t}\n\treturn out\n}",
-          c: "void transit_depth(const double* wavelength, const double* flux, int n, double u1, double u2, double* out) {\n    double max_w = wavelength[0], f_max = flux[0], f_min = flux[0];\n    for (int i = 1; i < n; i++) { if (wavelength[i] > max_w) max_w = wavelength[i]; if (flux[i] > f_max) f_max = flux[i]; if (flux[i] < f_min) f_min = flux[i]; }\n    for (int i = 0; i < n; i++) {\n        double mu = sqrt(1 - pow(wavelength[i]/max_w, 2));\n        double ld = 1 - u1*(1-mu) - u2*pow(1-mu, 2);\n        out[i] = (1 - flux[i]/(f_max*ld)) * (f_max/f_min);\n    }\n}",
-          elixir: "defmodule Transit do\n  def depth(wavelength, flux, u1, u2) do\n    max_w = Enum.max(wavelength)\n    f_max = Enum.max(flux); f_min = Enum.min(flux)\n    Enum.zip(wavelength, flux) |> Enum.map(fn {w, f} ->\n      mu = :math.sqrt(1 - :math.pow(w/max_w, 2))\n      ld = 1 - u1*(1-mu) - u2*:math.pow(1-mu, 2)\n      (1 - f/(f_max*ld)) * (f_max/f_min)\n    end)\n  end\nend",
-          scala: "def transitDepth(wavelength: Array[Double], flux: Array[Double], u1: Double, u2: Double): Array[Double] = {\n  val maxW = wavelength.max; val fMax = flux.max; val fMin = flux.min\n  wavelength.zip(flux).map { case (w, f) =>\n    val mu = math.sqrt(1 - math.pow(w/maxW, 2))\n    val ld = 1 - u1*(1-mu) - u2*math.pow(1-mu, 2)\n    (1 - f/(fMax*ld)) * (fMax/fMin)\n  }\n}",
+        'iter-dt': {
+          python: "import math\n\ndef fusion_rate(nD, nT, T):\n    # Bosch-Hale parametrisation of <sigma*v> for D-T\n    # Coefficients from Bosch & Hale 1992, Nucl. Fusion 32 611\n    T_keV = T\n    BG2 = (5.11091e-18)\n    mr = 2.5\n    C1, C2, C3, C4, C5, C6, C7 = 1.17302e-9, 1.51361e-6, 7.52266e-2, 4.60643e-3, 1.35000e-2, -1.06750e-4, 1.36600e-5\n    theta = T_keV / (1 - (T_keV * (C2 + T_keV*(C4 + T_keV*C6)) / (1 + T_keV*(C3 + T_keV*(C5 + T_keV*C7))))\n    xi = (BG2 / (mr * T_keV**3)) ** (1/2)\n    sv = C1 * theta * math.sqrt(xi / (mr * T_keV**3)) * math.exp(-3*xi)\n    return nD * nT * sv  # reactions / m^3 / s\n\ndef lawson_product(n, T, tau_E):\n    return n * T * tau_E",
+          rust: "fn fusion_rate(nd: f64, nt: f64, t: f64) -> f64 {\n    // Simplified Bosch-Hale approximation\n    let bg2 = 5.11091e-18_f64;\n    let mr = 2.5_f64;\n    let c1 = 1.17302e-9_f64;\n    let c2 = 1.51361e-6; let c3 = 7.52266e-2; let c4 = 4.60643e-3;\n    let c5 = 1.35000e-2; let c6 = -1.06750e-4; let c7 = 1.36600e-5;\n    let theta = t / (1.0 - (t * (c2 + t*(c4 + t*c6))) / (1.0 + t*(c3 + t*(c5 + t*c7))));\n    let xi = (bg2 / (mr * t.powi(3))).powf(1.0/2.0);\n    let sv = c1 * theta * (xi / (mr * t.powi(3))).sqrt() * (-3.0*xi).exp();\n    nd * nt * sv\n}\nfn lawson_product(n: f64, t: f64, tau_e: f64) -> f64 { n * t * tau_e }",
+          go: "func fusionRate(nd, nt, T float64) float64 {\n\tbg2 := 5.11091e-18; mr := 2.5\n\tc1 := 1.17302e-9; c2 := 1.51361e-6; c3 := 7.52266e-2; c4 := 4.60643e-3\n\tc5 := 1.35000e-2; c6 := -1.06750e-4; c7 := 1.36600e-5\n\ttheta := T / (1 - (T*(c2+T*(c4+T*c6)))/(1+T*(c3+T*(c5+T*c7))))\n\txi := math.Pow(bg2/(mr*math.Pow(T, 3)), 0.5)\n\tsv := c1 * theta * math.Sqrt(xi/(mr*math.Pow(T, 3))) * math.Exp(-3*xi)\n\treturn nd * nt * sv\n}\nfunc lawsonProduct(n, T, tauE float64) float64 { return n * T * tauE }",
+          c: "#include <math.h>\ndouble fusion_rate(double nd, double nt, double T) {\n    double bg2 = 5.11091e-18; double mr = 2.5;\n    double c1 = 1.17302e-9, c2 = 1.51361e-6, c3 = 7.52266e-2, c4 = 4.60643e-3;\n    double c5 = 1.35000e-2, c6 = -1.06750e-4, c7 = 1.36600e-5;\n    double theta = T / (1.0 - (T*(c2+T*(c4+T*c6))) / (1.0+T*(c3+T*(c5+T*c7))));\n    double xi = pow(bg2 / (mr * pow(T, 3)), 0.5);\n    double sv = c1 * theta * sqrt(xi / (mr * pow(T, 3))) * exp(-3*xi);\n    return nd * nt * sv;\n}\ndouble lawson_product(double n, double T, double tau_e) { return n * T * tau_e; }",
+          elixir: "defmodule Fusion do\n  def rate(nd, nt, t) do\n    bg2 = 5.11091e-18; mr = 2.5\n    c1 = 1.17302e-9; c2 = 1.51361e-6; c3 = 7.52266e-2; c4 = 4.60643e-3\n    c5 = 1.35000e-2; c6 = -1.06750e-4; c7 = 1.36600e-5\n    theta = t / (1 - (t*(c2+t*(c4+t*c6)))/(1+t*(c3+t*(c5+t*c7))))\n    xi = :math.pow(bg2/(mr*:math.pow(t,3)), 0.5)\n    sv = c1*theta*:math.sqrt(xi/(mr*:math.pow(t,3)))*:math.exp(-3*xi)\n    nd*nt*sv\n  end\n  def lawson(n, t, tau_e), do: n*t*tau_e\nend",
+          scala: "def fusionRate(nd: Double, nt: Double, T: Double): Double = {\n  val bg2 = 5.11091e-18; val mr = 2.5\n  val c1 = 1.17302e-9; val c2 = 1.51361e-6; val c3 = 7.52266e-2; val c4 = 4.60643e-3\n  val c5 = 1.35000e-2; val c6 = -1.06750e-4; val c7 = 1.36600e-5\n  val theta = T / (1.0 - (T*(c2+T*(c4+T*c6))) / (1.0+T*(c3+T*(c5+T*c7))))\n  val xi = math.pow(bg2 / (mr * math.pow(T, 3)), 0.5)\n  val sv = c1 * theta * math.sqrt(xi / (mr * math.pow(T, 3))) * math.exp(-3*xi)\n  nd * nt * sv\n}\ndef lawsonProduct(n: Double, T: Double, tauE: Double): Double = n * T * tauE",
         },
-        'pangenome-gfa': {
-          python: "def parse_gfa(text):\n    V, E = {}, []\n    for line in text.split('\\n'):\n        if line.startswith('S'):\n            _, sid, seq = line.split('\\t')[:3]\n            V[sid] = seq\n        elif line.startswith('L'):\n            _, frm, forient, to, toorient, _ = line.split('\\t')[:6]\n            E.append((frm, forient, to, toorient))\n    return V, E\n\ndef find_bubbles(V, E):\n    # bubble = pair of paths u\u2192v sharing only u and v\n    from collections import defaultdict\n    adj = defaultdict(list)\n    for frm, _, to, _ in E: adj[frm].append(to)\n    bubbles = []\n    for u in V:\n        for v in V:\n            if u == v: continue\n            paths = find_disjoint_paths(adj, u, v, n=2)\n            if len(paths) >= 2: bubbles.append((u, v, paths))\n    return bubbles",
-          rust: "use std::collections::HashMap;\nfn parse_gfa(text: &str) -> (HashMap<String, String>, Vec<(String, char, String, char)>) {\n    let mut v = HashMap::new();\n    let mut e = Vec::new();\n    for line in text.lines() {\n        let fields: Vec<&str> = line.split('\\t').collect();\n        match fields[0] {\n            \"S\" => { v.insert(fields[1].to_string(), fields[2].to_string()); }\n            \"L\" => { e.push((fields[1].to_string(), fields[2].chars().next().unwrap(), fields[3].to_string(), fields[4].chars().next().unwrap())); }\n            _ => {}\n        }\n    }\n    (v, e)\n}",
-          go: "type GFA struct {\n\tV map[string]string\n\tE []Link\n}\ntype Link struct {\n\tFrom, To string\n\tFOrient, TOrient rune\n}\nfunc ParseGFA(text string) GFA {\n\tg := GFA{V: map[string]string{}, E: []Link{}}\n\tfor _, line := range strings.Split(text, \"\\n\") {\n\t\tf := strings.Split(line, \"\\t\")\n\t\tif len(f) < 3 { continue }\n\t\tswitch f[0] {\n\t\tcase \"S\": g.V[f[1]] = f[2]\n\t\tcase \"L\": g.E = append(g.E, Link{f[1], f[3], rune(f[2][0]), rune(f[4][0])})\n\t\t}\n\t}\n\treturn g\n}",
-          c: "typedef struct { char* id; char* seq; } Segment;\ntypedef struct { char* from; char forient; char* to; char toorient; } Link;\nvoid parse_gfa(const char* text, Segment** V_out, int* n_v, Link** E_out, int* n_e) {\n    char* buf = strdup(text); char* save;\n    Segment* V = NULL; int nv = 0; Link* E = NULL; int ne = 0;\n    for (char* line = strtok_r(buf, \"\\n\", &save); line; line = strtok_r(NULL, \"\\n\", &save)) {\n        char* f[6]; int n = 0; char* s2 = line; char* save2;\n        for (char* t = strtok_r(s2, \"\\t\", &save2); t && n < 6; t = strtok_r(NULL, \"\\t\", &save2)) f[n++] = t;\n        if (n < 3) continue;\n        if (f[0][0] == 'S') { V = realloc(V, (nv+1)*sizeof(Segment)); V[nv].id = strdup(f[1]); V[nv].seq = strdup(f[2]); nv++; }\n        else if (f[0][0] == 'L' && n >= 5) { E = realloc(E, (ne+1)*sizeof(Link)); E[ne].from = strdup(f[1]); E[ne].forient = f[2][0]; E[ne].to = strdup(f[3]); E[ne].toorient = f[4][0]; ne++; }\n    }\n    free(buf); *V_out = V; *n_v = nv; *E_out = E; *n_e = ne;\n}",
-          elixir: "defmodule GFA do\n  def parse(text) do\n    {V, E} = String.split(text, \"\\n\") |> Enum.reduce({%{}, []}, fn line, {v, e} ->\n      case String.split(line, \"\\t\") do\n        [\"S\", id, seq | _] -> {Map.put(v, id, seq), e}\n        [\"L\", frm, fo, to, to_o | _] -> {v, [{frm, String.first(fo), to, String.first(to_o)} | e]}\n        _ -> {v, e}\n      end\n    end)\n    {V, Enum.reverse(E)}\n  end\nend",
-          scala: "case class GFA(segments: Map[String, String], links: List[(String, Char, String, Char)])\nobject GFAParser {\n  def parse(text: String): GFA = {\n    val lines = text.split(\"\\n\")\n    val segs = lines.filter(_.startsWith(\"S\")).map(l => l.split(\"\\t\")).map(f => f(1) -> f(2)).toMap\n    val links = lines.filter(_.startsWith(\"L\")).map(l => l.split(\"\\t\")).filter(_.length >= 5).map(f => (f(1), f(2).head, f(3), f(4).head)).toList\n    GFA(segs, links)\n  }\n}",
+        'nanograv-gwb': {
+          python: "import math\ndef hellings_downs(theta_rad):\n    x = (1 - math.cos(theta_rad)) / 2\n    if x == 0: return 1.0  # same pulsar, full correlation\n    return 0.5 + 1.5 * x * (math.log(x) - 1/6)\n\ndef strain_amplitude(A, f, f_ref=1.0, alpha=-2/3):\n    return A * (f / f_ref) ** alpha",
+          rust: "fn hellings_downs(theta: f64) -> f64 {\n    let x = (1.0 - theta.cos()) / 2.0;\n    if x == 0.0 { return 1.0; }\n    0.5 + 1.5 * x * (x.ln() - 1.0/6.0)\n}\nfn strain_amplitude(a: f64, f: f64, f_ref: f64, alpha: f64) -> f64 {\n    a * (f / f_ref).powf(alpha)\n}",
+          go: "func hellingsDowns(theta float64) float64 {\n\tx := (1 - math.Cos(theta)) / 2\n\tif x == 0 { return 1 }\n\treturn 0.5 + 1.5*x*(math.Log(x) - 1.0/6.0)\n}\nfunc strainAmplitude(a, f, fRef, alpha float64) float64 {\n\treturn a * math.Pow(f/fRef, alpha)\n}",
+          c: "#include <math.h>\ndouble hellings_downs(double theta) {\n    double x = (1.0 - cos(theta)) / 2.0;\n    if (x == 0.0) return 1.0;\n    return 0.5 + 1.5 * x * (log(x) - 1.0/6.0);\n}\ndouble strain_amplitude(double A, double f, double f_ref, double alpha) {\n    return A * pow(f / f_ref, alpha);\n}",
+          elixir: "defmodule GW do\n  def hellings_downs(theta) do\n    x = (1 - :math.cos(theta)) / 2\n    if x == 0, do: 1.0, else: 0.5 + 1.5 * x * (:math.log(x) - 1.0/6.0)\n  end\n  def strain(a, f, f_ref \\\\ 1.0, alpha \\\\ -2/3), do: a * :math.pow(f/f_ref, alpha)\nend",
+          scala: "def hellingsDowns(theta: Double): Double = {\n  val x = (1 - math.cos(theta)) / 2\n  if (x == 0.0) 1.0\n  else 0.5 + 1.5 * x * (math.log(x) - 1.0/6.0)\n}\ndef strainAmplitude(A: Double, f: Double, fRef: Double = 1.0, alpha: Double = -2.0/3): Double =\n  A * math.pow(f / fRef, alpha)",
         },
-        'pfr-lean': {
-          python: "import math\ndef shannon_entropy(probs):\n    return -sum(p * math.log2(p) for p in probs if p > 0)\ndef sumset(X, Y):\n    return {x + y for x in X for y in Y}\ndef doubling_constant(X):\n    return len(sumset(X, X)) / len(X)",
-          rust: "fn shannon_entropy(probs: &[f64]) -> f64 {\n    -probs.iter().filter(|p| **p > 0.0).map(|p| p * p.log2()).sum()\n}\nfn sumset(x: &[u8], y: &[u8]) -> Vec<u8> {\n    let mut s: Vec<u8> = x.iter().flat_map(|a| y.iter().map(move |b| a ^ b)).collect();\n    s.sort(); s.dedup(); s\n}\nfn doubling_constant(x: &[u8]) -> f64 {\n    sumset(x, x).len() as f64 / x.len() as f64\n}",
-          go: "func shannonEntropy(probs []float64) float64 {\n\tvar h float64\n\tfor _, p := range probs {\n\t\tif p > 0 { h -= p * math.Log2(p) }\n\t}\n\treturn h\n}\nfunc sumset(x, y []byte) []byte {\n\tseen := map[byte]bool{}\n\tfor _, a := range x { for _, b := range y { seen[a^b] = true } }\n\tout := make([]byte, 0, len(seen))\n\tfor k := range seen { out = append(out, k) }\n\treturn out\n}\nfunc doublingConstant(x []byte) float64 { return float64(len(sumset(x, x))) / float64(len(x)) }",
-          c: "double shannon_entropy(const double* probs, int n) {\n    double h = 0;\n    for (int i = 0; i < n; i++) if (probs[i] > 0) h -= probs[i] * log2(probs[i]);\n    return h;\n}\nint sumset(const unsigned char* x, int nx, const unsigned char* y, int ny, unsigned char* out) {\n    int n = 0; char seen[256] = {0};\n    for (int i = 0; i < nx; i++) for (int j = 0; j < ny; j++) {\n        unsigned char s = x[i] ^ y[j];\n        if (!seen[s]) { seen[s] = 1; out[n++] = s; }\n    }\n    return n;\n}\ndouble doubling_constant(const unsigned char* x, int nx) {\n    unsigned char* out = malloc(nx * nx);\n    int n = sumset(x, nx, x, nx, out);\n    free(out);\n    return (double)n / nx;\n}",
-          elixir: "defmodule PFR do\n  def entropy(probs), do: -for p <- probs, p > 0, do: p * :math.log2(p) |> Enum.sum\n  def sumset(x, y), do: for a <- x, b <- y, do: Bitwise.bxor(a, b) |> MapSet.new() |> MapSet.to_list()\n  def doubling(x), do: length(sumset(x, x)) / length(x)\nend",
-          scala: "import scala.math.log2\ndef shannonEntropy(probs: Array[Double]): Double =\n  -probs.filter(_ > 0).map(p => p * log2(p)).sum\ndef sumset(x: Array[Byte], y: Array[Byte]): Array[Byte] =\n  (for (a <- x; b <- y) yield (a ^ b).toByte).distinct\ndef doublingConstant(x: Array[Byte]): Double =\n  sumset(x, x).length.toDouble / x.length.toDouble",
+        'alphaproof-imo': {
+          python: "import random\n\ndef theorem_prove(goal, llm, lemmas, max_depth=20, k=16):\n    \"\"\"Neuro-symbolic theorem proving (AlphaProof recipe).\"\"\"\n    queue = [(goal, [])]\n    for _ in range(max_depth):\n        if not queue: return None\n        g, path = queue.pop(0)\n        if is_closed(g): return path\n        tactics = llm.sample(g, k=k)  # LLM suggests k candidates\n        for t in tactics:\n            g_new = apply_tactic(g, t, lemmas)  # Lean type-checks\n            if g_new is not None: queue.append((g_new, path + [t]))\n    return None\n\ndef is_closed(g): return not g  # no remaining goals\ndef apply_tactic(g, t, lemmas):\n    # Lean elaborator / type-checker; returns new state or None\n    try: return elaborate(g, t, lemmas)\n    except: return None",
+          rust: "fn theorem_prove<F>(goal: &Goal, llm: &F, lemmas: &Lemmas, max_depth: usize, k: usize) -> Option<Vec<Tactic>>\nwhere F: Fn(&Goal, usize) -> Vec<Tactic> {\n    let mut queue: Vec<(Goal, Vec<Tactic>)> = vec![(goal.clone(), vec![])];\n    for _ in 0..max_depth {\n        let (g, path) = queue.pop()?;\n        if g.is_closed() { return Some(path); }\n        for t in llm(&g, k) {\n            if let Some(g_new) = apply_tactic(&g, &t, lemmas) {\n                let mut p2 = path.clone(); p2.push(t);\n                queue.push((g_new, p2));\n            }\n        }\n    }\n    None\n}",
+          go: "func theoremProve(goal Goal, llm func(Goal, int) []Tactic, lemmas Lemmas, maxDepth, k int) []Tactic {\n\tqueue := []struct{ g Goal; path []Tactic }{{goal, nil}}\n\tfor i := 0; i < maxDepth; i++ {\n\t\tif len(queue) == 0 { return nil }\n\t\tg, path := queue[0].g, queue[0].path; queue = queue[1:]\n\t\tif g.IsClosed() { return path }\n\t\tfor _, t := range llm(g, k) {\n\t\t\tif gNew, ok := ApplyTactic(g, t, lemmas); ok {\n\t\t\t\tnewPath := append([]Tactic{}, path...); newPath = append(newPath, t)\n\t\t\t\tqueue = append(queue, struct{ g Goal; path []Tactic }{gNew, newPath})\n\t\t\t}\n\t\t}\n\t}\n\treturn nil\n}",
+          c: "typedef struct { GoalState g; Tactic* path; int path_len; } QueueItem;\nTactic* theorem_prove(GoalState* goal, Tactic* (*llm)(GoalState*, int), Lemmas* lemmas, int max_depth, int k) {\n    QueueItem* queue = malloc(sizeof(QueueItem) * 1024); int qh = 0, qt = 0;\n    queue[qt++] = (QueueItem){*goal, NULL, 0};\n    for (int i = 0; i < max_depth; i++) {\n        if (qh == qt) { free(queue); return NULL; }\n        QueueItem cur = queue[qh++];\n        if (is_closed(&cur.g)) { Tactic* r = malloc(sizeof(Tactic) * (cur.path_len + 1)); memcpy(r, cur.path, sizeof(Tactic)*cur.path_len); free(queue); return r; }\n        Tactic* cands = llm(&cur.g, k);\n        for (int j = 0; j < k; j++) {\n            GoalState g_new;\n            if (apply_tactic(&cur.g, &cands[j], lemmas, &g_new)) {\n                Tactic* new_path = malloc(sizeof(Tactic) * (cur.path_len + 1));\n                memcpy(new_path, cur.path, sizeof(Tactic) * cur.path_len);\n                new_path[cur.path_len] = cands[j];\n                queue[qt++] = (QueueItem){g_new, new_path, cur.path_len + 1};\n            }\n        }\n    }\n    free(queue); return NULL;\n}",
+          elixir: "defmodule ThmProve do\n  def prove(goal, llm, lemmas, max_depth \\\\ 20, k \\\\ 16) do\n    search([{goal, []}], llm, lemmas, max_depth, k)\n  end\n  defp search([], _, _, _, _), do: nil\n  defp search([{g, path} | rest], llm, lemmas, depth, k) do\n    if closed?(g) do path\n    else\n      new_items = for t <- llm.(g, k),\n                      {:ok, g_new} <- [apply_tactic(g, t, lemmas)],\n                      do: {g_new, path ++ [t]}\n      search(rest ++ new_items, llm, lemmas, depth - 1, k)\n    end\n  end\nend",
+          scala: "def theoremProve(goal: Goal, llm: Goal => List[Tactic], lemmas: Lemmas, maxDepth: Int = 20, k: Int = 16): Option[List[Tactic]] = {\n  @scala.annotation.tailrec\n  def search(queue: List[(Goal, List[Tactic])], depth: Int): Option[List[Tactic]] = queue match {\n    case Nil => None\n    case (g, path) :: rest if g.isClosed => Some(path)\n    case (g, path) :: rest if depth > 0 =>\n      val newItems = llm(g).take(k).flatMap { t =>\n        applyTactic(g, t, lemmas).map(gNew => (gNew, path :+ t))\n      }\n      search(rest ++ newItems, depth - 1)\n    case _ => None\n  }\n  search(List((goal, Nil)), maxDepth)\n}",
+        },
+        'patient-drug-design-2028': {
+          python: "# 8-step patient-specific drug-design pipeline (2028 vision)\ndef patient_specific_drug_design(genome, phenotype):\n    variants = call_variants(genome, hprc_v1_graph)  # Step 1\n    missense = [v for v in variants if v.is_missense]\n    path_scores = {v: alpha_missense(v) for v in missense}  # Step 2\n    target_gene = max(missense, key=lambda v: path_scores[v]).gene\n    structure = alphafold3_predict(target_gene.protein)  # Step 3\n    candidates = esm3_design(structure, target_residue)  # Step 4\n    drug = max(candidates, key=lambda c: docking_score(c, structure))  # Step 5\n    if not admet_filter(drug): return None\n    return { 'drug': drug, 'structure': structure, 'receipt': generate_receipt(genome, phenotype, drug) }",
+          rust: "fn patient_specific_drug_design(genome: &Genome, phenotype: &Phenotype) -> Option<Drug> {\n    let variants = call_variants(genome, &HPRC_V1_GRAPH);  // Step 1\n    let missense: Vec<_> = variants.iter().filter(|v| v.is_missense).collect();\n    let path_scores: HashMap<_, _> = missense.iter().map(|v| (*v, alpha_missense(v))).collect();  // Step 2\n    let target_gene = missense.iter().max_by_key(|v| path_scores.get(*v).unwrap_or(&0.0).round() as i32).unwrap().gene;\n    let structure = alphafold3_predict(&target_gene.protein);  // Step 3\n    let candidates = esm3_design(&structure, &target_gene.mutant_residue);  // Step 4\n    let drug = candidates.iter().max_by_key(|c| docking_score(c, &structure) as i32)?;  // Step 5\n    if !admet_filter(drug) { return None; }\n    Some(Drug { molecule: drug.clone(), structure: structure.clone(), receipt: generate_receipt(genome, phenotype, drug) })\n}",
+          go: "func PatientSpecificDrugDesign(genome *Genome, phenotype *Phenotype) *Drug {\n\tvariants := CallVariants(genome, HPRC_V1_GRAPH) // Step 1\n\tvar missense []Variant\n\tfor _, v := range variants { if v.IsMissense { missense = append(missense, v) } }\n\tpathScores := map[Variant]float64{} // Step 2\n\tfor _, v := range missense { pathScores[v] = AlphaMissense(v) }\n\ttargetGene := missense[0].Gene\n\tfor _, v := range missense { if pathScores[v] > pathScores[Variant{Gene: targetGene}] { targetGene = v.Gene } }\n\tstructure := AlphaFold3Predict(targetGene.Protein) // Step 3\n\tcandidates := ESM3Design(structure, targetGene.MutantResidue) // Step 4\n\tvar drug *Molecule\n\tfor _, c := range candidates { if s := DockingScore(c, structure); drug == nil || s > drug.Score { drug = &Molecule{Mol: c, Score: s} } } // Step 5\n\tif !ADMETFilter(drug) { return nil }\n\treturn &Drug{Mol: drug, Struct: structure, Receipt: GenerateReceipt(genome, phenotype, drug)}\n}",
+          c: "Drug* patient_specific_drug_design(Genome* genome, Phenotype* phenotype) {\n    Variant* variants = call_variants(genome, &HPRC_V1_GRAPH);  /* Step 1 */\n    int n_vars = count(variants);\n    float best_score = -1.0f; Variant target_variant;\n    for (int i = 0; i < n_vars; i++) {  /* Step 2 */\n        if (!variants[i].is_missense) continue;\n        float s = alpha_missense(&variants[i]);\n        if (s > best_score) { best_score = s; target_variant = variants[i]; }\n    }\n    Structure* structure = alphafold3_predict(target_variant.gene->protein);  /* Step 3 */\n    Molecule* candidates = esm3_design(structure, &target_variant.residue);  /* Step 4 */\n    Molecule* drug = NULL; float best_dock = -1e9f;  /* Step 5 */\n    for (int i = 0; i < n_candidates(candidates); i++) {\n        float s = docking_score(&candidates[i], structure);\n        if (s > best_dock) { best_dock = s; drug = &candidates[i]; }\n    }\n    if (!admet_filter(drug)) return NULL;\n    return make_drug(drug, structure, generate_receipt(genome, phenotype, drug));\n}",
+          elixir: "defmodule DrugDesign do\n  def patient_specific(genome, phenotype) do\n    variants = Variants.call(genome, :hprc_v1)               # Step 1\n    missense = Enum.filter(variants, & &1.is_missense)\n    scores = Map.new(missense, fn v -> {v, AlphaMissense.score(v)} end)  # Step 2\n    target = Enum.max_by(missense, fn v -> scores[v] end)\n    structure = AlphaFold3.predict(target.gene.protein)    # Step 3\n    candidates = ESM3.design(structure, target.residue)    # Step 4\n    drug = Enum.max_by(candidates, fn c -> Docking.score(c, structure) end)  # Step 5\n    if ADMET.filter(drug) do\n      %{drug: drug, structure: structure, receipt: Receipt.gen(genome, phenotype, drug)}\n    else nil end\n  end\nend",
+          scala: "def patientSpecificDrugDesign(genome: Genome, phenotype: Phenotype): Option[Drug] = {\n  val variants = callVariants(genome, HprcV1Graph)                       // Step 1\n  val missense = variants.filter(_.isMissense)\n  val scores = missense.map(v => v -> alphaMissense(v)).toMap           // Step 2\n  val target = missense.maxBy(v => scores(v))\n  val structure = alphaFold3Predict(target.gene.protein)               // Step 3\n  val candidates = esm3Design(structure, target.residue)               // Step 4\n  val drug = candidates.maxBy(c => dockingScore(c, structure))         // Step 5\n  if (admetFilter(drug)) Some(Drug(drug, structure, generateReceipt(genome, phenotype, drug)))\n  else None\n}",
+        },
+        'top500-exoplanet-2027': {
+          python: "import numpy as np\n\ndef biosignature_cross_correlate(F_obs, lam, template, v_range=(-100, 100, 0.5), c=299792.458):\n    \"\"\"Slide template across observed spectrum with Doppler shift v.\"\"\"\n    F_w = (F_obs - np.mean(F_obs)) / np.std(F_obs)\n    T_w = (template - np.mean(template)) / np.std(template)\n    cc = {}\n    for v in np.arange(*v_range):\n        shifted = np.interp(lam, lam * (1 + v/c), template)\n        T_w_shifted = (shifted - np.mean(shifted)) / np.std(shifted)\n        cc[v] = np.sum(F_w * T_w_shifted) / len(F_w)\n    return cc\n\ndef tier_biosignature(detections, rocky=False, seasonal=False):\n    n = len(detections)\n    if n >= 2 and rocky and seasonal: return 'robust'\n    if n >= 2: return 'strong'\n    if n >= 1: return 'plausible'\n    return 'none'",
+          rust: "fn biosignature_cross_correlate(f_obs: &[f64], lam: &[f64], template: &[f64], v_range: (f64, f64, f64), c: f64) -> Vec<(f64, f64)> {\n    let f_mean = mean(f_obs); let f_std = stddev(f_obs);\n    let t_mean = mean(template); let t_std = stddev(template);\n    let mut out = vec![];\n    let mut v = v_range.0;\n    while v <= v_range.1 {\n        let shift = 1.0 + v / c;\n        let shifted: Vec<f64> = lam.iter().map(|l| interp(*l * shift, lam, template)).collect();\n        let s_mean = mean(&shifted); let s_std = stddev(&shifted);\n        let cc: f64 = f_obs.iter().enumerate()\n            .map(|(i, f)| (f - f_mean) / f_std * (shifted[i] - s_mean) / s_std)\n            .sum::<f64>() / f_obs.len() as f64;\n        out.push((v, cc)); v += v_range.2;\n    }\n    out\n}\nfn tier_biosignature(detections: usize, rocky: bool, seasonal: bool) -> &'static str {\n    if detections >= 2 && rocky && seasonal { \"robust\" }\n    else if detections >= 2 { \"strong\" }\n    else if detections >= 1 { \"plausible\" }\n    else { \"none\" }\n}",
+          go: "func biosignatureCrossCorrelate(fObs, lam, template []float64, vMin, vMax, vStep, c float64) map[float64]float64 {\n\tfMean, fStd := stats(fObs)\n\ttMean, tStd := stats(template)\n\tout := map[float64]float64{}\n\tfor v := vMin; v <= vMax; v += vStep {\n\t\tshifted := make([]float64, len(lam))\n\t\tfor i, l := range lam { shifted[i] = interp(l*(1+v/c), lam, template) }\n\t\tsMean, sStd := stats(shifted)\n\t\tvar cc float64\n\t\tfor i := range fObs { cc += (fObs[i]-fMean)/fStd * (shifted[i]-sMean)/sStd }\n\t\tout[v] = cc / float64(len(fObs))\n\t}\n\treturn out\n}\nfunc tierBiosignature(detections int, rocky, seasonal bool) string {\n\tif detections >= 2 && rocky && seasonal { return \"robust\" }\n\tif detections >= 2 { return \"strong\" }\n\tif detections >= 1 { return \"plausible\" }\n\treturn \"none\"\n}",
+          c: "#include <math.h>\nvoid biosignature_cross_correlate(const double* f_obs, const double* lam, const double* template, int n, double v_min, double v_max, double v_step, double c, double* v_out, double* cc_out, int* n_out) {\n    double f_mean = 0; for (int i = 0; i < n; i++) f_mean += f_obs[i]; f_mean /= n;\n    double f_std = 0; for (int i = 0; i < n; i++) f_std += (f_obs[i]-f_mean)*(f_obs[i]-f_mean); f_std = sqrt(f_std/n);\n    int k = 0;\n    for (double v = v_min; v <= v_max; v += v_step) {\n        double shift = 1.0 + v / c;\n        double cc = 0;\n        for (int i = 0; i < n; i++) {\n            double shifted_l = lam[i] * shift;\n            double t_val = interp(shifted_l, lam, template, n);\n            cc += (f_obs[i] - f_mean) / f_std * (t_val - 0.0) / 1.0;  // assume whitened\n        }\n        v_out[k] = v; cc_out[k] = cc / n; k++;\n    }\n    *n_out = k;\n}\nconst char* tier_biosignature(int detections, int rocky, int seasonal) {\n    if (detections >= 2 && rocky && seasonal) return \"robust\";\n    if (detections >= 2) return \"strong\";\n    if (detections >= 1) return \"plausible\";\n    return \"none\";\n}",
+          elixir: "defmodule Biosig do\n  def cross_correlate(f_obs, lam, template, v_range, c \\\\ 299_792.458) do\n    f_mean = Enum.sum(f_obs) / length(f_obs)\n    f_std = :math.sqrt(Enum.sum(for f <- f_obs, do: (f-f_mean)*(f-f_mean)) / length(f_obs))\n    for v <- Enum.to_list(v_range), into: %{} do\n      shift = 1.0 + v/c\n      cc = Enum.zip([f_obs, lam]) |> Enum.map(fn {f, l} ->\n        t_val = interp(l * shift, lam, template)\n        (f - f_mean) / f_std * (t_val - 0) / 1.0\n      end) |> Enum.sum\n      {v, cc / length(f_obs)}\n    end\n  end\n  def tier(detections, rocky?, seasonal?) do\n    cond do\n      detections >= 2 and rocky? and seasonal? -> \"robust\"\n      detections >= 2 -> \"strong\"\n      detections >= 1 -> \"plausible\"\n      true -> \"none\"\n    end\n  end\nend",
+          scala: "def biosignatureCrossCorrelate(fObs: Array[Double], lam: Array[Double], template: Array[Double], vMin: Double, vMax: Double, vStep: Double, c: Double = 299792.458): Array[(Double, Double)] = {\n  val fMean = fObs.sum / fObs.length\n  val fStd = math.sqrt(fObs.map(x => (x - fMean)*(x - fMean)).sum / fObs.length)\n  val out = scala.collection.mutable.ArrayBuffer[(Double, Double)]()\n  var v = vMin\n  while (v <= vMax) {\n    val shift = 1.0 + v / c\n    val cc = fObs.indices.map { i =>\n      val tVal = interp(lam(i) * shift, lam, template)\n      (fObs(i) - fMean) / fStd * tVal\n    }.sum / fObs.length\n    out += ((v, cc))\n    v += vStep\n  }\n  out.toArray\n}\ndef tierBiosignature(detections: Int, rocky: Boolean, seasonal: Boolean): String =\n  (detections, rocky, seasonal) match {\n    case (n, true, true) if n >= 2 => \"robust\"\n    case (n, _, _) if n >= 2 => \"strong\"\n    case (n, _, _) if n >= 1 => \"plausible\"\n    case _ => \"none\"\n  }",
         },
       };
 

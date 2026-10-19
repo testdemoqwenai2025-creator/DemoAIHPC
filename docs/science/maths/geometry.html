@@ -88,29 +88,60 @@
     <div class="container">
       <p class="crumbs"><a href="../../science-maths.html">Maths Hub</a> / Geometry · Tesseract</p>
       <span class="tag">Science &middot; Maths &middot; Geometry &middot; N-D visualization</span>
-      <h1>Tesseract (4D Hypercube)</h1>
-      <p class="lead">A tesseract is the 4D analogue of a cube — 16 vertices, 32 edges, 24 square faces, 8 cubic cells. Watch it rotate in 4D and project to 2D. Drag to change the projection distance.</p>
+      <h1>Tesseract (4D Hypercube) &rarr; N-D Hypercube Viewer</h1>
+      <p class="lead">A tesseract is the 4D analogue of a cube — 16 vertices, 32 edges, 24 square faces, 8 cubic cells. Watch it rotate in 4D and project to 2D. Drag to change the projection distance. Use the dimension slider below to explore higher-dimensional analogues: penteract (5D, 32 vertices), hexeract (6D, 64 vertices), all the way up to 10D (1024 vertices).</p>
 
       <div class="viewer">
         <div class="viewer-header">
-          <span class="title">Animated 4D hypercube — 16 vertices · 32 edges</span>
+          <span class="title" id="viewer-title">Animated 4D hypercube — 16 vertices · 32 edges</span>
           <span style="font-size: 11px; color: var(--text-muted-2);" id="rot-info">θ=0° φ=0° ψ=0°</span>
         </div>
         <div class="viewer-canvas">
           <svg class="tesseract" id="tesseract-svg" viewBox="0 0 600 420" preserveAspectRatio="xMidYMid meet"></svg>
-          <div class="info-overlay">
-            <div class="stat"><span class="l">Vertices:</span><span class="v">16</span></div>
-            <div class="stat"><span class="l">Edges:</span><span class="v">32</span></div>
-            <div class="stat"><span class="l">Faces:</span><span class="v">24</span></div>
-            <div class="stat"><span class="l">Cells:</span><span class="v">8</span></div>
-            <div class="stat"><span class="l">Dim:</span><span class="v">4D → 3D → 2D</span></div>
+          <div class="info-overlay" id="info-overlay">
+            <div class="stat"><span class="l">Vertices:</span><span class="v" id="info-vertices">16</span></div>
+            <div class="stat"><span class="l">Edges:</span><span class="v" id="info-edges">32</span></div>
+            <div class="stat"><span class="l">Faces:</span><span class="v" id="info-faces">24</span></div>
+            <div class="stat"><span class="l">Cells:</span><span class="v" id="info-cells">8</span></div>
+            <div class="stat"><span class="l">Dim:</span><span class="v" id="info-dim">4D → 3D → 2D</span></div>
           </div>
           <div class="controls">
             <button class="btn active" id="btn-play">⏸ Pause</button>
             <button class="btn" id="btn-speed">1× speed</button>
             <button class="btn" id="btn-reset">↺ Reset rotation</button>
+            <span style="margin-left: 8px; font-size: 11px; color: var(--text-muted-2);">Dimension:</span>
+            <input type="range" id="dim-slider" min="4" max="10" value="4" step="1" style="accent-color: var(--accent);" />
+            <span id="dim-value" style="font-size: 12px; font-weight: 700; color: var(--accent-2); min-width: 28px; text-align: center;">4</span>
+            <span style="margin-left: 8px; font-size: 11px; color: var(--text-muted-2);">Preset:</span>
+            <button class="btn" data-dim="4" title="Tesseract — 4D">4D</button>
+            <button class="btn" data-dim="5" title="Penteract — 5D">5D</button>
+            <button class="btn" data-dim="6" title="Hexeract — 6D">6D</button>
+            <button class="btn" data-dim="8" title="Octeract — 8D">8D</button>
+            <button class="btn" data-dim="10" title="Decaeract — 10D">10D</button>
           </div>
         </div>
+      </div>
+
+      <h2>N-D hypercube combinatorics</h2>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 12px;">
+        An N-dimensional hypercube (N-cube) has 2^N vertices and N·2^(N−1) edges. The number of k-dimensional sub-faces is given by the binomial C(N,k)·2^(N−k). The table below shows the combinatorics for dimensions 4 through 10 — observe how quickly the structure explodes.
+      </p>
+      <div style="overflow-x: auto; margin-bottom: 24px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 12px; color: var(--text-muted);">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <th style="padding: 8px 12px; text-align: left; color: var(--text);">N (dim)</th>
+              <th style="padding: 8px 12px; text-align: right; color: var(--text);">Vertices (2^N)</th>
+              <th style="padding: 8px 12px; text-align: right; color: var(--text);">Edges (N·2^(N-1))</th>
+              <th style="padding: 8px 12px; text-align: right; color: var(--text);">Faces (square)</th>
+              <th style="padding: 8px 12px; text-align: right; color: var(--text);">Cells (cube)</th>
+              <th style="padding: 8px 12px; text-align: right; color: var(--text);">Name</th>
+            </tr>
+          </thead>
+          <tbody id="nd-table-body" style="font-family: 'SF Mono', Menlo, monospace;">
+            <!-- Filled in by JS -->
+          </tbody>
+        </table>
       </div>
 
       <h2>Math → Code derivation</h2>
@@ -140,6 +171,34 @@
         <div class="step-explain">A second perspective projection from 3D to 2D. The result is the 2D image you see on screen — a shadow of a shadow of a 4D object.</div>
       </div>
 
+      <h2>N-D generalisation — the 5-step recipe for any dimension</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Use the dimension slider above to explore 5D, 6D, 8D, or 10D hypercubes. The generalisation below is the recipe that works for any N.</p>
+      <div class="derivation-step">
+        <strong>Step 1 (N-D): Vertices — all ±1 tuples in R^N</strong>
+        <div class="step-math">V = { (±1, ±1, …, ±1) ∈ R^N }  →  |V| = 2^N</div>
+        <div class="step-explain">An N-cube has 2^N vertices, each a corner of the cube. For N=10: 1024 vertices. Each vertex is identified by a binary pattern: bit d selects the sign of coordinate d.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2 (N-D): Edges — pairs differing in exactly one coordinate</strong>
+        <div class="step-math">E = { (v_i, v_j) : Hamming_distance(v_i, v_j) = 1 }  →  |E| = N · 2^(N-1)</div>
+        <div class="step-explain">Two vertices share an edge iff they differ in exactly one coordinate. Each of the N coordinates can flip (2 choices per flip), and there are 2^(N-1) pairs per flip — giving N · 2^(N-1) edges total. For N=10: 5120 edges.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3 (N-D): Rotation in 2-axis planes</strong>
+        <div class="step-math">R_{ij}(θ) · v : v_i ← v_i cos θ − v_j sin θ,  v_j ← v_i sin θ + v_j cos θ</div>
+        <div class="step-explain">N-D rotation happens in a plane (not around an axis). Pick two axes i, j; the rotation matrix R_ij preserves all coordinates except i and j, which transform as a 2D rotation. We rotate in N-1 planes (0, N-1), (1, N-1), …, (N-2, N-1) so the highest axis animates prominently.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4 (N-D): Chain of perspective projections N → 2</strong>
+        <div class="step-math">(x_0, …, x_{N-1}) → project from N to N-1 → … → 3 → 2</div>
+        <div class="step-explain">Chain (N-2) perspective projections, each dividing by (d_k − x_k). Each step loses one dimension; the final 2D image is a "shadow of a shadow of a shadow …" (N-2 layers deep). For N=10, the image is 8 shadows deep.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5 (N-D): k-faces — the combinatorial explosion</strong>
+        <div class="step-math">|k-faces| = C(N, k) · 2^(N-k)  →  N=10: 1024 verts, 5120 edges, 11520 sq faces, 15360 cubes, …</div>
+        <div class="step-explain">The number of k-dimensional sub-faces of an N-cube is the binomial C(N, k) × 2^(N-k) — choose k coordinates to vary, fix the others, and there are 2^(N-k) ways to fix them. Watch the combinatorics table above explode: N=10 has 1024 vertices but 5120 edges and 11520 square faces.</div>
+      </div>
+
       <h2>What you're seeing</h2>
       <ul>
         <li><strong>The outer cube</strong> is the "near" 3D face of the tesseract; the inner cube is the "far" face.</li>
@@ -157,33 +216,40 @@
       // Particle background
       (function(){const c=document.getElementById('particle-canvas'),x=c.getContext('2d');let W,H,P=[];const N=50,cols=['#06b6d4','#8b5cf6','#ec4899'];function r(){W=c.width=innerWidth;H=c.height=innerHeight}r();addEventListener('resize',r);for(let i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,W,H);for(let i=0;i<N;i++){for(let j=i+1;j<N;j++){const d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<90){x.strokeStyle='rgba(139,92,46,'+.1*(1-d/90)+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke()}}}for(const p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;x.fillStyle=p.c;x.globalAlpha=.4;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill()}x.globalAlpha=1;requestAnimationFrame(s)}s()})();
 
-      // ===== Tesseract (4D Hypercube) =====
-      // 16 vertices: all (±1, ±1, ±1, ±1)
-      const VERTS = [];
-      for (let x = -1; x <= 1; x += 2)
-      for (let y = -1; y <= 1; y += 2)
-      for (let z = -1; z <= 1; z += 2)
-      for (let w = -1; w <= 1; w += 2)
-        VERTS.push([x, y, z, w]);
+      // ===== N-D Hypercube viewer (Phase 26) =====
+      // Generalised from 4D tesseract to arbitrary N (4-10).
+      // An N-cube has 2^N vertices: all (±1, ±1, …, ±1) ∈ R^N.
+      // Two vertices are connected by an edge iff they differ in exactly one coordinate.
+      // Rotation: in N-D, rotations happen in a plane defined by two axes.
+      //   We rotate in multiple planes simultaneously, prioritising planes
+      //   involving the highest axis (so all dimensions animate visibly).
+      // Projection: chain of perspective projections N→N-1→…→3→2.
 
-      // 32 edges: pairs differing in exactly one coordinate
-      const EDGES = [];
-      for (let i = 0; i < VERTS.length; i++)
-        for (let j = i + 1; j < VERTS.length; j++) {
-          let diff = 0;
-          for (let d = 0; d < 4; d++) if (VERTS[i][d] !== VERTS[j][d]) diff++;
-          if (diff === 1) EDGES.push([i, j]);
+      let N_DIM = 4;  // current dimension (4=tesseract, 5=penteract, ...)
+      let VERTS = [];
+      let EDGES = [];
+
+      function buildNDCube(n) {
+        VERTS = [];
+        EDGES = [];
+        // Build all 2^n vertices: each vertex is an n-tuple of ±1
+        for (let i = 0; i < (1 << n); i++) {
+          const v = [];
+          for (let d = 0; d < n; d++) v.push((i >> d) & 1 ? 1 : -1);
+          VERTS.push(v);
         }
+        // Edges: pairs differing in exactly one coordinate
+        for (let i = 0; i < VERTS.length; i++) {
+          for (let j = i + 1; j < VERTS.length; j++) {
+            let diff = 0;
+            for (let d = 0; d < n; d++) if (VERTS[i][d] !== VERTS[j][d]) diff++;
+            if (diff === 1) EDGES.push([i, j]);
+          }
+        }
+      }
 
-      // Rotation state
-      let theta = 0, phi = 0, psi = 0;
-      let playing = true;
-      let speed = 1;
-      const speeds = [0.5, 1, 2, 4];
-      let speedIdx = 1;
-
-      function rotate4D(v, a, b, angle) {
-        // Rotate in the plane defined by axes a and b
+      function rotateND(v, a, b, angle) {
+        // Rotate vector v in the plane defined by axes a, b
         const c = Math.cos(angle), s = Math.sin(angle);
         const result = v.slice();
         result[a] = v[a] * c - v[b] * s;
@@ -191,73 +257,162 @@
         return result;
       }
 
-      function project4Dto3D(v, d4) {
-        // Perspective projection from 4D to 3D
-        const w = d4 / (d4 - v[3]);
-        return [v[0] * w, v[1] * w, v[2] * w];
+      function projectND(v, dim, dist) {
+        // Project from `dim`-D to (dim-1)-D via perspective projection.
+        // dist is the viewing distance in the last axis.
+        const last = v[dim - 1];
+        const w = dist / (dist - last);
+        return v.slice(0, dim - 1).map(x => x * w).concat([last]); // keep last for color
       }
 
-      function project3Dto2D(v, d3) {
-        // Perspective projection from 3D to 2D
-        const z = d3 / (d3 - v[2]);
-        return [v[0] * z, v[1] * z];
+      function projectTo2D(v, n_dim) {
+        // Chain perspective projections N → N-1 → … → 3 → 2
+        let cur = v.slice();
+        // Distances for each projection: scaling down as we reduce dimension
+        const baseDist = 3.0;
+        for (let d = n_dim; d > 2; d--) {
+          const dist = baseDist + 0.5 * (d - 2) / Math.max(n_dim - 2, 1);
+          const last = cur[d - 1];
+          const w = dist / (dist - last);
+          const next = cur.slice(0, d - 1).map(x => x * w);
+          // Keep last coordinate for color (depth)
+          next.push(last);
+          cur = next;
+        }
+        return { x: cur[0], y: cur[1], depth: cur[2] || 0 };
+      }
+
+      // Rotation state — multiple planes for visual richness
+      let angles = [];  // angles for plane (0, n_dim-1), (1, n_dim-1), (2, n_dim-1)...
+      let angleSpeeds = [];
+      let playing = true;
+      let speed = 1;
+      const speeds = [0.5, 1, 2, 4];
+      let speedIdx = 1;
+
+      function initAngles(n) {
+        // We rotate in planes (0, n-1), (1, n-1), (2, n-1), ..., (n-2, n-1)
+        // i.e., always involving the highest axis (this is what makes the
+        // hypercube "unfold" through the Nth dimension).
+        angles = [];
+        angleSpeeds = [];
+        for (let i = 0; i < n - 1; i++) {
+          angles.push(0);
+          // Slightly different speeds to avoid phase-lock
+          angleSpeeds.push(0.005 + 0.002 * i);
+        }
       }
 
       function render() {
         const svg = document.getElementById('tesseract-svg');
         const cx = 300, cy = 210;
         const scale = 80;
-        const d4 = 3.5; // 4D viewing distance
-        const d3 = 4.0; // 3D viewing distance
-
-        // Apply 4D rotations
+        // Apply N-D rotations: rotate each vertex in each plane
         const rotated = VERTS.map(v => {
-          let r = rotate4D(v, 0, 3, theta); // XW plane
-          r = rotate4D(r, 1, 3, phi);      // YW plane
-          r = rotate4D(r, 2, 3, psi);      // ZW plane
+          let r = v.slice();
+          for (let i = 0; i < angles.length; i++) {
+            r = rotateND(r, i, N_DIM - 1, angles[i]);
+          }
           return r;
         });
-
-        // Project to 3D then 2D
+        // Project to 2D
         const projected = rotated.map(v => {
-          const p3 = project4Dto3D(v, d4);
-          const p2 = project3Dto2D(p3, d3);
-          return { x: cx + p2[0] * scale, y: cy + p2[1] * scale, w: v[3], z: p3[2] };
+          const p = projectTo2D(v, N_DIM);
+          return {
+            x: cx + p.x * scale,
+            y: cy + p.y * scale,
+            depth: p.depth,  // last-axis depth (for color)
+          };
         });
-
         // Build SVG
         const parts = [];
         // Edges
         for (const [i, j] of EDGES) {
           const p1 = projected[i], p2 = projected[j];
-          // Color based on average W (4D depth) — closer = brighter
-          const avgW = (p1.w + p2.w) / 2;
-          const opacity = 0.3 + 0.5 * ((avgW + 1) / 2);
-          const color = avgW > 0 ? '#06b6d4' : '#8b5cf6';
-          parts.push(`<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${color}" stroke-width="1.5" opacity="${opacity}"/>`);
+          const avgDepth = (p1.depth + p2.depth) / 2;
+          // Normalise depth to [0, 1] for opacity
+          const norm = Math.max(0, Math.min(1, (avgDepth + 1.5) / 3));
+          const opacity = 0.2 + 0.6 * norm;
+          const color = avgDepth > 0 ? '#06b6d4' : '#8b5cf6';
+          parts.push(`<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${color}" stroke-width="${1 + norm}" opacity="${opacity}"/>`);
         }
-        // Vertices
-        for (let i = 0; i < projected.length; i++) {
+        // Vertices (limit drawing if too many — 1024 vertices for N=10)
+        const maxVerts = 256;
+        const step = Math.max(1, Math.ceil(projected.length / maxVerts));
+        for (let i = 0; i < projected.length; i += step) {
           const p = projected[i];
-          const r = 3 + 2 * ((p.w + 1) / 2);
-          const color = p.w > 0 ? '#f59e0b' : '#ec4899';
-          parts.push(`<circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${color}" opacity="${0.6 + 0.3 * ((p.w + 1) / 2)}"/>`);
+          const norm = Math.max(0, Math.min(1, (p.depth + 1.5) / 3));
+          const r = 2 + 2 * norm;
+          const color = p.depth > 0 ? '#f59e0b' : '#ec4899';
+          parts.push(`<circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${color}" opacity="${0.6 + 0.4 * norm}"/>`);
         }
         svg.innerHTML = parts.join('');
-
         // Update rotation info
-        document.getElementById('rot-info').textContent =
-          `θ=${(theta * 180 / Math.PI % 360).toFixed(0)}° φ=${(phi * 180 / Math.PI % 360).toFixed(0)}° ψ=${(psi * 180 / Math.PI % 360).toFixed(0)}°`;
+        const angleStr = angles.map((a, i) => `θ${i}=${(a * 180 / Math.PI % 360).toFixed(0)}°`).join(' ');
+        document.getElementById('rot-info').textContent = angleStr;
       }
 
       function animate() {
         if (playing) {
-          theta += 0.005 * speed;
-          phi += 0.007 * speed;
-          psi += 0.003 * speed;
+          for (let i = 0; i < angles.length; i++) {
+            angles[i] += angleSpeeds[i] * speed;
+          }
         }
         render();
         requestAnimationFrame(animate);
+      }
+
+      // N-D combinatorics: C(N, k) * 2^(N-k)
+      function binom(n, k) {
+        if (k < 0 || k > n) return 0;
+        let r = 1;
+        for (let i = 0; i < k; i++) r = r * (n - i) / (i + 1);
+        return r;
+      }
+      function ndFaceCount(n, k) {
+        // Number of k-dimensional sub-faces of an n-cube
+        return binom(n, k) * Math.pow(2, n - k);
+      }
+      const ND_NAMES = { 4: 'Tesseract', 5: 'Penteract', 6: 'Hexeract', 7: 'Hepteract', 8: 'Octeract', 9: 'Enneract', 10: 'Decaeract (10-cube)' };
+
+      function updateNDInfo() {
+        document.getElementById('info-vertices').textContent = VERTS.length;
+        document.getElementById('info-edges').textContent = EDGES.length;
+        document.getElementById('info-faces').textContent = ndFaceCount(N_DIM, 2);
+        document.getElementById('info-cells').textContent = ndFaceCount(N_DIM, 3);
+        document.getElementById('info-dim').textContent = `${N_DIM}D → 3D → 2D`;
+        document.getElementById('dim-value').textContent = N_DIM;
+        document.getElementById('viewer-title').textContent = `Animated ${N_DIM}D hypercube — ${VERTS.length} vertices · ${EDGES.length} edges`;
+      }
+
+      function buildNDTable() {
+        const tbody = document.getElementById('nd-table-body');
+        if (!tbody) return;
+        const rows = [];
+        for (let n = 4; n <= 10; n++) {
+          const v = Math.pow(2, n);
+          const e = n * Math.pow(2, n - 1);
+          const f = ndFaceCount(n, 2);
+          const c = ndFaceCount(n, 3);
+          const name = ND_NAMES[n] || `${n}-cube`;
+          rows.push(`<tr style="border-bottom: 1px solid var(--border); ${n === N_DIM ? 'background: rgba(6,182,212,0.08);' : ''}">
+            <td style="padding: 6px 12px; color: var(--accent-2); font-weight: 700;">${n}D</td>
+            <td style="padding: 6px 12px; text-align: right;">${v}</td>
+            <td style="padding: 6px 12px; text-align: right;">${e}</td>
+            <td style="padding: 6px 12px; text-align: right;">${f}</td>
+            <td style="padding: 6px 12px; text-align: right;">${c}</td>
+            <td style="padding: 6px 12px; text-align: right; color: var(--text);">${name}</td>
+          </tr>`);
+        }
+        tbody.innerHTML = rows.join('');
+      }
+
+      function setDimension(n) {
+        N_DIM = parseInt(n, 10);
+        buildNDCube(N_DIM);
+        initAngles(N_DIM);
+        updateNDInfo();
+        buildNDTable();
       }
 
       // Controls
@@ -272,11 +427,23 @@
         e.target.textContent = `${speed}× speed`;
       });
       document.getElementById('btn-reset').addEventListener('click', () => {
-        theta = 0; phi = 0; psi = 0;
+        for (let i = 0; i < angles.length; i++) angles[i] = 0;
+      });
+      document.getElementById('dim-slider').addEventListener('input', (e) => {
+        setDimension(e.target.value);
+      });
+      document.querySelectorAll('button[data-dim]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const dim = parseInt(btn.dataset.dim, 10);
+          document.getElementById('dim-slider').value = dim;
+          setDimension(dim);
+        });
       });
 
       // Start
+      setDimension(4);
       animate();
+
 
       // Theme
       (function(){const K='aihpc-theme';const b=document.body,r=document.querySelector('.ribbon'),i=document.getElementById('ribbon-theme-icon');function a(t){if(t==='light'){b.classList.add('light');r&&r.classList.add('light');i.textContent='☀'}else{b.classList.remove('light');r&&r.classList.remove('light');i.textContent='🌙'}}let d='dark';try{const s=localStorage.getItem(K);if(s==='light'||s==='dark')d=s;else if(matchMedia('(prefers-color-scheme:light)').matches)d='light'}catch(e){}a(d);document.getElementById('ribbon-theme-toggle').addEventListener('click',()=>{const n=b.classList.contains('light')?'dark':'light';a(n);try{localStorage.setItem(K,n)}catch(e){}})})();
