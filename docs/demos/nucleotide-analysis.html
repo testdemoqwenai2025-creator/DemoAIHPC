@@ -402,6 +402,7 @@
       // ============================================================
 
       const DEFAULT_SEQ = "ATGACCATGATTACGGATTCACTGGCCGTCGTTTTACAACGTCGTGAAACTGCGGAATCCTGAATCGCAAAGAACTGGCGTATCGCCGTATGCAGAAAAGCAGGCAAAGCCGACATTGCCGTGGCAGTGCACGGTGGTGCAGGCCAGCGCGTCCGGCAAAGCATTCAACGCGGTCAGGAATGCCGTGGCGAAGTGGAA";
+      const MAX_SEQ_LEN = 10000; // Limit to prevent browser freeze on long sequences
 
       const MOTIFS = [
         { seq: "TATAAA", label: "TATA box", color: "#f59e0b" },
@@ -693,8 +694,14 @@
 
       function renderGCPlot(seq) {
         const svg = document.getElementById('gc-plot');
-        const data = gcContent(seq, 20);
+        let data = gcContent(seq, 20);
         if (data.length === 0) { svg.innerHTML = ''; return; }
+        // Sample if too many points — prevents slow SVG rendering
+        const MAX_PLOT_POINTS = 500;
+        if (data.length > MAX_PLOT_POINTS) {
+          const step = Math.ceil(data.length / MAX_PLOT_POINTS);
+          data = data.filter((_, i) => i % step === 0);
+        }
         const W = 600, H = 120, pad = 4;
         const xs = data.map(d => d.pos);
         const xmin = Math.min(...xs), xmax = Math.max(...xs) || 1;
@@ -773,6 +780,9 @@
       async function runAll() {
         const seqInput = document.getElementById('seq-input').value.replace(/\s/g, '').toUpperCase();
         if (seqInput.length === 0) { alert('Please enter a DNA sequence.'); return; }
+        // Length limit — prevent browser freeze on long sequences
+        const analysisSeq = seqInput.length > MAX_SEQ_LEN ? seqInput.slice(0, MAX_SEQ_LEN) : seqInput;
+        const truncated = seqInput.length > MAX_SEQ_LEN;
         // Open popup
         const overlay = document.getElementById('popup-overlay');
         const traceEl = document.getElementById('trace-list');
@@ -804,7 +814,10 @@
         try {
           // Parse
           lis.parse.classList.add('active'); await sleep(280);
-          const seq = seqInput;
+          const seq = analysisSeq; // Use truncated sequence for analysis
+          if (truncated) {
+            pushTrace('parse', 'limit', `Sequence truncated from ${seqInput.length} to ${MAX_SEQ_LEN} bp for performance.`);
+          }
           pushTrace('parse', 'parse', `Validated ${seq.length} bp; alphabet ACGT.`);
           renderSeqStats(seq);
           lis.parse.classList.remove('active'); lis.parse.classList.add('done'); await sleep(140);
