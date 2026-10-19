@@ -387,6 +387,21 @@
           </div>
         </div>
 
+        <!-- Bring your own data — the user's key insight: "upload or url for desired dataset" -->
+        <div style="padding: 12px 20px; border-top: 1px solid var(--border); background: var(--bg-elevated);">
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted-2); margin-bottom: 8px;">5 · Bring your own dataset (ETL/ELT)</div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📁 Upload CSV/JSON/TXT
+              <input type="file" id="file-input" accept=".csv,.json,.txt,.tsv" style="display:none;" />
+            </label>
+            <input type="url" id="url-input" placeholder="or paste a dataset URL…" style="flex:1; min-width:200px; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-family: inherit;" />
+            <button class="act" id="url-fetch-btn" style="font-size: 11px;">⬇ Fetch URL</button>
+            <button class="act" id="use-default-btn" style="font-size: 11px;">↺ Use default</button>
+          </div>
+          <div id="etl-report" style="display:none; margin-top: 8px; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 120px; overflow: auto;"></div>
+        </div>
+
         <div class="popup-footer">
           <div class="meta">All client-side · no external services · data stays in your browser</div>
           <div class="actions">
@@ -846,6 +861,178 @@ print(json.dumps(result))
         }
       }
       document.getElementById('act-py').addEventListener('click', runPython);
+
+      // ---- ETL/ELT: Bring your own dataset ----
+      // The user's key insight: "upload or url for desired dataset"
+      // + "provide a code for ETL/ELT cleaning process"
+      // This lets users bring their own data, clean it, and run
+      // compute_outliers on it — completing the platform's goals.
+
+      function readCSV(text) {
+        const lines = text.trim().split(/\r?\n/);
+        return lines.map(l => l.split(/[,;\t]/).map(c => c.trim()));
+      }
+      function extractNumericColumn(rows, colIdx) {
+        // Try to find a numeric column; default to last column
+        const vals = [];
+        for (const r of rows) {
+          if (r.length <= colIdx) continue;
+          const v = parseFloat(r[colIdx]);
+          if (!Number.isNaN(v)) vals.push(v);
+        }
+        return vals;
+      }
+      function autoDetectColumn(rows) {
+        // Find the first column that has >50% parseable floats
+        const maxCol = Math.max(...rows.map(r => r.length));
+        for (let c = 0; c < maxCol; c++) {
+          let parsed = 0, total = 0;
+          for (const r of rows) {
+            if (r.length <= c) continue;
+            total++;
+            if (!isNaN(parseFloat(r[c]))) parsed++;
+          }
+          if (total > 0 && parsed / total > 0.5) return c;
+        }
+        return maxCol - 1; // fallback to last column
+      }
+      function etlClean(rawText, filename) {
+        // ETL pipeline: extract → transform → load
+        const report = [];
+        report.push(`▸ ETL pipeline starting — source: ${filename || 'pasted text'}`);
+
+        // Step 1: Parse (detect format)
+        let rows, format;
+        try {
+          JSON.parse(rawText);
+          // It's JSON — try to extract a numeric array
+          const json = JSON.parse(rawText);
+          if (Array.isArray(json) && json.length > 0 && typeof json[0] === 'number') {
+            const vals = json.filter(v => typeof v === 'number');
+            report.push(`▸ Format: JSON array of numbers (${vals.length} values)`);
+            return { values: vals, report };
+          } else {
+            // JSON object — look for a data array
+            for (const key of Object.keys(json)) {
+              if (Array.isArray(json[key]) && json[key].length > 0 && typeof json[key][0] === 'number') {
+                report.push(`▸ Format: JSON object → key "${key}" (${json[key].length} values)`);
+                return { values: json[key].filter(v => typeof v === 'number'), report };
+              }
+            }
+            throw new Error('JSON has no numeric array');
+          }
+        } catch {
+          // Not JSON → try CSV
+          rows = readCSV(rawText);
+          format = 'CSV';
+          if (rows.length === 0) throw new Error('Empty data');
+          report.push(`▸ Format: CSV/TSV (${rows.length} rows, ${rows[0].length} columns)`);
+        }
+
+        // Step 2: Detect numeric column
+        const colIdx = autoDetectColumn(rows);
+        const colName = rows[0] && rows[0][colIdx] ? rows[0][colIdx] : `column ${colIdx + 1}`;
+        // Check if first row is a header (non-numeric)
+        let dataRows = rows;
+        if (rows[0] && isNaN(parseFloat(rows[0][colIdx]))) {
+          dataRows = rows.slice(1);
+          report.push(`▸ Header row detected — column "${colName}" selected`);
+        } else {
+          report.push(`▸ Auto-detected column ${colIdx + 1} (no header)`);
+        }
+
+        // Step 3: Extract values (with NA removal)
+        const rawCount = dataRows.length;
+        const values = extractNumericColumn(dataRows, colIdx);
+        const naRemoved = rawCount - values.length;
+        report.push(`▸ Extract: ${values.length} values (removed ${naRemoved} NA/null/non-numeric)`);
+
+        // Step 4: Outlier pre-flagging (for ETL report, not removal)
+        if (values.length > 0) {
+          const mean = values.reduce((s, v) => s + v, 0) / values.length;
+          const std = Math.sqrt(values.reduce((s, v) => s + (v - mean) ** 2, 0) / values.length);
+          const iqr = values.slice().sort((a, b) => a - b);
+          const q1 = iqr[Math.floor(iqr.length * 0.25)] || 0;
+          const q3 = iqr[Math.floor(iqr.length * 0.75)] || 0;
+          const iqrVal = q3 - q1;
+          const lowerFence = q1 - 1.5 * iqrVal;
+          const upperFence = q3 + 1.5 * iqrVal;
+          const flaggedOutliers = values.filter(v => v < lowerFence || v > upperFence).length;
+          report.push(`▸ Stats: μ=${mean.toFixed(3)} σ=${std.toFixed(3)} IQR=[${q1.toFixed(2)}, ${q3.toFixed(2)}]`);
+          if (flaggedOutliers > 0) {
+            report.push(`▸ Outlier pre-flag (IQR 1.5×): ${flaggedOutliers} values outside [${lowerFence.toFixed(2)}, ${upperFence.toFixed(2)}]`);
+          }
+          report.push(`▸ ETL complete — ${values.length} values ready for compute_outliers()`);
+        } else {
+          report.push(`▸ ETL failed — no numeric values found`);
+        }
+
+        return { values, report };
+      }
+
+      function applyUserData(values, reportLines) {
+        if (!values || values.length === 0) {
+          alert('No numeric values found in the uploaded data.');
+          return;
+        }
+        // Replace the embedded DATASET with the user's data
+        DATASET.length = 0;
+        for (const v of values) DATASET.push(v);
+        // Show ETL report
+        const etlEl = document.getElementById('etl-report');
+        etlEl.style.display = 'block';
+        etlEl.innerHTML = reportLines.map(l => `<div style="margin: 2px 0;">${l.replace(/▸/g, '<span style="color: var(--accent-2);">▸</span>')}</div>`).join('');
+        // Reset lastResult so the user needs to Run again
+        lastResult = null;
+        document.getElementById('download-btn').disabled = true;
+      }
+
+      // File upload handler
+      document.getElementById('file-input').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const { values, report } = etlClean(ev.target.result, file.name);
+            applyUserData(values, report);
+          } catch (err) {
+            const etlEl = document.getElementById('etl-report');
+            etlEl.style.display = 'block';
+            etlEl.innerHTML = `<span style="color: var(--danger);">ETL error: ${err.message}</span>`;
+          }
+        };
+        reader.onerror = () => alert('File read failed.');
+        reader.readAsText(file);
+      });
+
+      // URL fetch handler
+      document.getElementById('url-fetch-btn').addEventListener('click', async () => {
+        const url = document.getElementById('url-input').value.trim();
+        if (!url) { alert('Paste a dataset URL first.'); return; }
+        const etlEl = document.getElementById('etl-report');
+        etlEl.style.display = 'block';
+        etlEl.textContent = 'Fetching… (CORS may block some URLs; try a CORS-enabled endpoint)';
+        try {
+          const resp = await fetch(url);
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const text = await resp.text();
+          const { values, report } = etlClean(text, url);
+          applyUserData(values, report);
+        } catch (err) {
+          etlEl.innerHTML = `<span style="color: var(--danger);">Fetch error: ${err.message}</span><br><span style="font-size: 10px;">Tip: the URL must be CORS-enabled. Many public datasets (data.gov, github raw) work. If blocked, download the file and use the Upload button instead.</span>`;
+        }
+      });
+
+      // Use default data
+      document.getElementById('use-default-btn').addEventListener('click', () => {
+        const defaults = [3.2, 5.1, 4.7, 2.9, 5.8, 4.2, 6.1, 3.9, 5.5, 4.8];
+        DATASET.length = 0;
+        for (const v of defaults) DATASET.push(v);
+        document.getElementById('etl-report').style.display = 'none';
+        lastResult = null;
+        document.getElementById('download-btn').disabled = true;
+      });
 
       // ---- Ribbon theme toggle ----
       (function setupRibbonTheme() {
