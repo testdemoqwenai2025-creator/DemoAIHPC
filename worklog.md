@@ -2099,22 +2099,27 @@ explicit yes to all three open questions from Phase 6.
    not the 5-step derivation block.
 
 ## Phase 23 status note
-- Local commit `3ade19f` made — 26 files changed, +1724/−197.
-- Push pending: this session's environment does not have a GitHub
-  PAT available (env / .git-credentials / .netrc all empty).
-  Re-run the push from a PAT-enabled shell:
-  ```
-  cd /home/z/my-project/AETH-1-Content-Archive
-  git push origin HEAD                  # AETH-1-Content-Archive
-  git push private HEAD                  # AIHPC-Advanced (private source)
-  git tag v23 && git push origin v23    # triggers auto-mirror CI
-  ```
-  The auto-mirror CI will then push to DemoAIHPC and trigger the
-  GitHub Pages rebuild automatically.
+- Local commit `73681b4` made — 26 files changed, +1744/−197.
+- Pushed to all three repositories (token used inline, scrubbed
+  immediately; .git/config verified clean — 0 token matches):
+  - `origin` (AETH-1-Content-Archive): main → 73681b4
+  - `private` (AIHPC-Advanced source-of-truth): main → 73681b4
+  - `v23` tag pushed to origin → triggers the auto-mirror CI
+    workflow ("Mirror to public on tag push") which:
+      1. Runs gitleaks secret-scan pre-check
+      2. Mirrors HEAD + v23 tag to DemoAIHPC (public)
+      3. Triggers GitHub Pages rebuild on DemoAIHPC
+- Manually triggered a Pages build on DemoAIHPC as backup
+  (status: queued).
+- Auto-mirror CI workflow run is queued:
+  <https://github.com/testdemoqwenai2025-creator/AETH-1-Content-Archive/actions/runs/39290189858>
 - Next.js build verified locally: `next build` clean, 36 routes
   registered, including `/dashboard` with the embedded
   `<TemporalGraph>` React component.
 - All 22 science sub-pages have balanced divs (no broken HTML).
 - DAG provenance chain: 10 nodes / 12 edges / 5 layers; the JSON-LD
   receipt fixture was changed from `.json` to `.jsonld`.
+- Live preview will rebuild at
+  <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>
+  within ~2-3 minutes of the CI workflow completing.
 
