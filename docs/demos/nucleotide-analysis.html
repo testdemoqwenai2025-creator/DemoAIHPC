@@ -355,6 +355,11 @@
             </div>
           </div>
           <pre class="code-block" id="code-block"></pre>
+          <div style="margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+            <button class="btn primary" id="nuc-py-btn">▶ Execute in Python (Pyodide)</button>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Loads CPython 3.12 WASM from CDN (one-time ~10MB). Runs reverse_complement() in real Python and compares with the JS implementation.</span>
+          </div>
+          <div id="nuc-py-result" style="display:none; margin-top: 8px; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; font-family: 'SF Mono', Menlo, monospace; font-size: 11px; color: var(--text);"></div>
         </div>
 
         <!-- Audience-annotated results panel -->
@@ -961,6 +966,66 @@
       renderSeqStats(DEFAULT_SEQ);
       renderCode('python');
       renderAnnotations('student');
+
+      // ---- Pyodide integration: real Python execution of reverse_complement ----
+      let pyodidePromise = null;
+      function loadPyodide() {
+        if (pyodidePromise) return pyodidePromise;
+        pyodidePromise = new Promise(async (resolve, reject) => {
+          try {
+            if (!window.loadPyodide) {
+              await new Promise((r, j) => {
+                const s = document.createElement('script');
+                s.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js';
+                s.onload = r;
+                s.onerror = () => j(new Error('Pyodide failed to load from CDN.'));
+                document.head.appendChild(s);
+              });
+            }
+            const py = await window.loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/' });
+            resolve(py);
+          } catch (e) { reject(e); }
+        });
+        return pyodidePromise;
+      }
+      async function runPyRevComp() {
+        const btn = document.getElementById('nuc-py-btn');
+        const out = document.getElementById('nuc-py-result');
+        const seq = document.getElementById('seq-input').value.replace(/\s/g, '').toUpperCase();
+        if (!seq) { alert('Enter a DNA sequence first.'); return; }
+        btn.disabled = true;
+        btn.textContent = 'Loading Pyodide… (one-time ~10MB)';
+        out.style.display = 'block';
+        out.textContent = 'Loading Pyodide runtime from CDN (one-time ~10MB download)...';
+        try {
+          const py = await loadPyodide();
+          btn.textContent = 'Executing Python…';
+          out.textContent = 'Pyodide loaded. Running reverse_complement() in Python...';
+          const pySrc = `
+COMPLEMENT = {"A": "T", "T": "A", "G": "C", "C": "G"}
+def reverse_complement(dna):
+    return "".join(COMPLEMENT.get(b, b) for b in reversed(dna.upper()))
+result = reverse_complement(${JSON.stringify(seq)})
+`;
+          py.runPython(pySrc);
+          const pyResult = py.globals.get('result').toString();
+          const jsResult = reverseComplement(seq);
+          const match = pyResult === jsResult;
+          out.innerHTML = `<span style="color: var(--accent-2);">✓ Python execution complete (via Pyodide / CPython 3.12 WASM):</span><br>` +
+            `<span style="color: var(--text-muted);">Input:</span> ${seq.slice(0, 30)}… (${seq.length} bp)<br>` +
+            `<span style="color: var(--text-muted);">Python result:</span> ${pyResult.slice(0, 30)}… (${pyResult.length} bp)<br>` +
+            `<span style="color: var(--text-muted);">JS result:</span> ${jsResult.slice(0, 30)}… (${jsResult.length} bp)<br>` +
+            `<span style="color: ${match ? 'var(--success)' : 'var(--danger)'}; font-weight: bold;">Match JS impl: ${match ? 'YES ✓ (bit-for-bit reproducible)' : 'NO (drift!)'}</span>`;
+          btn.textContent = '✓ Executed in Python';
+        } catch (e) {
+          out.innerHTML = `<span style="color: var(--danger);">Pyodide error: ${e.message}</span>`;
+          btn.textContent = '▶ Execute in Python (retry)';
+        } finally {
+          btn.disabled = false;
+          setTimeout(() => { btn.textContent = '▶ Execute in Python (Pyodide)'; }, 2000);
+        }
+      }
+      document.getElementById('nuc-py-btn').addEventListener('click', runPyRevComp);
 
       // ---- Ribbon theme toggle ----
       (function setupRibbonTheme() {
