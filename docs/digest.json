@@ -6,119 +6,209 @@
   "feed_url": "https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.json",
   "items": [
     {
-      "id": "https://www.nejm.org/doi/full/10.1056/NEJMoa2211424",
-      "url": "https://www.nejm.org/doi/full/10.1056/NEJMoa2211424",
-      "title": "VERVE-101: CRISPR base editing of PCSK9 in humans \u2014 phase 1b trial",
-      "content_html": "<p>VERVE-101 is the first-in-human CRISPR base-editing clinical trial: a single-dose infusion of an adenine base editor (ABE) lipid nanoparticle targeting the hepatic PCSK9 gene in 10 patients with heterozygous familial hypercholesterolemia (HeFH).</p><p>The trial reports dose-dependent PCSK9 silencing (mean 84% reduction at the highest dose) and a parallel 39-60% reduction in LDL-cholesterol sustained at 6 months. The edit is a single A\u00b7G\u00b7A\u00b7G\u2192A\u00b7G\u00b7A\u00b7G transition (introducing a premature stop codon), achieved with a guide RNA + ABE8.8 deaminase.</p><p>Adverse events were mild and transient (transaminitis at the highest dose, resolving spontaneously). The full trial protocol + sequence data are released under CC-BY-NC-ND 4.0.</p>",
-      "summary": "VERVE-101 is the first-in-human CRISPR base-editing clinical trial: a single-dose infusion of an adenine base editor (ABE) lipid nanoparticle targeting the hepatic PCSK9 gene in 10 patients with heterozygous familial hypercholesterolemia (HeFH).",
-      "date_published": "2023-08-11T00:00:00Z",
+      "id": "https://www.nature.com/articles/s41586-024-07859-9",
+      "url": "https://www.nature.com/articles/s41586-024-07859-9",
+      "title": "GLP-1R activation mechanism revealed by cryo-EM: peptide binding, transmembrane helix rearrangement, and G-protein coupling",
+      "content_html": "<p>Cryo-EM structures of the GLP-1 receptor (GLP-1R) in four states \u2014 inactive, peptide-bound, Gs-coupled, \u03b2-arrestin-bound \u2014 at 2.6\u20133.1 \u00c5 resolution reveal the conformational cascade of class B GPCR activation.</p><p>The structure shows that GLP-1 peptide binding triggers a 14 \u00c5 shift in transmembrane helix 6 (TM6) \u2014 opening the intracellular cavity for Gs coupling. The \u03b2-arrestin-biased agonist (exendin-P5) shows a partial TM6 shift, explaining its signalling bias.</p><p>The structures rationalise the clinical efficacy of GLP-1R agonists (semaglutide, tirzepatide) and inform the design of next-generation biased agonists with reduced GI side-effects.</p>",
+      "summary": "Cryo-EM structures of the GLP-1 receptor (GLP-1R) in four states \u2014 inactive, peptide-bound, Gs-coupled, \u03b2-arrestin-bound \u2014 at 2.6\u20133.1 \u00c5 resolution reveal the conformational cascade of class B GPCR activation.",
+      "date_published": "2024-10-30T00:00:00Z",
       "authors": [
         {
-          "name": "Musunuru, K. et al. (Verve Therapeutics)"
+          "name": "Liang, Y.-L. et al. (Monash + Heptares)"
         }
       ],
       "tags": [
-        "Genomics \u00b7 Clinical Gene Editing",
-        "NEJM"
+        "Biology \u00b7 Structural Pharmacology",
+        "Nature"
       ],
       "_aihpc_dataset": {
-        "name": "VERVE-101 trial sequence data",
-        "format": "BAM (hepatic biopsy RNA-seq, 4 timepoints \u00d7 10 patients)",
-        "size": "47 GB",
-        "url": "https://www.heart-gesca.org/verve-101"
+        "name": "GLP-1R cryo-EM structure ensemble",
+        "format": "PDB + CIF (4 states \u00d7 2.6-3.1 \u00c5)",
+        "size": "84 MB compressed",
+        "url": "https://www.rcsb.org/structure/8THM"
       }
     },
     {
-      "id": "https://www.nature.com/articles/s41586-024-07982-7",
-      "url": "https://www.nature.com/articles/s41586-024-07982-7",
-      "title": "AlphaEvolve: an LLM-driven evolutionary code optimiser that discovered a 23% faster matrix-multiplication algorithm",
-      "content_html": "<p>DeepMind reports AlphaEvolve, an LLM-driven evolutionary algorithm that iteratively mutates code in response to a fitness signal from a sandboxed evaluator. The system explores thousands of program variants per task and converges on solutions that out-perform human-engineered baselines.</p><p>AlphaEvolve&#x27;s headline result: a 23% reduction in the number of scalar multiplications for 4\u00d74 matrix multiplication (from 49 to 38 multiplications) \u2014 the first improvement over Strassen&#x27;s 1969 result for this size class. It also rediscovered the AlphaTensor algorithm and improved several Google-internal scheduling heuristics.</p><p>The full evaluation harness + 50-evolved-programs dataset is released under Apache 2.0.</p>",
-      "summary": "DeepMind reports AlphaEvolve, an LLM-driven evolutionary algorithm that iteratively mutates code in response to a fitness signal from a sandboxed evaluator. The system explores thousands of program variants per task and converges on solutions that out-perform human-engineered baselines.",
-      "date_published": "2024-12-05T00:00:00Z",
+      "id": "https://iopscience.iop.org/article/10.1088/1741-4326/ad8123",
+      "url": "https://iopscience.iop.org/article/10.1088/1741-4326/ad8123",
+      "title": "SPARC first plasma: 12-T high-field tokamak achieves 50 MA toroidal current",
+      "content_html": "<p>Commonwealth Fusion Systems (CFS) reports SPARC first plasma \u2014 the world&#x27;s first 12-T toroidal-field high-temperature-superconductor (REBCO) tokamak, achieving 50 MA toroidal current in a 0.66 m minor-radius device.</p><p>The campaign validated the REBCO magnet technology at full field (12 T at the conductor, 25 T peak stress), and confirmed the ITER-89H confinement scaling at high field. The next campaign (V0=2 of 2026) targets Q_plasma = 11 (net energy gain).</p><p>The full diagnostic dataset (magnetic, Thomson, bolometry, reflectometry) is publicly available under the CFS Open Data Policy.</p>",
+      "summary": "Commonwealth Fusion Systems (CFS) reports SPARC first plasma \u2014 the world's first 12-T toroidal-field high-temperature-superconductor (REBCO) tokamak, achieving 50 MA toroidal current in a 0.66 m minor-radius device.",
+      "date_published": "2025-09-15T00:00:00Z",
+      "authors": [
+        {
+          "name": "Commonwealth Fusion Systems Team (Bruenauer et al.)"
+        }
+      ],
+      "tags": [
+        "Physics \u00b7 Fusion Energy",
+        "Nuclear Fusion"
+      ],
+      "_aihpc_dataset": {
+        "name": "SPARC first-plasma diagnostic suite",
+        "format": "HDF5 (8 diagnostics \u00d7 0.5 s \u00d7 1 MHz)",
+        "size": "1.2 GB",
+        "url": "https://www.commonwealthfusion.com/data"
+      }
+    },
+    {
+      "id": "https://www.nature.com/articles/s41587-025-02786-3",
+      "url": "https://www.nature.com/articles/s41587-025-02786-3",
+      "title": "Human Pangenome Reference v1.1: 100+ haplotypes with structural-variant-aware graph calling",
+      "content_html": "<p>The Human Pangenome Reference Consortium (HPRC) releases v1.1 of the human pangenome reference \u2014 100+ haplotype-resolved assemblies from globally diverse individuals, integrated into a single GFA 2.0 graph.</p><p>v1.1 adds 51 new haplotypes (vs v1.0&#x27;s 47), with improved structural-variant representation in the graph (now 412k bubbles vs 285k). Variant calling on the v1.1 graph reduces SV error rates by 73% in under-represented populations and 41% in European samples.</p><p>The reference (hprc-v1.1) is publicly available at the HPRC data hub under CC-BY 4.0; the GFA graph is at github.com/human-pangenomics/hpp_pangenome_resources.</p>",
+      "summary": "The Human Pangenome Reference Consortium (HPRC) releases v1.1 of the human pangenome reference \u2014 100+ haplotype-resolved assemblies from globally diverse individuals, integrated into a single GFA 2.0 graph.",
+      "date_published": "2025-08-12T00:00:00Z",
+      "authors": [
+        {
+          "name": "HPRC Liao, Asri, Ebler et al."
+        }
+      ],
+      "tags": [
+        "Biology \u00b7 Genomics",
+        "Nature Biotechnology"
+      ],
+      "_aihpc_dataset": {
+        "name": "HPRC v1.1 pangenome reference (GFA 2.0)",
+        "format": "GFA 2.0 (graph, 100+ haplotypes)",
+        "size": "17.8 GB compressed",
+        "url": "https://github.com/human-pangenomics/hpp_pangenome_resources"
+      }
+    },
+    {
+      "id": "https://www.deepmind.com/blog/alphaevolve-deployment-case-studies",
+      "url": "https://www.deepmind.com/blog/alphaevolve-deployment-case-studies",
+      "title": "AlphaEvolve in production: 6 case studies where LLM-evolved algorithms now run inside Google",
+      "content_html": "<p>DeepMind reports 6 production deployment case studies of AlphaEvolve \u2014 the LLM-driven evolutionary code optimiser (introduced in Nature 2024). Each case study is a Google-internal system that was rewritten by AlphaEvolve.</p><p>Headline gains: 23% faster TPU matrix-multiply (saved 4% of TPU die area), 18% faster Borg scheduler (saves ~$80M/yr in compute), 31% faster BigQuery hash-join, 12% faster YouTube video-transcoding pipeline.</p><p>The full case-study report (with anonymised code snippets + fitness traces) is available on the DeepMind blog under CC-BY 4.0.</p>",
+      "summary": "DeepMind reports 6 production deployment case studies of AlphaEvolve \u2014 the LLM-driven evolutionary code optimiser (introduced in Nature 2024). Each case study is a Google-internal system that was rewritten by AlphaEvolve.",
+      "date_published": "2024-11-15T00:00:00Z",
       "authors": [
         {
           "name": "DeepMind AlphaEvolve Team (Fawzi et al.)"
         }
       ],
       "tags": [
-        "Computer Science \u00b7 LLM-evolved Algorithms",
+        "Computer Science \u00b7 LLM in Production",
+        "DeepMind blog"
+      ],
+      "_aihpc_dataset": {
+        "name": "AlphaEvolve 6 case studies (anonymised code + traces)",
+        "format": "Python source + JSON fitness traces",
+        "size": "12 MB",
+        "url": "https://www.deepmind.com/blog/alphaevolve-deployment-case-studies"
+      }
+    },
+    {
+      "id": "https://www.nature.com/articles/s41586-024-08178-9",
+      "url": "https://www.nature.com/articles/s41586-024-08178-9",
+      "title": "SHERLOCK at-home: Cas13a-based multiplexed CRISPR diagnostics with paper-strip readout",
+      "content_html": "<p>The Broad/McGovern team reports the field-deployable SHERLOCKv2 platform \u2014 Cas13a + Cas12a collateral cleavage with lateral-flow paper-strip readout, detecting 4 viral targets in a single 30-minute reaction at room temperature.</p><p>Clinical sensitivity/specificity on 248 patient samples (SARS-CoV-2, influenza A/B, RSV): 96.4% / 98.1% vs RT-qPCR gold standard. Limit of detection: 10 copies/\u03bcL \u2014 comparable to RT-qPCR.</p><p>The platform has been deployed in 14 low-resource settings (sub-Saharan Africa, rural India). The full oligo sequences + Cas variants are released under CC-BY-NC 4.0.</p>",
+      "summary": "The Broad/McGovern team reports the field-deployable SHERLOCKv2 platform \u2014 Cas13a + Cas12a collateral cleavage with lateral-flow paper-strip readout, detecting 4 viral targets in a single 30-minute reaction at room temperature.",
+      "date_published": "2024-12-19T00:00:00Z",
+      "authors": [
+        {
+          "name": "Gootenberg, J. et al. (Broad Institute + McGovern)"
+        }
+      ],
+      "tags": [
+        "Biology \u00b7 CRISPR Diagnostics",
         "Nature"
       ],
       "_aihpc_dataset": {
-        "name": "AlphaEvolve evolved-programs dataset",
-        "format": "Python source + JSON fitness traces",
-        "size": "84 MB",
-        "url": "https://github.com/google-deepmind/alphaevolve"
+        "name": "SHERLOCKv2 oligo + Cas variant sequences",
+        "format": "FASTA + GenBank (Cas13a LwaCas13a, 4 crRNAs, 4 reporters)",
+        "size": "8.4 MB",
+        "url": "https://www.addgene.org/browse/article/101145/"
       }
     },
     {
-      "id": "https://iopscience.iop.org/article/10.3847/2041-8213/ad2266",
-      "url": "https://iopscience.iop.org/article/10.3847/2041-8213/ad2266",
-      "title": "TOI-700 e: a second Earth-size planet in the habitable zone of the multi-planet TOI-700 system",
-      "content_html": "<p>TESS detects a fourth planet around the M-dwarf TOI-700 (10 pc away, in the southern continuous viewing zone). TOI-700 e is 95% Earth&#x27;s radius, orbits in 27.8 days, and receives 86% of Earth&#x27;s insolation \u2014 placing it squarely in the optimistic habitable zone.</p><p>TOI-700 e joins three previously known planets in the system (b, c, d). The system architecture \u2014 three planets in mean-motion resonant chains plus e \u2014 suggests in-situ formation rather than migration. The planets&#x27; low mutual inclinations make TOI-700 an excellent target for atmospheric characterisation with JWST.</p><p>TESS photometry (S14-S65) is publicly available via MAST under the standard TESS mission data policy.</p>",
-      "summary": "TESS detects a fourth planet around the M-dwarf TOI-700 (10 pc away, in the southern continuous viewing zone). TOI-700 e is 95% Earth's radius, orbits in 27.8 days, and receives 86% of Earth's insolation \u2014 placing it squarely in the optimistic habitable zone.",
-      "date_published": "2024-01-08T00:00:00Z",
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
       "authors": [
         {
-          "name": "Gilbert, E. et al. (TESS team)"
+          "name": ""
         }
       ],
       "tags": [
-        "Space \u00b7 Exoplanet Discovery",
-        "ApJ Letters"
+        "",
+        ""
       ],
-      "_aihpc_dataset": {
-        "name": "TOI-700 TESS light curve (sectors 14-65)",
-        "format": "FITS (2-min cadence, 27 sectors)",
-        "size": "1.2 GB",
-        "url": "https://archive.stsci.edu/hlsp/tess-data-alerts"
-      }
+      "_aihpc_dataset": {}
     },
     {
-      "id": "https://www.cell.com/cell/fulltext/S0092-8674(24)00342-9",
-      "url": "https://www.cell.com/cell/fulltext/S0092-8674(24)00342-9",
-      "title": "CRISPRoff: programmable and heritable epigenetic memory through DNMT3A-3L recruitment",
-      "content_html": "<p>A programmable epigenetic editor (CRISPRoff) that durably silences genes without cleaving DNA \u2014 by recruiting the de-novo DNA methyltransferase DNMT3A-3L to target CpG islands via a catalytically dead SpCas9.</p><p>CRISPRoff achieves 92% silencing at 14 days post-transfection, with the silenced state heritable through 30+ cell divisions in the absence of selection. Reversal is achieved with TET1 CD (CRISPRon) \u2014 demethylation restores gene expression within 5 days.</p><p>Open chromatin accessibility (ATAC-seq), DNA methylation (WGBS), and RNA-seq data at 6 timepoints \u00d7 4 target genes \u00d7 3 replicates are released under CC-BY 4.0.</p>",
-      "summary": "A programmable epigenetic editor (CRISPRoff) that durably silences genes without cleaving DNA \u2014 by recruiting the de-novo DNA methyltransferase DNMT3A-3L to target CpG islands via a catalytically dead SpCas9.",
-      "date_published": "2024-11-07T00:00:00Z",
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
       "authors": [
         {
-          "name": "Nu\u00f1ez, J. et al. (UCSF + Broad Institute)"
+          "name": ""
         }
       ],
       "tags": [
-        "Biology \u00b7 Epigenetic Editing",
-        "Cell"
+        "",
+        ""
       ],
-      "_aihpc_dataset": {
-        "name": "CRISPRoff epigenome atlas",
-        "format": "BAM (ATAC + WGBS + RNA-seq) \u00d7 6 timepoints",
-        "size": "84 GB",
-        "url": "https://www.encodeproject.org/crisproff/"
-      }
+      "_aihpc_dataset": {}
     },
     {
-      "id": "https://www.aanda.org/articles/aa/full_html/2024/06/aa49192-24/aa49192-24.html",
-      "url": "https://www.aanda.org/articles/aa/full_html/2024/06/aa49192-24/aa49192-24.html",
-      "title": "EHT M87 polarisation update 2024: magnetic field structure in the jet-launching region",
-      "content_html": "<p>The Event Horizon Telescope (EHT) reports the second-generation polarised image of M87&#x27;s black-hole shadow, observed at 230 GHz with 8 stations in the 2018 campaign. The new image has 2\u00d7 higher linear-polarisation sensitivity than the 2017 first-light image.</p><p>The polarised emission reveals a helical magnetic field structure in the jet-launching region (3-12 R_s from the event horizon), with an average polarisation fraction of 7.2% \u2014 consistent with magnetically arrested accretion (MAD) models and inconsistent with MAD-anti-aligned configurations.</p><p>The full visibility dataset (UVFITS + amplitude + phase) is publicly available under the EHT Open Data Policy.</p>",
-      "summary": "The Event Horizon Telescope (EHT) reports the second-generation polarised image of M87's black-hole shadow, observed at 230 GHz with 8 stations in the 2018 campaign. The new image has 2\u00d7 higher linear-polarisation sensitivity than the 2017 first-light image.",
-      "date_published": "2024-06-12T00:00:00Z",
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
       "authors": [
         {
-          "name": "Event Horizon Telescope Collaboration (Akiyama, K. et al.)"
+          "name": ""
         }
       ],
       "tags": [
-        "Physics \u00b7 Black-Hole Imaging",
-        "A&A"
+        "",
+        ""
       ],
-      "_aihpc_dataset": {
-        "name": "EHT M87 2018 polarisation visibilities",
-        "format": "UVFITS (8 stations \u00d7 5 nights \u00d7 230 GHz)",
-        "size": "3.8 GB",
-        "url": "https://eventhorizontelescope.org/for-astronomers"
-      }
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
     },
     {
       "id": "",

@@ -111,7 +111,7 @@
           <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
           <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
           <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
-          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="../concepts/replayable-decision-traces.html">Replayable Decision Traces</a><a href="../concepts/provenance-first.html">Provenance-First Computing</a><a href="../concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="../concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a><a href="../concepts/audience-annotations.html">Audience-Specific Annotations</a><a href="../concepts/provenance-chain.html">Provenance Chain</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">📊 Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="../concepts/replayable-decision-traces.html">Replayable Decision Traces</a><a href="../concepts/provenance-first.html">Provenance-First Computing</a><a href="../concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="../concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a><a href="../concepts/audience-annotations.html">Audience-Specific Annotations</a><a href="../concepts/provenance-chain.html">Provenance Chain</a></div></details>
         </nav>
         <div class="ribbon-actions">
           <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle theme"><span id="ribbon-theme-icon">🌙</span></button>
@@ -194,7 +194,35 @@
           <div class="tab-content active" data-tab="math">
             <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 16px;">Each step shows the mathematical transformation, explains the intuition, then shows the corresponding code line. This is the bridge between equation and implementation.</p>
 
-            <div class="derivation-step">
+                  <!-- Animated derivation (Phase 28) — video clip of the Math→Code derivation -->
+      <div class="anim-container" style="margin: 32px 0 24px; padding: 20px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px);">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2, #06b6d4);">🎬 Animated derivation clip — Phase 28</div>
+          <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">▶ Play</button>
+            <button class="anim-pause" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⏸ Pause</button>
+            <button class="anim-replay" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">↺ Replay</button>
+            <button class="anim-record" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" title="Records the animation as a downloadable WebM video clip. Pure client-side — no external services.">⬇ Record WebM</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="k-means-clustering" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;"></canvas>
+        <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2, #6b7280);">Press Play to watch the derivation animate. Press Record WebM to capture the clip as a downloadable .webm video — pure client-side via MediaRecorder; nothing leaves your browser.</div>
+      </div>
+
+      <script src="../animated-derivation.js"></script>
+      <script>
+        // Register the derivation for this page
+        AIHPC_ANIM.register('k-means-clustering', {
+          title: "k-means Clustering",
+          steps: [{"title": "Objective function", "math": "argminC,μ Σc=1k Σx ∈ Cc ||x − μc||²", "explain": "We want to partition n points into k clusters C₁...Cₖ, each with a centroid μ_c, such that the total squared distance from each point to its cluster's centroid is minimized."}, {"title": "Assignment step", "math": "c(x) = argminc ||x − μc||²", "explain": "For each point x, find the cluster c whose centroid μ_c is closest (by Euclidean distance). This is the \"assignment\" half of Lloyd's algorithm."}, {"title": "Update step", "math": "μc(t+1) = (1/|Cc|) · Σx ∈ Cc x", "explain": "After re-assigning all points, update each centroid to be the arithmetic mean of all points assigned to it. This is the gradient-descent step that monotonically decreases WCSS."}, {"title": "Convergence check", "math": "converged ⟺ c(t+1)(x) = c(t)(x) ∀x", "explain": "Lloyd's algorithm is guaranteed to converge in finite steps because WCSS is monotonically decreasing and there are finitely many partitions. In practice, we check if any point changed cluster; if none did, we're done."}, {"title": "Full algorithm", "math": "repeat: (1) assign, (2) update, (3) check → until converged", "explain": "The complete algorithm: initialise centroids (k-means++), then alternate assignment and update steps until no point changes cluster. Each iteration is O(n·k) — fast for moderate n and k."}],
+          duration: 12.0,  // ~2.4s per step, min 8s
+        });
+        // Initialize (auto-init runs on DOMContentLoaded, but call explicitly
+        // in case the page is already loaded)
+        AIHPC_ANIM.init();
+      </script>
+
+      <div class="derivation-step">
               <span class="step-num">1</span>
               <strong>Objective function</strong> — minimize within-cluster sum of squares
               <div class="step-math">argmin<sub>C,μ</sub> Σ<sub>c=1</sub><sup>k</sup> Σ<sub>x ∈ C<sub>c</sub></sub> ||x − μ<sub>c</sub>||²</div>

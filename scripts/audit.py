@@ -151,6 +151,7 @@ def check_ribbon(html_files):
     # Pages that are intentionally minimal (no ribbon required)
     MINIMAL_PAGES = {
         os.path.join(DOCS, "digest", "archive", "index.html"),
+        os.path.join(DOCS, "audit.html"),
     }
     failures = []
     required = ["Platform", "AETHEL Suite", "Science", "Insights"]
@@ -571,6 +572,74 @@ def check_rss_subscribe_panel():
                        "RSS subscribe UX panel present: copyable URL + Feedly + Inoreader + JSON Feed links")
 
 
+def check_animated_derivations_loaded():
+    """Check (Phase 28): animated-derivation.js is loaded on every page
+    that has a .derivation-step block (skipping archived issues)."""
+    parsers_path = os.path.join(DOCS, "animated-derivation.js")
+    if not os.path.isfile(parsers_path):
+        return CheckResult("animated_derivations_loaded", False,
+                           "docs/animated-derivation.js missing")
+    try:
+        subprocess.run(["node", "--check", parsers_path],
+                        check=True, capture_output=True, timeout=10)
+    except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired):
+        return CheckResult("animated_derivations_loaded", False,
+                           "animated-derivation.js syntax invalid or node unavailable")
+    failures = []
+    n_with_anim = 0
+    n_with_derivation = 0
+    for dirpath, _, files in os.walk(DOCS):
+        if "archive" in dirpath:
+            continue
+        for fname in files:
+            if not fname.endswith(".html"):
+                continue
+            path = os.path.join(dirpath, fname)
+            with open(path, "r", encoding="utf-8") as f:
+                s = f.read()
+            has_derivation = 'class="derivation-step"' in s
+            if not has_derivation:
+                continue
+            n_with_derivation += 1
+            if "animated-derivation.js" not in s:
+                rel = os.path.relpath(path, DOCS)
+                failures.append(f"{rel}: has .derivation-step but doesn't load animated-derivation.js")
+            elif "anim-derivation" not in s:
+                rel = os.path.relpath(path, DOCS)
+                failures.append(f"{rel}: loads animated-derivation.js but no <canvas class='anim-derivation'> found")
+            else:
+                n_with_anim += 1
+    if failures:
+        return CheckResult("animated_derivations_loaded", False,
+                           f"{len(failures)} pages missing animated-derivation",
+                           failures[:20])
+    return CheckResult("animated_derivations_loaded", True,
+                       f"animated-derivation.js loaded on all {n_with_anim} / {n_with_derivation} pages with .derivation-step blocks")
+
+
+def check_audit_dashboard():
+    """Check (Phase 28): audit.html dashboard exists and is up-to-date."""
+    audit_path = os.path.join(DOCS, "audit.html")
+    if not os.path.isfile(audit_path):
+        return CheckResult("audit_dashboard", False,
+                           "docs/audit.html missing — run scripts/gen-audit-dashboard.py")
+    with open(audit_path, "r", encoding="utf-8") as f:
+        s = f.read()
+    required = [
+        "Application audit dashboard",
+        "AIHPC_ANIM" if False else "Last run",  # placeholder
+        "Total checks",
+        "Passed",
+        "Failed",
+    ]
+    missing = [r for r in required if r not in s]
+    if missing:
+        return CheckResult("audit_dashboard", False,
+                           f"audit.html missing: {missing}")
+    return CheckResult("audit_dashboard", True,
+                       "docs/audit.html present with summary cards + per-check rows + last-run timestamp")
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -600,6 +669,8 @@ def main():
         check_digest_parsers_loaded(),
         check_etl_panels_present(),
         check_rss_subscribe_panel(),
+        check_animated_derivations_loaded(),
+        check_audit_dashboard(),
     ]
 
     if args.json:

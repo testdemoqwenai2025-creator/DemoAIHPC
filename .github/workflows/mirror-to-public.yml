@@ -1,8 +1,15 @@
 name: Mirror to public on tag push
 
 # Triggered on tag push (safer than every commit on main).
-# Runs a gitleaks secret-scan as a pre-check; if it passes, mirrors
-# the tagged commit to the public DemoAIHPC repository.
+# Runs three pre-checks in sequence:
+#   1. Gitleaks secret-scan (catches leaked tokens)
+#   2. Application audit (Phase 26 / 27 — scripts/audit.py with 17 checks:
+#      div balance, ribbon presence, subscribe-gate, math derivations,
+#      JS syntax, .git/config clean, internal links, all 5 seed demos,
+#      digest pattern, weekly digest in ribbon, generator scripts,
+#      DAG provenance, TemporalGraph route, digest-parsers loaded,
+#      ETL panels balanced, RSS subscribe panel)
+#   3. Mirror push to the public DemoAIHPC repository (GitHub Pages source)
 #
 # The public mirror is at https://github.com/testdemoqwenai2025-creator/DemoAIHPC
 # (this is the source that GitHub Pages serves).
@@ -34,9 +41,44 @@ jobs:
           # Default config scans for common secret patterns (AWS keys,
           # GitHub PATs, Stripe keys, etc.) and any *.env / *.key files.
 
+  application-audit:
+    name: Application audit (17 checks)
+    needs: secret-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node.js (for JS syntax checks)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run audit script
+        run: |
+          python3 scripts/audit.py --json > audit-results.json
+          echo "## Application audit results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          python3 scripts/audit.py >> $GITHUB_STEP_SUMMARY 2>&1
+          # Exit with audit.py's exit code (0 = pass, 1 = any failure)
+          python3 scripts/audit.py > /dev/null 2>&1
+
+      - name: Upload audit results as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-results
+          path: audit-results.json
+          retention-days: 30
+
   mirror-to-public:
     name: Mirror to DemoAIHPC (public)
-    needs: secret-scan
+    needs: [secret-scan, application-audit]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout (full)

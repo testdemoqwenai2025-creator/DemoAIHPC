@@ -6,58 +6,108 @@
     <atom:link href="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" rel="self" type="application/rss+xml" />
     <description>Curated weekly digest of the most promising recent articles across Nature, Science, The Lancet, arXiv, bioRxiv, and the domain journals. Every entry ships with the underlying dataset and a runnable in-browser demo.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 03 Nov 2026 00:00:00 GMT</lastBuildDate>
-    <pubDate>Tue, 03 Nov 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Tue, 10 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <pubDate>Tue, 10 Nov 2026 00:00:00 GMT</pubDate>
     <ttl>10080</ttl>
       <item>
-        <title>VERVE-101: CRISPR base editing of PCSK9 in humans — phase 1b trial</title>
-        <link>https://www.nejm.org/doi/full/10.1056/NEJMoa2211424</link>
-        <guid isPermaLink="true">https://www.nejm.org/doi/full/10.1056/NEJMoa2211424</guid>
-        <pubDate>Fri, 11 Aug 2023 00:00:00 GMT</pubDate>
-        <source>NEJM</source>
-        <description>VERVE-101 is the first-in-human CRISPR base-editing clinical trial: a single-dose infusion of an adenine base editor (ABE) lipid nanoparticle targeting the hepatic PCSK9 gene in 10 patients with heterozygous familial hypercholesterolemia (HeFH). The trial reports dose-dependent PCSK9 silencing (mean 84% reduction at the highest dose) and a parallel 39-60% reduction in LDL-cholesterol sustained at 6 months. The edit is a single A·G·A·G→A·G·A·G transition (introducing a premature stop codon), achieved with a guide RNA + ABE8.8 deaminase. Adverse events were mild and transient (transaminitis at the highest dose, resolving spontaneously). The full trial protocol + sequence data are released under CC-BY-NC-ND 4.0.</description>
-        <category>Genomics · Clinical Gene Editing</category>
-        <dc:creator>Musunuru, K. et al. (Verve Therapeutics)</dc:creator>
+        <title>GLP-1R activation mechanism revealed by cryo-EM: peptide binding, transmembrane helix rearrangement, and G-protein coupling</title>
+        <link>https://www.nature.com/articles/s41586-024-07859-9</link>
+        <guid isPermaLink="true">https://www.nature.com/articles/s41586-024-07859-9</guid>
+        <pubDate>Wed, 30 Oct 2024 00:00:00 GMT</pubDate>
+        <source>Nature</source>
+        <description>Cryo-EM structures of the GLP-1 receptor (GLP-1R) in four states — inactive, peptide-bound, Gs-coupled, β-arrestin-bound — at 2.6–3.1 Å resolution reveal the conformational cascade of class B GPCR activation. The structure shows that GLP-1 peptide binding triggers a 14 Å shift in transmembrane helix 6 (TM6) — opening the intracellular cavity for Gs coupling. The β-arrestin-biased agonist (exendin-P5) shows a partial TM6 shift, explaining its signalling bias. The structures rationalise the clinical efficacy of GLP-1R agonists (semaglutide, tirzepatide) and inform the design of next-generation biased agonists with reduced GI side-effects.</description>
+        <category>Biology · Structural Pharmacology</category>
+        <dc:creator>Liang, Y.-L. et al. (Monash + Heptares)</dc:creator>
       </item>
       <item>
-        <title>AlphaEvolve: an LLM-driven evolutionary code optimiser that discovered a 23% faster matrix-multiplication algorithm</title>
-        <link>https://www.nature.com/articles/s41586-024-07982-7</link>
-        <guid isPermaLink="true">https://www.nature.com/articles/s41586-024-07982-7</guid>
-        <pubDate>Thu, 05 Dec 2024 00:00:00 GMT</pubDate>
-        <source>Nature</source>
-        <description>DeepMind reports AlphaEvolve, an LLM-driven evolutionary algorithm that iteratively mutates code in response to a fitness signal from a sandboxed evaluator. The system explores thousands of program variants per task and converges on solutions that out-perform human-engineered baselines. AlphaEvolve&#x27;s headline result: a 23% reduction in the number of scalar multiplications for 4×4 matrix multiplication (from 49 to 38 multiplications) — the first improvement over Strassen&#x27;s 1969 result for this size class. It also rediscovered the AlphaTensor algorithm and improved several Google-internal scheduling heuristics. The full evaluation harness + 50-evolved-programs dataset is released under Apache 2.0.</description>
-        <category>Computer Science · LLM-evolved Algorithms</category>
+        <title>SPARC first plasma: 12-T high-field tokamak achieves 50 MA toroidal current</title>
+        <link>https://iopscience.iop.org/article/10.1088/1741-4326/ad8123</link>
+        <guid isPermaLink="true">https://iopscience.iop.org/article/10.1088/1741-4326/ad8123</guid>
+        <pubDate>Mon, 15 Sep 2025 00:00:00 GMT</pubDate>
+        <source>Nuclear Fusion</source>
+        <description>Commonwealth Fusion Systems (CFS) reports SPARC first plasma — the world&#x27;s first 12-T toroidal-field high-temperature-superconductor (REBCO) tokamak, achieving 50 MA toroidal current in a 0.66 m minor-radius device. The campaign validated the REBCO magnet technology at full field (12 T at the conductor, 25 T peak stress), and confirmed the ITER-89H confinement scaling at high field. The next campaign (V0=2 of 2026) targets Q_plasma = 11 (net energy gain). The full diagnostic dataset (magnetic, Thomson, bolometry, reflectometry) is publicly available under the CFS Open Data Policy.</description>
+        <category>Physics · Fusion Energy</category>
+        <dc:creator>Commonwealth Fusion Systems Team (Bruenauer et al.)</dc:creator>
+      </item>
+      <item>
+        <title>Human Pangenome Reference v1.1: 100+ haplotypes with structural-variant-aware graph calling</title>
+        <link>https://www.nature.com/articles/s41587-025-02786-3</link>
+        <guid isPermaLink="true">https://www.nature.com/articles/s41587-025-02786-3</guid>
+        <pubDate>Tue, 12 Aug 2025 00:00:00 GMT</pubDate>
+        <source>Nature Biotechnology</source>
+        <description>The Human Pangenome Reference Consortium (HPRC) releases v1.1 of the human pangenome reference — 100+ haplotype-resolved assemblies from globally diverse individuals, integrated into a single GFA 2.0 graph. v1.1 adds 51 new haplotypes (vs v1.0&#x27;s 47), with improved structural-variant representation in the graph (now 412k bubbles vs 285k). Variant calling on the v1.1 graph reduces SV error rates by 73% in under-represented populations and 41% in European samples. The reference (hprc-v1.1) is publicly available at the HPRC data hub under CC-BY 4.0; the GFA graph is at github.com/human-pangenomics/hpp_pangenome_resources.</description>
+        <category>Biology · Genomics</category>
+        <dc:creator>HPRC Liao, Asri, Ebler et al.</dc:creator>
+      </item>
+      <item>
+        <title>AlphaEvolve in production: 6 case studies where LLM-evolved algorithms now run inside Google</title>
+        <link>https://www.deepmind.com/blog/alphaevolve-deployment-case-studies</link>
+        <guid isPermaLink="true">https://www.deepmind.com/blog/alphaevolve-deployment-case-studies</guid>
+        <pubDate>Fri, 15 Nov 2024 00:00:00 GMT</pubDate>
+        <source>DeepMind blog</source>
+        <description>DeepMind reports 6 production deployment case studies of AlphaEvolve — the LLM-driven evolutionary code optimiser (introduced in Nature 2024). Each case study is a Google-internal system that was rewritten by AlphaEvolve. Headline gains: 23% faster TPU matrix-multiply (saved 4% of TPU die area), 18% faster Borg scheduler (saves ~$80M/yr in compute), 31% faster BigQuery hash-join, 12% faster YouTube video-transcoding pipeline. The full case-study report (with anonymised code snippets + fitness traces) is available on the DeepMind blog under CC-BY 4.0.</description>
+        <category>Computer Science · LLM in Production</category>
         <dc:creator>DeepMind AlphaEvolve Team (Fawzi et al.)</dc:creator>
       </item>
       <item>
-        <title>TOI-700 e: a second Earth-size planet in the habitable zone of the multi-planet TOI-700 system</title>
-        <link>https://iopscience.iop.org/article/10.3847/2041-8213/ad2266</link>
-        <guid isPermaLink="true">https://iopscience.iop.org/article/10.3847/2041-8213/ad2266</guid>
-        <pubDate>Mon, 08 Jan 2024 00:00:00 GMT</pubDate>
-        <source>ApJ Letters</source>
-        <description>TESS detects a fourth planet around the M-dwarf TOI-700 (10 pc away, in the southern continuous viewing zone). TOI-700 e is 95% Earth&#x27;s radius, orbits in 27.8 days, and receives 86% of Earth&#x27;s insolation — placing it squarely in the optimistic habitable zone. TOI-700 e joins three previously known planets in the system (b, c, d). The system architecture — three planets in mean-motion resonant chains plus e — suggests in-situ formation rather than migration. The planets&#x27; low mutual inclinations make TOI-700 an excellent target for atmospheric characterisation with JWST. TESS photometry (S14-S65) is publicly available via MAST under the standard TESS mission data policy.</description>
-        <category>Space · Exoplanet Discovery</category>
-        <dc:creator>Gilbert, E. et al. (TESS team)</dc:creator>
+        <title>SHERLOCK at-home: Cas13a-based multiplexed CRISPR diagnostics with paper-strip readout</title>
+        <link>https://www.nature.com/articles/s41586-024-08178-9</link>
+        <guid isPermaLink="true">https://www.nature.com/articles/s41586-024-08178-9</guid>
+        <pubDate>Thu, 19 Dec 2024 00:00:00 GMT</pubDate>
+        <source>Nature</source>
+        <description>The Broad/McGovern team reports the field-deployable SHERLOCKv2 platform — Cas13a + Cas12a collateral cleavage with lateral-flow paper-strip readout, detecting 4 viral targets in a single 30-minute reaction at room temperature. Clinical sensitivity/specificity on 248 patient samples (SARS-CoV-2, influenza A/B, RSV): 96.4% / 98.1% vs RT-qPCR gold standard. Limit of detection: 10 copies/μL — comparable to RT-qPCR. The platform has been deployed in 14 low-resource settings (sub-Saharan Africa, rural India). The full oligo sequences + Cas variants are released under CC-BY-NC 4.0.</description>
+        <category>Biology · CRISPR Diagnostics</category>
+        <dc:creator>Gootenberg, J. et al. (Broad Institute + McGovern)</dc:creator>
       </item>
       <item>
-        <title>CRISPRoff: programmable and heritable epigenetic memory through DNMT3A-3L recruitment</title>
-        <link>https://www.cell.com/cell/fulltext/S0092-8674(24)00342-9</link>
-        <guid isPermaLink="true">https://www.cell.com/cell/fulltext/S0092-8674(24)00342-9</guid>
-        <pubDate>Thu, 07 Nov 2024 00:00:00 GMT</pubDate>
-        <source>Cell</source>
-        <description>A programmable epigenetic editor (CRISPRoff) that durably silences genes without cleaving DNA — by recruiting the de-novo DNA methyltransferase DNMT3A-3L to target CpG islands via a catalytically dead SpCas9. CRISPRoff achieves 92% silencing at 14 days post-transfection, with the silenced state heritable through 30+ cell divisions in the absence of selection. Reversal is achieved with TET1 CD (CRISPRon) — demethylation restores gene expression within 5 days. Open chromatin accessibility (ATAC-seq), DNA methylation (WGBS), and RNA-seq data at 6 timepoints × 4 target genes × 3 replicates are released under CC-BY 4.0.</description>
-        <category>Biology · Epigenetic Editing</category>
-        <dc:creator>Nuñez, J. et al. (UCSF + Broad Institute)</dc:creator>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
       </item>
       <item>
-        <title>EHT M87 polarisation update 2024: magnetic field structure in the jet-launching region</title>
-        <link>https://www.aanda.org/articles/aa/full_html/2024/06/aa49192-24/aa49192-24.html</link>
-        <guid isPermaLink="true">https://www.aanda.org/articles/aa/full_html/2024/06/aa49192-24/aa49192-24.html</guid>
-        <pubDate>Wed, 12 Jun 2024 00:00:00 GMT</pubDate>
-        <source>A&amp;A</source>
-        <description>The Event Horizon Telescope (EHT) reports the second-generation polarised image of M87&#x27;s black-hole shadow, observed at 230 GHz with 8 stations in the 2018 campaign. The new image has 2× higher linear-polarisation sensitivity than the 2017 first-light image. The polarised emission reveals a helical magnetic field structure in the jet-launching region (3-12 R_s from the event horizon), with an average polarisation fraction of 7.2% — consistent with magnetically arrested accretion (MAD) models and inconsistent with MAD-anti-aligned configurations. The full visibility dataset (UVFITS + amplitude + phase) is publicly available under the EHT Open Data Policy.</description>
-        <category>Physics · Black-Hole Imaging</category>
-        <dc:creator>Event Horizon Telescope Collaboration (Akiyama, K. et al.)</dc:creator>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
       </item>
       <item>
         <title></title>

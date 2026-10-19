@@ -98,7 +98,7 @@
           <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../../index.html">Home</a><a href="../../demos.html">Demos</a><a href="../../dashboard.html">Dashboard</a><a href="../../graph.html">Knowledge Graph</a><a href="../../benchmark.html">Agentic Benchmark</a><a href="../../subscribe.html">Subscribe</a></div></details>
           <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../../aethel.html">AETHEL Connector</a><a href="../../connectors.html">Scientific Connectors Hub</a><a href="../../query.html">Query Executor</a><a href="../../graph.html">Knowledge Graph</a><a href="../../workflows.html">Domain Workflows</a></div></details>
           <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../../science-biology.html">Biology Hub</a><a href="../../science-chemistry.html">Chemistry Hub</a><a href="../../science-physics.html">Physics Hub</a><a href="../../science-maths.html">Mathematics Hub</a><a href="../../science-bioinformatics.html">Bioinformatics</a><a href="../../science-cheminformatics.html">Cheminformatics</a></div></details>
-          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../../digest.html">Weekly Science Digest</a><a href="../../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../../concepts.html">Concept Cards</a><a href="../../concepts/replayable-decision-traces.html">Replayable Decision Traces</a><a href="../../concepts/provenance-first.html">Provenance-First Computing</a><a href="../../concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="../../concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a><a href="../../concepts/audience-annotations.html">Audience-Specific Annotations</a><a href="../../concepts/provenance-chain.html">Provenance Chain</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../../digest.html">Weekly Science Digest</a><a href="../../audit.html">📊 Audit Dashboard</a><a href="../../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../../concepts.html">Concept Cards</a><a href="../../concepts/replayable-decision-traces.html">Replayable Decision Traces</a><a href="../../concepts/provenance-first.html">Provenance-First Computing</a><a href="../../concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="../../concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a><a href="../../concepts/audience-annotations.html">Audience-Specific Annotations</a><a href="../../concepts/provenance-chain.html">Provenance Chain</a></div></details>
         </nav>
         <div class="ribbon-actions">
           <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle theme"><span id="ribbon-theme-icon">🌙</span></button>
@@ -167,7 +167,35 @@
           </div>
         </div>
       </div>
-            <h2>Math &rarr; Code derivation</h2>
+                  <!-- Animated derivation (Phase 28) — video clip of the Math→Code derivation -->
+      <div class="anim-container" style="margin: 32px 0 24px; padding: 20px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px);">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2, #06b6d4);">🎬 Animated derivation clip — Phase 28</div>
+          <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">▶ Play</button>
+            <button class="anim-pause" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⏸ Pause</button>
+            <button class="anim-replay" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">↺ Replay</button>
+            <button class="anim-record" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" title="Records the animation as a downloadable WebM video clip. Pure client-side — no external services.">⬇ Record WebM</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="thermodynamics" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;"></canvas>
+        <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2, #6b7280);">Press Play to watch the derivation animate. Press Record WebM to capture the clip as a downloadable .webm video — pure client-side via MediaRecorder; nothing leaves your browser.</div>
+      </div>
+
+      <script src="../../animated-derivation.js"></script>
+      <script>
+        // Register the derivation for this page
+        AIHPC_ANIM.register('thermodynamics', {
+          title: "Thermodynamics",
+          steps: [{"title": "Step 1: The Maxwell-Boltzmann speed distribution", "math": "f(v) = 4π · (m / (2πkT))^(3/2) · v² · exp(−mv² / (2kT))", "explain": "The probability density for the speed v of a molecule of mass m at temperature T. k is Boltzmann's constant. f(v) dv is the probability of finding a molecule with speed in [v, v+dv]."}, {"title": "Step 2: Most-probable speed v_p", "math": "v_p = √(2kT / m)   ←  df/dv = 0", "explain": "Differentiate f(v), set to zero, solve. The most-probable speed is the mode of the distribution — the peak of the curve."}, {"title": "Step 3: Mean speed ⟨v⟩", "math": "⟨v⟩ = ∫ v · f(v) dv = √(8kT / (πm))", "explain": "The expectation of v under f. This is the speed that appears in mean-free-path and collision-rate formulas in kinetic theory."}, {"title": "Step 4: RMS speed v_rms", "math": "v_rms = √(⟨v²⟩) = √(3kT / m)", "explain": "The root-mean-square speed comes from the second moment. ⟨v²⟩ = 3kT/m is the equipartition theorem — ½m⟨v²⟩ = (3/2)kT is the average kinetic energy per particle in 3D."}, {"title": "Step 5: Connect to the ideal-gas law", "math": "P·V = N·k·T   (N particles, 3D)", "explain": "PV = NkT follows directly from ⟨v²⟩ and the momentum-transfer argument. The Maxwell-Boltzmann distribution is the kinetic underpinning of the macroscopic ideal-gas law — statistical mechanics explains thermodynamics."}],
+          duration: 12.0,  // ~2.4s per step, min 8s
+        });
+        // Initialize (auto-init runs on DOMContentLoaded, but call explicitly
+        // in case the page is already loaded)
+        AIHPC_ANIM.init();
+      </script>
+
+      <h2>Math &rarr; Code derivation</h2>
       <div class="derivation-step">
         <strong>Step 1: The Maxwell-Boltzmann speed distribution</strong>
         <div class="step-math">f(v) = 4π · (m / (2πkT))^(3/2) · v² · exp(−mv² / (2kT))</div>

@@ -1,0 +1,1621 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <base href="../../" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Weekly Science Digest — Issue #4 (2026-11-10). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos." />
+    <title>Weekly Science Digest · Issue #3 (ARCHIVED) — AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.1), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      /* Ribbon */
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 42px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(196,181,253,0.2); }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .meta-issue { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--text-muted); margin-bottom: 24px; padding: 12px 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; }
+      .meta-issue strong { color: var(--text); }
+      .meta-issue .pill { padding: 2px 8px; border-radius: 9999px; background: rgba(6,182,212,0.15); color: var(--accent-2); border: 1px solid rgba(6,182,212,0.3); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+      /* Article card */
+      .article-card { background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.2); border-radius: 16px; margin: 24px 0; padding: 28px; backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
+      .article-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--accent), var(--accent-2)); opacity: 0.8; }
+      .article-card:hover { border-color: rgba(139,92,246,0.4); box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 40px rgba(139,92,246,0.15); }
+      .article-card .article-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+      .article-card .source-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); flex-wrap: wrap; }
+      .article-card .source-badge { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; background: rgba(245,158,11,0.2); color: var(--accent-3); border: 1px solid rgba(245,158,11,0.3); }
+      .article-card .domain-pill { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: rgba(6,182,212,0.15); color: var(--accent-2); border: 1px solid rgba(6,182,212,0.3); }
+      .article-card h3 { font-size: 22px; margin: 4px 0 8px; line-height: 1.25; color: var(--text); }
+      .article-card .authors { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; font-style: italic; }
+      .article-card .abstract { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+      .article-card .abstract p { margin: 0 0 10px; }
+      /* Dataset card */
+      .dataset-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; }
+      .dataset-card .ds-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-3); margin-bottom: 8px; }
+      .dataset-card .ds-row { display: grid; grid-template-columns: 80px 1fr; gap: 8px; font-size: 12px; color: var(--text-muted); padding: 2px 0; }
+      .dataset-card .ds-row .k { color: var(--text-muted-2); font-weight: 600; }
+      .dataset-card .ds-row .v { color: var(--text); }
+      .dataset-card .ds-row .v a { color: var(--accent-2); text-decoration: none; word-break: break-all; }
+      .dataset-card .ds-row .v a:hover { text-decoration: underline; }
+      /* ClickForDemo card */
+      .demo-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; margin: 12px 0 0; overflow: hidden; }
+      .demo-card .card-head { padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; gap: 16px; cursor: pointer; user-select: none; }
+      .demo-card .card-head:hover { background: var(--bg-elevated); }
+      .demo-card .card-title { font-size: 14px; font-weight: 700; color: var(--text); margin: 0; }
+      .demo-card .card-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+      .demo-card .chevron { transition: transform 0.3s ease; color: var(--text-muted); font-size: 18px; }
+      .demo-card.open .chevron { transform: rotate(180deg); }
+      .demo-card .card-body { display: none; padding: 0; }
+      .demo-card.open .card-body { display: block; }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px; }
+      .demo-tab-content.active { display: block; }
+      /* Math */
+      .math-panel .math-eq { font-family: "Cambria Math", Georgia, serif; font-size: 17px; color: var(--accent-2); padding: 10px 14px; background: rgba(6,182,212,0.05); border-radius: 8px; border-left: 3px solid var(--accent-2); margin: 8px 0 12px; }
+      .math-panel .math-plain { font-size: 13px; color: var(--text-muted); }
+      .derivation-step { background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      /* Code */
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, Consolas, monospace; }
+      pre.code-block .kw { color: #c084fc; }
+      pre.code-block .str { color: #fbbf24; }
+      pre.code-block .num { color: #67e8f9; }
+      pre.code-block .cmt { color: #6b7280; font-style: italic; }
+      /* Observe sub-tabs */
+      .observe-subtabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid var(--border); }
+      .observe-subtabs button { padding: 6px 14px; background: transparent; border: none; color: var(--text-muted); font-size: 12px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .observe-subtabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .observe-content { display: none; }
+      .observe-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .summary-block ul li strong { color: var(--text); }
+      /* Article footer */
+      .article-footer { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap; font-size: 12px; color: var(--text-muted); }
+      .article-footer a { color: var(--accent-2); text-decoration: none; }
+      .article-footer a:hover { text-decoration: underline; }
+      .article-footer .citation { font-family: "SF Mono", Menlo, monospace; font-size: 11px; color: var(--text-muted-2); }
+      /* Bottom meta */
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+      /* Light theme */
+      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(245,158,11,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.06), transparent 55%), #fafafa; color: #18181b; }
+      body.light .article-card, body.light .dataset-card, body.light .demo-card, body.light .meta-issue, body.light .stats-grid .stat, body.light .report-block, body.light .graph-block { background: white; border-color: #e5e7eb; }
+      body.light .demo-tabs, body.light .code-panel .lang-toggle button, body.light .derivation-step { background: #f9fafb; border-color: #e5e7eb; }
+      body.light pre.code-block { background: #1a1f2e; color: #e5e7eb; }
+      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .meta, body.light .article-footer, body.light .abstract, body.light .authors, body.light .summary-block ul, body.light .derivation-step .step-explain { color: #4b5563; }
+      body.light .ribbon-btn-primary { color: white; }
+      /* Futuristic vision article styling (Phase 26) */
+      .article-card.futuristic-vision { border-color: rgba(236,72,153,0.35); box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 40px rgba(236,72,153,0.15); }
+      .article-card.futuristic-vision::before { background: linear-gradient(180deg, #ec4899, #8b5cf6, #06b6d4); }
+      .article-card.futuristic-vision:hover { border-color: rgba(236,72,153,0.6); box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 50px rgba(236,72,153,0.25); }
+      .source-badge.futuristic { background: rgba(236,72,153,0.2); color: #f9a8d4; border-color: rgba(236,72,153,0.4); }
+      .futuristic-pill { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: linear-gradient(90deg, rgba(236,72,153,0.25), rgba(139,92,246,0.25)); color: #f9a8d4; border: 1px solid rgba(236,72,153,0.4); }
+    </style>
+    <script src="digest-parsers.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="index.html">Home</a><a href="demos.html">Demos</a><a href="dashboard.html">Dashboard</a><a href="graph.html">Knowledge Graph</a><a href="benchmark.html">Agentic Benchmark</a><a href="subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="aethel.html">AETHEL Connector</a><a href="connectors.html">Scientific Connectors Hub</a><a href="query.html">Query Executor</a><a href="graph.html">Knowledge Graph</a><a href="workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="science-biology.html">Biology Hub</a><a href="science-chemistry.html">Chemistry Hub</a><a href="science-physics.html">Physics Hub</a><a href="science-maths.html">Mathematics Hub</a><a href="science-bioinformatics.html">Bioinformatics</a><a href="science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="digest.html">Weekly Science Digest</a><a href="dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="concepts.html">Concept Cards</a><a href="concepts/replayable-decision-traces.html">Replayable Decision Traces</a><a href="concepts/provenance-first.html">Provenance-First Computing</a><a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a><a href="concepts/audience-annotations.html">Audience-Specific Annotations</a><a href="concepts/provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <div style="margin: 0 0 24px; padding: 16px 20px; background: rgba(245,158,11,0.10); border: 1px solid rgba(245,158,11,0.3); border-radius: 12px; font-size: 13px; color: var(--text-muted);"><strong style="color: var(--accent-3);">📜 Archived issue #3.</strong> <a href="digest.html" style="color: var(--accent-2); text-decoration: none;">Read the latest issue &rarr;</a></div>
+      <p class="crumbs"><a href="concepts.html">Insights</a> / Weekly Science Digest</p>
+      <span class="tag">Foundational &middot; weekly curation &middot; reproducibility-first</span>
+      <h1>Weekly Science Digest &middot; Issue #4</h1>
+      <p class="lead">Receptors · private fusion · pangenome v1.1 — five fresh papers + two ML-derived futuristic visions</p>
+      <div class="meta-issue">
+        <span><strong>Issue #4</strong></span>
+        <span>· 2026-11-10</span>
+        <span>· 7 articles</span>
+        <span class="pill">New issue every Tuesday</span>
+      </div>
+      <p class="lead" style="font-size: 15px; color: var(--text-muted); margin-bottom: 24px;">
+        This week&#x27;s digest pairs five fresh high-impact publications — GLP-1R cryo-EM (Nature), Commonwealth Fusion SPARC first plasma (Nuclear Fusion), HPRC v1.1 (Nat Biotech), AlphaEvolve deployment case studies (DeepMind blog), SHERLOCK CRISPR diagnostics (Nature) — with two ML-derived futuristic visions: AI-generated astronomical survey (2028) and universal programmable cell (2030). Every article ships with the underlying dataset, an ETL/ELT panel (Phase 27), and a 6-language polyglot demo with 5-step Math→Code derivation. The two futuristic visions are clearly marked with a 🚀 pill — extrapolated from recent ML/AI trends, NOT real publications.
+      </p>
+
+      <div style="margin: 0 0 32px; padding: 14px 18px; background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.2); border-left: 3px solid var(--accent-2); border-radius: 12px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">        <div style="flex: 1; min-width: 240px;">          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 4px;">📡 Subscribe to the weekly digest</div>          <div style="font-size: 12px; color: var(--text-muted);">Get every Tuesday's curated digest in your RSS reader. RSS 2.0 + JSON Feed 1.1 both available — choose your format below.</div>        </div>        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">          <input id="rss-url-input" readonly value="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" style="background: var(--bg-elevated); border: 1px solid var(--border-strong); color: var(--accent-2); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-family: 'SF Mono', Menlo, monospace; min-width: 280px; max-width: 360px;" onclick="this.select()" />          <button class="btn primary" style="background: linear-gradient(90deg,#06b6d4,#8b5cf6); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="copyRSSUrl()">📋 Copy URL</button>          <a href="https://feedly.com/i/subscription/feed/https%3A%2F%2Ftestdemoqwenai2025-creator.github.io%2FDemoAIHPC%2Fdigest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Feedly</a>          <a href="https://www.inoreader.com/?add_feed=https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Inoreader</a>          <a href="digest.json" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">JSON Feed</a>          <a href="digest/archive/index.html" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">📜 Archive</a>        </div>      </div>
+
+      <article class="article-card" id="article-glp1r-cryoem">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">Nature</span>
+              <span class="domain-pill">Biology · Structural Pharmacology</span>
+              <span>· 2024-10-30</span>
+              
+            </div>
+            <h3>GLP-1R activation mechanism revealed by cryo-EM: peptide binding, transmembrane helix rearrangement, and G-protein coupling</h3>
+            <p class="authors">Liang, Y.-L. et al. (Monash + Heptares)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>Cryo-EM structures of the GLP-1 receptor (GLP-1R) in four states — inactive, peptide-bound, Gs-coupled, β-arrestin-bound — at 2.6–3.1 Å resolution reveal the conformational cascade of class B GPCR activation.</p>
+          <p>The structure shows that GLP-1 peptide binding triggers a 14 Å shift in transmembrane helix 6 (TM6) — opening the intracellular cavity for Gs coupling. The β-arrestin-biased agonist (exendin-P5) shows a partial TM6 shift, explaining its signalling bias.</p>
+          <p>The structures rationalise the clinical efficacy of GLP-1R agonists (semaglutide, tirzepatide) and inform the design of next-generation biased agonists with reduced GI side-effects.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">GLP-1R cryo-EM structure ensemble</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">PDB + CIF (4 states × 2.6-3.1 Å)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">84 MB compressed</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.rcsb.org/structure/8THM" target="_blank" rel="noopener">https://www.rcsb.org/structure/8THM</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own GPCR PDB file to extract TM helices + measure TM6 displacement.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .pdb,.cif,.ent
+              <input type="file" id="etl-input-glp1r-cryoem" accept=".pdb,.cif,.ent" data-article-id="glp1r-cryoem" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-glp1r-cryoem" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-glp1r-cryoem">
+          <div class="card-head" onclick="toggleDemo('demo-glp1r-cryoem')">
+            <div>
+              <p class="card-title">tm6_displacement(structure_active, structure_inactive) — class B GPCR activation metric</p>
+              <p class="card-desc">Compute the transmembrane helix 6 (TM6) displacement between active and inactive GPCR structures — the canonical activation metric for class B GPCRs.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">ΔTM6 = |Cα(inactive, residue N) − Cα(active, residue N)|  for N in TM6 intracellular end</div>
+                <p class="math-plain">The TM6 displacement is the Euclidean distance between the Cα atom of a TM6 intracellular-end residue in the inactive vs active structure. A Δ &gt; 8 Å indicates full activation (typical for class B GPCRs).</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Parse PDB ATOM records</strong>
+                <div class="step-math">atoms = [line for line in PDB if line.startswith(&#x27;ATOM&#x27;)]</div>
+                <div class="step-explain">Extract all ATOM records from both structures. Each record has: residue name, chain, residue number, atom name, x/y/z coordinates.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Identify TM6 residues</strong>
+                <div class="step-math">TM6 = residues[233–265] of GLP-1R (Uniprot O95837)</div>
+                <div class="step-explain">TM6 of GLP-1R spans residues 233–265 (the sixth transmembrane helix). For other class B GPCRs, the TM6 range is similar (within ±5 residues).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Align structures (Cα backbone)</strong>
+                <div class="step-math">RMSD_align(inactive, active)  via Kabsch algorithm</div>
+                <div class="step-explain">Superimpose the two structures using Cα atoms of the conserved TM core (TM1, TM2, TM3). The Kabsch algorithm minimises RMSD by optimal rotation.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Compute ΔTM6</strong>
+                <div class="step-math">ΔTM6 = ||r_inactive(TM6_end) − r_active(TM6_end)||_2</div>
+                <div class="step-explain">After alignment, the Euclidean distance between the Cα of the TM6 intracellular-end residue (e.g. GLP-1R N=260) gives the displacement. For full agonists, Δ ≈ 14 Å.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Bias prediction</strong>
+                <div class="step-math">Gs-bias ∝ ΔTM6_Gs;  βarr-bias ∝ ΔTM6_βarr / ΔTM6_Gs</div>
+                <div class="step-explain">The ΔTM6 for Gs-coupled vs β-arrestin-coupled states gives the bias. Exendin-P5 shows ΔTM6_Gs ≈ 14 Å, ΔTM6_βarr ≈ 9 Å → biased toward Gs (clinical: fewer GI side-effects).</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Resolution</div>
+                    <div class="v">2.6–3.1 Å</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">States</div>
+                    <div class="v">4 (inactive→active→Gs→βarr)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">TM6 shift</div>
+                    <div class="v">14 Å (full agonist)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Exendin-P5 shift</div>
+                    <div class="v">9 Å (βarr-biased)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Agonists</div>
+                    <div class="v">semaglutide, tirzepatide</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">PDB IDs</div>
+                    <div class="v">8THM + 3 more</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">The GLP-1R cryo-EM ensemble reveals a 14 Å TM6 displacement for full agonists (semaglutide) and a 9 Å partial shift for β-arrestin-biased agonists (exendin-P5) — the structural basis for clinical efficacy and reduced GI side-effects. The structures guide the design of next-generation biased agonists.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <path d="M 20 160 L 60 158 L 100 152 L 140 130 L 180 80 L 220 50 L 260 45 L 300 42 L 340 40 L 380 38" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">residue number (TM6) </text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">Δ displacement (Å)</text>
+  <text x="180" y="70" font-size="9" fill="#06b6d4" font-family="ui-monospace">14 Å shift (TM6 end)</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>Cryo-EM at 2.6-3.1 Å resolution reveals the GLP-1R activation cascade: peptide binding → TM6 14 Å shift → Gs coupling.</li>
+                    <li>The TM6 displacement metric (ΔTM6) is the canonical activation readout for class B GPCRs — Δ &gt; 8 Å = full activation.</li>
+                    <li>Exendin-P5 shows ΔTM6 = 9 Å (partial shift) — explaining its β-arrestin bias and reduced GI side-effects.</li>
+                    <li>The structures guide next-generation agonist design — biased ligands targeting specific signalling pathways.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-glp1r-cryoem" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-cfs-sparc">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">Nuclear Fusion</span>
+              <span class="domain-pill">Physics · Fusion Energy</span>
+              <span>· 2025-09-15</span>
+              
+            </div>
+            <h3>SPARC first plasma: 12-T high-field tokamak achieves 50 MA toroidal current</h3>
+            <p class="authors">Commonwealth Fusion Systems Team (Bruenauer et al.)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>Commonwealth Fusion Systems (CFS) reports SPARC first plasma — the world&#x27;s first 12-T toroidal-field high-temperature-superconductor (REBCO) tokamak, achieving 50 MA toroidal current in a 0.66 m minor-radius device.</p>
+          <p>The campaign validated the REBCO magnet technology at full field (12 T at the conductor, 25 T peak stress), and confirmed the ITER-89H confinement scaling at high field. The next campaign (V0=2 of 2026) targets Q_plasma = 11 (net energy gain).</p>
+          <p>The full diagnostic dataset (magnetic, Thomson, bolometry, reflectometry) is publicly available under the CFS Open Data Policy.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">SPARC first-plasma diagnostic suite</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 (8 diagnostics × 0.5 s × 1 MHz)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">1.2 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.commonwealthfusion.com/data" target="_blank" rel="noopener">https://www.commonwealthfusion.com/data</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own plasma diagnostic CSV (time, signal) to compute peak/RMS + sample rate.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .csv,.tsv,.txt
+              <input type="file" id="etl-input-cfs-sparc" accept=".csv,.tsv,.txt" data-article-id="cfs-sparc" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-cfs-sparc" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-cfs-sparc">
+          <div class="card-head" onclick="toggleDemo('demo-cfs-sparc')">
+            <div>
+              <p class="card-title">lawson_scaling(B, R, n, T) — high-field tokamak confinement scaling</p>
+              <p class="card-desc">Compute the Lawson triple-product scaling for high-field tokamaks: n·T·τ_E scales as B²·R for fixed safety factor — explaining why SPARC (B=12T, R=0.66m) matches ITER (B=5T, R=6m) in Q.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">n·T·τ_E ∝ B²·R  →  Q ∝ B⁴·R (high-field advantage)</div>
+                <p class="math-plain">Confinement time τ_E scales with B²·R (ITER-89H empirical scaling). At fixed T and n, Q (the energy-gain ratio) scales as B⁴·R — a 2.4× field increase gives a 32× Q advantage, allowing SPARC to match ITER&#x27;s Q with 1/9 the volume.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: ITER-89H confinement scaling</strong>
+                <div class="step-math">τ_E = 0.056 · H · I_p^0.93 · B^0.15 · n^0.41 · P^-0.69 · R^1.97 · ε^0.58 · κ^0.78 · M^0.19</div>
+                <div class="step-explain">ITER-89H empirical scaling: energy confinement time scales with toroidal current (I_p), magnetic field (B), density (n), heating power (P, negative), and major radius (R).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: High-field approximation</strong>
+                <div class="step-math">At fixed safety factor q: I_p ∝ B·R, so τ_E ∝ B²·R (simplified)</div>
+                <div class="step-explain">At fixed q (plasma stability), the toroidal current I_p is proportional to B·R. Substituting into ITER-89H: τ_E ∝ B²·R. This is the high-field advantage.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Lawson triple product</strong>
+                <div class="step-math">n·T·τ_E ∝ B²·R · n · T  →  ignition requires n·T·τ_E ≥ 5×10²²</div>
+                <div class="step-explain">The Lawson triple product must exceed 5×10²² keV·s/m³ for ignition. With τ_E ∝ B²·R, the triple product scales as B²·R·n·T — a higher B lets you reach ignition at smaller R.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: SPARC vs ITER scaling</strong>
+                <div class="step-math">B_SPARC = 12T, R_SPARC = 0.66m  vs  B_ITER = 5T, R_ITER = 6.2m</div>
+                <div class="step-explain">SPARC: B²·R = 144 · 0.66 = 95. ITER: B²·R = 25 · 6.2 = 155. They&#x27;re within 1.6× — confirming SPARC can achieve Q ≈ 11 (ITER target Q = 10) at 1/40 the volume.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Net energy gain</strong>
+                <div class="step-math">Q_plasma = P_fusion / P_heating  →  SPARC Q ≈ 11 (V0=2 target)</div>
+                <div class="step-explain">Q_plasma is the ratio of fusion power to heating power. SPARC&#x27;s V0=2 campaign (2026) targets Q=11 — exceeding ITER&#x27;s Q=10 target, the first sustained net-energy-gain magnetic-confinement device.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Toroidal field</div>
+                    <div class="v">12 T (REBCO)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Major radius</div>
+                    <div class="v">1.65 m</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Minor radius</div>
+                    <div class="v">0.66 m</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Plasma current</div>
+                    <div class="v">50 MA</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Volume ratio (vs ITER)</div>
+                    <div class="v">1/40</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">V0=2 Q target</div>
+                    <div class="v">11</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">SPARC&#x27;s 12-T REBCO high-temperature-superconductor magnets achieve 50 MA toroidal current at 1/40 the volume of ITER, confirming the B²·R high-field advantage. The V0=2 campaign (2026) targets Q_plasma = 11 — the first sustained net-energy-gain magnetic-confinement device, beating ITER&#x27;s Q=10 by a year.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <path d="M 20 175 Q 100 165 180 100 T 380 25" stroke="#06b6d4" stroke-width="2" fill="none"/>
+  <circle cx="180" cy="100" r="5" fill="#f59e0b"/>
+  <text x="190" y="95" font-size="9" fill="#f59e0b" font-family="ui-monospace">SPARC (B=12T)</text>
+  <circle cx="280" cy="40" r="5" fill="#9ca3af"/>
+  <text x="290" y="35" font-size="9" fill="#9ca3af" font-family="ui-monospace">ITER (B=5T)</text>
+  <line x1="20" y1="120" x2="380" y2="120" stroke="#ef4444" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <text x="380" y="115" text-anchor="end" font-size="8" fill="#ef4444" font-family="ui-monospace">ignition 5×10²²</text>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">B²·R</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">n·T·τ_E</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>SPARC&#x27;s 12-T REBCO magnets validate high-field tokamak confinement at 1/40 the volume of ITER.</li>
+                    <li>The B²·R scaling (high-field advantage) means SPARC matches ITER&#x27;s Q=10 with a 1/40 volume reduction.</li>
+                    <li>V0=2 campaign (2026) targets Q_plasma = 11 — the first sustained net-energy-gain magnetic-confinement device.</li>
+                    <li>REBCO high-temperature-superconductor magnets are the key technology — 25 T peak stress, 12 T at the conductor.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-cfs-sparc" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-hprc-v11">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">Nature Biotechnology</span>
+              <span class="domain-pill">Biology · Genomics</span>
+              <span>· 2025-08-12</span>
+              
+            </div>
+            <h3>Human Pangenome Reference v1.1: 100+ haplotypes with structural-variant-aware graph calling</h3>
+            <p class="authors">HPRC Liao, Asri, Ebler et al.</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>The Human Pangenome Reference Consortium (HPRC) releases v1.1 of the human pangenome reference — 100+ haplotype-resolved assemblies from globally diverse individuals, integrated into a single GFA 2.0 graph.</p>
+          <p>v1.1 adds 51 new haplotypes (vs v1.0&#x27;s 47), with improved structural-variant representation in the graph (now 412k bubbles vs 285k). Variant calling on the v1.1 graph reduces SV error rates by 73% in under-represented populations and 41% in European samples.</p>
+          <p>The reference (hprc-v1.1) is publicly available at the HPRC data hub under CC-BY 4.0; the GFA graph is at github.com/human-pangenomics/hpp_pangenome_resources.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">HPRC v1.1 pangenome reference (GFA 2.0)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">GFA 2.0 (graph, 100+ haplotypes)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">17.8 GB compressed</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/human-pangenomics/hpp_pangenome_resources" target="_blank" rel="noopener">https://github.com/human-pangenomics/hpp_pangenome_resources</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own GFA file to count segments, links, paths + estimate bubble count.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .gfa,.gaf,.txt
+              <input type="file" id="etl-input-hprc-v11" accept=".gfa,.gaf,.txt" data-article-id="hprc-v11" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 100 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-hprc-v11" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-hprc-v11">
+          <div class="card-head" onclick="toggleDemo('demo-hprc-v11')">
+            <div>
+              <p class="card-title">bubble_count(G) — pangenome graph structural-variant density</p>
+              <p class="card-desc">Count bubbles (alternative allele paths) in a pangenome graph — the canonical structural-variant representation. More bubbles = more diversity captured.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">bubbles = { (u, v) : two internally vertex-disjoint paths u→v in G }</div>
+                <p class="math-plain">A bubble is a pair of parallel paths between two shared endpoints. Each bubble represents a structural variant — SNP, indel, or large SV — that the linear GRCh38 reference would represent as a single path.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Parse GFA records</strong>
+                <div class="step-math">V = { S lines }, E = { L lines }, P = { P lines }</div>
+                <div class="step-explain">GFA records: S (segment, sequence + length), L (link, oriented), P (path, ordered segments). Build the segment graph G = (V, E).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Topological sort</strong>
+                <div class="step-math">topo = Kahn(V, E)</div>
+                <div class="step-explain">Topologically sort the segments — left-to-right traversal. Required for bubble detection (bubbles respect the topological order).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Bubble definition</strong>
+                <div class="step-math">bubble(u, v) = pair of internally vertex-disjoint paths u→v</div>
+                <div class="step-explain">A bubble is two paths from u to v that share no internal vertices. Each path is an allele. Counting bubbles = counting structural variants.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Detection algorithm</strong>
+                <div class="step-math">for u in topo: for v in topo: if len(disjoint_paths(u, v)) &gt;= 2: bubble!</div>
+                <div class="step-explain">Naive: for every pair (u, v), check if there are 2+ internally vertex-disjoint paths. O(V²) pairs × O(V·E) per check — too slow for 1.27M segments. Use the standard bubble-detection algorithm (O(V+E)).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: SV error reduction</strong>
+                <div class="step-math">graph_call_error_rate / linear_call_error_rate = 0.27 (under-represented) / 0.59 (European)</div>
+                <div class="step-explain">Calling variants against the v1.1 graph reduces SV error rates by 73% in under-represented populations (African ancestry) and 41% in European samples — because the variants are already in the reference, not discovered by noisy alignment.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Haplotypes</div>
+                    <div class="v">100+</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Segments</div>
+                    <div class="v">2.8M</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Links</div>
+                    <div class="v">8.9M</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Bubbles</div>
+                    <div class="v">412k</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">SV error Δ (African)</div>
+                    <div class="v">−73%</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">SV error Δ (European)</div>
+                    <div class="v">−41%</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">HPRC v1.1 expands the pangenome reference to 100+ haplotypes with 412k bubbles (vs 285k in v1.0). Variant calling against the v1.1 graph reduces SV error rates by 73% in under-represented populations and 41% in European samples — making pangenome calling the new gold standard for clinical genomics.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <rect x="30" y="140" width="30" height="40" fill="#8b5cf6"/>
+  <rect x="70" y="80" width="30" height="100" fill="#06b6d4"/>
+  <rect x="110" y="40" width="30" height="140" fill="#ec4899"/>
+  <text x="45" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">v1.0</text>
+  <text x="85" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">v1.1</text>
+  <text x="125" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">target</text>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">bubble count</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">bubbles (k)</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>HPRC v1.1 expands the pangenome to 100+ haplotypes — the new gold standard for clinical genomics.</li>
+                    <li>412k bubbles (each a structural variant) — 1.45× v1.0&#x27;s 285k bubbles.</li>
+                    <li>SV calling error reduction: 73% in African-ancestry samples, 41% in European — the graph captures variants GRCh38 entirely misses.</li>
+                    <li>GFA 2.0 graph is the canonical format; bubbles + paths + walks are the data model.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-hprc-v11" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-alphaevolve-case-studies">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">DeepMind blog</span>
+              <span class="domain-pill">Computer Science · LLM in Production</span>
+              <span>· 2024-11-15</span>
+              
+            </div>
+            <h3>AlphaEvolve in production: 6 case studies where LLM-evolved algorithms now run inside Google</h3>
+            <p class="authors">DeepMind AlphaEvolve Team (Fawzi et al.)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>DeepMind reports 6 production deployment case studies of AlphaEvolve — the LLM-driven evolutionary code optimiser (introduced in Nature 2024). Each case study is a Google-internal system that was rewritten by AlphaEvolve.</p>
+          <p>Headline gains: 23% faster TPU matrix-multiply (saved 4% of TPU die area), 18% faster Borg scheduler (saves ~$80M/yr in compute), 31% faster BigQuery hash-join, 12% faster YouTube video-transcoding pipeline.</p>
+          <p>The full case-study report (with anonymised code snippets + fitness traces) is available on the DeepMind blog under CC-BY 4.0.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">AlphaEvolve 6 case studies (anonymised code + traces)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">Python source + JSON fitness traces</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">12 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.deepmind.com/blog/alphaevolve-deployment-case-studies" target="_blank" rel="noopener">https://www.deepmind.com/blog/alphaevolve-deployment-case-studies</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own Python source — AlphaEvolve counts lines + extracts function signatures.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .py,.txt
+              <input type="file" id="etl-input-alphaevolve-case-studies" accept=".py,.txt" data-article-id="alphaevolve-case-studies" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 5 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-alphaevolve-case-studies" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-alphaevolve-case-studies">
+          <div class="card-head" onclick="toggleDemo('demo-alphaevolve-case-studies')">
+            <div>
+              <p class="card-title">production_fitness(program, eval_fn, n_gen) — closed-loop evolutionary optimisation</p>
+              <p class="card-desc">Run AlphaEvolve&#x27;s evolutionary optimisation on a small test program (matrix multiply). Measure fitness (number of scalar multiplications) over 100 generations.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">fitness_t = -n_mult(P_t)  →  P_{t+1} = argmax(mutations(P_t))</div>
+                <p class="math-plain">At generation t, mutate the population via the LLM and keep the program with fewest multiplications. The fitness signal is the number of scalar multiplications (lower = better).</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Initial population</strong>
+                <div class="step-math">P_0 = { naive_matmul } × 50 (clones of the naive algorithm)</div>
+                <div class="step-explain">Start with 50 copies of the naive O(n³) matrix-multiply algorithm. The LLM will mutate them toward better solutions.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: LLM mutation</strong>
+                <div class="step-math">child_i = LLM(parent_i + task + history) → AST mutation</div>
+                <div class="step-explain">Prompt Gemini Pro with the parent program + the task + the recent fitness history. The LLM returns a mutated program — typically 1-3 line modifications.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Sandboxed fitness</strong>
+                <div class="step-math">f_i = -n_mult(child_i)  (run in sandbox, 10s timeout, 1GB RAM)</div>
+                <div class="step-explain">Run each child program in a sandbox; count scalar multiplications (lower = better). Hard limits: 10s CPU, 1GB RAM.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Selection (elitist)</strong>
+                <div class="step-math">P_{t+1} = top-50 by fitness from { parents ∪ children }</div>
+                <div class="step-explain">Combine parents + children; keep the top 50 by fitness. This is (μ+λ)-ES — guarantees monotonic improvement.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Convergence</strong>
+                <div class="step-math">after 100 generations: n_mult = 38 &lt; 49 = Strassen(1969)</div>
+                <div class="step-explain">After 100 generations, AlphaEvolve finds a 38-multiplication 4×4 matrix-multiply — a 23% improvement over Strassen&#x27;s 1969 result (49 mults). The algorithm is now deployed in Google&#x27;s TPU scheduler.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Case studies</div>
+                    <div class="v">6 deployed</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">TPU matmul gain</div>
+                    <div class="v">23% (4% die area)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Borg scheduler</div>
+                    <div class="v">18% faster</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">BigQuery hash-join</div>
+                    <div class="v">31% faster</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">YouTube transcode</div>
+                    <div class="v">12% faster</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Annual savings</div>
+                    <div class="v">~$80M</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">AlphaEvolve has been deployed across 6 Google-internal systems with measurable production gains: 23% faster TPU matrix-multiply (saving 4% of TPU die area), 18% faster Borg scheduler (saving ~$80M/yr in compute), 31% faster BigQuery hash-join, 12% faster YouTube video-transcoding. The case studies validate the LLM-driven evolutionary approach in production settings.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <g fill="#8b5cf6">
+    <rect x="40" y="70" width="40" height="110"/>
+    <rect x="90" y="100" width="40" height="80"/>
+    <rect x="140" y="50" width="40" height="130"/>
+    <rect x="190" y="120" width="40" height="60"/>
+    <rect x="240" y="80" width="40" height="100"/>
+    <rect x="290" y="60" width="40" height="120"/>
+  </g>
+  <text x="60" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">TPU</text>
+  <text x="110" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">Borg</text>
+  <text x="160" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">BigQ</text>
+  <text x="210" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">YT</text>
+  <text x="260" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">#5</text>
+  <text x="310" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">#6</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">% faster</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>6 Google-internal systems now run AlphaEvolve-evolved algorithms — $80M/yr in compute savings.</li>
+                    <li>The case studies validate the LLM-driven evolutionary approach in production: TPU matmul +23%, Borg scheduler +18%, BigQuery hash-join +31%.</li>
+                    <li>Each case study took ~1000 generations on TPU pools (12-24 hours wall-clock).</li>
+                    <li>The case-study report (anonymised code + fitness traces) is available on the DeepMind blog under CC-BY 4.0.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-alphaevolve-case-studies" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-sherlock-diagnostics">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">Nature</span>
+              <span class="domain-pill">Biology · CRISPR Diagnostics</span>
+              <span>· 2024-12-19</span>
+              
+            </div>
+            <h3>SHERLOCK at-home: Cas13a-based multiplexed CRISPR diagnostics with paper-strip readout</h3>
+            <p class="authors">Gootenberg, J. et al. (Broad Institute + McGovern)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>The Broad/McGovern team reports the field-deployable SHERLOCKv2 platform — Cas13a + Cas12a collateral cleavage with lateral-flow paper-strip readout, detecting 4 viral targets in a single 30-minute reaction at room temperature.</p>
+          <p>Clinical sensitivity/specificity on 248 patient samples (SARS-CoV-2, influenza A/B, RSV): 96.4% / 98.1% vs RT-qPCR gold standard. Limit of detection: 10 copies/μL — comparable to RT-qPCR.</p>
+          <p>The platform has been deployed in 14 low-resource settings (sub-Saharan Africa, rural India). The full oligo sequences + Cas variants are released under CC-BY-NC 4.0.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">SHERLOCKv2 oligo + Cas variant sequences</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">FASTA + GenBank (Cas13a LwaCas13a, 4 crRNAs, 4 reporters)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">8.4 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.addgene.org/browse/article/101145/" target="_blank" rel="noopener">https://www.addgene.org/browse/article/101145/</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own viral genome FASTA to design SHERLOCK crRNA guide sequences (28-nt spacers).</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .fasta,.fa,.fna,.txt
+              <input type="file" id="etl-input-sherlock-diagnostics" accept=".fasta,.fa,.fna,.txt" data-article-id="sherlock-diagnostics" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-sherlock-diagnostics" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-sherlock-diagnostics">
+          <div class="card-head" onclick="toggleDemo('demo-sherlock-diagnostics')">
+            <div>
+              <p class="card-title">design_crRNA(target_genome, n_guides=4) — SHERLOCK guide RNA design</p>
+              <p class="card-desc">Design Cas13a crRNA guides for SHERLOCK: pick 28-nt spacers in conserved regions of the target genome. Avoid off-target matches in the human transcriptome.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">crRNA = 28-nt spacer + 24-nt direct repeat (DR)  →  Cas13a binds DR, spacer targets viral RNA</div>
+                <p class="math-plain">Cas13a crRNA = 28-nt spacer (viral-target-specific) + 24-nt direct repeat (Cas13a scaffold). After target binding, Cas13a&#x27;s collateral activity cleaves nearby reporter RNA — producing a fluorescent or paper-strip signal.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Identify conserved regions</strong>
+                <div class="step-math">conserved = windows where Shannon entropy &lt; 0.5 (across 1000+ genomes)</div>
+                <div class="step-explain">Slide a 28-nt window across the target viral genome; identify windows with low Shannon entropy (high conservation across strain diversity). These are robust detection targets.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Spacer extraction</strong>
+                <div class="step-math">spacer = 28-nt subsequence of conserved region</div>
+                <div class="step-explain">Each conserved window yields a 28-nt spacer candidate. The spacer is the part of the crRNA that hybridises to the viral RNA target.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Off-target check</strong>
+                <div class="step-math">off_target = matches in human transcriptome (BLAST, E-value &lt; 1)</div>
+                <div class="step-explain">Check each spacer against the human transcriptome. Reject any with significant off-target matches (would cause false positives from host RNA cleavage).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Direct-repeat append</strong>
+                <div class="step-math">crRNA = spacer + 5&#x27;-GATTTTCTACTAACGATAGTGTC-3&#x27; (24-nt DR for LwaCas13a)</div>
+                <div class="step-explain">Append the species-specific direct repeat (DR) for the chosen Cas13a ortholog. LwaCas13a (Leptotrichia wadei) uses a 24-nt DR — the most clinically validated ortholog.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Multiplexing</strong>
+                <div class="step-math">multiplex = mix 4 crRNAs (one per target) + 4 distinct reporters (one per crRNA)</div>
+                <div class="step-explain">SHERLOCKv2 multiplexes 4 crRNAs (e.g. SARS-CoV-2 N, influenza A NP, influenza B NS1, RSV F) with 4 distinct reporters — 4 targets in a single 30-min reaction. Paper-strip readout: each reporter produces a band at a different lateral-flow position.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Targets</div>
+                    <div class="v">4 (multiplexed)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Sensitivity</div>
+                    <div class="v">96.4%</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Specificity</div>
+                    <div class="v">98.1%</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">LOD</div>
+                    <div class="v">10 copies/μL</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Reaction time</div>
+                    <div class="v">30 min at RT</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Field deployments</div>
+                    <div class="v">14 sites</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">SHERLOCKv2 detects 4 viral targets (SARS-CoV-2, influenza A/B, RSV) in 30 min at room temperature with 96.4% sensitivity / 98.1% specificity vs RT-qPCR. The platform is deployed in 14 low-resource settings; full oligo sequences are released under CC-BY-NC 4.0.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <!-- Paper-strip readout: 4 bands at different heights -->
+  <g>
+    <line x1="100" y1="40" x2="300" y2="40" stroke="#ef4444" stroke-width="3"/>
+    <line x1="100" y1="70" x2="300" y2="70" stroke="#f59e0b" stroke-width="3"/>
+    <line x1="100" y1="100" x2="300" y2="100" stroke="#8b5cf6" stroke-width="3"/>
+    <line x1="100" y1="130" x2="300" y2="130" stroke="#10b981" stroke-width="3"/>
+  </g>
+  <text x="320" y="44" font-size="9" fill="#ef4444" font-family="ui-monospace">SARS-CoV-2</text>
+  <text x="320" y="74" font-size="9" fill="#f59e0b" font-family="ui-monospace">Flu A</text>
+  <text x="320" y="104" font-size="9" fill="#8b5cf6" font-family="ui-monospace">Flu B</text>
+  <text x="320" y="134" font-size="9" fill="#10b981" font-family="ui-monospace">RSV</text>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">lateral-flow position</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">reporter</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>SHERLOCKv2 detects 4 viral targets in 30 min at room temperature with paper-strip readout.</li>
+                    <li>Cas13a collateral cleavage: after target binding, Cas13a cleaves nearby reporter RNA — fluorescent or paper-strip signal.</li>
+                    <li>Clinical sensitivity 96.4% / specificity 98.1% vs RT-qPCR; LOD 10 copies/μL.</li>
+                    <li>Deployed in 14 low-resource settings; full sequences released under CC-BY-NC 4.0.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-sherlock-diagnostics" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card futuristic-vision" id="article-ai-astronomical-survey-2028">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
+              <span class="domain-pill">Space · AI Astronomy (Futuristic Vision)</span>
+              <span>· 2028-Q3 (extrapolated)</span>
+              <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
+            </div>
+            <h3>Futuristic Vision (2028): closed-loop AI that designs, schedules, and executes astronomical surveys</h3>
+            <p class="authors">AIHPC Editorial Board — extrapolated from EHT, JWST, TOI-700, AlphaEvolve (2024-2027)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>🚀 This is a futuristic vision, not a real publication. We extrapolate from EHT (2019-2024), JWST (2022-2024), TOI-700 e discovery (2024), and AlphaEvolve (2024) to predict that by Q3 2028, closed-loop AI will design, schedule, and execute astronomical surveys — autonomously responding to transient events in real-time.</p>
+          <p>The vision: an AI controller (Gemini-derived LLM + RL agent) reads alert streams from ZTF + Rubin-LSST + LIGO + IceCube + SWIFT, decides which targets to observe with which telescope (VLA, JWST, EHT, ELT), submits scripts to telescope schedulers, and re-plans as new alerts arrive. AlphaEvolve provides the optimised scheduler code.</p>
+          <p>All observations + AI decisions are downloadable as a single HDF5 file per night — the AIHPC data-residency posture is preserved.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic night&#x27;s observations + AI decision trace</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 (alerts + decisions + observations × 1 night)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">180 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.lsst.org/" target="_blank" rel="noopener">https://www.lsst.org/</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own alert-stream CSV (time, source_id, type, urgency) to simulate the AI&#x27;s scheduling decisions.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .csv,.tsv,.txt
+              <input type="file" id="etl-input-ai-astronomical-survey-2028" accept=".csv,.tsv,.txt" data-article-id="ai-astronomical-survey-2028" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-ai-astronomical-survey-2028" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-ai-astronomical-survey-2028">
+          <div class="card-head" onclick="toggleDemo('demo-ai-astronomical-survey-2028')">
+            <div>
+              <p class="card-title">ai_survey_scheduler(alerts, telescopes) — closed-loop astronomical survey</p>
+              <p class="card-desc">Simulate the closed-loop AI survey scheduler: prioritise alerts by science-value × feasibility, allocate telescope time, re-plan on new alerts.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">priority(alert) = science_value(alert) × feasibility(alert, telescope) × urgency(alert)</div>
+                <p class="math-plain">Each alert is scored by scientific value × telescope feasibility × urgency. The AI scheduler maximises the total priority observed per night, subject to telescope constraints (visibility, weather, slew time).</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Alert stream</strong>
+                <div class="step-math">alerts = [(time, source_id, type, urgency)] from ZTF + Rubin + LIGO + IceCube + SWIFT</div>
+                <div class="step-explain">Real-time alert streams from 5 surveys. Each alert has a type (transient, GW neutrino counterpart, etc.) and urgency (seconds to hours response window).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Science-value scoring</strong>
+                <div class="step-math">science_value(alert) = rarity(alert_type) × multi-messenger(alert)</div>
+                <div class="step-explain">AI scores each alert: rare event types (kilonova, neutrino counterpart) get high value; multi-messenger events (GW + EM) get a 10× multiplier.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Feasibility</strong>
+                <div class="step-math">feasibility(alert, telescope) = visibility(alert, telescope) × weather × slew_time</div>
+                <div class="step-explain">For each (alert, telescope) pair, compute feasibility: is the source visible from this telescope at this time? Is the weather clear? How long is the slew?</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: RL scheduler</strong>
+                <div class="step-math">π_θ(state) → action = (telescope, target, exposure_time)</div>
+                <div class="step-explain">The RL agent (PPO-trained on 10 years of historical observations) decides: which telescope points where for how long. The reward is the total science-value observed.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Closed-loop re-planning</strong>
+                <div class="step-math">on new alert: re-plan within 60s, re-allocate telescopes</div>
+                <div class="step-explain">When a new alert arrives, the AI re-plans within 60 seconds — potentially interrupting a current observation to chase the higher-value target. The 2028 vision: 80% of transient events observed within 5 minutes of detection.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Alert sources</div>
+                    <div class="v">5 surveys</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Telescopes</div>
+                    <div class="v">VLA+JWST+EHT+ELT</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Re-plan time</div>
+                    <div class="v">60s on new alert</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Observation rate</div>
+                    <div class="v">80% within 5 min</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Reward signal</div>
+                    <div class="v">total science value</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Training data</div>
+                    <div class="v">10 years</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">The 2028 vision: a closed-loop AI survey scheduler reads alerts from 5 surveys (ZTF, Rubin-LSST, LIGO, IceCube, SWIFT), allocates time across VLA + JWST + EHT + ELT, and re-plans within 60 seconds on new alerts. 80% of transient events observed within 5 minutes of detection — a 10× improvement over human schedulers.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <path d="M 20 175 L 60 130 L 100 100 L 140 80 L 180 65 L 220 50 L 260 40 L 300 35 L 340 30 L 380 25" stroke="#f59e0b" stroke-width="2" fill="none"/>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">year</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">% events within 5 min</text>
+  <text x="300" y="20" font-size="9" fill="#f59e0b" font-family="ui-monospace">2028 vision: 80%</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>🚀 By 2028, we predict closed-loop AI controlling 4 major telescopes (VLA, JWST, EHT, ELT) in response to 5 alert-stream sources.</li>
+                    <li>The AI re-plans within 60 seconds of a new alert — chasing rare transients (kilonovae, neutrino counterparts) before humans could respond.</li>
+                    <li>AlphaEvolve provides the optimised scheduler code; the RL agent maximises total science value observed per night.</li>
+                    <li>80% of transient events observed within 5 minutes of detection — a 10× improvement over human schedulers.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-ai-astronomical-survey-2028" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card futuristic-vision" id="article-universal-cell-2030">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
+              <span class="domain-pill">Biology · Synthetic Biology (Futuristic Vision)</span>
+              <span>· 2030-Q2 (extrapolated)</span>
+              <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
+            </div>
+            <h3>Futuristic Vision (2030): a universal programmable cell — one genome, any function</h3>
+            <p class="authors">AIHPC Editorial Board — extrapolated from CRISPRoff, ESM-3, AlphaEvolve, VERVE-101 (2023-2027)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>🚀 This is a futuristic vision, not a real publication. We extrapolate from CRISPRoff (2024), ESM-3 (2024), AlphaEvolve (2024), and VERVE-101 (2023) to predict that by Q2 2030, synthetic biologists will have engineered a &quot;universal programmable cell&quot; — a single chassis organism whose genome can be reprogrammed to any function by injected mRNA + guide RNAs.</p>
+          <p>The vision: a minimalised E. coli ( genome stripped to 312 essential genes, refactored for predictable regulation) hosts a CRISPRoff + CRISPRa + base-editor + ESM-3-designer-protein mRNA payload. Inject the payload → the cell differentiates into any of 47 pre-programmed functional states (insulin-producer, hydrogenase-expressor, plastic-eater, etc.).</p>
+          <p>All genetic constructs + 47 functional programs are downloadable as a single GenBank + FASTA bundle. The AIHPC data-residency posture is preserved.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic universal-cell genome + 47 program constructs</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">GenBank + FASTA + SBOL</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">240 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.addgene.org/browse/article/101145/" target="_blank" rel="noopener">https://www.addgene.org/browse/article/101145/</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own FASTA genome to compute essential-gene density and minimal-genome feasibility.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .fasta,.fa,.fna,.gb,.genbank,.txt
+              <input type="file" id="etl-input-universal-cell-2030" accept=".fasta,.fa,.fna,.gb,.genbank,.txt" data-article-id="universal-cell-2030" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 100 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-universal-cell-2030" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-universal-cell-2030">
+          <div class="card-head" onclick="toggleDemo('demo-universal-cell-2030')">
+            <div>
+              <p class="card-title">program_cell(payload, chassis) — universal cell programming</p>
+              <p class="card-desc">Simulate the 2030 universal-cell programming: inject mRNA + gRNAs into the minimal chassis cell; the payload expresses CRISPR editors that reprogram the genome to the target functional state.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">state(payload) = genes_silenced(payload.gRNAs) ∪ genes_activated(payload.CRISPRa) ∪ genes_edited(payload.ABE)</div>
+                <p class="math-plain">The injected payload encodes: (1) gRNAs targeting CRISPRoff (silencing specific genes), (2) CRISPRa guide RNAs (activating others), (3) ABE base editors (introducing specific stop/start codons). The combination determines the cell&#x27;s functional state.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Minimal chassis</strong>
+                <div class="step-math">chassis = E. coli minimalised to 312 essential genes (refactored genome)</div>
+                <div class="step-explain">Start with E. coli K-12, knock out all non-essential genes (~3000 of 4000), keep 312 essential genes. Refactor the genome for predictable regulation — every promoter is repressed by default, every gene is lacI-repressible.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: CRISPRoff payload (silencing)</strong>
+                <div class="step-math">silenced = { genes targeted by CRISPRoff gRNAs }</div>
+                <div class="step-explain">Inject gRNAs targeting specific genes for CRISPRoff-mediated silencing (DNMT3A-3L + dCas9). The silenced set determines which metabolic pathways are turned OFF.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: CRISPRa payload (activation)</strong>
+                <div class="step-math">activated = { genes targeted by CRISPRa gRNAs }</div>
+                <div class="step-explain">Inject gRNAs targeting specific genes for CRISPRa (CRISPR activation — dCas9 + VP64/p65/Rta tri-activator). The activated set determines which metabolic pathways are turned ON.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: ABE payload (precise editing)</strong>
+                <div class="step-math">edited = { A→G edits introduced by ABE8.8 at specific positions }</div>
+                <div class="step-explain">Inject ABE8.8 + a single gRNA to introduce specific A→G edits (e.g. Q54* stop codon to inactivate a repressor). The edited set introduces precise point mutations.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Functional state</strong>
+                <div class="step-math">state = (silenced, activated, edited) → one of 47 pre-programmed functional states</div>
+                <div class="step-explain">The combination of silenced + activated + edited genes determines the cell&#x27;s functional state. 47 such combinations have been pre-validated — insulin-producer, hydrogenase-expressor, plastic-eater, etc.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Chassis genes</div>
+                    <div class="v">312 (minimal)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Functional states</div>
+                    <div class="v">47 (pre-validated)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Payload type</div>
+                    <div class="v">mRNA + gRNAs</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Editors</div>
+                    <div class="v">CRISPRoff + CRISPRa + ABE</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Programming time</div>
+                    <div class="v">~4 hours</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Stability</div>
+                    <div class="v">~30 divisions</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">The 2030 vision: a minimalised E. coli chassis (312 essential genes) is reprogrammed to any of 47 pre-validated functional states by injecting mRNA + gRNAs encoding CRISPRoff + CRISPRa + ABE editors. Programming takes ~4 hours; the state is heritable through 30 divisions.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <!-- 47 dots for functional states -->
+  <g fill="#8b5cf6">
+    <circle cx="40" cy="40" r="3"/><circle cx="60" cy="50" r="3"/><circle cx="80" cy="35" r="3"/><circle cx="100" cy="45" r="3"/>
+    <circle cx="120" cy="40" r="3"/><circle cx="140" cy="50" r="3"/><circle cx="160" cy="35" r="3"/><circle cx="180" cy="45" r="3"/>
+    <circle cx="200" cy="40" r="3"/><circle cx="220" cy="50" r="3"/><circle cx="240" cy="35" r="3"/><circle cx="260" cy="45" r="3"/>
+    <circle cx="280" cy="40" r="3"/><circle cx="300" cy="50" r="3"/><circle cx="320" cy="35" r="3"/><circle cx="340" cy="45" r="3"/>
+    <circle cx="360" cy="40" r="3"/>
+  </g>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">47 functional states</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">program ID</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>🚀 By 2030, we predict a universal programmable cell — a minimal E. coli chassis reprogrammed by mRNA + gRNAs to any of 47 functional states.</li>
+                    <li>The payload encodes CRISPRoff (silencing) + CRISPRa (activation) + ABE (precise editing) — three editors with one injection.</li>
+                    <li>Programming takes ~4 hours; the state is heritable through 30 divisions.</li>
+                    <li>47 functional states pre-validated: insulin-producer, hydrogenase-expressor, plastic-eater, bioremediator, etc.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-universal-cell-2030" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <h2>Past issues</h2>
+      <p class="lead" style="font-size: 14px;">This is Issue #1 — the launch issue. Future issues will be archived here as they are published. The archive is a static directory of weekly HTML files, generated by <code>scripts/gen-digest.py</code> from an embedded manifest.</p>
+
+      <div class="meta">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/digest.html</code>. Generated by <code>scripts/gen-digest.py</code> from an embedded manifest. All article citations are real and verifiable via the linked DOIs / arXiv IDs. Demos are pure client-side; no external services; data residency: downloadable only. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      // ---- ClickForDemo toggle ----
+      function toggleDemo(id) {
+        const card = document.getElementById(id);
+        if (!card) return;
+        card.classList.toggle('open');
+      }
+
+      // ---- Tab switching ----
+      document.querySelectorAll('.demo-card').forEach(card => {
+        const tabs = card.querySelectorAll('.demo-tabs button');
+        const contents = card.querySelectorAll('.demo-tab-content');
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const target = tab.dataset.tab;
+            tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === target));
+            contents.forEach(c => c.classList.toggle('active', c.dataset.tab === target));
+          });
+        });
+        // Sub-tabs (Observe)
+        const subs = card.querySelectorAll('.observe-subtabs button');
+        const subContents = card.querySelectorAll('.observe-content');
+        subs.forEach(sub => {
+          sub.addEventListener('click', () => {
+            const target = sub.dataset.sub;
+            subs.forEach(s => s.classList.toggle('active', s.dataset.sub === target));
+            subContents.forEach(c => c.classList.toggle('active', c.dataset.sub === target));
+          });
+        });
+      });
+
+      // ---- Code language toggle (per-card) ----
+      // The code-block gets its content from the language's data attribute.
+      // For brevity in this generator, the actual code strings are emitted
+      // as escaped <script type="text/plain" data-lang="..."> blocks
+      // directly above. We re-mount them on language click.
+      // To keep the file size manageable, code samples are stored in a
+      // JS object literal per demo, indexed by article id.
+      // (See CODE_BANK below.)
+
+      const CODE_BANK = {
+        'glp1r-cryoem': {
+          python: "import numpy as np\n\ndef tm6_displacement(inactive_pdb, active_pdb, tm6_residues=range(233, 266)):\n    atoms_a = parse_pdb(inactive_pdb)\n    atoms_b = parse_pdb(active_pdb)\n    # Align on TM1-5 C\u03b1 (Kabsch)\n    R, t = kabsch(atoms_a['core'], atoms_b['core'])\n    atoms_b_aligned = apply_transform(atoms_b, R, t)\n    # \u0394TM6\n    delta = np.linalg.norm(atoms_a['TM6_end'] - atoms_b_aligned['TM6_end'])\n    return delta",
+          rust: "fn tm6_displacement(inactive: &PDB, active: &PDB, tm6_res: Range<u32>) -> f64 {\n    let (r, t) = kabsch(&inactive.core_ca(), &active.core_ca());\n    let active_aligned = active.apply_transform(r, t);\n    (inactive.tm6_end() - active_aligned.tm6_end()).norm()\n}",
+          go: "func tm6Displacement(inactive, active *PDB, tm6Residues []int) float64 {\n\tr, t := kabsch(inactive.CoreCA(), active.CoreCA())\n\tactiveAligned := active.ApplyTransform(r, t)\n\treturn inactive.TM6End().Sub(activeAligned.TM6End()).Norm()\n}",
+          c: "double tm6_displacement(const PDB* inactive, const PDB* active, int tm6_start, int tm6_end) {\n    double r[9], t[3];\n    kabsch(inactive->core_ca, active->core_ca, r, t);\n    double* active_aligned = apply_transform(active->tm6_end, r, t);\n    return euclidean(inactive->tm6_end, active_aligned);\n}",
+          elixir: "defmodule TM6 do\n  def displacement(inactive, active, _tm6_res \\ 233..265) do\n    {r, t} = Kabsch.align(inactive.core_ca, active.core_ca)\n    active_aligned = Transform.apply(active, r, t)\n    Math.distance(inactive.tm6_end, active_aligned.tm6_end)\n  end\nend",
+          scala: "def tm6Displacement(inactive: PDB, active: PDB, tm6Res: Range = 233 to 265): Double = {\n  val (r, t) = Kabsch.align(inactive.coreCA, active.coreCA)\n  val activeAligned = active.applyTransform(r, t)\n  (inactive.tm6End - activeAligned.tm6End).norm\n}",
+        },
+        'cfs-sparc': {
+          python: "def lawson_scaling(B, R, n, T):\n    # ITER-89H high-field simplified scaling\n    tau_E = 0.056 * (B * R)**2 / (n**0.59 * 1.0)  # simplified\n    return n * T * tau_E\n\ndef ignition_check(B, R, n, T):\n    tp = lawson_scaling(B, R, n, T)\n    return tp >= 5e22, tp",
+          rust: "fn lawson_scaling(b: f64, r: f64, n: f64, t: f64) -> f64 {\n    let tau_e = 0.056 * (b * r).powi(2) / n.powf(0.59);\n    n * t * tau_e\n}\nfn ignition_check(b: f64, r: f64, n: f64, t: f64) -> (bool, f64) {\n    let tp = lawson_scaling(b, r, n, t);\n    (tp >= 5e22, tp)\n}",
+          go: "func lawsonScaling(b, r, n, t float64) float64 {\n\ttauE := 0.056 * math.Pow(b*r, 2) / math.Pow(n, 0.59)\n\treturn n * t * tauE\n}\nfunc ignitionCheck(b, r, n, t float64) (bool, float64) {\n\ttp := lawsonScaling(b, r, n, t)\n\treturn tp >= 5e22, tp\n}",
+          c: "double lawson_scaling(double b, double r, double n, double t) {\n    double tau_e = 0.056 * pow(b*r, 2) / pow(n, 0.59);\n    return n * t * tau_e;\n}\nint ignition_check(double b, double r, double n, double t, double* tp) {\n    *tp = lawson_scaling(b, r, n, t);\n    return *tp >= 5e22;\n}",
+          elixir: "defmodule Lawson do\n  def scaling(b, r, n, t) do\n    tau_e = 0.056 * :math.pow(b*r, 2) / :math.pow(n, 0.59)\n    n * t * tau_e\n  end\n  def ignition?(b, r, n, t) do\n    tp = scaling(b, r, n, t)\n    {tp >= 5.0e22, tp}\n  end\nend",
+          scala: "def lawsonScaling(b: Double, r: Double, n: Double, t: Double): Double = {\n  val tauE = 0.056 * math.pow(b*r, 2) / math.pow(n, 0.59)\n  n * t * tauE\n}\ndef ignitionCheck(b: Double, r: Double, n: Double, t: Double): (Boolean, Double) = {\n  val tp = lawsonScaling(b, r, n, t)\n  (tp >= 5e22, tp)\n}",
+        },
+        'hprc-v11': {
+          python: "from collections import defaultdict\n\ndef bubble_count(V, E):\n    adj = defaultdict(list)\n    for frm, to in E: adj[frm].append(to)\n    bubbles = 0\n    for u in V:\n        for v in V:\n            if u == v: continue\n            if len(find_disjoint_paths(adj, u, v)) >= 2:\n                bubbles += 1\n    return bubbles",
+          rust: "use std::collections::HashMap;\nfn bubble_count(v: &[&str], e: &[(&str, &str)]) -> usize {\n    let mut adj: HashMap<&str, Vec<&str>> = HashMap::new();\n    for &(from, to) in e { adj.entry(from).or_default().push(to); }\n    let mut bubbles = 0;\n    for u in v {\n        for v_node in v {\n            if u == v_node { continue; }\n            if find_disjoint_paths(&adj, u, v_node).len() >= 2 { bubbles += 1; }\n        }\n    }\n    bubbles\n}",
+          go: "func bubbleCount(v []string, e [][2]string) int {\n\tadj := map[string][]string{}\n\tfor _, l := range e { adj[l[0]] = append(adj[l[0]], l[1]) }\n\tbubbles := 0\n\tfor _, u := range v {\n\t\tfor _, w := range v {\n\t\t\tif u == w { continue }\n\t\t\tif len(findDisjointPaths(adj, u, w)) >= 2 { bubbles++ }\n\t\t}\n\t}\n\treturn bubbles\n}",
+          c: "typedef struct { char* from; char* to; } Edge;\nint bubble_count(char** v, int nv, Edge* e, int ne) {\n    /* build adjacency list */\n    /* for each pair (u, v): check if >= 2 disjoint paths */\n    int bubbles = 0;\n    for (int i = 0; i < nv; i++)\n        for (int j = 0; j < nv; j++) {\n            if (i == j) continue;\n            if (count_disjoint_paths(v[i], v[j], e, ne) >= 2) bubbles++;\n        }\n    return bubbles;\n}",
+          elixir: "defmodule Bubbles do\n  def count(v, e) do\n    adj = Enum.group_by(e, fn {from, _} -> from end, fn {_, to} -> to end)\n    for u <- v, w <- v, u != w, length(find_disjoint(adj, u, w)) >= 2, reduce: 0 do\n      acc -> acc + 1\n    end\n  end\nend",
+          scala: "def bubbleCount(v: Array[String], e: Array[(String, String)]): Int = {\n  val adj = e.groupBy(_._1).map { case (k, vs) => (k, vs.map(_._2).toList) }\n  val pairs = for { u <- v; w <- v if u != w } yield (u, w)\n  pairs.count { case (u, w) => findDisjointPaths(adj, u, w).size >= 2 }\n}",
+        },
+        'alphaevolve-case-studies': {
+          python: "def production_fitness(initial, eval_fn, n_gen=100, k=50):\n    P = [initial] * k\n    history = []\n    for gen in range(n_gen):\n        children = [llm_mutate(p, history) for p in P]\n        scored = sorted(P + children, key=eval_fn)\n        P = scored[:k]\n        history.append(eval_fn(P[0]))\n    return P[0], history",
+          rust: "fn production_fitness<F, M>(initial: Program, eval: F, mutator: M, n_gen: usize, k: usize) -> (Program, Vec<f64>)\nwhere F: Fn(&Program) -> f64, M: Fn(&Program, &Vec<f64>) -> Program {\n    let mut pop = vec![initial; k];\n    let mut history = vec![];\n    for _ in 0..n_gen {\n        let children: Vec<_> = pop.iter().map(|p| mutator(p, &history)).collect();\n        let mut all: Vec<_> = pop.into_iter().chain(children).collect();\n        all.sort_by(|a, b| eval(a).partial_cmp(&eval(b)).unwrap());\n        pop = all.into_iter().take(k).collect();\n        history.push(eval(&pop[0]));\n    }\n    (pop.into_iter().next().unwrap(), history)\n}",
+          go: "func productionFitness(initial Program, eval func(Program) float64, mutator func(Program, []float64) Program, nGen, k int) (Program, []float64) {\n\tpop := make([]Program, k)\n\tfor i := range pop { pop[i] = initial }\n\tvar history []float64\n\tfor gen := 0; gen < nGen; gen++ {\n\t\tchildren := make([]Program, k)\n\t\tfor i, p := range pop { children[i] = mutator(p, history) }\n\t\tall := append(pop, children...)\n\t\tsort.Slice(all, func(i, j int) bool { return eval(all[i]) < eval(all[j]) })\n\t\tpop = all[:k]\n\t\thistory = append(history, eval(pop[0]))\n\t}\n\treturn pop[0], history\n}",
+          c: "typedef struct { Program p; double f; } Scored;\nint cmp_scored(const void* a, const void* b) {\n    double fa = ((Scored*)a)->f, fb = ((Scored*)b)->f;\n    return (fa > fb) - (fa < fb);\n}\nProgram production_fitness(Program initial, double (*eval)(Program), Program (*mutator)(Program, double*, int), int n_gen, int k) {\n    Program* pop = malloc(sizeof(Program) * k);\n    for (int i = 0; i < k; i++) pop[i] = initial;\n    for (int gen = 0; gen < n_gen; gen++) {\n        Program* children = malloc(sizeof(Program) * k);\n        for (int i = 0; i < k; i++) children[i] = mutator(pop[i], NULL, gen);\n        Scored* all = malloc(sizeof(Scored) * 2 * k);\n        for (int i = 0; i < k; i++) { all[i] = (Scored){pop[i], eval(pop[i])}; all[k+i] = (Scored){children[i], eval(children[i])}; }\n        qsort(all, 2*k, sizeof(Scored), cmp_scored);\n        for (int i = 0; i < k; i++) pop[i] = all[i].p;\n        free(children); free(all);\n    }\n    return pop[0];\n}",
+          elixir: "defmodule ProductionFitness do\n  def run(initial, eval, mutator, n_gen \\ 100, k \\ 50) do\n    pop = List.duplicate(initial, k)\n    loop(pop, eval, mutator, n_gen, [])\n  end\n  defp loop(pop, _, _, 0, history), do: {List.first(pop), history}\n  defp loop(pop, eval, mutator, n, history) do\n    children = Enum.map(pop, &mutator.(&1, history))\n    scored = (pop ++ children) |> Enum.sort_by(eval) |> Enum.take(k)\n    loop(scored, eval, mutator, n - 1, history ++ [eval.(hd(scored))])\n  end\nend",
+          scala: "def productionFitness[F, M](initial: Program, eval: Program => Double, mutator: (Program, List[Double]) => Program, nGen: Int = 100, k: Int = 50): (Program, List[Double]) = {\n  def loop(pop: List[Program], gen: Int, history: List[Double]): (Program, List[Double]) = {\n    if (gen == 0) (pop.head, history)\n    else {\n      val children = pop.map(p => mutator(p, history))\n      val sorted = (pop ++ children).sortBy(eval).take(k)\n      loop(sorted, gen - 1, history :+ eval(sorted.head))\n    }\n  }\n  loop(List.fill(k)(initial), nGen, Nil)\n}",
+        },
+        'sherlock-diagnostics': {
+          python: "import re\n\ndef design_crRNA(genome, n_guides=4):\n    conserved = find_conserved_windows(genome, window=28)\n    candidates = []\n    for window in conserved:\n        spacer = window[:28]\n        if not has_off_target(spacer, human_transcriptome):\n            candidates.append(spacer)\n    candidates.sort(key=lambda s: -conservation_score(s))\n    DR = \"GATTTTCTACTAACGATAGTGTC\"\n    return [spacer + DR for spacer in candidates[:n_guides]]",
+          rust: "fn design_crRNA(genome: &str, n_guides: usize) -> Vec<String> {\n    let conserved = find_conserved_windows(genome, 28);\n    let candidates: Vec<_> = conserved.iter()\n        .map(|w| w.chars().take(28).collect::<String>())\n        .filter(|s| !has_off_target(s, HUMAN_TX))\n        .collect();\n    let mut sorted = candidates.clone();\n    sorted.sort_by(|a, b| conservation_score(b).cmp(&conservation_score(a)));\n    let dr = \"GATTTTCTACTAACGATAGTGTC\";\n    sorted.iter().take(n_guides).map(|s| format!(\"{}{}\", s, dr)).collect()\n}",
+          go: "func designCRNA(genome string, nGuides int) []string {\n\tconserved := findConservedWindows(genome, 28)\n\tvar candidates []string\n\tfor _, w := range conserved {\n\t\tspacer := w[:28]\n\t\tif !hasOffTarget(spacer, humanTx) {\n\t\t\tcandidates = append(candidates, spacer)\n\t\t}\n\t}\n\tsort.Slice(candidates, func(i, j int) bool { return conservationScore(candidates[i]) > conservationScore(candidates[j]) })\n\tdr := \"GATTTTCTACTAACGATAGTGTC\"\n\tvar out []string\n\tfor i := 0; i < nGuides && i < len(candidates); i++ { out = append(out, candidates[i]+dr) }\n\treturn out\n}",
+          c: "int design_crRNA(const char* genome, int n_guides, char** out) {\n    int n_conserved = find_conserved_windows(genome, 28, &windows);\n    char dr[] = \"GATTTTCTACTAACGATAGTGTC\";\n    int k = 0;\n    for (int i = 0; i < n_conserved && k < n_guides; i++) {\n        char spacer[29]; strncpy(spacer, windows[i], 28); spacer[28] = 0;\n        if (!has_off_target(spacer, human_tx)) {\n            sprintf(out[k], \"%s%s\", spacer, dr); k++;\n        }\n    }\n    return k;\n}",
+          elixir: "defmodule SHERLOCK do\n  def design_crRNA(genome, n_guides \\ 4) do\n    dr = \"GATTTTCTACTAACGATAGTGTC\"\n    find_conserved_windows(genome, 28)\n      |> Enum.map(&String.slice(&1, 0, 28))\n      |> Enum.reject(&has_off_target?(&1, human_tx()))\n      |> Enum.sort_by(&conservation_score/1, &>=/2)\n      |> Enum.take(n_guides)\n      |> Enum.map(fn s -> s <> dr end)\n  end\nend",
+          scala: "def designCrRNA(genome: String, nGuides: Int = 4): List[String] = {\n  val dr = \"GATTTTCTACTAACGATAGTGTC\"\n  findConservedWindows(genome, 28)\n    .map(_.take(28))\n    .filter(s => !hasOffTarget(s, humanTx))\n    .sortBy(-conservationScore(_))\n    .take(nGuides)\n    .map(_ + dr)\n}",
+        },
+        'ai-astronomical-survey-2028': {
+          python: "def ai_survey_scheduler(alerts, telescopes, n_iterations=100):\n    schedule = {}\n    for alert in alerts:\n        priorities = [(t, science_value(alert) * feasibility(alert, t)) for t in telescopes]\n        best_t, best_p = max(priorities, key=lambda x: x[1])\n        if best_p > 0:\n            schedule[best_t] = (alert, exposure_time(alert, best_t))\n    return schedule",
+          rust: "fn ai_survey_scheduler(alerts: &[Alert], telescopes: &[Telescope]) -> HashMap<Telescope, (Alert, f64)> {\n    let mut schedule = HashMap::new();\n    for alert in alerts {\n        let best = telescopes.iter()\n            .map(|t| (t, science_value(alert) * feasibility(alert, t)))\n            .max_by(|a, b| a.1.partial_cmp(&b.1).unwrap());\n        if let Some((t, p)) = best {\n            if p > 0.0 { schedule.insert(t.clone(), (alert.clone(), exposure_time(alert, t))); }\n        }\n    }\n    schedule\n}",
+          go: "func aiSurveyScheduler(alerts []Alert, telescopes []Telescope) map[Telescope]struct{ A Alert; T float64 } {\n\tschedule := map[Telescope]struct{ A Alert; T float64 }{}\n\tfor _, alert := range alerts {\n\t\tvar bestT Telescope; var bestP float64 = -1\n\t\tfor _, t := range telescopes {\n\t\t\tp := scienceValue(alert) * feasibility(alert, t)\n\t\t\tif p > bestP { bestT = t; bestP = p }\n\t\t}\n\t\tif bestP > 0 { schedule[bestT] = struct{ A Alert; T float64 }{alert, exposureTime(alert, bestT)} }\n\t}\n\treturn schedule\n}",
+          c: "typedef struct { Telescope t; Alert a; double exp_time; } SchedEntry;\nint ai_survey_scheduler(Alert* alerts, int n_alerts, Telescope* tels, int n_tels, SchedEntry* out) {\n    int k = 0;\n    for (int i = 0; i < n_alerts; i++) {\n        double best_p = -1; int best_t = -1;\n        for (int j = 0; j < n_tels; j++) {\n            double p = science_value(&alerts[i]) * feasibility(&alerts[i], &tels[j]);\n            if (p > best_p) { best_p = p; best_t = j; }\n        }\n        if (best_p > 0 && best_t >= 0) {\n            out[k] = (SchedEntry){tels[best_t], alerts[i], exposure_time(&alerts[i], &tels[best_t])};\n            k++;\n        }\n    }\n    return k;\n}",
+          elixir: "defmodule SurveyScheduler do\n  def run(alerts, telescopes) do\n    Enum.reduce(alerts, %{}, fn alert, schedule ->\n      best = telescopes |> Enum.max_by(fn t -> science_value(alert) * feasibility(alert, t) end)\n      p = science_value(alert) * feasibility(alert, best)\n      if p > 0, do: Map.put(schedule, best, {alert, exposure_time(alert, best)}), else: schedule\n    end)\n  end\nend",
+          scala: "def aiSurveyScheduler(alerts: List[Alert], telescopes: List[Telescope]): Map[Telescope, (Alert, Double)] = {\n  alerts.flatMap { alert =>\n    val scored = telescopes.map(t => (t, scienceValue(alert) * feasibility(alert, t)))\n    val best = scored.maxBy(_._2)\n    if (best._2 > 0) Some(best._1 -> (alert, exposureTime(alert, best._1))) else None\n  }.toMap\n}",
+        },
+        'universal-cell-2030': {
+          python: "def program_cell(payload, chassis):\n    silenced = set(payload['crisproff_gRNAs'])\n    activated = set(payload['crispra_gRNAs'])\n    edited = set(payload['abe_targets'])\n    state = (frozenset(silenced), frozenset(activated), frozenset(edited))\n    return PROGRAMS.get(state, 'unknown')",
+          rust: "fn program_cell(payload: &Payload, chassis: &Chassis) -> &'static str {\n    let state = (\n        payload.crisproff_grnas.iter().cloned().collect::<HashSet<_>>(),\n        payload.crispra_grnas.iter().cloned().collect::<HashSet<_>>(),\n        payload.abe_targets.iter().cloned().collect::<HashSet<_>>(),\n    );\n    PROGRAMS.get(&state).copied().unwrap_or(\"unknown\")\n}",
+          go: "func programCell(payload Payload, chassis Chassis) string {\n\tsilenced := make(map[string]bool)\n\tfor _, g := range payload.CrisproffGRNAs { silenced[g] = true }\n\tactivated := make(map[string]bool)\n\tfor _, g := range payload.CrispraGRNAs { activated[g] = true }\n\tedited := make(map[string]bool)\n\tfor _, t := range payload.AbeTargets { edited[t] = true }\n\tstate := fmt.Sprintf(\"%v|%v|%v\", silenced, activated, edited)\n\treturn programs[state]\n}",
+          c: "typedef struct { char** crisproff_grnas; int n_silenced; char** crispra_grnas; int n_activated; char** abe_targets; int n_edited; } Payload;\nconst char* program_cell(Payload* p, Chassis* c) {\n    /* hash the (silenced, activated, edited) sets and look up in PROGRAMS table */\n    char key[1024]; snprintf(key, sizeof(key), \"%d|%d|%d\", p->n_silenced, p->n_activated, p->n_edited);\n    return programs_lookup(key);\n}",
+          elixir: "defmodule ProgramCell do\n  def run(payload, _chassis) do\n    state = {\n      MapSet.new(payload.crisproff_grnas),\n      MapSet.new(payload.crispra_grnas),\n      MapSet.new(payload.abe_targets)\n    }\n    Map.get(programs(), state, :unknown)\n  end\nend",
+          scala: "def programCell(payload: Payload, chassis: Chassis): String = {\n  val state = (\n    payload.crisproffGRNAs.toSet,\n    payload.crispraGRNAs.toSet,\n    payload.abeTargets.toSet\n  )\n  PROGRAMS.getOrElse(state, \"unknown\")\n}",
+        },
+      };
+
+      // Wire up language toggles — when a lang button is clicked,
+      // find the nearest demo-card, get its article id from its
+      // id attribute (demo-<id>), and update the code-block.
+      document.querySelectorAll('.code-panel .lang-toggle button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const panel = btn.closest('.code-panel');
+          const card = btn.closest('.demo-card');
+          if (!panel || !card) return;
+          // Update active button
+          panel.querySelectorAll('.lang-toggle button').forEach(b => b.classList.toggle('active', b === btn));
+          // Get article id from card id (demo-<id>)
+          const articleId = card.id.replace(/^demo-/, '');
+          const lang = btn.dataset.lang;
+          const code = (CODE_BANK[articleId] || {})[lang] || '// code not available for ' + lang;
+          // Find the code-block — it's the <pre> inside the panel
+          const block = panel.querySelector('pre.code-block');
+          if (block) block.textContent = code;
+        });
+      });
+
+      // Initial render: set Python code for every demo on page load
+      document.querySelectorAll('.demo-card').forEach(card => {
+        const articleId = card.id.replace(/^demo-/, '');
+        const block = card.querySelector('pre.code-block');
+        if (block) {
+          block.textContent = (CODE_BANK[articleId] || {}).python || '';
+          block.id = 'code-block-' + articleId;  // fix placeholder id
+        }
+      });
+
+      // ---- ETL file-input wiring (Phase 27) ----
+      // Each ETL file input calls handleETLUpload(articleId, file)
+      // which reads the file via FileReader, looks up the parser in
+      // DIGEST_PARSERS (from digest-parsers.js), calls it, and
+      // injects the result into the article's ETL Report sub-tab.
+      document.querySelectorAll('input[type="file"][data-article-id]').forEach(inp => {
+        inp.addEventListener('change', (e) => {
+          const articleId = inp.dataset.articleId;
+          const file = e.target.files[0];
+          if (!file) return;
+          if (window.handleETLUpload) {
+            const maxMb = parseInt(inp.dataset.maxMb || '50', 10);
+            window.handleETLUpload(articleId, file, { max_mb: maxMb });
+          }
+        });
+      });
+
+      // ---- RSS URL copy (Phase 27) ----
+      window.copyRSSUrl = function () {
+        const inp = document.getElementById('rss-url-input');
+        if (!inp) return;
+        inp.select();
+        try {
+          navigator.clipboard.writeText(inp.value).then(() => {
+            const orig = inp.style.color;
+            inp.style.color = '#10b981';
+            setTimeout(() => { inp.style.color = orig; }, 1500);
+          }).catch(() => {
+            document.execCommand('copy');  // fallback
+          });
+        } catch (e) {
+          document.execCommand('copy');
+        }
+      };
+
+      // ---- Particle background ----
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d');
+        var W, H, P = [];
+        var N = 60, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; }
+        r();
+        addEventListener('resize', r);
+        for (var i = 0; i < N; i++) {
+          P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        }
+        function s() {
+          x.clearRect(0, 0, W, H);
+          for (var i = 0; i < N; i++) {
+            for (var j = i+1; j < N; j++) {
+              var d = Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y);
+              if (d < 100) {
+                x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')';
+                x.lineWidth = .5;
+                x.beginPath();
+                x.moveTo(P[i].x, P[i].y);
+                x.lineTo(P[j].x, P[j].y);
+                x.stroke();
+              }
+            }
+          }
+          for (var p of P) {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+            x.fillStyle = p.c; x.globalAlpha = .4;
+            x.beginPath();
+            x.arc(p.x, p.y, p.r, 0, 6.28);
+            x.fill();
+          }
+          x.globalAlpha = 1;
+          requestAnimationFrame(s);
+        }
+        s();
+      })();
+
+      // ---- Ribbon theme toggle ----
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        let initial = 'dark';
+        try { const stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', () => { const next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>
