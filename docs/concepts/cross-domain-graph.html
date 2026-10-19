@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Cross-Domain Knowledge Graph — demos, papers, datasets, and AETHEL Suite surfaces are all nodes; shared tags and domains are edges. Composability is the defensible angle." />
+    <title>Cross-Domain Knowledge Graph — AIHPC Advanced Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); background: rgba(11,15,26,0.8); backdrop-filter: blur(10px); }
+      .ribbon.light { background: rgba(255,255,255,0.85); border-bottom-color: #e5e7eb; }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; }
+      @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+
+      .container { max-width: 880px; margin: 0 auto; padding: 56px 24px 96px; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-elevated); font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+      h1 { font-size: 38px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 720px; margin: 0 0 40px; }
+      h2 { font-size: 24px; margin: 40px 0 12px; letter-spacing: -0.01em; }
+      p { margin: 0 0 16px; }
+      .muted { color: var(--text-muted); }
+      ul { padding-left: 22px; color: var(--text-muted); }
+      ul li { margin-bottom: 6px; }
+      ul li strong { color: var(--text); }
+      code { background: var(--bg-elevated); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
+
+      .demo { margin-top: 40px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-elevated); overflow: hidden; }
+      .demo-header { padding: 16px 24px; border-bottom: 1px solid var(--border); }
+      .demo-header .label { font-size: 11px; color: var(--accent-3); text-transform: uppercase; letter-spacing: 0.06em; }
+      .demo-header h3 { margin: 4px 0 0; font-size: 18px; }
+      .demo-body { padding: 24px; }
+      .pick-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+      .pick { background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text-muted); padding: 6px 12px; border-radius: 9999px; cursor: pointer; font-size: 12px; font-family: inherit; }
+      .pick.active { background: var(--accent); color: white; border-color: transparent; }
+      svg.graph { width: 100%; height: 320px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; }
+      .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; font-size: 12px; color: var(--text-muted); }
+      .legend .item { display: inline-flex; align-items: center; gap: 6px; }
+      .legend .swatch { width: 10px; height: 10px; border-radius: 9999px; }
+
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+
+      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.06), transparent 55%), #fafafa; color: #18181b; }
+      body.light .demo, body.light svg.graph, body.light .pick, body.light .tag, body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .muted, body.light ul, body.light .meta, body.light .tag, body.light .legend { color: #4b5563; }
+      body.light code { background: #f3f4f6; border-color: #e5e7eb; }
+      body.light .ribbon-btn-primary { color: white; }
+    </style>
+  </head>
+  <body>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../index.html#live-demo">Demos</a><a href="../dashboard.html">Dashboard</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu">
+            <a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a>
+            <a href="../concepts.html">Concept Cards</a>
+            <a href="replayable-decision-traces.html">Replayable Decision Traces</a>
+            <a href="provenance-first.html">Provenance-First Computing</a>
+            <a href="lazy-evaluation.html">Lazy Evaluation as UX</a>
+            <a href="cross-domain-graph.html">Cross-Domain Knowledge Graph</a>
+            <a href="audience-annotations.html">Audience-Specific Annotations</a>
+          </div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../index.html#live-demo" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <p class="crumbs"><a href="../concepts.html">Concept Cards</a> / Cross-Domain Knowledge Graph</p>
+      <span class="tag">Composability &middot; the defensible angle</span>
+      <h1>Cross-Domain Knowledge Graph</h1>
+      <p class="lead">
+        Demos, papers, datasets, and AETHEL Suite surfaces are all nodes;
+        shared tags and domains are edges. Composability across scientific
+        fields is what no single-purpose tool gives you.
+      </p>
+
+      <h2>What it is</h2>
+      <p>
+        A graph that places every artifact in AIHPC Advanced — a demo
+        manifest, an AETHEL Connector page, a published paper, an
+        ingested dataset, a generated hypothesis, a user-collaborator —
+        on equal footing as nodes. Edges express provenance (this demo
+        used that dataset), similarity (these two demos share a tag),
+        and inference (this hypothesis connects these two domains).
+      </p>
+
+      <h2>Where the idea came from</h2>
+      <p>
+        Knowledge graphs are old (Semantic Web, Freebase, Wikidata).
+        Scientific knowledge graphs specifically (OpenAlex, Semantic
+        Scholar, Microsoft Academic Graph) index papers and citations.
+        What's new here is making <em>demos and computations</em>
+        first-class nodes — not just papers, but the actual reproducible
+        artifacts. Combined with the temporal dimension (see
+        <a href="../dashboard.html">the temporal dashboard</a>), the
+        graph becomes a living map of the platform's evolving state.
+      </p>
+
+      <h2>Why it matters for AIHPC</h2>
+      <ul>
+        <li><strong>Discovery.</strong> A protein-folding researcher lands on /science/proteins; the graph shows 2-hop neighbours: a genetics demo, a maths paper on SE(3) equivariance, an AETHEL hypothesis linking them.</li>
+        <li><strong>Composability.</strong> "Compose this demo's output with that demo's input" is one graph traversal away when both demos are nodes.</li>
+        <li><strong>Citation.</strong> A paper cites a demo URL; the graph edge is automatic.</li>
+        <li><strong>Recommendation.</strong> "You ran the OLS demo; here are three demos that share the <code>linear-algebra</code> tag."</li>
+        <li><strong>Surveillance of one's own AI.</strong> When AETHEL adds an inferred edge, the graph visualises it; a viewer can audit which hypotheses the AI is currently holding.</li>
+      </ul>
+
+      <h2>How AIHPC Advanced implements it</h2>
+      <ul>
+        <li><strong>Nodes.</strong> Each demo manifest has a <code>meta.tags</code> and <code>meta.domain</code> field; those become node attributes. AETHEL Suite routes become nodes too (typed by route prefix).</li>
+        <li><strong>Edges.</strong> Three classes: <em>provenance</em> (output of A is input of B), <em>similarity</em> (shared tag), <em>inferred</em> (AETHEL hypothesis).</li>
+        <li><strong>Visualisation.</strong> The temporal dashboard at <code>/dashboard</code> renders the AETHEL sub-graph with play/replay. A forthcoming <code>/graph</code> route will render the full cross-domain graph.</li>
+      </ul>
+
+      <!-- Hypothetical demo -->
+      <div class="demo">
+        <div class="demo-header">
+          <p class="label">Hypothetical demo</p>
+          <h3>Click any demo card to see its 2-hop neighbourhood in the graph</h3>
+        </div>
+        <div class="demo-body">
+          <p class="muted" style="margin-top:0;">Pick a demo card; the graph shows the demo, its 2-hop neighbours (other demos, papers, datasets, AETHEL Suite surfaces) and the edges that connect them.</p>
+          <div class="pick-row" id="picks">
+            <button class="pick" data-demo="linear-regression">linear-regression</button>
+            <button class="pick" data-demo="molecular-dynamics">molecular-dynamics</button>
+            <button class="pick" data-demo="citation-pagerank">citation-pagerank</button>
+            <button class="pick" data-demo="kmeans-clustering">kmeans-clustering</button>
+          </div>
+          <svg class="graph" id="graph" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid meet"></svg>
+          <div class="legend">
+            <span class="item"><span class="swatch" style="background:#06b6d4"></span>demo</span>
+            <span class="item"><span class="swatch" style="background:#f59e0b"></span>paper</span>
+            <span class="item"><span class="swatch" style="background:#10b981"></span>dataset</span>
+            <span class="item"><span class="swatch" style="background:#8b5cf6"></span>AETHEL Suite</span>
+          </div>
+        </div>
+      </div>
+
+      <h2>Evolution of the subject</h2>
+      <ul>
+        <li><strong>Today.</strong> Static cross-domain graph on the dashboard; demos have tags; no automated edge creation yet.</li>
+        <li><strong>Phase 4+.</strong> <code>/graph</code> route renders the full graph interactively; each demo's neighbourhood is reachable from its card.</li>
+        <li><strong>Phase 5+.</strong> Automated provenance edges — when demo B uses demo A's output, an edge is created automatically.</li>
+        <li><strong>Phase 6+.</strong> Graph-powered recommendation; AETHEL uses the graph as context for hypothesis generation.</li>
+      </ul>
+
+      <h2>Open questions we want to be wrong about</h2>
+      <ul>
+        <li>Is similarity by shared tag too coarse? Should we use embedding similarity once a small embedding model runs in-browser?</li>
+        <li>Should the graph be queryable via SPARQL, GraphQL, or a custom DSL?</li>
+      </ul>
+
+      <div class="meta">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/concepts/cross-domain-graph.html</code>. Next.js route: <code>/concepts/cross-domain-graph</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      // Hypothetical demo: 2-hop neighbourhood for each demo card
+      const NEIGHBOURHOOD = {
+        'linear-regression': {
+          center: { id: 'linear-regression', type: 'demo', label: 'OLS demo' },
+          neighbours: [
+            { id: 'paper:Seber2003', type: 'paper', label: 'Seber 2003' },
+            { id: 'dataset:mtcars', type: 'dataset', label: 'mtcars' },
+            { id: '/demos', type: 'aethel', label: '/demos' },
+            { id: 'paper:Hastie2009', type: 'paper', label: 'ESL Hastie' },
+            { id: 'demo:kmeans', type: 'demo', label: 'k-means' },
+            { id: '/aethel', type: 'aethel', label: '/aethel' },
+          ],
+          edges: [
+            ['paper:Seber2003', 'linear-regression', 'cites'],
+            ['linear-regression', 'dataset:mtcars', 'uses'],
+            ['linear-regression', '/demos', 'listed-in'],
+            ['paper:Hastie2009', 'linear-regression', 'cites'],
+            ['linear-regression', 'demo:kmeans', 'shares-tag:linear-algebra'],
+            ['linear-regression', '/aethel', 'hosted-by'],
+          ],
+        },
+        'molecular-dynamics': {
+          center: { id: 'molecular-dynamics', type: 'demo', label: 'MD demo' },
+          neighbours: [
+            { id: 'paper:Verlet1967', type: 'paper', label: 'Verlet 1967' },
+            { id: 'dataset:1AKI', type: 'dataset', label: 'PDB 1AKI' },
+            { id: '/science/proteins', type: 'aethel', label: '/science/proteins' },
+            { id: 'demo:linear-regression', type: 'demo', label: 'OLS demo' },
+            { id: 'paper:AlphaFold2021', type: 'paper', label: 'AlphaFold' },
+            { id: '/workflows', type: 'aethel', label: '/workflows' },
+          ],
+          edges: [
+            ['paper:Verlet1967', 'molecular-dynamics', 'cites'],
+            ['molecular-dynamics', 'dataset:1AKI', 'uses'],
+            ['molecular-dynamics', '/science/proteins', 'hosted-by'],
+            ['molecular-dynamics', 'demo:linear-regression', 'shares-tag:physics'],
+            ['paper:AlphaFold2021', 'molecular-dynamics', 'cites'],
+            ['molecular-dynamics', '/workflows', 'listed-in'],
+          ],
+        },
+        'citation-pagerank': {
+          center: { id: 'citation-pagerank', type: 'demo', label: 'PageRank' },
+          neighbours: [
+            { id: 'paper:Page1998', type: 'paper', label: 'Page 1998' },
+            { id: 'dataset:OpenAlex', type: 'dataset', label: 'OpenAlex' },
+            { id: '/knowledge-graph', type: 'aethel', label: '/knowledge-graph' },
+            { id: 'demo:linear-regression', type: 'demo', label: 'OLS demo' },
+            { id: '/query', type: 'aethel', label: '/query' },
+            { id: 'paper:Newman2018', type: 'paper', label: 'Newman 2018' },
+          ],
+          edges: [
+            ['paper:Page1998', 'citation-pagerank', 'cites'],
+            ['citation-pagerank', 'dataset:OpenAlex', 'uses'],
+            ['citation-pagerank', '/knowledge-graph', 'hosted-by'],
+            ['citation-pagerank', 'demo:linear-regression', 'shares-tag:graph-theory'],
+            ['citation-pagerank', '/query', 'hosted-by'],
+            ['paper:Newman2018', 'citation-pagerank', 'cites'],
+          ],
+        },
+        'kmeans-clustering': {
+          center: { id: 'kmeans-clustering', type: 'demo', label: 'k-means' },
+          neighbours: [
+            { id: 'paper:Lloyd1982', type: 'paper', label: 'Lloyd 1982' },
+            { id: 'dataset:iris', type: 'dataset', label: 'iris' },
+            { id: '/demos', type: 'aethel', label: '/demos' },
+            { id: 'demo:linear-regression', type: 'demo', label: 'OLS demo' },
+            { id: '/workflows', type: 'aethel', label: '/workflows' },
+            { id: 'paper:Arthur2007', type: 'paper', label: 'Arthur 2007' },
+          ],
+          edges: [
+            ['paper:Lloyd1982', 'kmeans-clustering', 'cites'],
+            ['kmeans-clustering', 'dataset:iris', 'uses'],
+            ['kmeans-clustering', '/demos', 'listed-in'],
+            ['kmeans-clustering', 'demo:linear-regression', 'shares-tag:linear-algebra'],
+            ['kmeans-clustering', '/workflows', 'listed-in'],
+            ['paper:Arthur2007', 'kmeans-clustering', 'cites'],
+          ],
+        },
+      };
+      const COLORS = { demo:'#06b6d4', paper:'#f59e0b', dataset:'#10b981', aethel:'#8b5cf6' };
+
+      function render(key) {
+        const data = NEIGHBOURHOOD[key];
+        const svg = document.getElementById('graph');
+        const W = 800, H = 320, cx = W/2, cy = H/2;
+        const center = { x: cx, y: cy, r: 14 };
+        const ring = data.neighbours.map((n, i) => {
+          const a = (i / data.neighbours.length) * 2 * Math.PI - Math.PI/2;
+          return { ...n, x: cx + 130 * Math.cos(a), y: cy + 130 * Math.sin(a), r: 9 };
+        });
+        const parts = [];
+        // edges
+        data.edges.forEach(([from, to, label]) => {
+          const a = from === data.center.id ? center : ring.find(n => n.id === from);
+          const b = to === data.center.id ? center : ring.find(n => n.id === to);
+          if (!a || !b) return;
+          const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+          parts.push(`<path d="M ${a.x} ${a.y} Q ${mx} ${my - 10} ${b.x} ${b.y}" stroke="rgba(148,163,184,0.4)" stroke-width="1" fill="none"/>`);
+          parts.push(`<text x="${mx}" y="${my - 14}" text-anchor="middle" font-size="9" fill="#6b7280">${label}</text>`);
+        });
+        // neighbours
+        ring.forEach(n => {
+          parts.push(`<circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${COLORS[n.type]}"/>`);
+          parts.push(`<text x="${n.x}" y="${n.y - 16}" text-anchor="middle" font-size="10" font-weight="600" fill="#f3f4f6">${n.label}</text>`);
+        });
+        // center
+        parts.push(`<circle cx="${center.x}" cy="${center.y}" r="${center.r + 4}" fill="${COLORS.demo}" opacity="0.25"/>`);
+        parts.push(`<circle cx="${center.x}" cy="${center.y}" r="${center.r}" fill="${COLORS.demo}"/>`);
+        parts.push(`<text x="${center.x}" y="${center.y + 28}" text-anchor="middle" font-size="11" font-weight="700" fill="#f3f4f6">${data.center.label}</text>`);
+        svg.innerHTML = parts.join('');
+      }
+
+      document.querySelectorAll('.pick').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.pick').forEach(b => b.classList.toggle('active', b === btn));
+          render(btn.dataset.demo);
+        });
+      });
+      // Initial render
+      document.querySelector('.pick[data-demo="linear-regression"]').classList.add('active');
+      render('linear-regression');
+
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        let initial = 'dark';
+        try { const stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', () => { const next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

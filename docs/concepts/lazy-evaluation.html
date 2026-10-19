@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Lazy Evaluation as a UX Primitive — popups open immediately and stream updates. The 'feels alive' property that's hard to copy." />
+    <title>Lazy Evaluation as UX — AIHPC Advanced Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); background: rgba(11,15,26,0.8); backdrop-filter: blur(10px); }
+      .ribbon.light { background: rgba(255,255,255,0.85); border-bottom-color: #e5e7eb; }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; }
+      @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+
+      .container { max-width: 880px; margin: 0 auto; padding: 56px 24px 96px; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-elevated); font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+      h1 { font-size: 38px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 720px; margin: 0 0 40px; }
+      h2 { font-size: 24px; margin: 40px 0 12px; letter-spacing: -0.01em; }
+      p { margin: 0 0 16px; }
+      .muted { color: var(--text-muted); }
+      ul { padding-left: 22px; color: var(--text-muted); }
+      ul li { margin-bottom: 6px; }
+      ul li strong { color: var(--text); }
+      code { background: var(--bg-elevated); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
+
+      .demo { margin-top: 40px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-elevated); overflow: hidden; }
+      .demo-header { padding: 16px 24px; border-bottom: 1px solid var(--border); }
+      .demo-header .label { font-size: 11px; color: var(--accent-3); text-transform: uppercase; letter-spacing: 0.06em; }
+      .demo-header h3 { margin: 4px 0 0; font-size: 18px; }
+      .demo-body { padding: 24px; }
+      .btn { background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: inherit; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+      .btn:hover { border-color: var(--accent); }
+      .btn.primary { background: linear-gradient(90deg,#8b5cf6,#06b6d4); border-color: transparent; }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+      /* Popup */
+      .popup-overlay { position: fixed; inset: 0; background: rgba(5,8,16,0.7); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+      .popup-overlay.open { display: flex; }
+      .popup { background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 18px; max-width: 520px; width: 100%; max-height: 80vh; overflow: auto; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+      .popup h3 { margin: 0 0 12px; }
+      .tokens { font-family: "SF Mono", Menlo, monospace; font-size: 13px; line-height: 1.8; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; min-height: 60px; }
+      .tokens .cursor { display: inline-block; width: 8px; height: 14px; background: var(--accent); vertical-align: text-bottom; margin-left: 2px; animation: blink 1s steps(2, start) infinite; }
+      @keyframes blink { to { visibility: hidden; } }
+      .progress { margin-top: 12px; height: 4px; background: var(--bg); border-radius: 9999px; overflow: hidden; }
+      .progress-bar { height: 100%; background: linear-gradient(90deg,#8b5cf6,#06b6d4); width: 0; transition: width 0.2s ease; }
+
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+
+      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.06), transparent 55%), #fafafa; color: #18181b; }
+      body.light .demo, body.light .popup, body.light .tokens, body.light .progress, body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary, body.light .tag { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .muted, body.light ul, body.light .meta, body.light .tag { color: #4b5563; }
+      body.light code { background: #f3f4f6; border-color: #e5e7eb; }
+      body.light .ribbon-btn-primary { color: white; }
+      body.light .btn:not(.primary) { color: #18181b; }
+    </style>
+  </head>
+  <body>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../index.html#live-demo">Demos</a><a href="../dashboard.html">Dashboard</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu">
+            <a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a>
+            <a href="../concepts.html">Concept Cards</a>
+            <a href="replayable-decision-traces.html">Replayable Decision Traces</a>
+            <a href="provenance-first.html">Provenance-First Computing</a>
+            <a href="lazy-evaluation.html">Lazy Evaluation as UX</a>
+            <a href="cross-domain-graph.html">Cross-Domain Knowledge Graph</a>
+            <a href="audience-annotations.html">Audience-Specific Annotations</a>
+          </div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../index.html#live-demo" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <p class="crumbs"><a href="../concepts.html">Concept Cards</a> / Lazy Evaluation as UX</p>
+      <span class="tag">UX &middot; feels alive</span>
+      <h1>Lazy Evaluation as a UX Primitive</h1>
+      <p class="lead">
+        Popups open immediately with a "pending" state and stream updates
+        as the computation progresses. Users feel progress rather than
+        blocking — the "feels alive" property that's hard to copy.
+      </p>
+
+      <h2>What it is</h2>
+      <p>
+        A <strong>lazy-evaluated popup</strong> is a UI container that
+        appears instantly (zero perceived latency), shows a streaming
+        progress trace, and progressively fills in the result as
+        sub-steps complete. The viewer sees the computation
+        <em>happening</em> rather than waiting for it. This is in
+        contrast to a blocking spinner that hides the work.
+      </p>
+
+      <h2>Where the idea came from</h2>
+      <p>
+        Streaming UIs became mainstream with chat-GPT-style token
+        streaming (OpenAI, 2022), but the pattern is older:
+        server-sent events in modern web standards, Observable
+        notebooks' reactive cell updates, and Unix pipes'
+        progressive output. The "popup" framing is what makes it a
+        reusable UX primitive rather than a one-off.
+      </p>
+
+      <h2>Why it matters for AIHPC</h2>
+      <ul>
+        <li><strong>Perceived latency.</strong> A 5-second computation feels instant if the popup opens in 50ms and streams updates every 200ms.</li>
+        <li><strong>Trust.</strong> When the viewer sees steps arriving, they trust the result more than a black-box spinner.</li>
+        <li><strong>Composability.</strong> Each step can be a sub-trace (see <a href="replayable-decision-traces.html">Replayable Decision Traces</a>); the popup becomes a viewer onto the trace.</li>
+        <li><strong>Pedagogy.</strong> A student can pause mid-stream to inspect an intermediate value.</li>
+        <li><strong>Cancellation.</strong> Long-running computations get a Cancel button because the popup owns the lifecycle.</li>
+      </ul>
+
+      <h2>How AIHPC Advanced implements it</h2>
+      <ul>
+        <li><strong>Today.</strong> The OLS demo's execution-trace popup streams steps (parse → XᵀX → invert → Xᵀy → β̂ → RSS → plot) with progress dots. Each step has a 180–280 ms cadence so a viewer can read it.</li>
+        <li><strong>Server-side (later).</strong> SSE or WebSocket from a sandboxed runtime pushes trace events as they happen. The popup renders them in real time.</li>
+        <li><strong>Cancellation.</strong> The popup's close button aborts the underlying computation (AbortController for fetch; worker terminate for in-browser).</li>
+      </ul>
+
+      <!-- Hypothetical demo -->
+      <div class="demo">
+        <div class="demo-header">
+          <p class="label">Hypothetical demo</p>
+          <h3>A popup that streams "thinking…" tokens for a 5-second simulated query</h3>
+        </div>
+        <div class="demo-body">
+          <p class="muted" style="margin-top:0;">Imagine: you ask AETHEL a natural-language question ("Which genes regulate pathway Y?") and the popup opens instantly, streaming "thinking" tokens while it parses, searches the graph, ranks candidates, and assembles the answer. Below is a sketch.</p>
+          <button class="btn primary" id="demo-run">▶ Ask AETHEL</button>
+        </div>
+      </div>
+
+      <div class="popup-overlay" id="popup-overlay">
+        <div class="popup">
+          <h3>AETHEL is thinking…</h3>
+          <div class="tokens" id="tokens"></div>
+          <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+          <p class="muted" style="font-size:12px; margin-top:12px;">Step <span id="step-no">0</span>/5 &middot; <span id="step-name">idle</span></p>
+        </div>
+      </div>
+
+      <h2>Evolution of the subject</h2>
+      <ul>
+        <li><strong>Today.</strong> Pure client-side streaming with setTimeout cadence.</li>
+        <li><strong>Phase 4+.</strong> SSE stream from a sandboxed runtime; each trace event is a JSON object on the wire.</li>
+        <li><strong>Phase 5+.</strong> Popups compose — open a sub-popup from any step to inspect the sub-trace.</li>
+        <li><strong>Phase 6+.</strong> "Thinking" tokens become inspectable — click any token to see its grounding in the knowledge graph.</li>
+      </ul>
+
+      <h2>Open questions we want to be wrong about</h2>
+      <ul>
+        <li>Is SSE enough or do we need WebTransport for sub-50ms latency traces?</li>
+        <li>How much should a viewer be able to intervene mid-stream (pause, edit input, branch)?</li>
+      </ul>
+
+      <div class="meta">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/concepts/lazy-evaluation.html</code>. Next.js route: <code>/concepts/lazy-evaluation</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      const QUERY = "Which genes regulate pathway Y?";
+      const STEPS = [
+        { name: 'parsing query', tokens: ['Parsing', ' natural-language', ' query', '...'] },
+        { name: 'searching knowledge graph', tokens: ['Searching', ' the', ' 2.4M-node', ' graph', ' for', ' "pathway Y", '...'] },
+        { name: 'ranking candidates', tokens: ['Ranking', ' 47', ' candidate', ' regulators', ' by', ' confidence', '...'] },
+        { name: 'assembling answer', tokens: ['Assembling', ' the', ' answer', ' from', ' 12', ' high-confidence', ' edges', '...'] },
+        { name: 'formatting provenance', tokens: ['Formatting', ' provenance', ' receipt', ' for', ' the', ' answer', '.'] },
+      ];
+
+      async function runDemo() {
+        const overlay = document.getElementById('popup-overlay');
+        const tokens = document.getElementById('tokens');
+        const bar = document.getElementById('progress-bar');
+        const stepNo = document.getElementById('step-no');
+        const stepName = document.getElementById('step-name');
+        overlay.classList.add('open');
+        tokens.innerHTML = '';
+        bar.style.width = '0%';
+        for (let i = 0; i < STEPS.length; i++) {
+          stepNo.textContent = String(i + 1);
+          stepName.textContent = STEPS[i].name;
+          for (const tok of STEPS[i].tokens) {
+            tokens.innerHTML += `<span>${tok}</span>`;
+            bar.style.width = ((i + (STEPS[i].tokens.indexOf(tok) + 1) / STEPS[i].tokens.length) / STEPS.length * 100) + '%';
+            await new Promise(r => setTimeout(r, 180));
+          }
+          tokens.innerHTML += ' ';
+          await new Promise(r => setTimeout(r, 100));
+        }
+        bar.style.width = '100%';
+        stepNo.textContent = STEPS.length;
+        stepName.textContent = 'done';
+        tokens.innerHTML += '<br><br><strong style="color: #06b6d4;">Answer:</strong> BRCA1, TP53, MYC, and 9 other regulators (mean confidence 0.84). Provenance receipt attached to the CSV download.';
+      }
+      document.getElementById('demo-run').addEventListener('click', runDemo);
+      document.getElementById('popup-overlay').addEventListener('click', (e) => { if (e.target.id === 'popup-overlay') e.target.classList.remove('open'); });
+
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        let initial = 'dark';
+        try { const stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', () => { const next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

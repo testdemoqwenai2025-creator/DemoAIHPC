@@ -276,6 +276,10 @@ npm start
 
 ## Pages
 
+The application is a **multi-page application (MPA)** — each page is a
+distinct URL. Next.js provides 27 routes; the GitHub Pages preview
+serves a static mirror for the landing, dashboard, and concept cards.
+
 | Path | Description |
 |------|-------------|
 | `/` | Home — landing view + microservices dashboard with AETHEL integration, knowledge graph, connectors, query executor, domain workflows. |
@@ -293,16 +297,33 @@ npm start
 | `/science/genetics` | Genetics — AlphaMissense-style variant pathogenicity (direction page). |
 | `/science/nucleotides` | Nucleotides — DNA / RNA sequence analysis (direction page). |
 | `/science/maths` | Mathematics — AlphaProof-style theorem proving (direction page). |
+| `/dashboard` | **Temporal RDF Knowledge Graph Dashboard** — replayable decision traces with play / replay / scrub, knowledge tracing. Inspired by FoundationCapital / Aktiver context graphs. |
+| `/concepts` | **Concept Cards** index — deeper thoughts with the evolution of each subject, paired with hypothetical demos. |
+| `/concepts/replayable-decision-traces` | Replayable Decision Traces — the foundational concept. |
+| `/concepts/provenance-first` | Provenance-First Computing — reproducibility as the substrate. |
+| `/concepts/lazy-evaluation` | Lazy Evaluation as a UX Primitive — the "feels alive" property. |
+| `/concepts/cross-domain-graph` | Cross-Domain Knowledge Graph — composability across scientific fields. |
+| `/concepts/audience-annotations` | Audience-Specific Annotations — student / researcher / executive. |
 | `/login` | Login — placeholder for auth (deferred per the "no external services" constraint). |
 | `/preview1` | Static sci-fi themed preview page (Hero, Features, Domains, Architecture, Pricing, CTA). |
 | `/api` | API route. |
 
 In addition, the **GitHub Pages preview endpoint** at
 <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/> serves a static
-landing page from `/docs` that includes an embedded, fully client-side
-working OLS demo and a top ribbon mirroring the Next.js `Ribbon` component
-(three dropdowns: Platform / AETHEL Suite / Science; dark/light toggle;
-Login; Get Started).
+multi-page site from `/docs`:
+
+- `/docs/index.html` — landing page with ribbon + embedded working OLS demo.
+- `/docs/dashboard.html` — the temporal RDF knowledge graph dashboard with play / replay / scrub / knowledge tracing / decision traces.
+- `/docs/concepts.html` — Concept Cards index.
+- `/docs/concepts/replayable-decision-traces.html` — the foundational concept + hypothetical demo (replay the OLS trace as a growing graph).
+- `/docs/concepts/provenance-first.html` — provenance receipt sketch.
+- `/docs/concepts/lazy-evaluation.html` — streaming "thinking…" tokens demo.
+- `/docs/concepts/cross-domain-graph.html` — 2-hop neighbourhood per demo card.
+- `/docs/concepts/audience-annotations.html` — k-means audience toggle demo.
+
+All static pages share the same ribbon (Platform / AETHEL Suite / Science
+/ Insights dropdowns + dark/light toggle + Login + Get Started) and
+the same `aihpc-theme` localStorage key as the Next.js app.
 
 ---
 

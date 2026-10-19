@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Provenance-First Computing — every result is a first-class artifact with full provenance. Surpass AETHEL by making reproducibility the substrate, not a feature." />
+    <title>Provenance-First Computing — AIHPC Advanced Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); background: rgba(11,15,26,0.8); backdrop-filter: blur(10px); }
+      .ribbon.light { background: rgba(255,255,255,0.85); border-bottom-color: #e5e7eb; }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; }
+      @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+
+      .container { max-width: 880px; margin: 0 auto; padding: 56px 24px 96px; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .crumbs a:hover { color: var(--text); }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-elevated); font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+      h1 { font-size: 38px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 720px; margin: 0 0 40px; }
+      h2 { font-size: 24px; margin: 40px 0 12px; letter-spacing: -0.01em; }
+      p { margin: 0 0 16px; }
+      .muted { color: var(--text-muted); }
+      ul { padding-left: 22px; color: var(--text-muted); }
+      ul li { margin-bottom: 6px; }
+      ul li strong { color: var(--text); }
+      code { background: var(--bg-elevated); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; color: var(--text); }
+
+      .demo { margin-top: 40px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-elevated); overflow: hidden; }
+      .demo-header { padding: 16px 24px; border-bottom: 1px solid var(--border); }
+      .demo-header .label { font-size: 11px; color: var(--accent-3); text-transform: uppercase; letter-spacing: 0.06em; }
+      .demo-header h3 { margin: 4px 0 0; font-size: 18px; }
+      .demo-body { padding: 24px; }
+      .receipt { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; color: var(--text); white-space: pre-wrap; word-break: break-word; }
+      .receipt .k { color: var(--accent); }
+      .receipt .s { color: #67e8f9; }
+      .receipt .n { color: #fbbf24; }
+      .receipt .com { color: var(--text-muted-2); }
+
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+
+      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.06), transparent 55%), #fafafa; color: #18181b; }
+      body.light .demo, body.light .receipt, body.light .tag, body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
+      body.light .receipt { background: #fafafa; }
+      body.light .lead, body.light .muted, body.light ul, body.light .meta, body.light .tag, body.light .receipt .com { color: #4b5563; }
+      body.light code { background: #f3f4f6; border-color: #e5e7eb; }
+      body.light .ribbon-btn-primary { color: white; }
+    </style>
+  </head>
+  <body>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand">
+          <span class="ribbon-logo">A</span>
+          <span class="ribbon-name">AIHPC Advanced</span>
+        </a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown">
+            <summary>Platform</summary>
+            <div class="ribbon-menu">
+              <a href="../index.html">Home</a>
+              <a href="../index.html#live-demo">Demos</a>
+              <a href="../dashboard.html">Dashboard</a>
+            </div>
+          </details>
+          <details class="ribbon-dropdown">
+            <summary>Insights</summary>
+            <div class="ribbon-menu">
+              <a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a>
+              <a href="../concepts.html">Concept Cards</a>
+              <a href="replayable-decision-traces.html">Replayable Decision Traces</a>
+              <a href="provenance-first.html">Provenance-First Computing</a>
+              <a href="lazy-evaluation.html">Lazy Evaluation as UX</a>
+              <a href="cross-domain-graph.html">Cross-Domain Knowledge Graph</a>
+              <a href="audience-annotations.html">Audience-Specific Annotations</a>
+            </div>
+          </details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../index.html#live-demo" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <p class="crumbs"><a href="../concepts.html">Concept Cards</a> / Provenance-First Computing</p>
+      <span class="tag">Architecture &middot; surpass AETHEL</span>
+      <h1>Provenance-First Computing</h1>
+      <p class="lead">
+        Every result is a first-class artifact with full provenance: input
+        data, math, code, execution trace, output, report. Reproducibility
+        isn't a feature; it's the substrate. The "surpass AETHEL" thesis
+        rests here.
+      </p>
+
+      <h2>What it is</h2>
+      <p>
+        A <strong>provenance receipt</strong> is a JSON document that
+        travels with every downloadable result. It records: the demo
+        manifest (math, code, annotations), the input data hash, the
+        runtime (browser / server-sandboxed), the version of every
+        library touched, the execution trace, the output hash, and the
+        timestamp. Given the same manifest, same input, and same
+        runtime, the result is bit-for-bit reproducible.
+      </p>
+
+      <h2>Where the idea came from</h2>
+      <p>
+        Provenance research is old — W3C PROV (2013), OPM (2008), the
+        Open Provenance Model. Notebook platforms (Jupyter, Observable,
+        Pluto) ship partial provenance (code + outputs). Scientific
+        reproducibility crises across fields (psychology, oncology,
+        ML benchmarking) made it topical. AIHPC Advanced's contribution
+        is to make provenance <em>first-class</em> — not optional, not
+        enterprise-tier, but the default substrate of every artifact.
+      </p>
+
+      <h2>Why it matters for AIHPC</h2>
+      <ul>
+        <li><strong>Audit without NDA.</strong> A reviewer can verify a claim by replaying the trace locally; they never need to access your private data.</li>
+        <li><strong>Citation.</strong> A demo result cites its own provenance receipt; a paper cites the demo URL. Citations become computable.</li>
+        <li><strong>Composability.</strong> Workflow A's output is workflow B's input; the receipts chain. The composite receipt is itself a receipt.</li>
+        <li><strong>Versioning.</strong> AETHEL's knowledge graph updates an edge; the old edge isn't deleted, it's superseded with a pointer. History is recoverable.</li>
+      </ul>
+
+      <h2>How AIHPC Advanced implements it</h2>
+      <ul>
+        <li><strong>Manifest.</strong> The <code>DemoManifest</code> TypeScript schema (see <code>src/lib/demos/manifest.ts</code>) declares the math, code, annotations, datasets, observability, and runtime for each demo.</li>
+        <li><strong>Receipt.</strong> A <code>ProvenanceReceipt</code> JSON file is generated alongside every downloadable CSV / JSON. It includes manifest hash, input hash, output hash, runtime info, and a link to the trace.</li>
+        <li><strong>Trace.</strong> See <a href="replayable-decision-traces.html">Replayable Decision Traces</a>. The trace is part of the receipt.</li>
+        <li><strong>Receipt URL.</strong> The receipt is content-addressed (SHA-256 of its content) so the same URL always returns the same receipt — no version drift.</li>
+      </ul>
+
+      <!-- Hypothetical demo -->
+      <div class="demo">
+        <div class="demo-header">
+          <p class="label">Hypothetical demo</p>
+          <h3>Ship a provenance receipt alongside every downloadable CSV</h3>
+        </div>
+        <div class="demo-body">
+          <p class="muted" style="margin-top:0;">
+            Imagine: you run the OLS demo. You click "Download CSV" and
+            you get two files — the data and a receipt. The receipt is
+            what makes the CSV citable. Below is a sketch of what the
+            receipt would look like.
+          </p>
+          <pre class="receipt">{
+  <span class="k">"@context"</span>: <span class="s">"https://aihpc.advanced/prov/v1"</span>,
+  <span class="k">"manifestHash"</span>: <span class="s">"sha256:7fe6475..."</span>,
+  <span class="k">"manifest"</span>: {
+    <span class="k">"id"</span>: <span class="s">"linear-regression"</span>,
+    <span class="k">"version"</span>: <span class="s">"v0.2.1"</span>,
+    <span class="k">"runtime"</span>: <span class="s">"browser"</span>,
+    <span class="k">"dataResidency"</span>: <span class="s">"downloadable"</span>
+  },
+  <span class="k">"input"</span>: {
+    <span class="k">"dataHash"</span>: <span class="s">"sha256:8a3f1b..."</span>,
+    <span class="k">"n"</span>: <span class="n">6</span>,
+    <span class="k">"source"</span>: <span class="s">"user-edited in-browser"</span>
+  },
+  <span class="k">"output"</span>: {
+    <span class="k">"csvHash"</span>: <span class="s">"sha256:c2d9e0..."</span>,
+    <span class="k">"beta"</span>: [<span class="n">0.066667</span>, <span class="n">1.971429</span>],
+    <span class="k">"rss"</span>: <span class="n">0.042857</span>,
+    <span class="k">"r2"</span>: <span class="n">0.999524</span>
+  },
+  <span class="k">"trace"</span>: {
+    <span class="k">"url"</span>: <span class="s">"trace://ols/7fe6475.../trace.json"</span>,
+    <span class="k">"steps"</span>: <span class="n">7</span>,
+    <span class="k">"format"</span>: <span class="s">"json-ld"</span>
+  },
+  <span class="k">"environment"</span>: {
+    <span class="k">"client"</span>: <span class="s">"browser"</span>,
+    <span class="k">"timestamp"</span>: <span class="s">"2026-10-19T10:14:52Z"</span>
+  },
+  <span class="k">"signature"</span>: <span class="s">"sha256:..."</span>,
+  <span class="com">// Re-run: same manifest + same input + same runtime</span>
+  <span class="com">//  =&gt; same output hash. Bit-for-bit reproducible.</span>
+}</pre>
+        </div>
+      </div>
+
+      <h2>Evolution of the subject</h2>
+      <ul>
+        <li><strong>Today.</strong> Manifest exists; receipt is sketched on this page; CSV download is real but no receipt yet.</li>
+        <li><strong>Phase 4+.</strong> Receipt auto-generated alongside every CSV download; receipt content-addressed.</li>
+        <li><strong>Phase 5+.</strong> Receipt cross-references AETHEL knowledge graph — every output edge gets a provenance receipt.</li>
+        <li><strong>Phase 6+.</strong> Receipt becomes citable — a DOI-style identifier minted from the receipt hash. Citations become computable.</li>
+      </ul>
+
+      <h2>Open questions we want to be wrong about</h2>
+      <ul>
+        <li>Should the receipt live alongside the CSV (two files) or be embedded (one file with metadata)?</li>
+        <li>Where do receipts get content-addressed when there's no server? Client-side SHA + IPFS-style pinning later?</li>
+        <li>What's the right schema — W3C PROV-O, JSON-LD with a custom <code>@context</code>, or both?</li>
+      </ul>
+
+      <div class="meta">
+        <p>
+          &copy; 2026 AIHPC Advanced. &middot;
+          Static page from <code>/docs/concepts/provenance-first.html</code>.
+          Next.js route: <code>/concepts/provenance-first</code>. Comments
+          to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body;
+        const ribbon = document.querySelector('.ribbon');
+        const icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        let initial = 'dark';
+        try { const stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', () => { const next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

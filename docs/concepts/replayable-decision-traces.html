@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Replayable Decision Traces — the foundational concept for AIHPC Advanced. Inspired by FoundationCapital / Aktiver context graphs. Every computation produces a replayable trace; the audit trail is the asset." />
+    <title>Replayable Decision Traces — AIHPC Advanced Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); background: rgba(11,15,26,0.8); backdrop-filter: blur(10px); }
+      .ribbon.light { background: rgba(255,255,255,0.85); border-bottom-color: #e5e7eb; }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; }
+      @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+
+      .container { max-width: 880px; margin: 0 auto; padding: 56px 24px 96px; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .crumbs a:hover { color: var(--text); }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-elevated); font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+      h1 { font-size: 38px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 720px; margin: 0 0 40px; }
+      h2 { font-size: 24px; margin: 40px 0 12px; letter-spacing: -0.01em; }
+      p { margin: 0 0 16px; color: var(--text); }
+      .muted { color: var(--text-muted); }
+      ul { padding-left: 22px; color: var(--text-muted); }
+      ul li { margin-bottom: 6px; }
+      ul li strong { color: var(--text); }
+      code { background: var(--bg-elevated); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; color: var(--text); }
+
+      /* Hypothetical demo */
+      .demo { margin-top: 40px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-elevated); overflow: hidden; }
+      .demo-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+      .demo-header h3 { margin: 0; font-size: 18px; }
+      .demo-header .label { font-size: 11px; color: var(--accent-3); text-transform: uppercase; letter-spacing: 0.06em; }
+      .demo-body { padding: 24px; }
+      .demo-controls { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+      .btn { background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: inherit; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+      .btn:hover { border-color: var(--accent); }
+      .btn.primary { background: linear-gradient(90deg,#8b5cf6,#06b6d4); border-color: transparent; }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      svg.graph { width: 100%; height: 280px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; }
+      .trace { margin-top: 16px; max-height: 220px; overflow: auto; }
+      .trace-row { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 6px; font-size: 13px; background: var(--bg); }
+      .trace-row .step { font-family: "SF Mono", Menlo, monospace; color: var(--accent-2); margin-right: 8px; font-size: 11px; }
+      .trace-row .reason { color: var(--text-muted); margin-top: 4px; font-size: 12px; }
+
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+
+      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.06), transparent 55%), #fafafa; color: #18181b; }
+      body.light .demo, body.light .trace-row, body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary, body.light .tag { background: white; border-color: #e5e7eb; }
+      body.light svg.graph { background: #fafafa; }
+      body.light .lead, body.light .muted, body.light .tag, body.light .meta, body.light ul, body.light .trace-row .reason { color: #4b5563; }
+      body.light code { background: #f3f4f6; border-color: #e5e7eb; }
+      body.light .ribbon-btn-primary, body.light .btn { color: white; }
+      body.light .btn:not(.primary) { color: #18181b; }
+    </style>
+  </head>
+  <body>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand">
+          <span class="ribbon-logo">A</span>
+          <span class="ribbon-name">AIHPC Advanced</span>
+        </a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown">
+            <summary>Platform</summary>
+            <div class="ribbon-menu">
+              <a href="../index.html">Home</a>
+              <a href="../index.html#live-demo">Demos</a>
+              <a href="../dashboard.html">Dashboard</a>
+            </div>
+          </details>
+          <details class="ribbon-dropdown">
+            <summary>Insights</summary>
+            <div class="ribbon-menu">
+              <a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a>
+              <a href="../concepts.html">Concept Cards</a>
+              <a href="replayable-decision-traces.html">Replayable Decision Traces</a>
+              <a href="provenance-first.html">Provenance-First Computing</a>
+              <a href="lazy-evaluation.html">Lazy Evaluation as UX</a>
+              <a href="cross-domain-graph.html">Cross-Domain Knowledge Graph</a>
+              <a href="audience-annotations.html">Audience-Specific Annotations</a>
+            </div>
+          </details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme">
+            <span id="ribbon-theme-icon">🌙</span>
+          </button>
+          <a href="../index.html#live-demo" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <p class="crumbs"><a href="../concepts.html">Concept Cards</a> / Replayable Decision Traces</p>
+      <span class="tag">Foundational &middot; FoundationCapital / Aktiver inspiration</span>
+      <h1>Replayable Decision Traces</h1>
+      <p class="lead">
+        Every computation, every graph change, every demo run produces a
+        trace that can be replayed timestep-by-timestep. The graph evolves
+        in front of the viewer; the audit trail <em>is</em> the asset.
+        This is the foundational concept for AIHPC Advanced — borrowed
+        from the broader public sphere around context graphs and
+        replayable decision traces.
+      </p>
+
+      <h2>What it is</h2>
+      <p>
+        A <strong>decision trace</strong> is an ordered list of state
+        changes — RDF triples being added, removed, or updated — paired
+        with the <em>reason</em> each change was made. A trace is
+        <strong>replayable</strong> when a viewer can scrub through
+        timesteps and watch the graph (or the computation) reconstruct
+        itself step by step. The point isn't a slick animation; the point
+        is that every state is recoverable, every decision is auditable,
+        and every claim has a path back to its evidence.
+      </p>
+
+      <h2>Where the idea came from</h2>
+      <p>
+        Context graphs — popularised alongside the concept of replayable
+        decision traces — represent a framework introduced by the
+        venture-capital firm FoundationCapital and solved by Aktiver.
+        The public sphere (LinkedIn posts, talks, and product pages from
+        that ecosystem — names like Jay Weinberg, Ashleigh N. Faith,
+        Caroline Chung MD, Sumanta Mukhopadhyay, Kyrsten M., Joe
+        Mueller, Malachi Keddington, John Beverley come up in connection
+        with it) has been refining the vocabulary for several years. The
+        underlying research is widely available; AIHPC Advanced is an
+        open, client-side implementation of the same idea, applied to
+        scientific knowledge.
+      </p>
+
+      <h2>Why it matters for AIHPC</h2>
+      <ul>
+        <li><strong>Audit.</strong> When AETHEL generates a hypothesis, a viewer can scrub back to see which papers, which datasets, and which prior hypotheses led to it. No black box.</li>
+        <li><strong>Reproducibility.</strong> A demo run is a trace; re-running the trace reproduces the same output bit-for-bit. The trace is the provenance receipt.</li>
+        <li><strong>Debuggability.</strong> When a result is wrong, the trace tells you which step introduced the error. You don't bisect the code; you bisect the trace.</li>
+        <li><strong>Pedagogy.</strong> A student can scrub slowly through a trace to see how a regression line is fit, how a PageRank converges, how a knowledge graph grows. The trace is a curriculum.</li>
+        <li><strong>Trust.</strong> "Trust the result because you can replay the reasoning." This is the bar a surpass-AETHEL platform must clear.</li>
+      </ul>
+
+      <h2>How AIHPC Advanced implements it</h2>
+      <ul>
+        <li><strong>Trace data model.</strong> A trace is a list of <code>{ action, subject, predicate, object, confidence?, reason }</code> records. The graph state at timestep <code>t</code> is the cumulative application of changes from <code>t=0</code> through <code>t</code>.</li>
+        <li><strong>Storage.</strong> Traces live alongside the result (CSV / JSON) as a parallel download. The trace is part of the artifact, not a side-channel.</li>
+        <li><strong>Visualisation.</strong> The <a href="../dashboard.html">temporal knowledge graph dashboard</a> renders a trace as an SVG that evolves with a play / replay / scrub control.</li>
+        <li><strong>Open standard.</strong> The trace format is JSON-LD compatible; triples are RDF; reasons are free text today and will be formalised as PROV-O-style provenance in a later phase.</li>
+      </ul>
+
+      <!-- Hypothetical demo -->
+      <div class="demo">
+        <div class="demo-header">
+          <div>
+            <p class="label">Hypothetical demo</p>
+            <h3>Replay the OLS trace as a graph that grows a node per step</h3>
+          </div>
+        </div>
+        <div class="demo-body">
+          <p class="muted" style="margin-top:0;">
+            Imagine: you run the OLS demo. Instead of just seeing β̂, you
+            also get a downloadable trace file and a "Replay as graph"
+            button. Press it and a small graph grows a node per step
+            (parse, XᵀX, invert, Xᵀy, β̂, RSS, plot) — each node carrying
+            the reason it was added. Below is a sketch of what that feels
+            like.
+          </p>
+          <div class="demo-controls">
+            <button class="btn primary" id="demo-play">▶ Replay trace</button>
+            <button class="btn" id="demo-step">Step ▶</button>
+            <button class="btn" id="demo-reset">↺ Reset</button>
+          </div>
+          <svg class="graph" id="demo-svg" viewBox="0 0 800 280" preserveAspectRatio="xMidYMid meet"></svg>
+          <div class="trace" id="demo-trace"></div>
+        </div>
+      </div>
+
+      <h2>Evolution of the subject (where this is heading)</h2>
+      <ul>
+        <li><strong>Today.</strong> Traces are JSON files alongside CSVs; the dashboard plays them as an animation.</li>
+        <li><strong>Phase 4+.</strong> Traces become first-class API responses — every demo route returns <code>{ result, trace }</code> by default. The trace is queryable (SPARQL-style).</li>
+        <li><strong>Phase 5+.</strong> Traces compose — a workflow that runs three demos in sequence produces a trace that references each sub-trace by ID. Multi-tenant provenance.</li>
+        <li><strong>Phase 6+.</strong> Traces feed back into AETHEL's hypothesis generator. "Watch the graph evolve" becomes "watch the AI evolve the graph" — supervised autonomy.</li>
+      </ul>
+
+      <h2>Open questions we want to be wrong about</h2>
+      <ul>
+        <li>Is RDF/JSON-LD the right substrate, or should we use something leaner (e.g. Apache Arrow traces)?</li>
+        <li>Should "reason" be free text or a structured cause (PROV-O)? Hybrid for now; pressure-test later.</li>
+        <li>Where does the trace live when the result is shared by URL? Inline (heavy) or hash-pinned to a content-addressed store (needs infra)?</li>
+      </ul>
+
+      <div class="meta">
+        <p>
+          &copy; 2026 AIHPC Advanced. &middot;
+          This concept card is a static page served by GitHub Pages from
+          <code>/docs/concepts/replayable-decision-traces.html</code>.
+          The hypothetical demo above is pure client-side JS. Inspired by
+          the public sphere around FoundationCapital / Aktiver context
+          graphs and replayable decision traces. The Next.js route
+          <code>/concepts/replayable-decision-traces</code> mirrors this
+          page. Comments / corrections welcome at
+          <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Hypothetical demo: replay the OLS trace as a growing graph
+      const STEPS = [
+        { id: 'parse', label: 'Parse', reason: 'Input table parsed into X, y matrices.' },
+        { id: 'xtx', label: 'XᵀX', reason: 'XᵀX computed for the normal equations.' },
+        { id: 'inv', label: '(XᵀX)⁻¹', reason: '2×2 closed-form inverse; det != 0.' },
+        { id: 'xty', label: 'Xᵀy', reason: 'Right-hand side of the normal equations.' },
+        { id: 'beta', label: 'β̂', reason: 'β̂ = (XᵀX)⁻¹ Xᵀy — the OLS estimator.' },
+        { id: 'rss', label: 'RSS', reason: 'Residual sum of squares and R² computed.' },
+        { id: 'plot', label: 'Plot', reason: 'SVG plot rendered; CSV blob offered for download.' },
+      ];
+
+      let stepIdx = 0;
+      let playing = false;
+      let timer = null;
+
+      function layout() {
+        const W = 800, H = 280, pad = 40;
+        const positions = {};
+        STEPS.forEach((s, i) => {
+          const t = i / Math.max(STEPS.length - 1, 1);
+          const x = pad + t * (W - 2 * pad);
+          const y = H / 2 + Math.sin(i * 1.1) * 40;
+          positions[s.id] = { x, y };
+        });
+        return positions;
+      }
+
+      function render(activeUpTo) {
+        const svg = document.getElementById('demo-svg');
+        const positions = layout();
+        const parts = [];
+        // Edges (between consecutive steps)
+        for (let i = 1; i <= activeUpTo; i++) {
+          if (i >= STEPS.length) break;
+          const a = positions[STEPS[i - 1].id];
+          const b = positions[STEPS[i].id];
+          if (a && b) {
+            parts.push(`<path d="M ${a.x} ${a.y} L ${b.x} ${b.y}" stroke="rgba(139,92,246,0.6)" stroke-width="2" fill="none"/>`);
+          }
+        }
+        // Nodes
+        STEPS.forEach((s, i) => {
+          const p = positions[s.id];
+          const visible = i <= activeUpTo;
+          const isLast = i === activeUpTo;
+          const color = isLast ? '#06b6d4' : (visible ? '#8b5cf6' : '#374151');
+          const opacity = visible ? 1 : 0.25;
+          parts.push(`<circle cx="${p.x}" cy="${p.y}" r="${isLast ? 12 : 9}" fill="${color}" opacity="${opacity}"/>`);
+          parts.push(`<text x="${p.x}" y="${p.y - 18}" text-anchor="middle" font-size="11" font-weight="600" fill="${visible ? '#f3f4f6' : '#6b7280'}" opacity="${opacity}">${s.label}</text>`);
+        });
+        svg.innerHTML = parts.join('');
+
+        // Trace panel
+        const traceEl = document.getElementById('demo-trace');
+        traceEl.innerHTML = STEPS.slice(0, activeUpTo + 1).map((s, i) => `
+          <div class="trace-row">
+            <span class="step">step ${i + 1}/${STEPS.length}</span>
+            <strong>${s.label}</strong>
+            <div class="reason">${s.reason}</div>
+          </div>
+        `).join('') || '<div class="trace-row"><span class="reason">Trace empty — press Replay or Step.</span></div>';
+      }
+
+      function step() {
+        if (stepIdx >= STEPS.length - 1) { stop(); return; }
+        stepIdx++;
+        render(stepIdx);
+      }
+      function start() {
+        if (playing) return;
+        playing = true;
+        document.getElementById('demo-play').textContent = '⏸ Pause';
+        timer = setInterval(step, 600);
+      }
+      function stop() {
+        playing = false;
+        document.getElementById('demo-play').textContent = '▶ Replay trace';
+        if (timer) { clearInterval(timer); timer = null; }
+      }
+      function reset() { stop(); stepIdx = 0; render(-1); }
+      function toggle() { if (playing) stop(); else { if (stepIdx >= STEPS.length - 1) reset(); start(); } }
+
+      document.getElementById('demo-play').addEventListener('click', toggle);
+      document.getElementById('demo-step').addEventListener('click', () => { stop(); step(); });
+      document.getElementById('demo-reset').addEventListener('click', reset);
+
+      // Ribbon theme toggle
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body;
+        const ribbon = document.querySelector('.ribbon');
+        const icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        let initial = 'dark';
+        try { const stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', () => { const next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+
+      reset();
+    </script>
+  </body>
+</html>

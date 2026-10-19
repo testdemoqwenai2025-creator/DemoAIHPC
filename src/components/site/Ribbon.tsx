@@ -102,6 +102,46 @@ const GROUPS: NavGroup[] = [
       },
     ],
   },
+  {
+    label: 'Insights',
+    items: [
+      {
+        href: '/dashboard',
+        label: 'Temporal Knowledge Graph Dashboard',
+        desc: 'Replayable decision traces, play / replay / scrub',
+      },
+      {
+        href: '/concepts',
+        label: 'Concept Cards',
+        desc: 'Deeper thoughts with evolution + hypothetical demos',
+      },
+      {
+        href: '/concepts/replayable-decision-traces',
+        label: 'Replayable Decision Traces',
+        desc: 'FoundationCapital / Aktiver inspiration',
+      },
+      {
+        href: '/concepts/provenance-first',
+        label: 'Provenance-First Computing',
+        desc: 'Reproducibility as the substrate',
+      },
+      {
+        href: '/concepts/lazy-evaluation',
+        label: 'Lazy Evaluation as UX',
+        desc: 'The feels-alive property',
+      },
+      {
+        href: '/concepts/cross-domain-graph',
+        label: 'Cross-Domain Knowledge Graph',
+        desc: 'Composability across scientific fields',
+      },
+      {
+        href: '/concepts/audience-annotations',
+        label: 'Audience-Specific Annotations',
+        desc: 'Student / researcher / executive',
+      },
+    ],
+  },
 ]
 
 export function Ribbon() {

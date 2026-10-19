@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Temporal RDF semantic knowledge graph dashboard for AIHPC Advanced. Watch the AETHEL knowledge graph change over time as new data evolves relationships. Replayable decision traces, knowledge tracing, play / replay / scrub controls. Inspired by FoundationCapital / Aktiver context-graphs framework."
+    />
+    <title>Temporal Knowledge Graph Dashboard — AIHPC Advanced</title>
+    <style>
+      :root {
+        --bg: #0b0f1a;
+        --bg-elevated: #121826;
+        --bg-elevated-2: #1a2133;
+        --border: #1f2937;
+        --border-strong: #2a3548;
+        --text: #f3f4f6;
+        --text-muted: #9ca3af;
+        --text-muted-2: #6b7280;
+        --accent: #8b5cf6;
+        --accent-2: #06b6d4;
+        --accent-3: #f59e0b;
+        --success: #10b981;
+        --danger: #ef4444;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        background: radial-gradient(
+            1200px 600px at 20% -10%, rgba(139, 92, 246, 0.18), transparent 60%
+          ),
+          radial-gradient(
+            1200px 600px at 100% 0%, rgba(6, 182, 212, 0.12), transparent 55%
+          ),
+          var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+      /* Ribbon (shared with index.html) */
+      .ribbon {
+        position: sticky; top: 0; z-index: 50;
+        border-bottom: 1px solid var(--border);
+        background: rgba(11, 15, 26, 0.8); backdrop-filter: blur(10px);
+      }
+      .ribbon.light { background: rgba(255, 255, 255, 0.85); border-bottom-color: #e5e7eb; }
+      .ribbon-inner {
+        max-width: 1400px; margin: 0 auto; padding: 0 24px;
+        height: 56px; display: flex; align-items: center; gap: 12px;
+      }
+      .ribbon-brand {
+        display: flex; align-items: center; gap: 8px;
+        text-decoration: none; color: var(--text); font-weight: 600;
+      }
+      .ribbon-logo {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 28px; height: 28px; border-radius: 8px;
+        background: linear-gradient(135deg, #06b6d4, #8b5cf6, #d946ef);
+        color: white; font-size: 12px; font-weight: 700;
+      }
+      .ribbon-name { display: none; }
+      @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary {
+        list-style: none; cursor: pointer; padding: 6px 12px;
+        border-radius: 6px; font-size: 14px; color: var(--text-muted);
+        display: inline-flex; align-items: center; gap: 4px;
+      }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu {
+        position: absolute; top: 100%; left: 0; margin-top: 4px;
+        min-width: 240px; background: var(--bg-elevated);
+        border: 1px solid var(--border-strong); border-radius: 12px;
+        padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+        display: flex; flex-direction: column; gap: 2px;
+      }
+      .ribbon-menu a {
+        text-decoration: none; color: var(--text-muted); font-size: 13px;
+        padding: 6px 10px; border-radius: 6px;
+      }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn {
+        background: transparent; border: 1px solid var(--border); color: var(--text);
+        width: 32px; height: 32px; border-radius: 8px; cursor: pointer;
+        font-size: 14px; display: inline-flex; align-items: center; justify-content: center;
+      }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-ghost {
+        display: inline-flex; align-items: center; padding: 6px 14px;
+        border-radius: 9999px; border: 1px solid var(--border); color: var(--text);
+        text-decoration: none; font-size: 13px; font-weight: 600;
+      }
+      .ribbon-btn-ghost:hover { border-color: var(--accent); }
+      .ribbon-btn-primary {
+        display: inline-flex; align-items: center; padding: 6px 16px;
+        border-radius: 9999px; background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+        color: white; text-decoration: none; font-size: 13px; font-weight: 600;
+      }
+      .ribbon-btn-primary:hover { filter: brightness(1.08); }
+
+      /* Page layout */
+      .container {
+        max-width: 1400px; margin: 0 auto; padding: 24px 24px 96px;
+      }
+      h1 {
+        font-size: 32px; line-height: 1.15; margin: 8px 0 6px;
+        letter-spacing: -0.02em;
+        background: linear-gradient(90deg, #fff, #c4b5fd 60%, #67e8f9);
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+      }
+      .subtitle { color: var(--text-muted); font-size: 15px; max-width: 920px; margin-bottom: 20px; }
+      .badge {
+        display: inline-block; padding: 4px 10px; border-radius: 9999px;
+        border: 1px solid var(--border); background: var(--bg-elevated);
+        font-size: 12px; color: var(--text-muted);
+      }
+
+      /* Dashboard grid */
+      .dash {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        grid-template-rows: auto auto;
+        gap: 16px;
+        margin-top: 16px;
+      }
+      @media (max-width: 1100px) { .dash { grid-template-columns: 1fr; } }
+
+      .panel {
+        background: var(--bg-elevated); border: 1px solid var(--border);
+        border-radius: 16px; padding: 20px;
+      }
+      .panel h2 { font-size: 14px; margin: 0 0 12px; color: var(--text); letter-spacing: 0.04em; text-transform: uppercase; }
+      .panel h2 .meta { color: var(--text-muted-2); font-weight: 400; text-transform: none; letter-spacing: 0; margin-left: 8px; font-size: 12px; }
+
+      /* Graph panel */
+      .graph-panel { grid-row: 1 / 3; min-height: 520px; display: flex; flex-direction: column; }
+      .graph-canvas { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; min-height: 440px; position: relative; overflow: hidden; }
+      .graph-legend {
+        display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px;
+        font-size: 12px; color: var(--text-muted);
+      }
+      .graph-legend .item { display: inline-flex; align-items: center; gap: 6px; }
+      .graph-legend .swatch { width: 10px; height: 10px; border-radius: 9999px; }
+
+      /* Stats panel */
+      .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+      .stat { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+      .stat .label { color: var(--text-muted-2); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+      .stat .value { color: var(--text); font-size: 20px; font-weight: 700; font-feature-settings: "tnum"; font-family: "SF Mono", Menlo, monospace; }
+      .stat .delta { font-size: 11px; color: var(--text-muted-2); }
+      .stat .delta.up { color: var(--success); }
+      .stat .delta.down { color: var(--danger); }
+
+      /* Trace panel */
+      .trace-list { max-height: 360px; overflow: auto; padding: 0; margin: 0; list-style: none; }
+      .trace-item {
+        padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px;
+        margin-bottom: 8px; font-size: 13px; background: var(--bg);
+      }
+      .trace-item .action {
+        display: inline-block; padding: 2px 8px; border-radius: 9999px;
+        font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+        margin-right: 6px;
+      }
+      .trace-item .action.add { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+      .trace-item .action.remove { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+      .trace-item .action.update { background: rgba(245, 158, 11, 0.15); color: var(--accent-3); }
+      .trace-item .triple { color: var(--text); font-family: "SF Mono", Menlo, monospace; font-size: 12px; }
+      .trace-item .triple .s { color: #c084fc; }
+      .trace-item .triple .p { color: #67e8f9; }
+      .trace-item .triple .o { color: #fbbf24; }
+      .trace-item .reason { color: var(--text-muted); font-size: 12px; margin-top: 4px; }
+
+      /* Controls (timeline scrubber) */
+      .controls-panel { grid-column: 1 / -1; }
+      .controls-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+      .ctrl-btn {
+        background: var(--bg-elevated-2); border: 1px solid var(--border-strong);
+        color: var(--text); padding: 8px 14px; border-radius: 8px;
+        cursor: pointer; font-size: 14px; font-family: inherit; font-weight: 600;
+        display: inline-flex; align-items: center; gap: 6px;
+      }
+      .ctrl-btn:hover { border-color: var(--accent); }
+      .ctrl-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      .ctrl-btn.primary {
+        background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+        border-color: transparent;
+      }
+      .ctrl-btn.primary:hover { filter: brightness(1.08); }
+      .ctrl-speed {
+        display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+      }
+      .ctrl-speed button {
+        background: transparent; color: var(--text-muted); border: 0;
+        padding: 8px 12px; font-size: 12px; cursor: pointer; font-family: inherit; font-weight: 600;
+      }
+      .ctrl-speed button.active { background: var(--accent); color: white; }
+      .timeline-wrap { flex: 1; min-width: 260px; }
+      .timeline-label { font-size: 11px; color: var(--text-muted-2); margin-bottom: 4px; }
+      .timeline {
+        position: relative; height: 36px; cursor: pointer;
+      }
+      .timeline-track {
+        position: absolute; top: 14px; left: 0; right: 0; height: 6px;
+        background: var(--bg-elevated-2); border-radius: 9999px;
+      }
+      .timeline-progress {
+        position: absolute; top: 14px; left: 0; height: 6px;
+        background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+        border-radius: 9999px;
+        transition: width 0.3s ease;
+      }
+      .timeline-tick {
+        position: absolute; top: 8px; width: 2px; height: 22px;
+        background: var(--border-strong); border-radius: 1px;
+      }
+      .timeline-tick.active { background: var(--accent); }
+      .timeline-cursor {
+        position: absolute; top: 4px; width: 16px; height: 16px;
+        background: white; border-radius: 9999px; transform: translateX(-50%);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+        transition: left 0.3s ease; cursor: grab;
+      }
+      .timeline-event-labels {
+        position: relative; height: 16px; margin-top: 4px;
+      }
+      .timeline-event-labels span {
+        position: absolute; transform: translateX(-50%);
+        font-size: 10px; color: var(--text-muted-2); white-space: nowrap;
+      }
+
+      .step-info {
+        display: flex; align-items: center; gap: 12px; margin-top: 8px;
+        font-size: 13px; color: var(--text-muted);
+      }
+      .step-info .step-no { font-family: "SF Mono", Menlo, monospace; color: var(--text); font-weight: 700; }
+      .step-info .step-label { color: var(--text); }
+      .step-info .step-ts { color: var(--text-muted-2); font-family: "SF Mono", Menlo, monospace; font-size: 11px; }
+
+      /* SVG */
+      svg.graph { width: 100%; height: 100%; display: block; }
+      svg.graph .node-circle { transition: r 0.4s ease, fill 0.4s ease, opacity 0.4s ease; }
+      svg.graph .node-label { font: 600 11px ui-sans-serif, system-ui, sans-serif; fill: var(--text); pointer-events: none; }
+      svg.graph .edge { transition: opacity 0.4s ease, stroke-width 0.4s ease; }
+      svg.graph .edge-label { font: 9px ui-sans-serif, system-ui, sans-serif; fill: var(--text-muted-2); pointer-events: none; }
+
+      /* Concept callout */
+      .callout {
+        margin-top: 16px; padding: 12px 16px;
+        border: 1px solid var(--border); border-left: 3px solid var(--accent-2);
+        border-radius: 8px; background: rgba(6, 182, 212, 0.05);
+        font-size: 13px; color: var(--text-muted);
+      }
+      .callout strong { color: var(--text); }
+
+      /* Footer */
+      .meta {
+        margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border);
+        color: var(--text-muted); font-size: 13px;
+      }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+
+      /* Light theme */
+      body.light {
+        background: radial-gradient(
+            1200px 600px at 20% -10%, rgba(139, 92, 246, 0.08), transparent 60%
+          ),
+          radial-gradient(
+            1200px 600px at 100% 0%, rgba(6, 182, 212, 0.06), transparent 55%
+          ), #fafafa;
+        color: #18181b;
+      }
+      body.light .panel, body.light .stat, body.light .trace-item,
+      body.light .graph-canvas, body.light .timeline-track, body.light .timeline-tick {
+        background: white; border-color: #e5e7eb;
+      }
+      body.light .graph-canvas { background: #fafafa; }
+      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary {
+        background: white; border-color: #e5e7eb;
+      }
+      body.light .stat .value, body.light .step-info .step-no,
+      body.light .step-info .step-label, body.light .panel h2,
+      body.light .trace-item .triple, body.light h1, body.light .ctrl-btn,
+      body.light .ribbon-brand, body.light .ribbon-icon-btn {
+        color: #18181b;
+      }
+      body.light .stat .label, body.light .step-info, body.light .step-info .step-ts,
+      body.light .subtitle, body.light .badge, body.light .trace-item .reason,
+      body.light .panel h2 .meta, body.light .ribbon-dropdown > summary,
+      body.light .graph-legend, body.light .ribbon-menu a, body.light .ctrl-speed button,
+      body.light .timeline-event-labels span, body.light .callout {
+        color: #4b5563;
+      }
+      body.light .callout { background: rgba(6, 182, 212, 0.04); border-left-color: #06b6d4; }
+      body.light svg.graph .node-label { fill: #18181b; }
+      body.light svg.graph .edge-label { fill: #6b7280; }
+      body.light .ribbon-btn-ghost { color: #18181b; }
+    </style>
+  </head>
+  <body>
+    <!-- Shared ribbon (mirrors src/components/site/Ribbon.tsx) -->
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="index.html" class="ribbon-brand">
+          <span class="ribbon-logo">A</span>
+          <span class="ribbon-name">AIHPC Advanced</span>
+        </a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown">
+            <summary>Platform</summary>
+            <div class="ribbon-menu">
+              <a href="index.html">Home</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/README.md#about">About</a>
+              <a href="index.html#live-demo">Demos</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/microservices/page.tsx">Microservices</a>
+            </div>
+          </details>
+          <details class="ribbon-dropdown">
+            <summary>AETHEL Suite</summary>
+            <div class="ribbon-menu">
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/aethel/page.tsx">AETHEL Connector</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/connectors/page.tsx">Scientific Connectors Hub</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/query/page.tsx">Query Executor</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/knowledge-graph/page.tsx">Knowledge Graph</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/workflows/page.tsx">Domain Workflows</a>
+            </div>
+          </details>
+          <details class="ribbon-dropdown">
+            <summary>Science</summary>
+            <div class="ribbon-menu">
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/page.tsx">Science Hub</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/proteins/page.tsx">Proteins (AlphaFold-style)</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/genetics/page.tsx">Genetics (AlphaMissense-style)</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/nucleotides/page.tsx">Nucleotides</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/maths/page.tsx">Mathematics (AlphaProof-style)</a>
+            </div>
+          </details>
+          <details class="ribbon-dropdown">
+            <summary>Insights</summary>
+            <div class="ribbon-menu">
+              <a href="dashboard.html">Temporal Knowledge Graph Dashboard</a>
+              <a href="concepts.html">Concept Cards</a>
+              <a href="concepts/replayable-decision-traces.html">Replayable Decision Traces</a>
+              <a href="concepts/provenance-first.html">Provenance-First Computing</a>
+              <a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a>
+              <a href="concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a>
+              <a href="concepts/audience-annotations.html">Audience-Specific Annotations</a>
+            </div>
+          </details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme">
+            <span id="ribbon-theme-icon">🌙</span>
+          </button>
+          <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/login/page.tsx" class="ribbon-btn-ghost">Login</a>
+          <a href="index.html#live-demo" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <span class="badge">Dashboard &middot; Temporal RDF Knowledge Graph</span>
+      <h1>Watch the graph change over time</h1>
+      <p class="subtitle">
+        A temporal RDF semantic knowledge-graph UI complete with knowledge
+        tracing and play / replay of how a given state changes over time.
+        Context graphs (popularised alongside replayable decision traces)
+        are a framework introduced by FoundationCapital and solved by
+        Aktiver; this dashboard is AIHPC Advanced's open, client-side
+        implementation of the same idea — applied to the AETHEL scientific
+        knowledge graph. Every timestep records the
+        <strong>decisions</strong> that added, removed, or updated RDF
+        triples, so a viewer can scrub through time and watch the graph
+        evolve. All client-side; no external services; no data leaves the
+        browser.
+      </p>
+
+      <div class="dash">
+        <!-- Graph panel -->
+        <section class="panel graph-panel">
+          <h2>Live graph state <span class="meta" id="graph-state-meta">t=0</span></h2>
+          <div class="graph-canvas">
+            <svg class="graph" id="graph" viewBox="0 0 800 480" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+          <div class="graph-legend" id="legend"><!-- filled by JS --></div>
+        </section>
+
+        <!-- Stats panel -->
+        <section class="panel">
+          <h2>Knowledge tracing <span class="meta">cumulative</span></h2>
+          <div class="stats">
+            <div class="stat">
+              <div class="label">Nodes</div>
+              <div class="value" id="stat-nodes">0</div>
+              <div class="delta" id="stat-nodes-delta">—</div>
+            </div>
+            <div class="stat">
+              <div class="label">Edges</div>
+              <div class="value" id="stat-edges">0</div>
+              <div class="delta" id="stat-edges-delta">—</div>
+            </div>
+            <div class="stat">
+              <div class="label">Domains</div>
+              <div class="value" id="stat-domains">0</div>
+              <div class="delta" id="stat-domains-delta">—</div>
+            </div>
+            <div class="stat">
+              <div class="label">Avg conf.</div>
+              <div class="value" id="stat-confidence">—</div>
+              <div class="delta" id="stat-confidence-delta">—</div>
+            </div>
+          </div>
+          <div class="callout">
+            <strong>Knowledge tracing</strong> reports the cumulative
+            state of the graph at the current timestep: how many nodes,
+            how many edges, how many distinct domains are represented,
+            and the mean confidence over edges that carry a confidence
+            field. The deltas show change versus the previous timestep.
+          </div>
+        </section>
+
+        <!-- Decision trace panel -->
+        <section class="panel">
+          <h2>Decision trace <span class="meta" id="trace-meta">at t=0</span></h2>
+          <ul class="trace-list" id="trace-list"><!-- filled by JS --></ul>
+        </section>
+
+        <!-- Controls panel -->
+        <section class="panel controls-panel">
+          <h2>Timeline scrubber <span class="meta">drag to scrub, or press play</span></h2>
+          <div class="controls-row">
+            <button class="ctrl-btn primary" id="play-btn" title="Play / Pause">▶ Play</button>
+            <button class="ctrl-btn" id="replay-btn" title="Replay from start">↺ Replay</button>
+            <button class="ctrl-btn" id="step-back-btn" title="Step backward">◀ Step</button>
+            <button class="ctrl-btn" id="step-fwd-btn" title="Step forward">Step ▶</button>
+            <div class="ctrl-speed" role="group" aria-label="Playback speed">
+              <button data-speed="1" class="active">1×</button>
+              <button data-speed="2">2×</button>
+              <button data-speed="4">4×</button>
+            </div>
+            <div class="timeline-wrap">
+              <div class="timeline-label" id="timeline-label">Timestep 0 of 9</div>
+              <div class="timeline" id="timeline">
+                <div class="timeline-track"></div>
+                <div class="timeline-progress" id="timeline-progress"></div>
+                <div class="timeline-cursor" id="timeline-cursor"></div>
+              </div>
+              <div class="timeline-event-labels" id="timeline-events"></div>
+            </div>
+          </div>
+          <div class="step-info">
+            <span class="step-no" id="step-no">T0</span>
+            <span class="step-label" id="step-label">Initial seed</span>
+            <span class="step-ts" id="step-ts">2026-01-01T00:00:00Z</span>
+          </div>
+        </section>
+      </div>
+
+      <div class="meta">
+        <p>
+          &copy; 2026 AIHPC Advanced. &middot;
+          This dashboard is a static page served by GitHub Pages from
+          <code>/docs/dashboard.html</code> in the
+          <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC" target="_blank" rel="noreferrer noopener">DemoAIHPC</a>
+          repository. The temporal RDF data and the play / replay logic
+          are pure client-side JavaScript. The Next.js route
+          <code>/dashboard</code> mirrors this page and lives in the
+          repository root. Inspired by FoundationCapital / Aktiver
+          context-graphs and replayable decision traces.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // ============================================================
+      // Temporal RDF Knowledge Graph — pure client-side
+      // ============================================================
+      // Data model: a list of timesteps, each carrying a set of
+      // changes. A change is { action: 'add'|'remove'|'update',
+      // subject, predicate, object, confidence?, reason }.
+      // The graph state at timestep t is the cumulative application
+      // of all changes from t=0 to t (inclusive).
+      // ============================================================
+
+      // ---- Color palette by node type ----
+      const COLORS = {
+        aethel:     '#8b5cf6', // purple — central AETHEL node
+        domain:     '#06b6d4', // cyan — scientific domains
+        paper:      '#f59e0b', // amber — papers
+        dataset:    '#10b981', // green — datasets
+        hypothesis: '#ec4899', // pink — inferred hypotheses
+        experiment: '#3b82f6', // blue — experiments
+        collaborator: '#a855f7', // violet
+      };
+      const TYPE_LABELS = {
+        aethel: 'AETHEL core',
+        domain: 'Scientific domain',
+        paper: 'Paper',
+        dataset: 'Dataset',
+        hypothesis: 'Hypothesis (inferred)',
+        experiment: 'Experiment',
+        collaborator: 'Collaborator',
+      };
+
+      // ---- Timesteps (the "decision trace" of AETHEL evolving) ----
+      const TIMESTEPS = [
+        {
+          id: 'T0', label: 'Initial seed', ts: '2026-01-01T00:00:00Z',
+          changes: [
+            { action: 'add', subject: 'aethel:AETHEL', predicate: 'rdf:type', object: 'aethel:HypercomputeLayer', reason: 'Initial seed: AETHEL platform instantiated.' },
+            { action: 'add', subject: 'domain:Biology', predicate: 'rdf:type', object: 'aethel:Domain', reason: 'Seed domain.' },
+            { action: 'add', subject: 'domain:Chemistry', predicate: 'rdf:type', object: 'aethel:Domain', reason: 'Seed domain.' },
+            { action: 'add', subject: 'domain:Materials', predicate: 'rdf:type', object: 'aethel:Domain', reason: 'Seed domain.' },
+            { action: 'add', subject: 'domain:Molecular', predicate: 'rdf:type', object: 'aethel:Domain', reason: 'Seed domain.' },
+            { action: 'add', subject: 'domain:Genetics', predicate: 'rdf:type', object: 'aethel:Domain', reason: 'Seed domain.' },
+            { action: 'add', subject: 'domain:Proteins', predicate: 'rdf:type', object: 'aethel:Domain', reason: 'Seed domain.' },
+            { action: 'add', subject: 'domain:Nucleotides', predicate: 'rdf:type', object: 'aethel:Domain', reason: 'Seed domain.' },
+            { action: 'add', subject: 'domain:Mathematics', predicate: 'rdf:type', object: 'aethel:Domain', reason: 'Seed domain.' },
+            { action: 'add', subject: 'aethel:AETHEL', predicate: 'aethel:hosts', object: 'domain:Biology', reason: 'Initial domain registration.' },
+            { action: 'add', subject: 'aethel:AETHEL', predicate: 'aethel:hosts', object: 'domain:Chemistry', reason: 'Initial domain registration.' },
+            { action: 'add', subject: 'aethel:AETHEL', predicate: 'aethel:hosts', object: 'domain:Materials', reason: 'Initial domain registration.' },
+            { action: 'add', subject: 'aethel:AETHEL', predicate: 'aethel:hosts', object: 'domain:Molecular', reason: 'Initial domain registration.' },
+            { action: 'add', subject: 'aethel:AETHEL', predicate: 'aethel:hosts', object: 'domain:Genetics', reason: 'Initial domain registration.' },
+            { action: 'add', subject: 'aethel:AETHEL', predicate: 'aethel:hosts', object: 'domain:Proteins', reason: 'Initial domain registration.' },
+            { action: 'add', subject: 'aethel:AETHEL', predicate: 'aethel:hosts', object: 'domain:Nucleotides', reason: 'Initial domain registration.' },
+            { action: 'add', subject: 'aethel:AETHEL', predicate: 'aethel:hosts', object: 'domain:Mathematics', reason: 'Initial domain registration.' },
+          ],
+        },
+        {
+          id: 'T1', label: 'Paper P1 indexed', ts: '2026-02-14T09:30:00Z',
+          changes: [
+            { action: 'add', subject: 'paper:P1', predicate: 'rdf:type', object: 'aethel:Paper', reason: 'New arXiv preprint indexed.' },
+            { action: 'add', subject: 'paper:P1', predicate: 'aethel:references', object: 'domain:Proteins', reason: 'Paper mentions protein-folding results.' },
+            { action: 'add', subject: 'paper:P1', predicate: 'aethel:references', object: 'domain:Genetics', reason: 'Paper discusses variant consequences.' },
+            { action: 'add', subject: 'paper:P1', predicate: 'aethel:authoredBy', object: 'collaborator:C1', reason: 'Author metadata parsed.' },
+            { action: 'add', subject: 'collaborator:C1', predicate: 'rdf:type', object: 'aethel:Collaborator', reason: 'First-seen author.' },
+          ],
+        },
+        {
+          id: 'T2', label: 'Dataset D1 ingested (gene expression)', ts: '2026-03-03T14:12:00Z',
+          changes: [
+            { action: 'add', subject: 'dataset:D1', predicate: 'rdf:type', object: 'aethel:Dataset', reason: 'New bulk RNA-seq dataset ingested from GEO.' },
+            { action: 'add', subject: 'dataset:D1', predicate: 'aethel:coversDomain', object: 'domain:Genetics', reason: 'Dataset contains gene-expression measurements.' },
+            { action: 'add', subject: 'dataset:D1', predicate: 'aethel:coversDomain', object: 'domain:Proteins', reason: 'Dataset links genes to protein products.' },
+            { action: 'add', subject: 'dataset:D1', predicate: 'aethel:derivedFrom', object: 'paper:P1', reason: 'Dataset was first described in P1.' },
+          ],
+        },
+        {
+          id: 'T3', label: 'AETHEL generates hypothesis H1', ts: '2026-04-21T11:05:00Z',
+          changes: [
+            { action: 'add', subject: 'hypothesis:H1', predicate: 'rdf:type', object: 'aethel:Hypothesis', reason: 'AETHEL inferred a novel relationship from co-occurrence in 3 papers.' },
+            { action: 'add', subject: 'hypothesis:H1', predicate: 'aethel:asserts', object: 'domain:Genetics', reason: 'Hypothesis: gene X regulates pathway Y.' },
+            { action: 'add', subject: 'hypothesis:H1', predicate: 'aethel:asserts', object: 'domain:Molecular', reason: 'Hypothesis: gene X regulates pathway Y.' },
+            { action: 'add', subject: 'hypothesis:H1', predicate: 'aethel:confidence', object: '0.65', reason: 'Bayesian prior from co-occurrence statistics.' },
+          ],
+        },
+        {
+          id: 'T4', label: 'Experiment E1 confirms H1', ts: '2026-05-09T16:40:00Z',
+          changes: [
+            { action: 'add', subject: 'experiment:E1', predicate: 'rdf:type', object: 'aethel:Experiment', reason: 'Wet-lab experiment run.' },
+            { action: 'add', subject: 'experiment:E1', predicate: 'aethel:validates', object: 'hypothesis:H1', reason: 'p < 0.01, n=12 replicates.' },
+            { action: 'update', subject: 'hypothesis:H1', predicate: 'aethel:confidence', object: '0.95', reason: 'Posterior updated with experimental evidence.' },
+          ],
+        },
+        {
+          id: 'T5', label: 'Cross-domain link: Proteins ↔ Mathematics', ts: '2026-06-18T08:00:00Z',
+          changes: [
+            { action: 'add', subject: 'domain:Proteins', predicate: 'aethel:derivedFrom', object: 'domain:Mathematics', reason: 'AlphaFold-style folding reduces to geometric optimisation; cross-domain bridge established.' },
+            { action: 'add', subject: 'paper:P2', predicate: 'rdf:type', object: 'aethel:Paper', reason: 'Companion paper indexed.' },
+            { action: 'add', subject: 'paper:P2', predicate: 'aethel:references', object: 'domain:Proteins', reason: 'P2 introduces the SE(3)-equivariant formulation.' },
+            { action: 'add', subject: 'paper:P2', predicate: 'aethel:references', object: 'domain:Mathematics', reason: 'P2 introduces the SE(3)-equivariant formulation.' },
+          ],
+        },
+        {
+          id: 'T6', label: 'Collaborator C2 joins (Materials)', ts: '2026-07-22T10:15:00Z',
+          changes: [
+            { action: 'add', subject: 'collaborator:C2', predicate: 'rdf:type', object: 'aethel:Collaborator', reason: 'Onboarded via NDA-protected access.' },
+            { action: 'add', subject: 'collaborator:C2', predicate: 'aethel:worksIn', object: 'domain:Materials', reason: 'Primary domain.' },
+            { action: 'add', subject: 'collaborator:C2', predicate: 'aethel:worksIn', object: 'domain:Chemistry', reason: 'Secondary domain.' },
+          ],
+        },
+        {
+          id: 'T7', label: 'Retraction: H1 partially debunked', ts: '2026-08-30T13:25:00Z',
+          changes: [
+            { action: 'update', subject: 'hypothesis:H1', predicate: 'aethel:confidence', object: '0.42', reason: 'Independent replication failed for the Genetics→Molecular edge in a different cell line.' },
+            { action: 'remove', subject: 'hypothesis:H1', predicate: 'aethel:asserts', object: 'domain:Molecular', reason: 'Edge retracted pending re-experiment.' },
+          ],
+        },
+        {
+          id: 'T8', label: 'Citation network update', ts: '2026-09-19T09:00:00Z',
+          changes: [
+            { action: 'add', subject: 'paper:P3', predicate: 'rdf:type', object: 'aethel:Paper', reason: 'New paper indexed.' },
+            { action: 'add', subject: 'paper:P3', predicate: 'aethel:references', object: 'domain:Nucleotides', reason: 'P3 covers DNA motif search.' },
+            { action: 'add', subject: 'paper:P3', predicate: 'aethel:cites', object: 'paper:P1', reason: 'Citation network expansion.' },
+            { action: 'add', subject: 'paper:P3', predicate: 'aethel:cites', object: 'paper:P2', reason: 'Citation network expansion.' },
+          ],
+        },
+        {
+          id: 'T9', label: 'Final consolidated state', ts: '2026-10-19T00:00:00Z',
+          changes: [
+            { action: 'add', subject: 'aethel:AETHEL', predicate: 'aethel:knownAssertions', object: '27', reason: 'Cumulative assertions count stabilised.' },
+            { action: 'update', subject: 'hypothesis:H1', predicate: 'aethel:confidence', object: '0.48', reason: 'Re-experiment raised confidence slightly; edge remains provisional.' },
+          ],
+        },
+      ];
+
+      // ---- Compute node type from node id prefix ----
+      function nodeType(id) {
+        const prefix = id.split(':')[0];
+        return prefix === 'aethel' && id === 'aethel:AETHEL'
+          ? 'aethel'
+          : prefix;
+      }
+      function nodeLabel(id) {
+        const [prefix, name] = id.split(':');
+        return name || id;
+      }
+
+      // ---- Radial layout: AETHEL in centre, domains in inner ring,
+      //      everything else in outer rings near related domain ----
+      function computeLayout(state, W, H) {
+        const cx = W / 2, cy = H / 2;
+        const positions = {};
+
+        // AETHEL in centre
+        if (state.nodes['aethel:AETHEL']) {
+          positions['aethel:AETHEL'] = { x: cx, y: cy, r: 22, ring: 0 };
+        }
+
+        // Domains in inner ring
+        const domainIds = Object.keys(state.nodes).filter(
+          (id) => nodeType(id) === 'domain',
+        );
+        const innerR = 110;
+        domainIds.forEach((id, i) => {
+          const a = (i / domainIds.length) * 2 * Math.PI - Math.PI / 2;
+          positions[id] = {
+            x: cx + innerR * Math.cos(a),
+            y: cy + innerR * Math.sin(a),
+            r: 14, ring: 1, angle: a,
+          };
+        });
+
+        // Other nodes: place in outer ring near a related domain
+        const others = Object.keys(state.nodes).filter((id) => {
+          const t = nodeType(id);
+          return t !== 'aethel' && t !== 'domain';
+        });
+        const outerR = 200;
+        others.forEach((id, i) => {
+          // Find a related domain (first edge that references a domain)
+          const relatedEdge = Object.values(state.edges).find(
+            (e) =>
+              (e.subject === id && nodeType(e.object) === 'domain') ||
+              (e.object === id && nodeType(e.subject) === 'domain'),
+          );
+          let baseAngle = (i / Math.max(others.length, 1)) * 2 * Math.PI;
+          if (relatedEdge) {
+            const domainId =
+              nodeType(relatedEdge.subject) === 'domain'
+                ? relatedEdge.subject
+                : relatedEdge.object;
+            if (positions[domainId] && positions[domainId].angle != null) {
+              baseAngle = positions[domainId].angle;
+            }
+          }
+          // small jitter to avoid overlap
+          const jitter = ((i % 5) - 2) * 0.18;
+          const a = baseAngle + jitter;
+          positions[id] = {
+            x: cx + outerR * Math.cos(a),
+            y: cy + outerR * Math.sin(a),
+            r: 10, ring: 2, angle: a,
+          };
+        });
+
+        return positions;
+      }
+
+      // ---- Apply timesteps 0..t to compute current state ----
+      function computeStateAt(t) {
+        const nodes = {};
+        const edges = {}; // key: subject|predicate|object
+        for (let i = 0; i <= t; i++) {
+          const step = TIMESTEPS[i];
+          if (!step) continue;
+          for (const ch of step.changes) {
+            // Register nodes
+            if (ch.subject) nodes[ch.subject] = nodes[ch.subject] || { id: ch.subject };
+            if (ch.action !== 'update' && ch.object && ch.object.includes(':') && !/^[\d.]+$/.test(ch.object)) {
+              nodes[ch.object] = nodes[ch.object] || { id: ch.object };
+            }
+            // Apply edge change
+            const k = `${ch.subject}|${ch.predicate}|${ch.object}`;
+            if (ch.action === 'add' || ch.action === 'update') {
+              edges[k] = {
+                subject: ch.subject,
+                predicate: ch.predicate,
+                object: ch.object,
+                confidence: ch.confidence,
+              };
+            } else if (ch.action === 'remove') {
+              delete edges[k];
+            }
+          }
+        }
+        return { nodes, edges };
+      }
+
+      // ---- Stats from state ----
+      function computeStats(state) {
+        const nodeArr = Object.keys(state.nodes);
+        const edgeArr = Object.values(state.edges);
+        const domains = new Set(
+          nodeArr.filter((id) => nodeType(id) === 'domain'),
+        );
+        const confEdges = edgeArr.filter(
+          (e) => e.predicate === 'aethel:confidence' || e.confidence != null,
+        );
+        let avgConf = null;
+        // confidence is stored as an edge to a numeric-string object
+        const numericConf = edgeArr.filter(
+          (e) => e.predicate === 'aethel:confidence' && /^[\d.]+$/.test(e.object),
+        );
+        if (numericConf.length > 0) {
+          avgConf =
+            numericConf.reduce((s, e) => s + parseFloat(e.object), 0) /
+            numericConf.length;
+        }
+        return {
+          nodes: nodeArr.length,
+          edges: edgeArr.length,
+          domains: domains.size,
+          avgConf: avgConf == null ? null : avgConf,
+          confidenceCount: numericConf.length,
+        };
+      }
+
+      // ---- Render graph SVG ----
+      function renderGraph(state) {
+        const svg = document.getElementById('graph');
+        const W = 800, H = 480;
+        const positions = computeLayout(state, W, H);
+        const parts = [];
+
+        // Edges (curved)
+        const edgeArr = Object.values(state.edges);
+        edgeArr.forEach((e) => {
+          const s = positions[e.subject];
+          const o = positions[e.object];
+          if (!s || !o) return;
+          const dx = o.x - s.x, dy = o.y - s.y;
+          const mx = (s.x + o.x) / 2 - dy * 0.08;
+          const my = (s.y + o.y) / 2 + dx * 0.08;
+          const isUpdate = e.predicate === 'aethel:confidence';
+          const stroke = isUpdate ? '#f59e0b' : 'rgba(148, 163, 184, 0.5)';
+          const sw = isUpdate ? 2 : 1.2;
+          parts.push(
+            `<path class="edge" d="M ${s.x} ${s.y} Q ${mx} ${my} ${o.x} ${o.y}" stroke="${stroke}" stroke-width="${sw}" fill="none" opacity="0.85"/>`
+          );
+        });
+
+        // Nodes
+        Object.keys(state.nodes).forEach((id) => {
+          const p = positions[id];
+          if (!p) return;
+          const t = nodeType(id);
+          const color = COLORS[t] || '#94a3b8';
+          parts.push(
+            `<circle class="node-circle" cx="${p.x}" cy="${p.y}" r="${p.r}" fill="${color}" opacity="0.95"/>`
+          );
+          // Label offset
+          const ly = p.y + p.r + 12;
+          parts.push(
+            `<text class="node-label" x="${p.x}" y="${ly}" text-anchor="middle">${nodeLabel(id)}</text>`
+          );
+        });
+
+        svg.innerHTML = parts.join('');
+      }
+
+      // ---- Render legend ----
+      function renderLegend() {
+        const el = document.getElementById('legend');
+        el.innerHTML = Object.keys(TYPE_LABELS).map((t) => {
+          return `<span class="item"><span class="swatch" style="background:${COLORS[t] || '#94a3b8'}"></span>${TYPE_LABELS[t]}</span>`;
+        }).join('');
+      }
+
+      // ---- Render stats ----
+      function renderStats(stats, prevStats) {
+        document.getElementById('stat-nodes').textContent = stats.nodes;
+        document.getElementById('stat-edges').textContent = stats.edges;
+        document.getElementById('stat-domains').textContent = stats.domains;
+        document.getElementById('stat-confidence').textContent =
+          stats.avgConf == null ? '—' : stats.avgConf.toFixed(2);
+
+        const fmt = (cur, prev) => {
+          if (prev == null || cur === prev) return '—';
+          const d = cur - prev;
+          const sign = d > 0 ? '+' : '';
+          return `${sign}${d.toFixed(d % 1 === 0 ? 0 : 2)}`;
+        };
+        const setDelta = (id, cur, prev) => {
+          const el = document.getElementById(id);
+          const v = fmt(cur, prev);
+          el.textContent = v;
+          el.classList.toggle('up', prev != null && cur > prev);
+          el.classList.toggle('down', prev != null && cur < prev);
+        };
+        setDelta('stat-nodes-delta', stats.nodes, prevStats?.nodes);
+        setDelta('stat-edges-delta', stats.edges, prevStats?.edges);
+        setDelta('stat-domains-delta', stats.domains, prevStats?.domains);
+        const confEl = document.getElementById('stat-confidence-delta');
+        if (stats.avgConf == null || prevStats?.avgConf == null) {
+          confEl.textContent = '—';
+          confEl.classList.remove('up', 'down');
+        } else {
+          const d = stats.avgConf - prevStats.avgConf;
+          confEl.textContent = (d > 0 ? '+' : '') + d.toFixed(2);
+          confEl.classList.toggle('up', d > 0);
+          confEl.classList.toggle('down', d < 0);
+        }
+      }
+
+      // ---- Render decision trace for current timestep ----
+      function renderTrace(t) {
+        const step = TIMESTEPS[t];
+        const el = document.getElementById('trace-list');
+        document.getElementById('trace-meta').textContent = `at ${step.id}`;
+        if (!step || step.changes.length === 0) {
+          el.innerHTML = '<li class="trace-item"><span class="reason">No changes at this timestep.</span></li>';
+          return;
+        }
+        el.innerHTML = step.changes.map((ch) => {
+          const actionClass = ch.action;
+          const actionLabel = ch.action;
+          // Triple with semantic highlighting
+          const objDisplay = /^[\d.]+$/.test(ch.object)
+            ? `<span class="o">${ch.object}</span>`
+            : `<span class="o">${ch.object}</span>`;
+          return `
+            <li class="trace-item">
+              <span class="action ${actionClass}">${actionLabel}</span>
+              <span class="triple">
+                <span class="s">${ch.subject}</span>
+                <span class="p">${ch.predicate}</span>
+                ${objDisplay}
+              </span>
+              <div class="reason">${ch.reason}</div>
+            </li>
+          `;
+        }).join('');
+      }
+
+      // ---- Render timeline ----
+      function renderTimeline(t) {
+        const total = TIMESTEPS.length;
+        document.getElementById('timeline-label').textContent = `Timestep ${t + 1} of ${total}`;
+        const pct = (t / Math.max(total - 1, 1)) * 100;
+        document.getElementById('timeline-progress').style.width = pct + '%';
+        document.getElementById('timeline-cursor').style.left = pct + '%';
+        // Event labels
+        const evWrap = document.getElementById('timeline-events');
+        evWrap.innerHTML = TIMESTEPS.map((s, i) => {
+          const left = (i / Math.max(total - 1, 1)) * 100;
+          return `<span style="left:${left}%">${s.id}</span>`;
+        }).join('');
+      }
+
+      // ---- Render step info ----
+      function renderStepInfo(t) {
+        const step = TIMESTEPS[t];
+        document.getElementById('step-no').textContent = step.id;
+        document.getElementById('step-label').textContent = step.label;
+        document.getElementById('step-ts').textContent = step.ts;
+        document.getElementById('graph-state-meta').textContent = `t=${t} (${step.id})`;
+      }
+
+      // ---- State machine ----
+      let currentT = 0;
+      let prevStats = null;
+      let playing = false;
+      let playSpeed = 1;
+      let playTimer = null;
+
+      function goToT(t) {
+        currentT = Math.max(0, Math.min(TIMESTEPS.length - 1, t));
+        const state = computeStateAt(currentT);
+        const stats = computeStats(state);
+        renderGraph(state);
+        renderStats(stats, prevStats);
+        renderTrace(currentT);
+        renderTimeline(currentT);
+        renderStepInfo(currentT);
+        prevStats = stats;
+      }
+
+      function stepFwd() { goToT(currentT + 1); }
+      function stepBack() { goToT(currentT - 1); }
+      function replay() { stopPlay(); prevStats = null; goToT(0); startPlay(); }
+      function startPlay() {
+        if (playing) return;
+        playing = true;
+        document.getElementById('play-btn').innerHTML = '⏸ Pause';
+        const stepMs = 1800 / playSpeed;
+        playTimer = setInterval(() => {
+          if (currentT >= TIMESTEPS.length - 1) {
+            stopPlay();
+            return;
+          }
+          stepFwd();
+        }, stepMs);
+      }
+      function stopPlay() {
+        playing = false;
+        document.getElementById('play-btn').innerHTML = '▶ Play';
+        if (playTimer) { clearInterval(playTimer); playTimer = null; }
+      }
+      function togglePlay() { playing ? stopPlay() : startPlay(); }
+
+      // ---- Wire up controls ----
+      document.getElementById('play-btn').addEventListener('click', togglePlay);
+      document.getElementById('replay-btn').addEventListener('click', replay);
+      document.getElementById('step-fwd-btn').addEventListener('click', () => { stopPlay(); stepFwd(); });
+      document.getElementById('step-back-btn').addEventListener('click', () => { stopPlay(); stepBack(); });
+      document.querySelectorAll('.ctrl-speed button').forEach((b) => {
+        b.addEventListener('click', () => {
+          playSpeed = parseInt(b.dataset.speed, 10);
+          document.querySelectorAll('.ctrl-speed button').forEach((x) => x.classList.toggle('active', x === b));
+          if (playing) { stopPlay(); startPlay(); }
+        });
+      });
+
+      // Timeline drag
+      const timeline = document.getElementById('timeline');
+      let dragging = false;
+      function timelineXToT(x) {
+        const rect = timeline.getBoundingClientRect();
+        const pct = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+        return Math.round(pct * (TIMESTEPS.length - 1));
+      }
+      timeline.addEventListener('mousedown', (e) => {
+        dragging = true; stopPlay();
+        goToT(timelineXToT(e.clientX));
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (dragging) goToT(timelineXToT(e.clientX));
+      });
+      window.addEventListener('mouseup', () => { dragging = false; });
+      timeline.addEventListener('touchstart', (e) => {
+        dragging = true; stopPlay();
+        goToT(timelineXToT(e.touches[0].clientX));
+      }, { passive: true });
+      window.addEventListener('touchmove', (e) => {
+        if (dragging && e.touches[0]) goToT(timelineXToT(e.touches[0].clientX));
+      }, { passive: true });
+      window.addEventListener('touchend', () => { dragging = false; });
+
+      // ---- Ribbon theme toggle (mirrors index.html) ----
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body;
+        const ribbon = document.querySelector('.ribbon');
+        const icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') {
+            body.classList.add('light');
+            ribbon && ribbon.classList.add('light');
+            if (icon) icon.textContent = '☀';
+          } else {
+            body.classList.remove('light');
+            ribbon && ribbon.classList.remove('light');
+            if (icon) icon.textContent = '🌙';
+          }
+        }
+        let initial = 'dark';
+        try {
+          const stored = localStorage.getItem(KEY);
+          if (stored === 'light' || stored === 'dark') initial = stored;
+          else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light';
+        } catch (e) {}
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            const next = body.classList.contains('light') ? 'dark' : 'light';
+            apply(next);
+            try { localStorage.setItem(KEY, next); } catch (e) {}
+          });
+        }
+      })();
+
+      // ---- Initial render ----
+      renderLegend();
+      goToT(0);
+    </script>
+  </body>
+</html>

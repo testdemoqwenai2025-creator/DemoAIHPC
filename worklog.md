@@ -1047,3 +1047,228 @@ page structure. Push to private, sync to public, verify Pages preview.
   should we wait until mobile traffic justifies it?
 - Q3: For auth, is the localStorage-session stopgap (option 4) worth
   landing now, or hold for the external-services phase?
+
+---
+
+## Phase 4 — MPA architecture + Temporal Knowledge Graph Dashboard + Concept Cards — 2026-10-19
+
+**Task ID**: PHASE-4-MPA-DASHBOARD-CONCEPTS-1
+**Agent**: Z User (main)
+**Task**: Convert the SPA-style static preview into a proper MPA
+(multi-page application), build the temporal RDF semantic knowledge graph
+dashboard (FoundationCapital / Aktiver inspiration — play / replay /
+scrub, knowledge tracing, decision traces), and add a Concept Cards
+section with deeper-thought pages paired with hypothetical demos. All
+pure client-side, no external services. Mirror every static page as a
+Next.js route. Always-on 24/7 / 365-day preview endpoint via GitHub
+Pages. Update README.
+
+### Work Log
+
+- Inventoried the project skills directory at `/home/z/my-project/skills/`
+  (project-level, not in the AETH-1-Content-Archive repo). There is no
+  `skills.md` file in the initial repository; the skills are agent-side
+  tools (charts, pdf, docx, agent-browser, ASR/TTS/VLM/LLM, etc.).
+  Referenced for next-phase suggestions below.
+
+#### 1. Temporal Knowledge Graph Dashboard (the centerpiece)
+
+- Created `docs/dashboard.html` — a static page served by GitHub Pages
+  at <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/dashboard.html>.
+  Pure client-side JS, ~750 lines including the inline data, layout,
+  rendering, controls, and theme.
+- **Data model**: 10 timesteps (T0..T9) describing the AETHEL knowledge
+  graph evolving over a year of scientific discovery events. Each
+  timestep carries a list of changes
+  `{ action: 'add'|'remove'|'update', subject, predicate, object,
+  confidence?, reason }`. The graph state at timestep t is the
+  cumulative application of all changes from t=0 through t.
+- **Timesteps narrative**: T0 initial seed (8 domains + AETHEL core)
+  → T1 paper P1 indexed → T2 dataset D1 ingested → T3 AETHEL generates
+  hypothesis H1 (confidence 0.65) → T4 experiment E1 confirms H1
+  (confidence → 0.95) → T5 cross-domain link Proteins↔Mathematics
+  (AlphaFold-style) → T6 collaborator C2 joins (Materials) → T7
+  retraction (H1 confidence drops to 0.42, Molecular edge removed) →
+  T8 citation network update → T9 final consolidated state.
+- **Layout**: radial. AETHEL core in the centre, 8 domains on an
+  inner ring, papers/datasets/hypotheses/experiments/collaborators
+  on an outer ring positioned near their related domain. SVG-based
+  with curved edges, colour-coded by node type.
+- **Controls**: Play / Pause button (auto-advance at 1x / 2x / 4x
+  speed), Replay button (resets to T0 and replays), Step-forward /
+  Step-backward buttons, and a draggable timeline scrubber with
+  per-timestep event labels.
+- **Knowledge tracing**: stats panel showing cumulative nodes, edges,
+  distinct domains, and mean confidence at the current timestep,
+  each with a delta vs. the previous timestep (green up / red down).
+- **Decision trace panel**: lists every change at the current
+  timestep with subject→predicate→object triple (semantic-highlighted)
+  and the reason for the change.
+- **Theme**: dark/light toggle mirrored from `index.html`, persisted
+  to localStorage via the same `aihpc-theme` key. Light-theme CSS
+  overrides included.
+- **Ribbon**: shared with `index.html` (Platform / AETHEL Suite /
+  Science / Insights dropdowns + dark/light toggle + Login + Get
+  Started).
+
+#### 2. Concept Cards
+
+- Created `docs/concepts.html` — Concept Cards index with 5 cards.
+- Created `docs/concepts/replayable-decision-traces.html` — the
+  foundational concept. Includes a hypothetical demo: "Replay the OLS
+  trace as a graph that grows a node per step" — a small SVG that
+  animates nodes appearing one at a time as the 7 OLS steps execute,
+  with a per-step reason panel. Play / Step / Reset controls.
+- Created `docs/concepts/provenance-first.html` — provenance receipt
+  sketch as a syntax-highlighted JSON block showing manifestHash,
+  inputHash, outputHash, trace URL, environment, signature.
+- Created `docs/concepts/lazy-evaluation.html` — hypothetical demo
+  with a popup that streams "thinking…" tokens for a 5-second
+  simulated AETHEL query, with a progress bar and step indicator.
+- Created `docs/concepts/cross-domain-graph.html` — hypothetical
+  demo where you pick a demo card and see its 2-hop neighbourhood
+  rendered as an SVG graph (other demos, papers, datasets, AETHEL
+  Suite routes).
+- Created `docs/concepts/audience-annotations.html` — hypothetical
+  demo with a Student / Researcher / Executive toggle on a k-means
+  clustering explanation; the math stays the same, the explanation
+  shifts register.
+- Each concept card page documents: What it is, Where the idea came
+  from, Why it matters for AIHPC, How AIHPC implements it, Evolution
+  of the subject (today → Phase 4+ → Phase 5+ → Phase 6+), and
+  Open questions we want to be wrong about.
+
+#### 3. MPA architecture
+
+- The static GitHub Pages site is now a true MPA: separate HTML
+  files per page (`index.html`, `dashboard.html`, `concepts.html`,
+  `concepts/*.html`) with cross-page navigation via the shared ribbon.
+  Each page owns its concern; no SPA-style routing on the static
+  site.
+- The Next.js app continues to use the App Router (each route is a
+  separate file under `src/app/`) — that's already MPA-shaped.
+  Added new routes to mirror the static pages.
+
+#### 4. Next.js route mirrors
+
+- `src/app/dashboard/page.tsx` — links to the live static dashboard.
+- `src/app/concepts/page.tsx` — Concept Cards index (renders the
+  5 cards as Links).
+- `src/app/concepts/replayable-decision-traces/page.tsx`
+- `src/app/concepts/provenance-first/page.tsx`
+- `src/app/concepts/lazy-evaluation/page.tsx`
+- `src/app/concepts/cross-domain-graph/page.tsx`
+- `src/app/concepts/audience-annotations/page.tsx`
+
+Each Next.js route points to its corresponding static page on GitHub
+Pages for the live interactive demo (since Pages can't run server-side
+Next.js). When external hosting lands in a later phase, the demos
+will move into the Next.js routes.
+
+#### 5. Ribbon updates
+
+- `src/components/site/Ribbon.tsx` — added a fourth dropdown group
+  "Insights" with 7 items: Temporal Knowledge Graph Dashboard,
+  Concept Cards, Replayable Decision Traces, Provenance-First
+  Computing, Lazy Evaluation as UX, Cross-Domain Knowledge Graph,
+  Audience-Specific Annotations.
+- `docs/index.html` ribbon — added the same Insights dropdown so
+  the static landing page links to the new dashboard and concept
+  cards. Updated the hero CTAs to lead with "Open the temporal
+  dashboard" and "Browse Concept Cards".
+
+#### 6. README + this worklog
+
+- Updated `README.md` — reframed the Pages section to describe the
+  MPA architecture (27 Next.js routes + 8 static GitHub Pages
+  files), added all new routes to the Pages table, and expanded
+  the live-preview paragraph to enumerate the 8 static files.
+
+### Stage Summary
+
+- **Live preview endpoint (24/7 / 365)**:
+  <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>
+  - The landing page (index.html) — ribbon + embedded OLS demo
+  - The temporal dashboard (dashboard.html) — 10 timesteps, play /
+    replay / scrub, knowledge tracing, decision traces
+  - 6 concept card pages (concepts.html + 5 deep-dives) — each with
+    a hypothetical demo
+- **Next.js application (foundation)**: 27 routes registered; all
+  new Insights routes are deep-linkable; ribbon updated with the
+  new "Insights" group.
+- **MPA architecture**: confirmed. Both the static site (separate
+  HTML files) and the Next.js app (App Router, separate files per
+  route) are MPA-shaped. No SPA-style routing on the static site.
+- **FoundationCapital / Aktiver inspiration**: explicitly credited
+  on the dashboard and on the Replayable Decision Traces concept
+  card. The framework is in the public sphere; AIHPC Advanced's
+  contribution is the open, client-side, scientific-knowledge-graph
+  application of it.
+
+### Build verification
+
+- `next build` succeeded with 27 routes (added 7 new Insights
+  routes). All static pages prerendered.
+- `tsc --noEmit` clean for all new files.
+- HTML tag-balance check passed for all 8 static HTML files.
+
+### Next-phase suggestions (per the locked-in workflow, referencing
+the project skills directory)
+
+1. **Nucleotides live demo** — still the most-tractable next live
+   demo. Pure JS (ORF, GC, KMP motif, Nussinov RNA folding), output
+   as FASTA / GenBank Blob. Drops into the existing `/demos/[id]`
+   framework. Could be paired with a temporal trace that shows the
+   sequence being scanned.
+2. **Auto-mirror CI** — still pending from earlier phases. GitHub
+   Action on tag push, gitleaks pre-check, mirror private → public.
+   Worth landing before push volume grows further.
+3. **Provenance receipt generator** — implement the sketch from the
+   Provenance-First concept card as a real JSON file produced
+   alongside every CSV download from the demo runner. Would make
+   the OLS demo receipts real.
+4. **Temporal dashboard as a reusable component** — extract the
+   timesteps / state-machine / SVG-renderer / scrubber from
+   `docs/dashboard.html` into a TypeScript module
+   (`src/components/demos/TemporalGraph.tsx`) so any demo can ship a
+   temporal trace. Today it's bespoke to the dashboard; tomorrow
+   it's the standard viewer for every Replayable Decision Trace.
+5. **Knowledge graph route** — `/graph` that renders the full
+   cross-domain graph (not just per-demo neighbourhood as on the
+   concept card). Would unify demos, papers, datasets, and AETHEL
+   Suite pages as nodes. Could use the existing `KnowledgeGraph.tsx`
+   component as a starting point.
+6. **3D protein viewer** — Three.js bundle so `/science/proteins`
+   can render a sample PDB even before the live prediction model
+   lands. The `agent-browser` skill in the project skills directory
+   could drive a screenshot / preview generation pipeline.
+7. **Auto-generated concept cards from demo manifests** — once the
+   demo runner emits a trace + receipt, a concept card could be
+   auto-generated from a demo by combining its `annotations` with
+   a graph view of its trace. The `docx` skill could export the
+   resulting concept card as a downloadable Word document for
+   offline review.
+8. **Recursive agentic benchmark** — the team mentioned "recursive
+   development of use agentic workflows." A formal benchmark for
+   the agent's own performance (trace length, decision quality,
+   rework rate) could itself be a temporal graph in the dashboard,
+   making the agent's evolution observable in the same UI as
+   AETHEL's.
+
+### Open questions for the next iteration
+
+- Q1: For Phase 5, lead with the **Nucleotides live demo** (option 1,
+  most leverage, ships in existing demo framework), or the
+  **Provenance receipt generator** (option 3, makes receipts real
+  across all demos), or the **TemporalGraph reusable component**
+  (option 4, multiplies the value of every demo by giving it a
+  replay viewer)?
+- Q2: Should the temporal dashboard accept user-supplied trace JSON
+  (so any demo's trace can be loaded and replayed in the same UI),
+  or stay seeded with the AETHEL evolution narrative for now?
+- Q3: For the auto-mirror CI, mirror on tag push only (safer) or on
+  every push to main (more current)?
+- Q4: Does the recursive-agentic-benchmark idea (option 8) resonate
+  with the "recursive development of use agentic workflows" framing
+  the team mentioned? If so, it could be the single most distinctive
+  feature of the platform — but it's a substantial build.
