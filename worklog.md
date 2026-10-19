@@ -883,3 +883,167 @@ hosting comes online.
   online), do you want me to prep a one-click **Vercel** config now so
   it's ready to flip the switch later, or leave it untouched until you
   say go?
+
+---
+
+## Phase 3 — AETHEL Suite migration + Ribbon + Science group — 2026-10-19
+
+**Task ID**: PHASE-3-AETHEL-MIGRATION-1
+**Agent**: Z User (main)
+**Task**: Migrate every AETHEL page out of the home-page tab system into
+dedicated deep-linkable routes, build a top ribbon (grouped nav + dark/light
+toggle + Get Started + Login + search), and add the modern AI for science
+pages (Proteins / Genetics / Nucleotides / Mathematics) inspired by
+DeepMind's Alpha family — the "surpass AETHEL" direction. Update the live
+static preview (docs/index.html) to mirror the ribbon and surface the new
+page structure. Push to private, sync to public, verify Pages preview.
+
+### Work Log
+
+- Inventoried the home page (`src/app/page.tsx`) — 11 tabs total:
+  `dashboard`, `architecture`, `connectors`, `ide-studio`, `data-lake`,
+  `publish`, `aethel`, `connectors` (Sci Connectors Hub), `query`,
+  `knowledge`, `workflows`. The last 5 wrap dedicated components
+  (AETHELConnector, ScientificConnectorsHub, QueryExecutor,
+  KnowledgeGraph, DomainWorkflows); the first 6 are inline JSX.
+- Created the **Ribbon** component (`src/components/site/Ribbon.tsx`) —
+  replaces SiteNav. Three grouped dropdowns (Platform / AETHEL Suite /
+  Science), dark/light theme toggle (uses useTheme context), search
+  affordance with datalist-driven page hints, Login button, Get Started
+  CTA. Active group is highlighted based on the current path.
+- Updated `src/app/layout.tsx` to render `<Ribbon>` instead of `<SiteNav>`.
+- Updated `src/components/site/SiteFooter.tsx` navigation list to surface
+  Home / About / Demos / Science Hub / AETHEL Connector / Login.
+- Created dedicated routes for every AETHEL feature:
+  - `/aethel` → AETHEL Connector
+  - `/connectors` → Scientific Connectors Hub
+  - `/query` → Query Executor
+  - `/knowledge-graph` → Knowledge Graph
+  - `/workflows` → Domain Workflows
+  - `/microservices` → summary gateway that links into the home-page
+    tab system (dashboard / architecture / ide-studio / data-lake /
+    publish)
+- Each AETHEL route is a client component (`'use client'`) that reads
+  the theme via the `useTheme()` hook and passes `darkMode` to the
+  underlying legacy component, keeping inline conditional styles in
+  sync with the ribbon's dark/light toggle. Initial attempt with a
+  `PageShell` HOC passing children as a function failed (Next.js
+  disallows passing functions from server to client components) —
+  switched to the direct-hook pattern and removed PageShell.
+- Fixed pre-existing `useMemo` import bug in
+  `src/components/visualization/KnowledgeGraph.tsx` (it was using
+  `useMemo` without importing it — the build exposed this once the
+  component was rendered as a route).
+- Created the **Science group** — Alpha-family-inspired modern AI for
+  science pages, all under `/science/*`:
+  - `/science` — Science Hub landing with 4 pillar cards
+  - `/science/proteins` — AlphaFold 3-style protein structure prediction
+  - `/science/genetics` — AlphaMissense-style variant pathogenicity
+  - `/science/nucleotides` — DNA / RNA sequence analysis (ORF, GC,
+    motif, restriction map, RNA secondary structure)
+  - `/science/maths` — AlphaProof-style theorem proving in Lean
+  Each page documents Inputs, Outputs, Method, and Observability so
+  the planned interface is reviewable today even though live
+  execution is gated on later phases (Pyodide / WebGPU for proteins
+  and genetics; external LLM + Lean kernel for maths; pure JS for
+  nucleotides — the most tractable next live demo).
+- Created `/login` placeholder page (auth deferred per the
+  "no external services" constraint) — captures email for waitlist
+  front-end only, links to contact email for NDA-protected access.
+- Updated the live static preview (`docs/index.html`) to mirror the
+  ribbon:
+  - Added a sticky top ribbon with three `<details>` dropdowns
+    (Platform / AETHEL Suite / Science), dark/light toggle button
+    (persisted to localStorage via the same `aihpc-theme` key as the
+    Next.js app), Login button (links to the GitHub source for now),
+    Get Started CTA (scrolls to the live OLS demo).
+  - Added light-theme CSS overrides (body.light + selector overrides
+    for cards, panels, dropdowns, callouts, code blocks).
+  - Added a "Science group — surpass AETHEL" section with 4 pillar
+    cards linking to each science page.
+  - Added an "AETHEL Suite — original surface, now deep-linkable"
+    section with 6 cards (5 AETHEL routes + microservices gateway).
+  - Updated the hero lead paragraph to mention the surpass-AETHEL
+    direction and the Science group.
+- Updated `README.md` — added the AETHEL Suite and Science group to
+  Features, expanded the Pages table to include all 19 routes, and
+  documented the ribbon in the live preview endpoint paragraph.
+- Verified `next build` succeeds with all 19 routes:
+  `/`, `/_not-found`, `/about`, `/aethel`, `/api`, `/connectors`,
+  `/demos`, `/demos/linear-regression` (SSG), `/knowledge-graph`,
+  `/login`, `/microservices`, `/preview1`, `/query`, `/science`,
+  `/science/genetics`, `/science/maths`, `/science/nucleotides`,
+  `/science/proteins`, `/workflows`.
+- Verified `tsc --noEmit` is clean for all new files. After the
+  KnowledgeGraph useMemo fix, the only remaining type errors are
+  `examples/websocket/*` (socket.io not installed — out of scope) and
+  `DomainWorkflows.tsx` (SVG `size` prop — pre-existing, low priority).
+
+### Stage Summary
+
+- **Live preview endpoint (always on)**:
+  <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>
+  - Now includes the top ribbon (Platform / AETHEL Suite / Science
+    dropdowns + dark/light toggle + Login + Get Started)
+  - Includes the Science group section (4 Alpha-family pillar cards)
+  - Includes the AETHEL Suite section (5 deep-linkable AETHEL pages
+    + microservices gateway)
+  - Light theme now fully supported on the static page (toggle
+    persists to localStorage)
+  - Embedded OLS demo unchanged
+- **Next.js application (foundation, committed, not yet deployed)**:
+  - 19 routes registered; 5 AETHEL features now deep-linkable as
+    their own routes instead of being trapped inside the home page
+    tab system
+  - Ribbon replaces SiteNav on every page
+  - 4 science pillar pages + science hub document the
+    "surpass AETHEL" direction with planned inputs/outputs/method/
+    observability for each
+  - Login placeholder acknowledges the deferred auth constraint
+- **Direction**: AETHEL Suite preserves the original AETHEL surface
+  (now deep-linkable); Science group introduces the Alpha-family
+  modern AI for science tools that AETHEL did not have. Together
+  they carry the "surpass AETHEL" ambition the team stated.
+
+### Next-phase suggestions (per the locked-in workflow)
+
+1. **Nucleotides live demo** — most tractable next live demo (pure
+   JS, no ML model). Implement ORF scan, GC sliding window, KMP motif
+   search, Nussinov RNA folding in a new `/demos/nucleotide-analysis`
+   manifest + DemoRunner branch. Output as FASTA / GenBank Blob
+   download. Estimated 1 session.
+2. **Pyodide integration** — for genetics and proteins pillars.
+   Requires WebGPU or WASM-SIMD for the heavy models, but the
+   annotation/inspection side (transcript lookup, ClinVar join,
+   residue graph) can ship first.
+3. **Ribbon mobile drawer** — the current ribbon collapses the
+   grouped dropdowns on small screens but they aren't ideal below
+   ~640px. Add a hamburger-triggered Sheet drawer with the same
+   nav structure.
+4. **Auth + RBAC foundation** — even without external services,
+   a localStorage-based "session" can gate features (e.g. "Login"
+   stores an email; certain demos require it; admin pages require
+   a magic-link email). When external services land, swap to
+   Clerk/Supabase without changing the gate points.
+5. **Auto-mirror CI** — still pending from Phase 2's list. Worth
+   landing before the volume of pushes grows further.
+6. **3D protein viewer** — Three.js bundle added to the Next.js
+   app so `/science/proteins` can render a sample PDB even before
+   the live prediction model lands. Shows the user what the output
+   looks like.
+7. **Cross-domain knowledge graph route** — `/graph` that links
+   demos and AETHEL Suite pages by shared `meta.tags` and
+   `meta.domain`. Renders an interactive graph (existing
+   KnowledgeGraph component can be the starting point).
+
+### Open questions for the next iteration
+
+- Q1: For Phase 4, lead with the **Nucleotides live demo** (option 1,
+  most leverage-per-effort, ships inside the existing demo framework),
+  or **Pyodide integration** (option 2, unlocks the proteins/genetics
+  pillars but is heavier), or **3D protein viewer** (option 6, visual
+  wow without needing the model)?
+- Q2: For the ribbon on mobile, do you want a Sheet drawer now or
+  should we wait until mobile traffic justifies it?
+- Q3: For auth, is the localStorage-session stopgap (option 4) worth
+  landing now, or hold for the external-services phase?

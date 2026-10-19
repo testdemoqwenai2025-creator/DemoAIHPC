@@ -594,9 +594,283 @@
         border-color: var(--accent);
         color: var(--text);
       }
+      /* ---- Ribbon ---- */
+      .ribbon {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        border-bottom: 1px solid var(--border);
+        background: rgba(11, 15, 26, 0.8);
+        backdrop-filter: blur(10px);
+      }
+      .ribbon.light {
+        background: rgba(255, 255, 255, 0.85);
+        border-bottom-color: #e5e7eb;
+      }
+      .ribbon-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .ribbon-brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      .ribbon-logo {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #06b6d4, #8b5cf6, #d946ef);
+        color: white;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .ribbon-name {
+        display: none;
+      }
+      @media (min-width: 600px) {
+        .ribbon-name {
+          display: inline;
+        }
+      }
+      .ribbon-nav {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .ribbon-dropdown {
+        position: relative;
+      }
+      .ribbon-dropdown > summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        color: var(--text-muted);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .ribbon-dropdown > summary::-webkit-details-marker {
+        display: none;
+      }
+      .ribbon-dropdown > summary::after {
+        content: "▾";
+        font-size: 10px;
+        opacity: 0.6;
+      }
+      .ribbon-dropdown[open] > summary {
+        background: var(--bg-elevated);
+        color: var(--text);
+      }
+      .ribbon-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 4px;
+        min-width: 260px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-strong);
+        border-radius: 12px;
+        padding: 6px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .ribbon-menu a {
+        text-decoration: none;
+        color: var(--text-muted);
+        font-size: 13px;
+        padding: 6px 10px;
+        border-radius: 6px;
+      }
+      .ribbon-menu a:hover {
+        background: var(--bg);
+        color: var(--text);
+      }
+      .ribbon-actions {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .ribbon-icon-btn {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text);
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .ribbon-icon-btn:hover {
+        border-color: var(--accent);
+      }
+      .ribbon-btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 14px;
+        border-radius: 9999px;
+        border: 1px solid var(--border);
+        color: var(--text);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .ribbon-btn-ghost:hover {
+        border-color: var(--accent);
+      }
+      .ribbon-btn-primary {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 16px;
+        border-radius: 9999px;
+        background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+        color: white;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .ribbon-btn-primary:hover {
+        filter: brightness(1.08);
+      }
+      /* Light theme overrides */
+      body.light {
+        background: radial-gradient(
+            1200px 600px at 20% -10%,
+            rgba(139, 92, 246, 0.12),
+            transparent 60%
+          ),
+          radial-gradient(
+            1200px 600px at 100% 0%,
+            rgba(6, 182, 212, 0.08),
+            transparent 55%
+          ),
+          #fafafa;
+        color: #18181b;
+      }
+      body.light .card,
+      body.light .demo,
+      body.light .demo-footer,
+      body.light .panel,
+      body.light .demo-header {
+        background: white;
+        border-color: #e5e7eb;
+      }
+      body.light .demo {
+        background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+      }
+      body.light .ribbon-menu,
+      body.light .ribbon-dropdown[open] > summary {
+        background: white;
+        border-color: #e5e7eb;
+      }
+      body.light .pill,
+      body.light .badge {
+        background: white;
+        border-color: #e5e7eb;
+        color: #4b5563;
+      }
+      body.light .demo-status,
+      body.light .lead,
+      body.light .card p,
+      body.light .annotations,
+      body.light .meta,
+      body.light .compliance,
+      body.light .math .op,
+      body.light .compliance .pill,
+      body.light .panel-label,
+      body.light .data-table th,
+      body.light .demo-subtitle,
+      body.light .callout,
+      body.light .ribbon-dropdown > summary {
+        color: #4b5563;
+      }
+      body.light .callout {
+        background: rgba(6, 182, 212, 0.04);
+        border-left-color: #06b6d4;
+      }
+      body.light pre.code,
+      body.light .plot,
+      body.light .data-table th {
+        background: #f9fafb;
+        border-color: #e5e7eb;
+      }
+      body.light .ribbon-menu a {
+        color: #4b5563;
+      }
+      body.light .ribbon-menu a:hover {
+        background: #f3f4f6;
+      }
     </style>
   </head>
   <body>
+    <!-- Ribbon (static mirror of src/components/site/Ribbon.tsx) -->
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="#" class="ribbon-brand">
+          <span class="ribbon-logo">A</span>
+          <span class="ribbon-name">AIHPC Advanced</span>
+        </a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown">
+            <summary>Platform</summary>
+            <div class="ribbon-menu">
+              <a href="#">Home</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/README.md#about">About</a>
+              <a href="#live-demo">Demos</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/README.md#preview1">Preview 1</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/microservices/page.tsx">Microservices</a>
+            </div>
+          </details>
+          <details class="ribbon-dropdown">
+            <summary>AETHEL Suite</summary>
+            <div class="ribbon-menu">
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/aethel/page.tsx">AETHEL Connector</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/connectors/page.tsx">Scientific Connectors Hub</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/query/page.tsx">Query Executor</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/knowledge-graph/page.tsx">Knowledge Graph</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/workflows/page.tsx">Domain Workflows</a>
+            </div>
+          </details>
+          <details class="ribbon-dropdown">
+            <summary>Science</summary>
+            <div class="ribbon-menu">
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/page.tsx">Science Hub</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/proteins/page.tsx">Proteins (AlphaFold-style)</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/genetics/page.tsx">Genetics (AlphaMissense-style)</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/nucleotides/page.tsx">Nucleotides</a>
+              <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/maths/page.tsx">Mathematics (AlphaProof-style)</a>
+            </div>
+          </details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme">
+            <span id="ribbon-theme-icon">🌙</span>
+          </button>
+          <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/login/page.tsx" class="ribbon-btn-ghost">Login</a>
+          <a href="#live-demo" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
     <div class="container">
       <span class="badge">Public preview &middot; no NDA required &middot; no external services</span>
       <h1>AIHPC Advanced</h1>
@@ -607,7 +881,10 @@
         This is the public mirror of the private
         <code>AIHPC-Advanced</code> source-of-truth repository. The demo
         below is fully client-side — your inputs and outputs never leave
-        your browser.
+        your browser. The Science group (Proteins / Genetics / Nucleotides
+        / Mathematics, inspired by DeepMind's Alpha family) carries the
+        direction to <em>surpass AETHEL</em>; the AETHEL Suite preserves
+        every original AETHEL surface, now deep-linkable.
       </p>
 
       <div class="actions">
@@ -738,6 +1015,86 @@
             <button class="btn btn-ghost" id="download-btn" disabled>⬇ Download CSV</button>
           </div>
           <div class="demo-status" id="demo-status">Idle.</div>
+        </div>
+      </section>
+
+      <!-- ============ SCIENCE PILLARS ============ -->
+      <section class="demo" style="border-color: rgba(245, 158, 11, 0.3); margin-top: 56px;">
+        <div class="demo-header" style="border-color: rgba(245, 158, 11, 0.2); background: linear-gradient(180deg, rgba(245, 158, 11, 0.06), rgba(18, 24, 38, 0.6));">
+          <div>
+            <h2 class="demo-title">Science group — surpass AETHEL</h2>
+            <p class="demo-subtitle">
+              Modern AI for science, inspired by DeepMind's Alpha family.
+              These pillars are documented in the repo today; live execution
+              arrives in later phases.
+            </p>
+          </div>
+          <div class="demo-meta">
+            <span class="pill" style="border-color: rgba(245, 158, 11, 0.3);">Direction: surpass AETHEL</span>
+          </div>
+        </div>
+        <div class="demo-body">
+          <div class="panel" style="grid-column: 1 / -1;">
+            <div class="grid" style="margin-top: 0;">
+              <div class="card">
+                <h3>Proteins</h3>
+                <p>AlphaFold 3-style protein and protein&ndash;ligand complex structure prediction, with per-residue pLDDT, PAE matrix, and PDB download.</p>
+                <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/proteins/page.tsx" target="_blank" rel="noreferrer noopener">Open page &rarr;</a>
+              </div>
+              <div class="card">
+                <h3>Genetics</h3>
+                <p>AlphaMissense-style missense variant pathogenicity classification with ClinVar-style annotation and TSV download.</p>
+                <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/genetics/page.tsx" target="_blank" rel="noreferrer noopener">Open page &rarr;</a>
+              </div>
+              <div class="card">
+                <h3>Nucleotides</h3>
+                <p>DNA / RNA sequence analysis: ORF finding, GC content, motif search, restriction map, RNA secondary structure.</p>
+                <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/nucleotides/page.tsx" target="_blank" rel="noreferrer noopener">Open page &rarr;</a>
+              </div>
+              <div class="card">
+                <h3>Mathematics</h3>
+                <p>AlphaProof-style natural-language to formal theorem proving in Lean, with verifiable proof certificates.</p>
+                <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/science/maths/page.tsx" target="_blank" rel="noreferrer noopener">Open page &rarr;</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ AETHEL SUITE ============ -->
+      <section style="margin-top: 56px;">
+        <h2 style="font-size: 24px; margin: 0 0 16px;">AETHEL Suite — original surface, now deep-linkable</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>AETHEL Connector</h3>
+            <p>Hypercomputing emulation layer. Quantum circuit simulation, neural architecture search, automated hypothesis generation.</p>
+            <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/aethel/page.tsx" target="_blank" rel="noreferrer noopener">Open page &rarr;</a>
+          </div>
+          <div class="card">
+            <h3>Scientific Connectors Hub</h3>
+            <p>Bioinformatics, cheminformatics, molecular modelling and materials science connectors unified behind one hub.</p>
+            <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/connectors/page.tsx" target="_blank" rel="noreferrer noopener">Open page &rarr;</a>
+          </div>
+          <div class="card">
+            <h3>Query Executor</h3>
+            <p>Natural-language and structured query interface against the AETHEL knowledge graph.</p>
+            <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/query/page.tsx" target="_blank" rel="noreferrer noopener">Open page &rarr;</a>
+          </div>
+          <div class="card">
+            <h3>Knowledge Graph</h3>
+            <p>Interactive cross-domain knowledge graph visualisation across the 2.4M-node AETHEL catalogue.</p>
+            <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/knowledge-graph/page.tsx" target="_blank" rel="noreferrer noopener">Open page &rarr;</a>
+          </div>
+          <div class="card">
+            <h3>Domain Workflows</h3>
+            <p>Pre-built scientific workflow templates per domain — bio, chem, molecular, materials.</p>
+            <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/workflows/page.tsx" target="_blank" rel="noreferrer noopener">Open page &rarr;</a>
+          </div>
+          <div class="card">
+            <h3>Microservices dashboard</h3>
+            <p>The full polyglot microservices view (dashboard, architecture, IDE studio, data lake, publishing).</p>
+            <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/blob/main/src/app/microservices/page.tsx" target="_blank" rel="noreferrer noopener">Open page &rarr;</a>
+          </div>
         </div>
       </section>
 
@@ -886,6 +1243,52 @@
       // dataset edited in the table lives only in this page's memory;
       // the result is downloadable as a CSV Blob.
       // ============================================================
+
+      // ---- Ribbon theme toggle (mirrors src/components/site/ThemeProvider) ----
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body;
+        const ribbon = document.querySelector('.ribbon');
+        const icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') {
+            body.classList.add('light');
+            ribbon && ribbon.classList.add('light');
+            if (icon) icon.textContent = '☀';
+          } else {
+            body.classList.remove('light');
+            ribbon && ribbon.classList.remove('light');
+            if (icon) icon.textContent = '🌙';
+          }
+        }
+        let initial = 'dark';
+        try {
+          const stored = localStorage.getItem(KEY);
+          if (stored === 'light' || stored === 'dark') {
+            initial = stored;
+          } else if (
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: light)').matches
+          ) {
+            initial = 'light';
+          }
+        } catch (e) {
+          /* ignore */
+        }
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            const next = body.classList.contains('light') ? 'dark' : 'light';
+            apply(next);
+            try {
+              localStorage.setItem(KEY, next);
+            } catch (e) {
+              /* ignore */
+            }
+          });
+        }
+      })();
 
       // ---- Default data ----
       const defaultData = [

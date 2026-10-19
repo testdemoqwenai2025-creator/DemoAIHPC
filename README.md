@@ -81,6 +81,25 @@ This separation keeps legal scenarios simple:
 - **AETHEL integration** — quantum circuit simulation, neural architecture
   search, automated hypothesis generation, cross-domain knowledge graph,
   predictive model ensembles, citation network analysis.
+- **AETHEL Suite (every AETHEL surface, deep-linkable)** — AETHEL
+  Connector, Scientific Connectors Hub, Query Executor, Knowledge Graph,
+  Domain Workflows. Originally embedded as tabs in the home page, now
+  each migrated to its own route under `/aethel`, `/connectors`, `/query`,
+  `/knowledge-graph`, `/workflows`.
+- **Science group (surpass AETHEL)** — Alpha-family-inspired modern AI for
+  science: Proteins (AlphaFold 3), Genetics (AlphaMissense), Nucleotides
+  (RNAfold / Nucleotide Transformer), Mathematics (AlphaProof). Each has
+  its own route under `/science/*` documenting inputs, outputs, method,
+  and observability. Live execution lands in later phases.
+- **Top ribbon** — three grouped dropdowns (Platform / AETHEL Suite /
+  Science), dark/light theme toggle, search affordance, Login, Get
+  Started CTA. Rendered from `RootLayout` so it appears on every page.
+- **Live, observable demos** — each demo is a first-class artifact with
+  provenance: math → code → annotations → observability → downloadable
+  result. The first seed demo (Ordinary Least Squares) is embedded live in
+  the GitHub Pages preview at
+  <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/> and is also
+  available in the Next.js app at `/demos/linear-regression`.
 - **Scientific connectors hub** — bioinformatics, cheminformatics, molecular
   modelling, materials science.
 - **Knowledge graph visualization** — interactive cross-domain graph.
@@ -89,16 +108,11 @@ This separation keeps legal scenarios simple:
 - **About page** — explains the platform, dual-repo workflow and compliance
   posture.
 - **Dark / light theme toggle on every page** — global toggle in the top
-  navigation bar, persisted to `localStorage`.
+  ribbon, persisted to `localStorage`.
 - **Compliance footer on every page** — GDPR, HIPAA, contact e-mail, and a
   "Return to Home" button.
-- **Global site navigation** — Home / About / Demos / Preview 1.
-- **Live, observable demos** — each demo is a first-class artifact with
-  provenance: math → code → annotations → observability → downloadable
-  result. The first seed demo (Ordinary Least Squares) is embedded live in
-  the GitHub Pages preview at
-  <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/> and is also
-  available in the Next.js app at `/demos/linear-regression`.
+- **Global site navigation** — top ribbon (Platform / AETHEL Suite /
+  Science dropdowns) + footer navigation.
 
 ## Demo framework (Phase 2)
 
@@ -268,14 +282,27 @@ npm start
 | `/about` | About — explains the platform, dual-repo workflow, AETHEL integration, polyglot stack, compliance and contact. |
 | `/demos` | Demos listing — cards for every demo in the registry. |
 | `/demos/[id]` | Single demo — 4-panel layout (math, code, annotations, observability) + Run + Download CSV. |
+| `/microservices` | Microservices dashboard gateway — links into the home-page tab system. |
+| `/aethel` | AETHEL Connector — hypercomputing emulation layer (migrated from home tab). |
+| `/connectors` | Scientific Connectors Hub — bio / chem / molecular / materials connectors (migrated). |
+| `/query` | Query Executor — natural-language + structured query (migrated). |
+| `/knowledge-graph` | Knowledge Graph — interactive cross-domain 2.4M-node graph (migrated). |
+| `/workflows` | Domain Workflows — pre-built scientific workflow templates (migrated). |
+| `/science` | Science Hub — Alpha-family-inspired modern AI for science landing. |
+| `/science/proteins` | Proteins — AlphaFold 3-style structure prediction (direction page). |
+| `/science/genetics` | Genetics — AlphaMissense-style variant pathogenicity (direction page). |
+| `/science/nucleotides` | Nucleotides — DNA / RNA sequence analysis (direction page). |
+| `/science/maths` | Mathematics — AlphaProof-style theorem proving (direction page). |
+| `/login` | Login — placeholder for auth (deferred per the "no external services" constraint). |
 | `/preview1` | Static sci-fi themed preview page (Hero, Features, Domains, Architecture, Pricing, CTA). |
 | `/api` | API route. |
 
 In addition, the **GitHub Pages preview endpoint** at
 <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/> serves a static
 landing page from `/docs` that includes an embedded, fully client-side
-working OLS demo. This is the canonical public preview while external hosting
-is not yet in place.
+working OLS demo and a top ribbon mirroring the Next.js `Ribbon` component
+(three dropdowns: Platform / AETHEL Suite / Science; dark/light toggle;
+Login; Get Started).
 
 ---
 

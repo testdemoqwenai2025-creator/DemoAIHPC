@@ -58,8 +58,23 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/preview1" className="hover:text-foreground">
-                  Preview 1
+                <Link href="/demos" className="hover:text-foreground">
+                  Demos
+                </Link>
+              </li>
+              <li>
+                <Link href="/science" className="hover:text-foreground">
+                  Science Hub
+                </Link>
+              </li>
+              <li>
+                <Link href="/aethel" className="hover:text-foreground">
+                  AETHEL Connector
+                </Link>
+              </li>
+              <li>
+                <Link href="/login" className="hover:text-foreground">
+                  Login
                 </Link>
               </li>
             </ul>
