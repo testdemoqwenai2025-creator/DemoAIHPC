@@ -167,9 +167,20 @@
           <div class="stat"><div class="l">Converged</div><div class="v" id="stat-conv">no</div></div>
           <div class="stat"><div class="l">Runtime</div><div class="v" id="stat-time">0ms</div></div>
         </div>
+        <!-- ETL/ELT: Bring your own data -->
+        <div style="padding: 10px 16px; border-top: 1px solid var(--border); background: var(--bg-elevated);">
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted-2); margin-bottom: 6px;">📁 Bring your own data (ETL/ELT)</div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+            <label style="background: var(--bg-elevated); border: 1px solid #2a3548; color: var(--text); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 10px; font-weight: 600;">📁 Upload CSV (x,y)
+              <input type="file" id="kmeans-file-input" accept=".csv,.tsv,.txt" style="display:none;" />
+            </label>
+            <input type="url" id="kmeans-url-input" placeholder="or paste a CSV URL…" style="flex:1; min-width:160px; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 4px 8px; border-radius: 6px; font-size: 10px; font-family: inherit;" />
+            <button class="btn" id="kmeans-url-fetch" style="font-size: 10px;">⬇ Fetch</button>
+            <button class="btn" id="kmeans-use-default" style="font-size: 10px;">↺ Default</button>
+          </div>
+          <div id="kmeans-etl-report" style="display:none; margin-top: 6px; padding: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; font-size: 10px; color: var(--text-muted); font-family: SF Mono, monospace;"></div>
+        </div>
       </div>
-
-      <!-- ClickForDemo: Math / Code / Observe -->
       <div class="demo-panel">
         <div class="derivation-panel">
           <div class="demo-tabs">
@@ -397,6 +408,76 @@
       document.getElementById('btn-step').addEventListener('click', step);
       document.getElementById('btn-run').addEventListener('click', run);
       document.getElementById('btn-reset').addEventListener('click', () => { genPoints(); initCentroids(k); render(); updateStats(); document.getElementById('btn-download').disabled = true; });
+
+      // ---- ETL/ELT: Bring your own data to k-means ----
+      function kmeansETL(text, source) {
+        const report = [`▸ ETL starting — source: ${source}`];
+        const lines = text.trim().split(/\r?\n/);
+        report.push(`▸ Parsed ${lines.length} lines`);
+        // Parse CSV/TSV
+        const rows = lines.map(l => l.split(/[,;\t\s]/).map(c => c.trim()));
+        // Find two numeric columns
+        let colX = -1, colY = -1;
+        const maxCols = Math.max(...rows.map(r => r.length));
+        for (let c = 0; c < maxCols; c++) {
+          let parsed = 0;
+          for (const r of rows) { if (r.length > c && !isNaN(parseFloat(r[c]))) parsed++; }
+          if (parsed > rows.length * 0.5) { if (colX === -1) colX = c; else if (colY === -1) { colY = c; break; } }
+        }
+        if (colX === -1 || colY === -1) { report.push('▸ ERROR: no two numeric columns found'); return { points: [], report }; }
+        report.push(`▸ Detected numeric columns: x=${colX+1}, y=${colY+1}`);
+        // Check header
+        let dataRows = rows;
+        if (rows[0] && (isNaN(parseFloat(rows[0][colX])) || isNaN(parseFloat(rows[0][colY])))) {
+          dataRows = rows.slice(1);
+          report.push(`▸ Header row skipped`);
+        }
+        // Extract + clean
+        const rawCount = dataRows.length;
+        const newPoints = [];
+        for (const r of dataRows) {
+          const x = parseFloat(r[colX]), y = parseFloat(r[colY]);
+          if (!isNaN(x) && !isNaN(y)) newPoints.push([x, y]);
+        }
+        report.push(`▸ Extracted ${newPoints.length} points (removed ${rawCount - newPoints.length} NA/null)`);
+        // Scale to viewBox (0-600, 0-320) with padding
+        if (newPoints.length > 0) {
+          const xs = newPoints.map(p => p[0]), ys = newPoints.map(p => p[1]);
+          const xmin = Math.min(...xs), xmax = Math.max(...xs);
+          const ymin = Math.min(...ys), ymax = Math.max(...ys);
+          const xrange = xmax - xmin || 1, yrange = ymax - ymin || 1;
+          report.push(`▸ Range: x=[${xmin.toFixed(2)}, ${xmax.toFixed(2)}] y=[${ymin.toFixed(2)}, ${ymax.toFixed(2)}]`);
+          for (let i = 0; i < newPoints.length; i++) {
+            newPoints[i][0] = 40 + ((newPoints[i][0] - xmin) / xrange) * 520;
+            newPoints[i][1] = 40 + ((newPoints[i][1] - ymin) / yrange) * 240;
+          }
+          report.push(`▸ Scaled to viewBox (0-600, 0-320)`);
+          report.push(`▸ ETL complete — ${newPoints.length} points ready for k-means`);
+        }
+        return { points: newPoints, report };
+      }
+      function applyUserData(pts, reportLines) {
+        if (!pts || pts.length < k) { alert(`Need at least ${k} points for k=${k} clusters.`); return; }
+        points = pts; initCentroids(k); render(); updateStats();
+        document.getElementById('stat-n').textContent = pts.length;
+        document.getElementById('btn-download').disabled = true;
+        const el = document.getElementById('kmeans-etl-report');
+        el.style.display = 'block';
+        el.innerHTML = reportLines.map(l => `<div style="margin:1px 0;">${l.replace(/▸/g, '<span style="color:var(--accent-2);">▸</span>')}</div>`).join('');
+      }
+      document.getElementById('kmeans-file-input').addEventListener('change', (e) => {
+        const file = e.target.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => { try { const { points: pts, report } = kmeansETL(ev.target.result, file.name); applyUserData(pts, report); } catch (err) { alert('ETL error: ' + err.message); } };
+        reader.readAsText(file);
+      });
+      document.getElementById('kmeans-url-fetch').addEventListener('click', async () => {
+        const url = document.getElementById('kmeans-url-input').value.trim();
+        if (!url) { alert('Paste a CSV URL first.'); return; }
+        try { const resp = await fetch(url); if (!resp.ok) throw new Error(`HTTP ${resp.status}`); const text = await resp.text(); const { points: pts, report } = kmeansETL(text, url); applyUserData(pts, report); }
+        catch (err) { alert('Fetch error: ' + err.message + '\n\nTip: the URL must be CORS-enabled.'); }
+      });
+      document.getElementById('kmeans-use-default').addEventListener('click', () => { genPoints(); initCentroids(k); render(); updateStats(); document.getElementById('stat-n').textContent = N_POINTS; document.getElementById('kmeans-etl-report').style.display = 'none'; document.getElementById('btn-download').disabled = true; });
       document.getElementById('btn-k-inc').addEventListener('click', () => { if (k < 8) { k++; document.getElementById('k-display').textContent = k; genPoints(); initCentroids(k); render(); updateStats(); } });
       document.getElementById('btn-k-dec').addEventListener('click', () => { if (k > 2) { k--; document.getElementById('k-display').textContent = k; genPoints(); initCentroids(k); render(); updateStats(); } });
       document.getElementById('btn-download').addEventListener('click', () => {
