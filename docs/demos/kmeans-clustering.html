@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="k-means Clustering — live Lloyd's algorithm with animated centroids. Math-to-code derivation: see how each line of code is derived from the mathematical objective. Pure client-side." />
+    <title>k-means Clustering — AIHPC Advanced Live Demo</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; position: relative; overflow-x: hidden; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.3; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid #2a3548; border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 24px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 32px; line-height: 1.1; margin: 0 0 8px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(196,181,253,0.2); }
+      .lead { font-size: 15px; color: var(--text-muted); max-width: 920px; margin: 0 0 24px; }
+      .hero { position: relative; margin: 0 0 24px; height: 180px; border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(6,182,212,0.1) 50%, rgba(236,72,153,0.15) 100%); border: 1px solid rgba(139,92,246,0.25); backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 60px rgba(139,92,246,0.1); }
+      .hero svg { width: 100%; height: 100%; }
+      .hero .hero-text { position: absolute; top: 50%; left: 32px; transform: translateY(-50%); max-width: 460px; pointer-events: none; }
+      .hero .hero-text .h-tag { font-size: 11px; color: rgba(196,181,253,0.9); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 6px; }
+      .hero .hero-text .h-title { font-size: 18px; font-weight: 700; color: white; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+      .hero .hero-text .h-sub { font-size: 12px; color: rgba(243,244,246,0.8); margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+
+      /* Demo panel */
+      .demo-panel { background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.2); border-radius: 16px; overflow: hidden; backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); margin: 16px 0; }
+      .demo-panel-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+      .demo-panel-header .title { font-size: 13px; font-weight: 600; }
+      .demo-controls { display: flex; gap: 6px; flex-wrap: wrap; }
+      .btn { background: var(--bg-elevated); border: 1px solid #2a3548; color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-family: inherit; font-weight: 600; }
+      .btn:hover { border-color: var(--accent); }
+      .btn.primary { background: linear-gradient(90deg,#8b5cf6,#06b6d4); border-color: transparent; color: white; box-shadow: 0 0 20px rgba(139,92,246,0.3); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+      /* Cluster canvas */
+      .cluster-canvas { width: 100%; height: 320px; background: radial-gradient(circle at 50% 50%, rgba(139,92,246,0.05), transparent 70%), #000; position: relative; }
+      svg.cluster-svg { width: 100%; height: 100%; display: block; }
+      .cluster-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; padding: 12px 16px; border-top: 1px solid var(--border); }
+      .cluster-stats .stat { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+      .cluster-stats .stat .l { font-size: 9px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .cluster-stats .stat .v { font-family: "SF Mono", Menlo, monospace; font-size: 16px; font-weight: 700; color: var(--text); margin-top: 2px; }
+
+      /* Math-to-code derivation */
+      .derivation-panel { padding: 16px; }
+      .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-num { display: inline-block; width: 22px; height: 22px; border-radius: 9999px; background: var(--accent); color: white; font-size: 11px; font-weight: 700; text-align: center; line-height: 22px; margin-right: 8px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 16px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+      .derivation-step .step-code { font-family: "SF Mono", Menlo, monospace; font-size: 11px; color: #67e8f9; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; margin-top: 4px; display: block; }
+      .derivation-step .step-code .kw { color: #c084fc; } .derivation-step .step-code .fn { color: #67e8f9; } .derivation-step .step-code .num { color: #fbbf24; } .derivation-step .step-code .str { color: #86efac; } .derivation-step .step-code .com { color: #6b7280; }
+
+      /* ClickForDemo tabs */
+      .demo-tabs { display: inline-flex; border: 1px solid var(--border); border-radius: 9999px; overflow: hidden; margin: 0 0 12px; }
+      .demo-tabs button { background: transparent; color: var(--text-muted); border: 0; padding: 6px 14px; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+      .demo-tabs button.active { background: var(--accent); color: white; }
+      .tab-content { display: none; }
+      .tab-content.active { display: block; }
+
+      /* Code panel */
+      .lang-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 9999px; overflow: hidden; flex-wrap: wrap; margin-bottom: 10px; }
+      .lang-toggle button { background: transparent; color: var(--text-muted); border: 0; padding: 4px 10px; cursor: pointer; font-family: inherit; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+      .lang-toggle button.active { background: var(--accent); color: white; }
+      pre.code-block { margin: 0; overflow: auto; font-family: "SF Mono", Menlo, monospace; font-size: 11px; line-height: 1.5; color: #e5e7eb; max-height: 280px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
+      pre.code-block .kw { color: #c084fc; } pre.code-block .fn { color: #67e8f9; } pre.code-block .str { color: #86efac; } pre.code-block .num { color: #fbbf24; } pre.code-block .com { color: #6b7280; font-style: italic; } pre.code-block .ty { color: #f9a8d4; }
+
+      /* Summary */
+      .summary-block { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; font-size: 13px; color: var(--text-muted); }
+      .summary-block h4 { color: var(--text); margin: 0 0 6px; }
+      .summary-block ul { padding-left: 22px; }
+      .summary-block li { margin-bottom: 4px; }
+      .summary-block li strong { color: var(--text); }
+
+      .meta { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+      body.light { background: #fafafa; color: #18181b; }
+      body.light #particle-canvas { opacity: 0.1; }
+      body.light .demo-panel, body.light .tag { background: rgba(255,255,255,0.6); backdrop-filter: blur(12px); border-color: #e5e7eb; }
+      body.light .cluster-canvas { background: #f3f4f6; }
+      body.light pre.code-block, body.light .derivation-step, body.light .summary-block, body.light .cluster-stats .stat { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
+      body.light .lead, body.light .meta { color: #4b5563; }
+      body.light .ribbon-btn-primary { color: white; }
+    </style>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Graph</a><a href="../benchmark.html">Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology</a><a href="../science-chemistry.html">Chemistry</a><a href="../science-physics.html">Physics</a><a href="../science-maths.html">Maths</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../concepts.html">Concept Cards</a><a href="../concepts/replayable-decision-traces.html">Replayable Traces</a><a href="../concepts/provenance-first.html">Provenance-First</a><a href="../concepts/lazy-evaluation.html">Lazy Evaluation</a><a href="../concepts/provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../demos.html">Demos</a> / k-means Clustering</p>
+      <span class="tag">Demo &middot; Machine Learning &middot; Lloyd&apos;s Algorithm &middot; math-to-code derivation</span>
+      <h1>k-means Clustering</h1>
+      <p class="lead">Watch Lloyd&apos;s algorithm converge in real time. The Math tab shows <strong>step-by-step how each line of code is derived from the mathematical objective</strong> — the bridge between equation and implementation that no other platform shows.</p>
+
+      <!-- Hero: scattered points + centroids -->
+      <div class="hero">
+        <svg viewBox="0 0 1000 180" preserveAspectRatio="xMidYMid slice">
+          <g opacity="0.08" stroke="#8b5cf6" stroke-width="0.5"><line x1="0" y1="30" x2="1000" y2="30"/><line x1="0" y1="90" x2="1000" y2="90"/><line x1="0" y1="150" x2="1000" y2="150"/></g>
+          <g fill="#06b6d4" opacity="0.5"><circle cx="80" cy="60" r="3"/><circle cx="120" cy="80" r="3"/><circle cx="100" cy="50" r="3"/><circle cx="60" cy="70" r="3"/><circle cx="140" cy="90" r="3"/><circle cx="90" cy="100" r="3"/></g>
+          <g fill="#10b981" opacity="0.5"><circle cx="500" cy="50" r="3"/><circle cx="540" cy="70" r="3"/><circle cx="480" cy="80" r="3"/><circle cx="520" cy="90" r="3"/><circle cx="560" cy="60" r="3"/></g>
+          <g fill="#f59e0b" opacity="0.5"><circle cx="800" cy="100" r="3"/><circle cx="840" cy="120" r="3"/><circle cx="780" cy="110" r="3"/><circle cx="820" cy="90" r="3"/><circle cx="860" cy="110" r="3"/></g>
+          <g fill="#ec4899" opacity="0.5"><circle cx="300" cy="120" r="3"/><circle cx="340" cy="140" r="3"/><circle cx="280" cy="130" r="3"/><circle cx="320" cy="110" r="3"/></g>
+          <g fill="white" opacity="0.9"><circle cx="100" cy="70" r="6" stroke="#8b5cf6" stroke-width="2" fill="none"/><circle cx="500" cy="70" r="6" stroke="#8b5cf6" stroke-width="2" fill="none"/><circle cx="800" cy="110" r="6" stroke="#8b5cf6" stroke-width="2" fill="none"/><circle cx="300" cy="120" r="6" stroke="#8b5cf6" stroke-width="2" fill="none"/></g>
+        </svg>
+        <div class="hero-text">
+          <p class="h-tag">Live demo &middot; Lloyd&apos;s algorithm &middot; pure client-side</p>
+          <p class="h-title">Points &rarr; Centroids &rarr; Convergence</p>
+          <p class="h-sub">Adjust k, step through iterations, watch centroids move. Math-to-code derivation shows how the code emerges from the objective.</p>
+        </div>
+      </div>
+
+      <!-- Live demo panel -->
+      <div class="demo-panel">
+        <div class="demo-panel-header">
+          <span class="title">Live k-means — 200 points, adjustable k</span>
+          <div class="demo-controls">
+            <button class="btn" id="btn-step">▶ Step</button>
+            <button class="btn primary" id="btn-run">▶ Run to convergence</button>
+            <button class="btn" id="btn-reset">↺ Reset</button>
+            <span style="font-size:11px; color: var(--text-muted); align-self:center;">k =</span>
+            <button class="btn" id="btn-k-dec">−</button>
+            <span style="font-size:13px; color: var(--text); font-family: SF Mono; align-self:center;" id="k-display">3</span>
+            <button class="btn" id="btn-k-inc">+</button>
+            <button class="btn" id="btn-download" disabled>⬇ CSV</button>
+          </div>
+        </div>
+        <div class="cluster-canvas">
+          <svg class="cluster-svg" id="cluster-svg" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+        <div class="cluster-stats">
+          <div class="stat"><div class="l">Points</div><div class="v" id="stat-n">200</div></div>
+          <div class="stat"><div class="l">Clusters (k)</div><div class="v" id="stat-k">3</div></div>
+          <div class="stat"><div class="l">Iteration</div><div class="v" id="stat-iter">0</div></div>
+          <div class="stat"><div class="l">WCSS</div><div class="v" id="stat-wcss">—</div></div>
+          <div class="stat"><div class="l">Converged</div><div class="v" id="stat-conv">no</div></div>
+          <div class="stat"><div class="l">Runtime</div><div class="v" id="stat-time">0ms</div></div>
+        </div>
+      </div>
+
+      <!-- ClickForDemo: Math / Code / Observe -->
+      <div class="demo-panel">
+        <div class="derivation-panel">
+          <div class="demo-tabs">
+            <button class="active" data-tab="math">📐 Math → Code Derivation</button>
+            <button data-tab="code">⌨ Code (6 languages)</button>
+            <button data-tab="observe">📊 Observe</button>
+          </div>
+
+          <!-- MATH-TO-CODE DERIVATION TAB (the user's key insight) -->
+          <div class="tab-content active" data-tab="math">
+            <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 16px;">Each step shows the mathematical transformation, explains the intuition, then shows the corresponding code line. This is the bridge between equation and implementation.</p>
+
+            <div class="derivation-step">
+              <span class="step-num">1</span>
+              <strong>Objective function</strong> — minimize within-cluster sum of squares
+              <div class="step-math">argmin<sub>C,μ</sub> Σ<sub>c=1</sub><sup>k</sup> Σ<sub>x ∈ C<sub>c</sub></sub> ||x − μ<sub>c</sub>||²</div>
+              <div class="step-explain">We want to partition n points into k clusters C₁...Cₖ, each with a centroid μ_c, such that the total squared distance from each point to its cluster's centroid is minimized.</div>
+              <code class="step-code"><span class="com"># The objective we minimize</span>\n<span class="kw">def</span> <span class="fn">wcss</span>(points, assignments, centroids):\n    <span class="kw">return</span> <span class="fn">sum</span>((p[<span class="num">0</span>]-centroids[a][<span class="num">0</span>])**<span class="num">2</span> + (p[<span class="num">1</span>]-centroids[a][<span class="num">1</span>])**<span class="num">2</span> <span class="kw">for</span> p, a <span class="kw">in</span> <span class="fn">zip</span>(points, assignments))</code>
+            </div>
+
+            <div class="derivation-step">
+              <span class="step-num">2</span>
+              <strong>Assignment step</strong> — assign each point to nearest centroid
+              <div class="step-math">c(x) = argmin<sub>c</sub> ||x − μ<sub>c</sub>||²</div>
+              <div class="step-explain">For each point x, find the cluster c whose centroid μ_c is closest (by Euclidean distance). This is the "assignment" half of Lloyd's algorithm.</div>
+              <code class="step-code"><span class="com"># Step 2: assign each point to nearest centroid</span>\n<span class="kw">def</span> <span class="fn">assign</span>(points, centroids):\n    <span class="kw">return</span> [<span class="fn">min</span>(<span class="fn">range</span>(<span class="fn">len</span>(centroids)),\n            key=<span class="kw">lambda</span> c: <span class="fn">sum</span>((p[d]-centroids[c][d])**<span class="num">2</span> <span class="kw">for</span> d <span class="kw">in</span> <span class="fn">range</span>(<span class="num">2</span>)))\n           <span class="kw">for</span> p <span class="kw">in</span> points]</code>
+            </div>
+
+            <div class="derivation-step">
+              <span class="step-num">3</span>
+              <strong>Update step</strong> — move each centroid to the mean of its assigned points
+              <div class="step-math">μ<sub>c</sub><sup>(t+1)</sup> = (1/|C<sub>c</sub>|) · Σ<sub>x ∈ C<sub>c</sub></sub> x</div>
+              <div class="step-explain">After re-assigning all points, update each centroid to be the arithmetic mean of all points assigned to it. This is the gradient-descent step that monotonically decreases WCSS.</div>
+              <code class="step-code"><span class="com"># Step 3: update centroids to cluster means</span>\n<span class="kw">def</span> <span class="fn">update</span>(points, assignments, k):\n    <span class="kw">return</span> [(\n        <span class="fn">sum</span>(p[<span class="num">0</span>] <span class="kw">for</span> p, a <span class="kw">in</span> <span class="fn">zip</span>(points, assignments) <span class="kw">if</span> a == c) / <span class="fn">max</span>(<span class="num">1</span>, <span class="fn">sum</span>(<span class="num">1</span> <span class="kw">for</span> a <span class="kw">in</span> assignments <span class="kw">if</span> a == c)),\n        <span class="fn">sum</span>(p[<span class="num">1</span>] <span class="kw">for</span> p, a <span class="kw">in</span> <span class="fn">zip</span>(points, assignments) <span class="kw">if</span> a == c) / <span class="fn">max</span>(<span class="num">1</span>, <span class="fn">sum</span>(<span class="num">1</span> <span class="kw">for</span> a <span class="kw">in</span> assignments <span class="kw">if</span> a == c))\n    ) <span class="kw">for</span> c <span class="kw">in</span> <span class="fn">range</span>(k)]</code>
+            </div>
+
+            <div class="derivation-step">
+              <span class="step-num">4</span>
+              <strong>Convergence check</strong> — stop when assignments stop changing
+              <div class="step-math">converged ⟺ c<sup>(t+1)</sup>(x) = c<sup>(t)</sup>(x) ∀x</div>
+              <div class="step-explain">Lloyd's algorithm is guaranteed to converge in finite steps because WCSS is monotonically decreasing and there are finitely many partitions. In practice, we check if any point changed cluster; if none did, we're done.</div>
+              <code class="step-code"><span class="com"># Step 4: check convergence</span>\n<span class="kw">if</span> new_assignments == old_assignments:\n    <span class="kw">break</span>  <span class="com"># converged</span></code>
+            </div>
+
+            <div class="derivation-step">
+              <span class="step-num">5</span>
+              <strong>Full algorithm</strong> — alternate assignment and update until convergence
+              <div class="step-math">repeat: (1) assign, (2) update, (3) check → until converged</div>
+              <div class="step-explain">The complete algorithm: initialise centroids (k-means++), then alternate assignment and update steps until no point changes cluster. Each iteration is O(n·k) — fast for moderate n and k.</div>
+              <code class="step-code"><span class="kw">def</span> <span class="fn">kmeans</span>(points, k, max_iter=<span class="num">100</span>):\n    centroids = <span class="fn">kmeans_plusplus_init</span>(points, k)\n    <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(max_iter):\n        assignments = <span class="fn">assign</span>(points, centroids)     <span class="com"># Step 2</span>\n        new_centroids = <span class="fn">update</span>(points, assignments, k) <span class="com"># Step 3</span>\n        <span class="kw">if</span> new_centroids == centroids: <span class="kw">break</span>      <span class="com"># Step 4</span>\n        centroids = new_centroids\n    <span class="kw">return</span> assignments, centroids</code>
+            </div>
+
+            <div style="margin-top:16px; padding:12px; background: rgba(6,182,212,0.05); border:1px solid rgba(6,182,212,0.2); border-radius:8px;">
+              <strong style="color: var(--accent-2); font-size: 13px;">Why this matters:</strong>
+              <p style="font-size: 12px; color: var(--text-muted); margin: 6px 0 0;">The derivation shows <em>exactly</em> how the mathematical objective (Step 1) decomposes into three simple operations (Steps 2-4) that any programmer can implement. The gap between "I know the math" and "I can code it" is bridged step by step. This is the pattern that makes AIHPC Advanced uniquely valuable for students, cross-disciplinary researchers, and anyone who needs to translate mathematical expressions into working code.</p>
+            </div>
+          </div>
+
+          <!-- CODE TAB -->
+          <div class="tab-content" data-tab="code">
+            <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 8px;">The same k-means algorithm in 6 platform languages. Toggle to compare idioms.</p>
+            <div class="lang-toggle" id="lang-toggle">
+              <button data-lang="python" class="active">Python</button>
+              <button data-lang="rust">Rust</button>
+              <button data-lang="go">Go</button>
+              <button data-lang="c">C</button>
+              <button data-lang="elixir">Elixir</button>
+              <button data-lang="scala">Scala</button>
+            </div>
+            <pre class="code-block" id="code-block"></pre>
+          </div>
+
+          <!-- OBSERVE TAB -->
+          <div class="tab-content" data-tab="observe">
+            <div class="cluster-stats" style="padding: 0; border: 0;">
+              <div class="stat"><div class="l">Final WCSS</div><div class="v" id="obs-wcss">—</div></div>
+              <div class="stat"><div class="l">Iterations</div><div class="v" id="obs-iter">—</div></div>
+              <div class="stat"><div class="l">Points per cluster</div><div class="v" id="obs-dist">—</div></div>
+              <div class="stat"><div class="l">Silhouette</div><div class="v" id="obs-sil">—</div></div>
+            </div>
+            <div class="summary-block" style="margin-top: 12px;">
+              <h4>Executive summary</h4>
+              <ul>
+                <li><strong>Algorithm:</strong> Lloyd's algorithm — alternate assignment and update until convergence.</li>
+                <li><strong>Complexity:</strong> O(n·k) per iteration. Converges in ~10-30 iterations for typical datasets.</li>
+                <li><strong>Guarantee:</strong> WCSS monotonically decreases. Finite termination guaranteed.</li>
+                <li><strong>Output:</strong> Downloadable CSV with point coordinates, cluster assignments, and centroids.</li>
+                <li><strong>Audit:</strong> The Math → Code derivation tab shows exactly how each line of code is derived from the mathematical objective.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="meta">
+        <p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/demos/kmeans-clustering.html</code>. Next.js: <code>/demos/kmeans-clustering</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      // Particle background
+      (function(){const c=document.getElementById('particle-canvas'),x=c.getContext('2d');let W,H,P=[];const N=60,cols=['#06b6d4','#8b5cf6','#ec4899'];function r(){W=c.width=innerWidth;H=c.height=innerHeight}r();addEventListener('resize',r);for(let i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,W,H);for(let i=0;i<N;i++){for(let j=i+1;j<N;j++){const d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<100){x.strokeStyle='rgba(139,92,246,'+.12*(1-d/100)+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke()}}}for(const p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;x.fillStyle=p.c;x.globalAlpha=.5;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill()}x.globalAlpha=1;requestAnimationFrame(s)}s()})();
+
+      // ===== k-means live demo =====
+      const N_POINTS = 200;
+      const CLUSTER_COLORS = ['#06b6d4','#10b981','#f59e0b','#ec4899','#8b5cf6','#3b82f6','#ef4444','#a855f7'];
+      let points = [];
+      let centroids = [];
+      let assignments = [];
+      let k = 3;
+      let iteration = 0;
+      let converged = false;
+      let lastResult = null;
+
+      // Generate 200 points in 4 natural clusters
+      function genPoints() {
+        const centers = [[120, 80], [380, 60], [200, 220], [480, 200]];
+        points = [];
+        for (let i = 0; i < N_POINTS; i++) {
+          const c = centers[i % centers.length];
+          points.push([c[0] + (Math.random()-0.5)*80, c[1] + (Math.random()-0.5)*80]);
+        }
+      }
+
+      // k-means++ initialization
+      function initCentroids(k) {
+        centroids = [points[Math.floor(Math.random()*points.length)].slice()];
+        while (centroids.length < k) {
+          const dists = points.map(p => Math.min(...centroids.map(c => (p[0]-c[0])**2+(p[1]-c[1])**2)));
+          const total = dists.reduce((a,b)=>a+b, 0);
+          let r = Math.random() * total, idx = 0;
+          for (let i = 0; i < dists.length; i++) { r -= dists[i]; if (r <= 0) { idx = i; break; } }
+          centroids.push(points[idx].slice());
+        }
+        assignments = new Array(points.length).fill(0);
+        iteration = 0; converged = false;
+      }
+
+      // Assignment step
+      function assignStep() {
+        for (let i = 0; i < points.length; i++) {
+          let best = 0, bestD = Infinity;
+          for (let c = 0; c < centroids.length; c++) {
+            const d = (points[i][0]-centroids[c][0])**2 + (points[i][1]-centroids[c][1])**2;
+            if (d < bestD) { bestD = d; best = c; }
+          }
+          assignments[i] = best;
+        }
+      }
+
+      // Update step
+      function updateStep() {
+        const changed = false;
+        for (let c = 0; c < centroids.length; c++) {
+          let sx = 0, sy = 0, cnt = 0;
+          for (let i = 0; i < points.length; i++) {
+            if (assignments[i] === c) { sx += points[i][0]; sy += points[i][1]; cnt++; }
+          }
+          if (cnt > 0) { centroids[c] = [sx/cnt, sy/cnt]; }
+        }
+      }
+
+      // WCSS
+      function computeWCSS() {
+        let s = 0;
+        for (let i = 0; i < points.length; i++) {
+          const c = centroids[assignments[i]];
+          s += (points[i][0]-c[0])**2 + (points[i][1]-c[1])**2;
+        }
+        return s;
+      }
+
+      // One Lloyd iteration
+      function step() {
+        const oldAssign = assignments.slice();
+        assignStep(); updateStep(); iteration++;
+        converged = oldAssign.every((a, i) => a === assignments[i]);
+        render(); updateStats();
+      }
+
+      // Run to convergence
+      function run() {
+        const t0 = performance.now();
+        while (!converged && iteration < 100) step();
+        document.getElementById('stat-time').textContent = Math.round(performance.now() - t0) + 'ms';
+        lastResult = { points, assignments, centroids, wcss: computeWCSS(), iterations: iteration };
+        document.getElementById('btn-download').disabled = false;
+      }
+
+      // Render
+      function render() {
+        const svg = document.getElementById('cluster-svg');
+        const parts = [];
+        // Points
+        for (let i = 0; i < points.length; i++) {
+          const c = CLUSTER_COLORS[assignments[i] % CLUSTER_COLORS.length];
+          parts.push(`<circle cx="${points[i][0]}" cy="${points[i][1]}" r="3" fill="${c}" opacity="0.7"/>`);
+        }
+        // Centroids
+        for (let c = 0; c < centroids.length; c++) {
+          const col = CLUSTER_COLORS[c % CLUSTER_COLORS.length];
+          parts.push(`<circle cx="${centroids[c][0]}" cy="${centroids[c][1]}" r="8" fill="none" stroke="white" stroke-width="2"/>`);
+          parts.push(`<circle cx="${centroids[c][0]}" cy="${centroids[c][1]}" r="6" fill="${col}" stroke="white" stroke-width="1.5"/>`);
+          parts.push(`<text x="${centroids[c][0]}" y="${centroids[c][1]-12}" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="SF Mono">${c+1}</text>`);
+        }
+        svg.innerHTML = parts.join('');
+      }
+
+      function updateStats() {
+        document.getElementById('stat-k').textContent = k;
+        document.getElementById('stat-iter').textContent = iteration;
+        const wcss = computeWCSS();
+        document.getElementById('stat-wcss').textContent = wcss > 0 ? wcss.toFixed(0) : '—';
+        document.getElementById('stat-conv').textContent = converged ? '✓ yes' : 'no';
+        // Observe tab
+        document.getElementById('obs-wcss').textContent = wcss > 0 ? wcss.toFixed(0) : '—';
+        document.getElementById('obs-iter').textContent = iteration;
+        if (lastResult) {
+          const dist = centroids.map((_, c) => assignments.filter(a => a === c).length).join(',');
+          document.getElementById('obs-dist').textContent = dist;
+        }
+      }
+
+      // Controls
+      document.getElementById('btn-step').addEventListener('click', step);
+      document.getElementById('btn-run').addEventListener('click', run);
+      document.getElementById('btn-reset').addEventListener('click', () => { genPoints(); initCentroids(k); render(); updateStats(); document.getElementById('btn-download').disabled = true; });
+      document.getElementById('btn-k-inc').addEventListener('click', () => { if (k < 8) { k++; document.getElementById('k-display').textContent = k; genPoints(); initCentroids(k); render(); updateStats(); } });
+      document.getElementById('btn-k-dec').addEventListener('click', () => { if (k > 2) { k--; document.getElementById('k-display').textContent = k; genPoints(); initCentroids(k); render(); updateStats(); } });
+      document.getElementById('btn-download').addEventListener('click', () => {
+        if (!lastResult) return;
+        const lines = ['# AIHPC Advanced — k-means output', '# Generated: ' + new Date().toISOString(), '#', 'index,x,y,cluster'];
+        points.forEach((p, i) => lines.push(`${i+1},${p[0].toFixed(2)},${p[1].toFixed(2)},${assignments[i]}`));
+        lines.push('# centroids:');
+        centroids.forEach((c, i) => lines.push(`# centroid_${i+1},${c[0].toFixed(2)},${c[1].toFixed(2)}`));
+        lines.push(`# wcss,${computeWCSS().toFixed(2)}`);
+        lines.push(`# iterations,${iteration}`);
+        const blob = new Blob([lines.join('\n')+'\n'], { type: 'text/csv;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'aihpc-kmeans-' + Date.now() + '.csv';
+        document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      });
+
+      // Tabs
+      document.querySelectorAll('.demo-tabs button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tab = btn.dataset.tab;
+          document.querySelectorAll('.demo-tabs button').forEach(b => b.classList.toggle('active', b === btn));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.dataset.tab === tab));
+        });
+      });
+
+      // Polyglot code
+      const CODE = {
+        python: `<span class="com"># kmeans.py — Python (numpy-style)</span>
+<span class="kw">def</span> <span class="fn">kmeans</span>(points, k, max_iter=<span class="num">100</span>):
+    centroids = <span class="fn">kmeans_plusplus_init</span>(points, k)
+    <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(max_iter):
+        <span class="com"># Step 2: assign each point to nearest centroid</span>
+        assignments = [<span class="fn">min</span>(<span class="fn">range</span>(k), key=<span class="kw">lambda</span> c: <span class="fn">sum</span>((p[d]-centroids[c][d])**<span class="num">2</span> <span class="kw">for</span> d <span class="kw">in</span> <span class="fn">range</span>(<span class="num">2</span>))) <span class="kw">for</span> p <span class="kw">in</span> points]
+        <span class="com"># Step 3: update centroids to cluster means</span>
+        new_centroids = [(
+            <span class="fn">sum</span>(p[<span class="num">0</span>] <span class="kw">for</span> p, a <span class="kw">in</span> <span class="fn">zip</span>(points, assignments) <span class="kw">if</span> a == c) / <span class="fn">max</span>(<span class="num">1</span>, <span class="fn">sum</span>(<span class="num">1</span> <span class="kw">for</span> a <span class="kw">in</span> assignments <span class="kw">if</span> a == c)),
+            <span class="fn">sum</span>(p[<span class="num">1</span>] <span class="kw">for</span> p, a <span class="kw">in</span> <span class="fn">zip</span>(points, assignments) <span class="kw">if</span> a == c) / <span class="fn">max</span>(<span class="num">1</span>, <span class="fn">sum</span>(<span class="num">1</span> <span class="kw">for</span> a <span class="kw">in</span> assignments <span class="kw">if</span> a == c))
+        ) <span class="kw">for</span> c <span class="kw">in</span> <span class="fn">range</span>(k)]
+        <span class="com"># Step 4: check convergence</span>
+        <span class="kw">if</span> new_centroids == centroids: <span class="kw">break</span>
+        centroids = new_centroids
+    <span class="kw">return</span> assignments, centroids`,
+        rust: `<span class="com">// kmeans.rs — Rust</span>
+<span class="kw">pub fn</span> <span class="fn">kmeans</span>(points: &amp;[<span class="ty">Vec</span>&lt;<span class="kw">f64</span>&gt;], k: <span class="ty">usize</span>) -&gt; (<span class="ty">Vec</span>&lt;<span class="ty">usize</span>&gt;, <span class="ty">Vec</span>&lt;<span class="ty">Vec</span>&lt;<span class="kw">f64</span>&gt;&gt;) {
+    <span class="kw">let mut</span> centroids = <span class="fn">init</span>(points, k);
+    <span class="kw">loop</span> {
+        <span class="kw">let</span> assignments: <span class="ty">Vec</span>&lt;<span class="ty">usize</span>&gt; = points.<span class="fn">iter</span>().<span class="fn">map</span>(|p| {
+            (<span class="num">0</span>..k).<span class="fn">min_by</span>(|&amp;a, &amp;b| {
+                <span class="fn">dist2</span>(p, &amp;centroids[a]).<span class="fn">partial_cmp</span>(&amp;<span class="fn">dist2</span>(p, &amp;centroids[b])).<span class="fn">unwrap</span>()
+            }).<span class="fn">unwrap</span>()
+        }).<span class="fn">collect</span>();
+        <span class="kw">let</span> new_c = <span class="fn">update</span>(points, &amp;assignments, k);
+        <span class="kw">if</span> new_c == centroids { <span class="kw">return</span> (assignments, centroids); }
+        centroids = new_c;
+    }
+}`,
+        go: `<span class="com">// kmeans.go</span>
+<span class="kw">func</span> <span class="fn">KMeans</span>(points [][<span class="num">2</span>]<span class="ty">float64</span>, k <span class="ty">int</span>) ([]<span class="ty">int</span>, [][<span class="num">2</span>]<span class="ty">float64</span>) {
+    centroids := <span class="fn">initCentroids</span>(points, k)
+    <span class="kw">for</span> iter := <span class="num">0</span>; iter &lt; <span class="num">100</span>; iter++ {
+        assignments := <span class="fn">assign</span>(points, centroids)
+        newC := <span class="fn">update</span>(points, assignments, k)
+        <span class="kw">if</span> <span class="fn">equal</span>(newC, centroids) { <span class="kw">return</span> assignments, centroids }
+        centroids = newC
+    }
+    <span class="kw">return</span> <span class="fn">assign</span>(points, centroids), centroids
+}`,
+        c: `<span class="com">/* kmeans.c */</span>
+<span class="kw">void</span> <span class="fn">kmeans</span>(<span class="kw">double</span> *points, <span class="kw">int</span> n, <span class="kw">int</span> k, <span class="kw">int</span> *assign, <span class="kw">double</span> *centroids) {
+    <span class="fn">init</span>(points, n, k, centroids);
+    <span class="kw">for</span> (<span class="kw">int</span> iter = <span class="num">0</span>; iter &lt; <span class="num">100</span>; iter++) {
+        <span class="fn">assign_step</span>(points, n, k, centroids, assign);
+        <span class="kw">if</span> (<span class="fn">update_step</span>(points, n, k, assign, centroids)) <span class="kw">break</span>;
+    }
+}`,
+        elixir: `<span class="com"># kmeans.exs</span>
+<span class="kw">def</span> <span class="fn">kmeans</span>(points, k) <span class="kw">do</span>
+  centroids = <span class="fn">init</span>(points, k)
+  <span class="fn">loop</span>(points, centroids, k, <span class="fn">List</span>.<span class="fn">duplicate</span>(<span class="num">0</span>, <span class="fn">length</span>(points)))
+<span class="kw">end</span>
+<span class="kw">defp</span> <span class="fn">loop</span>(points, centroids, k, old) <span class="kw">do</span>
+  assignments = <span class="fn">Enum</span>.<span class="fn">map</span>(points, &amp;<span class="fn">assign</span>(&amp;<span class="num">1</span>, centroids))
+  <span class="kw">if</span> assignments == old, <span class="kw">do:</span> {assignments, centroids},
+  <span class="kw">else:</span> <span class="fn">loop</span>(points, <span class="fn">update</span>(points, assignments, k), k, assignments)
+<span class="kw">end</span>`,
+        scala: `<span class="com">// kmeans.sc</span>
+<span class="kw">def</span> <span class="fn">kmeans</span>(points: <span class="ty">Vector</span>[(<span class="ty">Double</span>, <span class="ty">Double</span>)], k: <span class="ty">Int</span>): (<span class="ty">Vector</span>[<span class="ty">Int</span>], <span class="ty">Vector</span>[(<span class="ty">Double</span>, <span class="ty">Double</span>)]) = {
+  <span class="kw">var</span> centroids = <span class="fn">init</span>(points, k)
+  <span class="kw">var</span> assignments = <span class="ty">Vector</span>.<span class="fn">fill</span>(points.length)(<span class="num">0</span>)
+  <span class="kw">while</span> (<span class="kw">true</span>) {
+    <span class="kw">val</span> newA = points.<span class="fn">map</span>(p =&gt; (<span class="num">0</span> <span class="kw">until</span> k).<span class="fn">minBy</span>(c =&gt; <span class="fn">dist2</span>(p, centroids(c))))
+    <span class="kw">if</span> (newA == assignments) <span class="kw">return</span> (newA, centroids)
+    centroids = <span class="fn">update</span>(points, newA, k)
+    assignments = newA
+  }
+  (assignments, centroids)
+}`,
+      };
+      function renderCode(lang) {
+        document.getElementById('code-block').innerHTML = CODE[lang];
+        document.querySelectorAll('#lang-toggle button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+      }
+      document.querySelectorAll('#lang-toggle button').forEach(b => b.addEventListener('click', () => renderCode(b.dataset.lang)));
+
+      // Init
+      genPoints(); initCentroids(k); render(); updateStats(); renderCode('python');
+
+      // Theme
+      (function(){const K='aihpc-theme';const b=document.body,r=document.querySelector('.ribbon'),i=document.getElementById('ribbon-theme-icon');function a(t){if(t==='light'){b.classList.add('light');r&&r.classList.add('light');i.textContent='☀'}else{b.classList.remove('light');r&&r.classList.remove('light');i.textContent='🌙'}}let d='dark';try{const s=localStorage.getItem(K);if(s==='light'||s==='dark')d=s;else if(matchMedia('(prefers-color-scheme:light)').matches)d='light'}catch(e){}a(d);document.getElementById('ribbon-theme-toggle').addEventListener('click',()=>{const n=b.classList.contains('light')?'dark':'light';a(n);try{localStorage.setItem(K,n)}catch(e){}})})();
+    </script>
+  </body>
+</html>
