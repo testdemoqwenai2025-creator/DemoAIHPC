@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Domain Workflows — AIHPC Advanced AETHEL Suite." />
+    <title>Domain Workflows — AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#8b5cf6; --accent-2:#06b6d4; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; position: relative; overflow-x: hidden; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.25; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid #2a3548; border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 980px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; }
+      h1 { font-size: 38px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 720px; margin: 0 0 32px; }
+      .hero { position: relative; margin: 0 0 32px; height: 220px; border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, rgba(139,92,46,0.15) 0%, rgba(6,182,212,0.1) 50%, rgba(236,72,153,0.15) 100%); border: 1px solid rgba(139,92,246,0.25); backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+      .hero svg { width: 100%; height: 100%; }
+      .hero .hero-text { position: absolute; top: 50%; left: 32px; transform: translateY(-50%); max-width: 380px; pointer-events: none; }
+      .hero .hero-text .h-tag { font-size: 11px; color: rgba(196,181,253,0.9); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 6px; }
+      .hero .hero-text .h-title { font-size: 20px; font-weight: 700; color: white; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+      .stub { background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.2); border-radius: 12px; padding: 16px 20px; margin-top: 24px; backdrop-filter: blur(12px); }
+      .stub h3 { margin: 0 0 8px; font-size: 16px; }
+      .stub p { margin: 0; font-size: 14px; color: var(--text-muted); }
+      .stub a { color: var(--accent-2); text-decoration: none; }
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      body.light { background: #fafafa; color: #18181b; }
+      body.light #particle-canvas { opacity: 0.1; }
+      body.light .ribbon-btn-primary { color: white; }
+    </style>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="index.html">Home</a><a href="demos.html">Demos</a><a href="dashboard.html">Dashboard</a><a href="graph.html">Knowledge Graph</a><a href="benchmark.html">Agentic Benchmark</a><a href="subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="aethel.html">AETHEL Connector</a><a href="connectors.html">Scientific Connectors Hub</a><a href="query.html">Query Executor</a><a href="graph.html">Knowledge Graph</a><a href="workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="science-biology.html">Biology Hub</a><a href="science-chemistry.html">Chemistry Hub</a><a href="science-physics.html">Physics Hub</a><a href="science-maths.html">Mathematics Hub</a><a href="science-bioinformatics.html">Bioinformatics</a><a href="science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="concepts.html">Concept Cards</a><a href="concepts/replayable-decision-traces.html">Replayable Decision Traces</a><a href="concepts/provenance-first.html">Provenance-First Computing</a><a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a><a href="concepts/audience-annotations.html">Audience-Specific Annotations</a><a href="concepts/provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="index.html">Home</a> / Domain Workflows</p>
+      <span class="tag">AETHEL Suite &middot; Workflow Templates</span>
+      <h1>Domain Workflows</h1>
+      <div class="hero">
+        <svg viewBox="0 0 1000 220" preserveAspectRatio="xMidYMid slice">
+          <g opacity="0.85" transform="translate(500, 110)"><circle cx="0" cy="0" r="20" fill="#8b5cf6" opacity="0.3"/><circle cx="0" cy="0" r="12" fill="#8b5cf6"/><circle cx="-60" cy="-30" r="8" fill="#06b6d4"/><circle cx="60" cy="-30" r="8" fill="#10b981"/><circle cx="-60" cy="30" r="8" fill="#ec4899"/><circle cx="60" cy="30" r="8" fill="#f59e0b"/><line x1="0" y1="0" x2="-60" y2="-30" stroke="rgba(255,255,255,0.3)"/><line x1="0" y1="0" x2="60" y2="-30" stroke="rgba(255,255,255,0.3)"/><line x1="0" y1="0" x2="-60" y2="30" stroke="rgba(255,255,255,0.3)"/><line x1="0" y1="0" x2="60" y2="30" stroke="rgba(255,255,255,0.3)"/></g>
+        </svg>
+        <div class="hero-text">
+          <p class="h-tag">AETHEL Suite</p>
+          <p class="h-title">Domain Workflows</p>
+        </div>
+      </div>
+      <p class="lead">Pre-built scientific workflow templates per domain. Each workflow chains multiple AETHEL operations into a reproducible pipeline with full provenance.</p>
+      <div class="stub">
+        <h3>Related pages</h3>
+        <p><a href="dashboard.html">Temporal Dashboard</a> &middot; <a href="graph.html">Cross-Domain Knowledge Graph</a> &middot; <a href="demos.html">All Demos</a></p>
+      </div>
+      <div class="stub">
+        <h3>Full interactive version</h3>
+        <p>The full interactive Domain Workflows is available in the Next.js application (run locally with <code>npm run dev</code>). The static GitHub Pages preview shows the platform overview. For NDA-protected access, contact <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+      <div class="meta"><p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/workflows.html</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p></div>
+    </div>
+    <script>
+      (function(){var c=document.getElementById('particle-canvas'),x=c.getContext('2d');var W,H,P=[];var N=50;var cols=['#06b6d4','#8b5cf6','#ec4899'];function r(){W=c.width=innerWidth;H=c.height=innerHeight}r();addEventListener('resize',r);for(var i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,W,H);for(var i=0;i<N;i++){for(var j=i+1;j<N;j++){var d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<90){x.strokeStyle='rgba(139,92,246,'+.1*(1-d/90)+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke()}}}for(var p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;x.fillStyle=p.c;x.globalAlpha=.4;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill()}x.globalAlpha=1;requestAnimationFrame(s)}s()})();
+      (function(){var K='aihpc-theme';var b=document.body,r=document.querySelector('.ribbon'),i=document.getElementById('ribbon-theme-icon');function a(t){if(t==='light'){b.classList.add('light');r&&r.classList.add('light');i.textContent='☀'}else{b.classList.remove('light');r&&r.classList.remove('light');i.textContent='🌙'}}var d='dark';try{var s=localStorage.getItem(K);if(s==='light'||s==='dark')d=s;else if(matchMedia('(prefers-color-scheme:light)').matches)d='light'}catch(e){}a(d);document.getElementById('ribbon-theme-toggle').addEventListener('click',function(){var n=b.classList.contains('light')?'dark':'light';a(n);try{localStorage.setItem(K,n)}catch(e){}})})();
+    </script>
+  </body>
+</html>
