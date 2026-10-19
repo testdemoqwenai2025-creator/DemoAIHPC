@@ -146,7 +146,10 @@
           <div class="viewer-controls">
             <button class="btn" id="ctrl-rotate">▶ Auto-rotate</button>
             <button class="btn" id="ctrl-reset">↺ Reset view</button>
-            <button class="btn" id="ctrl-ribbon">⬇ PDB (40 atoms)</button>
+            <label class="btn" style="cursor:pointer;">📁 Upload PDB
+              <input type="file" id="pdb-upload" accept=".pdb,.ent,.txt" style="display:none;" />
+            </label>
+            <button class="btn" id="ctrl-ribbon">⬇ PDB export</button>
           </div>
           <div class="viewer-loading" id="viewer-loading">Loading Three.js from CDN…</div>
         </div>
@@ -154,12 +157,12 @@
 
       <h2>What you&apos;re seeing</h2>
       <p class="muted">
-        The 3D scene renders a synthetic alpha-helix backbone. Each
-        green sphere is a C-alpha atom; cyan tubes are peptide bonds
-        connecting them; amber sticks are stub side chains pointing
-        outward. The helix is generated procedurally using the
-        parametric equations for an ideal α-helix:
-        <code>r = 2.3 Å, rise = 1.5 Å/residue, 3.6 residues/turn</code>.
+        The 3D scene renders a synthetic alpha-helix backbone by default.
+        Each green sphere is a C-alpha atom; cyan tubes are peptide bonds;
+        amber sticks are stub side chains. <strong>Upload a real PDB file</strong>
+        using the 📁 Upload PDB button to view any protein structure — the
+        parser reads ATOM records, extracts C-alpha atoms for the backbone,
+        and renders side chain atoms as amber spheres.
       </p>
 
       <h2>How it was built</h2>
@@ -336,6 +339,107 @@
         a.href = url; a.download = 'aihpc-synthetic-helix-' + Date.now() + '.pdb';
         document.body.appendChild(a); a.click(); a.remove();
         URL.revokeObjectURL(url);
+      });
+
+      // ---- PDB file upload: parse real protein structures ----
+      function parsePDB(text) {
+        const atoms = [];
+        const lines = text.split(/\r?\n/);
+        for (const line of lines) {
+          if (line.startsWith('ATOM') || line.startsWith('HETATM')) {
+            const atomName = line.substring(12, 16).trim();
+            const resName = line.substring(17, 20).trim();
+            const resSeq = parseInt(line.substring(22, 26).trim());
+            const x = parseFloat(line.substring(30, 38));
+            const y = parseFloat(line.substring(38, 46));
+            const z = parseFloat(line.substring(46, 54));
+            const element = line.substring(76, 78).trim() || atomName[0] || 'C';
+            if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
+              atoms.push({ atomName, resName, resSeq, x, y, z, element });
+            }
+          }
+        }
+        return atoms;
+      }
+
+      function rebuildScene(allAtoms) {
+        // Clear the scene (remove all meshes, keep lights + camera)
+        const toRemove = [];
+        scene.traverse((obj) => { if (obj.isMesh) toRemove.push(obj); });
+        for (const obj of toRemove) { scene.remove(obj); obj.geometry?.dispose(); obj.material?.dispose(); }
+
+        // Extract C-alpha atoms for backbone
+        const caAtoms = allAtoms.filter(a => a.atomName === 'CA');
+        // Also get all atoms for side chains
+        const otherAtoms = allAtoms.filter(a => a.atomName !== 'CA' && a.atomName !== 'H');
+
+        if (caAtoms.length === 0 && allAtoms.length > 0) {
+          // No CA atoms — use all atoms
+          caAtoms.push(...allAtoms.slice(0, Math.min(200, allAtoms.length)));
+        }
+
+        // Compute center for camera positioning
+        const center = new THREE.Vector3();
+        for (const a of caAtoms) center.add(new THREE.Vector3(a.x, a.y, a.z));
+        center.divideScalar(caAtoms.length || 1);
+
+        // Scale factor (PDB coords are in Å, we render in those units directly)
+        const scale = 1.0;
+
+        // C-alpha spheres (green)
+        const caGeo = new THREE.SphereGeometry(0.6, 12, 12);
+        const caMat = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.4, metalness: 0.2 });
+        const caPositions = [];
+        for (const a of caAtoms) {
+          const pos = new THREE.Vector3(a.x * scale, a.y * scale, a.z * scale);
+          caPositions.push(pos);
+          const sphere = new THREE.Mesh(caGeo, caMat);
+          sphere.position.copy(pos);
+          scene.add(sphere);
+        }
+
+        // Backbone bonds (cyan cylinders between consecutive C-alphas)
+        const bondMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.5, metalness: 0.3 });
+        for (let i = 0; i < caPositions.length - 1; i++) {
+          scene.add(cylinderBetween(caPositions[i], caPositions[i+1], 0.15, bondMat));
+        }
+
+        // Side chain atoms (amber) — show first N to avoid overcrowding
+        const sideMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.6, metalness: 0.1 });
+        const sideGeo = new THREE.SphereGeometry(0.3, 8, 8);
+        const maxSide = Math.min(200, otherAtoms.length);
+        for (let i = 0; i < maxSide; i++) {
+          const a = otherAtoms[i];
+          const sphere = new THREE.Mesh(sideGeo, sideMat);
+          sphere.position.set(a.x * scale, a.y * scale, a.z * scale);
+          scene.add(sphere);
+        }
+
+        // Update camera to frame the new structure
+        camera.position.set(center.x + 20, center.y + 20, center.z + 20);
+        controls.target.copy(center);
+        controls.update();
+
+        // Update header
+        document.getElementById('viewer-meta').textContent =
+          `${caAtoms.length} C-α atoms · ${allAtoms.length} total atoms · ${maxSide} side chain atoms · PDB loaded`;
+      }
+
+      // File upload handler
+      document.getElementById('pdb-upload').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const atoms = parsePDB(ev.target.result);
+            if (atoms.length === 0) { alert('No ATOM records found in the PDB file.'); return; }
+            rebuildScene(atoms);
+          } catch (err) {
+            alert('PDB parse error: ' + err.message);
+          }
+        };
+        reader.readAsText(file);
       });
 
       // ---- Resize handler ----
