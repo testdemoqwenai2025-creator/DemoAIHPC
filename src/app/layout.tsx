@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/components/site/ThemeProvider";
+import { SiteNav } from "@/components/site/SiteNav";
+import { SiteFooter } from "@/components/site/SiteFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,23 +17,39 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SciHub Pro - The Scientific GitHub for the Modern Age | Bioinformatics, Cheminformatics & More",
-  description: "Unified open-source platform for scientific computing. Bioinformatics, Cheminformatics, Molecular Modelling, Materials Science — all in one place. Free Community Edition + Enterprise features.",
-  keywords: ["scientific computing", "bioinformatics", "cheminformatics", "molecular modelling", "research platform", "open source science", "computational biology", "drug discovery", "materials science", "GitHub for science", "SciHub Pro"],
-  authors: [{ name: "SciHub Pro Team" }],
+  title: "AIHPC Advanced - Scientific Computing Platform | Bioinformatics, Cheminformatics & More",
+  description:
+    "Unified scientific computing platform. Bioinformatics, cheminformatics, molecular modelling and materials science behind one polyglot microservices architecture. Public preview mirror of the private AIHPC-Advanced repository.",
+  keywords: [
+    "scientific computing",
+    "bioinformatics",
+    "cheminformatics",
+    "molecular modelling",
+    "research platform",
+    "open source science",
+    "computational biology",
+    "drug discovery",
+    "materials science",
+    "AIHPC",
+    "AETHEL",
+    "SciHub Pro",
+  ],
+  authors: [{ name: "AIHPC Advanced Team" }],
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "SciHub Pro - The Scientific GitHub for the Modern Age",
-    description: "One unified platform for all your scientific computing needs. From sequence analysis to drug discovery.",
-    siteName: "SciHub Pro",
+    title: "AIHPC Advanced - Scientific Computing Platform",
+    description:
+      "Public preview mirror of the AIHPC Advanced scientific computing platform.",
+    siteName: "AIHPC Advanced",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SciHub Pro - Scientific Computing Platform",
-    description: "Democratizing computational research for scientists worldwide.",
+    title: "AIHPC Advanced - Scientific Computing Platform",
+    description:
+      "Public preview mirror of the AIHPC Advanced scientific computing platform.",
   },
 };
 
@@ -44,8 +63,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
-        {children}
-        <Toaster />
+        <ThemeProvider>
+          <div className="flex min-h-screen flex-col">
+            <SiteNav />
+            <div className="flex-1">{children}</div>
+            <SiteFooter />
+          </div>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

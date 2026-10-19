@@ -14,6 +14,7 @@ import { Switch } from '@/components/ui/switch'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { AuthProvider } from '@/components/auth/AuthContext'
+import { useTheme } from '@/components/site/ThemeProvider'
 import GlobalNavbar from '@/components/layout/GlobalNavbar'
 import EnhancedLandingPage from '@/components/layout/EnhancedLandingPage'
 import AETHELConnector from '@/components/aethel/AETHELConnector'
@@ -1817,7 +1818,11 @@ export default function SciHubProApp() {
   const [selectedService, setSelectedService] = useState<Microservice | null>(null)
   const [activeTab, setActiveTab] = useState('dashboard')
   const [searchQuery, setSearchQuery] = useState('')
-  const [darkMode, setDarkMode] = useState(true)
+  // Keep the in-page dark mode toggle in sync with the global ThemeProvider so
+  // the SiteNav toggle and the in-app toggle both reflect the same theme.
+  const { theme, setTheme } = useTheme()
+  const darkMode = theme === 'dark'
+  const setDarkMode = (d: boolean) => setTheme(d ? 'dark' : 'light')
   const [quantumAnimation, setQuantumAnimation] = useState(true)
 
   return (
