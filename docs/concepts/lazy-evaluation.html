@@ -408,7 +408,7 @@
             <button class="act" id="act-py">▶ Execute in Python (Pyodide)</button>
             <button class="act" id="act-copy">⎘ Copy β̂</button>
             <button class="act" id="act-csv">⬇ CSV</button>
-            <button class="act primary" id="act-receipt">⬇ Receipt</button>
+            <button class="act primary" id="act-receipt" title="Pro tier required — sign in at /subscribe">⬇ Receipt</button>
           </div>
           <div id="py-result" style="display:none; width:100%; margin-top:8px; padding:10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius:8px; font-family: 'SF Mono', Menlo, monospace; font-size: 12px; color: var(--text);"></div>
         </div>
@@ -1032,6 +1032,44 @@ print(json.dumps(result))
         document.getElementById('etl-report').style.display = 'none';
         lastResult = null;
         document.getElementById('download-btn').disabled = true;
+      });
+
+      // ---- Subscription gating (live) ----
+      // Read localStorage session; disable "Download Receipt" on Free tier.
+      // The /subscribe page manages the session under 'aihpc-session'.
+      function checkTier() {
+        try {
+          const raw = localStorage.getItem('aihpc-session');
+          if (!raw) return 'free';
+          const s = JSON.parse(raw);
+          return s.tier || 'free';
+        } catch { return 'free'; }
+      }
+      function applyGating() {
+        const tier = checkTier();
+        const receiptBtn = document.getElementById('act-receipt');
+        if (tier === 'free') {
+          receiptBtn.style.opacity = '0.5';
+          receiptBtn.style.cursor = 'not-allowed';
+          receiptBtn.title = '🔒 Pro tier required — sign in at /subscribe.html to download receipts';
+          receiptBtn.addEventListener('click', function gateClick(e) {
+            if (checkTier() === 'free') {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              alert('🔒 Download Receipt is a Pro-tier feature.\n\nSign in at /subscribe.html and upgrade to Pro to download provenance receipts.\n\nFree tier: CSV download only.\nPro tier: CSV + receipt + trace.');
+              return false;
+            }
+            receiptBtn.removeEventListener('click', gateClick);
+          }, true);
+        } else {
+          receiptBtn.style.opacity = '1';
+          receiptBtn.style.cursor = 'pointer';
+          receiptBtn.title = `Download provenance receipt (${tier} tier)`;
+        }
+      }
+      // Apply gating when popup opens
+      document.getElementById('launch-btn').addEventListener('click', () => {
+        setTimeout(applyGating, 100); // wait for popup to render
       });
 
       // ---- Ribbon theme toggle ----
