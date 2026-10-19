@@ -3,16 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Cross-Domain Knowledge Graph — every demo, paper, dataset, and AETHEL Suite surface as a node, with provenance / similarity / inferred edges. Foundation page; live interactive graph coming in a later phase." />
+    <meta name="description" content="Live Cross-Domain Knowledge Graph — every demo, paper, dataset, and AETHEL Suite surface as a node. Provenance / similarity / inferred edges. Force-directed SVG layout, drag to inspect, click to filter." />
     <title>Cross-Domain Knowledge Graph — AIHPC Advanced</title>
     <style>
-      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; }
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; }
       * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
-      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; overflow-x: hidden; position: relative; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.25; }
       .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
       .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
       .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
-      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-inner { max-width: 1400px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
       .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
       .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
       .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
@@ -29,47 +30,65 @@
       .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
       .ribbon-icon-btn:hover { border-color: var(--accent); }
       .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
-      .container { max-width: 980px; margin: 0 auto; padding: 56px 24px 96px; }
+      .container { max-width: 1400px; margin: 0 auto; padding: 24px 24px 96px; position: relative; z-index: 1; }
       .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
       .crumbs a { color: var(--text-muted); text-decoration: none; }
-      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-elevated); font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
-      h1 { font-size: 38px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
-      .lead { font-size: 18px; color: var(--text-muted); max-width: 760px; margin: 0 0 40px; }
-      h2 { font-size: 22px; margin: 32px 0 10px; }
-      p { margin: 0 0 14px; }
-      .muted { color: var(--text-muted); }
-      ul { padding-left: 22px; color: var(--text-muted); }
-      ul li { margin-bottom: 6px; } ul li strong { color: var(--text); }
-      code { background: var(--bg-elevated); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
-      .hero { position: relative; margin: 0 0 32px; height: 220px; border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, rgba(139,92,246,0.18) 0%, rgba(6,182,212,0.12) 50%, rgba(236,72,153,0.18) 100%); border: 1px solid rgba(139,92,246,0.25); }
-      .hero svg { width: 100%; height: 100%; }
-      .hero .hero-text { position: absolute; top: 50%; left: 32px; transform: translateY(-50%); max-width: 380px; pointer-events: none; }
-      .hero .hero-text .h-tag { font-size: 11px; color: rgba(196,181,253,0.9); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 6px; }
-      .hero .hero-text .h-title { font-size: 20px; font-weight: 700; color: white; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
-      .hero .hero-text .h-sub { font-size: 13px; color: rgba(243,244,246,0.8); margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
-      .stub { background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 12px; padding: 16px 20px; margin-top: 24px; }
-      .stub h3 { margin: 0 0 8px; font-size: 16px; }
-      .stub p { margin: 0; font-size: 14px; color: var(--text-muted); }
-      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 12px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 920px; margin: 0 0 24px; }
+      .graph-layout { display: grid; grid-template-columns: 1fr 320px; gap: 16px; margin-top: 16px; }
+      @media (max-width: 980px) { .graph-layout { grid-template-columns: 1fr; } }
+      .graph-panel { background: rgba(18, 24, 38, 0.6); border: 1px solid rgba(139,92,246,0.2); border-radius: 16px; overflow: hidden; backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+      .graph-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .graph-header .title { font-size: 13px; font-weight: 600; color: var(--text); }
+      .graph-canvas-wrap { position: relative; height: 520px; background: radial-gradient(circle at 50% 50%, rgba(139,92,246,0.06), transparent 70%), #000; }
+      svg.graph { width: 100%; height: 100%; display: block; cursor: grab; }
+      svg.graph:active { cursor: grabbing; }
+      svg.graph .node { cursor: pointer; transition: filter 0.2s ease; }
+      svg.graph .node:hover { filter: drop-shadow(0 0 6px currentColor); }
+      svg.graph .edge { stroke: rgba(148, 163, 184, 0.25); stroke-width: 1; fill: none; }
+      svg.graph .edge.highlight { stroke: rgba(6, 182, 212, 0.7); stroke-width: 1.5; }
+      svg.graph .edge-label { font: 8px ui-sans-serif, system-ui, sans-serif; fill: var(--text-muted-2); pointer-events: none; }
+      svg.graph .node-label { font: 600 10px ui-sans-serif, system-ui, sans-serif; fill: var(--text); pointer-events: none; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+      .graph-controls { position: absolute; bottom: 12px; left: 12px; display: flex; gap: 6px; flex-wrap: wrap; }
+      .graph-controls .btn { background: rgba(11,15,26,0.7); border: 1px solid rgba(139,92,246,0.3); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-family: inherit; font-weight: 600; backdrop-filter: blur(8px); }
+      .graph-controls .btn:hover { border-color: var(--accent); }
+      .graph-controls .btn.active { background: var(--accent); color: white; border-color: transparent; }
+      .graph-legend { position: absolute; top: 12px; right: 12px; background: rgba(11,15,26,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; backdrop-filter: blur(8px); font-size: 11px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; max-width: 200px; }
+      .graph-legend .item { display: flex; align-items: center; gap: 6px; }
+      .graph-legend .swatch { width: 10px; height: 10px; border-radius: 9999px; }
+      .info-panel { background: rgba(18, 24, 38, 0.6); border: 1px solid rgba(139,92,246,0.2); border-radius: 16px; padding: 16px; backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+      .info-panel h3 { margin: 0 0 12px; font-size: 14px; color: var(--text); }
+      .info-panel .info-row { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+      .info-panel .info-row:last-child { border-bottom: 0; }
+      .info-panel .info-row .l { color: var(--text-muted-2); text-transform: uppercase; font-size: 10px; letter-spacing: 0.06em; }
+      .info-panel .info-row .v { color: var(--text); font-family: "SF Mono", Menlo, monospace; margin-top: 2px; }
+      .info-panel .neighbour-list { font-size: 12px; color: var(--text-muted); }
+      .info-panel .neighbour-list a { color: var(--accent-2); text-decoration: none; }
+      .info-panel .neighbour-list a:hover { text-decoration: underline; }
+      .info-empty { color: var(--text-muted-2); font-size: 12px; text-align: center; padding: 32px 0; }
+      .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 12px; }
+      .stats-row .stat { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+      .stats-row .stat .l { font-size: 9px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-row .stat .v { font-family: "SF Mono", Menlo, monospace; font-size: 16px; font-weight: 700; color: var(--text); }
+      .meta { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
       .meta a { color: var(--text); text-decoration: none; }
       .meta a:hover { text-decoration: underline; }
-      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.06), transparent 55%), #fafafa; color: #18181b; }
-      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary, body.light .tag, body.light .stub { background: white; border-color: #e5e7eb; }
-      body.light .lead, body.light .muted, body.light ul, body.light .meta, body.light .stub p { color: #4b5563; }
-      body.light code { background: #f3f4f6; border-color: #e5e7eb; }
-      body.light .hero { background: linear-gradient(135deg, rgba(139,92,246,0.08) 0%, rgba(6,182,212,0.06) 50%, rgba(236,72,153,0.08) 100%); border-color: rgba(139,92,246,0.25); }
-      body.light .hero .hero-text .h-tag { color: #4b5563; }
-      body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; }
-      body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
+      body.light { background: #fafafa; color: #18181b; }
+      body.light #particle-canvas { opacity: 0.1; }
+      body.light .graph-panel, body.light .info-panel, body.light .tag, body.light .ribbon-menu { background: white; border-color: #e5e7eb; }
+      body.light .graph-canvas-wrap { background: #f3f4f6; }
+      body.light .lead, body.light .meta { color: #4b5563; }
       body.light .ribbon-btn-primary { color: white; }
     </style>
   </head>
   <body>
+    <canvas id="particle-canvas"></canvas>
     <header class="ribbon">
       <div class="ribbon-inner">
         <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
         <nav class="ribbon-nav">
-          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="index.html">Home</a><a href="demos.html">Demos</a><a href="dashboard.html">Dashboard</a><a href="graph.html">Knowledge Graph</a><a href="benchmark.html">Agentic Benchmark</a></div></details>
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="index.html">Home</a><a href="demos.html">Demos</a><a href="dashboard.html">Dashboard</a><a href="graph.html">Knowledge Graph</a><a href="benchmark.html">Agentic Benchmark</a><a href="subscribe.html">Subscribe</a></div></details>
           <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu">
             <a href="science-biology.html">Biology Hub</a>
             <a href="science-chemistry.html">Chemistry Hub</a>
@@ -84,6 +103,7 @@
             <a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a>
             <a href="concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a>
             <a href="concepts/audience-annotations.html">Audience-Specific Annotations</a>
+            <a href="concepts/provenance-chain.html">Provenance Chain</a>
           </div></details>
         </nav>
         <div class="ribbon-actions">
@@ -92,66 +112,401 @@
         </div>
       </div>
     </header>
+
     <div class="container">
       <p class="crumbs"><a href="index.html">Home</a> / Cross-Domain Knowledge Graph</p>
-      <span class="tag">Insights &middot; Cross-Domain Knowledge Graph</span>
+      <span class="tag">Insights &middot; Cross-Domain Knowledge Graph &middot; live interactive</span>
       <h1>Cross-Domain Knowledge Graph</h1>
-      <p class="lead">Every artifact in AIHPC Advanced — demos, papers, datasets, AETHEL Suite surfaces — as a node. Edges express provenance, similarity, and inference.</p>
+      <p class="lead">
+        Every artifact in AIHPC Advanced — demos, papers, datasets, and
+        AETHEL Suite surfaces — as a node. Click any node to see its
+        2-hop neighbourhood. Drag to rearrange. The graph is rendered
+        with a simple force-directed layout, pure client-side.
+      </p>
 
-      <!-- Hero: network graph illustration -->
-      <div class="hero">
-        <svg viewBox="0 0 1000 220" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <filter id="g1" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="2" result="b"/>
-              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-          <g opacity="0.5" stroke="rgba(148,163,184,0.4)" stroke-width="1">
-            <line x1="500" y1="110" x2="200" y2="60"/><line x1="500" y1="110" x2="800" y2="60"/>
-            <line x1="500" y1="110" x2="200" y2="170"/><line x1="500" y1="110" x2="800" y2="170"/>
-            <line x1="500" y1="110" x2="350" y2="40"/><line x1="500" y1="110" x2="650" y2="40"/>
-            <line x1="500" y1="110" x2="350" y2="180"/><line x1="500" y1="110" x2="650" y2="180"/>
-            <line x1="200" y1="60" x2="350" y2="40"/><line x1="800" y1="60" x2="650" y2="40"/>
-            <line x1="200" y1="170" x2="350" y2="180"/><line x1="800" y1="170" x2="650" y2="180"/>
-          </g>
-          <g filter="url(#g1)">
-            <circle cx="500" cy="110" r="14" fill="#8b5cf6"/>
-            <circle cx="200" cy="60" r="8" fill="#06b6d4"/><circle cx="800" cy="60" r="8" fill="#06b6d4"/>
-            <circle cx="200" cy="170" r="8" fill="#f59e0b"/><circle cx="800" cy="170" r="8" fill="#f59e0b"/>
-            <circle cx="350" cy="40" r="6" fill="#10b981"/><circle cx="650" cy="40" r="6" fill="#10b981"/>
-            <circle cx="350" cy="180" r="6" fill="#ec4899"/><circle cx="650" cy="180" r="6" fill="#ec4899"/>
-          </g>
-          <g fill="#f3f4f6" opacity="0.5" font-size="10" text-anchor="middle" font-family="SF Mono, monospace">
-            <text x="500" y="135">AETHEL</text>
-            <text x="200" y="50">demo</text><text x="800" y="50">demo</text>
-            <text x="200" y="190">paper</text><text x="800" y="190">paper</text>
-            <text x="350" y="30">dataset</text><text x="650" y="30">dataset</text>
-          </g>
-        </svg>
-        <div class="hero-text">
-          <p class="h-tag">Insights &middot; composability</p>
-          <p class="h-title">Every artifact is a node.</p>
-          <p class="h-sub">Provenance + similarity + inference edges across all of science.</p>
+      <div class="graph-layout">
+        <div class="graph-panel">
+          <div class="graph-header">
+            <span class="title">Live interactive graph</span>
+            <span style="font-size: 11px; color: var(--text-muted-2); font-family: SF Mono, monospace;" id="graph-stats">— nodes / — edges</span>
+          </div>
+          <div class="graph-canvas-wrap">
+            <svg class="graph" id="graph" viewBox="0 0 900 520" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="graph-legend">
+              <div class="item"><span class="swatch" style="background:#06b6d4"></span>demo</div>
+              <div class="item"><span class="swatch" style="background:#f59e0b"></span>paper</div>
+              <div class="item"><span class="swatch" style="background:#10b981"></span>dataset</div>
+              <div class="item"><span class="swatch" style="background:#8b5cf6"></span>AETHEL Suite</div>
+              <div class="item"><span class="swatch" style="background:#ec4899"></span>concept card</div>
+              <div class="item"><span class="swatch" style="background:#3b82f6"></span>science hub</div>
+            </div>
+            <div class="graph-controls">
+              <button class="btn" id="filter-all">All</button>
+              <button class="btn" id="filter-demo">Demos only</button>
+              <button class="btn" id="filter-paper">Papers only</button>
+              <button class="btn" id="filter-aethel">AETHEL Suite</button>
+              <button class="btn" id="reheat">↺ Reheat</button>
+            </div>
+          </div>
+        </div>
+        <div class="info-panel">
+          <h3>Selected node</h3>
+          <div id="info-content" class="info-empty">Click any node in the graph to inspect its properties and 2-hop neighbourhood.</div>
         </div>
       </div>
 
-      <h2>What this is</h2>
-      <p class="muted">A graph that places every artifact — a demo manifest, an AETHEL Connector page, a published paper, an ingested dataset, a generated hypothesis, a user-collaborator — on equal footing as nodes. Three classes of edges: <strong>provenance</strong> (output of A is input of B), <strong>similarity</strong> (shared tag/domain), <strong>inferred</strong> (AETHEL hypothesis).</p>
-
-      <h2>Live interactive graph</h2>
-      <p class="muted">The full interactive cross-domain graph is in development. The temporal dashboard at <a href="dashboard.html">/dashboard</a> shows the AETHEL evolution sub-graph; the per-demo 2-hop neighbourhood visualisation is on the <a href="concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph concept card</a>.</p>
-
-      <div class="stub">
-        <h3>Live interactive graph — coming in a later phase</h3>
-        <p>The full <code>/graph</code> route will render all demos, papers, datasets, and AETHEL Suite pages as nodes with provenance + similarity + inferred edges. Click any node to see its 2-hop neighbourhood; traverse the graph to discover related artifacts across scientific domains. Uses the existing <code>KnowledgeGraph.tsx</code> component as a starting point.</p>
-      </div>
-
       <div class="meta">
-        <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/graph.html</code>. Next.js route: <code>/graph</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+        <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/graph.html</code>. Next.js route: <code>/graph</code>. The force-directed layout is pure client-side JS. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>
+
     <script>
+      // ============================================================
+      // Particle background
+      // ============================================================
+      (function particles() {
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let W, H, parts = [];
+        const N = 60;
+        const colors = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+        resize(); window.addEventListener('resize', resize);
+        for (let i = 0; i < N; i++) {
+          parts.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-0.5)*0.25, vy: (Math.random()-0.5)*0.25, r: Math.random()*1.5+0.5, color: colors[Math.floor(Math.random()*colors.length)] });
+        }
+        function step() {
+          ctx.clearRect(0,0,W,H);
+          for (let i = 0; i < N; i++) {
+            const pi = parts[i];
+            for (let j = i+1; j < N; j++) {
+              const pj = parts[j];
+              const dx = pi.x-pj.x, dy = pi.y-pj.y;
+              const d = Math.sqrt(dx*dx+dy*dy);
+              if (d < 100) { ctx.strokeStyle = `rgba(139,92,246,${0.12*(1-d/100)})`; ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(pi.x,pi.y); ctx.lineTo(pj.x,pj.y); ctx.stroke(); }
+            }
+          }
+          for (const p of parts) {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+            ctx.fillStyle = p.color; ctx.globalAlpha = 0.5;
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+          requestAnimationFrame(step);
+        }
+        step();
+      })();
+
+      // ============================================================
+      // Cross-Domain Knowledge Graph — force-directed layout
+      // ============================================================
+      const NODES = [
+        // Demos
+        { id: 'demo:ols', type: 'demo', label: 'OLS demo', href: 'index.html#live-demo' },
+        { id: 'demo:nucleotide', type: 'demo', label: 'Nucleotide Analysis', href: 'demos/nucleotide-analysis.html' },
+        { id: 'demo:kmeans', type: 'demo', label: 'k-means (coming)', href: 'demos.html' },
+        { id: 'demo:md', type: 'demo', label: 'Molecular dynamics (coming)', href: 'demos.html' },
+        // Papers
+        { id: 'paper:Seber2003', type: 'paper', label: 'Seber 2003 (Linear Regression)' },
+        { id: 'paper:Verlet1967', type: 'paper', label: 'Verlet 1967 (MD)' },
+        { id: 'paper:Page1998', type: 'paper', label: 'Page 1998 (PageRank)' },
+        { id: 'paper:AlphaFold2021', type: 'paper', label: 'AlphaFold (Jumper 2021)' },
+        { id: 'paper:AlphaMissense2023', type: 'paper', label: 'AlphaMissense (Cheng 2023)' },
+        { id: 'paper:Arthur2007', type: 'paper', label: 'Arthur 2007 (k-means++)' },
+        // Datasets
+        { id: 'dataset:mtcars', type: 'dataset', label: 'mtcars' },
+        { id: 'dataset:ecoli-lacZ', type: 'dataset', label: 'E. coli lacZ (NC_000913.3)' },
+        { id: 'dataset:iris', type: 'dataset', label: 'iris (Fisher 1936)' },
+        { id: 'dataset:OpenAlex', type: 'dataset', label: 'OpenAlex' },
+        { id: 'dataset:PDB-1AKI', type: 'dataset', label: 'PDB 1AKI (lysozyme)' },
+        // AETHEL Suite
+        { id: 'aethel:connector', type: 'aethel', label: 'AETHEL Connector', href: 'index.html#live-demo' },
+        { id: 'aethel:connectors-hub', type: 'aethel', label: 'Scientific Connectors Hub', href: 'index.html#live-demo' },
+        { id: 'aethel:query', type: 'aethel', label: 'Query Executor', href: 'index.html#live-demo' },
+        { id: 'aethel:knowledge-graph', type: 'aethel', label: 'Knowledge Graph (this page)', href: 'graph.html' },
+        { id: 'aethel:workflows', type: 'aethel', label: 'Domain Workflows', href: 'index.html#live-demo' },
+        // Concept cards
+        { id: 'concept:replayable-traces', type: 'concept', label: 'Replayable Decision Traces', href: 'concepts/replayable-decision-traces.html' },
+        { id: 'concept:provenance-first', type: 'concept', label: 'Provenance-First', href: 'concepts/provenance-first.html' },
+        { id: 'concept:lazy-eval', type: 'concept', label: 'Lazy Evaluation as UX', href: 'concepts/lazy-evaluation.html' },
+        { id: 'concept:cross-domain', type: 'concept', label: 'Cross-Domain Graph (this concept)', href: 'concepts/cross-domain-graph.html' },
+        { id: 'concept:audience', type: 'concept', label: 'Audience Annotations', href: 'concepts/audience-annotations.html' },
+        { id: 'concept:provenance-chain', type: 'concept', label: 'Provenance Chain', href: 'concepts/provenance-chain.html' },
+        // Science hubs
+        { id: 'hub:biology', type: 'hub', label: 'Biology Hub', href: 'science-biology.html' },
+        { id: 'hub:chemistry', type: 'hub', label: 'Chemistry Hub', href: 'science-chemistry.html' },
+        { id: 'hub:physics', type: 'hub', label: 'Physics Hub', href: 'science-physics.html' },
+        { id: 'hub:maths', type: 'hub', label: 'Mathematics Hub', href: 'science-maths.html' },
+      ];
+      const EDGES = [
+        // demo uses dataset
+        ['demo:ols', 'dataset:mtcars', 'uses'],
+        ['demo:nucleotide', 'dataset:ecoli-lacZ', 'uses'],
+        ['demo:kmeans', 'dataset:iris', 'uses'],
+        // demo cites paper
+        ['paper:Seber2003', 'demo:ols', 'cites'],
+        ['paper:Arthur2007', 'demo:kmeans', 'cites'],
+        ['paper:Verlet1967', 'demo:md', 'cites'],
+        ['paper:Page1998', 'aethel:knowledge-graph', 'cites'],
+        ['paper:AlphaFold2021', 'aethel:connector', 'cites'],
+        ['paper:AlphaMissense2023', 'aethel:connector', 'cites'],
+        // demo hosted-by aethel
+        ['demo:ols', 'aethel:connector', 'hosted-by'],
+        ['demo:nucleotide', 'aethel:connector', 'hosted-by'],
+        ['demo:kmeans', 'aethel:connector', 'hosted-by'],
+        // demo shares-tag (similarity)
+        ['demo:ols', 'demo:kmeans', 'shares-tag:linear-algebra'],
+        ['demo:nucleotide', 'paper:AlphaFold2021', 'shares-domain:biology'],
+        ['demo:md', 'paper:Verlet1967', 'shares-domain:physics'],
+        // concept cards reference demos
+        ['concept:replayable-traces', 'demo:ols', 'applies-to'],
+        ['concept:replayable-traces', 'demo:nucleotide', 'applies-to'],
+        ['concept:provenance-first', 'demo:ols', 'applies-to'],
+        ['concept:provenance-first', 'demo:nucleotide', 'applies-to'],
+        ['concept:lazy-eval', 'demo:ols', 'applies-to'],
+        ['concept:cross-domain', 'aethel:knowledge-graph', 'instantiated-by'],
+        ['concept:audience', 'demo:ols', 'applies-to'],
+        ['concept:provenance-chain', 'demo:nucleotide', 'applies-to'],
+        // hubs contain
+        ['hub:biology', 'demo:nucleotide', 'contains'],
+        ['hub:biology', 'paper:AlphaFold2021', 'contains'],
+        ['hub:chemistry', 'paper:AlphaFold2021', 'cross-references'],
+        ['hub:physics', 'demo:md', 'contains'],
+        ['hub:physics', 'paper:Verlet1967', 'contains'],
+        ['hub:maths', 'demo:ols', 'contains'],
+        ['hub:maths', 'paper:Page1998', 'contains'],
+        // aethel suite cross-refs
+        ['aethel:connector', 'aethel:knowledge-graph', 'connected'],
+        ['aethel:connectors-hub', 'aethel:connector', 'part-of'],
+        ['aethel:query', 'aethel:knowledge-graph', 'queries'],
+        ['aethel:workflows', 'aethel:connector', 'orchestrates'],
+      ];
+
+      const COLORS = {
+        demo: '#06b6d4', paper: '#f59e0b', dataset: '#10b981',
+        aethel: '#8b5cf6', concept: '#ec4899', hub: '#3b82f6',
+      };
+      const TYPE_LABELS = {
+        demo: 'Live demo', paper: 'Research paper', dataset: 'Dataset',
+        aethel: 'AETHEL Suite', concept: 'Concept card', hub: 'Science hub',
+      };
+
+      // ---- Force-directed layout (simple) ----
+      const W = 900, H = 520;
+      const nodes = NODES.map(n => ({ ...n, x: W/2 + (Math.random()-0.5)*200, y: H/2 + (Math.random()-0.5)*200, vx: 0, vy: 0, r: n.type === 'hub' ? 14 : n.type === 'aethel' ? 12 : 9 }));
+      const nodeById = Object.fromEntries(nodes.map(n => [n.id, n]));
+      const edges = EDGES.map(([f, t, label]) => ({ from: f, to: t, label, source: nodeById[f], target: nodeById[t] }));
+
+      function tick() {
+        // Repulsion (Coulomb-like, O(n^2) but n is small)
+        for (let i = 0; i < nodes.length; i++) {
+          const a = nodes[i];
+          for (let j = i+1; j < nodes.length; j++) {
+            const b = nodes[j];
+            const dx = b.x - a.x, dy = b.y - a.y;
+            const d2 = dx*dx + dy*dy + 0.01;
+            const d = Math.sqrt(d2);
+            const f = 800 / d2;
+            const fx = (dx/d) * f, fy = (dy/d) * f;
+            a.vx -= fx; a.vy -= fy;
+            b.vx += fx; b.vy += fy;
+          }
+        }
+        // Attraction along edges (spring-like)
+        for (const e of edges) {
+          const dx = e.target.x - e.source.x, dy = e.target.y - e.source.y;
+          const d = Math.sqrt(dx*dx + dy*dy);
+          const f = (d - 80) * 0.02;
+          const fx = (dx/d) * f, fy = (dy/d) * f;
+          e.source.vx += fx; e.source.vy += fy;
+          e.target.vx -= fx; e.target.vy -= fy;
+        }
+        // Center pull + velocity damping + integration
+        for (const n of nodes) {
+          n.vx += (W/2 - n.x) * 0.005;
+          n.vy += (H/2 - n.y) * 0.005;
+          n.vx *= 0.85; n.vy *= 0.85;
+          n.x += n.vx; n.y += n.vy;
+          // Clamp
+          n.x = Math.max(20, Math.min(W-20, n.x));
+          n.y = Math.max(20, Math.min(H-20, n.y));
+        }
+      }
+
+      // ---- Render ----
+      const svg = document.getElementById('graph');
+      const statsEl = document.getElementById('graph-stats');
+      const infoEl = document.getElementById('info-content');
+      let selectedId = null;
+      let filterType = null;
+
+      function isVisible(n) {
+        if (!filterType) return true;
+        return n.type === filterType;
+      }
+      function edgeVisible(e) {
+        return isVisible(e.source) && isVisible(e.target);
+      }
+
+      function render() {
+        const parts = [];
+        // Edges
+        for (const e of edges) {
+          if (!edgeVisible(e)) continue;
+          const highlight = selectedId && (e.source.id === selectedId || e.target.id === selectedId);
+          const mid = `${(e.source.x + e.target.x) / 2},${(e.source.y + e.target.y) / 2}`;
+          parts.push(`<path class="edge ${highlight ? 'highlight' : ''}" d="M ${e.source.x} ${e.source.y} L ${e.target.x} ${e.target.y}" />`);
+          if (highlight) {
+            parts.push(`<text class="edge-label" x="${(e.source.x + e.target.x) / 2}" y="${(e.source.y + e.target.y) / 2 - 4}" text-anchor="middle">${e.label}</text>`);
+          }
+        }
+        // Nodes
+        for (const n of nodes) {
+          if (!isVisible(n)) continue;
+          const color = COLORS[n.type];
+          const isSel = selectedId === n.id;
+          const r = isSel ? n.r + 4 : n.r;
+          parts.push(`<g class="node" data-id="${n.id}" transform="translate(${n.x}, ${n.y})">`);
+          if (isSel) parts.push(`<circle r="${r+6}" fill="${color}" opacity="0.2"/>`);
+          parts.push(`<circle r="${r}" fill="${color}" stroke="${isSel ? 'white' : 'rgba(0,0,0,0.3)'}" stroke-width="${isSel ? 2 : 0.5}"/>`);
+          parts.push(`<text class="node-label" x="0" y="${-r - 6}" text-anchor="middle">${n.label}</text>`);
+          parts.push(`</g>`);
+        }
+        svg.innerHTML = parts.join('');
+        statsEl.textContent = `${nodes.filter(isVisible).length} nodes / ${edges.filter(edgeVisible).length} edges`;
+
+        // Wire click handlers
+        svg.querySelectorAll('.node').forEach(g => {
+          g.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedId = g.dataset.id;
+            render();
+            renderInfo();
+          });
+        });
+      }
+
+      function renderInfo() {
+        if (!selectedId) {
+          infoEl.className = 'info-empty';
+          infoEl.textContent = 'Click any node in the graph to inspect its properties and 2-hop neighbourhood.';
+          return;
+        }
+        const n = nodeById[selectedId];
+        if (!n) return;
+        // Find 1-hop neighbours
+        const neighbours = new Set();
+        for (const e of edges) {
+          if (e.source.id === n.id) neighbours.add(e.target.id);
+          if (e.target.id === n.id) neighbours.add(e.source.id);
+        }
+        const neighbourList = [...neighbours].map(id => {
+          const nb = nodeById[id];
+          return `<div style="margin: 4px 0;"><a data-id="${nb.id}" href="#" onclick="return false;">${nb.label}</a> <span style="color: var(--text-muted-2); font-size: 10px;">(${nb.type})</span></div>`;
+        }).join('');
+        infoEl.className = '';
+        infoEl.innerHTML = `
+          <div class="info-row">
+            <div class="l">Type</div>
+            <div class="v"><span style="display:inline-block; width:10px; height:10px; border-radius:9999px; background:${COLORS[n.type]}; margin-right:6px;"></span>${TYPE_LABELS[n.type]}</div>
+          </div>
+          <div class="info-row">
+            <div class="l">Label</div>
+            <div class="v">${n.label}</div>
+          </div>
+          <div class="info-row">
+            <div class="l">ID</div>
+            <div class="v" style="font-size: 11px;">${n.id}</div>
+          </div>
+          <div class="info-row">
+            <div class="l">1-hop neighbours</div>
+            <div class="neighbour-list" style="margin-top: 6px;">${neighbourList || '<span style="color: var(--text-muted-2);">none</span>'}</div>
+          </div>
+          ${n.href ? `<div class="info-row"><div class="l">Open</div><div class="v"><a href="${n.href}" style="color: var(--accent-2); text-decoration: none;">${n.href} &rarr;</a></div></div>` : ''}
+          <div class="stats-row">
+            <div class="stat"><div class="l">Total nodes</div><div class="v">${nodes.length}</div></div>
+            <div class="stat"><div class="l">Total edges</div><div class="v">${edges.length}</div></div>
+            <div class="stat"><div class="l">Neighbours</div><div class="v">${neighbours.size}</div></div>
+          </div>
+        `;
+        // Wire neighbour click
+        infoEl.querySelectorAll('a[data-id]').forEach(a => {
+          a.addEventListener('click', (e) => {
+            e.preventDefault();
+            selectedId = a.dataset.id;
+            render();
+            renderInfo();
+          });
+        });
+      }
+
+      // ---- Filter buttons ----
+      document.getElementById('filter-all').addEventListener('click', () => { filterType = null; updateFilterButtons(); render(); });
+      document.getElementById('filter-demo').addEventListener('click', () => { filterType = 'demo'; updateFilterButtons(); render(); });
+      document.getElementById('filter-paper').addEventListener('click', () => { filterType = 'paper'; updateFilterButtons(); render(); });
+      document.getElementById('filter-aethel').addEventListener('click', () => { filterType = 'aethel'; updateFilterButtons(); render(); });
+      document.getElementById('reheat').addEventListener('click', () => {
+        for (const n of nodes) { n.vx = (Math.random()-0.5)*30; n.vy = (Math.random()-0.5)*30; }
+      });
+      function updateFilterButtons() {
+        document.querySelectorAll('.graph-controls .btn').forEach(b => {
+          const id = b.id.replace('filter-', '').replace('reheat', '');
+          if (b.id === 'reheat') return;
+          b.classList.toggle('active', (id === 'all' && !filterType) || id === filterType);
+        });
+      }
+
+      // ---- Drag (simple — drag the closest node) ----
+      let dragNode = null;
+      svg.addEventListener('mousedown', (e) => {
+        const pt = svg.createSVGPoint();
+        pt.x = e.clientX; pt.y = e.clientY;
+        const ctm = svg.getScreenCTM();
+        if (!ctm) return;
+        const inv = ctm.inverse();
+        const local = pt.matrixTransform(inv);
+        // Find closest node within radius
+        let closest = null, closestDist = Infinity;
+        for (const n of nodes) {
+          if (!isVisible(n)) continue;
+          const d = Math.sqrt((n.x - local.x)**2 + (n.y - local.y)**2);
+          if (d < n.r + 6 && d < closestDist) { closest = n; closestDist = d; }
+        }
+        if (closest) {
+          dragNode = closest;
+          e.preventDefault();
+        }
+      });
+      svg.addEventListener('mousemove', (e) => {
+        if (!dragNode) return;
+        const pt = svg.createSVGPoint();
+        pt.x = e.clientX; pt.y = e.clientY;
+        const ctm = svg.getScreenCTM();
+        if (!ctm) return;
+        const inv = ctm.inverse();
+        const local = pt.matrixTransform(inv);
+        dragNode.x = local.x; dragNode.y = local.y;
+        dragNode.vx = 0; dragNode.vy = 0;
+      });
+      svg.addEventListener('mouseup', () => { dragNode = null; });
+      svg.addEventListener('mouseleave', () => { dragNode = null; });
+
+      // ---- Animate ----
+      function loop() {
+        tick();
+        render();
+        requestAnimationFrame(loop);
+      }
+      // Initial settle: 200 ticks before showing
+      for (let i = 0; i < 200; i++) tick();
+      render();
+      renderInfo();
+      updateFilterButtons();
+      loop();
+
+      // ---- Ribbon theme toggle ----
       (function setupRibbonTheme() {
         const KEY = 'aihpc-theme';
         const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');

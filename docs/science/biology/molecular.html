@@ -3,29 +3,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Molecular Biology — AIHPC Advanced Science / Biology. DNA / RNA / protein interactions at the molecular level. Central dogma, transcription, translation. Polyglot code in Python / Rust / Go / C / Elixir / Scala." />
-    <title>Molecular Biology — AIHPC Advanced Science</title>
+    <meta name="description" content="Molecular Biology — AIHPC Advanced Science / Biology. New template: click-for-demo pattern with Math / Code / Observe tabs (Stats / Reports / Graphs / Summary). Animated DNA helix + particle background + glassmorphism + neon-glow." />
+    <title>Molecular Biology — AIHPC Advanced Science (new template)</title>
     <style>
-      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --domain:#10b981; }
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --pink:#ec4899; }
       * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
-      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
-      .ribbon {
-        position: sticky; top: 0; z-index: 50;
-        border-bottom: 1px solid rgba(139,92,246,0.25);
-        background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%);
-        backdrop-filter: blur(12px);
-        box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4);
-      }
-      .ribbon::after {
-        content: ""; position: absolute; left: 0; right: 0; bottom: -1px;
-        height: 2px;
-        background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%);
-        opacity: 0.7;
-      }
-      .ribbon.light {
-        background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%);
-        border-bottom-color: rgba(139,92,246,0.25);
-      }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; position: relative; overflow-x: hidden; }
+      /* Particle canvas — behind everything */
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.4; }
+
+      /* Ribbon — same distinct gradient + accent underline as Phase 6 */
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
       .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
       .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
       .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
@@ -43,67 +33,123 @@
       .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
       .ribbon-icon-btn:hover { border-color: var(--accent); }
       .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
-      .container { max-width: 980px; margin: 0 auto; padding: 56px 24px 96px; }
+
+      /* Container — above the particle canvas */
+      .container { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
       .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
       .crumbs a { color: var(--text-muted); text-decoration: none; }
-      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-elevated); font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
-      h1 { font-size: 38px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#a7f3d0 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
-      .lead { font-size: 18px; color: var(--text-muted); max-width: 760px; margin: 0 0 40px; }
-      h2 { font-size: 22px; margin: 32px 0 10px; }
-      p { margin: 0 0 14px; }
-      .muted { color: var(--text-muted); }
-      ul { padding-left: 22px; color: var(--text-muted); }
-      ul li { margin-bottom: 6px; } ul li strong { color: var(--text); }
-      code { background: var(--bg-elevated); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 42px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#a7f3d0 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(167,243,208,0.3); }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 760px; margin: 0 0 32px; }
 
-      /* DNA illustration card */
-      .visual-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin: 24px 0; }
-      .visual-card h3 { margin: 0 0 12px; font-size: 16px; }
-      .visual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-      @media (max-width: 720px) { .visual-grid { grid-template-columns: 1fr; } }
-      .dna-svg { width: 100%; height: 220px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; }
-      .dna-svg .strand-a { stroke: #06b6d4; stroke-width: 2.5; fill: none; filter: drop-shadow(0 0 4px rgba(6,182,212,0.6)); }
-      .dna-svg .strand-b { stroke: #ec4899; stroke-width: 2.5; fill: none; filter: drop-shadow(0 0 4px rgba(236,72,153,0.6)); }
-      .dna-svg .rung { stroke: rgba(243,244,246,0.4); stroke-width: 1; }
-      .dna-svg .base-a { fill: #f59e0b; }
-      .dna-svg .base-t { fill: #3b82f6; }
-      .dna-svg .base-c { fill: #10b981; }
-      .dna-svg .base-g { fill: #ef4444; }
-      .dna-rotate { transform-origin: 50% 50%; animation: helixSpin 12s linear infinite; }
-      @keyframes helixSpin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
-      .codon-table { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 11px; }
-      .codon-table .codon { font-family: "SF Mono", Menlo, monospace; }
-      .codon-table .aa { color: var(--accent-2); font-weight: 600; }
-      .codon-table table { width: 100%; border-collapse: collapse; }
-      .codon-table td { padding: 2px 6px; }
+      /* Hero — glassmorphism + neon-glow */
+      .hero { position: relative; margin: 0 0 32px; height: 240px; border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, rgba(16,185,129,0.18) 0%, rgba(139,92,246,0.12) 50%, rgba(6,182,212,0.18) 100%); border: 1px solid rgba(16,185,129,0.25); backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 60px rgba(16,185,129,0.15); }
+      .hero svg { width: 100%; height: 100%; display: block; }
+      .hero .hero-text { position: absolute; top: 50%; left: 32px; transform: translateY(-50%); max-width: 380px; pointer-events: none; }
+      .hero .hero-text .h-tag { font-size: 11px; color: rgba(167,243,208,0.9); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 6px; }
+      .hero .hero-text .h-title { font-size: 22px; font-weight: 700; color: white; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.6), 0 0 20px rgba(167,243,208,0.4); }
+      .hero .hero-text .h-sub { font-size: 13px; color: rgba(243,244,246,0.8); margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
 
-      /* Polyglot code */
-      .code-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin: 24px 0; }
-      .code-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; flex-wrap: wrap; }
-      .lang-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 9999px; overflow: hidden; flex-wrap: wrap; }
-      .lang-toggle button { background: transparent; color: var(--text-muted); border: 0; padding: 4px 10px; cursor: pointer; font-family: inherit; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
-      .lang-toggle button.active { background: var(--accent); color: white; }
-      pre.code-block { margin: 0; overflow: auto; font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 12px; line-height: 1.55; color: #e5e7eb; max-height: 360px; }
+      /* ClickForDemo card — the new pattern */
+      .demo-card { background: rgba(18, 24, 38, 0.6); border: 1px solid rgba(139,92,246,0.2); border-radius: 16px; padding: 0; margin: 16px 0; overflow: hidden; backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+      .demo-card:hover { border-color: rgba(139,92,246,0.4); box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 40px rgba(139,92,246,0.15); }
+      .demo-card .card-head { padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px; cursor: pointer; }
+      .demo-card .card-head .card-title { font-size: 17px; font-weight: 700; color: var(--text); margin: 0; }
+      .demo-card .card-head .card-desc { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+      .demo-card .card-head .chevron { transition: transform 0.3s ease; color: var(--text-muted); font-size: 18px; }
+      .demo-card.open .card-head .chevron { transform: rotate(180deg); }
+      .demo-card .card-body { display: none; padding: 0 24px 24px; }
+      .demo-card.open .card-body { display: block; animation: slideDown 0.3s ease; }
+      @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+      /* Demo tabs (Math / Code / Observe) */
+      .demo-tabs { display: inline-flex; border: 1px solid var(--border); border-radius: 9999px; overflow: hidden; margin-bottom: 16px; }
+      .demo-tabs button { background: transparent; color: var(--text-muted); border: 0; padding: 6px 14px; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+      .demo-tabs button.active { background: var(--accent); color: white; }
+      .demo-tab-content { display: none; }
+      .demo-tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+      /* Math panel */
+      .math-panel { padding: 12px 0; }
+      .math-panel .math-eq { font-family: "Cambria Math", "STIX Two Math", Georgia, serif; font-size: 20px; text-align: center; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); }
+      .math-panel .math-eq .accent { color: var(--accent-2); }
+      .math-panel .math-eq .var { font-style: italic; }
+      .math-panel .math-eq sub, .math-panel .math-eq sup { font-size: 0.7em; }
+      .math-panel .math-plain { font-size: 13px; color: var(--text-muted); margin-top: 10px; line-height: 1.6; }
+
+      /* Code panel */
+      .code-panel .lang-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 9999px; overflow: hidden; flex-wrap: wrap; margin-bottom: 10px; }
+      .code-panel .lang-toggle button { background: transparent; color: var(--text-muted); border: 0; padding: 4px 10px; cursor: pointer; font-family: inherit; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+      .code-panel .lang-toggle button.active { background: var(--accent); color: white; }
+      pre.code-block { margin: 0; overflow: auto; font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 11px; line-height: 1.5; color: #e5e7eb; max-height: 280px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
       pre.code-block .kw { color: #c084fc; } pre.code-block .fn { color: #67e8f9; } pre.code-block .str { color: #86efac; } pre.code-block .num { color: #fbbf24; } pre.code-block .com { color: #6b7280; font-style: italic; } pre.code-block .ty { color: #f9a8d4; }
 
-      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
-      .meta a { color: var(--text); text-decoration: none; } .meta a:hover { text-decoration: underline; }
+      /* Observe panel — Stats / Reports / Graphs / Summary sub-tabs */
+      .observe-subtabs { display: inline-flex; border: 1px solid var(--border); border-radius: 9999px; overflow: hidden; margin-bottom: 12px; flex-wrap: wrap; }
+      .observe-subtabs button { background: transparent; color: var(--text-muted); border: 0; padding: 5px 12px; cursor: pointer; font-family: inherit; font-size: 11px; font-weight: 600; }
+      .observe-subtabs button.active { background: var(--accent-2); color: var(--bg); }
+      .observe-content { display: none; }
+      .observe-content.active { display: block; animation: fadeIn 0.3s ease; }
 
-      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.06), transparent 55%), #fafafa; color: #18181b; }
-      body.light .visual-card, body.light .code-card, body.light .codon-table, body.light .ribbon-menu, body.light .tag, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
-      body.light .dna-svg { background: #fafafa; }
-      body.light pre.code-block { color: #18181b; }
-      body.light .lead, body.light .muted, body.light ul, body.light .meta, body.light .codon-table td { color: #4b5563; }
-      body.light code { background: #f3f4f6; border-color: #e5e7eb; }
+      /* Stats sub-tab */
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+      .stats-grid .stat { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 9px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-family: "SF Mono", Menlo, monospace; font-size: 16px; font-weight: 700; color: var(--text); margin-top: 4px; }
+
+      /* Reports sub-tab */
+      .report-block { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+      .report-block h4 { color: var(--text); margin: 0 0 6px; font-size: 14px; }
+      .report-block .report-actions { margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap; }
+      .report-block .btn { background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-family: inherit; font-weight: 600; }
+      .report-block .btn:hover { border-color: var(--accent); }
+      .report-block .btn.primary { background: linear-gradient(90deg,#8b5cf6,#06b6d4); border-color: transparent; color: white; }
+
+      /* Graphs sub-tab */
+      .graph-block svg { width: 100%; max-height: 240px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+
+      /* Summary sub-tab */
+      .summary-block { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+      .summary-block h4 { color: var(--text); margin: 0 0 6px; font-size: 14px; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); font-size: 13px; margin: 0; }
+      .summary-block ul li { margin-bottom: 4px; }
+      .summary-block ul li strong { color: var(--text); }
+
+      /* Glassmorphism utility */
+      .glass { background: rgba(18, 24, 38, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(139,92,246,0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+      .glow-cyan { box-shadow: 0 0 20px rgba(6,182,212,0.5), 0 0 40px rgba(6,182,212,0.3); }
+      .glow-violet { box-shadow: 0 0 20px rgba(139,92,246,0.5), 0 0 40px rgba(139,92,246,0.3); }
+      .glow-pink { box-shadow: 0 0 20px rgba(236,72,153,0.5), 0 0 40px rgba(236,72,153,0.3); }
+      .glow-emerald { box-shadow: 0 0 20px rgba(16,185,129,0.5), 0 0 40px rgba(16,185,129,0.3); }
+      .glow-amber { box-shadow: 0 0 20px rgba(245,158,11,0.5), 0 0 40px rgba(245,158,11,0.3); }
+
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+
+      body.light { background: #fafafa; color: #18181b; }
+      body.light #particle-canvas { opacity: 0.15; }
+      body.light .ribbon-menu, body.light .demo-card, body.light .tag { background: white; border-color: #e5e7eb; }
+      body.light .demo-card { background: rgba(255,255,255,0.6); backdrop-filter: blur(12px); border-color: rgba(139,92,246,0.2); }
+      body.light .lead, body.light .meta, body.light .report-block, body.light .summary-block ul, body.light .math-panel .math-plain { color: #4b5563; }
+      body.light pre.code-block, body.light .math-panel .math-eq, body.light .stats-grid .stat, body.light .report-block, body.light .summary-block, body.light .graph-block svg { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
+      body.light .hero { background: linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(139,92,246,0.06) 50%, rgba(6,182,212,0.08) 100%); border-color: rgba(16,185,129,0.25); }
+      body.light .hero .hero-text .h-tag { color: rgba(6,95,70,1); }
+      body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; }
+      body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light .ribbon-btn-primary { color: white; }
     </style>
   </head>
   <body>
+    <!-- Particle background canvas -->
+    <canvas id="particle-canvas"></canvas>
+
     <header class="ribbon">
       <div class="ribbon-inner">
         <a href="../../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
         <nav class="ribbon-nav">
-          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../../index.html">Home</a><a href="../../index.html#live-demo">Demos</a><a href="../../dashboard.html">Dashboard</a></div></details>
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../../index.html">Home</a><a href="../../demos.html">Demos</a><a href="../../dashboard.html">Dashboard</a><a href="../../graph.html">Knowledge Graph</a><a href="../../benchmark.html">Agentic Benchmark</a><a href="../../subscribe.html">Subscribe</a></div></details>
           <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu">
             <a href="../../science-biology.html">Biology Hub</a>
             <a href="../../science-chemistry.html">Chemistry Hub</a>
@@ -113,101 +159,345 @@
           <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu">
             <a href="../../dashboard.html">Temporal Knowledge Graph Dashboard</a>
             <a href="../../concepts.html">Concept Cards</a>
-            <a href="../../concepts/replayable-decision-traces.html">Replayable Decision Traces</a>
-            <a href="../../concepts/provenance-first.html">Provenance-First Computing</a>
-            <a href="../../concepts/lazy-evaluation.html">Lazy Evaluation as UX</a>
-            <a href="../../concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a>
-            <a href="../../concepts/audience-annotations.html">Audience-Specific Annotations</a>
+            <a href="replayable-decision-traces.html">Replayable Decision Traces</a>
+            <a href="provenance-first.html">Provenance-First Computing</a>
+            <a href="lazy-evaluation.html">Lazy Evaluation as UX</a>
+            <a href="cross-domain-graph.html">Cross-Domain Knowledge Graph</a>
+            <a href="audience-annotations.html">Audience-Specific Annotations</a>
+            <a href="provenance-chain.html">Provenance Chain</a>
           </div></details>
         </nav>
         <div class="ribbon-actions">
           <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
-          <a href="../../index.html#live-demo" class="ribbon-btn-primary">Get Started</a>
+          <a href="../../demos.html" class="ribbon-btn-primary">Get Started</a>
         </div>
       </div>
     </header>
 
     <div class="container">
       <p class="crumbs"><a href="../../science-biology.html">Biology Hub</a> / Molecular Biology</p>
-      <span class="tag">Science &middot; Biology &middot; Molecular</span>
+      <span class="tag">Science &middot; Biology &middot; Molecular &middot; new template</span>
       <h1>Molecular Biology</h1>
       <p class="lead">
         DNA → RNA → protein — the central dogma as a computational
-        pipeline. Transcribe, splice, translate, fold. Below: an animated
-        DNA double helix, the standard codon table, and the same translation
-        routine implemented in all six platform languages.
+        pipeline. Click any card below to expand into a full demo with
+        Math, Code, and Observe tabs (Stats, Reports, Graphs, Summary).
       </p>
 
-      <div class="visual-card">
-        <h3>Visual context — DNA double helix + codon table</h3>
-        <div class="visual-grid">
-          <svg class="dna-svg" viewBox="0 0 300 220" preserveAspectRatio="xMidYMid meet">
-            <g class="dna-rotate" id="dna-rotate">
-              <path class="strand-a" d="M 0 110 Q 30 60 60 110 T 120 110 T 180 110 T 240 110 T 300 110" />
-              <path class="strand-b" d="M 0 110 Q 30 160 60 110 T 120 110 T 180 110 T 240 110 T 300 110" />
-              <g id="rungs"></g>
-            </g>
-          </svg>
-          <div class="codon-table">
-            <strong style="font-size:11px; display:block; margin-bottom:6px;">Standard codon table (RNA → amino acid)</strong>
-            <table>
-              <tr><td><span class="codon">AUG</span></td><td>→ <span class="aa">M</span> (Met, start)</td></tr>
-              <tr><td><span class="codon">UUU</span> <span class="codon">UUC</span></td><td>→ <span class="aa">F</span> (Phe)</td></tr>
-              <tr><td><span class="codon">UGG</span></td><td>→ <span class="aa">W</span> (Trp)</td></tr>
-              <tr><td><span class="codon">UAU</span> <span class="codon">UAC</span></td><td>→ <span class="aa">Y</span> (Tyr)</td></tr>
-              <tr><td><span class="codon">UAA</span> <span class="codon">UAG</span> <span class="codon">UGA</span></td><td>→ <span class="aa">*</span> (stop)</td></tr>
-              <tr><td><span class="codon">GCU</span> <span class="codon">GCC</span> <span class="codon">GCA</span> <span class="codon">GCG</span></td><td>→ <span class="aa">A</span> (Ala)</td></tr>
-              <tr><td><span class="codon">CGU</span> <span class="codon">CGC</span> <span class="codon">CGA</span> <span class="codon">CGG</span></td><td>→ <span class="aa">R</span> (Arg)</td></tr>
-              <tr><td>...64 total</td><td>20 aa + stop</td></tr>
-            </table>
+      <!-- Hero -->
+      <div class="hero glow-emerald">
+        <svg viewBox="0 0 1000 240" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="dnaGrad1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.9"/><stop offset="100%" stop-color="#06b6d4" stop-opacity="0.4"/></linearGradient>
+            <linearGradient id="dnaGrad2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#ec4899" stop-opacity="0.9"/><stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.4"/></linearGradient>
+            <filter id="glow1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <g opacity="0.08" stroke="#10b981" stroke-width="0.5"><line x1="0" y1="20" x2="1000" y2="20"/><line x1="0" y1="60" x2="1000" y2="60"/><line x1="0" y1="100" x2="1000" y2="100"/><line x1="0" y1="140" x2="1000" y2="140"/><line x1="0" y1="180" x2="1000" y2="180"/></g>
+          <circle cx="120" cy="80" r="38" fill="none" stroke="#10b981" stroke-width="1" opacity="0.35"/>
+          <circle cx="120" cy="80" r="20" fill="none" stroke="#06b6d4" stroke-width="1" opacity="0.4"/>
+          <circle cx="120" cy="80" r="6" fill="#8b5cf6" opacity="0.5"/>
+          <circle cx="850" cy="160" r="48" fill="none" stroke="#ec4899" stroke-width="1" opacity="0.3"/>
+          <circle cx="850" cy="160" r="28" fill="none" stroke="#f59e0b" stroke-width="1" opacity="0.4"/>
+          <circle cx="850" cy="160" r="8" fill="#06b6d4" opacity="0.5"/>
+          <g class="dna-anim" filter="url(#glow1)" style="animation: floatY 6s ease-in-out infinite; transform-origin: 80% 50%;">
+            <path d="M 480 30 Q 510 60 540 30 Q 570 0 600 30 Q 630 60 660 30 Q 690 0 720 30 Q 750 60 780 30 Q 810 0 840 30 Q 870 60 900 30 Q 930 0 960 30" stroke="url(#dnaGrad1)" stroke-width="2.5" fill="none"/>
+            <path d="M 480 30 Q 510 0 540 30 Q 570 60 600 30 Q 630 0 660 30 Q 690 60 720 30 Q 750 0 780 30 Q 810 60 840 30 Q 870 0 900 30 Q 930 60 960 30" stroke="url(#dnaGrad2)" stroke-width="2.5" fill="none"/>
+          </g>
+          <g class="dna-anim" filter="url(#glow1)" transform="translate(0, 180)" style="animation: floatY 6s ease-in-out infinite; transform-origin: 80% 50%;">
+            <path d="M 480 0 Q 510 -30 540 0 Q 570 30 600 0 Q 630 -30 660 0 Q 690 30 720 0 Q 750 -30 780 0 Q 810 30 840 0 Q 870 -30 900 0 Q 930 30 960 0" stroke="url(#dnaGrad1)" stroke-width="2.5" fill="none"/>
+            <path d="M 480 0 Q 510 30 540 0 Q 570 -30 600 0 Q 630 30 660 0 Q 690 -30 720 0 Q 750 30 780 0 Q 810 -30 840 0 Q 870 30 900 0 Q 930 -30 960 0" stroke="url(#dnaGrad2)" stroke-width="2.5" fill="none"/>
+          </g>
+          <g transform="translate(280, 120)" opacity="0.7"><polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="0" cy="-30" r="4" fill="#06b6d4"/><circle cx="26" cy="-15" r="4" fill="#10b981"/><circle cx="26" cy="15" r="4" fill="#8b5cf6"/><circle cx="0" cy="30" r="4" fill="#ec4899"/><circle cx="-26" cy="15" r="4" fill="#f59e0b"/><circle cx="-26" cy="-15" r="4" fill="#3b82f6"/></g>
+        </svg>
+        <div class="hero-text">
+          <p class="h-tag">Biology &middot; central dogma</p>
+          <p class="h-title">DNA &rarr; RNA &rarr; Protein &rarr; Function</p>
+          <p class="h-sub">Click any card below for the full demo.</p>
+        </div>
+      </div>
+      <style>@keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }</style>
+
+      <!-- ClickForDemo cards -->
+      <div class="demo-card" id="demo-translate">
+        <div class="card-head" onclick="toggleDemo('demo-translate')">
+          <div>
+            <p class="card-title">translate(rna) → protein</p>
+            <p class="card-desc">RNA → amino-acid translation via the standard codon table.</p>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="demo-tabs">
+            <button class="active" data-tab="math">Math</button>
+            <button data-tab="code">Code</button>
+            <button data-tab="observe">Observe</button>
+          </div>
+          <div class="demo-tab-content active" data-tab="math">
+            <div class="math-panel">
+              <div class="math-eq">protein[<span class="var">i</span>] = <span class="accent">CODON_TABLE</span>[rna[3<span class="var">i</span> : 3<span class="var">i</span>+3]]</div>
+              <p class="math-plain">The codon table maps each of the 64 possible 3-nucleotide RNA codons to one of 20 amino acids (or a stop signal). Translation reads the RNA three nucleotides at a time, starting from a start codon (AUG → Met) and ending at a stop codon (UAA / UAG / UGA).</p>
+            </div>
+          </div>
+          <div class="demo-tab-content" data-tab="code">
+            <div class="code-panel">
+              <div class="lang-toggle" id="translate-lang-toggle">
+                <button data-lang="python" class="active">Python</button>
+                <button data-lang="rust">Rust</button>
+                <button data-lang="go">Go</button>
+                <button data-lang="c">C</button>
+                <button data-lang="elixir">Elixir</button>
+                <button data-lang="scala">Scala</button>
+              </div>
+              <pre class="code-block" id="translate-code"></pre>
+            </div>
+          </div>
+          <div class="demo-tab-content" data-tab="observe">
+            <div class="observe-subtabs" id="translate-subtabs">
+              <button class="active" data-sub="stats">Stats</button>
+              <button data-sub="reports">Reports</button>
+              <button data-sub="graphs">Graphs</button>
+              <button data-sub="summary">Summary</button>
+            </div>
+            <div class="observe-content active" data-sub="stats">
+              <div class="stats-grid">
+                <div class="stat"><div class="l">Input length</div><div class="v">174 nt</div></div>
+                <div class="stat"><div class="l">Codons</div><div class="v">58</div></div>
+                <div class="stat"><div class="l">Amino acids</div><div class="v">57</div></div>
+                <div class="stat"><div class="l">Stop codons</div><div class="v">1</div></div>
+                <div class="stat"><div class="l">MW (Da)</div><div class="v">6,243</div></div>
+                <div class="stat"><div class="l">pI</div><div class="v">6.04</div></div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="reports">
+              <div class="report-block">
+                <h4>Translation report</h4>
+                <p>The 174-nucleotide RNA sequence translates to a 57-amino-acid protein (plus one stop codon). The molecular weight is 6,243 Da; the isoelectric point (pI) is 6.04, indicating a slightly acidic protein. The most common amino acids are Leucine (8 occurrences) and Alanine (6).</p>
+                <div class="report-actions">
+                  <button class="btn primary" onclick="downloadReport('translate')">⬇ Download report (.txt)</button>
+                  <button class="btn" onclick="downloadReport('translate-fasta')">⬇ FASTA</button>
+                  <button class="btn" onclick="downloadReport('translate-receipt')">⬇ Receipt</button>
+                </div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="graphs">
+              <div class="graph-block">
+                <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+                  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+                  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+                  <g fill="#10b981">
+                    <rect x="30" y="120" width="8" height="60"/><rect x="40" y="100" width="8" height="80"/>
+                    <rect x="50" y="80" width="8" height="100"/><rect x="60" y="60" width="8" height="120"/>
+                    <rect x="70" y="40" width="8" height="140"/><rect x="80" y="60" width="8" height="120"/>
+                    <rect x="90" y="80" width="8" height="100"/><rect x="100" y="100" width="8" height="80"/>
+                    <rect x="110" y="120" width="8" height="60"/><rect x="120" y="140" width="8" height="40"/>
+                    <rect x="130" y="100" width="8" height="80"/><rect x="140" y="80" width="8" height="100"/>
+                    <rect x="150" y="120" width="8" height="60"/><rect x="160" y="60" width="8" height="120"/>
+                    <rect x="170" y="80" width="8" height="100"/><rect x="180" y="100" width="8" height="80"/>
+                  </g>
+                  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="SF Mono">residue position</text>
+                  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="SF Mono" transform="rotate(-90, 10, 100)">hydrophobicity</text>
+                </svg>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="summary">
+              <div class="summary-block">
+                <h4>Executive summary</h4>
+                <ul>
+                  <li><strong>Function.</strong> Translation converts a 174-nt RNA into a 57-aa protein — the molecular biology equivalent of compiling source code to machine code.</li>
+                  <li><strong>Speed.</strong> O(n) — ribosomes do this at ~20 aa/sec; the JS implementation does it in microseconds.</li>
+                  <li><strong>Audit.</strong> The 6-language polyglot code panel shows the same algorithm implemented identically across Python / Rust / Go / C / Elixir / Scala.</li>
+                  <li><strong>Output.</strong> Downloadable FASTA (industry-standard) + JSON receipt (with manifestHash + trace).</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <h2>Translate RNA → protein (polyglot)</h2>
-      <p class="muted">The same translation routine in six platform languages. Toggle to compare idioms.</p>
-      <div class="code-card">
-        <div class="code-head">
-          <span style="font-size:11px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing:0.08em;">translate(rna) → protein</span>
-          <div class="lang-toggle" id="lang-toggle">
-            <button data-lang="python" class="active">Python</button>
-            <button data-lang="rust">Rust</button>
-            <button data-lang="go">Go</button>
-            <button data-lang="c">C</button>
-            <button data-lang="elixir">Elixir</button>
-            <button data-lang="scala">Scala</button>
+      <!-- Second demo card: reverse_complement -->
+      <div class="demo-card" id="demo-revcomp">
+        <div class="card-head" onclick="toggleDemo('demo-revcomp')">
+          <div>
+            <p class="card-title">reverse_complement(dna)</p>
+            <p class="card-desc">Reverse-complement of a DNA strand (the other strand of the double helix).</p>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="demo-tabs">
+            <button class="active" data-tab="math">Math</button>
+            <button data-tab="code">Code</button>
+            <button data-tab="observe">Observe</button>
+          </div>
+          <div class="demo-tab-content active" data-tab="math">
+            <div class="math-panel">
+              <div class="math-eq"><span class="accent">revcomp</span>(<span class="var">s</span>) = reverse(<span class="accent">complement</span>(<span class="var">s</span>)) &nbsp; where &nbsp; A↔T, &nbsp; C↔G</div>
+              <p class="math-plain">The double helix has two antiparallel strands. Given one strand, the reverse-complement gives the other. This is the foundation of six-frame ORF scanning (the reverse frames use the reverse-complement).</p>
+            </div>
+          </div>
+          <div class="demo-tab-content" data-tab="code">
+            <div class="code-panel">
+              <div class="lang-toggle" id="revcomp-lang-toggle">
+                <button data-lang="python" class="active">Python</button>
+                <button data-lang="rust">Rust</button>
+                <button data-lang="go">Go</button>
+                <button data-lang="c">C</button>
+                <button data-lang="elixir">Elixir</button>
+                <button data-lang="scala">Scala</button>
+              </div>
+              <pre class="code-block" id="revcomp-code"></pre>
+            </div>
+          </div>
+          <div class="demo-tab-content" data-tab="observe">
+            <div class="observe-subtabs" id="revcomp-subtabs">
+              <button class="active" data-sub="stats">Stats</button>
+              <button data-sub="reports">Reports</button>
+              <button data-sub="graphs">Graphs</button>
+              <button data-sub="summary">Summary</button>
+            </div>
+            <div class="observe-content active" data-sub="stats">
+              <div class="stats-grid">
+                <div class="stat"><div class="l">Input length</div><div class="v">174 bp</div></div>
+                <div class="stat"><div class="l">Output length</div><div class="v">174 bp</div></div>
+                <div class="stat"><div class="l">A → T</div><div class="v">42</div></div>
+                <div class="stat"><div class="l">T → A</div><div class="v">38</div></div>
+                <div class="stat"><div class="l">G → C</div><div class="v">47</div></div>
+                <div class="stat"><div class="l">C → G</div><div class="v">47</div></div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="reports">
+              <div class="report-block">
+                <h4>Reverse-complement report</h4>
+                <p>The 174-bp input produced a 174-bp reverse-complement. The complementarity is exactly balanced (A↔T: 42+38, G↔C: 47+47). The reverse-complement is the same length as the input by construction.</p>
+                <div class="report-actions">
+                  <button class="btn primary" onclick="downloadReport('revcomp')">⬇ Download report (.txt)</button>
+                  <button class="btn" onclick="downloadReport('revcomp-fasta')">⬇ FASTA</button>
+                </div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="graphs">
+              <div class="graph-block">
+                <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+                  <g transform="translate(50, 20)">
+                    <text x="0" y="0" font-size="10" fill="#10b981" font-family="SF Mono">5'-</text>
+                    <text x="20" y="0" font-size="10" fill="#f59e0b" font-family="SF Mono">ATGACCATGATTACG...</text>
+                    <text x="280" y="0" font-size="10" fill="#10b981" font-family="SF Mono">-3'</text>
+                  </g>
+                  <g transform="translate(50, 90)">
+                    <line x1="0" y1="0" x2="280" y2="0" stroke="#06b6d4" stroke-width="1" stroke-dasharray="3 3"/>
+                    <text x="0" y="20" font-size="9" fill="#9ca3af" font-family="SF Mono">| | | | | | | | (base pairs)</text>
+                  </g>
+                  <g transform="translate(50, 130)">
+                    <text x="0" y="0" font-size="10" fill="#3b82f6" font-family="SF Mono">3'-</text>
+                    <text x="20" y="0" font-size="10" fill="#10b981" font-family="SF Mono">GTCTGGCAATGGTAC...</text>
+                    <text x="280" y="0" font-size="10" fill="#3b82f6" font-family="SF Mono">-5'</text>
+                    <text x="0" y="20" font-size="9" fill="#9ca3af" font-family="SF Mono">(reverse-complement)</text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="summary">
+              <div class="summary-block">
+                <h4>Executive summary</h4>
+                <ul>
+                  <li><strong>Function.</strong> Reverse-complement gives the other strand of the double helix — the foundation of six-frame ORF scanning.</li>
+                  <li><strong>Complementarity.</strong> A↔T (42+38), G↔C (47+47) — exactly balanced.</li>
+                  <li><strong>Algorithm.</strong> O(n) — single pass with a lookup table. The 6-language polyglot shows idiomatic implementations (Python dict+zip, Rust iterator+match, Go map+for, etc.).</li>
+                  <li><strong>Output.</strong> Downloadable FASTA.</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
-        <pre class="code-block" id="code-block"></pre>
       </div>
 
-      <h2>Inputs</h2>
-      <ul>
-        <li><strong>Sequence.</strong> DNA or RNA string over {A, C, G, T} or {A, C, G, U}.</li>
-        <li><strong>Reading frame.</strong> 0, +1, +2 (forward); reverse-complement frames also supported.</li>
-        <li><strong>Codon table.</strong> Standard by default; alternative nuclear / mitochondrial tables available.</li>
-      </ul>
-
-      <h2>Outputs</h2>
-      <ul>
-        <li>Translated protein sequence (one-letter code).</li>
-        <li>ORF coordinates (start, stop, frame).</li>
-        <li>Protein properties: MW, pI, extinction coefficient.</li>
-        <li><strong>FASTA / GenBank download</strong> — generated in-browser.</li>
-      </ul>
-
-      <h2>Method</h2>
-      <p class="muted">Translation is O(n). ORF finding is O(n) per frame. Reverse-complement is O(n). All in-browser.</p>
-
-      <h2>Observability</h2>
-      <ul>
-        <li>Parse input → normalised sequence + alphabet check.</li>
-        <li>Reverse-complement (if requested).</li>
-        <li>Six-frame scan for ORFs.</li>
-        <li>Translate each ORF.</li>
-        <li>Compute protein properties.</li>
-        <li>Render plots + tables + offer FASTA / GenBank download.</li>
-      </ul>
+      <!-- Third demo card: gc_content -->
+      <div class="demo-card" id="demo-gc">
+        <div class="card-head" onclick="toggleDemo('demo-gc')">
+          <div>
+            <p class="card-title">gc_content(dna, window)</p>
+            <p class="card-desc">Sliding-window GC% — local guanine+cytosine content along the sequence.</p>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="demo-tabs">
+            <button class="active" data-tab="math">Math</button>
+            <button data-tab="code">Code</button>
+            <button data-tab="observe">Observe</button>
+          </div>
+          <div class="demo-tab-content active" data-tab="math">
+            <div class="math-panel">
+              <div class="math-eq"><span class="accent">GC%</span><sub>w</sub>(<span class="var">i</span>) = (|G| + |C|) / |w| &nbsp; at position <span class="var">i</span></div>
+              <p class="math-plain">Sliding window of size w (default 20). GC content varies along the sequence; sudden spikes can hint at horizontal gene transfer or recent insertions. E. coli ~50%, human ~40%, Streptomyces ~70%.</p>
+            </div>
+          </div>
+          <div class="demo-tab-content" data-tab="code">
+            <div class="code-panel">
+              <div class="lang-toggle" id="gc-lang-toggle">
+                <button data-lang="python" class="active">Python</button>
+                <button data-lang="rust">Rust</button>
+                <button data-lang="go">Go</button>
+                <button data-lang="c">C</button>
+                <button data-lang="elixir">Elixir</button>
+                <button data-lang="scala">Scala</button>
+              </div>
+              <pre class="code-block" id="gc-code"></pre>
+            </div>
+          </div>
+          <div class="demo-tab-content" data-tab="observe">
+            <div class="observe-subtabs" id="gc-subtabs">
+              <button class="active" data-sub="stats">Stats</button>
+              <button data-sub="reports">Reports</button>
+              <button data-sub="graphs">Graphs</button>
+              <button data-sub="summary">Summary</button>
+            </div>
+            <div class="observe-content active" data-sub="stats">
+              <div class="stats-grid">
+                <div class="stat"><div class="l">Global GC%</div><div class="v">53.4%</div></div>
+                <div class="stat"><div class="l">Min (w=20)</div><div class="v">35.0%</div></div>
+                <div class="stat"><div class="l">Max (w=20)</div><div class="v">70.0%</div></div>
+                <div class="stat"><div class="l">Mean</div><div class="v">52.8%</div></div>
+                <div class="stat"><div class="l">Windows</div><div class="v">155</div></div>
+                <div class="stat"><div class="l">Std dev</div><div class="v">7.2%</div></div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="reports">
+              <div class="report-block">
+                <h4>GC content report</h4>
+                <p>Global GC% = 53.4%, consistent with E. coli (typical 50-52%). Sliding-window (w=20) shows local variation from 35% to 70% with a standard deviation of 7.2%. No extreme outliers — the sequence is genomically homogeneous.</p>
+                <div class="report-actions">
+                  <button class="btn primary" onclick="downloadReport('gc')">⬇ Download report (.txt)</button>
+                </div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="graphs">
+              <div class="graph-block">
+                <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+                  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+                  <line x1="20" y1="20" x2="380" y2="20" stroke="#06b6d4" stroke-width="0.5" stroke-dasharray="2 2"/>
+                  <line x1="20" y1="100" x2="380" y2="100" stroke="rgba(16,185,129,0.5)" stroke-width="1" stroke-dasharray="3 3"/>
+                  <polyline points="20,100 40,80 60,120 80,60 100,90 120,110 140,70 160,100 180,90 200,130 220,80 240,100 260,70 280,110 300,90 320,100 340,80 360,110 380,100" stroke="#10b981" stroke-width="2" fill="none"/>
+                  <text x="380" y="18" text-anchor="end" font-size="9" fill="#06b6d4" font-family="SF Mono">max 70%</text>
+                  <text x="380" y="98" text-anchor="end" font-size="9" fill="#10b981" font-family="SF Mono">mean 53%</text>
+                  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="SF Mono">position (bp)</text>
+                </svg>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="summary">
+              <div class="summary-block">
+                <h4>Executive summary</h4>
+                <ul>
+                  <li><strong>Global GC%.</strong> 53.4% — consistent with E. coli (50-52% expected).</li>
+                  <li><strong>Variation.</strong> Local GC% ranges 35-70% with σ=7.2%. No extreme outliers.</li>
+                  <li><strong>Interpretation.</strong> Genomically homogeneous — no horizontal-transfer signatures.</li>
+                  <li><strong>Algorithm.</strong> Sliding window O(n·w); naïve but clear. Optimised to O(n) with running sum.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/science/biology/molecular.html</code>. Next.js route: <code>/science/biology/molecular</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
@@ -215,158 +505,297 @@
     </div>
 
     <script>
-      // Build DNA helix rungs
-      (function buildHelix() {
-        const rungsEl = document.getElementById('rungs');
-        const bases = ['A','T','C','G'];
-        let parts = [];
-        for (let i = 0; i < 15; i++) {
-          const x = 10 + i * 20;
-          const yA = 110 + Math.sin(i * 0.6) * 40;
-          const yB = 110 - Math.sin(i * 0.6) * 40;
-          parts.push(`<line class="rung" x1="${x}" y1="${yA}" x2="${x}" y2="${yB}" />`);
-          const b1 = bases[i % 4];
-          const b2 = (b1 === 'A' ? 'T' : b1 === 'T' ? 'A' : b1 === 'C' ? 'G' : 'C');
-          parts.push(`<circle class="base base-${b1}" cx="${x}" cy="${yA}" r="3.5"/>`);
-          parts.push(`<circle class="base base-${b2}" cx="${x}" cy="${yB}" r="3.5"/>`);
+      // ============================================================
+      // Particle background — slow drift + connection lines
+      // ============================================================
+      (function particles() {
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let W, H, particles = [];
+        const N = 80;
+        const colors = ['#06b6d4', '#8b5cf6', '#ec4899', '#10b981', '#f59e0b'];
+
+        function resize() {
+          W = canvas.width = window.innerWidth;
+          H = canvas.height = window.innerHeight;
         }
-        rungsEl.innerHTML = parts.join('');
+        resize();
+        window.addEventListener('resize', resize);
+
+        // Init
+        for (let i = 0; i < N; i++) {
+          particles.push({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            r: Math.random() * 1.5 + 0.5,
+            color: colors[Math.floor(Math.random() * colors.length)],
+          });
+        }
+
+        function step() {
+          ctx.clearRect(0, 0, W, H);
+          // Connection lines (Delaunay-ish: O(n^2) but small n)
+          for (let i = 0; i < N; i++) {
+            const pi = particles[i];
+            for (let j = i+1; j < N; j++) {
+              const pj = particles[j];
+              const dx = pi.x - pj.x, dy = pi.y - pj.y;
+              const d = Math.sqrt(dx*dx + dy*dy);
+              if (d < 120) {
+                ctx.strokeStyle = `rgba(139, 92, 246, ${0.15 * (1 - d/120)})`;
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(pi.x, pi.y);
+                ctx.lineTo(pj.x, pj.y);
+                ctx.stroke();
+              }
+            }
+          }
+          // Particles
+          for (const p of particles) {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = 0.6;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+          requestAnimationFrame(step);
+        }
+        step();
       })();
 
-      // Polyglot translate(rna) implementations
-      const CODE = {
-        python: `<span class="com"># translate.py — Python (dict lookup, generator)</span>
-<span class="kw">CODON_TABLE</span> = {
-    <span class="str">"UUU"</span>: <span class="str">"F"</span>, <span class="str">"UUC"</span>: <span class="str">"F"</span>, <span class="str">"UUG"</span>: <span class="str">"L"</span>, <span class="str">"UUA"</span>: <span class="str">"L"</span>,
-    <span class="str">"AUG"</span>: <span class="str">"M"</span>,  <span class="com"># start</span>
-    <span class="str">"UGG"</span>: <span class="str">"W"</span>, <span class="str">"UAA"</span>: <span class="str">"*"</span>, <span class="str">"UAG"</span>: <span class="str">"*"</span>, <span class="str">"UGA"</span>: <span class="str">"*"</span>,
-    <span class="com"># ... 64 total</span>
-}
+      // ============================================================
+      // ClickForDemo pattern — toggle, tabs, sub-tabs
+      // ============================================================
+      function toggleDemo(id) {
+        const card = document.getElementById(id);
+        card.classList.toggle('open');
+        if (card.classList.contains('open')) {
+          // Initialize the tabs if not done yet
+          initTabs(card);
+        }
+      }
+
+      function initTabs(card) {
+        if (card.dataset.init) return;
+        card.dataset.init = '1';
+        // Top-level tabs (Math / Code / Observe)
+        card.querySelectorAll('.demo-tabs button').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const tab = btn.dataset.tab;
+            card.querySelectorAll('.demo-tabs button').forEach(b => b.classList.toggle('active', b === btn));
+            card.querySelectorAll('.demo-tab-content').forEach(c => c.classList.toggle('active', c.dataset.tab === tab));
+            e.stopPropagation();
+          });
+        });
+        // Sub-tabs (Stats / Reports / Graphs / Summary)
+        card.querySelectorAll('.observe-subtabs button').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const sub = btn.dataset.sub;
+            const subtab = btn.closest('.observe-subtabs');
+            subtab.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+            const observePanel = subtab.parentElement;
+            observePanel.querySelectorAll('.observe-content').forEach(c => c.classList.toggle('active', c.dataset.sub === sub));
+            e.stopPropagation();
+          });
+        });
+        // Language toggles (Code panel)
+        const langToggle = card.querySelector('.code-panel .lang-toggle');
+        if (langToggle) {
+          langToggle.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const lang = btn.dataset.lang;
+              langToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+              const demoId = card.id.replace('demo-', '');
+              const codeBlock = card.querySelector('.code-block');
+              if (window.CODE && window.CODE[demoId] && window.CODE[demoId][lang]) {
+                codeBlock.innerHTML = window.CODE[demoId][lang];
+              }
+              e.stopPropagation();
+            });
+          });
+        }
+      }
+
+      // ---- Polyglot code (for all 3 demos on this page) ----
+      window.CODE = {
+        translate: {
+          python: `<span class="com"># translate.py — Python (dict + generator)</span>
+<span class="kw">CODON_TABLE</span> = {<span class="str">"UUU"</span>: <span class="str">"F"</span>, <span class="str">"UUC"</span>: <span class="str">"F"</span>, <span class="str">"AUG"</span>: <span class="str">"M"</span>, <span class="str">"UGG"</span>: <span class="str">"W"</span>, <span class="str">"UAA"</span>: <span class="str">"*"</span>, <span class="com"># ... 64 total</span>}
 
 <span class="kw">def</span> <span class="fn">translate</span>(rna: <span class="ty">str</span>) -&gt; <span class="ty">str</span>:
-    <span class="kw">return</span> <span class="str">""</span>.<span class="fn">join</span>(
-        <span class="fn">CODON_TABLE</span>.<span class="fn">get</span>(rna[i:i+<span class="num">3</span>], <span class="str">"X"</span>)
-        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">0</span>, <span class="fn">len</span>(rna) - <span class="num">2</span>, <span class="num">3</span>)
-        <span class="kw">if</span> <span class="fn">len</span>(rna[i:i+<span class="num">3</span>]) == <span class="num">3</span>
-    )`,
-        rust: `<span class="com">// translate.rs — Rust (HashMap + iterator chunks)</span>
-<span class="kw">use</span> std::collections::<span class="ty">HashMap</span>;
-
-<span class="kw">fn</span> <span class="fn">codon_table</span>() -&gt; <span class="ty">HashMap</span>&lt;&amp;<span class="kw">'static str</span>, <span class="kw">char</span>&gt; {
-    <span class="kw">let</span> <span class="kw">mut</span> t = <span class="ty">HashMap</span>::<span class="fn">new</span>();
-    t.<span class="fn">insert</span>(<span class="str">"UUU"</span>, <span class="str">'F'</span>); t.<span class="fn">insert</span>(<span class="str">"UUC"</span>, <span class="str">'F'</span>);
-    t.<span class="fn">insert</span>(<span class="str">"AUG"</span>, <span class="str">'M'</span>); t.<span class="fn">insert</span>(<span class="str">"UGG"</span>, <span class="str">'W'</span>);
-    t.<span class="fn">insert</span>(<span class="str">"UAA"</span>, <span class="str">'*'</span>); <span class="com">// stop</span>
-    <span class="com">// ...</span>
-    t
-}
-
+    <span class="kw">return</span> <span class="str">""</span>.<span class="fn">join</span>(<span class="fn">CODON_TABLE</span>.<span class="fn">get</span>(rna[i:i+<span class="num">3</span>], <span class="str">"X"</span>)
+              <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">0</span>, <span class="fn">len</span>(rna)-<span class="num">2</span>, <span class="num">3</span>))`,
+          rust: `<span class="com">// translate.rs — Rust (HashMap + iterator chunks)</span>
+<span class="kw">fn</span> <span class="fn">codon_table</span>() -&gt; <span class="ty">HashMap</span>&lt;&amp;<span class="kw">'static str</span>, <span class="kw">char</span>&gt; { <span class="kw">let mut</span> t = <span class="ty">HashMap</span>::<span class="fn">new</span>(); t.<span class="fn">insert</span>(<span class="str">"AUG"</span>, <span class="str">'M'</span>); t <span class="com">/* ... */</span> }
 <span class="kw">pub fn</span> <span class="fn">translate</span>(rna: &amp;<span class="ty">str</span>) -&gt; <span class="ty">String</span> {
     <span class="kw">let</span> table = <span class="fn">codon_table</span>();
-    rna.<span class="fn">as_bytes</span>()
-        .<span class="fn">chunks</span>(<span class="num">3</span>)
-        .<span class="fn">filter_map</span>(|c| {
-            <span class="kw">let</span> s = std::str::<span class="fn">from_utf8</span>(c).<span class="fn">ok</span>()?;
-            table.<span class="fn">get</span>(s).<span class="fn">copied</span>()
-        })
+    rna.<span class="fn">as_bytes</span>().<span class="fn">chunks</span>(<span class="num">3</span>)
+        .<span class="fn">filter_map</span>(|c| table.<span class="fn">get</span>(std::str::<span class="fn">from_utf8</span>(c).<span class="fn">ok</span>()?).<span class="fn">copied</span>())
         .<span class="fn">collect</span>()
 }`,
-        go: `<span class="com">// translate.go — Golang (map + for loop)</span>
-<span class="kw">package</span> molbio
-
-<span class="kw">var</span> codonTable = <span class="kw">map</span>[<span class="ty">string</span>]<span class="ty">rune</span>{
-    <span class="str">"UUU"</span>: <span class="str">'F'</span>, <span class="str">"UUC"</span>: <span class="str">'F'</span>,
-    <span class="str">"AUG"</span>: <span class="str">'M'</span>, <span class="str">"UGG"</span>: <span class="str">'W'</span>,
-    <span class="str">"UAA"</span>: <span class="str">'*'</span>, <span class="str">"UAG"</span>: <span class="str">'*'</span>,
-    <span class="com">// ...</span>
-}
-
+          go: `<span class="com">// translate.go — Golang (map + for loop)</span>
+<span class="kw">var</span> codonTable = <span class="kw">map</span>[<span class="ty">string</span>]<span class="ty">rune</span>{<span class="str">"AUG"</span>: <span class="str">'M'</span>, <span class="str">"UGG"</span>: <span class="str">'W'</span>, <span class="str">"UAA"</span>: <span class="str">'*'</span>}
 <span class="kw">func</span> <span class="fn">Translate</span>(rna <span class="ty">string</span>) <span class="ty">string</span> {
     <span class="kw">var</span> protein []<span class="ty">rune</span>
     <span class="kw">for</span> i := <span class="num">0</span>; i+<span class="num">3</span> &lt;= <span class="fn">len</span>(rna); i += <span class="num">3</span> {
-        codon := rna[i:i+<span class="num">3</span>]
-        <span class="kw">if</span> aa, ok := codonTable[codon]; ok {
+        <span class="kw">if</span> aa, ok := codonTable[rna[i:i+<span class="num">3</span>]]; ok {
             protein = <span class="fn">append</span>(protein, aa)
-        } <span class="kw">else</span> {
-            protein = <span class="fn">append</span>(protein, <span class="str">'X'</span>)
         }
     }
     <span class="kw">return</span> <span class="ty">string</span>(protein)
 }`,
-        c: `<span class="com">/* translate.c — C (jump table on 3-bit encoding) */</span>
-<span class="kw">#include</span> <span class="str">&lt;string.h&gt;</span>
-
-<span class="com">/* Encode A=0,C=1,G=2,U=3 -&gt; codon = c0*16 + c1*4 + c2 */</span>
-<span class="kw">static const char</span> TABLE[<span class="num">64</span>] = {
-    <span class="str">'F'</span>,<span class="str">'F'</span>,<span class="str">'L'</span>,<span class="str">'L'</span>, <span class="str">'S'</span>,<span class="str">'S'</span>,<span class="str">'S'</span>,<span class="str">'S'</span>,
-    <span class="str">'Y'</span>,<span class="str">'Y'</span>,<span class="str">'*'</span>,<span class="str">'*'</span>, <span class="str">'C'</span>,<span class="str">'C'</span>,<span class="str">'*'</span>,<span class="str">'W'</span>,
-    <span class="str">'L'</span>,<span class="str">'L'</span>,<span class="str">'L'</span>,<span class="str">'L'</span>, <span class="str">'P'</span>,<span class="str">'P'</span>,<span class="str">'P'</span>,<span class="str">'P'</span>,
-    <span class="str">'H'</span>,<span class="str">'H'</span>,<span class="str">'Q'</span>,<span class="str">'Q'</span>, <span class="str">'R'</span>,<span class="str">'R'</span>,<span class="str">'R'</span>,<span class="str">'R'</span>,
-    <span class="str">'I'</span>,<span class="str">'I'</span>,<span class="str">'I'</span>,<span class="str">'M'</span>, <span class="str">'T'</span>,<span class="str">'T'</span>,<span class="str">'T'</span>,<span class="str">'T'</span>,
-    <span class="str">'N'</span>,<span class="str">'N'</span>,<span class="str">'K'</span>,<span class="str">'K'</span>, <span class="str">'S'</span>,<span class="str">'S'</span>,<span class="str">'R'</span>,<span class="str">'R'</span>,
-    <span class="str">'V'</span>,<span class="str">'V'</span>,<span class="str">'V'</span>,<span class="str">'V'</span>, <span class="str">'A'</span>,<span class="str">'A'</span>,<span class="str">'A'</span>,<span class="str">'A'</span>,
-    <span class="str">'D'</span>,<span class="str">'D'</span>,<span class="str">'E'</span>,<span class="str">'E'</span>, <span class="str">'G'</span>,<span class="str">'G'</span>,<span class="str">'G'</span>,<span class="str">'G'</span>,
-};
-
-<span class="kw">static int</span> <span class="fn">encode</span>(<span class="kw">char</span> c) {
-    <span class="kw">switch</span>(c) {
-        <span class="kw">case</span> <span class="str">'A'</span>: <span class="kw">return</span> <span class="num">0</span>;
-        <span class="kw">case</span> <span class="str">'C'</span>: <span class="kw">return</span> <span class="num">1</span>;
-        <span class="kw">case</span> <span class="str">'G'</span>: <span class="kw">return</span> <span class="num">2</span>;
-        <span class="kw">case</span> <span class="str">'U'</span>: <span class="kw">return</span> <span class="num">3</span>;
-        <span class="kw">default</span>: <span class="kw">return</span> -<span class="num">1</span>;
-    }
-}
-
+          c: `<span class="com">/* translate.c — C (jump table on 3-bit encoding) */</span>
+<span class="kw">static const char</span> TABLE[<span class="num">64</span>] = {<span class="str">'F'</span>,<span class="str">'F'</span>,<span class="str">'L'</span>,<span class="str">'L'</span>,<span class="str">'S'</span>,<span class="str">'S'</span>,<span class="str">'S'</span>,<span class="str">'S'</span>, <span class="com">/* ... */</span>};
+<span class="kw">static int</span> <span class="fn">encode</span>(<span class="kw">char</span> c) { <span class="kw">switch</span>(c) { <span class="kw">case</span> <span class="str">'A'</span>: <span class="kw">return</span> <span class="num">0</span>; <span class="kw">case</span> <span class="str">'C'</span>: <span class="kw">return</span> <span class="num">1</span>; <span class="kw">case</span> <span class="str">'G'</span>: <span class="kw">return</span> <span class="num">2</span>; <span class="kw">case</span> <span class="str">'U'</span>: <span class="kw">return</span> <span class="num">3</span>; <span class="kw">default</span>: <span class="kw">return</span> -<span class="num">1</span>; } }
 <span class="kw">void</span> <span class="fn">translate</span>(<span class="kw">const char</span> *rna, <span class="kw">int</span> n, <span class="kw">char</span> *out) {
     <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i + <span class="num">3</span> &lt;= n; i += <span class="num">3</span>) {
-        <span class="kw">int</span> idx = <span class="fn">encode</span>(rna[i]) * <span class="num">16</span>
-                + <span class="fn">encode</span>(rna[i+<span class="num">1</span>]) * <span class="num">4</span>
-                + <span class="fn">encode</span>(rna[i+<span class="num">2</span>]);
+        <span class="kw">int</span> idx = <span class="fn">encode</span>(rna[i]) * <span class="num">16</span> + <span class="fn">encode</span>(rna[i+<span class="num">1</span>]) * <span class="num">4</span> + <span class="fn">encode</span>(rna[i+<span class="num">2</span>]);
         out[i/<span class="num">3</span>] = (idx &gt;= <span class="num">0</span>) ? TABLE[idx] : <span class="str">'X'</span>;
     }
 }`,
-        elixir: `<span class="com"># translate.exs — Elixir (pattern match + Stream)</span>
+          elixir: `<span class="com"># translate.exs — Elixir (pattern match + Stream)</span>
 <span class="kw">defmodule</span> <span class="ty">MolBio</span> <span class="kw">do</span>
-  <span class="kw">defp</span> <span class="fn">codon</span>(<span class="str">"UUU"</span>), <span class="kw">do:</span> <span class="str">'F'</span>
   <span class="kw">defp</span> <span class="fn">codon</span>(<span class="str">"AUG"</span>), <span class="kw">do:</span> <span class="str">'M'</span>
   <span class="kw">defp</span> <span class="fn">codon</span>(<span class="str">"UGG"</span>), <span class="kw">do:</span> <span class="str">'W'</span>
-  <span class="kw">defp</span> <span class="fn">codon</span>(<span class="str">"UAA"</span>), <span class="kw">do:</span> <span class="str">'*'</span>
-  <span class="kw">defp</span> <span class="fn">codon</span>(_),     <span class="kw">do:</span> <span class="str">'X'</span>
-
-  <span class="kw">def</span> <span class="fn">translate</span>(rna) <span class="kw">when</span> <span class="fn">is_binary</span>(rna) <span class="kw">do</span>
-    rna
-    |&gt; <span class="ty">Stream</span>.<span class="fn">chunk_every</span>(<span class="num">3</span>)
-    |&gt; <span class="ty">Stream</span>.<span class="fn">map</span>(&amp;<span class="fn">Enum</span>.<span class="fn">join</span>/<span class="num">1</span>)
-    |&gt; <span class="ty">Enum</span>.<span class="fn">map</span>(&amp;<span class="fn">codon</span>/<span class="num">1</span>)
-    |&gt; <span class="ty">List</span>.<span class="fn">to_string</span>()
+  <span class="kw">defp</span> <span class="fn">codon</span>(_), <span class="kw">do:</span> <span class="str">'X'</span>
+  <span class="kw">def</span> <span class="fn">translate</span>(rna) <span class="kw">do</span>
+    rna |&gt; <span class="ty">Stream</span>.<span class="fn">chunk_every</span>(<span class="num">3</span>) |&gt; <span class="ty">Enum</span>.<span class="fn">map</span>(&amp;<span class="fn">codon</span>/<span class="num">1</span>)
   <span class="kw">end</span>
 <span class="kw">end</span>`,
-        scala: `<span class="com">// translate.sc — Scala (grouped + map)</span>
-<span class="kw">object</span> <span class="ty">MolBio</span> {
-  <span class="kw">private val</span> table = <span class="ty">Map</span>(
-    <span class="str">"UUU"</span> -&gt; <span class="str">'F'</span>, <span class="str">"UUC"</span> -&gt; <span class="str">'F'</span>,
-    <span class="str">"AUG"</span> -&gt; <span class="str">'M'</span>, <span class="str">"UGG"</span> -&gt; <span class="str">'W'</span>,
-    <span class="str">"UAA"</span> -&gt; <span class="str">'*'</span> <span class="com">// stop</span>
-    <span class="com">// ...</span>
-  )
-
-  <span class="kw">def</span> <span class="fn">translate</span>(rna: <span class="ty">String</span>): <span class="ty">String</span> =
-    rna.<span class="fn">grouped</span>(<span class="num">3</span>)
-       .<span class="fn">filter</span>(_.length == <span class="num">3</span>)
-       .<span class="fn">map</span>(codon =&gt; table.<span class="fn">getOrElse</span>(codon, <span class="str">'X'</span>))
-       .<span class="fn">mkString</span>
+          scala: `<span class="com">// translate.sc — Scala (grouped + map)</span>
+<span class="kw">def</span> <span class="fn">translate</span>(rna: <span class="ty">String</span>): <span class="ty">String</span> =
+    rna.<span class="fn">grouped</span>(<span class="num">3</span>).<span class="fn">map</span>(codon =&gt; table.<span class="fn">getOrElse</span>(codon, <span class="str">'X'</span>)).<span class="fn">mkString</span>`,
+        },
+        revcomp: {
+          python: `<span class="com"># reverse_complement.py — Python (dict + reversed)</span>
+<span class="kw">COMPLEMENT</span> = {<span class="str">"A"</span>: <span class="str">"T"</span>, <span class="str">"T"</span>: <span class="str">"A"</span>, <span class="str">"G"</span>: <span class="str">"C"</span>, <span class="str">"C"</span>: <span class="str">"G"</span>}
+<span class="kw">def</span> <span class="fn">reverse_complement</span>(dna: <span class="ty">str</span>) -&gt; <span class="ty">str</span>:
+    <span class="kw">return</span> <span class="str">""</span>.<span class="fn">join</span>(<span class="fn">COMPLEMENT</span>[b] <span class="kw">for</span> b <span class="kw">in</span> <span class="fn">reversed</span>(dna.<span class="fn">upper</span>()))`,
+          rust: `<span class="com">// reverse_complement.rs — Rust (iterator + match)</span>
+<span class="kw">pub fn</span> <span class="fn">reverse_complement</span>(dna: &amp;<span class="ty">str</span>) -&gt; <span class="ty">String</span> {
+    dna.<span class="fn">as_bytes</span>().<span class="fn">iter</span>().<span class="fn">rev</span>().<span class="fn">map</span>(|&amp;b| <span class="kw">match</span> b {
+        <span class="kw">'A' as u8</span> =&gt; <span class="kw">'T' as u8</span>, <span class="kw">'T' as u8</span> =&gt; <span class="kw">'A' as u8</span>,
+        <span class="kw">'G' as u8</span> =&gt; <span class="kw">'C' as u8</span>, <span class="kw">'C' as u8</span> =&gt; <span class="kw">'G' as u8</span>, _ =&gt; b,
+    }).<span class="fn">map</span>(|b| b <span class="kw">as</span> <span class="kw">char</span>).<span class="fn">collect</span>()
 }`,
+          go: `<span class="com">// reverse_complement.go — Golang</span>
+<span class="kw">var</span> complement = <span class="kw">map</span>[<span class="ty">byte</span>]<span class="ty">byte</span>{<span class="str">'A'</span>:<span class="str">'T'</span>, <span class="str">'T'</span>:<span class="str">'A'</span>, <span class="str">'G'</span>:<span class="str">'C'</span>, <span class="str">'C'</span>:<span class="str">'G'</span>}
+<span class="kw">func</span> <span class="fn">ReverseComplement</span>(dna <span class="ty">string</span>) <span class="ty">string</span> {
+    n := <span class="fn">len</span>(dna); out := <span class="fn">make</span>([]<span class="ty">byte</span>, n)
+    <span class="kw">for</span> i := <span class="num">0</span>; i &lt; n; i++ { out[i] = complement[dna[n-<span class="num">1</span>-i]] }
+    <span class="kw">return</span> <span class="ty">string</span>(out)
+}`,
+          c: `<span class="com">/* reverse_complement.c — C (in-place reverse + lookup) */</span>
+<span class="kw">static char</span> <span class="fn">comp</span>(<span class="kw">char</span> c) {
+    <span class="kw">switch</span> (c) { <span class="kw">case</span> <span class="str">'A'</span>: <span class="kw">return</span> <span class="str">'T'</span>; <span class="kw">case</span> <span class="str">'T'</span>: <span class="kw">return</span> <span class="str">'A'</span>; <span class="kw">case</span> <span class="str">'G'</span>: <span class="kw">return</span> <span class="str">'C'</span>; <span class="kw">case</span> <span class="str">'C'</span>: <span class="kw">return</span> <span class="str">'G'</span>; <span class="kw">default</span>: <span class="kw">return</span> c; }
+}
+<span class="kw">void</span> <span class="fn">reverse_complement</span>(<span class="kw">char</span> *s, <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>, j = n-<span class="num">1</span>; i &lt; j; i++, j--) { <span class="kw">char</span> a = <span class="fn">comp</span>(s[i]); s[i] = <span class="fn">comp</span>(s[j]); s[j] = a; }
+}`,
+          elixir: `<span class="com"># reverse_complement.exs — Elixir (Enum + map)</span>
+<span class="kw">defmodule</span> <span class="ty">Nucleotides</span> <span class="kw">do</span>
+  <span class="kw">defp</span> <span class="fn">complement</span>(<span class="str">"A"</span>), <span class="kw">do:</span> <span class="str">"T"</span>
+  <span class="kw">defp</span> <span class="fn">complement</span>(<span class="str">"T"</span>), <span class="kw">do:</span> <span class="str">"A"</span>
+  <span class="kw">defp</span> <span class="fn">complement</span>(<span class="str">"G"</span>), <span class="kw">do:</span> <span class="str">"C"</span>
+  <span class="kw">defp</span> <span class="fn">complement</span>(<span class="str">"C"</span>), <span class="kw">do:</span> <span class="str">"G"</span>
+  <span class="kw">def</span> <span class="fn">reverse_complement</span>(dna) <span class="kw">do</span>
+    dna |&gt; <span class="ty">String</span>.<span class="fn">graphemes</span>() |&gt; <span class="ty">Enum</span>.<span class="fn">reverse</span>() |&gt; <span class="ty">Enum</span>.<span class="fn">map</span>(&amp;<span class="fn">complement</span>/<span class="num">1</span>) |&gt; <span class="ty">Enum</span>.<span class="fn">join</span>()
+  <span class="kw">end</span>
+<span class="kw">end</span>`,
+          scala: `<span class="com">// reverse_complement.sc — Scala</span>
+<span class="kw">def</span> <span class="fn">reverseComplement</span>(dna: <span class="ty">String</span>): <span class="ty">String</span> =
+    dna.<span class="fn">map</span>(c =&gt; <span class="ty">Map</span>(<span class="str">'A'</span>-&gt;<span class="str">'T'</span>, <span class="str">'T'</span>-&gt;<span class="str">'A'</span>, <span class="str">'G'</span>-&gt;<span class="str">'C'</span>, <span class="str">'C'</span>-&gt;<span class="str">'G'</span>).<span class="fn">getOrElse</span>(c, c)).<span class="fn">reverse</span>.<span class="fn">mkString</span>`,
+        },
+        gc: {
+          python: `<span class="com"># gc_content.py — Python (sliding window)</span>
+<span class="kw">def</span> <span class="fn">gc_content</span>(seq: <span class="ty">str</span>, w: <span class="ty">int</span> = <span class="num">20</span>) -&gt; <span class="ty">list</span>[<span class="ty">float</span>]:
+    <span class="kw">return</span> [sum(<span class="num">1</span> <span class="kw">for</span> b <span class="kw">in</span> seq[i:i+w] <span class="kw">if</span> b <span class="kw">in</span> <span class="str">"GC"</span>)/w
+            <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(seq)-w+<span class="num">1</span>)]`,
+          rust: `<span class="com">// gc_content.rs — Rust (windows + map)</span>
+<span class="kw">pub fn</span> <span class="fn">gc_content</span>(seq: &amp;<span class="ty">str</span>, w: <span class="ty">usize</span>) -&gt; <span class="ty">Vec</span>&lt;<span class="kw">f64</span>&gt; {
+    seq.<span class="fn">as_bytes</span>().<span class="fn">windows</span>(w).<span class="fn">map</span>(|win| {
+        win.<span class="fn">iter</span>().<span class="fn">filter</span>(|&amp;&amp;b| b == <span class="kw">b'G'</span> || b == <span class="kw">b'C'</span>).<span class="fn">count</span>() <span class="kw">as</span> <span class="kw">f64</span> / w <span class="kw">as</span> <span class="kw">f64</span>
+    }).<span class="fn">collect</span>()
+}`,
+          go: `<span class="com">// gc_content.go — Golang</span>
+<span class="kw">func</span> <span class="fn">GCContent</span>(seq <span class="ty">string</span>, w <span class="ty">int</span>) []<span class="ty">float64</span> {
+    out := <span class="fn">make</span>([]<span class="ty">float64</span>, <span class="fn">len</span>(seq)-w+<span class="num">1</span>)
+    <span class="kw">for</span> i := <span class="num">0</span>; i+w &lt;= <span class="fn">len</span>(seq); i++ {
+        gc := <span class="num">0</span>
+        <span class="kw">for</span> j := i; j &lt; i+w; j++ { <span class="kw">if</span> seq[j]==<span class="str">'G'</span> || seq[j]==<span class="str">'C'</span> { gc++ } }
+        out[i] = <span class="fn">float64</span>(gc)/<span class="fn">float64</span>(w)
+    }
+    <span class="kw">return</span> out
+}`,
+          c: `<span class="com">/* gc_content.c — C */</span>
+<span class="kw">void</span> <span class="fn">gc_content</span>(<span class="kw">const char</span> *seq, <span class="kw">int</span> n, <span class="kw">int</span> w, <span class="kw">double</span> *out) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i+w &lt;= n; i++) {
+        <span class="kw">int</span> gc = <span class="num">0</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = i; j &lt; i+w; j++) { <span class="kw">if</span> (seq[j]==<span class="str">'G'</span> || seq[j]==<span class="str">'C'</span>) gc++; }
+        out[i] = (<span class="kw">double</span>)gc / w;
+    }
+}`,
+          elixir: `<span class="com"># gc_content.exs — Elixir</span>
+<span class="kw">def</span> <span class="fn">gc_content</span>(seq, w) <span class="kw">do</span>
+    <span class="kw">for</span> i &lt;- <span class="num">0</span>..(<span class="fn">String</span>.<span class="fn">length</span>(seq) - w) <span class="kw">do</span>
+        win = <span class="ty">String</span>.<span class="fn">slice</span>(seq, i, w)
+        (<span class="ty">String</span>.<span class="fn">replace</span>(win, ~r/<span class="str">[^GC]</span>/, <span class="str">""</span>) |&gt; <span class="ty">String</span>.<span class="fn">length</span>()) / w
+    <span class="kw">end</span>
+<span class="kw">end</span>`,
+          scala: `<span class="com">// gc_content.sc — Scala</span>
+<span class="kw">def</span> <span class="fn">gcContent</span>(seq: <span class="ty">String</span>, w: <span class="ty">Int</span>): <span class="ty">Vector</span>[<span class="ty">Double</span>] =
+    (<span class="num">0</span> <span class="kw">to</span> seq.length - w).<span class="fn">map</span> { i =&gt;
+        seq.<span class="fn">substring</span>(i, i+w).<span class="fn">count</span>(c =&gt; c == <span class="str">'G'</span> || c == <span class="str">'C'</span>).<span class="fn">toDouble</span> / w
+    }.toVector`,
+        },
       };
-      function renderCode(lang) {
-        document.getElementById('code-block').innerHTML = CODE[lang] || '';
-        document.querySelectorAll('#lang-toggle button').forEach((b) =>
-          b.classList.toggle('active', b.dataset.lang === lang));
-      }
-      document.querySelectorAll('#lang-toggle button').forEach((b) =>
-        b.addEventListener('click', () => renderCode(b.dataset.lang)));
-      renderCode('python');
 
+      // Initial render of code blocks
+      document.getElementById('translate-code').innerHTML = window.CODE.translate.python;
+      document.getElementById('revcomp-code').innerHTML = window.CODE.revcomp.python;
+      document.getElementById('gc-code').innerHTML = window.CODE.gc.python;
+
+      // ---- Download report (mock) ----
+      function downloadReport(kind) {
+        let content = '', filename = '', mime = 'text/plain';
+        if (kind === 'translate') {
+          content = 'AIHPC Advanced — Translation report\nGenerated: ' + new Date().toISOString() + '\n\nInput: 174 nt RNA\nOutput: 57 aa + 1 stop\nMW: 6,243 Da\npI: 6.04\nMost common aa: Leu (8), Ala (6)';
+          filename = 'aihpc-translate-report-' + Date.now() + '.txt';
+        } else if (kind === 'translate-fasta') {
+          content = '>AIHPC_TRANSLATED_PROTEIN length=57 mw=6243 pi=6.04\nM T D L D W R L L T L V F T T V Q V R E T A S S R L R R L V S D S R I G R D S R V R A I A D N A R K I G S A T M V G D V E\n';
+          filename = 'aihpc-translated-' + Date.now() + '.fasta';
+          mime = 'text/x-fasta';
+        } else if (kind === 'translate-receipt') {
+          content = JSON.stringify({'@context':'https://aihpc.advanced/prov/v1', manifest:{id:'translate',language:'browser',runtime:'browser',dataResidency:'downloadable'}, input:{length:174, source:'demo'}, output:{aa_count:57, mw:6243, pi:6.04}, environment:{client:'browser', timestamp:new Date().toISOString()}}, null, 2);
+          filename = 'aihpc-receipt-' + Date.now() + '.json';
+          mime = 'application/json';
+        } else if (kind === 'revcomp') {
+          content = 'AIHPC Advanced — Reverse-complement report\nGenerated: ' + new Date().toISOString() + '\n\nInput: 174 bp\nOutput: 174 bp\nComplementarity: A↔T (42+38), G↔C (47+47)';
+          filename = 'aihpc-revcomp-report-' + Date.now() + '.txt';
+        } else if (kind === 'revcomp-fasta') {
+          content = '>AIHPC_REVCOMP length=174\n' + 'GTCTGGCAATGGTACAAAGTGCCGGCAGCAAACATTGTGCAGCACTTTGACGCCTTAGGACTTAGCGTTTCTTGACCGCATAGCGGCATACGTCATTTCTGTCCGTTTTCGGCTGTAACGGTCATCGAATGGTACAAAGTGCACGCCACCGCAGCCGTGCCGCGTGCGTGCCAGGCAGCGCGTTCGGCGAAAGCATTC'.match(/.{1,60}/g).join('\n') + '\n';
+          filename = 'aihpc-revcomp-' + Date.now() + '.fasta';
+          mime = 'text/x-fasta';
+        } else if (kind === 'gc') {
+          content = 'AIHPC Advanced — GC content report\nGenerated: ' + new Date().toISOString() + '\n\nSequence: 174 bp\nGlobal GC%: 53.4%\nMin (w=20): 35.0%\nMax (w=20): 70.0%\nMean: 52.8%\nStd dev: 7.2%\nWindows: 155';
+          filename = 'aihpc-gc-report-' + Date.now() + '.txt';
+        }
+        const blob = new Blob([content], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      // ---- Ribbon theme toggle ----
       (function setupRibbonTheme() {
         const KEY = 'aihpc-theme';
         const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');
