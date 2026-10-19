@@ -977,6 +977,19 @@
               <button id="reset-data">Reset to defaults</button>
             </div>
 
+            <!-- ETL/ELT: Bring your own data to the OLS demo -->
+            <div style="margin-top: 10px; padding: 10px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;">
+              <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted-2); margin-bottom: 6px;">📁 Bring your own data (ETL/ELT)</div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+                <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 10px; font-weight: 600;">📁 Upload CSV (x,y)
+                  <input type="file" id="ols-file-input" accept=".csv,.tsv,.txt" style="display:none;" />
+                </label>
+                <input type="url" id="ols-url-input" placeholder="or paste a CSV URL…" style="flex:1; min-width:140px; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 4px 8px; border-radius: 6px; font-size: 10px; font-family: inherit;" />
+                <button class="data-tools button" id="ols-url-fetch" style="font-size: 10px;">⬇ Fetch</button>
+              </div>
+              <div id="ols-etl-report" style="display:none; margin-top: 6px; padding: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; font-size: 10px; color: var(--text-muted); font-family: SF Mono, monospace;"></div>
+            </div>
+
             <svg class="plot" id="plot" viewBox="0 0 400 220" preserveAspectRatio="none"></svg>
 
             <div class="callout">
@@ -1451,6 +1464,65 @@
         renderTable();
         document.getElementById('demo-status').innerHTML = 'Idle.';
         document.getElementById('download-btn').disabled = true;
+      });
+
+      // ---- ETL/ELT: Bring your own data to the OLS demo ----
+      function olsETL(text, source) {
+        const report = [`▸ ETL starting — source: ${source}`];
+        const lines = text.trim().split(/\r?\n/);
+        report.push(`▸ Parsed ${lines.length} lines`);
+        const rows = lines.map(l => l.split(/[,;\t\s]/).map(c => c.trim()));
+        let colX = -1, colY = -1;
+        const maxCols = Math.max(...rows.map(r => r.length));
+        for (let c = 0; c < maxCols; c++) {
+          let parsed = 0;
+          for (const r of rows) { if (r.length > c && !isNaN(parseFloat(r[c]))) parsed++; }
+          if (parsed > rows.length * 0.5) { if (colX === -1) colX = c; else if (colY === -1) { colY = c; break; } }
+        }
+        if (colX === -1 || colY === -1) { report.push('▸ ERROR: need 2 numeric columns'); return { data: [], report }; }
+        report.push(`▸ Detected columns: x=${colX+1}, y=${colY+1}`);
+        let dataRows = rows;
+        if (rows[0] && (isNaN(parseFloat(rows[0][colX])) || isNaN(parseFloat(rows[0][colY])))) {
+          dataRows = rows.slice(1); report.push(`▸ Header row skipped`);
+        }
+        const rawCount = dataRows.length;
+        const newData = [];
+        for (const r of dataRows) {
+          const x = parseFloat(r[colX]), y = parseFloat(r[colY]);
+          if (!isNaN(x) && !isNaN(y)) newData.push({ x, y });
+        }
+        report.push(`▸ Extracted ${newData.length} points (removed ${rawCount - newData.length} NA/null)`);
+        if (newData.length > 0) {
+          const xs = newData.map(p => p.x), ys = newData.map(p => p.y);
+          report.push(`▸ Range: x=[${Math.min(...xs).toFixed(2)}, ${Math.max(...xs).toFixed(2)}] y=[${Math.min(...ys).toFixed(2)}, ${Math.max(...ys).toFixed(2)}]`);
+          report.push(`▸ ETL complete — ${newData.length} points ready for OLS`);
+        }
+        return { data: newData, report };
+      }
+      function applyOlsData(newData, reportLines) {
+        if (!newData || newData.length < 3) { alert('Need at least 3 data points for OLS.'); return; }
+        data = newData;
+        lastResult = null;
+        renderTable();
+        document.getElementById('demo-status').innerHTML = 'Idle.';
+        document.getElementById('download-btn').disabled = true;
+        const el = document.getElementById('ols-etl-report');
+        el.style.display = 'block';
+        el.innerHTML = reportLines.map(l => `<div style="margin:1px 0;">${l.replace(/▸/g, '<span style="color:var(--accent-2);">▸</span>')}</div>`).join('');
+      }
+      document.getElementById('ols-file-input').addEventListener('change', (e) => {
+        const file = e.target.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => { try { const { data: d, report } = olsETL(ev.target.result, file.name); applyOlsData(d, report); } catch (err) { alert('ETL error: ' + err.message); } };
+        reader.readAsText(file);
+      });
+      document.getElementById('ols-url-fetch').addEventListener('click', async () => {
+        const url = document.getElementById('ols-url-input').value.trim();
+        if (!url) { alert('Paste a CSV URL first.'); return; }
+        const el = document.getElementById('ols-etl-report');
+        el.style.display = 'block'; el.textContent = 'Fetching…';
+        try { const resp = await fetch(url); if (!resp.ok) throw new Error(`HTTP ${resp.status}`); const text = await resp.text(); const { data: d, report } = olsETL(text, url); applyOlsData(d, report); }
+        catch (err) { el.innerHTML = `<span style="color:var(--danger);">Fetch error: ${err.message}</span>`; }
       });
 
       // ---- Linear algebra (2×2 closed form) ----
