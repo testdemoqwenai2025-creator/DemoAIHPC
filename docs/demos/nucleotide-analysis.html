@@ -286,6 +286,19 @@
             <button class="btn" id="download-genbank-btn" disabled>⬇ GenBank</button>
             <button class="btn" id="download-receipt-btn" disabled>⬇ Receipt</button>
           </div>
+          <!-- ETL/ELT: Bring your own sequence -->
+          <div style="margin-top: 10px; padding: 10px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted-2); margin-bottom: 6px;">📁 Bring your own sequence (ETL/ELT)</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+              <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 10px; font-weight: 600;">📁 Upload FASTA/TXT
+                <input type="file" id="nuc-file-input" accept=".fasta,.fa,.fna,.txt,.fastq,.tsv" style="display:none;" />
+              </label>
+              <input type="url" id="nuc-url-input" placeholder="or paste a FASTA URL…" style="flex:1; min-width:160px; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 4px 8px; border-radius: 6px; font-size: 10px; font-family: inherit;" />
+              <button class="btn" id="nuc-url-fetch" style="font-size: 10px;">⬇ Fetch</button>
+              <button class="btn" id="nuc-use-default" style="font-size: 10px;">↺ Default</button>
+            </div>
+            <div id="nuc-etl-report" style="display:none; margin-top: 6px; padding: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; font-size: 10px; color: var(--text-muted); font-family: SF Mono, monospace;"></div>
+          </div>
           <div class="callout">
             <strong>Data residency.</strong> The sequence above lives only
             in your browser tab. Nothing is uploaded. The "Run all analyses"
@@ -1026,6 +1039,79 @@ result = reverse_complement(${JSON.stringify(seq)})
         }
       }
       document.getElementById('nuc-py-btn').addEventListener('click', runPyRevComp);
+
+      // ---- ETL/ELT: FASTA file upload for nucleotide demo ----
+      function parseFASTA(text) {
+        const lines = text.trim().split(/\r?\n/);
+        let header = null, seqLines = [];
+        for (const line of lines) {
+          if (line.startsWith('>')) { header = line.slice(1).trim(); }
+          else if (line.startsWith(';')) { /* comment, skip */ }
+          else { seqLines.push(line.trim()); }
+        }
+        if (!header && seqLines.length === 0) {
+          const raw = text.toUpperCase().replace(/[^ACGTUNRYSWKMBDHV]/g, '');
+          return { header: 'uploaded_sequence', seq: raw };
+        }
+        return { header: header || 'uploaded_sequence', seq: seqLines.join('').toUpperCase() };
+      }
+      function cleanSeq(seq) { return seq.toUpperCase().replace(/[^ACGTUNRYSWKMBDHV]/g, ''); }
+      function applyUserSeq(seq, report) {
+        const cleaned = cleanSeq(seq);
+        if (cleaned.length < 6) { alert('Sequence too short (need at least 6 bp).'); return; }
+        document.getElementById('seq-input').value = cleaned;
+        renderSeqStats(cleaned);
+        report.push(`▸ Sequence loaded: ${cleaned.length} bp`);
+        const gc = ((cleaned.match(/[GC]/g) || []).length / cleaned.length * 100).toFixed(1);
+        report.push(`▸ GC%: ${gc}%`);
+        report.push(`▸ ETL complete — ${cleaned.length} bp ready for analysis`);
+        const el = document.getElementById('nuc-etl-report');
+        el.style.display = 'block';
+        el.innerHTML = report.map(l => `<div style="margin:1px 0;">${l.replace(/▸/g, '<span style="color:var(--accent-2);">▸</span>')}</div>`).join('');
+        lastResult = null;
+        ['download-fasta-btn','download-genbank-btn','download-receipt-btn'].forEach(id => document.getElementById(id).disabled = true);
+      }
+      document.getElementById('nuc-file-input').addEventListener('change', (e) => {
+        const file = e.target.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const report = [`▸ ETL starting — source: ${file.name}`];
+          try {
+            const { header, seq } = parseFASTA(ev.target.result);
+            report.push(`▸ Format: ${ev.target.result.includes('>') ? 'FASTA' : 'raw sequence'}`);
+            if (header) report.push(`▸ Header: ${header}`);
+            applyUserSeq(seq, report);
+          } catch (err) {
+            document.getElementById('nuc-etl-report').style.display = 'block';
+            document.getElementById('nuc-etl-report').innerHTML = `<span style="color:var(--danger);">ETL error: ${err.message}</span>`;
+          }
+        };
+        reader.readAsText(file);
+      });
+      document.getElementById('nuc-url-fetch').addEventListener('click', async () => {
+        const url = document.getElementById('nuc-url-input').value.trim();
+        if (!url) { alert('Paste a FASTA URL first.'); return; }
+        const el = document.getElementById('nuc-etl-report');
+        el.style.display = 'block'; el.textContent = 'Fetching… (CORS may block some URLs)';
+        try {
+          const resp = await fetch(url); if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const text = await resp.text();
+          const report = [`▸ ETL starting — source: ${url}`];
+          const { header, seq } = parseFASTA(text);
+          report.push(`▸ Format: ${text.includes('>') ? 'FASTA' : 'raw sequence'}`);
+          if (header) report.push(`▸ Header: ${header}`);
+          applyUserSeq(seq, report);
+        } catch (err) {
+          el.innerHTML = `<span style="color:var(--danger);">Fetch error: ${err.message}</span><br><span style="font-size:10px;">Tip: try a CORS-enabled URL or download and use Upload.</span>`;
+        }
+      });
+      document.getElementById('nuc-use-default').addEventListener('click', () => {
+        document.getElementById('seq-input').value = DEFAULT_SEQ;
+        renderSeqStats(DEFAULT_SEQ);
+        document.getElementById('nuc-etl-report').style.display = 'none';
+        lastResult = null;
+        ['download-fasta-btn','download-genbank-btn','download-receipt-btn'].forEach(id => document.getElementById(id).disabled = true);
+      });
 
       // ---- Ribbon theme toggle ----
       (function setupRibbonTheme() {
