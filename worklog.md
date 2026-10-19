@@ -768,3 +768,118 @@ repository. Provide a GitHub preview endpoint.
   push, keeping the two functionally identical at HEAD.
 - Dark/light theme toggle, site navigation, compliance footer and About
   page are now available on every page via the root layout.
+
+---
+
+## Phase 2 — Demo Framework Foundation + Live Embedded Demo — 2026-10-19
+
+**Task ID**: PHASE-2-DEMO-1
+**Agent**: Z User (main)
+**Task**: Establish the demo framework as the next slice of the platform —
+math → code → annotations → observability pipeline with lazy-evaluated
+popups, downloadable outputs (data residency locked to "downloadable"), no
+external services (GitHub-only), a live working demo embedded in the GitHub
+Pages preview, and a Next.js foundation that will be deployed when external
+hosting comes online.
+
+### Work Log
+
+- Rebuilt `docs/index.html` (the live GitHub Pages preview) into a fuller
+  landing page with an embedded working **Ordinary Least Squares** demo:
+  - Math panel with audience toggle (Student / Researcher / Executive)
+    showing the closed-form β̂ = (XᵀX)⁻¹ Xᵀy derivation
+  - Code panel showing the TypeScript OLS implementation
+  - Annotations panel that switches content per audience
+  - Editable data table (add / remove / reset rows)
+  - Live SVG plot of data points and regression line
+  - **Lazy streaming execution popup**: opens immediately with a "pending"
+    trace list, then marks each step (parse → XᵀX → invert → Xᵀy → β̂ →
+    residuals → plot) as active/done with progress dots. This is the
+    "feels alive" UX primitive from the project brief
+  - **Download CSV button** that builds a Blob in-browser and triggers a
+    download — output never leaves the user's machine
+  - **Copy β̂** button using the Clipboard API
+  - Inline data residency callout explaining the GDPR / HIPAA posture
+- Added `src/lib/demos/manifest.ts` — the `DemoManifest` TypeScript schema
+  defining: meta, math (LaTeX + plain language), code (language + source +
+  inputs), annotations (per audience), datasets (web | upload), observability
+  (metrics + traces), reports (formats), runtime (`browser` |
+  `server-sandboxed`), and `dataResidency` (`downloadable` only for now)
+- Added `src/lib/demos/seeds/linear-regression.ts` — a seed demo manifest
+  that mirrors the embedded `/docs` demo exactly
+- Added `src/lib/demos/registry.ts` — single source of truth for the demo
+  list. `getDemoById` and `listDemos` exports
+- Added `src/app/demos/page.tsx` — listing route rendering cards for every
+  demo in the registry
+- Added `src/app/demos/[id]/page.tsx` — single demo view with SSG via
+  `generateStaticParams`, rendering `<DemoRunner>`
+- Added `src/components/demos/DemoRunner.tsx` — client component that
+  renders the 4-panel layout (math, code, annotations, observability) and
+  executes the demo in-browser. Linear-regression is fully implemented;
+  additional demos will require branching in the `runDemo` switch
+- Wired `/demos` into the global `SiteNav` so it appears on every page
+- Updated `README.md` with the demo framework section, data residency
+  contract, pages table (now includes `/demos` and `/demos/[id]`), and
+  project structure (now includes `src/lib/demos/`, `src/components/demos/`,
+  `docs/`)
+- Verified `next build` succeeds — routes `/`, `/about`, `/demos`,
+  `/demos/linear-regression` (SSG), `/preview1` and `/api` all compile
+  cleanly
+- Verified TypeScript type-check is clean for all new files (the 4
+  pre-existing errors in `examples/websocket`, `KnowledgeGraph.tsx` and
+  `DomainWorkflows.tsx` are unchanged and out of scope for this phase)
+
+### Stage Summary
+
+- **Live preview endpoint (always on)**:
+  <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>
+  - Static landing page with the embedded working OLS demo
+  - All client-side, no external services
+  - Editable data, streaming trace popup, downloadable CSV
+- **Next.js foundation (committed, not yet deployed)**:
+  - `/demos` listing + `/demos/linear-regression` SSG detail route
+  - `DemoManifest` schema as the contract for adding new demos
+  - `DemoRunner` component with audience toggle, streaming trace, CSV
+    download, error handling
+- **Data residency contract**: locked to `downloadable` only. Private
+  dataset output goes to the user's machine; nothing transits a server.
+  HIPAA / GDPR exposure is sidestepped by construction.
+- **No external services**: confined to GitHub as requested. External
+  hosting (Vercel / GCP / Azure) and `server-sandboxed` runtime are
+  deferred to a later phase, gated on the team's go-ahead.
+
+### Next-phase suggestions (per the locked-in workflow)
+
+1. **Pyodide for Python demos.** Add `pyodide` (CDN or vendored) so the
+   `/demos/[id]` runtime can execute Python in the browser. This unlocks
+   pandas / numpy / scipy / networkx demos without a server.
+2. **More seed demos.** Three good next candidates that all run client-side:
+   - `molecular-dynamics` (Verlet integration, pure JS)
+   - `citation-pagerank` (PageRank, pure JS, networkx-equivalent)
+   - `kmeans-clustering` (Lloyd's algorithm, pure JS, with SVG centroid
+     animation)
+3. **KaTeX integration.** Replace the hand-rolled math HTML in the Next.js
+   app with KaTeX rendering of the `math.latex` field. The static
+   `docs/index.html` keeps its semantic HTML math (no CDN dependency).
+4. **Dataset registry.** A preset list of CORS-enabled web datasets
+   (data.gov, UCI ML, Kaggle public) referenced by `DatasetRef.id`, with
+   a dropdown UI in `DemoRunner`. Private uploads already work (file
+   input → in-browser parse).
+5. **Auto-mirror CI.** A GitHub Action in the private repo that runs on
+   tag push only, runs a gitleaks secret scan, and mirrors to the public
+   repo. Replaces the manual `git push public main` we do today.
+6. **Report generator.** Auto-build a Markdown / HTML summary from the
+   manifest + execution trace + result metrics, with a Download button.
+7. **Knowledge graph seed.** Each demo's `meta.tags` become nodes in the
+   cross-domain knowledge graph; render an interactive graph on a new
+   `/graph` route linking demos by shared tag / domain.
+
+### Open questions for the next iteration
+
+- Q1: For Phase 3, should I add **Pyodide + 2 more seed demos** (option 1+2
+  above), or pivot to the **report generator + dataset registry**
+  (options 4+6), or start the **knowledge graph seed** (option 7)?
+- Q2: For the live deploy of the Next.js app (when external services come
+  online), do you want me to prep a one-click **Vercel** config now so
+  it's ready to flip the switch later, or leave it untouched until you
+  say go?

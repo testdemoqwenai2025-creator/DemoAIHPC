@@ -92,7 +92,58 @@ This separation keeps legal scenarios simple:
   navigation bar, persisted to `localStorage`.
 - **Compliance footer on every page** — GDPR, HIPAA, contact e-mail, and a
   "Return to Home" button.
-- **Global site navigation** — Home / About / Preview 1.
+- **Global site navigation** — Home / About / Demos / Preview 1.
+- **Live, observable demos** — each demo is a first-class artifact with
+  provenance: math → code → annotations → observability → downloadable
+  result. The first seed demo (Ordinary Least Squares) is embedded live in
+  the GitHub Pages preview at
+  <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/> and is also
+  available in the Next.js app at `/demos/linear-regression`.
+
+## Demo framework (Phase 2)
+
+Every demo is defined declaratively by a `DemoManifest` (see
+`src/lib/demos/manifest.ts`) covering:
+
+1. **Meta** — id, title, domain, tags, difficulty, audience.
+2. **Math** — LaTeX source + plain-language restatement.
+3. **Code** — language, source, editable inputs.
+4. **Annotations** — audience-specific (student / researcher / executive).
+5. **Datasets** — references to web datasets or in-browser private uploads.
+6. **Observability** — metric and trace specs the runtime emits.
+7. **Reports** — supported output formats (CSV / summary / blog / paper).
+8. **Runtime** — `browser` (default, no external services) or
+   `server-sandboxed` (future, gated on external hosting).
+9. **Data residency** — currently always `downloadable`. Outputs are
+   offered as browser-side downloads; nothing is persisted server-side.
+
+### Data residency
+
+The first locked-in principle of the demo framework is: **outputs are
+downloadable, never stored server-side**. When a user runs a private dataset
+through a public demo:
+
+- The dataset is loaded into the browser tab only (file upload via the
+  `<input type="file">` API, or in-table editing).
+- The computation runs in the browser (pure JS for now; Pyodide for Python
+  in a later phase).
+- The result is offered as a download (CSV / JSON Blob via
+  `URL.createObjectURL`).
+- Nothing transits a server. No PHI. No personal data. No storage cost. No
+  retention policy to enforce.
+
+This sidesteps HIPAA / GDPR exposure for the public preview. When external
+hosting (Vercel / GCP / Azure) is added in a later phase, the
+`dataResidency` field on `DemoManifest` will admit `server-persisted` and
+`ephemeral` options — and only then will demos that need them be added.
+
+For NDA-protected scenarios or datasets too large for in-browser execution,
+contact <testdemoqwenai2025@gmail.com>.
+
+### Seed demo
+
+- **`linear-regression`** — Ordinary Least Squares (closed form). Mirrors the
+  embedded demo in `docs/index.html`.
 
 ---
 
@@ -118,6 +169,9 @@ This separation keeps legal scenarios simple:
 │   │   ├── layout.tsx           # Root layout — wraps every page with ThemeProvider + SiteNav + SiteFooter
 │   │   ├── page.tsx             # Home — microservices dashboard / landing
 │   │   ├── about/page.tsx       # About page
+│   │   ├── demos/
+│   │   │   ├── page.tsx         # Demos listing
+│   │   │   └── [id]/page.tsx    # Single demo view (SSG)
 │   │   ├── preview1/page.tsx    # Static sci-fi themed preview
 │   │   ├── api/route.ts         # API route
 │   │   └── globals.css          # Tailwind + shadcn tokens (:root and .dark)
@@ -126,6 +180,8 @@ This separation keeps legal scenarios simple:
 │   │   │   ├── ThemeProvider.tsx # Global theme context (dark / light)
 │   │   │   ├── SiteNav.tsx       # Global top navigation + theme toggle
 │   │   │   └── SiteFooter.tsx    # Global footer (GDPR / HIPAA / contact / return home)
+│   │   ├── demos/
+│   │   │   └── DemoRunner.tsx    # 4-panel demo renderer + browser-side execution
 │   │   ├── layout/
 │   │   │   ├── GlobalNavbar.tsx        # In-app navigation (view mode, search)
 │   │   │   └── EnhancedLandingPage.tsx # Landing view
@@ -136,9 +192,18 @@ This separation keeps legal scenarios simple:
 │   │   ├── workflows/DomainWorkflows.tsx
 │   │   ├── auth/AuthContext.tsx
 │   │   └── ui/                  # shadcn/ui primitives
+│   ├── lib/
+│   │   └── demos/
+│   │       ├── manifest.ts      # DemoManifest TypeScript schema
+│   │       ├── registry.ts     # Demo registry (single source of truth)
+│   │       └── seeds/
+│   │           └── linear-regression.ts  # Seed demo #01 — OLS
 │   ├── hooks/
 │   └── lib/
 ├── prisma/schema.prisma
+├── docs/                        # Static GitHub Pages content (live preview)
+│   ├── index.html              # Landing page with embedded working OLS demo
+│   └── .nojekyll
 ├── examples/websocket/          # Example WebSocket server + frontend
 ├── tests/                       # Build & runtime scripts
 ├── download/                    # Captured outputs (README.md, dump.txt)
@@ -201,8 +266,16 @@ npm start
 |------|-------------|
 | `/` | Home — landing view + microservices dashboard with AETHEL integration, knowledge graph, connectors, query executor, domain workflows. |
 | `/about` | About — explains the platform, dual-repo workflow, AETHEL integration, polyglot stack, compliance and contact. |
+| `/demos` | Demos listing — cards for every demo in the registry. |
+| `/demos/[id]` | Single demo — 4-panel layout (math, code, annotations, observability) + Run + Download CSV. |
 | `/preview1` | Static sci-fi themed preview page (Hero, Features, Domains, Architecture, Pricing, CTA). |
 | `/api` | API route. |
+
+In addition, the **GitHub Pages preview endpoint** at
+<https://testdemoqwenai2025-creator.github.io/DemoAIHPC/> serves a static
+landing page from `/docs` that includes an embedded, fully client-side
+working OLS demo. This is the canonical public preview while external hosting
+is not yet in place.
 
 ---
 

@@ -5,24 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Public preview landing page for AIHPC Advanced — scientific computing platform. Public mirror of the private AIHPC-Advanced repository."
+      content="Public preview landing page for AIHPC Advanced — scientific computing platform with live, observable, downloadable demos. Public mirror of the private AIHPC-Advanced repository. All outputs are downloaded to your machine; no data leaves your browser."
     />
     <title>AIHPC Advanced — Public Preview</title>
     <style>
       :root {
         --bg: #0b0f1a;
         --bg-elevated: #121826;
+        --bg-elevated-2: #1a2133;
         --border: #1f2937;
+        --border-strong: #2a3548;
         --text: #f3f4f6;
         --text-muted: #9ca3af;
+        --text-muted-2: #6b7280;
         --accent: #8b5cf6;
         --accent-2: #06b6d4;
+        --accent-3: #f59e0b;
+        --success: #10b981;
+        --danger: #ef4444;
       }
       * {
         box-sizing: border-box;
       }
+      html,
       body {
         margin: 0;
+        padding: 0;
+      }
+      body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           Helvetica, Arial, sans-serif;
         background: radial-gradient(
@@ -41,7 +51,7 @@
         line-height: 1.6;
       }
       .container {
-        max-width: 980px;
+        max-width: 1100px;
         margin: 0 auto;
         padding: 64px 24px 96px;
       }
@@ -65,6 +75,15 @@
         background-clip: text;
         color: transparent;
       }
+      h2 {
+        font-size: 28px;
+        margin: 0 0 12px;
+        letter-spacing: -0.01em;
+      }
+      h3 {
+        margin: 0 0 8px;
+        font-size: 18px;
+      }
       .lead {
         font-size: 20px;
         color: var(--text-muted);
@@ -87,10 +106,6 @@
       .card:hover {
         border-color: rgba(139, 92, 246, 0.55);
         transform: translateY(-2px);
-      }
-      .card h3 {
-        margin: 0 0 8px;
-        font-size: 18px;
       }
       .card p {
         margin: 0;
@@ -124,24 +139,30 @@
         font-size: 14px;
         font-weight: 600;
         text-decoration: none;
+        cursor: pointer;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--text);
+        font-family: inherit;
         transition: background 0.2s ease, color 0.2s ease, border-color 0.2s
-          ease;
+          ease, filter 0.2s ease;
       }
       .btn-primary {
         background: linear-gradient(90deg, #8b5cf6, #06b6d4);
         color: white;
-        border: 1px solid transparent;
       }
       .btn-primary:hover {
         filter: brightness(1.08);
       }
       .btn-ghost {
-        background: transparent;
-        color: var(--text);
-        border: 1px solid var(--border);
+        border-color: var(--border);
       }
       .btn-ghost:hover {
         border-color: rgba(139, 92, 246, 0.55);
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
       .meta {
         margin-top: 64px;
@@ -171,27 +192,436 @@
         border: 1px solid var(--border);
         background: var(--bg-elevated);
       }
+      /* ---- Demo section ---- */
+      .demo {
+        margin-top: 56px;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: linear-gradient(
+          180deg,
+          var(--bg-elevated) 0%,
+          rgba(18, 24, 38, 0.6) 100%
+        );
+        overflow: hidden;
+      }
+      .demo-header {
+        padding: 24px 28px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .demo-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0;
+      }
+      .demo-subtitle {
+        color: var(--text-muted);
+        font-size: 13px;
+        margin-top: 4px;
+      }
+      .demo-meta {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .demo-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+        background: var(--border);
+      }
+      @media (max-width: 760px) {
+        .demo-body {
+          grid-template-columns: 1fr;
+        }
+      }
+      .panel {
+        background: var(--bg-elevated);
+        padding: 24px 28px;
+      }
+      .panel-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-muted-2);
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+      .panel-label .audience-toggle {
+        display: inline-flex;
+        border: 1px solid var(--border);
+        border-radius: 9999px;
+        overflow: hidden;
+        font-size: 11px;
+      }
+      .panel-label .audience-toggle button {
+        background: transparent;
+        color: var(--text-muted);
+        border: 0;
+        padding: 4px 10px;
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 600;
+      }
+      .panel-label .audience-toggle button.active {
+        background: var(--accent);
+        color: white;
+      }
+      /* Math panel */
+      .math {
+        font-family: "Cambria Math", "STIX Two Math", Georgia, serif;
+        font-size: 18px;
+        line-height: 1.8;
+        color: var(--text);
+      }
+      .math .var {
+        font-style: italic;
+      }
+      .math .op {
+        color: var(--accent-2);
+        margin: 0 4px;
+      }
+      .math .accent {
+        color: var(--accent);
+      }
+      .math sub,
+      .math sup {
+        font-size: 0.75em;
+      }
+      .math .matrix {
+        display: inline-table;
+        vertical-align: middle;
+        border-left: 2px solid var(--text-muted);
+        border-right: 2px solid var(--text-muted);
+        padding: 0 8px;
+        margin: 0 4px;
+      }
+      .math .matrix td {
+        padding: 2px 8px;
+        text-align: center;
+      }
+      /* Code panel */
+      pre.code {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px 18px;
+        font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono",
+          monospace;
+        font-size: 13px;
+        line-height: 1.55;
+        overflow-x: auto;
+        margin: 0;
+        color: #e5e7eb;
+      }
+      pre.code .kw {
+        color: #c084fc;
+      }
+      pre.code .fn {
+        color: #67e8f9;
+      }
+      pre.code .num {
+        color: #fbbf24;
+      }
+      pre.code .str {
+        color: #86efac;
+      }
+      pre.code .com {
+        color: #6b7280;
+        font-style: italic;
+      }
+      .annotations {
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+      .annotations h4 {
+        color: var(--text);
+        margin: 0 0 8px;
+        font-size: 14px;
+      }
+      .annotations ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+      .annotations li {
+        margin-bottom: 6px;
+      }
+      .demo-footer {
+        padding: 20px 28px;
+        border-top: 1px solid var(--border);
+        background: var(--bg-elevated);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .demo-run {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .demo-status {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+      .demo-status .ok {
+        color: var(--success);
+        font-weight: 600;
+      }
+      .demo-status .err {
+        color: var(--danger);
+        font-weight: 600;
+      }
+      /* Popup */
+      .popup-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 8, 16, 0.7);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        padding: 16px;
+      }
+      .popup-overlay.open {
+        display: flex;
+      }
+      .popup {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-strong);
+        border-radius: 18px;
+        max-width: 560px;
+        width: 100%;
+        max-height: 80vh;
+        overflow: auto;
+        padding: 24px 28px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      }
+      .popup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+      }
+      .popup-title {
+        margin: 0;
+        font-size: 18px;
+      }
+      .popup-close {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 16px;
+      }
+      .popup-close:hover {
+        border-color: var(--accent);
+        color: var(--text);
+      }
+      .trace {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 16px;
+      }
+      .trace li {
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        margin-bottom: 8px;
+        font-size: 13px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .trace li.active {
+        border-color: var(--accent);
+        color: var(--text);
+        background: rgba(139, 92, 246, 0.1);
+      }
+      .trace li.done {
+        border-color: var(--success);
+        color: var(--text);
+      }
+      .trace li.error {
+        border-color: var(--danger);
+        color: var(--text);
+      }
+      .trace .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 9999px;
+        background: var(--text-muted-2);
+        flex-shrink: 0;
+      }
+      .trace li.active .dot {
+        background: var(--accent);
+        animation: pulse 1s ease-in-out infinite;
+      }
+      .trace li.done .dot {
+        background: var(--success);
+      }
+      .trace li.error .dot {
+        background: var(--danger);
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+      .popup-result {
+        margin-top: 16px;
+        padding: 16px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+      }
+      .popup-result h4 {
+        margin: 0 0 8px;
+        font-size: 13px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .popup-result .row {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px 0;
+        font-size: 14px;
+      }
+      .popup-result .row .label {
+        color: var(--text-muted);
+      }
+      .popup-result .row .value {
+        font-family: "SF Mono", Menlo, monospace;
+        color: var(--text);
+      }
+      .popup-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+      /* SVG plot */
+      .plot {
+        width: 100%;
+        height: 220px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        margin-top: 12px;
+      }
+      /* Data residency callout */
+      .callout {
+        margin-top: 16px;
+        padding: 12px 16px;
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--accent-2);
+        border-radius: 8px;
+        background: rgba(6, 182, 212, 0.05);
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+      .callout strong {
+        color: var(--text);
+      }
+      /* Data input editor */
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        margin-top: 8px;
+      }
+      .data-table th,
+      .data-table td {
+        padding: 6px 8px;
+        border: 1px solid var(--border);
+        text-align: center;
+      }
+      .data-table th {
+        color: var(--text-muted);
+        font-weight: 600;
+        background: var(--bg);
+      }
+      .data-table input {
+        width: 100%;
+        background: transparent;
+        border: 0;
+        color: var(--text);
+        font-family: "SF Mono", Menlo, monospace;
+        font-size: 13px;
+        text-align: center;
+        padding: 4px;
+      }
+      .data-table input:focus {
+        outline: 2px solid var(--accent);
+        border-radius: 4px;
+      }
+      .data-tools {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .data-tools button {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        padding: 4px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        font-family: inherit;
+      }
+      .data-tools button:hover {
+        border-color: var(--accent);
+        color: var(--text);
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <span class="badge">Public preview &middot; no NDA required</span>
+      <span class="badge">Public preview &middot; no NDA required &middot; no external services</span>
       <h1>AIHPC Advanced</h1>
       <p class="lead">
-        Unified scientific computing platform — bioinformatics,
-        cheminformatics, molecular modelling and materials science behind one
-        polyglot microservices architecture, integrated with the AETHEL
-        hypercomputing emulation layer. This is the public mirror of the
-        private <code>AIHPC-Advanced</code> source-of-truth repository.
+        A unified scientific computing platform where every demo is a
+        first-class artifact with provenance:
+        <strong>math &rarr; code &rarr; annotations &rarr; observability</strong>.
+        This is the public mirror of the private
+        <code>AIHPC-Advanced</code> source-of-truth repository. The demo
+        below is fully client-side — your inputs and outputs never leave
+        your browser.
       </p>
 
       <div class="actions">
         <a
           class="btn btn-primary"
+          href="#live-demo"
+          >Try the live demo &darr;</a
+        >
+        <a
+          class="btn btn-ghost"
           href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC"
           target="_blank"
           rel="noreferrer noopener"
-          >Browse DemoAIHPC on GitHub &rarr;</a
+          >Browse DemoAIHPC on GitHub</a
         >
         <a
           class="btn btn-ghost"
@@ -202,6 +632,116 @@
         >
       </div>
 
+      <!-- ============ LIVE DEMO ============ -->
+      <section class="demo" id="live-demo">
+        <div class="demo-header">
+          <div>
+            <h2 class="demo-title">Demo 01 — Ordinary Least Squares</h2>
+            <p class="demo-subtitle">
+              Linear regression by closed-form OLS. Math &rarr; code &rarr;
+              annotations &rarr; live observable execution trace &rarr;
+              downloadable result.
+            </p>
+          </div>
+          <div class="demo-meta">
+            <span class="pill">Domain: Statistics</span>
+            <span class="pill">Runtime: Browser (pure JS)</span>
+            <span class="pill">Data: stays in your browser</span>
+          </div>
+        </div>
+
+        <div class="demo-body">
+          <!-- Math panel -->
+          <div class="panel">
+            <div class="panel-label">
+              <span>1. Math</span>
+              <span class="audience-toggle" id="audience-toggle">
+                <button data-audience="student" class="active">Student</button>
+                <button data-audience="researcher">Researcher</button>
+                <button data-audience="executive">Executive</button>
+              </span>
+            </div>
+            <div class="math" id="math-panel">
+              <!-- Filled by JS -->
+            </div>
+          </div>
+
+          <!-- Code panel -->
+          <div class="panel">
+            <div class="panel-label"><span>2. Code</span><span>TypeScript</span></div>
+<pre class="code"><span class="com">// Ordinary Least Squares — closed-form solution</span>
+<span class="com">// β̂ = (XᵀX)⁻¹ Xᵀy</span>
+
+<span class="kw">function</span> <span class="fn">ols</span>(X: <span class="kw">number</span>[][], y: <span class="kw">number</span>[]): <span class="kw">number</span>[] {
+  <span class="kw">const</span> Xt      = <span class="fn">transpose</span>(X);
+  <span class="kw">const</span> XtX     = <span class="fn">matmul</span>(Xt, X);
+  <span class="kw">const</span> XtX_inv = <span class="fn">invert2</span>(XtX);   <span class="com">// 2×2 closed form</span>
+  <span class="kw">const</span> Xty     = <span class="fn">matvec</span>(Xt, y);
+  <span class="kw">return</span> <span class="fn">matvec</span>(XtX_inv, Xty);          <span class="com">// β̂</span>
+}
+
+<span class="com">// Predict y for a given β̂ and x</span>
+<span class="kw">function</span> <span class="fn">predict</span>(beta: <span class="kw">number</span>[], x: <span class="kw">number</span>): <span class="kw">number</span> {
+  <span class="kw">return</span> beta[<span class="num">0</span>] + beta[<span class="num">1</span>] * x;            <span class="com">// β₀ + β₁·x</span>
+}</pre>
+          </div>
+
+          <!-- Annotations panel -->
+          <div class="panel" style="grid-column: 1 / -1">
+            <div class="panel-label"><span>3. Annotations</span><span id="audience-label">for: student</span></div>
+            <div class="annotations" id="annotations-panel">
+              <!-- Filled by JS -->
+            </div>
+          </div>
+
+          <!-- Inputs + Observability panel -->
+          <div class="panel" style="grid-column: 1 / -1">
+            <div class="panel-label">
+              <span>4. Inputs &amp; Observability</span>
+              <span>Edit the data, then Run</span>
+            </div>
+
+            <table class="data-table" id="data-table">
+              <thead>
+                <tr><th>#</th><th>x (input)</th><th>y (observed)</th><th>ŷ (predicted)</th></tr>
+              </thead>
+              <tbody id="data-body"><!-- Filled by JS --></tbody>
+            </table>
+
+            <div class="data-tools">
+              <button id="add-row">+ Add row</button>
+              <button id="remove-row">&minus; Remove last row</button>
+              <button id="reset-data">Reset to defaults</button>
+            </div>
+
+            <svg class="plot" id="plot" viewBox="0 0 400 220" preserveAspectRatio="none"></svg>
+
+            <div class="callout">
+              <strong>Data residency.</strong>
+              The dataset you edit above lives only in your browser tab.
+              Nothing is uploaded. When you click
+              <em>Run &amp; observe</em>, the computation happens locally
+              and the result popup offers a <em>Download CSV</em> button —
+              the output also stays on your machine. For HIPAA, this means
+              no PHI ever transits a server. For GDPR, no personal data is
+              processed. For NDA-protected work, contact
+              <a href="mailto:testdemoqwenai2025@gmail.com"
+                >testdemoqwenai2025@gmail.com</a
+              >.
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-footer">
+          <div class="demo-run">
+            <button class="btn btn-primary" id="run-btn">▶ Run &amp; observe</button>
+            <button class="btn btn-ghost" id="download-btn" disabled>⬇ Download CSV</button>
+          </div>
+          <div class="demo-status" id="demo-status">Idle.</div>
+        </div>
+      </section>
+
+      <!-- ============ CARDS ============ -->
       <div class="grid">
         <div class="card">
           <h3>Dual-repository workflow</h3>
@@ -267,7 +807,8 @@
           <h3>Compliance</h3>
           <p>
             The public preview does not collect personal data (GDPR) and
-            processes no PHI (HIPAA). DPAs / BAAs are available for enterprise
+            processes no PHI (HIPAA). Outputs are downloadable; nothing is
+            stored server-side. DPAs / BAAs are available for enterprise
             deployments on request.
           </p>
           <a
@@ -295,6 +836,7 @@
         <span class="pill">HIPAA</span>
         <span class="pill">No personal data collected</span>
         <span class="pill">No PHI processed</span>
+        <span class="pill">Outputs downloadable — nothing stored server-side</span>
       </div>
 
       <div class="meta">
@@ -310,9 +852,456 @@
           >
           repository. The interactive Next.js application lives in the
           repository root and can be run locally with
-          <code>npm install &amp;&amp; npm run dev</code>.
+          <code>npm install &amp;&amp; npm run dev</code>. External hosting
+          (Vercel / GCP / Azure) will be added in a later phase when the team
+          is ready; for now everything is confined to GitHub.
         </p>
       </div>
     </div>
+
+    <!-- Popup -->
+    <div class="popup-overlay" id="popup-overlay">
+      <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+        <div class="popup-header">
+          <h3 class="popup-title" id="popup-title">Execution trace</h3>
+          <button class="popup-close" id="popup-close" aria-label="Close popup">&times;</button>
+        </div>
+        <ul class="trace" id="trace"><!-- Filled by JS --></ul>
+        <div class="popup-result" id="popup-result" style="display:none">
+          <h4>Result</h4>
+          <div id="popup-result-rows"><!-- Filled by JS --></div>
+        </div>
+        <div class="popup-actions" id="popup-actions" style="display:none">
+          <button class="btn btn-primary" id="popup-download">⬇ Download CSV</button>
+          <button class="btn btn-ghost" id="popup-copy">Copy β̂</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ============================================================
+      // AIHPC Advanced — embedded OLS demo (pure client-side JS)
+      // ============================================================
+      // No external dependencies, no network calls, no server. The
+      // dataset edited in the table lives only in this page's memory;
+      // the result is downloadable as a CSV Blob.
+      // ============================================================
+
+      // ---- Default data ----
+      const defaultData = [
+        { x: 1, y: 2.1 },
+        { x: 2, y: 3.9 },
+        { x: 3, y: 6.2 },
+        { x: 4, y: 8.1 },
+        { x: 5, y: 10.0 },
+        { x: 6, y: 11.9 },
+      ];
+      let data = defaultData.map((d) => ({ ...d }));
+      let lastResult = null;
+
+      // ---- Math (rendered as semantic HTML) ----
+      const mathHTML = `
+        <p>Given <span class="var">n</span> observations
+          (<span class="var">x</span><sub><span class="var">i</span></sub>, <span class="var">y</span><sub><span class="var">i</span></sub>),
+          find <span class="accent">β̂</span> minimising the residual sum of squares:</p>
+        <p style="text-align:center; margin: 18px 0;">
+          <span class="accent">RSS</span>(β) <span class="op">=</span>
+          Σ<sub><span class="var">i</span></sub>
+          ( <span class="var">y</span><sub><span class="var">i</span></sub>
+          <span class="op">−</span>
+          <span class="var">x</span><sub><span class="var">i</span></sub><sup>T</sup>β )<sup>2</sup>
+        </p>
+        <p>Taking the gradient and setting it to zero gives the
+          <strong>normal equations</strong>:</p>
+        <p style="text-align:center; margin: 18px 0;">
+          <span class="accent">β̂</span> <span class="op">=</span>
+          ( X<sup>T</sup> X )<sup>−1</sup> X<sup>T</sup> <span class="var">y</span>
+        </p>
+        <p>For simple linear regression with intercept,
+          X <span class="op">=</span>
+          [ <span class="matrix"><table><tr><td>1</td><td>x<sub>1</sub></td></tr><tr><td>1</td><td>x<sub>2</sub></td></tr><tr><td>…</td><td>…</td></tr><tr><td>1</td><td>x<sub>n</sub></td></tr></table></span> ]
+          and β <span class="op">=</span> [ β<sub>0</sub>, β<sub>1</sub> ]<sup>T</sup>.</p>
+      `;
+      document.getElementById('math-panel').innerHTML = mathHTML;
+
+      // ---- Annotations (audience-switchable) ----
+      const annotations = {
+        student: `
+          <h4>What is OLS?</h4>
+          <p>Ordinary Least Squares finds the line that minimises the total
+            squared vertical distance from each point to the line. "Squared"
+            because squaring removes the sign — points above and below the
+            line both count positively — and penalises big errors more
+            than small ones.</p>
+          <ul>
+            <li><strong>β₀</strong> is the intercept — where the line crosses the y-axis.</li>
+            <li><strong>β₁</strong> is the slope — how much y changes per unit x.</li>
+            <li>The closed form <code>β̂ = (XᵀX)⁻¹ Xᵀy</code> gives the
+              exact answer in one shot — no iteration needed.</li>
+          </ul>
+          <p>Try editing the table above and re-running. Notice how β̂
+            changes when you change a single point.</p>
+        `,
+        researcher: `
+          <h4>Methodology notes</h4>
+          <ul>
+            <li><strong>Model.</strong> y = Xβ + ε, with E[ε] = 0 and
+              Var(ε) = σ²I. The OLS estimator is BLUE under
+              Gauss–Markov assumptions.</li>
+            <li><strong>Closed form.</strong> For k ≤ 3 predictors the
+              closed-form inverse is numerically stable; for larger k one
+              would use QR decomposition (numpy.linalg.lstsq) instead of
+              explicitly inverting XᵀX.</li>
+            <li><strong>Standard errors.</strong> σ̂² = RSS / (n − k);
+              Var(β̂) = σ̂² (XᵀX)⁻¹. Not computed in this demo — extend by
+              adding the diagonal of (XᵀX)⁻¹ times σ̂².</li>
+            <li><strong>Assumption diagnostics</strong> (residual
+              normality, homoscedasticity) are intentionally out of scope
+              here; this is the canonical estimator, not a full
+              regression suite.</li>
+          </ul>
+        `,
+        executive: `
+          <h4>Why this matters</h4>
+          <p>Linear regression is the workhorse of business analytics —
+            forecasting demand, sizing headcount, attribution modelling.
+            The closed-form solution is what powers every "trend line" you
+            see in a BI dashboard.</p>
+          <ul>
+            <li><strong>Speed.</strong> Closed-form OLS solves in one
+              matrix inversion. For n &lt; 10,000 it is sub-millisecond
+              on commodity hardware.</li>
+            <li><strong>Interpretability.</strong> β₁ tells you the
+              marginal effect of x on y — the single number a stakeholder
+              will quote.</li>
+            <li><strong>Honesty.</strong> The popup shows every step the
+              computer takes. No black box. This is the audit trail your
+              risk team will ask for.</li>
+          </ul>
+        `,
+      };
+      let currentAudience = 'student';
+      function renderAnnotations() {
+        document.getElementById('annotations-panel').innerHTML =
+          annotations[currentAudience] || '';
+        document.getElementById('audience-label').textContent =
+          'for: ' + currentAudience;
+        document.querySelectorAll('#audience-toggle button').forEach((b) => {
+          b.classList.toggle('active', b.dataset.audience === currentAudience);
+        });
+      }
+      document.querySelectorAll('#audience-toggle button').forEach((b) => {
+        b.addEventListener('click', () => {
+          currentAudience = b.dataset.audience;
+          renderAnnotations();
+        });
+      });
+      renderAnnotations();
+
+      // ---- Data table ----
+      function renderTable() {
+        const tbody = document.getElementById('data-body');
+        tbody.innerHTML = '';
+        data.forEach((row, i) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${i + 1}</td>
+            <td><input type="number" step="any" data-i="${i}" data-k="x" value="${row.x}"></td>
+            <td><input type="number" step="any" data-i="${i}" data-k="y" value="${row.y}"></td>
+            <td id="pred-${i}">—</td>
+          `;
+          tbody.appendChild(tr);
+        });
+        tbody.querySelectorAll('input').forEach((inp) => {
+          inp.addEventListener('input', (e) => {
+            const i = +e.target.dataset.i;
+            const k = e.target.dataset.k;
+            const v = parseFloat(e.target.value);
+            if (!Number.isNaN(v)) {
+              data[i][k] = v;
+              updatePredictionsInTable();
+              drawPlot();
+            }
+          });
+        });
+        updatePredictionsInTable();
+        drawPlot();
+      }
+      function updatePredictionsInTable() {
+        if (!lastResult) {
+          data.forEach((_, i) => {
+            const el = document.getElementById('pred-' + i);
+            if (el) el.textContent = '—';
+          });
+          return;
+        }
+        const { beta } = lastResult;
+        data.forEach((row, i) => {
+          const el = document.getElementById('pred-' + i);
+          if (el) {
+            const yhat = beta[0] + beta[1] * row.x;
+            el.textContent = yhat.toFixed(3);
+          }
+        });
+      }
+
+      document.getElementById('add-row').addEventListener('click', () => {
+        const last = data[data.length - 1];
+        data.push({ x: (last?.x ?? 0) + 1, y: (last?.y ?? 0) + 2 });
+        renderTable();
+      });
+      document.getElementById('remove-row').addEventListener('click', () => {
+        if (data.length > 2) {
+          data.pop();
+          renderTable();
+        }
+      });
+      document.getElementById('reset-data').addEventListener('click', () => {
+        data = defaultData.map((d) => ({ ...d }));
+        lastResult = null;
+        renderTable();
+        document.getElementById('demo-status').innerHTML = 'Idle.';
+        document.getElementById('download-btn').disabled = true;
+      });
+
+      // ---- Linear algebra (2×2 closed form) ----
+      function transpose(M) { return M[0].map((_, j) => M.map((r) => r[j])); }
+      function matmul(A, B) {
+        const n = A.length, m = B[0].length, k = B.length;
+        const C = Array.from({ length: n }, () => Array(m).fill(0));
+        for (let i = 0; i < n; i++)
+          for (let j = 0; j < m; j++)
+            for (let l = 0; l < k; l++) C[i][j] += A[i][l] * B[l][j];
+        return C;
+      }
+      function matvec(A, v) {
+        return A.map((row) => row.reduce((s, x, i) => s + x * v[i], 0));
+      }
+      function invert2(M) {
+        const [[a, b], [c, d]] = M;
+        const det = a * d - b * c;
+        if (Math.abs(det) < 1e-12) throw new Error('Singular matrix (XᵀX not invertible).');
+        return [[d / det, -b / det], [-c / det, a / det]];
+      }
+
+      // ---- SVG plot ----
+      function drawPlot() {
+        const svg = document.getElementById('plot');
+        const W = 400, H = 220, pad = 28;
+        const xs = data.map((d) => d.x);
+        const ys = data.map((d) => d.y);
+        const xmin = Math.min(...xs), xmax = Math.max(...xs);
+        const ymin = Math.min(...ys, lastResult ? lastResult.beta[0] + lastResult.beta[1] * xmin : Infinity);
+        const ymax = Math.max(...ys, lastResult ? lastResult.beta[0] + lastResult.beta[1] * xmax : -Infinity);
+        const xrange = xmax - xmin || 1, yrange = ymax - ymin || 1;
+        const sx = (x) => pad + ((x - xmin) / xrange) * (W - 2 * pad);
+        const sy = (y) => H - pad - ((y - ymin) / yrange) * (H - 2 * pad);
+        let parts = [];
+        // Axes
+        parts.push(`<line x1="${pad}" y1="${H - pad}" x2="${W - pad}" y2="${H - pad}" stroke="#2a3548" stroke-width="1"/>`);
+        parts.push(`<line x1="${pad}" y1="${pad}" x2="${pad}" y2="${H - pad}" stroke="#2a3548" stroke-width="1"/>`);
+        // Regression line
+        if (lastResult) {
+          const { beta } = lastResult;
+          const x1 = xmin, x2 = xmax;
+          const y1 = beta[0] + beta[1] * x1;
+          const y2 = beta[0] + beta[1] * x2;
+          parts.push(`<line x1="${sx(x1)}" y1="${sy(y1)}" x2="${sx(x2)}" y2="${sy(y2)}" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round"/>`);
+        }
+        // Points
+        data.forEach((d) => {
+          parts.push(`<circle cx="${sx(d.x)}" cy="${sy(d.y)}" r="4" fill="#06b6d4"/>`);
+        });
+        svg.innerHTML = parts.join('');
+      }
+
+      // ---- Popup + lazy streaming execution ----
+      const overlay = document.getElementById('popup-overlay');
+      const traceEl = document.getElementById('trace');
+      const popupClose = document.getElementById('popup-close');
+      const popupResult = document.getElementById('popup-result');
+      const popupResultRows = document.getElementById('popup-result-rows');
+      const popupActions = document.getElementById('popup-actions');
+      const runBtn = document.getElementById('run-btn');
+      const downloadBtn = document.getElementById('download-btn');
+      const statusEl = document.getElementById('demo-status');
+
+      popupClose.addEventListener('click', () => overlay.classList.remove('open'));
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.classList.remove('open');
+      });
+
+      // Streaming steps — the popup opens immediately and updates as
+      // each phase completes. Even though the real OLS is sub-millisecond,
+      // we intentionally space the steps so the user can read them.
+      // This is the "feels alive" UX primitive described in the brief.
+      function sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
+
+      async function runDemo() {
+        runBtn.disabled = true;
+        downloadBtn.disabled = true;
+        statusEl.innerHTML = 'Running…';
+        overlay.classList.add('open');
+        popupResult.style.display = 'none';
+        popupActions.style.display = 'none';
+        traceEl.innerHTML = '';
+
+        const steps = [
+          { id: 'parse',   label: 'Parse input table → X, y' },
+          { id: 'xtx',     label: 'Compute XᵀX' },
+          { id: 'xtx-inv', label: 'Invert XᵀX (2×2 closed form)' },
+          { id: 'xty',     label: 'Compute Xᵀy' },
+          { id: 'beta',    label: 'β̂ = (XᵀX)⁻¹ Xᵀy' },
+          { id: 'resid',   label: 'Compute residuals & RSS' },
+          { id: 'plot',    label: 'Render SVG plot & table predictions' },
+        ];
+        const lis = {};
+        steps.forEach((s) => {
+          const li = document.createElement('li');
+          li.innerHTML = `<span class="dot"></span><span>${s.label}</span>`;
+          traceEl.appendChild(li);
+          lis[s.id] = li;
+        });
+
+        try {
+          // Step 1: parse
+          lis.parse.classList.add('active');
+          await sleep(220);
+          const X = data.map((d) => [1, d.x]);
+          const y = data.map((d) => d.y);
+          lis.parse.classList.remove('active');
+          lis.parse.classList.add('done');
+          await sleep(120);
+
+          // Step 2: XᵀX
+          lis.xtx.classList.add('active');
+          await sleep(220);
+          const Xt = transpose(X);
+          const XtX = matmul(Xt, X);
+          lis.xtx.classList.remove('active');
+          lis.xtx.classList.add('done');
+          await sleep(120);
+
+          // Step 3: invert
+          lis['xtx-inv'].classList.add('active');
+          await sleep(280);
+          const XtX_inv = invert2(XtX);
+          lis['xtx-inv'].classList.remove('active');
+          lis['xtx-inv'].classList.add('done');
+          await sleep(120);
+
+          // Step 4: Xᵀy
+          lis.xty.classList.add('active');
+          await sleep(200);
+          const Xty = matvec(Xt, y);
+          lis.xty.classList.remove('active');
+          lis.xty.classList.add('done');
+          await sleep(120);
+
+          // Step 5: β̂
+          lis.beta.classList.add('active');
+          await sleep(260);
+          const beta = matvec(XtX_inv, Xty);
+          lis.beta.classList.remove('active');
+          lis.beta.classList.add('done');
+          await sleep(120);
+
+          // Step 6: residuals
+          lis.resid.classList.add('active');
+          await sleep(220);
+          const yhat = data.map((d) => beta[0] + beta[1] * d.x);
+          const residuals = data.map((d, i) => d.y - yhat[i]);
+          const rss = residuals.reduce((s, r) => s + r * r, 0);
+          const tss = data.reduce((s, d) => s + (d.y - (y.reduce((p, v) => p + v, 0) / y.length)) ** 2, 0);
+          const r2 = 1 - rss / tss;
+          lis.resid.classList.remove('active');
+          lis.resid.classList.add('done');
+          await sleep(120);
+
+          // Step 7: plot
+          lis.plot.classList.add('active');
+          await sleep(240);
+          lastResult = { beta, yhat, residuals, rss, r2 };
+          updatePredictionsInTable();
+          drawPlot();
+          lis.plot.classList.remove('active');
+          lis.plot.classList.add('done');
+
+          // Result panel
+          popupResultRows.innerHTML = `
+            <div class="row"><span class="label">β₀ (intercept)</span><span class="value">${beta[0].toFixed(6)}</span></div>
+            <div class="row"><span class="label">β₁ (slope)</span><span class="value">${beta[1].toFixed(6)}</span></div>
+            <div class="row"><span class="label">RSS</span><span class="value">${rss.toFixed(6)}</span></div>
+            <div class="row"><span class="label">R²</span><span class="value">${r2.toFixed(6)}</span></div>
+            <div class="row"><span class="label">n observations</span><span class="value">${data.length}</span></div>
+          `;
+          popupResult.style.display = 'block';
+          popupActions.style.display = 'flex';
+          statusEl.innerHTML = `<span class="ok">Done.</span> β₀=${beta[0].toFixed(3)}, β₁=${beta[1].toFixed(3)}, R²=${r2.toFixed(3)}`;
+          downloadBtn.disabled = false;
+        } catch (err) {
+          // Mark the active step as errored
+          const activeLi = traceEl.querySelector('li.active');
+          if (activeLi) {
+            activeLi.classList.remove('active');
+            activeLi.classList.add('error');
+          }
+          popupResultRows.innerHTML = `<div class="row"><span class="label">Error</span><span class="value" style="color: var(--danger)">${err.message}</span></div>`;
+          popupResult.style.display = 'block';
+          statusEl.innerHTML = `<span class="err">Error: ${err.message}</span>`;
+        } finally {
+          runBtn.disabled = false;
+        }
+      }
+      runBtn.addEventListener('click', runDemo);
+
+      // ---- Download CSV ----
+      function toCSV() {
+        if (!lastResult) return '';
+        const { beta, yhat, residuals, rss, r2 } = lastResult;
+        const lines = [];
+        lines.push('# AIHPC Advanced — OLS demo output');
+        lines.push('# Generated: ' + new Date().toISOString());
+        lines.push(`# beta_0 (intercept),${beta[0]}`);
+        lines.push(`# beta_1 (slope),${beta[1]}`);
+        lines.push(`# RSS,${rss}`);
+        lines.push(`# R2,${r2}`);
+        lines.push('#');
+        lines.push('index,x,y,yhat,residual');
+        data.forEach((d, i) => {
+          lines.push(`${i + 1},${d.x},${d.y},${yhat[i].toFixed(6)},${residuals[i].toFixed(6)}`);
+        });
+        return lines.join('\n') + '\n';
+      }
+      function downloadCSV() {
+        const csv = toCSV();
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'aihpc-ols-output-' + Date.now() + '.csv';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+      downloadBtn.addEventListener('click', downloadCSV);
+      document.getElementById('popup-download').addEventListener('click', downloadCSV);
+      document.getElementById('popup-copy').addEventListener('click', async () => {
+        if (!lastResult) return;
+        try {
+          await navigator.clipboard.writeText(JSON.stringify(lastResult.beta));
+          document.getElementById('popup-copy').textContent = '✓ Copied';
+          setTimeout(() => {
+            document.getElementById('popup-copy').textContent = 'Copy β̂';
+          }, 1500);
+        } catch {
+          // ignore
+        }
+      });
+
+      // ---- Initial render ----
+      renderTable();
+    </script>
   </body>
 </html>

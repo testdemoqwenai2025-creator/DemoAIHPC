@@ -24,6 +24,7 @@ export function SiteNav() {
   const links: { href: string; label: string }[] = [
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About' },
+    { href: '/demos', label: 'Demos' },
     { href: '/preview1', label: 'Preview 1' },
   ]
 
