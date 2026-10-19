@@ -1954,3 +1954,10 @@ explicit yes to all three open questions from Phase 6.
   "bedrums or footpaths or chains" directive, or is there a
   different shape they had in mind (e.g., a tree, a DAG, a tree-
   of-trees)?
+
+## Phase 22 status note
+- PDB file upload added to 3D protein viewer
+- ETL/ELT added to OLS demo
+- Particle bg applied to 13 legacy pages
+- Molecular-dynamics demo built (5th seed demo)
+- Pages build status: monitoring
