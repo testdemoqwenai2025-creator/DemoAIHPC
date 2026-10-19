@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Chemistry Hub — AIHPC Advanced Science. Subdomains: Organic, Inorganic, Physical, Analytical, Materials, Computational Chemistry." />
+    <title>Chemistry Hub — AIHPC Advanced Science</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(245,158,11,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); background: rgba(11,15,26,0.8); backdrop-filter: blur(10px); }
+      .ribbon.light { background: rgba(255,255,255,0.85); border-bottom-color: #e5e7eb; }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; }
+      .badge { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-elevated); font-size: 12px; color: var(--text-muted); margin-bottom: 24px; }
+      h1 { font-size: 40px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#fcd34d 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 760px; margin: 0 0 40px; }
+      .cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-top: 24px; }
+      .card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 16px; padding: 24px; transition: border-color 0.2s ease, transform 0.2s ease; text-decoration: none; color: var(--text); display: flex; flex-direction: column; gap: 8px; }
+      .card:hover { border-color: rgba(245,158,11,0.55); transform: translateY(-2px); }
+      .card .icon { width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(139,92,246,0.2)); display: inline-flex; align-items: center; justify-content: center; }
+      .card .icon svg { width: 24px; height: 24px; }
+      .card .tag { font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .card h2 { margin: 0; font-size: 20px; }
+      .card p { margin: 0; color: var(--text-muted); font-size: 14px; flex: 1; }
+      .card .tools { font-size: 12px; color: var(--accent-3); font-weight: 600; }
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(245,158,11,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.06), transparent 55%), #fafafa; color: #18181b; }
+      body.light .card, body.light .badge, body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .badge, body.light .meta, body.light .card p, body.light .card .tag, body.light .card .tools { color: #4b5563; }
+      body.light .ribbon-btn-primary { color: white; }
+    </style>
+  </head>
+  <body>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="index.html">Home</a><a href="index.html#live-demo">Demos</a><a href="dashboard.html">Dashboard</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu">
+            <a href="science-biology.html">Biology Hub</a>
+            <a href="science-chemistry.html">Chemistry Hub</a>
+            <a href="science-physics.html">Physics Hub</a>
+            <a href="science-maths.html">Mathematics Hub</a>
+          </div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu">
+            <a href="dashboard.html">Temporal Knowledge Graph Dashboard</a>
+            <a href="concepts.html">Concept Cards</a>
+            <a href="concepts/replayable-decision-traces.html">Replayable Decision Traces</a>
+            <a href="concepts/provenance-first.html">Provenance-First Computing</a>
+            <a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a>
+            <a href="concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a>
+            <a href="concepts/audience-annotations.html">Audience-Specific Annotations</a>
+          </div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="index.html#live-demo" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <span class="badge">Science Hub &middot; Chemistry</span>
+      <h1>Chemistry</h1>
+      <p class="lead">
+        Modern AI for chemistry — organic, inorganic, physical, analytical,
+        materials, and computational subdomains. Inspired by DeepMind&apos;s
+        GNoME (materials discovery), AlphaFold-style molecular structure
+        prediction, and graph-neural-network molecular property models.
+        Each subdomain card below is a dedicated page.
+      </p>
+
+      <div class="cards">
+        <a class="card" href="science/chemistry/organic.html">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="3"/><path d="M9 9l3 3M15 9l-3 3M9 15l3-3M15 15l-3-3"/></svg></div>
+          <span class="tag">Subdomain</span>
+          <h2>Organic Chemistry</h2>
+          <p>Reaction prediction, retrosynthesis, SMILES / InChI parsing. Graph neural networks for reaction-class classification and product prediction.</p>
+          <span class="tools">Tools: RDKit (Pyodide), GNN, SMILES parser</span>
+        </a>
+        <a class="card" href="science/chemistry/inorganic.html">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/><path d="M12 2v20M2 8.5l20 7M22 8.5l-20 7"/></svg></div>
+          <span class="tag">Subdomain</span>
+          <h2>Inorganic Chemistry</h2>
+          <p>Crystal-structure prediction, coordination chemistry, ligand-field theory. GNoME-style materials discovery.</p>
+          <span class="tools">Tools: VASP-style DFT (mock), symmetry groups, CIF export</span>
+        </a>
+        <a class="card" href="science/chemistry/physical.html">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0Z"/><path d="M3 12h18M12 3v18"/></svg></div>
+          <span class="tag">Subdomain</span>
+          <h2>Physical Chemistry</h2>
+          <p>Thermodynamics, kinetics, quantum chemistry. Transition-state search, Arrhenius plots, partition-function calculators.</p>
+          <span class="tools">Tools: ODE solver, TST, Boltzmann sampling</span>
+        </a>
+        <a class="card" href="science/chemistry/analytical.html">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M3 3v18h18M7 14l3-4 4 3 4-6"/></svg></div>
+          <span class="tag">Subdomain</span>
+          <h2>Analytical Chemistry</h2>
+          <p>NMR / MS / IR spectrum processing, peak picking, deconvolution. Chromatogram integration.</p>
+          <span class="tools">Tools: FFT, Gaussian deconvolution, peak picker</span>
+        </a>
+        <a class="card" href="science/chemistry/materials.html">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+          <span class="tag">Subdomain</span>
+          <h2>Materials Chemistry</h2>
+          <p>Battery materials, catalysts, polymers. Phase-diagram exploration and Pourbaix diagrams.</p>
+          <span class="tools">Tools: Phase-diagram viewer, Pourbaix, convex hull</span>
+        </a>
+        <a class="card" href="science/chemistry/computational.html">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
+          <span class="tag">Subdomain</span>
+          <h2>Computational Chemistry</h2>
+          <p>Molecular dynamics, DFT, semi-empirical methods. Force-field parameterisation and free-energy perturbation.</p>
+          <span class="tools">Tools: OpenMM (Pyodide), xTB, FEP</span>
+        </a>
+      </div>
+
+      <div class="meta">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/science-chemistry.html</code>. Next.js route: <code>/science/chemistry</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        let initial = 'dark';
+        try { const stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', () => { const next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

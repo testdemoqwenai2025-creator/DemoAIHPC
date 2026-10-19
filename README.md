@@ -292,11 +292,31 @@ serves a static mirror for the landing, dashboard, and concept cards.
 | `/query` | Query Executor — natural-language + structured query (migrated). |
 | `/knowledge-graph` | Knowledge Graph — interactive cross-domain 2.4M-node graph (migrated). |
 | `/workflows` | Domain Workflows — pre-built scientific workflow templates (migrated). |
-| `/science` | Science Hub — Alpha-family-inspired modern AI for science landing. |
-| `/science/proteins` | Proteins — AlphaFold 3-style structure prediction (direction page). |
-| `/science/genetics` | Genetics — AlphaMissense-style variant pathogenicity (direction page). |
-| `/science/nucleotides` | Nucleotides — DNA / RNA sequence analysis (direction page). |
-| `/science/maths` | Mathematics — AlphaProof-style theorem proving (direction page). |
+| `/science/biology` | **Biology Hub** — Molecular / Genetics / Proteins / Cell Imaging / Systems / Evolutionary. |
+| `/science/biology/molecular` | Molecular Biology — central dogma, transcription, translation. Has animated DNA helix + polyglot code. |
+| `/science/biology/imaging` | Cell Imaging — microscopy segmentation, denoising, super-resolution. |
+| `/science/biology/systems` | Systems Biology — pathway modelling, ODE/SDE, FBA. |
+| `/science/biology/evolutionary` | Evolutionary Biology — phylogenetics, MSA, dN/dS. |
+| `/science/chemistry` | **Chemistry Hub** — Organic / Inorganic / Physical / Analytical / Materials / Computational. |
+| `/science/chemistry/organic` | Organic Chemistry — reaction prediction, retrosynthesis, SMILES. |
+| `/science/chemistry/inorganic` | Inorganic Chemistry — crystal-structure prediction, GNoME-style. |
+| `/science/chemistry/physical` | Physical Chemistry — thermodynamics, kinetics, quantum. |
+| `/science/chemistry/analytical` | Analytical Chemistry — NMR / MS / IR spectrum processing. |
+| `/science/chemistry/materials` | Materials Chemistry — batteries, catalysts, polymers. |
+| `/science/chemistry/computational` | Computational Chemistry — MD, DFT, FEP. |
+| `/science/physics` | **Physics Hub** — Space / Waves / Sound / Mechanics / Quantum / Thermo. |
+| `/science/physics/space` | Space & Astrophysics — orbital mechanics, N-body, exoplanet transits. |
+| `/science/physics/waves` | Waves & Optics — EM spectrum, diffraction, FFT spectroscopy. |
+| `/science/physics/sound` | Sound & Acoustics — wave equation, room acoustics, STFT. |
+| `/science/physics/mechanics` | Mechanics — rigid-body dynamics, Lagrangian/Hamiltonian. |
+| `/science/physics/quantum` | Quantum — Schrödinger, quantum circuits, VQE. |
+| `/science/physics/thermo` | Thermodynamics — equations of state, phase equilibria, MCMC. |
+| `/science/maths` | Mathematics Hub — Theorem proving / Algebra / Analysis / Geometry / Number theory / Probability. |
+| `/science/maths/algebra` | Algebra — group theory, Gröbner bases. |
+| `/science/maths/analysis` | Analysis — real/complex analysis, PDE solvers. |
+| `/science/maths/geometry` | Geometry — AlphaGeometry-style, differential geometry. |
+| `/science/maths/number-theory` | Number Theory — primality, ECC, L-functions. |
+| `/science/maths/probability` | Probability & Statistics — stochastic processes, MCMC. |
 | `/dashboard` | **Temporal RDF Knowledge Graph Dashboard** — replayable decision traces with play / replay / scrub, knowledge tracing. Inspired by FoundationCapital / Aktiver context graphs. |
 | `/concepts` | **Concept Cards** index — deeper thoughts with the evolution of each subject, paired with hypothetical demos. |
 | `/concepts/replayable-decision-traces` | Replayable Decision Traces — the foundational concept. |

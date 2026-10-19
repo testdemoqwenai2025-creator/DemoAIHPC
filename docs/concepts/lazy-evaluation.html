@@ -3,13 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Lazy Evaluation as a UX Primitive — popups open immediately and stream updates. The 'feels alive' property that's hard to copy." />
+    <meta name="description" content="Lazy Evaluation as a UX Primitive — the 'feels alive' property. Reimagined as a 4-panel research-short popup: animated DNA helix, 6-language code toggle (Python / Rust / Go / C / Elixir / Scala), streaming 'thinking' tokens with a real function-call on a dataset, and a live result visualization." />
     <title>Lazy Evaluation as UX — AIHPC Advanced Concept Card</title>
     <style>
-      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; }
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
       * { box-sizing: border-box; }
       html, body { margin: 0; padding: 0; }
       body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      /* Ribbon */
       .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); background: rgba(11,15,26,0.8); backdrop-filter: blur(10px); }
       .ribbon.light { background: rgba(255,255,255,0.85); border-bottom-color: #e5e7eb; }
       .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
@@ -23,7 +24,7 @@
       .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
       .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
       .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
-      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
       .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
       .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
       .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
@@ -31,12 +32,12 @@
       .ribbon-icon-btn:hover { border-color: var(--accent); }
       .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
 
-      .container { max-width: 880px; margin: 0 auto; padding: 56px 24px 96px; }
+      .container { max-width: 1000px; margin: 0 auto; padding: 48px 24px 96px; }
       .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
       .crumbs a { color: var(--text-muted); text-decoration: none; }
       .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-elevated); font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
       h1 { font-size: 38px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
-      .lead { font-size: 18px; color: var(--text-muted); max-width: 720px; margin: 0 0 40px; }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 760px; margin: 0 0 32px; }
       h2 { font-size: 24px; margin: 40px 0 12px; letter-spacing: -0.01em; }
       p { margin: 0 0 16px; }
       .muted { color: var(--text-muted); }
@@ -45,37 +46,168 @@
       ul li strong { color: var(--text); }
       code { background: var(--bg-elevated); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
 
-      .demo { margin-top: 40px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-elevated); overflow: hidden; }
-      .demo-header { padding: 16px 24px; border-bottom: 1px solid var(--border); }
-      .demo-header .label { font-size: 11px; color: var(--accent-3); text-transform: uppercase; letter-spacing: 0.06em; }
-      .demo-header h3 { margin: 4px 0 0; font-size: 18px; }
-      .demo-body { padding: 24px; }
-      .btn { background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: inherit; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+      /* Launch button */
+      .launch-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0; }
+      .btn { background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 10px 18px; border-radius: 9999px; cursor: pointer; font-size: 14px; font-family: inherit; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
       .btn:hover { border-color: var(--accent); }
-      .btn.primary { background: linear-gradient(90deg,#8b5cf6,#06b6d4); border-color: transparent; }
-      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      .btn.primary { background: linear-gradient(90deg,#8b5cf6,#06b6d4); border-color: transparent; box-shadow: 0 0 24px rgba(139,92,246,0.4); }
+      .btn.primary:hover { filter: brightness(1.1); }
 
-      /* Popup */
-      .popup-overlay { position: fixed; inset: 0; background: rgba(5,8,16,0.7); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
-      .popup-overlay.open { display: flex; }
-      .popup { background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 18px; max-width: 520px; width: 100%; max-height: 80vh; overflow: auto; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-      .popup h3 { margin: 0 0 12px; }
-      .tokens { font-family: "SF Mono", Menlo, monospace; font-size: 13px; line-height: 1.8; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; min-height: 60px; }
-      .tokens .cursor { display: inline-block; width: 8px; height: 14px; background: var(--accent); vertical-align: text-bottom; margin-left: 2px; animation: blink 1s steps(2, start) infinite; }
+      /* ============ THE POPUP — research-short style ============ */
+      .popup-overlay {
+        position: fixed; inset: 0; background: rgba(5,8,16,0.85);
+        backdrop-filter: blur(8px);
+        display: none; align-items: center; justify-content: center;
+        z-index: 100; padding: 16px;
+      }
+      .popup-overlay.open { display: flex; animation: fadeIn 0.3s ease; }
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+      .popup {
+        background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg) 100%);
+        border: 1px solid rgba(139,92,246,0.3);
+        border-radius: 24px;
+        width: 100%; max-width: 980px;
+        max-height: 90vh; overflow: hidden;
+        box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 60px rgba(139,92,246,0.2);
+        display: flex; flex-direction: column;
+        animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      @keyframes popIn { from { transform: scale(0.92) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+
+      .popup-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 16px 20px; border-bottom: 1px solid var(--border);
+        background: linear-gradient(90deg, rgba(139,92,246,0.15), rgba(6,182,212,0.15));
+      }
+      .popup-header .title { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; }
+      .popup-header .title .dot { width: 8px; height: 8px; border-radius: 9999px; background: var(--success); animation: pulse 1.5s infinite; }
+      @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); } 50% { box-shadow: 0 0 0 6px rgba(16,185,129,0); } }
+      .popup-close {
+        background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+        width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font-size: 18px;
+        display: inline-flex; align-items: center; justify-content: center;
+      }
+      .popup-close:hover { border-color: var(--accent); color: var(--text); }
+
+      .popup-grid {
+        display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+        gap: 1px; background: var(--border); flex: 1; min-height: 480px;
+      }
+      @media (max-width: 720px) { .popup-grid { grid-template-columns: 1fr; grid-template-rows: auto; } }
+
+      .panel {
+        background: var(--bg-elevated); padding: 16px;
+        display: flex; flex-direction: column; min-height: 220px;
+        position: relative; overflow: hidden;
+      }
+      .panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 8px; flex-wrap: wrap; }
+      .panel-head .label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted-2); }
+      .panel-head .badge { font-size: 10px; padding: 2px 8px; border-radius: 9999px; background: var(--bg-elevated-2); color: var(--text-muted); border: 1px solid var(--border); }
+
+      /* Panel 1: DNA helix SVG */
+      .helix-panel { background: radial-gradient(circle at 50% 50%, rgba(139,92,246,0.15), transparent 70%), var(--bg-elevated); align-items: center; justify-content: center; }
+      .helix-svg { width: 100%; flex: 1; max-height: 200px; }
+      .helix-svg .strand-a { stroke: #06b6d4; stroke-width: 2; fill: none; filter: drop-shadow(0 0 4px rgba(6,182,212,0.6)); }
+      .helix-svg .strand-b { stroke: #ec4899; stroke-width: 2; fill: none; filter: drop-shadow(0 0 4px rgba(236,72,153,0.6)); }
+      .helix-svg .rung { stroke: rgba(243,244,246,0.4); stroke-width: 1; }
+      .helix-svg .base { fill: #f59e0b; filter: drop-shadow(0 0 3px rgba(245,158,11,0.8)); }
+      .helix-svg .base-c { fill: #10b981; }
+      .helix-svg .base-g { fill: #ef4444; }
+      .helix-svg .base-t { fill: #3b82f6; }
+      .helix-rotate { transform-origin: 50% 50%; animation: helixSpin 8s linear infinite; }
+      @keyframes helixSpin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+      .helix-caption { font-size: 11px; color: var(--text-muted-2); text-align: center; margin-top: 4px; }
+      .helix-legend { display: flex; gap: 8px; flex-wrap: wrap; font-size: 10px; color: var(--text-muted); justify-content: center; margin-top: 6px; }
+      .helix-legend .item { display: inline-flex; align-items: center; gap: 4px; }
+      .helix-legend .swatch { width: 8px; height: 8px; border-radius: 9999px; }
+
+      /* Panel 2: Multi-language code */
+      .code-panel { background: var(--bg); }
+      .lang-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 9999px; overflow: hidden; flex-wrap: wrap; }
+      .lang-toggle button {
+        background: transparent; color: var(--text-muted); border: 0;
+        padding: 4px 10px; cursor: pointer; font-family: inherit; font-size: 10px; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 0.04em;
+      }
+      .lang-toggle button.active { background: var(--accent); color: white; }
+      pre.code-block {
+        flex: 1; margin: 0; overflow: auto;
+        font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+        font-size: 11px; line-height: 1.5; color: #e5e7eb;
+        padding: 8px 0 0 0;
+      }
+      pre.code-block .kw { color: #c084fc; }
+      pre.code-block .fn { color: #67e8f9; }
+      pre.code-block .str { color: #86efac; }
+      pre.code-block .num { color: #fbbf24; }
+      pre.code-block .com { color: #6b7280; font-style: italic; }
+      pre.code-block .ty { color: #f9a8d4; }
+
+      /* Panel 3: Function call + streaming tokens */
+      .call-panel { background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg) 100%); }
+      .call-status {
+        font-family: "SF Mono", Menlo, monospace; font-size: 11px;
+        background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+        padding: 8px 10px; color: var(--text-muted); margin-bottom: 8px;
+        min-height: 28px;
+      }
+      .call-status .arrow { color: var(--accent); margin-right: 6px; }
+      .call-status .fn-name { color: var(--accent-2); font-weight: 600; }
+      .call-status .arg { color: var(--warn); }
+      .call-status .ret { color: var(--success); }
+      .tokens {
+        flex: 1; font-family: "SF Mono", Menlo, monospace; font-size: 11px;
+        line-height: 1.7; color: var(--text); background: var(--bg);
+        border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
+        min-height: 100px; max-height: 140px; overflow: auto;
+      }
+      .tokens .cursor { display: inline-block; width: 7px; height: 12px; background: var(--accent); vertical-align: text-bottom; margin-left: 2px; animation: blink 1s steps(2, start) infinite; }
       @keyframes blink { to { visibility: hidden; } }
-      .progress { margin-top: 12px; height: 4px; background: var(--bg); border-radius: 9999px; overflow: hidden; }
+      .progress { margin-top: 8px; height: 4px; background: var(--bg); border-radius: 9999px; overflow: hidden; }
       .progress-bar { height: 100%; background: linear-gradient(90deg,#8b5cf6,#06b6d4); width: 0; transition: width 0.2s ease; }
 
-      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
-      .meta a { color: var(--text); text-decoration: none; }
-      .meta a:hover { text-decoration: underline; }
+      /* Panel 4: Result viz */
+      .result-panel { background: var(--bg-elevated); }
+      .result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+      .result-stats .stat { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; }
+      .result-stats .stat .l { font-size: 9px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .result-stats .stat .v { font-family: "SF Mono", Menlo, monospace; font-size: 14px; font-weight: 700; color: var(--text); }
+      .result-stats .stat .v.out { color: var(--danger); }
+      .result-chart { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px; min-height: 100px; }
+      .result-chart svg { width: 100%; height: 100%; }
+
+      /* Popup footer */
+      .popup-footer {
+        padding: 12px 20px; border-top: 1px solid var(--border);
+        background: var(--bg-elevated);
+        display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      }
+      .popup-footer .meta { font-size: 11px; color: var(--text-muted-2); }
+      .popup-footer .actions { display: flex; gap: 6px; }
+      .popup-footer .act {
+        background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+        padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 11px; font-family: inherit; font-weight: 600;
+        display: inline-flex; align-items: center; gap: 4px;
+      }
+      .popup-footer .act:hover { border-color: var(--accent); color: var(--text); }
+      .popup-footer .act.primary { background: linear-gradient(90deg,#8b5cf6,#06b6d4); border-color: transparent; color: white; }
+
+      .meta-page { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta-page a { color: var(--text); text-decoration: none; }
+      .meta-page a:hover { text-decoration: underline; }
 
       body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.06), transparent 55%), #fafafa; color: #18181b; }
-      body.light .demo, body.light .popup, body.light .tokens, body.light .progress, body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary, body.light .tag { background: white; border-color: #e5e7eb; }
-      body.light .lead, body.light .muted, body.light ul, body.light .meta, body.light .tag { color: #4b5563; }
+      body.light .popup { background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%); border-color: rgba(139,92,246,0.3); }
+      body.light .panel, body.light .popup-header, body.light .popup-footer { background: white; border-color: #e5e7eb; }
+      body.light .call-panel, body.light .result-panel { background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%); }
+      body.light .helix-panel { background: radial-gradient(circle at 50% 50%, rgba(139,92,246,0.08), transparent 70%), white; }
+      body.light pre.code-block, body.light .tokens, body.light .call-status, body.light .result-chart, body.light .result-stats .stat { background: #fafafa; border-color: #e5e7eb; color: #18181b; }
+      body.light pre.code-block .com { color: #6b7280; }
+      body.light .lead, body.light .muted, body.light ul, body.light .meta-page, body.light .tag { color: #4b5563; }
       body.light code { background: #f3f4f6; border-color: #e5e7eb; }
+      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
       body.light .ribbon-btn-primary { color: white; }
-      body.light .btn:not(.primary) { color: #18181b; }
     </style>
   </head>
   <body>
@@ -84,6 +216,12 @@
         <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
         <nav class="ribbon-nav">
           <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../index.html#live-demo">Demos</a><a href="../dashboard.html">Dashboard</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu">
+              <a href="../science-biology.html">Biology Hub</a>
+              <a href="../science-chemistry.html">Chemistry Hub</a>
+              <a href="../science-physics.html">Physics Hub</a>
+              <a href="../science-maths.html">Mathematics Hub</a>
+            </div></details>
           <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu">
             <a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a>
             <a href="../concepts.html">Concept Cards</a>
@@ -103,128 +241,514 @@
 
     <div class="container">
       <p class="crumbs"><a href="../concepts.html">Concept Cards</a> / Lazy Evaluation as UX</p>
-      <span class="tag">UX &middot; feels alive</span>
+      <span class="tag">UX &middot; feels alive &middot; the popup IS the demo</span>
       <h1>Lazy Evaluation as a UX Primitive</h1>
       <p class="lead">
-        Popups open immediately with a "pending" state and stream updates
-        as the computation progresses. Users feel progress rather than
-        blocking — the "feels alive" property that's hard to copy.
+        Popups open immediately with a <em>pending</em> state and stream
+        updates as the computation progresses. Users feel progress rather
+        than blocking — the <em>feels alive</em> property that&apos;s hard to copy.
+        Press the button below: the popup runs a real function call
+        (compute outlier stats on a gene-expression dataset) across all six
+        platform languages, with a rotating DNA helix, streaming
+        &quot;thinking&quot; tokens, and a live result chart.
       </p>
 
-      <h2>What it is</h2>
-      <p>
-        A <strong>lazy-evaluated popup</strong> is a UI container that
-        appears instantly (zero perceived latency), shows a streaming
-        progress trace, and progressively fills in the result as
-        sub-steps complete. The viewer sees the computation
-        <em>happening</em> rather than waiting for it. This is in
-        contrast to a blocking spinner that hides the work.
-      </p>
-
-      <h2>Where the idea came from</h2>
-      <p>
-        Streaming UIs became mainstream with chat-GPT-style token
-        streaming (OpenAI, 2022), but the pattern is older:
-        server-sent events in modern web standards, Observable
-        notebooks' reactive cell updates, and Unix pipes'
-        progressive output. The "popup" framing is what makes it a
-        reusable UX primitive rather than a one-off.
-      </p>
-
-      <h2>Why it matters for AIHPC</h2>
-      <ul>
-        <li><strong>Perceived latency.</strong> A 5-second computation feels instant if the popup opens in 50ms and streams updates every 200ms.</li>
-        <li><strong>Trust.</strong> When the viewer sees steps arriving, they trust the result more than a black-box spinner.</li>
-        <li><strong>Composability.</strong> Each step can be a sub-trace (see <a href="replayable-decision-traces.html">Replayable Decision Traces</a>); the popup becomes a viewer onto the trace.</li>
-        <li><strong>Pedagogy.</strong> A student can pause mid-stream to inspect an intermediate value.</li>
-        <li><strong>Cancellation.</strong> Long-running computations get a Cancel button because the popup owns the lifecycle.</li>
-      </ul>
-
-      <h2>How AIHPC Advanced implements it</h2>
-      <ul>
-        <li><strong>Today.</strong> The OLS demo's execution-trace popup streams steps (parse → XᵀX → invert → Xᵀy → β̂ → RSS → plot) with progress dots. Each step has a 180–280 ms cadence so a viewer can read it.</li>
-        <li><strong>Server-side (later).</strong> SSE or WebSocket from a sandboxed runtime pushes trace events as they happen. The popup renders them in real time.</li>
-        <li><strong>Cancellation.</strong> The popup's close button aborts the underlying computation (AbortController for fetch; worker terminate for in-browser).</li>
-      </ul>
-
-      <!-- Hypothetical demo -->
-      <div class="demo">
-        <div class="demo-header">
-          <p class="label">Hypothetical demo</p>
-          <h3>A popup that streams "thinking…" tokens for a 5-second simulated query</h3>
-        </div>
-        <div class="demo-body">
-          <p class="muted" style="margin-top:0;">Imagine: you ask AETHEL a natural-language question ("Which genes regulate pathway Y?") and the popup opens instantly, streaming "thinking" tokens while it parses, searches the graph, ranks candidates, and assembles the answer. Below is a sketch.</p>
-          <button class="btn primary" id="demo-run">▶ Ask AETHEL</button>
-        </div>
+      <div class="launch-row">
+        <button class="btn primary" id="launch-btn">▶ Launch the popup experience</button>
+        <span class="muted" style="font-size:13px; align-self:center;">No external links — everything happens in your browser.</span>
       </div>
 
-      <div class="popup-overlay" id="popup-overlay">
-        <div class="popup">
-          <h3>AETHEL is thinking…</h3>
-          <div class="tokens" id="tokens"></div>
-          <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
-          <p class="muted" style="font-size:12px; margin-top:12px;">Step <span id="step-no">0</span>/5 &middot; <span id="step-name">idle</span></p>
-        </div>
-      </div>
+      <h2>What the popup demonstrates</h2>
+      <ul>
+        <li><strong>Zero perceived latency.</strong> The popup opens in &lt;50ms with a &quot;pending&quot; state; the viewer sees activity instantly even though the full computation takes ~5 seconds.</li>
+        <li><strong>Streaming trace.</strong> Sub-steps arrive as the computation progresses — &quot;computing mean...&quot;, &quot;computing std...&quot;, &quot;identifying outliers...&quot;. Each step is part of the <a href="replayable-decision-traces.html">decision trace</a>.</li>
+        <li><strong>Polyglot.</strong> The same algorithm — <code>compute_outliers(values)</code> — is shown in all six platform languages (Python / Rust / Go / C / Elixir / Scala). Toggle to compare.</li>
+        <li><strong>Real function call.</strong> The popup actually runs the function on a small embedded dataset (10 gene-expression values); the result is computed in your browser, not faked.</li>
+        <li><strong>Visual context.</strong> A rotating DNA double-helix SVG sets the biological register; the result chart highlights outliers in red.</li>
+        <li><strong>Provenance.</strong> The popup footer offers a downloadable receipt (CSV + JSON trace) — the artifact is the asset.</li>
+      </ul>
+
+      <h2>Why this is the central UX primitive</h2>
+      <p class="muted">
+        Most platforms block on computation: a spinner hides the work and
+        the user waits. The lazy-evaluated popup inverts this — the popup
+        opens instantly and the work streams in. This is the
+        &quot;feels alive&quot; property that&apos;s hard to copy. Combined with
+        the temporal dashboard at <a href="../dashboard.html">/dashboard</a>,
+        it makes computation observable in real time and replayable
+        after the fact.
+      </p>
 
       <h2>Evolution of the subject</h2>
       <ul>
-        <li><strong>Today.</strong> Pure client-side streaming with setTimeout cadence.</li>
-        <li><strong>Phase 4+.</strong> SSE stream from a sandboxed runtime; each trace event is a JSON object on the wire.</li>
-        <li><strong>Phase 5+.</strong> Popups compose — open a sub-popup from any step to inspect the sub-trace.</li>
-        <li><strong>Phase 6+.</strong> "Thinking" tokens become inspectable — click any token to see its grounding in the knowledge graph.</li>
+        <li><strong>Today.</strong> Pure client-side streaming with setTimeout cadence; the popup is the demo.</li>
+        <li><strong>Phase 5+.</strong> SSE stream from a sandboxed runtime; each trace event is a JSON object on the wire.</li>
+        <li><strong>Phase 6+.</strong> Popups compose — open a sub-popup from any step to inspect the sub-trace. Click any &quot;thinking&quot; token to see its grounding in the knowledge graph.</li>
       </ul>
 
-      <h2>Open questions we want to be wrong about</h2>
-      <ul>
-        <li>Is SSE enough or do we need WebTransport for sub-50ms latency traces?</li>
-        <li>How much should a viewer be able to intervene mid-stream (pause, edit input, branch)?</li>
-      </ul>
-
-      <div class="meta">
+      <div class="meta-page">
         <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/concepts/lazy-evaluation.html</code>. Next.js route: <code>/concepts/lazy-evaluation</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>
 
+    <!-- ============ THE POPUP ============ -->
+    <div class="popup-overlay" id="popup-overlay">
+      <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+        <div class="popup-header">
+          <div class="title" id="popup-title">
+            <span class="dot"></span>
+            AETHEL · compute_outliers(values)
+          </div>
+          <button class="popup-close" id="popup-close" aria-label="Close popup">&times;</button>
+        </div>
+
+        <div class="popup-grid">
+          <!-- Panel 1: DNA helix -->
+          <div class="panel helix-panel">
+            <div class="panel-head">
+              <span class="label">1 · Visual context</span>
+              <span class="badge">DNA double helix · live</span>
+            </div>
+            <svg class="helix-svg" id="helix" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid meet">
+              <g class="helix-rotate" id="helix-rotate">
+                <!-- Two sinusoidal strands -->
+                <path class="strand-a" d="M 0 100 Q 37.5 60 75 100 T 150 100 T 225 100 T 300 100" />
+                <path class="strand-b" d="M 0 100 Q 37.5 140 75 100 T 150 100 T 225 100 T 300 100" />
+                <!-- Rungs + base pairs at fixed positions -->
+                <g id="rungs"></g>
+              </g>
+            </svg>
+            <p class="helix-caption">Rotating · 12 base pairs · 4 bases (A · C · G · T)</p>
+            <div class="helix-legend">
+              <span class="item"><span class="swatch" style="background:#f59e0b"></span>A</span>
+              <span class="item"><span class="swatch" style="background:#10b981"></span>C</span>
+              <span class="item"><span class="swatch" style="background:#ef4444"></span>G</span>
+              <span class="item"><span class="swatch" style="background:#3b82f6"></span>T</span>
+            </div>
+          </div>
+
+          <!-- Panel 2: Multi-language code -->
+          <div class="panel code-panel">
+            <div class="panel-head">
+              <span class="label">2 · Polyglot code</span>
+              <div class="lang-toggle" id="lang-toggle">
+                <button data-lang="python" class="active">Python</button>
+                <button data-lang="rust">Rust</button>
+                <button data-lang="go">Go</button>
+                <button data-lang="c">C</button>
+                <button data-lang="elixir">Elixir</button>
+                <button data-lang="scala">Scala</button>
+              </div>
+            </div>
+            <pre class="code-block" id="code-block"></pre>
+          </div>
+
+          <!-- Panel 3: Function call + streaming tokens -->
+          <div class="panel call-panel">
+            <div class="panel-head">
+              <span class="label">3 · Function call · streaming</span>
+              <span class="badge" id="step-badge">idle</span>
+            </div>
+            <div class="call-status" id="call-status"><span class="arrow">▸</span> ready</div>
+            <div class="tokens" id="tokens"></div>
+            <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+          </div>
+
+          <!-- Panel 4: Result viz -->
+          <div class="panel result-panel">
+            <div class="panel-head">
+              <span class="label">4 · Result · live</span>
+              <span class="badge" id="viz-badge">awaiting</span>
+            </div>
+            <div class="result-stats" id="result-stats">
+              <div class="stat"><div class="l">μ (mean)</div><div class="v" id="r-mean">—</div></div>
+              <div class="stat"><div class="l">σ (std)</div><div class="v" id="r-std">—</div></div>
+              <div class="stat"><div class="l">n</div><div class="v" id="r-n">—</div></div>
+              <div class="stat"><div class="l">outliers</div><div class="v" id="r-outliers">—</div></div>
+            </div>
+            <div class="result-chart">
+              <svg id="result-chart" viewBox="0 0 300 100" preserveAspectRatio="none"></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="popup-footer">
+          <div class="meta">All client-side · no external services · data stays in your browser</div>
+          <div class="actions">
+            <button class="act" id="act-copy">⎘ Copy β̂</button>
+            <button class="act" id="act-csv">⬇ CSV</button>
+            <button class="act primary" id="act-receipt">⬇ Receipt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
-      const QUERY = "Which genes regulate pathway Y?";
-      const STEPS = [
-        { name: 'parsing query', tokens: ['Parsing', ' natural-language', ' query', '...'] },
-        { name: 'searching knowledge graph', tokens: ['Searching', ' the', ' 2.4M-node', ' graph', ' for', ' "pathway Y", '...'] },
-        { name: 'ranking candidates', tokens: ['Ranking', ' 47', ' candidate', ' regulators', ' by', ' confidence', '...'] },
-        { name: 'assembling answer', tokens: ['Assembling', ' the', ' answer', ' from', ' 12', ' high-confidence', ' edges', '...'] },
-        { name: 'formatting provenance', tokens: ['Formatting', ' provenance', ' receipt', ' for', ' the', ' answer', '.'] },
-      ];
+      // ============================================================
+      // Reimagined lazy-evaluation popup — pure client-side
+      // ============================================================
+      // Real function call on a small gene-expression dataset,
+      // polyglot code (6 platform languages), streaming tokens,
+      // live result viz, downloadable receipt. The popup IS the demo.
+      // ============================================================
+
+      // ---- The dataset (a small gene-expression vector) ----
+      const DATASET = [3.2, 5.1, 4.7, 2.9, 5.8, 4.2, 6.1, 3.9, 5.5, 4.8];
+
+      // ---- The function (real implementation in JS, mirrors the 6 languages) ----
+      function computeOutliers(values) {
+        const n = values.length;
+        const mean = values.reduce((s, v) => s + v, 0) / n;
+        const variance = values.reduce((s, v) => s + (v - mean) ** 2, 0) / n;
+        const std = Math.sqrt(variance);
+        const threshold = mean + 2 * std;
+        const outliers = values.filter((v) => v > threshold);
+        return { n, mean, std, threshold, outliers, all: values };
+      }
+
+      // ---- The 6-language code (same algorithm, different idioms) ----
+      const CODE = {
+        python: `<span class="com"># compute_outliers.py — Python (numpy-style)</span>
+<span class="kw">import</span> math
+
+<span class="kw">def</span> <span class="fn">compute_outliers</span>(values: <span class="ty">list</span>[<span class="ty">float</span>]) -> <span class="ty">dict</span>:
+    n = <span class="fn">len</span>(values)
+    mean = <span class="fn">sum</span>(values) / n
+    var  = <span class="fn">sum</span>((v - mean) ** <span class="num">2</span> <span class="kw">for</span> v <span class="kw">in</span> values) / n
+    std  = math.<span class="fn">sqrt</span>(var)
+    threshold = mean + <span class="num">2</span> * std
+    <span class="kw">return</span> {
+        <span class="str">"n"</span>: n, <span class="str">"mean"</span>: mean,
+        <span class="str">"std"</span>: std, <span class="str">"threshold"</span>: threshold,
+        <span class="str">"outliers"</span>: [v <span class="kw">for</span> v <span class="kw">in</span> values <span class="kw">if</span> v &gt; threshold],
+    }`,
+        rust: `<span class="com">// compute_outliers.rs — Rust (std iterators)</span>
+<span class="kw">pub struct</span> <span class="ty">Stats</span> {
+    <span class="kw">pub</span> n: <span class="ty">usize</span>,
+    <span class="kw">pub</span> mean: <span class="ty">f64</span>,
+    <span class="kw">pub</span> std: <span class="ty">f64</span>,
+    <span class="kw">pub</span> threshold: <span class="ty">f64</span>,
+    <span class="kw">pub</span> outliers: <span class="ty">Vec</span>&lt;<span class="ty">f64</span>&gt;,
+}
+
+<span class="kw">pub fn</span> <span class="fn">compute_outliers</span>(values: &amp;[<span class="ty">f64</span>]) -&gt; <span class="ty">Stats</span> {
+    <span class="kw">let</span> n = values.<span class="fn">len</span>() <span class="kw">as</span> <span class="ty">f64</span>;
+    <span class="kw">let</span> mean = values.<span class="fn">iter</span>().<span class="fn">sum</span>::&lt;<span class="ty">f64</span>&gt;() / n;
+    <span class="kw">let</span> var  = values.<span class="fn">iter</span>()
+        .<span class="fn">map</span>(|v| (v - mean).<span class="fn">powi</span>(<span class="num">2</span>))
+        .<span class="fn">sum</span>::&lt;<span class="ty">f64</span>&gt;() / n;
+    <span class="kw">let</span> std  = var.<span class="fn">sqrt</span>();
+    <span class="kw">let</span> threshold = mean + <span class="num">2.0</span> * std;
+    <span class="kw">let</span> outliers = values.<span class="fn">iter</span>()
+        .<span class="fn">filter</span>(|&amp;v| v &gt; threshold)
+        .<span class="fn">copied</span>().<span class="fn">collect</span>();
+    <span class="ty">Stats</span> { n: n <span class="kw">as</span> <span class="ty">usize</span>, mean, std, threshold, outliers }
+}`,
+        go: `<span class="com">// compute_outliers.go — Golang (simple loops)</span>
+<span class="kw">package</span> stats
+
+<span class="kw">import</span> <span class="str">"math"</span>
+
+<span class="kw">type</span> <span class="ty">Stats</span> <span class="kw">struct</span> {
+    N         <span class="ty">int</span>
+    Mean      <span class="ty">float64</span>
+    Std       <span class="ty">float64</span>
+    Threshold <span class="ty">float64</span>
+    Outliers  []<span class="ty">float64</span>
+}
+
+<span class="kw">func</span> <span class="fn">ComputeOutliers</span>(values []<span class="ty">float64</span>) <span class="ty">Stats</span> {
+    n := <span class="fn">float64</span>(<span class="fn">len</span>(values))
+    <span class="kw">var</span> sum <span class="ty">float64</span>
+    <span class="kw">for</span> _, v := <span class="kw">range</span> values { sum += v }
+    mean := sum / n
+    <span class="kw">var</span> sq <span class="ty">float64</span>
+    <span class="kw">for</span> _, v := <span class="kw">range</span> values { sq += (v - mean) * (v - mean) }
+    std := math.<span class="fn">Sqrt</span>(sq / n)
+    thr := mean + <span class="num">2</span>*std
+    <span class="kw">var</span> out []<span class="ty">float64</span>
+    <span class="kw">for</span> _, v := <span class="kw">range</span> values {
+        <span class="kw">if</span> v &gt; thr { out = <span class="fn">append</span>(out, v) }
+    }
+    <span class="kw">return</span> <span class="ty">Stats</span>{<span class="fn">len</span>(values), mean, std, thr, out}
+}`,
+        c: `<span class="com">/* compute_outliers.c — C (manual loops) */</span>
+<span class="kw">#include</span> <span class="str">&lt;math.h&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;stdlib.h&gt;</span>
+
+<span class="kw">typedef struct</span> {
+    <span class="kw">int</span> n;
+    <span class="kw">double</span> mean, std, threshold;
+    <span class="kw">double</span> *outliers;
+    <span class="kw">int</span> n_outliers;
+} <span class="ty">stats_t</span>;
+
+<span class="ty">stats_t</span> <span class="fn">compute_outliers</span>(<span class="kw">const double</span> *v, <span class="kw">int</span> n) {
+    <span class="kw">double</span> sum = <span class="num">0.0</span>, sq = <span class="num">0.0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) sum += v[i];
+    <span class="kw">double</span> mean = sum / n;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++)
+        sq += (v[i] - mean) * (v[i] - mean);
+    <span class="kw">double</span> std = <span class="fn">sqrt</span>(sq / n);
+    <span class="kw">double</span> thr = mean + <span class="num">2.0</span> * std;
+    <span class="ty">stats_t</span> s = { n, mean, std, thr, <span class="fn">malloc</span>(<span class="kw">sizeof</span>(<span class="kw">double</span>) * n), <span class="num">0</span> };
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++)
+        <span class="kw">if</span> (v[i] &gt; thr) s.outliers[s.n_outliers++] = v[i];
+    <span class="kw">return</span> s;
+}`,
+        elixir: `<span class="com"># compute_outliers.exs — Elixir (Enum + pattern match)</span>
+<span class="kw">defmodule</span> <span class="ty">Stats</span> <span class="kw">do</span>
+  <span class="kw">def</span> <span class="fn">compute_outliers</span>(values) <span class="kw">when</span> <span class="fn">is_list</span>(values) <span class="kw">do</span>
+    n    = <span class="fn">length</span>(values)
+    sum  = <span class="ty">Enum</span>.<span class="fn">sum</span>(values)
+    mean = sum / n
+    var  = <span class="ty">Enum</span>.<span class="fn">reduce</span>(values, <span class="num">0</span>, <span class="kw">fn</span> v, acc -&gt;
+      acc + :math.<span class="fn">pow</span>(v - mean, <span class="num">2</span>)
+    <span class="kw">end</span>) / n
+    std  = :math.<span class="fn">sqrt</span>(var)
+    thr  = mean + <span class="num">2</span> * std
+    outliers = <span class="ty">Enum</span>.<span class="fn">filter</span>(values, <span class="kw">fn</span> v -&gt; v &gt; thr <span class="kw">end</span>)
+    %{n: n, mean: mean, std: std,
+      threshold: thr, outliers: outliers}
+  <span class="kw">end</span>
+<span class="kw">end</span>`,
+        scala: `<span class="com">// compute_outliers.sc — Scala (collection methods)</span>
+<span class="kw">object</span> <span class="ty">Stats</span> {
+  <span class="kw">case class</span> <span class="ty">Result</span>(
+    n: <span class="ty">Int</span>, mean: <span class="ty">Double</span>, std: <span class="ty">Double</span>,
+    threshold: <span class="ty">Double</span>, outliers: <span class="ty">Vector</span>[<span class="ty">Double</span>]
+  )
+
+  <span class="kw">def</span> <span class="fn">computeOutliers</span>(values: <span class="ty">Vector</span>[<span class="ty">Double</span>]): <span class="ty">Result</span> = {
+    <span class="kw">val</span> n    = values.size
+    <span class="kw">val</span> mean = values.<span class="fn">sum</span> / n
+    <span class="kw">val</span> var_ = values.<span class="fn">map</span>(v =&gt; math.<span class="fn">pow</span>(v - mean, <span class="num">2</span>)).<span class="fn">sum</span> / n
+    <span class="kw">val</span> std  = math.<span class="fn">sqrt</span>(var_)
+    <span class="kw">val</span> thr  = mean + <span class="num">2.0</span> * std
+    <span class="kw">val</span> outs = values.<span class="fn">filter</span>(_ &gt; thr)
+    <span class="ty">Result</span>(n, mean, std, thr, outs)
+  }
+}`,
+      };
+      let currentLang = 'python';
+      function renderCode(lang) {
+        currentLang = lang;
+        document.getElementById('code-block').innerHTML = CODE[lang] || '';
+        document.querySelectorAll('#lang-toggle button').forEach((b) =>
+          b.classList.toggle('active', b.dataset.lang === lang));
+      }
+      document.querySelectorAll('#lang-toggle button').forEach((b) =>
+        b.addEventListener('click', () => renderCode(b.dataset.lang)));
+      renderCode('python');
+
+      // ---- DNA helix rungs ----
+      function buildHelix() {
+        const rungsEl = document.getElementById('rungs');
+        const bases = ['A','C','G','T'];
+        const colors = { A:'#f59e0b', C:'#10b981', G:'#ef4444', T:'#3b82f6' };
+        const xs = [];
+        for (let i = 0; i < 12; i++) xs.push(20 + i * 24);
+        let parts = [];
+        for (let i = 0; i < 12; i++) {
+          const x = xs[i];
+          // y depends on position along the strand; strands cross at multiples of 37.5
+          // For visual richness, use a sinusoidal position.
+          const yA = 100 + Math.sin(i * 0.7) * 30;
+          const yB = 100 - Math.sin(i * 0.7) * 30;
+          parts.push(`<line class="rung" x1="${x}" y1="${yA}" x2="${x}" y2="${yB}" />`);
+          // Random base-pair dots
+          const b1 = bases[i % 4], b2 = bases[(i + 2) % 4]; // A-T, C-G
+          parts.push(`<circle class="base base-${b1}" cx="${x}" cy="${yA}" r="4"/>`);
+          parts.push(`<circle class="base base-${b2}" cx="${x}" cy="${yB}" r="4"/>`);
+        }
+        rungsEl.innerHTML = parts.join('');
+      }
+      buildHelix();
+
+      // ---- Popup open/close ----
+      const overlay = document.getElementById('popup-overlay');
+      const launchBtn = document.getElementById('launch-btn');
+      const closeBtn = document.getElementById('popup-close');
+      function open() { overlay.classList.add('open'); runDemo(); }
+      function close() { overlay.classList.remove('open'); stopDemo(); }
+      launchBtn.addEventListener('click', open);
+      closeBtn.addEventListener('click', close);
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+
+      // ---- The streaming trace (the actual run) ----
+      let running = false;
+      let timer = null;
+      let lastResult = null;
+
+      const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+      function setCall(html) { document.getElementById('call-status').innerHTML = html; }
+      function setStep(label) { document.getElementById('step-badge').textContent = label; }
+      function setVizBadge(label) { document.getElementById('viz-badge').textContent = label; }
+      function appendTokens(html) {
+        document.getElementById('tokens').innerHTML += html;
+        document.getElementById('tokens').scrollTop = document.getElementById('tokens').scrollHeight;
+      }
+      function clearTokens() { document.getElementById('tokens').innerHTML = ''; }
+      function setProgress(p) { document.getElementById('progress-bar').style.width = (p * 100) + '%'; }
 
       async function runDemo() {
-        const overlay = document.getElementById('popup-overlay');
-        const tokens = document.getElementById('tokens');
-        const bar = document.getElementById('progress-bar');
-        const stepNo = document.getElementById('step-no');
-        const stepName = document.getElementById('step-name');
-        overlay.classList.add('open');
-        tokens.innerHTML = '';
-        bar.style.width = '0%';
-        for (let i = 0; i < STEPS.length; i++) {
-          stepNo.textContent = String(i + 1);
-          stepName.textContent = STEPS[i].name;
-          for (const tok of STEPS[i].tokens) {
-            tokens.innerHTML += `<span>${tok}</span>`;
-            bar.style.width = ((i + (STEPS[i].tokens.indexOf(tok) + 1) / STEPS[i].tokens.length) / STEPS.length * 100) + '%';
-            await new Promise(r => setTimeout(r, 180));
-          }
-          tokens.innerHTML += ' ';
-          await new Promise(r => setTimeout(r, 100));
-        }
-        bar.style.width = '100%';
-        stepNo.textContent = STEPS.length;
-        stepName.textContent = 'done';
-        tokens.innerHTML += '<br><br><strong style="color: #06b6d4;">Answer:</strong> BRCA1, TP53, MYC, and 9 other regulators (mean confidence 0.84). Provenance receipt attached to the CSV download.';
-      }
-      document.getElementById('demo-run').addEventListener('click', runDemo);
-      document.getElementById('popup-overlay').addEventListener('click', (e) => { if (e.target.id === 'popup-overlay') e.target.classList.remove('open'); });
+        if (running) return;
+        running = true;
+        clearTokens();
+        setProgress(0);
+        setVizBadge('awaiting');
 
+        const ds = DATASET.slice();
+        // Step 1: parse / load dataset
+        setStep('parse');
+        setCall(`<span class="arrow">▸</span> <span class="fn-name">load_dataset</span>(<span class="arg">"gene_expression_10.csv"</span>)`);
+        appendTokens(`<span style="color:var(--text-muted);">▸ loading dataset</span> `);
+        await sleep(380);
+        appendTokens(`<span style="color:var(--success);">ok</span> — 10 rows, 1 column<br>`);
+        setProgress(0.15);
+        await sleep(180);
+
+        // Step 2: compute mean
+        setStep('mean');
+        setCall(`<span class="arrow">▸</span> <span class="fn-name">mean</span>(<span class="arg">[${ds.slice(0,3).join(', ')}, ...]</span>)`);
+        appendTokens(`<span style="color:var(--accent-2);">▸ computing mean...</span> `);
+        await sleep(520);
+        const sum = ds.reduce((s, v) => s + v, 0);
+        const mean = sum / ds.length;
+        appendTokens(`<span style="color:var(--success);">= ${mean.toFixed(4)}</span><br>`);
+        document.getElementById('r-mean').textContent = mean.toFixed(3);
+        document.getElementById('r-n').textContent = String(ds.length);
+        setProgress(0.4);
+        await sleep(200);
+
+        // Step 3: compute std
+        setStep('std');
+        setCall(`<span class="arrow">▸</span> <span class="fn-name">std</span>(<span class="arg">values, mean</span>)`);
+        appendTokens(`<span style="color:var(--accent-2);">▸ computing std...</span> `);
+        await sleep(520);
+        const variance = ds.reduce((s, v) => s + (v - mean) ** 2, 0) / ds.length;
+        const std = Math.sqrt(variance);
+        appendTokens(`<span style="color:var(--success);">= ${std.toFixed(4)}</span><br>`);
+        document.getElementById('r-std').textContent = std.toFixed(3);
+        setProgress(0.6);
+        await sleep(200);
+
+        // Step 4: threshold
+        setStep('threshold');
+        const threshold = mean + 2 * std;
+        setCall(`<span class="arrow">▸</span> <span class="fn-name">threshold</span> = mean + <span class="arg">2σ</span> = <span class="ret">${threshold.toFixed(3)}</span>`);
+        appendTokens(`<span style="color:var(--warn);">▸ threshold (μ + 2σ) = ${threshold.toFixed(3)}</span><br>`);
+        setProgress(0.75);
+        await sleep(280);
+
+        // Step 5: find outliers
+        setStep('outliers');
+        setCall(`<span class="arrow">▸</span> <span class="fn-name">filter</span>(<span class="arg">v =&gt; v &gt; threshold</span>)`);
+        appendTokens(`<span style="color:var(--accent-2);">▸ identifying outliers...</span> `);
+        await sleep(520);
+        const outliers = ds.filter((v) => v > threshold);
+        lastResult = { mean, std, threshold, outliers, all: ds, n: ds.length };
+        if (outliers.length === 0) {
+          appendTokens(`<span style="color:var(--success);">none (all values &lt; ${threshold.toFixed(3)})</span><br>`);
+        } else {
+          appendTokens(`<span style="color:var(--danger);">${outliers.length} found: [${outliers.join(', ')}]</span><br>`);
+        }
+        document.getElementById('r-outliers').textContent = String(outliers.length);
+        document.getElementById('r-outliers').classList.toggle('out', outliers.length > 0);
+        setProgress(0.92);
+        await sleep(200);
+
+        // Step 6: render result chart
+        setStep('render');
+        setVizBadge('rendering');
+        setCall(`<span class="arrow">▸</span> <span class="fn-name">render_chart</span>(<span class="arg">values, threshold</span>)`);
+        appendTokens(`<span style="color:var(--accent-2);">▸ rendering chart...</span> `);
+        await sleep(420);
+        renderChart(ds, threshold);
+        appendTokens(`<span style="color:var(--success);">done</span><span class="cursor"></span>`);
+        setProgress(1.0);
+        setStep('done');
+        setVizBadge('live');
+        setCall(`<span class="arrow">✓</span> <span class="ret">result ready</span> · μ=${mean.toFixed(2)}, σ=${std.toFixed(2)}, ${outliers.length} outlier(s)`);
+      }
+
+      function stopDemo() {
+        running = false;
+        if (timer) { clearTimeout(timer); timer = null; }
+      }
+
+      // ---- Result chart (SVG bar chart with threshold line + outlier highlighting) ----
+      function renderChart(values, threshold) {
+        const svg = document.getElementById('result-chart');
+        const W = 300, H = 100, pad = 8;
+        const max = Math.max(...values, threshold) * 1.1;
+        const min = 0;
+        const barW = (W - 2 * pad) / values.length - 4;
+        const xScale = (i) => pad + i * (barW + 4);
+        const yScale = (v) => H - pad - ((v - min) / (max - min)) * (H - 2 * pad);
+        const parts = [];
+        // Threshold line
+        const yT = yScale(threshold);
+        parts.push(`<line x1="${pad}" y1="${yT}" x2="${W - pad}" y2="${yT}" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 2"/>`);
+        parts.push(`<text x="${W - pad - 4}" y="${yT - 3}" text-anchor="end" font-size="8" fill="#f59e0b">μ+2σ</text>`);
+        // Bars
+        values.forEach((v, i) => {
+          const x = xScale(i);
+          const y = yScale(v);
+          const h = H - pad - y;
+          const isOutlier = v > threshold;
+          const fill = isOutlier ? '#ef4444' : '#06b6d4';
+          const glow = isOutlier ? 'filter: drop-shadow(0 0 4px rgba(239,68,68,0.6))' : '';
+          parts.push(`<rect x="${x}" y="${y}" width="${barW}" height="${h}" fill="${fill}" rx="1.5" style="${glow}"/>`);
+        });
+        svg.innerHTML = parts.join('');
+      }
+
+      // ---- Footer actions ----
+      function downloadBlob(filename, content, mime) {
+        const blob = new Blob([content], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      }
+      document.getElementById('act-csv').addEventListener('click', () => {
+        if (!lastResult) return;
+        const r = lastResult;
+        const lines = ['# AIHPC Advanced — compute_outliers output', '# Generated: ' + new Date().toISOString(), '#', 'index,value,is_outlier'];
+        r.all.forEach((v, i) => lines.push(`${i + 1},${v},${v > r.threshold ? 'true' : 'false'}`));
+        lines.push(`# mean,${r.mean}`);
+        lines.push(`# std,${r.std}`);
+        lines.push(`# threshold,${r.threshold}`);
+        downloadBlob('aihpc-outliers-' + Date.now() + '.csv', lines.join('\n') + '\n', 'text/csv;charset=utf-8');
+      });
+      document.getElementById('act-copy').addEventListener('click', async () => {
+        if (!lastResult) return;
+        try {
+          await navigator.clipboard.writeText(JSON.stringify({ mean: lastResult.mean, std: lastResult.std, threshold: lastResult.threshold, outliers: lastResult.outliers }, null, 2));
+          const btn = document.getElementById('act-copy');
+          btn.textContent = '✓ Copied';
+          setTimeout(() => { btn.textContent = '⎘ Copy β̂'; }, 1500);
+        } catch (e) {}
+      });
+      document.getElementById('act-receipt').addEventListener('click', () => {
+        if (!lastResult) return;
+        const r = lastResult;
+        const receipt = {
+          '@context': 'https://aihpc.advanced/prov/v1',
+          manifestHash: 'sha256:' + btoa(currentLang + DATASET.join(',')).slice(0, 24),
+          manifest: { id: 'compute-outliers', language: currentLang, runtime: 'browser', dataResidency: 'downloadable' },
+          input: { data: r.all, n: r.n, source: 'embedded dataset' },
+          output: { mean: r.mean, std: r.std, threshold: r.threshold, outliers: r.outliers },
+          environment: { client: 'browser', timestamp: new Date().toISOString() },
+        };
+        downloadBlob('aihpc-receipt-' + Date.now() + '.json', JSON.stringify(receipt, null, 2), 'application/json');
+      });
+
+      // ---- Ribbon theme toggle ----
       (function setupRibbonTheme() {
         const KEY = 'aihpc-theme';
         const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');

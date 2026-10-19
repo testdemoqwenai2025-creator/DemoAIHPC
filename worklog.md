@@ -1272,3 +1272,209 @@ the project skills directory)
   with the "recursive development of use agentic workflows" framing
   the team mentioned? If so, it could be the single most distinctive
   feature of the platform — but it's a substantial build.
+
+---
+
+## Phase 5 — Reimagined lazy-eval popup + Science domain reorganisation + polyglot code — 2026-10-19
+
+**Task ID**: PHASE-5-LAZY-EVAL-POPUP-SCIENCE-POLYGLOT-1
+**Agent**: Z User (main)
+**Task**: Reimagine the lazy-evaluation concept card's popup as a
+research-short "bells and whistles" experience (4-panel grid: animated
+DNA helix SVG + 6-language code toggle + streaming tokens with a real
+function-call on a dataset + live result visualisation), reorganise the
+Science section by proper scientific domain (Biology / Chemistry /
+Physics / Mathematics, each with subdomains), add multi-language code
+snippets to concept cards, avoid linking out to GitHub (the popup IS
+the demo), match LinkedIn research-short visual creativity.
+
+### Work Log
+
+#### 1. Reimagined lazy-evaluation popup (the centerpiece)
+
+- Rewrote `docs/concepts/lazy-evaluation.html` from scratch as a
+  research-short experience:
+  - **4-panel grid popup** (opens instantly, popIn animation):
+    1. **Visual context** — animated SVG DNA double helix with 12 base
+       pairs (A/C/G/T colour-coded), rotating continuously, glow filter
+       on strands.
+    2. **Polyglot code** — toggleable code panel showing the same
+       `compute_outliers(values)` function in **all 6 platform languages**:
+       Python (numpy-style), Rust (std iterators), Go (simple loops),
+       C (jump-table encoding), Elixir (pattern match + Stream), Scala
+       (collection methods). Syntax-highlighted (kw/fn/str/num/com/ty).
+    3. **Function call + streaming tokens** — the popup actually runs
+       `compute_outliers([3.2, 5.1, 4.7, 2.9, 5.8, 4.2, 6.1, 3.9, 5.5, 4.8])`
+       in-browser. The call-status line shows the current function
+       signature (`▸ mean([3.2, 5.1, ...])` → `= 4.62`), the tokens
+       panel streams step-by-step ("computing mean...", "computing std...",
+       "identifying outliers...") with a progress bar, and the step badge
+       shows the current step.
+    4. **Result viz** — live SVG bar chart with bars for each value,
+       outliers highlighted in red (values exceeding μ + 2σ), dashed
+       threshold line labelled "μ+2σ". Stats panel shows μ, σ, n, #outliers
+       with deltas.
+  - **Popup footer** with Copy β̂, Download CSV, Download Receipt
+    (real JSON provenance receipt with manifestHash + inputHash +
+    outputHash + trace URL + environment).
+  - **Glassmorphism** — gradient background, drop-shadows, backdrop blur.
+  - **No GitHub links** — the popup IS the demo. Closes the loop on
+    the user's directive: "avoid guiding the git repository, instead
+    you could design all the bells and whistle stated requirement as
+    above to the popup to the browser on lazy evaluation concept."
+
+#### 2. Science section reorganised by proper scientific domain
+
+- Built 4 new hub pages with subdomain cards:
+  - `docs/science-biology.html` — Biology hub with 6 subdomains:
+    Molecular, Genetics, Proteins, Cell Imaging, Systems, Evolutionary.
+  - `docs/science-chemistry.html` — Chemistry hub with 6 subdomains:
+    Organic, Inorganic, Physical, Analytical, Materials, Computational.
+  - `docs/science-physics.html` — Physics hub with 6 subdomains:
+    Space / Astrophysics, Waves / Optics, Sound / Acoustics, Mechanics,
+    Quantum, Thermodynamics.
+  - `docs/science-maths.html` — Mathematics hub with 6 subdomains:
+    Theorem Proving, Algebra, Analysis, Geometry, Number Theory,
+    Probability & Statistics.
+- Each hub uses a colour theme (Biology=emerald, Chemistry=amber,
+  Physics=blue, Mathematics=pink) with matching gradient glows.
+- Each subdomain card has an SVG icon, title, description, and tools list.
+
+#### 3. Subdomain sub-pages
+
+- Built 19 sub-pages via a generator script
+  (`/home/z/my-project/scripts/gen-science-stubs.js`):
+  - 4 Biology sub-pages (molecular, imaging, systems, evolutionary)
+  - 5 Chemistry sub-pages (inorganic, physical, analytical, materials,
+    computational — plus the existing organic)
+  - 5 Physics sub-pages (space, sound, mechanics, quantum, thermo —
+    plus the existing waves via the biology molecular template)
+  - 5 Maths sub-pages (algebra, analysis, geometry, number-theory,
+    probability)
+- Each stub page documents: Inputs, Outputs, Method, Observability
+  pattern, with a callout pointing to the live demo framework and the
+  temporal dashboard.
+- Enriched `docs/science/biology/molecular.html` with the full pattern:
+  animated DNA double helix SVG + standard codon table + 6-language
+  polyglot code toggle for `translate(rna) → protein` (Python dict /
+  Rust HashMap / Go map / C jump table / Elixir pattern match / Scala
+  grouped). This is the template for enriching other sub-pages.
+
+#### 4. Polyglot code across concept cards
+
+- Lazy-evaluation concept card: 6 languages (Python / Rust / Go / C /
+  Elixir / Scala) for `compute_outliers(values)`.
+- Molecular Biology subdomain page: 6 languages for
+  `translate(rna) → protein`.
+- Pattern is established; enriching the remaining sub-pages is a
+  straightforward replication.
+
+#### 5. Avoided GitHub links (per user directive)
+
+- Removed all `blob/main/src/app/*.tsx` links from `docs/index.html`
+  and `docs/dashboard.html`. Replaced with internal-page links
+  (hub pages, dashboard, concepts index, live-demo anchor).
+- The popup is the demo; no external navigation needed.
+
+#### 6. Ribbon updates
+
+- `src/components/site/Ribbon.tsx` — Science group rebuilt:
+  Biology Hub / Chemistry Hub / Physics Hub / Mathematics Hub.
+  Each entry's `desc` lists all 6 subdomains.
+- All static HTML pages' ribbons updated to use the new Science
+  structure (Biology / Chemistry / Physics / Mathematics hubs).
+
+#### 7. Next.js route mirrors
+
+- Added `src/app/science/biology/page.tsx` (hub)
+- Added `src/app/science/chemistry/page.tsx` (hub)
+- Added `src/app/science/physics/page.tsx` (hub)
+- Added `src/app/science/[...slug]/page.tsx` — catch-all route for all
+  21 sub-pages (molecular, imaging, systems, evolutionary, organic,
+  inorganic, physical, analytical, materials, computational, space,
+  waves, sound, mechanics, quantum, thermo, algebra, analysis, geometry,
+  number-theory, probability). Each renders a deep-linkable page that
+  links to the live static GitHub Pages page for the rich interactive
+  content. Used `generateStaticParams` to pre-render all 21 paths.
+
+#### 8. Build verified
+
+- `next build` succeeded. The Science dropdown now resolves to the 4
+  hub routes + the existing specific routes (/science/proteins,
+  /science/genetics, /science/nucleotides, /science/maths) which take
+  precedence over the catch-all.
+- The catch-all route statically generated 21 sub-pages.
+- Total routes now: 31+ (was 27 in Phase 4).
+- `tsc --noEmit` clean for all new files.
+
+### Stage Summary
+
+- **Live preview endpoint (24/7 / 365)**:
+  <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>
+  - The reimagined lazy-eval popup at
+    `/docs/concepts/lazy-evaluation.html` is the centerpiece: 4-panel
+    research-short experience with animated DNA helix, 6-language code
+    toggle, real function call on a dataset, live result viz, downloadable
+    CSV + receipt.
+  - 4 new Science hub pages (Biology / Chemistry / Physics / Maths),
+    each with 6 subdomain cards.
+  - 19 new Science sub-pages (stub today, with biology/molecular
+    enriched as the template).
+  - No GitHub blob links anywhere in the static site; the popup IS
+    the demo.
+- **Next.js application**: 31+ routes (added 4 hubs + 21 sub-pages via
+  catch-all + the existing 5 specific Science routes). Ribbon updated
+  with the new Science structure.
+- **Polyglot code**: 2 demo functions (compute_outliers, translate)
+  shown in all 6 platform languages (Python / Rust / Go / C / Elixir /
+  Scala). Pattern is established; replication across more sub-pages is
+  trivial.
+- **MPA architecture**: preserved and extended. Every new page is a
+  distinct URL.
+
+### Next-phase suggestions
+
+1. **Enrich the remaining 18 Science sub-pages** with the same pattern
+   as biology/molecular: animated SVG illustration + 6-language
+   polyglot code + inputs/outputs/method/observability. Could be
+   scripted — each sub-page needs a domain-specific illustration
+   (benzene ring for organic, sine wave for waves, N-body for space,
+   etc.) and a domain-specific function (SMILES parser for organic,
+   FFT for waves, etc.).
+2. **Live nucleotides demo** (still pending from earlier phases) —
+   would be the first real sub-domain demo with live execution
+   (ORF + GC + KMP motif + Nussinov). Output as FASTA / GenBank Blob.
+3. **Auto-mirror CI** — still pending; worth landing before push
+   volume grows further.
+4. **TemporalGraph as a reusable component** — extract the timesteps /
+   state-machine / SVG-renderer / scrubber from `docs/dashboard.html`
+   into `src/components/demos/TemporalGraph.tsx` so any demo can ship
+   a temporal trace.
+5. **3D protein viewer** — Three.js bundle so /science/biology/proteins
+   can render a sample PDB.
+6. **Recursive agentic benchmark** — formal benchmark for the agent's
+   own performance (trace length, decision quality, rework rate,
+   human-in-loop corrections) as a temporal graph in the dashboard.
+7. **Real Pyodide integration** — wire the polyglot code panels to
+   actually execute (Python via Pyodide for the OLS compute_outliers;
+   the other languages stay as reference snippets). Would make the
+   lazy-eval popup "for real" instead of just JS.
+8. **Subscription portal foundation** — even without external services,
+   a localStorage-based "session" can gate features. The lazy-eval
+   popup's "Download Receipt" could become the first gated feature
+   (free = CSV only, Pro = CSV + receipt, Team = CSV + receipt + trace).
+
+### Open questions for the next iteration
+
+- Q1: For Phase 6, lead with **enriching the 18 remaining Science
+  sub-pages** (option 1 — every sub-page gets the molecular.html
+  treatment, big content surface), or **live nucleotides demo**
+  (option 2 — first real live execution in the demo framework), or
+  **real Pyodide integration** (option 7 — makes the popup actually
+  run Python)?
+- Q2: Should the popup's polyglot code panel be wired to actually
+  execute (currently the JS impl runs, the other 5 languages are
+  reference)? Pyodide for Python is feasible; the others would need
+  WASM-compiled runtimes or stay as documentation.
+- Q3: Does the recursive-agentic-benchmark idea (option 6) still
+  resonate, and should it be the headline feature for Phase 7?

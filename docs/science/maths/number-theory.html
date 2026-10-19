@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Number Theory — AIHPC Advanced Science / Mathematics. Inputs, outputs, methods, and observability for number theory." />
+    <title>Number Theory — AIHPC Advanced Science</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --domain:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(236,72,153,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); background: rgba(11,15,26,0.8); backdrop-filter: blur(10px); }
+      .ribbon.light { background: rgba(255,255,255,0.85); border-bottom-color: #e5e7eb; }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 880px; margin: 0 auto; padding: 56px 24px 96px; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-elevated); font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+      h1 { font-size: 38px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#f9a8d4 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 720px; margin: 0 0 40px; }
+      h2 { font-size: 22px; margin: 32px 0 10px; }
+      p { margin: 0 0 14px; }
+      .muted { color: var(--text-muted); }
+      ul { padding-left: 22px; color: var(--text-muted); }
+      ul li { margin-bottom: 6px; }
+      ul li strong { color: var(--text); }
+      code { background: var(--bg-elevated); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
+      .stub { background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--domain); border-radius: 12px; padding: 16px 20px; margin-top: 32px; }
+      .stub h3 { margin: 0 0 8px; font-size: 16px; }
+      .stub p { margin: 0; font-size: 14px; color: var(--text-muted); }
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(236,72,153,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.06), transparent 55%), #fafafa; color: #18181b; }
+      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary, body.light .tag, body.light .stub { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .muted, body.light ul, body.light .meta, body.light .stub p { color: #4b5563; }
+      body.light code { background: #f3f4f6; border-color: #e5e7eb; }
+      body.light .ribbon-btn-primary { color: white; }
+    </style>
+  </head>
+  <body>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../../index.html">Home</a><a href="../../index.html#live-demo">Demos</a><a href="../../dashboard.html">Dashboard</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu">
+            <a href="../../science-biology.html">Biology Hub</a>
+            <a href="../../science-chemistry.html">Chemistry Hub</a>
+            <a href="../../science-physics.html">Physics Hub</a>
+            <a href="../../science-maths.html">Mathematics Hub</a>
+          </div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu">
+            <a href="../../dashboard.html">Temporal Knowledge Graph Dashboard</a>
+            <a href="../../concepts.html">Concept Cards</a>
+            <a href="../../concepts/replayable-decision-traces.html">Replayable Decision Traces</a>
+            <a href="../../concepts/provenance-first.html">Provenance-First Computing</a>
+            <a href="../../concepts/lazy-evaluation.html">Lazy Evaluation as UX</a>
+            <a href="../../concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a>
+            <a href="../../concepts/audience-annotations.html">Audience-Specific Annotations</a>
+          </div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../../index.html#live-demo" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../../science-maths.html">Mathematics Hub</a> / Number Theory</p>
+      <span class="tag">Science &middot; Mathematics &middot; Number Theory</span>
+      <h1>Number Theory</h1>
+      <p class="lead">This subdomain page documents the planned interface for number theory on AIHPC Advanced.</p>
+      <h2>Inputs</h2>
+      <ul>
+        <li>Domain-specific input formats (varies by subdomain — see the hub page).</li>
+        <li>Optional reference datasets (CORS-enabled public sources or user uploads).</li>
+      </ul>
+      <h2>Outputs</h2>
+      <ul>
+        <li>Computed result with downloadable CSV / JSON.</li>
+        <li>Provenance receipt (see <a href="../../concepts/provenance-first.html">Provenance-First Computing</a>).</li>
+        <li>Replayable trace (see <a href="../../concepts/replayable-decision-traces.html">Replayable Decision Traces</a>).</li>
+      </ul>
+      <h2>Method</h2>
+      <p class="muted">Specifics vary by subdomain. See the hub page for the broader methodology context.</p>
+      <div class="stub">
+        <h3>Live execution — coming in a later phase</h3>
+        <p>This is a stub today. The actual computation / visualisation will land when the corresponding demo is implemented in the <code>/demos/[id]</code> framework. For now, browse the <a href="../../concepts.html">Concept Cards</a> for the design pattern, or the <a href="../../dashboard.html">temporal dashboard</a> for the replayable-trace experience.</p>
+      </div>
+      <div class="meta">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/science/maths/number-theory.html</code>. Next.js route: <code>/science/maths/number-theory</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+    <script>
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        let initial = 'dark';
+        try { const stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', () => { const next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>
