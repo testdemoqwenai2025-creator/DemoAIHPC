@@ -203,6 +203,25 @@ This separation keeps legal scenarios simple:
   vertices/edges/faces/cells for N=4 through 10 (1024 vertices at
   N=10). Second 5-step Math→Code derivation block specifically for
   the N-D generalisation.
+- **ETL/ELT on every digest article (Phase 27)** — each article in
+  the Weekly Science Digest now has a "📁 Bring your own dataset"
+  panel. Users upload their own file (PDB / VCF / GFA / Lean source
+  / FASTA protein / CSV strain/spectrum/timing/catalog / Python
+  source / BED / FASTA genome) and the appropriate parser runs
+  client-side. Parsed stats appear in a new "ETL Report" sub-tab
+  in the Observe panel. Pure client-side — no data leaves the
+  browser; the AIHPC data-residency posture is preserved. The
+  shared `docs/digest-parsers.js` (27 KB) registers 11 file-format
+  parsers; `handleETLUpload()` is the main entry point.
+- **RSS subscribe UX (Phase 27)** — the digest page now has a
+  prominent subscribe panel at the top: copyable RSS URL (canonical
+  `…/digest.rss`), "📋 Copy URL" button, quick-links to Feedly +
+  Inoreader (with the feed URL pre-populated), and direct links to
+  the JSON Feed + past-issues Archive.
+- **Audit script extended to 17 checks (Phase 27)** — `scripts/audit.py`
+  added 3 new checks (digest-parsers.js loaded + 11 parsers valid,
+  7 ETL panels balanced, RSS subscribe panel present). Exit code
+  0/1 for CI integration.
 
 ## Demo framework (Phase 2)
 

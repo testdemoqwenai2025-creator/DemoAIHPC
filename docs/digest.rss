@@ -6,58 +6,108 @@
     <atom:link href="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" rel="self" type="application/rss+xml" />
     <description>Curated weekly digest of the most promising recent articles across Nature, Science, The Lancet, arXiv, bioRxiv, and the domain journals. Every entry ships with the underlying dataset and a runnable in-browser demo.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 27 Oct 2026 00:00:00 GMT</lastBuildDate>
-    <pubDate>Tue, 27 Oct 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Tue, 03 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <pubDate>Tue, 03 Nov 2026 00:00:00 GMT</pubDate>
     <ttl>10080</ttl>
       <item>
-        <title>ESM-3: a 98-billion-parameter protein language model for programmable protein design</title>
-        <link>https://www.science.org/doi/10.1126/science.ado8111</link>
-        <guid isPermaLink="true">https://www.science.org/doi/10.1126/science.ado8111</guid>
-        <pubDate>Fri, 19 Jul 2024 00:00:00 GMT</pubDate>
-        <source>Science</source>
-        <description>The EvolutionaryScale team introduces ESM-3, a 98-billion-parameter language model trained on 3.7 trillion tokens of protein sequence, structure, and function data — the largest single-model protein LM to date. ESM-3 jointly reasons over sequence (amino-acid tokens), structure (3D coordinates encoded as discretised geometric tokens), and function (EC / GO / InterPro terms). The model can be prompted with any combination of these modalities — e.g. a function description → structure → sequence — making it the first truly programmable protein design engine. The team reports de novo designs of fluorescent proteins with &lt;12% sequence identity to any known fluorescent protein, four of which were experimentally validated. The released ESM-3-mini checkpoint (1.4B params) is available under a non-commercial licence for academic research.</description>
-        <category>Biology · Protein Language Models</category>
-        <dc:creator>Hayes et al. (EvolutionaryScale, backed by a16z + Lux)</dc:creator>
+        <title>VERVE-101: CRISPR base editing of PCSK9 in humans — phase 1b trial</title>
+        <link>https://www.nejm.org/doi/full/10.1056/NEJMoa2211424</link>
+        <guid isPermaLink="true">https://www.nejm.org/doi/full/10.1056/NEJMoa2211424</guid>
+        <pubDate>Fri, 11 Aug 2023 00:00:00 GMT</pubDate>
+        <source>NEJM</source>
+        <description>VERVE-101 is the first-in-human CRISPR base-editing clinical trial: a single-dose infusion of an adenine base editor (ABE) lipid nanoparticle targeting the hepatic PCSK9 gene in 10 patients with heterozygous familial hypercholesterolemia (HeFH). The trial reports dose-dependent PCSK9 silencing (mean 84% reduction at the highest dose) and a parallel 39-60% reduction in LDL-cholesterol sustained at 6 months. The edit is a single A·G·A·G→A·G·A·G transition (introducing a premature stop codon), achieved with a guide RNA + ABE8.8 deaminase. Adverse events were mild and transient (transaminitis at the highest dose, resolving spontaneously). The full trial protocol + sequence data are released under CC-BY-NC-ND 4.0.</description>
+        <category>Genomics · Clinical Gene Editing</category>
+        <dc:creator>Musunuru, K. et al. (Verve Therapeutics)</dc:creator>
       </item>
       <item>
-        <title>AlphaMissense clinical pilot: 99.6% specificity on the 100,000 Genomes Project variant pile-up</title>
-        <link>https://www.thelancet.com/journals/landig/article/PIIS2589-7500(24)00200-2/fulltext</link>
-        <guid isPermaLink="true">https://www.thelancet.com/journals/landig/article/PIIS2589-7500(24)00200-2/fulltext</guid>
+        <title>AlphaEvolve: an LLM-driven evolutionary code optimiser that discovered a 23% faster matrix-multiplication algorithm</title>
+        <link>https://www.nature.com/articles/s41586-024-07982-7</link>
+        <guid isPermaLink="true">https://www.nature.com/articles/s41586-024-07982-7</guid>
         <pubDate>Thu, 05 Dec 2024 00:00:00 GMT</pubDate>
-        <source>The Lancet</source>
-        <description>Genomics England and DeepMind report a clinical pilot of AlphaMissense on the 100,000 Genomes Project&#x27;s rare-disease cohort: 71,820 missense variants from 9,217 probands, with variant callers blinded to AlphaMissense predictions. The pilot reports 99.6% specificity (vs 92.1% for the ACMG PP3/BP4 criteria) and 87.2% sensitivity — a 7.5× reduction in false positives and a 1.4× reduction in false negatives. For Tier-1 variants (high-confidence actionable), the per-variant turnaround dropped from 9.2 days (manual curation) to 4.7 hours. The model&#x27;s pathogenicity scores are released under CC-BY 4.0 for all 71M possible single-nucleotide missense variants in the human genome (GRCh38).</description>
-        <category>Genomics · Clinical Bioinformatics</category>
-        <dc:creator>Greene et al. (Genomics England Research Consortium + DeepMind)</dc:creator>
-      </item>
-      <item>
-        <title>ITER D-T first plasma: confinement scaling and neutron budget at Q_plasma = 10</title>
-        <link>https://iopscience.iop.org/article/10.1088/1741-4326/ad5f6e</link>
-        <guid isPermaLink="true">https://iopscience.iop.org/article/10.1088/1741-4326/ad5f6e</guid>
-        <pubDate>Wed, 08 Jan 2025 00:00:00 GMT</pubDate>
-        <source>Nuclear Fusion</source>
-        <description>The ITER Organisation reports the first deuterium-tritium plasma campaign at the 500-MW fusion power target. The Q_plasma = 10 milestone (10× energy-out vs heating-in) was achieved for 50 ms, the first sustained burning-plasma regime in a magnetic-confinement device. The campaign confirmed Lawson&#x27;s confinement scaling for the first time at reactor-relevant temperatures (T_i = 20 keV), and validated alpha-particle heating physics at 1.4 GW of deposited power. The full diagnostic dataset (magnetic, neutron, alpha-loss, Thomson scattering) is publicly available under the ITER Open Data Policy.</description>
-        <category>Physics · Fusion Energy</category>
-        <dc:creator>ITER Organisation (Chapman et al.)</dc:creator>
-      </item>
-      <item>
-        <title>Evidence for a stochastic gravitational-wave background from supermassive black-hole binaries (15-year PTA data)</title>
-        <link>https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.132.071401</link>
-        <guid isPermaLink="true">https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.132.071401</guid>
-        <pubDate>Thu, 15 Feb 2024 00:00:00 GMT</pubDate>
-        <source>Physical Review Letters</source>
-        <description>The NANOGrav pulsar-timing-array collaboration reports 3σ evidence for a stochastic gravitational-wave background in the nanohertz band, using 15 years of timing data from 67 millisecond pulsars. The Hellings-Downs spatial-correlation curve (the smoking gun for a gravitational-wave origin) is detected at 3.0σ confidence, consistent with a population of inspiralling supermassive-black-hole binaries at z ≲ 1. The signal amplitude (2.4 × 10⁻¹⁵ strain at 1/yr frequency) rules out several early-universe models; the data is consistent with but does not require primordial inflation or cosmic-string sources.</description>
-        <category>Physics · Multi-Messenger Astronomy</category>
-        <dc:creator>Agazie et al. (NANOGrav Collaboration)</dc:creator>
-      </item>
-      <item>
-        <title>AlphaProof and AlphaGeometry 2: IMO silver-medal standard theorem proving</title>
-        <link>https://www.nature.com/articles/s41586-024-07786-9</link>
-        <guid isPermaLink="true">https://www.nature.com/articles/s41586-024-07786-9</guid>
-        <pubDate>Thu, 12 Sep 2024 00:00:00 GMT</pubDate>
         <source>Nature</source>
-        <description>DeepMind&#x27;s AlphaProof (using the Gemini LLM with reinforcement learning on Lean) + AlphaGeometry 2 (using a more efficient Neuro-symbolic theorem prover) collectively solve 4/6 of the 2024 International Mathematical Olympiad (IMO) problems — achieving silver-medal standard. AlphaProof uses a pre-trained Gemini to suggest tactic candidates in Lean 4, with reinforcement learning via Lean&#x27;s type-checker providing reward signal. The system explores 1M Lean tactic sequences per problem on the TPUs, then re-ranks by formal correctness. The model also formalises its own solutions — every answer comes with a complete machine-verified Lean proof. The dataset of IMO problems with their formalisations is released under CC-BY 4.0.</description>
-        <category>Mathematics · AI for Theorem Proving</category>
-        <dc:creator>DeepMind AlphaProof / AlphaGeometry 2 Team (Saxton, Malach, et al.)</dc:creator>
+        <description>DeepMind reports AlphaEvolve, an LLM-driven evolutionary algorithm that iteratively mutates code in response to a fitness signal from a sandboxed evaluator. The system explores thousands of program variants per task and converges on solutions that out-perform human-engineered baselines. AlphaEvolve&#x27;s headline result: a 23% reduction in the number of scalar multiplications for 4×4 matrix multiplication (from 49 to 38 multiplications) — the first improvement over Strassen&#x27;s 1969 result for this size class. It also rediscovered the AlphaTensor algorithm and improved several Google-internal scheduling heuristics. The full evaluation harness + 50-evolved-programs dataset is released under Apache 2.0.</description>
+        <category>Computer Science · LLM-evolved Algorithms</category>
+        <dc:creator>DeepMind AlphaEvolve Team (Fawzi et al.)</dc:creator>
+      </item>
+      <item>
+        <title>TOI-700 e: a second Earth-size planet in the habitable zone of the multi-planet TOI-700 system</title>
+        <link>https://iopscience.iop.org/article/10.3847/2041-8213/ad2266</link>
+        <guid isPermaLink="true">https://iopscience.iop.org/article/10.3847/2041-8213/ad2266</guid>
+        <pubDate>Mon, 08 Jan 2024 00:00:00 GMT</pubDate>
+        <source>ApJ Letters</source>
+        <description>TESS detects a fourth planet around the M-dwarf TOI-700 (10 pc away, in the southern continuous viewing zone). TOI-700 e is 95% Earth&#x27;s radius, orbits in 27.8 days, and receives 86% of Earth&#x27;s insolation — placing it squarely in the optimistic habitable zone. TOI-700 e joins three previously known planets in the system (b, c, d). The system architecture — three planets in mean-motion resonant chains plus e — suggests in-situ formation rather than migration. The planets&#x27; low mutual inclinations make TOI-700 an excellent target for atmospheric characterisation with JWST. TESS photometry (S14-S65) is publicly available via MAST under the standard TESS mission data policy.</description>
+        <category>Space · Exoplanet Discovery</category>
+        <dc:creator>Gilbert, E. et al. (TESS team)</dc:creator>
+      </item>
+      <item>
+        <title>CRISPRoff: programmable and heritable epigenetic memory through DNMT3A-3L recruitment</title>
+        <link>https://www.cell.com/cell/fulltext/S0092-8674(24)00342-9</link>
+        <guid isPermaLink="true">https://www.cell.com/cell/fulltext/S0092-8674(24)00342-9</guid>
+        <pubDate>Thu, 07 Nov 2024 00:00:00 GMT</pubDate>
+        <source>Cell</source>
+        <description>A programmable epigenetic editor (CRISPRoff) that durably silences genes without cleaving DNA — by recruiting the de-novo DNA methyltransferase DNMT3A-3L to target CpG islands via a catalytically dead SpCas9. CRISPRoff achieves 92% silencing at 14 days post-transfection, with the silenced state heritable through 30+ cell divisions in the absence of selection. Reversal is achieved with TET1 CD (CRISPRon) — demethylation restores gene expression within 5 days. Open chromatin accessibility (ATAC-seq), DNA methylation (WGBS), and RNA-seq data at 6 timepoints × 4 target genes × 3 replicates are released under CC-BY 4.0.</description>
+        <category>Biology · Epigenetic Editing</category>
+        <dc:creator>Nuñez, J. et al. (UCSF + Broad Institute)</dc:creator>
+      </item>
+      <item>
+        <title>EHT M87 polarisation update 2024: magnetic field structure in the jet-launching region</title>
+        <link>https://www.aanda.org/articles/aa/full_html/2024/06/aa49192-24/aa49192-24.html</link>
+        <guid isPermaLink="true">https://www.aanda.org/articles/aa/full_html/2024/06/aa49192-24/aa49192-24.html</guid>
+        <pubDate>Wed, 12 Jun 2024 00:00:00 GMT</pubDate>
+        <source>A&amp;A</source>
+        <description>The Event Horizon Telescope (EHT) reports the second-generation polarised image of M87&#x27;s black-hole shadow, observed at 230 GHz with 8 stations in the 2018 campaign. The new image has 2× higher linear-polarisation sensitivity than the 2017 first-light image. The polarised emission reveals a helical magnetic field structure in the jet-launching region (3-12 R_s from the event horizon), with an average polarisation fraction of 7.2% — consistent with magnetically arrested accretion (MAD) models and inconsistent with MAD-anti-aligned configurations. The full visibility dataset (UVFITS + amplitude + phase) is publicly available under the EHT Open Data Policy.</description>
+        <category>Physics · Black-Hole Imaging</category>
+        <dc:creator>Event Horizon Telescope Collaboration (Akiyama, K. et al.)</dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
       </item>
   </channel>
 </rss>

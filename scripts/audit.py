@@ -489,6 +489,88 @@ def check_temporal_graph_route():
                        "Next.js /dashboard route uses <TemporalGraph> with TIMESTEPS data")
 
 
+def check_digest_parsers_loaded():
+    """Check (Phase 27): digest-parsers.js exists + is loaded by digest.html."""
+    parsers_path = os.path.join(DOCS, "digest-parsers.js")
+    if not os.path.isfile(parsers_path):
+        return CheckResult("digest_parsers_loaded", False,
+                           "docs/digest-parsers.js missing")
+    # Validate JS syntax via node --check
+    try:
+        subprocess.run(["node", "--check", parsers_path],
+                        check=True, capture_output=True, timeout=10)
+    except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired) as e:
+        return CheckResult("digest_parsers_loaded", False,
+                           f"digest-parsers.js syntax invalid or node unavailable")
+    # Check that digest.html loads the parser library
+    digest_path = os.path.join(DOCS, "digest.html")
+    with open(digest_path, "r", encoding="utf-8") as f:
+        s = f.read()
+    if '<script src="digest-parsers.js">' not in s:
+        return CheckResult("digest_parsers_loaded", False,
+                           "digest.html does not load digest-parsers.js")
+    # Check for required parsers in the registry
+    required_parsers = [
+        "parsePDB", "parseGWStrain", "parseSpecCSV", "parseGFA",
+        "parseLean", "parseFASTAProtein", "parseVCF", "parsePTResiduals",
+        "parseDiagCSV", "parseGenomeFASTA", "parseCatalogCSV",
+    ]
+    with open(parsers_path, "r", encoding="utf-8") as f:
+        parsers_src = f.read()
+    missing = [p for p in required_parsers if f"function {p}" not in parsers_src]
+    if missing:
+        return CheckResult("digest_parsers_loaded", False,
+                           f"missing parsers: {missing}")
+    return CheckResult("digest_parsers_loaded", True,
+                       f"digest-parsers.js loaded by digest.html + 11 parsers registered (syntax valid)")
+
+
+def check_etl_panels_present():
+    """Check (Phase 27): every article in the live digest has an ETL panel."""
+    digest_path = os.path.join(DOCS, "digest.html")
+    if not os.path.isfile(digest_path):
+        return CheckResult("etl_panels_present", False,
+                           "docs/digest.html missing")
+    with open(digest_path, "r", encoding="utf-8") as f:
+        s = f.read()
+    n_etl_panels = s.count('class="etl-panel"')
+    n_etl_inputs = s.count('input type="file" id="etl-input-')
+    n_etl_results = s.count('id="etl-result-')
+    n_etl_subtab = s.count('data-sub="etl"')
+    if n_etl_panels == 0:
+        return CheckResult("etl_panels_present", False,
+                           "no ETL panels found in digest.html")
+    if not (n_etl_panels == n_etl_inputs == n_etl_results):
+        return CheckResult("etl_panels_present", False,
+                           f"imbalance: panels={n_etl_panels}, inputs={n_etl_inputs}, results={n_etl_results}")
+    return CheckResult("etl_panels_present", True,
+                       f"{n_etl_panels} ETL panels present (each with file input + result container + ETL sub-tab) — n_inputs={n_etl_inputs}, n_results={n_etl_results}, n_subtabs={n_etl_subtab}")
+
+
+def check_rss_subscribe_panel():
+    """Check (Phase 27): RSS subscribe UX panel present at top of digest.html."""
+    digest_path = os.path.join(DOCS, "digest.html")
+    if not os.path.isfile(digest_path):
+        return CheckResult("rss_subscribe_panel", False,
+                           "docs/digest.html missing")
+    with open(digest_path, "r", encoding="utf-8") as f:
+        s = f.read()
+    required = [
+        'id="rss-url-input"',
+        'onclick="copyRSSUrl()"',
+        'feedly.com',
+        'inoreader.com',
+        'digest.rss',
+        'digest.json',
+    ]
+    missing = [r for r in required if r not in s]
+    if missing:
+        return CheckResult("rss_subscribe_panel", False,
+                           f"missing: {missing}")
+    return CheckResult("rss_subscribe_panel", True,
+                       "RSS subscribe UX panel present: copyable URL + Feedly + Inoreader + JSON Feed links")
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -515,6 +597,9 @@ def main():
         check_generator_scripts(),
         check_dag_provenance(),
         check_temporal_graph_route(),
+        check_digest_parsers_loaded(),
+        check_etl_panels_present(),
+        check_rss_subscribe_panel(),
     ]
 
     if args.json:

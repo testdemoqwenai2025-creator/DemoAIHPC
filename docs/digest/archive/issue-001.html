@@ -132,6 +132,7 @@
       .source-badge.futuristic { background: rgba(236,72,153,0.2); color: #f9a8d4; border-color: rgba(236,72,153,0.4); }
       .futuristic-pill { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: linear-gradient(90deg, rgba(236,72,153,0.25), rgba(139,92,246,0.25)); color: #f9a8d4; border: 1px solid rgba(236,72,153,0.4); }
     </style>
+    <script src="digest-parsers.js"></script>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -162,9 +163,11 @@
         <span>· 7 articles</span>
         <span class="pill">New issue every Tuesday</span>
       </div>
-      <p class="lead" style="font-size: 15px; color: var(--text-muted); margin-bottom: 32px;">
+      <p class="lead" style="font-size: 15px; color: var(--text-muted); margin-bottom: 24px;">
         This week&#x27;s digest pairs five fresh high-impact publications — ESM-3, AlphaMissense clinical pilot, ITER D-T first plasma, NANOGrav gravitational-wave background, and AlphaProof&#x27;s IMO silver — with two futuristic visions extrapolated from recent ML/AI trends: a 2028 patient-specific drug-design pipeline and a 2027 top-500 exoplanet atmosphere catalog. The futuristic visions are clearly marked with a 🚀 pill — they are not real publications; they are derived from trends in the existing literature. Every entry still ships with the underlying dataset and a runnable in-browser demo.
       </p>
+
+      <div style="margin: 0 0 32px; padding: 14px 18px; background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.2); border-left: 3px solid var(--accent-2); border-radius: 12px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">        <div style="flex: 1; min-width: 240px;">          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 4px;">📡 Subscribe to the weekly digest</div>          <div style="font-size: 12px; color: var(--text-muted);">Get every Tuesday's curated digest in your RSS reader. RSS 2.0 + JSON Feed 1.1 both available — choose your format below.</div>        </div>        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">          <input id="rss-url-input" readonly value="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" style="background: var(--bg-elevated); border: 1px solid var(--border-strong); color: var(--accent-2); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-family: 'SF Mono', Menlo, monospace; min-width: 280px; max-width: 360px;" onclick="this.select()" />          <button class="btn primary" style="background: linear-gradient(90deg,#06b6d4,#8b5cf6); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="copyRSSUrl()">📋 Copy URL</button>          <a href="https://feedly.com/i/subscription/feed/https%3A%2F%2Ftestdemoqwenai2025-creator.github.io%2FDemoAIHPC%2Fdigest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Feedly</a>          <a href="https://www.inoreader.com/?add_feed=https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Inoreader</a>          <a href="digest.json" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">JSON Feed</a>          <a href="digest/archive/index.html" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">📜 Archive</a>        </div>      </div>
 
       <article class="article-card" id="article-esm3">
         <div class="article-head">
@@ -190,6 +193,18 @@
           <div class="ds-row"><span class="k">Format</span><span class="v">HuggingFace dataset + FASTA + mmCIF</span></div>
           <div class="ds-row"><span class="k">Size</span><span class="v">3.7T tokens (3.1 TB raw)</span></div>
           <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.evolutionaryscale.ai/blog/esm3" target="_blank" rel="noopener">https://www.evolutionaryscale.ai/blog/esm3</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own protein sequence (FASTA format) to tokenise into 3-mers and compute amino-acid composition.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .fasta,.fa,.faa,.txt
+              <input type="file" id="etl-input-esm3" accept=".fasta,.fa,.faa,.txt" data-article-id="esm3" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 20 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-esm3" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
         <div class="demo-card" id="demo-esm3">
           <div class="card-head" onclick="toggleDemo('demo-esm3')">
@@ -259,6 +274,7 @@
                 <button data-sub="reports">Reports</button>
                 <button data-sub="graphs">Graphs</button>
                 <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
               </div>
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
@@ -319,6 +335,12 @@
                   </ul>
                 </div>
               </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-esm3" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -348,6 +370,18 @@
           <div class="ds-row"><span class="k">Format</span><span class="v">TSV (71M variants × 4 columns: chr, pos, ref→alt, path_score)</span></div>
           <div class="ds-row"><span class="k">Size</span><span class="v">2.4 GB compressed</span></div>
           <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://storage.googleapis.com/dm_alphamissense/AlphaMissense_gene_submission.tsv.gz" target="_blank" rel="noopener">https://storage.googleapis.com/dm_alphamissense/AlphaMissense_gene_submission.tsv.gz</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own VCF file (variant call format) to count variants by chromosome + by type (SNV/indel/SV).</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .vcf,.vcf.gz,.txt
+              <input type="file" id="etl-input-alphamissense-clinical" accept=".vcf,.vcf.gz,.txt" data-article-id="alphamissense-clinical" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 100 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-alphamissense-clinical" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
         <div class="demo-card" id="demo-alphamissense-clinical">
           <div class="card-head" onclick="toggleDemo('demo-alphamissense-clinical')">
@@ -417,6 +451,7 @@
                 <button data-sub="reports">Reports</button>
                 <button data-sub="graphs">Graphs</button>
                 <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
               </div>
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
@@ -473,6 +508,12 @@
                   </ul>
                 </div>
               </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-alphamissense-clinical" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -502,6 +543,18 @@
           <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 (magnetic, neutron, alpha-loss, Thomson)</span></div>
           <div class="ds-row"><span class="k">Size</span><span class="v">4.1 TB</span></div>
           <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.iter.org/news/iter-open-data" target="_blank" rel="noopener">https://www.iter.org/news/iter-open-data</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own diagnostic time-series (CSV: time, signal) to compute peak/RMS ratio + sample rate.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .csv,.tsv,.txt
+              <input type="file" id="etl-input-iter-dt" accept=".csv,.tsv,.txt" data-article-id="iter-dt" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-iter-dt" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
         <div class="demo-card" id="demo-iter-dt">
           <div class="card-head" onclick="toggleDemo('demo-iter-dt')">
@@ -571,6 +624,7 @@
                 <button data-sub="reports">Reports</button>
                 <button data-sub="graphs">Graphs</button>
                 <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
               </div>
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
@@ -632,6 +686,12 @@
                   </ul>
                 </div>
               </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-iter-dt" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -661,6 +721,18 @@
           <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 (67 pulsars × 15 yr × TOA + residuals)</span></div>
           <div class="ds-row"><span class="k">Size</span><span class="v">8.4 GB</span></div>
           <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://data.nanograv.org/Data-Downloads/15yr-data-release.html" target="_blank" rel="noopener">https://data.nanograv.org/Data-Downloads/15yr-data-release.html</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own pulsar-timing residuals (CSV: time, residual) to estimate HD signal + significance.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .csv,.tim,.txt
+              <input type="file" id="etl-input-nanograv-gwb" accept=".csv,.tim,.txt" data-article-id="nanograv-gwb" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-nanograv-gwb" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
         <div class="demo-card" id="demo-nanograv-gwb">
           <div class="card-head" onclick="toggleDemo('demo-nanograv-gwb')">
@@ -730,6 +802,7 @@
                 <button data-sub="reports">Reports</button>
                 <button data-sub="graphs">Graphs</button>
                 <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
               </div>
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
@@ -793,6 +866,12 @@
                   </ul>
                 </div>
               </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-nanograv-gwb" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -822,6 +901,18 @@
           <div class="ds-row"><span class="k">Format</span><span class="v">Lean source files (.lean)</span></div>
           <div class="ds-row"><span class="k">Size</span><span class="v">120 MB</span></div>
           <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/google-deepmind/imo-formalised" target="_blank" rel="noopener">https://github.com/google-deepmind/imo-formalised</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own Lean 4 source file to count theorems/lemmas/definitions + extract theorem names.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .lean,.txt
+              <input type="file" id="etl-input-alphaproof-imo" accept=".lean,.txt" data-article-id="alphaproof-imo" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 10 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-alphaproof-imo" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
         <div class="demo-card" id="demo-alphaproof-imo">
           <div class="card-head" onclick="toggleDemo('demo-alphaproof-imo')">
@@ -891,6 +982,7 @@
                 <button data-sub="reports">Reports</button>
                 <button data-sub="graphs">Graphs</button>
                 <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
               </div>
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
@@ -956,6 +1048,12 @@
                   </ul>
                 </div>
               </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-alphaproof-imo" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -985,6 +1083,18 @@
           <div class="ds-row"><span class="k">Format</span><span class="v">FASTA + GFA + clinical-phenotype JSON</span></div>
           <div class="ds-row"><span class="k">Size</span><span class="v">8.4 GB (full pangenome-graph + 1 synthetic genome)</span></div>
           <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/human-pangenomics/hpp_pangenome_resources" target="_blank" rel="noopener">https://github.com/human-pangenomics/hpp_pangenome_resources</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a synthetic patient genome (FASTA) to compute GC%, length, and AT% — step 1 of the 2028 pipeline.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .fasta,.fa,.fna,.txt
+              <input type="file" id="etl-input-patient-drug-design-2028" accept=".fasta,.fa,.fna,.txt" data-article-id="patient-drug-design-2028" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 200 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-patient-drug-design-2028" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
         <div class="demo-card" id="demo-patient-drug-design-2028">
           <div class="card-head" onclick="toggleDemo('demo-patient-drug-design-2028')">
@@ -1054,6 +1164,7 @@
                 <button data-sub="reports">Reports</button>
                 <button data-sub="graphs">Graphs</button>
                 <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
               </div>
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
@@ -1125,6 +1236,12 @@
                   </ul>
                 </div>
               </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-patient-drug-design-2028" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1154,6 +1271,18 @@
           <div class="ds-row"><span class="k">Format</span><span class="v">Parquet (500 rows × 47 atmospheric columns)</span></div>
           <div class="ds-row"><span class="k">Size</span><span class="v">1.2 GB</span></div>
           <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.cosmos.esa.int/web/ariel" target="_blank" rel="noopener">https://www.cosmos.esa.int/web/ariel</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own exoplanet catalog (CSV with planet, temp, radius, tier columns) to count planets + tier distribution.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .csv,.tsv,.txt
+              <input type="file" id="etl-input-top500-exoplanet-2027" accept=".csv,.tsv,.txt" data-article-id="top500-exoplanet-2027" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-top500-exoplanet-2027" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
         <div class="demo-card" id="demo-top500-exoplanet-2027">
           <div class="card-head" onclick="toggleDemo('demo-top500-exoplanet-2027')">
@@ -1223,6 +1352,7 @@
                 <button data-sub="reports">Reports</button>
                 <button data-sub="graphs">Graphs</button>
                 <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
               </div>
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
@@ -1296,6 +1426,12 @@
                     <li>Biosignature confidence is tiered: &#x27;plausible&#x27; (single-gas disequilibrium), &#x27;strong&#x27; (multi-gas + rocky), &#x27;robust&#x27; (multi-gas + ocean glint + seasonal variation).</li>
                     <li>The catalog is downloadable as 1.2 GB Parquet with a browser-side cross-correlation tool — researchers slide any molecular template against any planet&#x27;s spectrum.</li>
                   </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-top500-exoplanet-2027" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
             </div>
@@ -1439,6 +1575,41 @@
           block.id = 'code-block-' + articleId;  // fix placeholder id
         }
       });
+
+      // ---- ETL file-input wiring (Phase 27) ----
+      // Each ETL file input calls handleETLUpload(articleId, file)
+      // which reads the file via FileReader, looks up the parser in
+      // DIGEST_PARSERS (from digest-parsers.js), calls it, and
+      // injects the result into the article's ETL Report sub-tab.
+      document.querySelectorAll('input[type="file"][data-article-id]').forEach(inp => {
+        inp.addEventListener('change', (e) => {
+          const articleId = inp.dataset.articleId;
+          const file = e.target.files[0];
+          if (!file) return;
+          if (window.handleETLUpload) {
+            const maxMb = parseInt(inp.dataset.maxMb || '50', 10);
+            window.handleETLUpload(articleId, file, { max_mb: maxMb });
+          }
+        });
+      });
+
+      // ---- RSS URL copy (Phase 27) ----
+      window.copyRSSUrl = function () {
+        const inp = document.getElementById('rss-url-input');
+        if (!inp) return;
+        inp.select();
+        try {
+          navigator.clipboard.writeText(inp.value).then(() => {
+            const orig = inp.style.color;
+            inp.style.color = '#10b981';
+            setTimeout(() => { inp.style.color = orig; }, 1500);
+          }).catch(() => {
+            document.execCommand('copy');  // fallback
+          });
+        } catch (e) {
+          document.execCommand('copy');
+        }
+      };
 
       // ---- Particle background ----
       (function () {

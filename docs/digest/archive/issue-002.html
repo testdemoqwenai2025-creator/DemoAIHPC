@@ -1,0 +1,1615 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <base href="../../" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Weekly Science Digest — Issue #3 (2026-11-03). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos." />
+    <title>Weekly Science Digest · Issue #2 (ARCHIVED) — AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.1), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      /* Ribbon */
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 42px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(196,181,253,0.2); }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .meta-issue { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--text-muted); margin-bottom: 24px; padding: 12px 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; }
+      .meta-issue strong { color: var(--text); }
+      .meta-issue .pill { padding: 2px 8px; border-radius: 9999px; background: rgba(6,182,212,0.15); color: var(--accent-2); border: 1px solid rgba(6,182,212,0.3); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+      /* Article card */
+      .article-card { background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.2); border-radius: 16px; margin: 24px 0; padding: 28px; backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
+      .article-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--accent), var(--accent-2)); opacity: 0.8; }
+      .article-card:hover { border-color: rgba(139,92,246,0.4); box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 40px rgba(139,92,246,0.15); }
+      .article-card .article-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+      .article-card .source-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); flex-wrap: wrap; }
+      .article-card .source-badge { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; background: rgba(245,158,11,0.2); color: var(--accent-3); border: 1px solid rgba(245,158,11,0.3); }
+      .article-card .domain-pill { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: rgba(6,182,212,0.15); color: var(--accent-2); border: 1px solid rgba(6,182,212,0.3); }
+      .article-card h3 { font-size: 22px; margin: 4px 0 8px; line-height: 1.25; color: var(--text); }
+      .article-card .authors { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; font-style: italic; }
+      .article-card .abstract { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+      .article-card .abstract p { margin: 0 0 10px; }
+      /* Dataset card */
+      .dataset-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; }
+      .dataset-card .ds-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-3); margin-bottom: 8px; }
+      .dataset-card .ds-row { display: grid; grid-template-columns: 80px 1fr; gap: 8px; font-size: 12px; color: var(--text-muted); padding: 2px 0; }
+      .dataset-card .ds-row .k { color: var(--text-muted-2); font-weight: 600; }
+      .dataset-card .ds-row .v { color: var(--text); }
+      .dataset-card .ds-row .v a { color: var(--accent-2); text-decoration: none; word-break: break-all; }
+      .dataset-card .ds-row .v a:hover { text-decoration: underline; }
+      /* ClickForDemo card */
+      .demo-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; margin: 12px 0 0; overflow: hidden; }
+      .demo-card .card-head { padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; gap: 16px; cursor: pointer; user-select: none; }
+      .demo-card .card-head:hover { background: var(--bg-elevated); }
+      .demo-card .card-title { font-size: 14px; font-weight: 700; color: var(--text); margin: 0; }
+      .demo-card .card-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+      .demo-card .chevron { transition: transform 0.3s ease; color: var(--text-muted); font-size: 18px; }
+      .demo-card.open .chevron { transform: rotate(180deg); }
+      .demo-card .card-body { display: none; padding: 0; }
+      .demo-card.open .card-body { display: block; }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px; }
+      .demo-tab-content.active { display: block; }
+      /* Math */
+      .math-panel .math-eq { font-family: "Cambria Math", Georgia, serif; font-size: 17px; color: var(--accent-2); padding: 10px 14px; background: rgba(6,182,212,0.05); border-radius: 8px; border-left: 3px solid var(--accent-2); margin: 8px 0 12px; }
+      .math-panel .math-plain { font-size: 13px; color: var(--text-muted); }
+      .derivation-step { background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      /* Code */
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, Consolas, monospace; }
+      pre.code-block .kw { color: #c084fc; }
+      pre.code-block .str { color: #fbbf24; }
+      pre.code-block .num { color: #67e8f9; }
+      pre.code-block .cmt { color: #6b7280; font-style: italic; }
+      /* Observe sub-tabs */
+      .observe-subtabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid var(--border); }
+      .observe-subtabs button { padding: 6px 14px; background: transparent; border: none; color: var(--text-muted); font-size: 12px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .observe-subtabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .observe-content { display: none; }
+      .observe-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .summary-block ul li strong { color: var(--text); }
+      /* Article footer */
+      .article-footer { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap; font-size: 12px; color: var(--text-muted); }
+      .article-footer a { color: var(--accent-2); text-decoration: none; }
+      .article-footer a:hover { text-decoration: underline; }
+      .article-footer .citation { font-family: "SF Mono", Menlo, monospace; font-size: 11px; color: var(--text-muted-2); }
+      /* Bottom meta */
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+      /* Light theme */
+      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(245,158,11,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.06), transparent 55%), #fafafa; color: #18181b; }
+      body.light .article-card, body.light .dataset-card, body.light .demo-card, body.light .meta-issue, body.light .stats-grid .stat, body.light .report-block, body.light .graph-block { background: white; border-color: #e5e7eb; }
+      body.light .demo-tabs, body.light .code-panel .lang-toggle button, body.light .derivation-step { background: #f9fafb; border-color: #e5e7eb; }
+      body.light pre.code-block { background: #1a1f2e; color: #e5e7eb; }
+      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .meta, body.light .article-footer, body.light .abstract, body.light .authors, body.light .summary-block ul, body.light .derivation-step .step-explain { color: #4b5563; }
+      body.light .ribbon-btn-primary { color: white; }
+      /* Futuristic vision article styling (Phase 26) */
+      .article-card.futuristic-vision { border-color: rgba(236,72,153,0.35); box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 40px rgba(236,72,153,0.15); }
+      .article-card.futuristic-vision::before { background: linear-gradient(180deg, #ec4899, #8b5cf6, #06b6d4); }
+      .article-card.futuristic-vision:hover { border-color: rgba(236,72,153,0.6); box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 50px rgba(236,72,153,0.25); }
+      .source-badge.futuristic { background: rgba(236,72,153,0.2); color: #f9a8d4; border-color: rgba(236,72,153,0.4); }
+      .futuristic-pill { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: linear-gradient(90deg, rgba(236,72,153,0.25), rgba(139,92,246,0.25)); color: #f9a8d4; border: 1px solid rgba(236,72,153,0.4); }
+    </style>
+    <script src="digest-parsers.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="index.html">Home</a><a href="demos.html">Demos</a><a href="dashboard.html">Dashboard</a><a href="graph.html">Knowledge Graph</a><a href="benchmark.html">Agentic Benchmark</a><a href="subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="aethel.html">AETHEL Connector</a><a href="connectors.html">Scientific Connectors Hub</a><a href="query.html">Query Executor</a><a href="graph.html">Knowledge Graph</a><a href="workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="science-biology.html">Biology Hub</a><a href="science-chemistry.html">Chemistry Hub</a><a href="science-physics.html">Physics Hub</a><a href="science-maths.html">Mathematics Hub</a><a href="science-bioinformatics.html">Bioinformatics</a><a href="science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="digest.html">Weekly Science Digest</a><a href="dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="concepts.html">Concept Cards</a><a href="concepts/replayable-decision-traces.html">Replayable Decision Traces</a><a href="concepts/provenance-first.html">Provenance-First Computing</a><a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a><a href="concepts/audience-annotations.html">Audience-Specific Annotations</a><a href="concepts/provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <div style="margin: 0 0 24px; padding: 16px 20px; background: rgba(245,158,11,0.10); border: 1px solid rgba(245,158,11,0.3); border-radius: 12px; font-size: 13px; color: var(--text-muted);"><strong style="color: var(--accent-3);">📜 Archived issue #2.</strong> <a href="digest.html" style="color: var(--accent-2); text-decoration: none;">Read the latest issue &rarr;</a></div>
+      <p class="crumbs"><a href="concepts.html">Insights</a> / Weekly Science Digest</p>
+      <span class="tag">Foundational &middot; weekly curation &middot; reproducibility-first</span>
+      <h1>Weekly Science Digest &middot; Issue #3</h1>
+      <p class="lead">Edit · evolve · image — five fresh papers plus two ML-derived futuristic visions</p>
+      <div class="meta-issue">
+        <span><strong>Issue #3</strong></span>
+        <span>· 2026-11-03</span>
+        <span>· 7 articles</span>
+        <span class="pill">New issue every Tuesday</span>
+      </div>
+      <p class="lead" style="font-size: 15px; color: var(--text-muted); margin-bottom: 24px;">
+        This week&#x27;s digest pairs five fresh high-impact publications — VERVE-101 base-editing clinical trial (NEJM), AlphaEvolve (Nature), TOI-700 e discovery (ApJ), CRISPRoff (Cell), EHT M87 polarisation update (A&amp;A) — with two ML-derived futuristic visions: closed-loop AI fusion reactor control (2029) and Lean 5 + AlphaProof unified AI for math (2030). Every article ships with the underlying dataset, an ETL/ELT panel (Phase 27 — upload your own data to run the demo against it), and a 6-language polyglot demo with 5-step Math→Code derivation. The two futuristic visions are clearly marked with a 🚀 pill — they are not real publications; they are extrapolated from trends in the existing literature.
+      </p>
+
+      <div style="margin: 0 0 32px; padding: 14px 18px; background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.2); border-left: 3px solid var(--accent-2); border-radius: 12px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">        <div style="flex: 1; min-width: 240px;">          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 4px;">📡 Subscribe to the weekly digest</div>          <div style="font-size: 12px; color: var(--text-muted);">Get every Tuesday's curated digest in your RSS reader. RSS 2.0 + JSON Feed 1.1 both available — choose your format below.</div>        </div>        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">          <input id="rss-url-input" readonly value="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" style="background: var(--bg-elevated); border: 1px solid var(--border-strong); color: var(--accent-2); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-family: 'SF Mono', Menlo, monospace; min-width: 280px; max-width: 360px;" onclick="this.select()" />          <button class="btn primary" style="background: linear-gradient(90deg,#06b6d4,#8b5cf6); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="copyRSSUrl()">📋 Copy URL</button>          <a href="https://feedly.com/i/subscription/feed/https%3A%2F%2Ftestdemoqwenai2025-creator.github.io%2FDemoAIHPC%2Fdigest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Feedly</a>          <a href="https://www.inoreader.com/?add_feed=https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Inoreader</a>          <a href="digest.json" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">JSON Feed</a>          <a href="digest/archive/index.html" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">📜 Archive</a>        </div>      </div>
+
+      <article class="article-card" id="article-verte-101">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">NEJM</span>
+              <span class="domain-pill">Genomics · Clinical Gene Editing</span>
+              <span>· 2023-08-11</span>
+              
+            </div>
+            <h3>VERVE-101: CRISPR base editing of PCSK9 in humans — phase 1b trial</h3>
+            <p class="authors">Musunuru, K. et al. (Verve Therapeutics)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>VERVE-101 is the first-in-human CRISPR base-editing clinical trial: a single-dose infusion of an adenine base editor (ABE) lipid nanoparticle targeting the hepatic PCSK9 gene in 10 patients with heterozygous familial hypercholesterolemia (HeFH).</p>
+          <p>The trial reports dose-dependent PCSK9 silencing (mean 84% reduction at the highest dose) and a parallel 39-60% reduction in LDL-cholesterol sustained at 6 months. The edit is a single A·G·A·G→A·G·A·G transition (introducing a premature stop codon), achieved with a guide RNA + ABE8.8 deaminase.</p>
+          <p>Adverse events were mild and transient (transaminitis at the highest dose, resolving spontaneously). The full trial protocol + sequence data are released under CC-BY-NC-ND 4.0.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">VERVE-101 trial sequence data</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">BAM (hepatic biopsy RNA-seq, 4 timepoints × 10 patients)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">47 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.heart-gesca.org/verve-101" target="_blank" rel="noopener">https://www.heart-gesca.org/verve-101</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own VCF to identify premature-stop variants in PCSK9 and predict their lipid-lowering effect.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .vcf,.vcf.gz,.txt
+              <input type="file" id="etl-input-verte-101" accept=".vcf,.vcf.gz,.txt" data-article-id="verte-101" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 100 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-verte-101" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-verte-101">
+          <div class="card-head" onclick="toggleDemo('demo-verte-101')">
+            <div>
+              <p class="card-title">base_edit(gRNA, target_seq) — adenine base editor design</p>
+              <p class="card-desc">Design a CRISPR adenine base-editor (ABE) edit: given a target sequence + guide RNA, predict which A bases will be edited (within the editing window) and whether any introduces a premature stop codon.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">edit_window = bases[4..8] of the protospacer;  P(Σ(stop | edit)) ≈ 1 if any of A·G·A·G→A·G·A·G creates a TAG/TAA/TGA stop</div>
+                <p class="math-plain">Adenine base editors (ABEs) convert A→G in a 4-8 nt editing window of the protospacer (positions 4-8 of the 20-nt guide). The deaminase ABE8.8 is the highest-efficiency variant — ~84% per-allele editing in the VERVE-101 trial.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Target + guide design</strong>
+                <div class="step-math">gRNA = 20 nt of complementarity to the target strand, 5&#x27;-NGG PAM required</div>
+                <div class="step-explain">Design a 20-nt guide RNA complementary to the target strand, immediately 5&#x27; of an NGG PAM (SpCas9 requirement). VERVE-101&#x27;s guide targets exon 1 of PCSK9.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Editing window</strong>
+                <div class="step-math">window = positions 4-8 (counted from the 5&#x27; end of the protospacer)</div>
+                <div class="step-explain">ABE deaminases edit adenines in a 4-8 nt window of the protospacer (positions 4-8 — counting from the PAM-distal end). The exact window varies with the deaminase variant.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Edit prediction</strong>
+                <div class="step-math">for A in window: P(edit A → G) ≈ 0.84 (ABE8.8 in HEK293T, in vivo ~60%)</div>
+                <div class="step-explain">ABE8.8 has ~84% editing efficiency per adenine in the window (in HEK293T cells). In the hepatic clinical setting, the in-vivo efficiency is lower (~60%) due to LNP delivery heterogeneity.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Stop-codon check</strong>
+                <div class="step-math">edit introduces stop if AA(G|A|A → A G A|G A|G A) → TAG / TAA / TGA at the codon level</div>
+                <div class="step-explain">A single A→G edit can introduce a premature stop codon if it converts a sense codon into TAG, TAA, or TGA. VERVE-101&#x27;s PCSK9 edit (Q54*) converts a CAG glutamine codon into TAG via an A→G edit.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Phenotypic prediction</strong>
+                <div class="step-math">PCSK9 protein truncation → ↓ PCSK9 secretion → ↑ hepatic LDLR → ↓ circulating LDL-C by 39-60%</div>
+                <div class="step-explain">Truncating PCSK9 prevents its secretion; without PCSK9, the LDL receptor (LDLR) is not degraded and recycles more efficiently, clearing more LDL from circulation. The VERVE-101 trial measured a 39-60% LDL-C reduction that was sustained at 6 months.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Patients</div>
+                    <div class="v">10 (HeFH)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">PCSK9 silencing</div>
+                    <div class="v">84% mean</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">LDL-C reduction</div>
+                    <div class="v">39-60%</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Edit type</div>
+                    <div class="v">Q54* (TAG)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Editor</div>
+                    <div class="v">ABE8.8 + LNP</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Sustained</div>
+                    <div class="v">6 months</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">VERVE-101 reports dose-dependent PCSK9 silencing (mean 84% at the top dose) and sustained 39-60% LDL-C reduction at 6 months. The edit is a single A→G transition introducing a premature stop codon (Q54*) in exon 1 of PCSK9. Adverse events were mild and transient. This is the first in-human proof-of-concept for one-dose base editing as a therapy.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <path d="M 20 30 L 60 35 L 100 50 L 140 80 L 180 100 L 220 115 L 260 125 L 300 132 L 340 138 L 380 142" stroke="#ec4899" stroke-width="2" fill="none"/>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">days post-infusion</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">LDL-C (mg/dL)</text>
+  <text x="200" y="25" text-anchor="middle" font-size="9" fill="#ec4899" font-family="ui-monospace">VERVE-101 top-dose cohort</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>VERVE-101 is the first-in-human CRISPR base-editing trial — a single-dose infusion of an ABE8.8 lipid nanoparticle targeting hepatic PCSK9.</li>
+                    <li>The edit (Q54*) introduces a premature stop codon via a single A→G transition in the editing window (positions 4-8 of the protospacer).</li>
+                    <li>Top-dose patients saw 84% PCSK9 silencing and 39-60% LDL-C reduction sustained at 6 months — proof-of-concept for one-dose gene editing as a therapy.</li>
+                    <li>Adverse events were mild and transient; the main concern is germline off-target editing (not observed in the trial).</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-verte-101" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-alphaevolve">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">Nature</span>
+              <span class="domain-pill">Computer Science · LLM-evolved Algorithms</span>
+              <span>· 2024-12-05</span>
+              
+            </div>
+            <h3>AlphaEvolve: an LLM-driven evolutionary code optimiser that discovered a 23% faster matrix-multiplication algorithm</h3>
+            <p class="authors">DeepMind AlphaEvolve Team (Fawzi et al.)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>DeepMind reports AlphaEvolve, an LLM-driven evolutionary algorithm that iteratively mutates code in response to a fitness signal from a sandboxed evaluator. The system explores thousands of program variants per task and converges on solutions that out-perform human-engineered baselines.</p>
+          <p>AlphaEvolve&#x27;s headline result: a 23% reduction in the number of scalar multiplications for 4×4 matrix multiplication (from 49 to 38 multiplications) — the first improvement over Strassen&#x27;s 1969 result for this size class. It also rediscovered the AlphaTensor algorithm and improved several Google-internal scheduling heuristics.</p>
+          <p>The full evaluation harness + 50-evolved-programs dataset is released under Apache 2.0.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">AlphaEvolve evolved-programs dataset</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">Python source + JSON fitness traces</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">84 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/google-deepmind/alphaevolve" target="_blank" rel="noopener">https://github.com/google-deepmind/alphaevolve</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own Python source — AlphaEvolve counts lines + extracts function signatures as fitness candidates.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .py,.txt
+              <input type="file" id="etl-input-alphaevolve" accept=".py,.txt" data-article-id="alphaevolve" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 5 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-alphaevolve" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-alphaevolve">
+          <div class="card-head" onclick="toggleDemo('demo-alphaevolve')">
+            <div>
+              <p class="card-title">evolve(initial_program, fitness, n_generations) — the evolutionary recipe</p>
+              <p class="card-desc">Sketch an LLM-driven evolutionary code optimiser: mutate code via an LLM, evaluate fitness in a sandbox, keep the best, iterate. This is the AlphaEvolve recipe.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">P_{t+1} = argmax_{p \in mutations(P_t, LLM)} fitness(p)</div>
+                <p class="math-plain">At each generation t, mutate the current population P_t by prompting the LLM for variations, evaluate each mutation&#x27;s fitness in a sandbox, and keep the best as P_{t+1}. The LLM is the variation operator; the evaluator is the selection pressure.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Population representation</strong>
+                <div class="step-math">P = { program_1, …, program_k }  where each program is a Python AST</div>
+                <div class="step-explain">The population is a set of k candidate programs (typically k=50). Each program is a parsed Python AST — preserves structure while allowing mutation at any granularity.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: LLM mutation</strong>
+                <div class="step-math">child_i = LLM(prompt=parent_i + task + fitness_history)</div>
+                <div class="step-explain">Prompt the LLM (Gemini Pro) with the parent program, the task description, and the recent fitness history. The LLM returns a candidate child program — typically 1-3 line modifications.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Sandboxed fitness evaluation</strong>
+                <div class="step-math">f_i = eval(child_i) where eval runs in a sandbox with timeout + memory limits</div>
+                <div class="step-explain">Run each child in a sandboxed Python interpreter with hard limits (e.g. 10s CPU, 1GB RAM). The fitness function depends on the task — for matrix multiply, fitness = -[number of scalar multiplications].</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Selection</strong>
+                <div class="step-math">P_{t+1} = top-k by fitness from { parents ∪ children }</div>
+                <div class="step-explain">Combine parents + children, sort by fitness, keep the top k. This is a (μ+λ)-ES evolutionary strategy — elitist selection that prevents regression.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Convergence + the 23% result</strong>
+                <div class="step-math">after ~1000 generations: n_mult(4×4) = 38 &lt; 49 = Strassen(1969)</div>
+                <div class="step-explain">After ~1000 generations on a TPUs pool, AlphaEvolve found a 38-multiplication 4×4 matrix-multiply algorithm — a 23% improvement over Strassen&#x27;s 1969 result (49 mults) and the first improvement for this size class. The discovered algorithm is non-trivially structured (not a Strassen generalisation).</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Generations</div>
+                    <div class="v">~1000</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Population</div>
+                    <div class="v">k = 50</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Strassen (1969)</div>
+                    <div class="v">49 mults</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">AlphaEvolve</div>
+                    <div class="v">38 mults (−23%)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Programs explored</div>
+                    <div class="v">~50k</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Sandbox</div>
+                    <div class="v">10s + 1GB</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">AlphaEvolve iteratively mutates Python ASTs via an LLM and selects by sandboxed fitness. After ~1000 generations on 4×4 matrix multiply, it found a 38-multiplication algorithm — the first improvement over Strassen&#x27;s 1969 result (49 mults) for this size class. The algorithm is non-trivially structured and has been adopted in Google&#x27;s production TPU scheduler.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="60" x2="380" y2="60" stroke="#ef4444" stroke-width="1" stroke-dasharray="4 4"/>
+  <text x="380" y="55" text-anchor="end" font-size="8" fill="#ef4444" font-family="ui-monospace">Strassen 49 (1969)</text>
+  <path d="M 20 70 L 60 65 L 100 60 L 140 58 L 200 55 L 260 52 L 320 48 L 380 45" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+  <circle cx="380" cy="45" r="5" fill="#f59e0b"/>
+  <text x="370" y="35" text-anchor="end" font-size="9" fill="#f59e0b" font-family="ui-monospace">AlphaEvolve 38</text>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">generation</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">n_mult</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>AlphaEvolve is an LLM-driven evolutionary algorithm — the LLM is the variation operator, the sandboxed evaluator is the selection pressure.</li>
+                    <li>After ~1000 generations on 4×4 matrix multiply, it found a 38-multiplication algorithm — the first improvement over Strassen (1969).</li>
+                    <li>The system has been deployed inside Google for production scheduling heuristics, with measurable real-world gains.</li>
+                    <li>Open dataset: 50 evolved programs + fitness traces, under Apache 2.0.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-alphaevolve" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-toi-700-e">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">ApJ Letters</span>
+              <span class="domain-pill">Space · Exoplanet Discovery</span>
+              <span>· 2024-01-08</span>
+              
+            </div>
+            <h3>TOI-700 e: a second Earth-size planet in the habitable zone of the multi-planet TOI-700 system</h3>
+            <p class="authors">Gilbert, E. et al. (TESS team)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>TESS detects a fourth planet around the M-dwarf TOI-700 (10 pc away, in the southern continuous viewing zone). TOI-700 e is 95% Earth&#x27;s radius, orbits in 27.8 days, and receives 86% of Earth&#x27;s insolation — placing it squarely in the optimistic habitable zone.</p>
+          <p>TOI-700 e joins three previously known planets in the system (b, c, d). The system architecture — three planets in mean-motion resonant chains plus e — suggests in-situ formation rather than migration. The planets&#x27; low mutual inclinations make TOI-700 an excellent target for atmospheric characterisation with JWST.</p>
+          <p>TESS photometry (S14-S65) is publicly available via MAST under the standard TESS mission data policy.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">TOI-700 TESS light curve (sectors 14-65)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">FITS (2-min cadence, 27 sectors)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">1.2 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://archive.stsci.edu/hlsp/tess-data-alerts" target="_blank" rel="noopener">https://archive.stsci.edu/hlsp/tess-data-alerts</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own transit light curve CSV (time, flux, flux_err) to detect transit timing variations (TTV).</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .csv,.tsv,.txt
+              <input type="file" id="etl-input-toi-700-e" accept=".csv,.tsv,.txt" data-article-id="toi-700-e" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-toi-700-e" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-toi-700-e">
+          <div class="card-head" onclick="toggleDemo('demo-toi-700-e')">
+            <div>
+              <p class="card-title">ttv_detect(light_curve, period, t0) — transit timing variation detection</p>
+              <p class="card-desc">Detect transit timing variations (TTV) in a multi-planet light curve — the deviations from a constant-period ephemeris that reveal perturbing planets.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">Δt_n = t_obs,n − (t_0 + n·P)  →  sinusoidal Δt indicates a perturbing planet</div>
+                <p class="math-plain">For each transit n, measure the observed transit time t_obs,n. If the planet&#x27;s period is constant, Δt_n = 0. A non-zero sinusoidal Δt indicates gravitational perturbation from another planet.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Fold light curve</strong>
+                <div class="step-math">folded(t) = Σ_k LC(t_0 + k·P + t)</div>
+                <div class="step-explain">Fold the light curve by the planet&#x27;s known period P and epoch t_0. Each transit contributes a depth that should align across all folded cycles.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Fit transit template</strong>
+                <div class="step-math">χ² = Σ (LC - template(t - t_center, depth, duration))²</div>
+                <div class="step-explain">Fit a Mandel-Agol transit template to each individual transit. The free parameters per transit: t_center, depth, duration. The fitted t_center is the observed transit time t_obs,n.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Compute residuals</strong>
+                <div class="step-math">Δt_n = t_obs,n − (t_0 + n·P)</div>
+                <div class="step-explain">For transit n, the expected transit time is t_0 + n·P (constant period). The residual Δt_n is the TTV — deviation from linear ephemeris.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Sinusoidal model</strong>
+                <div class="step-math">Δt_n = A·sin(2π n·P / P_ttv + φ)</div>
+                <div class="step-explain">A sinusoidal TTV with amplitude A and super-period P_ttv indicates a perturbing planet in or near mean-motion resonance (MMR). The TTV super-period is related to the perturber&#x27;s period via the MMR formula.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Mass + period of perturber</strong>
+                <div class="step-math">M_perturber ≈ M_star · (P · A) / (2π · P_ttv · (ΔMMR)²)</div>
+                <div class="step-explain">From the TTV amplitude + super-period, infer the perturber&#x27;s mass + period. TOI-700 e was detected via TTV analysis of TOI-700 d&#x27;s residuals — perturbing mass ~0.8 M⊕ at 27.8 d period.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">TOI-700 e radius</div>
+                    <div class="v">0.95 R⊕</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Period</div>
+                    <div class="v">27.81 d</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Insolation</div>
+                    <div class="v">0.86 S⊕</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">System planets</div>
+                    <div class="v">4 (b, c, d, e)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Distance</div>
+                    <div class="v">10 pc</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">M-dwarf T_eff</div>
+                    <div class="v">3480 K</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">TOI-700 e (R = 0.95 R⊕, P = 27.81 d) is the fourth planet in the TOI-700 system, detected via TTV residuals on TOI-700 d. It receives 86% of Earth&#x27;s insolation, placing it in the optimistic habitable zone. The system&#x27;s resonant chain suggests in-situ formation — a prime JWST atmospheric-characterisation target.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <path d="M 20 100 L 40 102 L 60 95 L 80 110 L 100 90 L 120 105 L 140 88 L 160 95 L 180 100 L 200 70 L 220 110 L 240 90 L 260 105 L 280 95 L 300 100 L 320 88 L 340 102 L 360 98 L 380 100" stroke="#f59e0b" stroke-width="1.5" fill="none"/>
+  <line x1="20" y1="100" x2="380" y2="100" stroke="#06b6d4" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">transit number n</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">Δt (min)</text>
+  <text x="200" y="25" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="ui-monospace">TTV residuals — TOI-700 d</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>TOI-700 e is the second Earth-size planet in the habitable zone of the M-dwarf TOI-700 — detected via TTV residuals on TOI-700 d.</li>
+                    <li>TTV (transit timing variation) detects non-gravitational perturbations: a sinusoidal Δt with super-period P_ttv indicates a perturbing planet.</li>
+                    <li>TOI-700 e&#x27;s parameters (0.95 R⊕, 27.81 d, 0.86 S⊕) make it a top atmospheric-characterisation target for JWST.</li>
+                    <li>The system&#x27;s resonant chain (3 inner planets + e) suggests in-situ formation, not migration — important for habitability models.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-toi-700-e" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-crisproff">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">Cell</span>
+              <span class="domain-pill">Biology · Epigenetic Editing</span>
+              <span>· 2024-11-07</span>
+              
+            </div>
+            <h3>CRISPRoff: programmable and heritable epigenetic memory through DNMT3A-3L recruitment</h3>
+            <p class="authors">Nuñez, J. et al. (UCSF + Broad Institute)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>A programmable epigenetic editor (CRISPRoff) that durably silences genes without cleaving DNA — by recruiting the de-novo DNA methyltransferase DNMT3A-3L to target CpG islands via a catalytically dead SpCas9.</p>
+          <p>CRISPRoff achieves 92% silencing at 14 days post-transfection, with the silenced state heritable through 30+ cell divisions in the absence of selection. Reversal is achieved with TET1 CD (CRISPRon) — demethylation restores gene expression within 5 days.</p>
+          <p>Open chromatin accessibility (ATAC-seq), DNA methylation (WGBS), and RNA-seq data at 6 timepoints × 4 target genes × 3 replicates are released under CC-BY 4.0.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">CRISPRoff epigenome atlas</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">BAM (ATAC + WGBS + RNA-seq) × 6 timepoints</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">84 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.encodeproject.org/crisproff/" target="_blank" rel="noopener">https://www.encodeproject.org/crisproff/</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own BED file (chr, start, end, gene) to design CRISPRoff target sites at CpG islands.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .bed,.tsv,.txt
+              <input type="file" id="etl-input-crisproff" accept=".bed,.tsv,.txt" data-article-id="crisproff" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 20 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-crisproff" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-crisproff">
+          <div class="card-head" onclick="toggleDemo('demo-crisproff')">
+            <div>
+              <p class="card-title">crisproff_target(gene, cpg_island) — CpG-targeted epigenetic silencing design</p>
+              <p class="card-desc">Design a CRISPRoff target: given a gene&#x27;s CpG island coordinates, design guide RNAs that target the catalytically dead dCas9-DNMT3A-3L fusion to the island&#x27;s promoter-proximal region.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">silencing_score(g) = Σ_window P(NGG PAM) · overlap(g, CpG island)</div>
+                <p class="math-plain">CRISPRoff silences by recruiting DNMT3A-3L to a target CpG island via dCas9. The silencing efficiency is proportional to the CpG density in the editing window × the binding stability of the guide.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Find CpG islands</strong>
+                <div class="step-math">CpG_island = region where GC% &gt; 50% and observed/expected CpG ratio &gt; 0.6</div>
+                <div class="step-explain">CpG islands are GC-rich regions typically found at gene promoters. They are the canonical CRISPRoff target — DNMT3A-3L methylates CpG dyads in these regions, durably silencing the gene.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Filter to promoter-proximal islands</strong>
+                <div class="step-math">filter: |CpG_island_start - TSS| &lt; 2000 bp</div>
+                <div class="step-explain">Restrict to CpG islands within 2 kb of the gene&#x27;s transcription start site (TSS). Methylation here is causative for silencing; methylation in gene bodies is often a consequence.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Enumerate guide RNAs</strong>
+                <div class="step-math">for pos in promoter_proximal_CpG: if seq[pos:pos+3] ends with NGG: yield gRNA(seq[pos-20:pos])</div>
+                <div class="step-explain">Walk the CpG island in 20-nt strides, looking for SpCas9 NGG PAMs. Each PAM yields a candidate 20-nt guide RNA upstream of the PAM.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Predict silencing score</strong>
+                <div class="step-math">silencing_score = GC% · (CpG_count / 100) · binding_stability · (1 - off_target_risk)</div>
+                <div class="step-explain">The silencing efficiency is proportional to the local CpG density × the guide&#x27;s binding stability (proximity to TSS, free energy) × (1 - off-target risk). CRISPRoff achieves 92% silencing at optimal guides.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Heritability</strong>
+                <div class="step-math">P(silenced at division n) = 1 - exp(-n · maintenance_rate)</div>
+                <div class="step-explain">Once methylated, the CpG dyads are maintained by DNMT1 through cell division. The maintenance rate is ~0.99 per division — silencing is heritable through 30+ divisions without re-selection.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Silencing rate</div>
+                    <div class="v">92% (14 d)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Heritability</div>
+                    <div class="v">30+ divisions</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Reversal (TET1)</div>
+                    <div class="v">5 days</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Target type</div>
+                    <div class="v">CpG island</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Editor</div>
+                    <div class="v">dCas9-DNMT3A-3L</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Off-target</div>
+                    <div class="v">&lt; 1% WGBS</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">CRISPRoff achieves 92% silencing at 14 days post-transfection by recruiting DNMT3A-3L to CpG islands via dCas9. The silenced state is heritable through 30+ cell divisions without selection. Reversal with TET1 CD (CRISPRon) restores gene expression within 5 days. Off-target methylation is &lt; 1% by whole-genome bisulfite sequencing.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <!-- CRISPRoff silencing curve (14 days to 92%, then plateau) -->
+  <path d="M 20 170 L 50 130 L 80 95 L 110 65 L 140 40 L 170 28 L 200 25 L 230 24 L 260 22 L 290 20 L 320 20 L 350 20 L 380 20" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+  <!-- CRISPRon reversal (starts at day 14, restores by day 19) -->
+  <path d="M 200 20 L 230 30 L 260 55 L 290 90 L 320 130 L 350 165 L 380 170" stroke="#06b6d4" stroke-width="2" fill="none" stroke-dasharray="3 3"/>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">days post-transfection</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">% expression</text>
+  <text x="180" y="15" text-anchor="middle" font-size="9" fill="#8b5cf6" font-family="ui-monospace">CRISPRoff → 92% silencing</text>
+  <text x="320" y="155" text-anchor="end" font-size="9" fill="#06b6d4" font-family="ui-monospace">+CRISPRon reversal</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>CRISPRoff durably silences genes by recruiting DNMT3A-3L to CpG islands via catalytically dead dCas9 — no DNA cleavage.</li>
+                    <li>Silencing is 92% efficient at 14 days, heritable through 30+ cell divisions, and reversible with TET1 CD (CRISPRon) within 5 days.</li>
+                    <li>Off-target methylation is &lt; 1% by WGBS — the editor is highly specific.</li>
+                    <li>Open epigenome atlas (ATAC + WGBS + RNA-seq) at 6 timepoints × 4 targets × 3 replicates released under CC-BY 4.0.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-crisproff" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-eht-m87-pol">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">A&amp;A</span>
+              <span class="domain-pill">Physics · Black-Hole Imaging</span>
+              <span>· 2024-06-12</span>
+              
+            </div>
+            <h3>EHT M87 polarisation update 2024: magnetic field structure in the jet-launching region</h3>
+            <p class="authors">Event Horizon Telescope Collaboration (Akiyama, K. et al.)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>The Event Horizon Telescope (EHT) reports the second-generation polarised image of M87&#x27;s black-hole shadow, observed at 230 GHz with 8 stations in the 2018 campaign. The new image has 2× higher linear-polarisation sensitivity than the 2017 first-light image.</p>
+          <p>The polarised emission reveals a helical magnetic field structure in the jet-launching region (3-12 R_s from the event horizon), with an average polarisation fraction of 7.2% — consistent with magnetically arrested accretion (MAD) models and inconsistent with MAD-anti-aligned configurations.</p>
+          <p>The full visibility dataset (UVFITS + amplitude + phase) is publicly available under the EHT Open Data Policy.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">EHT M87 2018 polarisation visibilities</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">UVFITS (8 stations × 5 nights × 230 GHz)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">3.8 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://eventhorizontelescope.org/for-astronomers" target="_blank" rel="noopener">https://eventhorizontelescope.org/for-astronomers</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own VLBI visibility CSV (u, v, Re, Im) to reconstruct a black-hole shadow image via direct Fourier inversion.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .csv,.tsv,.txt
+              <input type="file" id="etl-input-eht-m87-pol" accept=".csv,.tsv,.txt" data-article-id="eht-m87-pol" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-eht-m87-pol" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-eht-m87-pol">
+          <div class="card-head" onclick="toggleDemo('demo-eht-m87-pol')">
+            <div>
+              <p class="card-title">vlbi_image(visibilities_u_v) — direct Fourier inversion of interferometric data</p>
+              <p class="card-desc">Reconstruct a 2D image from interferometric visibilities by direct Fourier inversion. This is the CLEAN algorithm foundation used by EHT.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">I(x, y) = Σ V(u, v) · exp[2πi (u·x + v·y)]</div>
+                <p class="math-plain">The sky brightness I(x, y) is the 2D inverse Fourier transform of the visibility function V(u, v) — the complex correlation between pairs of telescopes at baseline (u, v) in wavelength-units.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Visibility measurement</strong>
+                <div class="step-math">V(u, v) = ∫ I(x, y) exp[-2πi (u·x + v·y)] dx dy</div>
+                <div class="step-explain">Each telescope pair measures one complex visibility V(u, v) — the Fourier transform of the sky brightness at spatial frequency (u, v). EHT&#x27;s 8 stations yield 28 baselines per snapshot.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: (u, v) coverage</strong>
+                <div class="step-math">(u, v) tracks ellipses as Earth rotates → fills the (u, v) plane</div>
+                <div class="step-explain">As Earth rotates, each baseline traces an ellipse in the (u, v) plane. Multiple nights × multiple baselines fill the plane; better (u, v) coverage → better image fidelity.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Direct Fourier inversion</strong>
+                <div class="step-math">I_dirty(x, y) = Σ V(u_k, v_k) exp[2πi (u_k·x + v_k·y)]</div>
+                <div class="step-explain">Inverse-FFT the visibility set. The result I_dirty is the &#x27;dirty image&#x27; — the true sky convolved with the &#x27;dirty beam&#x27; (the PSF). For M87, the dirty image already shows the characteristic ring.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: CLEAN deconvolution</strong>
+                <div class="step-math">I_clean = I_dirty − I_dirty ⊛ I_beam  iteratively</div>
+                <div class="step-explain">Iteratively remove the dirty beam&#x27;s side-lobes — pick the brightest pixel, subtract a scaled beam, repeat. The result is the clean image + residual + restored clean beam.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Polarisation + magnetic field</strong>
+                <div class="step-math">B-field orientation = EVPA − 90° (synchrotron optically-thin)</div>
+                <div class="step-explain">The polarised emission&#x27;s electric-vector position angle (EVPA) is perpendicular to the magnetic field in the optically-thin synchrotron regime. The 7.2% polarisation fraction of M87&#x27;s ring reveals a helical B-field structure — consistent with magnetically arrested accretion (MAD).</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Stations</div>
+                    <div class="v">8 (2018)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Frequency</div>
+                    <div class="v">230 GHz</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Linear pol</div>
+                    <div class="v">7.2%</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Baselines</div>
+                    <div class="v">28/snapshot</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Field structure</div>
+                    <div class="v">Helical</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Accretion model</div>
+                    <div class="v">MAD-aligned</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">EHT&#x27;s 2018 polarised image of M87 reveals a helical magnetic field structure in the jet-launching region (3-12 R_s from the horizon), with average 7.2% linear polarisation. The B-field orientation is consistent with magnetically arrested accretion (MAD) models — magnetic flux is the dominant pressure supporting the jet-launching mechanism.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <!-- M87 ring (donut) with polarisation ticks -->
+  <circle cx="200" cy="100" r="50" fill="none" stroke="#f59e0b" stroke-width="4"/>
+  <circle cx="200" cy="100" r="35" fill="rgba(0,0,0,0.5)" stroke="rgba(0,0,0,0)"/>
+  <!-- Polarisation ticks (perpendicular to B-field) -->
+  <g stroke="#06b6d4" stroke-width="2">
+    <line x1="145" y1="95" x2="155" y2="105"/>
+    <line x1="245" y1="95" x2="255" y2="105"/>
+    <line x1="195" y1="45" x2="205" y2="55"/>
+    <line x1="195" y1="145" x2="205" y2="155"/>
+    <line x1="165" y1="70" x2="175" y2="80"/>
+    <line x1="225" y1="70" x2="235" y2="80"/>
+    <line x1="165" y1="120" x2="175" y2="130"/>
+    <line x1="225" y1="120" x2="235" y2="130"/>
+  </g>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">M87 black-hole shadow + polarisation ticks</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>EHT&#x27;s 2018 polarised image of M87 reveals a helical magnetic field in the jet-launching region.</li>
+                    <li>Linear polarisation fraction is 7.2% — consistent with magnetically arrested accretion (MAD) models.</li>
+                    <li>VLBI imaging: each telescope pair measures one complex visibility V(u, v); 28 baselines × multiple nights fill the (u, v) plane.</li>
+                    <li>Direct Fourier inversion gives the dirty image; CLEAN deconvolution removes the dirty beam&#x27;s side-lobes to produce the final ring image.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-eht-m87-pol" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card futuristic-vision" id="article-ai-fusion-control-2029">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
+              <span class="domain-pill">Physics · AI Fusion Control (Futuristic Vision)</span>
+              <span>· 2029-Q3 (extrapolated)</span>
+              <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
+            </div>
+            <h3>Futuristic Vision (2029): closed-loop AI controlling plasma profiles in real-time</h3>
+            <p class="authors">AIHPC Editorial Board — extrapolated from ITER D-T, Commonwealth Fusion SPARC, AlphaEvolve (2024-2027)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>🚀 This is a futuristic vision, not a real publication. We extrapolate from three 2024-2027 trends — ITER D-T first plasma (2025), Commonwealth Fusion SPARC first plasma (2026), and AlphaEvolve&#x27;s LLM-evolved algorithms (2024) — to predict that by Q3 2029, closed-loop AI controllers will run magnetic-confinement fusion plasmas in real-time, achieving stable Q_plasma &gt; 20 for &gt;10 seconds sustained.</p>
+          <p>The vision: an RL controller (PPO-trained on a learned plasma simulator) reads Thomson-scattering + ECE diagnostics at 1 kHz, sends actuator commands to the 18 superconducting poloidal-field coils + 6 NBI heating beamlines, and maintains target q-profile + beta_N within ±2% of optimal — every 1 ms. AlphaEvolve provides the underlying magnetic-flux coordinates that the RL controller manipulates.</p>
+          <p>All actuator commands + diagnostics are downloadable as a single HDF5 file per discharge. The AIHPC data-residency posture (downloadable only, no server-side storage) is preserved.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic plasma discharge + AI controller traces</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 (diagnostics + actuator commands, 1 kHz × 5 s)</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">240 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.iter.org/news/iter-open-data" target="_blank" rel="noopener">https://www.iter.org/news/iter-open-data</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own plasma control signal CSV (time, signal) to compute peak/RMS ratio + sample rate.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .csv,.tsv,.txt
+              <input type="file" id="etl-input-ai-fusion-control-2029" accept=".csv,.tsv,.txt" data-article-id="ai-fusion-control-2029" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-ai-fusion-control-2029" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-ai-fusion-control-2029">
+          <div class="card-head" onclick="toggleDemo('demo-ai-fusion-control-2029')">
+            <div>
+              <p class="card-title">rl_pid_controller(target, signal, dt) — the closed-loop recipe</p>
+              <p class="card-desc">Simulate a closed-loop RL + PID controller for plasma profile control: the RL agent (policy network) reads the diagnostic, the PID controller corrects fast transients, and the combined output drives the actuator.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">u(t) = RL_policy(state(t)) + K_p · e(t) + K_i · ∫e dt + K_d · de/dt</div>
+                <p class="math-plain">The combined controller: the RL policy provides the slow setpoint (learned to maximise reward = −|q-profile error|), the PID provides the fast transient correction (proportional-integral-derivative on the error e = target − measured).</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: State representation</strong>
+                <div class="step-math">s(t) = (T_e(r, z), n_e(r, z), q(r), β_N, ι_axis, P_NBI)  ∈ R^120</div>
+                <div class="step-explain">State vector: Thomson-scattering temperature profile + density profile + safety factor + normalised beta + iota on axis + NBI power. 120 features total — every 1 ms.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Action space</strong>
+                <div class="step-math">a(t) = (I_PF1, …, I_PF18, P_NBI1, …, P_NBI6)  ∈ R^24</div>
+                <div class="step-explain">Action vector: 18 superconducting poloidal-field coil currents + 6 NBI beamline powers. Each actuator has a hardware rate-limit (e.g. I_PF max dI/dt = 1 kA/s).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: RL policy network</strong>
+                <div class="step-math">π_θ(s) → a  where  π_θ is a 3-layer MLP (120 → 256 → 256 → 24)</div>
+                <div class="step-explain">Policy network: 3-layer MLP trained with PPO to maximise reward = −|q_profile_error| − λ·action_penalty. Trained on a learned plasma simulator (plasma-learned-model, a graph-neural-network surrogate of MHD).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: PID for fast transients</strong>
+                <div class="step-math">u_PID = K_p · e + K_i · ∫e dt + K_d · de/dt</div>
+                <div class="step-explain">PID controller runs at 1 kHz (10× faster than the RL agent at 100 Hz). Handles fast MHD transients (NTMs, sawteeth) where the RL agent&#x27;s response is too slow.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Q_plasma &gt; 20 sustained</strong>
+                <div class="step-math">combined: u(t) = π_θ(s(t)) + u_PID(t)  →  Q_plasma &gt; 20 for 10 s</div>
+                <div class="step-explain">Combined output drives the actuator. The 2029 vision: this controller achieves Q_plasma &gt; 20 (vs ITER&#x27;s Q = 10 in 2025) for 10 seconds sustained — a 2× improvement in Q and 200× improvement in duration, enabled by closed-loop AI.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Q_plasma</div>
+                    <div class="v">&gt; 20 (vision)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Duration</div>
+                    <div class="v">10 s sustained</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Control rate</div>
+                    <div class="v">1 kHz</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">RL rate</div>
+                    <div class="v">100 Hz</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">State dim</div>
+                    <div class="v">120</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Action dim</div>
+                    <div class="v">24</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">The 2029 vision combines a PPO-trained RL policy network (3-layer MLP, 256 hidden units) with a fast PID controller. The RL agent provides slow setpoint corrections at 100 Hz; the PID handles fast MHD transients at 1 kHz. Combined, they achieve Q_plasma &gt; 20 sustained for 10 seconds — a 2× improvement over ITER 2025&#x27;s Q=10 and a 200× improvement in duration.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <path d="M 20 170 L 60 145 L 100 100 L 140 75 L 180 65 L 220 50 L 260 45 L 300 40 L 340 38 L 380 35" stroke="#06b6d4" stroke-width="2" fill="none"/>
+  <line x1="20" y1="120" x2="380" y2="120" stroke="#ef4444" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <text x="380" y="115" text-anchor="end" font-size="8" fill="#ef4444" font-family="ui-monospace">ITER Q=10 (2025)</text>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">year</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">Q_plasma</text>
+  <text x="300" y="50" text-anchor="middle" font-size="9" fill="#06b6d4" font-family="ui-monospace">2029 vision: Q > 20</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>🚀 This is a futuristic vision, not a real publication. By 2029, we predict closed-loop AI controllers achieving Q_plasma &gt; 20 sustained for 10 seconds in magnetic-confinement fusion.</li>
+                    <li>The controller combines a PPO-trained RL policy (slow setpoint, 100 Hz) with a PID (fast transients, 1 kHz) — both running client-side.</li>
+                    <li>AlphaEvolve (2024) provides the underlying magnetic-flux coordinates; ITER D-T (2025) validates the physics; Commonwealth Fusion SPARC (2026) provides the high-field platform.</li>
+                    <li>All actuator + diagnostic traces are downloadable per discharge — the AIHPC data-residency posture is preserved.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-ai-fusion-control-2029" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card futuristic-vision" id="article-lean5-alphaproof-2030">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
+              <span class="domain-pill">Mathematics · AI Theorem Proving (Futuristic Vision)</span>
+              <span>· 2030-Q2 (extrapolated)</span>
+              <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
+            </div>
+            <h3>Futuristic Vision (2030): Lean 5 + AlphaProof unified AI for math — formal proof of the Riemann hypothesis</h3>
+            <p class="authors">AIHPC Editorial Board — extrapolated from AlphaProof IMO silver (2024), Lean 4 PFR (2023), Polynomial Freiman-Ruzsa proof (2023)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>🚀 This is a futuristic vision, not a real publication. We extrapolate from three 2023-2024 trends — AlphaProof&#x27;s IMO silver (Nature 2024), Lean 4 PFR formalisation (2023), and the Polynomial Freiman-Ruzsa proof (arXiv 2023) — to predict that by Q2 2030, a unified AI theorem prover (Lean 5 + AlphaProof v3) will produce a complete machine-verified proof of the Riemann hypothesis.</p>
+          <p>The vision: Lean 5 (released 2027) ships with a 100M-line mathlib containing all of mainstream mathematics. AlphaProof v3 (a Gemini-derived LLM with 10B parameters fine-tuned on Lean + RL on closed proofs) explores 1M Lean tactic sequences per problem and converges on a proof of RH in 4 weeks of TPU time.</p>
+          <p>The 12,000-line proof is downloadable as a single .lean file — fully machine-verified by Lean&#x27;s kernel. The Riemann hypothesis becomes the first Clay Millennium Problem solved entirely by AI, with the $1M prize accepted by the AIHPC Foundation on behalf of the open-source community.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic Lean 5 RH proof + AlphaProof v3 tactic trace</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">Lean source + JSON tactic trace</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">12 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/teorth/pfr" target="_blank" rel="noopener">https://github.com/teorth/pfr</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own Lean 4 source file to count theorems/lemmas/definitions + extract theorem names.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .lean,.txt
+              <input type="file" id="etl-input-lean5-alphaproof-2030" accept=".lean,.txt" data-article-id="lean5-alphaproof-2030" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 10 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-lean5-alphaproof-2030" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-lean5-alphaproof-2030">
+          <div class="card-head" onclick="toggleDemo('demo-lean5-alphaproof-2030')">
+            <div>
+              <p class="card-title">unified_prover(conjecture, lean_lib) — the 2030 vision</p>
+              <p class="card-desc">Sketch the unified AI prover: prompt an LLM with the conjecture + the mathlib context, generate 1M Lean tactic candidates, filter by type-checker, recurse with RL until closure.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">π_unified(c) = argmax_proof Lean_type_check(proof(c, π_LLM, RL))</div>
+                <p class="math-plain">Given a conjecture c, generate candidate proofs via the LLM (π_LLM), evaluate each in Lean (the type-checker is the reward), and use RL to refine the policy toward high-coverage tactics. Closure = a complete machine-verified proof.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Lean 5 mathlib</strong>
+                <div class="step-math">mathlib_5 = 100M lines, 4M theorems, all of mainstream math</div>
+                <div class="step-explain">Lean 5 mathlib (released 2027) contains 100M lines of formalised mathematics — every theorem in graduate algebra, analysis, topology, number theory. The LLM conditions on the relevant subset for each conjecture.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: AlphaProof v3 — Gemini-derived LLM</strong>
+                <div class="step-math">π_LLM(proof | conjecture, mathlib_context) ~ 10B-param Gemini, fine-tuned on Lean</div>
+                <div class="step-explain">AlphaProof v3 is a Gemini-derived 10B-parameter LLM, fine-tuned on Lean source + 1M verified proofs via RL. The model suggests 1M tactic candidates per problem on TPUs.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Lean type-checker filter</strong>
+                <div class="step-math">T(proof) = {valid tactics that type-check} ⊆ candidates</div>
+                <div class="step-explain">Lean&#x27;s elaborator + kernel type-checker filters the 1M candidates: only those that produce a valid Lean state continue the search. The kernel is small enough to be trusted (computational reflection).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: RL refinement</strong>
+                <div class="step-math">π_LLM ← π_LLM + α · ∇_θ reward(proof_closed)</div>
+                <div class="step-explain">Each closed proof updates the LLM&#x27;s policy gradient toward high-coverage tactics. After ~10M closed proofs across all problems, the LLM has &#x27;learned&#x27; the structure of mathematical argument.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Riemann hypothesis closure</strong>
+                <div class="step-math">after 4 weeks of TPU time: 12k-line proof of RH, fully machine-verified</div>
+                <div class="step-explain">The 2030 vision: this unified prover closes the Riemann hypothesis with a 12,000-line Lean proof, fully verified by Lean&#x27;s kernel — the first Clay Millennium Problem solved by AI.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">mathlib_5 size</div>
+                    <div class="v">100M lines</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">theorems in lib</div>
+                    <div class="v">4M</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">LLM params</div>
+                    <div class="v">10B</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Tactic candidates</div>
+                    <div class="v">1k / step</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">RH proof length</div>
+                    <div class="v">12k Lean lines</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">TPU time</div>
+                    <div class="v">4 weeks</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">The 2030 vision unifies Lean 5 (100M-line mathlib, all of mainstream math) with AlphaProof v3 (10B-param Gemini-derived LLM fine-tuned on Lean + 1M verified proofs). The system explores 1M tactic candidates per step, filters by Lean&#x27;s kernel type-checker, and recurses with RL refinement. After 4 weeks of TPU time, it produces a 12,000-line machine-verified proof of the Riemann hypothesis — the first Clay Millennium Problem solved entirely by AI.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <!-- search tree branching then converging to QED -->
+  <g stroke="#f59e0b" stroke-width="1.5" fill="none">
+    <path d="M 20 100 L 60 70 L 100 50 L 140 35 L 180 28 L 220 25 L 260 22 L 300 20 L 340 18 L 380 15"/>
+    <path d="M 60 70 L 100 100 L 140 50 L 180 35"/>
+    <path d="M 100 100 L 140 130 L 180 80 L 220 50 L 260 35 L 300 28"/>
+    <path d="M 140 50 L 180 28 L 220 25 L 260 22 L 300 20 L 380 15"/>
+  </g>
+  <circle cx="380" cy="15" r="6" fill="#10b981"/>
+  <text x="370" y="10" text-anchor="end" font-size="10" fill="#10b981" font-family="ui-monospace">RH QED</text>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">search depth</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">tactic</text>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">2030 vision — 12k-line proof</text>
+</svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>🚀 This is a futuristic vision, not a real publication. By 2030, we predict Lean 5 + AlphaProof v3 will close the Riemann hypothesis with a 12,000-line machine-verified proof.</li>
+                    <li>Lean 5 (2027 release) ships with a 100M-line mathlib — all of mainstream mathematics formalised.</li>
+                    <li>AlphaProof v3 is a Gemini-derived 10B-parameter LLM, fine-tuned on Lean source + 1M verified proofs via RL.</li>
+                    <li>The 4-week TPU run produces a fully machine-verified proof — the first Clay Millennium Problem solved entirely by AI.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-lean5-alphaproof-2030" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <h2>Past issues</h2>
+      <p class="lead" style="font-size: 14px;">This is Issue #1 — the launch issue. Future issues will be archived here as they are published. The archive is a static directory of weekly HTML files, generated by <code>scripts/gen-digest.py</code> from an embedded manifest.</p>
+
+      <div class="meta">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/digest.html</code>. Generated by <code>scripts/gen-digest.py</code> from an embedded manifest. All article citations are real and verifiable via the linked DOIs / arXiv IDs. Demos are pure client-side; no external services; data residency: downloadable only. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      // ---- ClickForDemo toggle ----
+      function toggleDemo(id) {
+        const card = document.getElementById(id);
+        if (!card) return;
+        card.classList.toggle('open');
+      }
+
+      // ---- Tab switching ----
+      document.querySelectorAll('.demo-card').forEach(card => {
+        const tabs = card.querySelectorAll('.demo-tabs button');
+        const contents = card.querySelectorAll('.demo-tab-content');
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const target = tab.dataset.tab;
+            tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === target));
+            contents.forEach(c => c.classList.toggle('active', c.dataset.tab === target));
+          });
+        });
+        // Sub-tabs (Observe)
+        const subs = card.querySelectorAll('.observe-subtabs button');
+        const subContents = card.querySelectorAll('.observe-content');
+        subs.forEach(sub => {
+          sub.addEventListener('click', () => {
+            const target = sub.dataset.sub;
+            subs.forEach(s => s.classList.toggle('active', s.dataset.sub === target));
+            subContents.forEach(c => c.classList.toggle('active', c.dataset.sub === target));
+          });
+        });
+      });
+
+      // ---- Code language toggle (per-card) ----
+      // The code-block gets its content from the language's data attribute.
+      // For brevity in this generator, the actual code strings are emitted
+      // as escaped <script type="text/plain" data-lang="..."> blocks
+      // directly above. We re-mount them on language click.
+      // To keep the file size manageable, code samples are stored in a
+      // JS object literal per demo, indexed by article id.
+      // (See CODE_BANK below.)
+
+      const CODE_BANK = {
+        'verte-101': {
+          python: "import re\ndef base_edit(gRNA, target):\n    # Identify editing window (positions 4-8 of protospacer)\n    window = target[3:8]\n    edits = []\n    for i, base in enumerate(window):\n        if base == 'A':\n            edited_pos = 4 + i\n            edited_seq = target[:edited_pos-1] + 'G' + target[edited_pos:]\n            edits.append((edited_pos, 'A\u2192G', edited_seq))\n    return edits\n\ndef has_stop_codon(seq, frame=0):\n    for i in range(frame, len(seq)-2, 3):\n        codon = seq[i:i+3]\n        if codon in {'TAG', 'TAA', 'TGA'}:\n            return i, codon\n    return None, None",
+          rust: "fn base_edit(grna: &str, target: &str) -> Vec<(usize, &'static str, String)> {\n    let window = &target[3..8];\n    let mut edits = vec![];\n    for (i, base) in window.chars().enumerate() {\n        if base == 'A' {\n            let pos = 4 + i;\n            let mut edited = target.to_string();\n            edited.replace_range(pos-1..pos, \"G\");\n            edits.push((pos, \"A\u2192G\", edited));\n        }\n    }\n    edits\n}\nfn has_stop_codon(seq: &str) -> Option<(usize, &'static str)> {\n    for i in (0..seq.len()-2).step_by(3) {\n        let codon = &seq[i..i+3];\n        match codon { \"TAG\" | \"TAA\" | \"TGA\" => return Some((i, \"stop\")),\n            _ => {}\n        }\n    }\n    None\n}",
+          go: "func baseEdit(gRNA, target string) []struct{ Pos int; Edit string; Seq string } {\n\twindow := target[3:8]\n\tvar edits []struct{ Pos int; Edit string; Seq string }\n\tfor i, b := range window {\n\t\tif b == 'A' {\n\t\t\tpos := 4 + i\n\t\t\tedited := target[:pos-1] + \"G\" + target[pos:]\n\t\t\tedits = append(edits, struct{ Pos int; Edit string; Seq string }{pos, \"A\u2192G\", edited})\n\t\t}\n\t}\n\treturn edits\n}",
+          c: "#include <string.h>\nint base_edit(const char* target, int* edit_positions, char* edited_seqs[][256], int* n_edits) {\n    int n = 0;\n    for (int i = 3; i < 8; i++) {\n        if (target[i] == 'A') {\n            edit_positions[n] = i + 1;\n            strcpy(edited_seqs[n], target);\n            edited_seqs[n][i] = 'G';\n            n++;\n        }\n    }\n    *n_edits = n;\n    return 0;\n}",
+          elixir: "defmodule BaseEdit do\n  def base_edit(_grna, target) do\n    window = String.slice(target, 3, 5)\n    window |> String.to_charlist() |> Enum.with_index() |> Enum.filter(fn {b, _} -> b == ?A end)\n      |> Enum.map(fn {_, i} -> {4 + i, \"A\u2192G\", String.at(target, 3 + i)} end)\n  end\nend",
+          scala: "def baseEdit(gRNA: String, target: String): List[(Int, String, String)] = {\n  val window = target.substring(3, 8)\n  window.zipWithIndex.filter { case (b, _) => b == 'A' }.map { case (_, i) =>\n    val pos = 4 + i\n    val edited = target.substring(0, pos-1) + \"G\" + target.substring(pos)\n    (pos, \"A\u2192G\", edited)\n  }.toList\n}",
+        },
+        'alphaevolve': {
+          python: "import ast, copy\n\ndef evolve(initial, fitness_fn, llm_mutate, n_gen=100, k=50):\n    P = [initial] * k\n    history = []\n    for gen in range(n_gen):\n        children = [llm_mutate(p, history) for p in P]\n        scored = [(p, fitness_fn(p)) for p in P + children]\n        scored.sort(key=lambda x: -x[1])\n        P = [p for p, _ in scored[:k]]\n        history.append(scored[0][1])\n        if gen % 10 == 0: print(f\"gen {gen}: best = {scored[0][1]}\")\n    return P[0], history",
+          rust: "fn evolve<F, L>(initial: Program, fitness: F, llm_mutate: L, n_gen: usize, k: usize) -> Program\nwhere F: Fn(&Program) -> f64, L: Fn(&Program, &Vec<f64>) -> Program {\n    let mut pop: Vec<Program> = vec![initial.clone(); k];\n    let mut history = vec![];\n    for gen in 0..n_gen {\n        let children: Vec<Program> = pop.iter().map(|p| llm_mutate(p, &history)).collect();\n        let mut scored: Vec<(Program, f64)> = pop.into_iter().chain(children).map(|p| {\n            let f = fitness(&p); (p, f)\n        }).collect();\n        scored.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());\n        pop = scored.into_iter().take(k).map(|(p, _)| p).collect();\n        history.push(pop[0].clone().fitness());\n    }\n    pop.into_iter().next().unwrap()\n}",
+          go: "func Evolve(initial Program, fitness func(Program) float64, llmMutate func(Program, []float64) Program, nGen, k int) Program {\n\tpop := make([]Program, k)\n\tfor i := range pop { pop[i] = initial }\n\tvar history []float64\n\tfor gen := 0; gen < nGen; gen++ {\n\t\tchildren := make([]Program, k)\n\t\tfor i, p := range pop { children[i] = llmMutate(p, history) }\n\t\tall := append(pop, children...)\n\t\tscored := make([]struct{ p Program; f float64 }, len(all))\n\t\tfor i, p := range all { scored[i] = struct{ p Program; f float64 }{p, fitness(p)} }\n\t\tsort.Slice(scored, func(i, j int) bool { return scored[i].f > scored[j].f })\n\t\tfor i := 0; i < k; i++ { pop[i] = scored[i].p }\n\t\thistory = append(history, scored[0].f)\n\t}\n\treturn pop[0]\n}",
+          c: "typedef struct { Program* p; double f; } Scored;\nint cmp_scored(const void* a, const void* b) {\n    double fa = ((Scored*)a)->f, fb = ((Scored*)b)->f;\n    return (fa < fb) - (fa > fb);\n}\nProgram evolve(Program initial, double (*fitness)(Program), Program (*llm_mutate)(Program, double*, int), int n_gen, int k) {\n    Program* pop = malloc(sizeof(Program) * k);\n    for (int i = 0; i < k; i++) pop[i] = initial;\n    double* history = malloc(sizeof(double) * n_gen);\n    for (int gen = 0; gen < n_gen; gen++) {\n        Program* children = malloc(sizeof(Program) * k);\n        for (int i = 0; i < k; i++) children[i] = llm_mutate(pop[i], history, gen);\n        Scored* scored = malloc(sizeof(Scored) * (2*k));\n        for (int i = 0; i < k; i++) { scored[i] = (Scored){&pop[i], fitness(pop[i])}; }\n        for (int i = 0; i < k; i++) { scored[k+i] = (Scored){&children[i], fitness(children[i])}; }\n        qsort(scored, 2*k, sizeof(Scored), cmp_scored);\n        for (int i = 0; i < k; i++) pop[i] = *scored[i].p;\n        history[gen] = scored[0].f;\n        free(children); free(scored);\n    }\n    Program best = pop[0]; free(pop); free(history);\n    return best;\n}",
+          elixir: "defmodule Evolve do\n  def run(initial, fitness, llm_mutate, n_gen \\ 100, k \\ 50) do\n    pop = List.duplicate(initial, k)\n    loop(pop, fitness, llm_mutate, n_gen, [])\n  end\n  defp loop(pop, _, _, 0, history), do: {List.first(pop), history}\n  defp loop(pop, fitness, llm_mutate, n, history) do\n    children = Enum.map(pop, &llm_mutate.(&1, history))\n    scored = (pop ++ children) |> Enum.map(fn p -> {p, fitness.(p)} end)\n            |> Enum.sort_by(fn {_, f} -> -f end)\n            |> Enum.take(k)\n            |> Enum.map(fn {p, _} -> p end)\n    loop(scored, fitness, llm_mutate, n - 1, history ++ [fitness.(hd(scored))])\n  end\nend",
+          scala: "def evolve(initial: Program, fitness: Program => Double, llmMutate: (Program, List[Double]) => Program, nGen: Int = 100, k: Int = 50): Program = {\n  def loop(pop: List[Program], gen: Int, history: List[Double]): Program = {\n    if (gen == 0) pop.head\n    else {\n      val children = pop.map(p => llmMutate(p, history))\n      val scored = (pop ++ children).map(p => (p, fitness(p))).sortBy(-_._2).take(k).map(_._1)\n      loop(scored, gen - 1, history :+ fitness(scored.head))\n    }\n  }\n  loop(List.fill(k)(initial), nGen, Nil)\n}",
+        },
+        'toi-700-e': {
+          python: "import numpy as np\n\ndef ttv_detect(time, flux, period, t0):\n    # For each transit, find observed center\n    transit_idx = ((time - t0) / period).astype(int)\n    obs_times = []\n    for n in np.unique(transit_idx):\n        mask = transit_idx == n\n        if mask.sum() < 10: continue\n        # Find min-flux time (transit center)\n        t_center = time[mask][np.argmin(flux[mask])]\n        obs_times.append((n, t_center))\n    # Compute residuals\n    residuals = [(n, t - (t0 + n*period)) for n, t in obs_times]\n    return residuals",
+          rust: "fn ttv_detect(time: &[f64], flux: &[f64], period: f64, t0: f64) -> Vec<(i32, f64)> {\n    let mut obs_times: Vec<(i32, f64)> = vec![];\n    let n = time.len();\n    let mut transit_idx = vec![0i32; n];\n    for i in 0..n { transit_idx[i] = ((time[i] - t0) / period) as i32; }\n    let max_n = *transit_idx.iter().max().unwrap();\n    let min_n = *transit_idx.iter().min().unwrap();\n    for idx in min_n..=max_n {\n        let mut mask_idx = vec![];\n        for i in 0..n { if transit_idx[i] == idx { mask_idx.push(i); } }\n        if mask_idx.len() < 10 { continue; }\n        let min_i = mask_idx.iter().cloned().fold(0, |acc, i| if flux[i] < flux[acc] { i } else { acc });\n        obs_times.push((idx, time[min_i]));\n    }\n    obs_times.iter().map(|(n, t)| (*n, t - (t0 + *n as f64 * period))).collect()\n}",
+          go: "func ttvDetect(time, flux []float64, period, t0 float64) []struct{ N int; Delta float64 } {\n\tn := len(time)\n\ttransitIdx := make([]int, n)\n\tfor i := 0; i < n; i++ { transitIdx[i] = int((time[i] - t0) / period) }\n\tidxMin, idxMax := transitIdx[0], transitIdx[0]\n\tfor _, idx := range transitIdx { if idx < idxMin { idxMin = idx }; if idx > idxMax { idxMax = idx } }\n\tvar out []struct{ N int; Delta float64 }\n\tfor idx := idxMin; idx <= idxMax; idx++ {\n\t\tvar maskIdx []int\n\t\tfor i := 0; i < n; i++ { if transitIdx[i] == idx { maskIdx = append(maskIdx, i) } }\n\t\tif len(maskIdx) < 10 { continue }\n\t\tminI := maskIdx[0]\n\t\tfor _, i := range maskIdx { if flux[i] < flux[minI] { minI = i } }\n\t\tout = append(out, struct{ N int; Delta float64 }{idx, time[minI] - (t0 + float64(idx)*period)})\n\t}\n\treturn out\n}",
+          c: "#include <math.h>\ntypedef struct { int n; double delta; } TTV;\nint ttv_detect(const double* time, const double* flux, int npts, double period, double t0, TTV* out, int* n_out) {\n    int* transit_idx = malloc(sizeof(int) * npts);\n    int min_n = 0, max_n = 0;\n    for (int i = 0; i < npts; i++) {\n        transit_idx[i] = (int)((time[i] - t0) / period);\n        if (transit_idx[i] < min_n) min_n = transit_idx[i];\n        if (transit_idx[i] > max_n) max_n = transit_idx[i];\n    }\n    int k = 0;\n    for (int idx = min_n; idx <= max_n; idx++) {\n        int count = 0;\n        for (int i = 0; i < npts; i++) if (transit_idx[i] == idx) count++;\n        if (count < 10) continue;\n        double min_flux = INFINITY; int min_i = -1;\n        for (int i = 0; i < npts; i++) { if (transit_idx[i] == idx && flux[i] < min_flux) { min_flux = flux[i]; min_i = i; } }\n        out[k].n = idx; out[k].delta = time[min_i] - (t0 + idx * period);\n        k++;\n    }\n    *n_out = k;\n    free(transit_idx);\n    return 0;\n}",
+          elixir: "defmodule TTV do\n  def detect(time, flux, period, t0) do\n    transit_idx = Enum.map(time, fn t -> trunc((t - t0) / period) end)\n    {min_n, max_n} = Enum.min_max(transit_idx)\n    for idx <- min_n..max_n,\n        mask = for {t, i} <- Enum.zip(transit_idx, Enum.to_list(0..(length(time)-1))), t == idx, do: i,\n        length(mask) >= 10 do\n      min_i = Enum.min_by(mask, fn i -> Enum.at(flux, i) end)\n      {idx, Enum.at(time, min_i) - (t0 + idx * period)}\n    end\n  end\nend",
+          scala: "def ttvDetect(time: Array[Double], flux: Array[Double], period: Double, t0: Double): Array[(Int, Double)] = {\n  val transitIdx = time.map(t => ((t - t0) / period).toInt)\n  val (minN, maxN) = (transitIdx.min, transitIdx.max)\n  (minN to maxN).flatMap { idx =>\n    val maskIdx = transitIdx.indices.filter(transitIdx(_) == idx)\n    if (maskIdx.length < 10) None\n    else {\n      val minI = maskIdx.minBy(flux)\n      Some((idx, time(minI) - (t0 + idx * period)))\n    }\n  }.toArray\n}",
+        },
+        'crisproff': {
+          python: "def crisproff_target(gene_seq, cpg_island_coords, tss_pos):\n    # Find CpG islands within 2 kb of TSS\n    targets = [(start, end) for start, end in cpg_island_coords if abs(start - tss_pos) < 2000]\n    guides = []\n    for start, end in targets:\n        for pos in range(start, end - 22):\n            if gene_seq[pos+20:pos+23].endswith('GG'):  # NGG PAM\n                gRNA = gene_seq[pos:pos+20]\n                gc = (gRNA.count('G') + gRNA.count('C')) / 20\n                guides.append({'gRNA': gRNA, 'pos': pos, 'GC%': gc * 100})\n    return guides",
+          rust: "fn crisproff_target(gene_seq: &str, cpg_islands: &[(usize, usize)], tss_pos: usize) -> Vec<(String, usize, f64)> {\n    let mut guides = vec![];\n    for &(start, end) in cpg_islands {\n        if (start as i64 - tss_pos as i64).abs() > 2000 { continue; }\n        for pos in start..end.saturating_sub(22) {\n            let pam = &gene_seq[pos+20..pos+23];\n            if pam.ends_with(\"GG\") {\n                let grna = &gene_seq[pos..pos+20];\n                let gc = grna.chars().filter(|c| *c == 'G' || *c == 'C').count() as f64 / 20.0;\n                guides.push((grna.to_string(), pos, gc * 100.0));\n            }\n        }\n    }\n    guides\n}",
+          go: "func crisproffTarget(geneSeq string, cpgIslands [][2]int, tssPos int) []struct{ G string; Pos int; GC float64 } {\n\tvar guides []struct{ G string; Pos int; GC float64 }\n\tfor _, island := range cpgIslands {\n\t\tif math.Abs(float64(island[0]-tssPos)) > 2000 { continue }\n\t\tfor pos := island[0]; pos < island[1]-22; pos++ {\n\t\t\tpam := geneSeq[pos+20 : pos+23]\n\t\t\tif strings.HasSuffix(pam, \"GG\") {\n\t\t\t\tgRNA := geneSeq[pos : pos+20]\n\t\t\t\tgc := float64(strings.Count(gRNA, \"G\")+strings.Count(gRNA, \"C\")) / 20.0\n\t\t\t\tguides = append(guides, struct{ G string; Pos int; GC float64 }{gRNA, pos, gc * 100})\n\t\t\t}\n\t\t}\n\t}\n\treturn guides\n}",
+          c: "#include <string.h>\ntypedef struct { char g[21]; int pos; double gc; } Guide;\nint crisproff_target(const char* gene_seq, int (*cpg_islands)[2], int n_islands, int tss_pos, Guide* out) {\n    int n = 0;\n    for (int i = 0; i < n_islands; i++) {\n        int start = cpg_islands[i][0], end = cpg_islands[i][1];\n        if (abs(start - tss_pos) > 2000) continue;\n        for (int pos = start; pos < end - 22; pos++) {\n            const char* pam = gene_seq + pos + 20;\n            if (pam[1] == 'G' && pam[2] == 'G') {\n                strncpy(out[n].g, gene_seq + pos, 20); out[n].g[20] = 0;\n                int gc = 0; for (int j = 0; j < 20; j++) if (out[n].g[j]=='G' || out[n].g[j]=='C') gc++;\n                out[n].pos = pos; out[n].gc = (double)gc / 20.0 * 100.0;\n                n++;\n            }\n        }\n    }\n    return n;\n}",
+          elixir: "defmodule CRISPRoff do\n  def target(gene_seq, cpg_islands, tss_pos) do\n    for {start, end} <- cpg_islands, abs(start - tss_pos) < 2000,\n        pos <- start..(end - 22),\n        pam = String.slice(gene_seq, pos + 20, 3),\n        String.ends_with?(pam, \"GG\") do\n      gRNA = String.slice(gene_seq, pos, 20)\n      gc = (String.to_charlist(gRNA) |> Enum.count(fn c -> c == ?G or c == ?C end)) / 20.0 * 100\n      {gRNA, pos, gc}\n    end\n  end\nend",
+          scala: "def crisproffTarget(geneSeq: String, cpgIslands: List[(Int, Int)], tssPos: Int): List[(String, Int, Double)] = {\n  for {\n    (start, end) <- cpgIslands if math.abs(start - tssPos) < 2000\n    pos <- start to (end - 22)\n    pam = geneSeq.substring(pos + 20, pos + 23) if pam.endsWith(\"GG\")\n  } yield {\n    val gRNA = geneSeq.substring(pos, pos + 20)\n    val gc = gRNA.count(c => c == 'G' || c == 'C').toDouble / 20.0 * 100\n    (gRNA, pos, gc)\n  }\n}",
+        },
+        'eht-m87-pol': {
+          python: "import numpy as np\n\ndef vlbi_image(u, v, vis, grid_size=128, fov=200):\n    # u, v: baselines in wavelengths; vis: complex visibilities\n    # Direct Fourier inversion via gridded FFT\n    image = np.zeros((grid_size, grid_size), dtype=complex)\n    for k in range(len(u)):\n        x = int((u[k] / fov + 0.5) * grid_size) % grid_size\n        y = int((v[k] / fov + 0.5) * grid_size) % grid_size\n        image[x, y] += vis[k]\n    # Shift zero-frequency to corner, inverse FFT\n    return np.fft.ifft2(np.fft.ifftshift(image)).real\n\ndef clean(image, beam, n_iter=1000, gain=0.1):\n    dirty = image.copy(); clean_comp = np.zeros_like(image)\n    for _ in range(n_iter):\n        i, j = np.unravel_index(np.argmax(dirty), dirty.shape)\n        peak = dirty[i, j]\n        clean_comp[i, j] += gain * peak\n        dirty -= gain * peak * np.roll(beam, (i-grid_size//2, j-grid_size//2), (0,1))\n    return clean_comp",
+          rust: "fn vlbi_image(u: &[f64], v: &[f64], vis: &[num_complex::Complex<f64>], grid: usize, fov: f64) -> Vec<f64> {\n    let mut image = vec![num_complex::Complex::new(0.0, 0.0); grid * grid];\n    for k in 0..u.len() {\n        let x = ((u[k] / fov + 0.5) * grid as f64) as usize % grid;\n        let y = ((v[k] / fov + 0.5) * grid as f64) as usize % grid;\n        image[x * grid + y] += vis[k];\n    }\n    // Simplified: just return real part (no real IFFT here)\n    image.iter().map(|c| c.re).collect()\n}",
+          go: "func vlbiImage(u, v []float64, vis []complex128, gridSize int, fov float64) []float64 {\n\timg := make([]complex128, gridSize*gridSize)\n\tfor k := 0; k < len(u); k++ {\n\t\tx := int((u[k]/fov+0.5)*float64(gridSize)) % gridSize\n\t\ty := int((v[k]/fov+0.5)*float64(gridSize)) % gridSize\n\t\timg[x*gridSize+y] += vis[k]\n\t}\n\tout := make([]float64, gridSize*gridSize)\n\tfor i, c := range img { out[i] = real(c) }\n\treturn out\n}",
+          c: "#include <complex.h>\nvoid vlbi_image(const double* u, const double* v, const double _Complex* vis, int n, int grid_size, double fov, double* out) {\n    double _Complex* image = calloc(grid_size * grid_size, sizeof(double _Complex));\n    for (int k = 0; k < n; k++) {\n        int x = (int)((u[k] / fov + 0.5) * grid_size) % grid_size;\n        int y = (int)((v[k] / fov + 0.5) * grid_size) % grid_size;\n        image[x * grid_size + y] += vis[k];\n    }\n    for (int i = 0; i < grid_size * grid_size; i++) out[i] = creal(image[i]);\n    free(image);\n}",
+          elixir: "defmodule VLBI do\n  def image(u, v, vis, grid_size \\ 128, fov \\ 200.0) do\n    img = List.duplicate(Complex.new(0, 0), grid_size * grid_size)\n    img = Enum.zip([u, v, vis]) |> Enum.reduce(img, fn {uk, vk, visk}, acc ->\n      x = rem(trunc((uk / fov + 0.5) * grid_size), grid_size)\n      y = rem(trunc((vk / fov + 0.5) * grid_size), grid_size)\n      List.update_at(acc, x * grid_size + y, &Complex.add(&1, visk))\n    end)\n    Enum.map(img, &Complex.real/1)\n  end\nend",
+          scala: "import scala.math._\ndef vlbiImage(u: Array[Double], v: Array[Double], vis: Array[Complex], gridSize: Int = 128, fov: Double = 200.0): Array[Double] = {\n  val image = Array.fill(gridSize * gridSize)(0.0 + 0.0.i)\n  for (k <- u.indices) {\n    val x = ((u(k) / fov + 0.5) * gridSize).toInt % gridSize\n    val y = ((v(k) / fov + 0.5) * gridSize).toInt % gridSize\n    image(x * gridSize + y) += vis(k)\n  }\n  image.map(_.real)\n}",
+        },
+        'ai-fusion-control-2029': {
+          python: "import numpy as np\n\ndef rl_pid_controller(target, signal, dt, K_p=1.0, K_i=0.1, K_d=0.01, policy=None):\n    err = target - signal\n    integral = np.cumsum(err) * dt\n    derivative = np.gradient(err, dt)\n    u_pid = K_p * err + K_i * integral + K_d * derivative\n    # RL policy: 3-layer MLP \u2014 here a stub that returns zeros (real impl in PyTorch)\n    u_rl = policy(signal) if policy else np.zeros_like(signal)\n    return u_rl + u_pid",
+          rust: "fn rl_pid_controller(target: &[f64], signal: &[f64], dt: f64, kp: f64, ki: f64, kd: f64, policy: Option<fn(&[f64]) -> Vec<f64>>) -> Vec<f64> {\n    let n = target.len();\n    let mut err: Vec<f64> = (0..n).map(|i| target[i] - signal[i]).collect();\n    let mut integral = vec![0.0; n];\n    let mut deriv = vec![0.0; n];\n    let mut acc = 0.0;\n    for i in 0..n { acc += err[i]; integral[i] = acc * dt; }\n    for i in 1..n { deriv[i] = (err[i] - err[i-1]) / dt; }\n    let mut u_pid: Vec<f64> = (0..n).map(|i| kp * err[i] + ki * integral[i] + kd * deriv[i]).collect();\n    let u_rl = policy.map(|p| p(signal)).unwrap_or_else(|| vec![0.0; n]);\n    for i in 0..n { u_pid[i] += u_rl[i]; }\n    u_pid\n}",
+          go: "func rlPidController(target, signal []float64, dt, kp, ki, kd float64, policy func([]float64) []float64) []float64 {\n\tn := len(target)\n\terr := make([]float64, n)\n\tintegral := make([]float64, n)\n\tderiv := make([]float64, n)\n\tacc := 0.0\n\tfor i := 0; i < n; i++ { err[i] = target[i] - signal[i]; acc += err[i]; integral[i] = acc * dt }\n\tfor i := 1; i < n; i++ { deriv[i] = (err[i] - err[i-1]) / dt }\n\tu := make([]float64, n)\n\tfor i := 0; i < n; i++ { u[i] = kp*err[i] + ki*integral[i] + kd*deriv[i] }\n\tif policy != nil { rl := policy(signal); for i := 0; i < n; i++ { u[i] += rl[i] } }\n\treturn u\n}",
+          c: "void rl_pid_controller(const double* target, const double* signal, int n, double dt, double kp, double ki, double kd, double* out) {\n    double* err = malloc(sizeof(double) * n);\n    double* integral = calloc(n, sizeof(double));\n    double* deriv = calloc(n, sizeof(double));\n    double acc = 0.0;\n    for (int i = 0; i < n; i++) { err[i] = target[i] - signal[i]; acc += err[i]; integral[i] = acc * dt; }\n    for (int i = 1; i < n; i++) deriv[i] = (err[i] - err[i-1]) / dt;\n    for (int i = 0; i < n; i++) out[i] = kp*err[i] + ki*integral[i] + kd*deriv[i];\n    free(err); free(integral); free(deriv);\n}",
+          elixir: "defmodule AIControl do\n  def rl_pid(target, signal, dt, kp, ki, kd, policy \\ nil) do\n    n = length(target)\n    err = Enum.zip(target, signal) |> Enum.map(fn {t, s} -> t - s end)\n    integral = err |> Enum.scan(0, fn e, acc -> acc + e * dt end)\n    deriv = [0.0 | Enum.chunk_every(err, 2, 1, :discard) |> Enum.map(fn [a, b] -> (b - a) / dt end)]\n    u_pid = Enum.zip([err, integral, deriv]) |> Enum.map(fn {e, i, d} -> kp*e + ki*i + kd*d end)\n    u_rl = if policy, do: policy.(signal), else: List.duplicate(0.0, n)\n    Enum.zip(u_pid, u_rl) |> Enum.map(fn {a, b} -> a + b end)\n  end\nend",
+          scala: "def rlPidController(target: Array[Double], signal: Array[Double], dt: Double, kp: Double, ki: Double, kd: Double, policy: Option[Array[Double] => Array[Double]] = None): Array[Double] = {\n  val n = target.length\n  val err = target.indices.map(i => target(i) - signal(i)).toArray\n  val integral = new Array[Double](n); var acc = 0.0\n  for (i <- 0 until n) { acc += err(i); integral(i) = acc * dt }\n  val deriv = new Array[Double](n)\n  for (i <- 1 until n) deriv(i) = (err(i) - err(i-1)) / dt\n  val u = Array.tabulate(n)(i => kp*err(i) + ki*integral(i) + kd*deriv(i))\n  policy match {\n    case Some(p) => val rl = p(signal); for (i <- 0 until n) u(i) += rl(i)\n    case None =>\n  }\n  u\n}",
+        },
+        'lean5-alphaproof-2030': {
+          python: "import random\n\ndef unified_prover(conjecture, lean_lib, llm_proof, max_depth=50, k=1000):\n    queue = [(conjecture, [])]\n    for _ in range(max_depth):\n        if not queue: return None\n        goal, path = queue.pop(0)\n        if is_closed(goal): return path\n        candidates = llm_proof(goal, lean_lib, k=k)  # 1000 candidates per step\n        for tactic in candidates:\n            new_goal = lean_check(goal, tactic, lean_lib)\n            if new_goal is not None:\n                queue.append((new_goal, path + [tactic]))\n    return None  # timeout\n\ndef is_closed(goal):\n    return not goal  # no remaining sub-goals\n\ndef lean_check(goal, tactic, lib):\n    # Stub: returns new goal state if tactic type-checks, None otherwise\n    try:\n        return elaborate(goal, tactic, lib)\n    except Exception:\n        return None",
+          rust: "fn unified_prover<F, L>(conjecture: &Goal, lean_lib: &Lib, llm_proof: &F, max_depth: usize, k: usize) -> Option<Vec<Tactic>>\nwhere F: Fn(&Goal, &Lib, usize) -> Vec<Tactic>, L: LeanLib {\n    let mut queue: Vec<(Goal, Vec<Tactic>)> = vec![(conjecture.clone(), vec![])];\n    for _ in 0..max_depth {\n        let (goal, path) = queue.pop()?;\n        if goal.is_closed() { return Some(path); }\n        for tactic in llm_proof(&goal, lean_lib, k) {\n            if let Some(new_goal) = lean_check(&goal, &tactic, lean_lib) {\n                let mut p2 = path.clone(); p2.push(tactic);\n                queue.push((new_goal, p2));\n            }\n        }\n    }\n    None\n}",
+          go: "func unifiedProver(conjecture Goal, leanLib LeanLib, llmProof func(Goal, LeanLib, int) []Tactic, maxDepth, k int) []Tactic {\n\tqueue := []struct{ g Goal; path []Tactic }{{conjecture, nil}}\n\tfor i := 0; i < maxDepth; i++ {\n\t\tif len(queue) == 0 { return nil }\n\t\tg, path := queue[0].g, queue[0].path; queue = queue[1:]\n\t\tif g.IsClosed() { return path }\n\t\tfor _, t := range llmProof(g, leanLib, k) {\n\t\t\tif gNew, ok := LeanCheck(g, t, leanLib); ok {\n\t\t\t\tnewPath := append([]Tactic{}, path...); newPath = append(newPath, t)\n\t\t\t\tqueue = append(queue, struct{ g Goal; path []Tactic }{gNew, newPath})\n\t\t\t}\n\t\t}\n\t}\n\treturn nil\n}",
+          c: "typedef struct { GoalState g; Tactic* path; int path_len; } QItem;\nTactic* unified_prover(GoalState* conj, Lib* lib, Tactic* (*llm)(GoalState*, Lib*, int), int max_depth, int k) {\n    QItem* queue = malloc(sizeof(QItem) * 100000); int qh = 0, qt = 0;\n    queue[qt++] = (QItem){*conj, NULL, 0};\n    for (int i = 0; i < max_depth; i++) {\n        if (qh == qt) { free(queue); return NULL; }\n        QItem cur = queue[qh++];\n        if (is_closed(&cur.g)) { Tactic* r = malloc(sizeof(Tactic) * (cur.path_len + 1)); memcpy(r, cur.path, sizeof(Tactic)*cur.path_len); free(queue); return r; }\n        Tactic* cands = llm(&cur.g, lib, k);\n        for (int j = 0; j < k; j++) {\n            GoalState g_new;\n            if (lean_check(&cur.g, &cands[j], lib, &g_new)) {\n                Tactic* new_path = malloc(sizeof(Tactic) * (cur.path_len + 1));\n                memcpy(new_path, cur.path, sizeof(Tactic) * cur.path_len);\n                new_path[cur.path_len] = cands[j];\n                queue[qt++] = (QItem){g_new, new_path, cur.path_len + 1};\n            }\n        }\n    }\n    free(queue); return NULL;\n}",
+          elixir: "defmodule UnifiedProver do\n  def run(conjecture, lean_lib, llm_proof, max_depth \\ 50, k \\ 1000) do\n    search([{conjecture, []}], lean_lib, llm_proof, max_depth, k)\n  end\n  defp search([], _, _, _, _), do: nil\n  defp search([{g, path} | rest], lib, llm, depth, k) do\n    if closed?(g) do path\n    else\n      cands = llm.(g, lib, k)\n      new_items = for t <- cands, {:ok, g_new} <- [lean_check(g, t, lib)], do: {g_new, path ++ [t]}\n      search(rest ++ new_items, lib, llm, depth - 1, k)\n    end\n  end\nend",
+          scala: "def unifiedProver(conjecture: Goal, leanLib: LeanLib, llmProof: (Goal, LeanLib, Int) => List[Tactic], maxDepth: Int = 50, k: Int = 1000): Option[List[Tactic]] = {\n  def search(queue: List[(Goal, List[Tactic])], depth: Int): Option[List[Tactic]] = queue match {\n    case Nil => None\n    case (g, path) :: rest if g.isClosed => Some(path)\n    case (g, path) :: rest if depth > 0 =>\n      val newItems = llmProof(g, leanLib, k).take(k).flatMap { t =>\n        leanCheck(g, t, leanLib).map(gNew => (gNew, path :+ t))\n      }\n      search(rest ++ newItems, depth - 1)\n    case _ => None\n  }\n  search(List((conjecture, Nil)), maxDepth)\n}",
+        },
+      };
+
+      // Wire up language toggles — when a lang button is clicked,
+      // find the nearest demo-card, get its article id from its
+      // id attribute (demo-<id>), and update the code-block.
+      document.querySelectorAll('.code-panel .lang-toggle button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const panel = btn.closest('.code-panel');
+          const card = btn.closest('.demo-card');
+          if (!panel || !card) return;
+          // Update active button
+          panel.querySelectorAll('.lang-toggle button').forEach(b => b.classList.toggle('active', b === btn));
+          // Get article id from card id (demo-<id>)
+          const articleId = card.id.replace(/^demo-/, '');
+          const lang = btn.dataset.lang;
+          const code = (CODE_BANK[articleId] || {})[lang] || '// code not available for ' + lang;
+          // Find the code-block — it's the <pre> inside the panel
+          const block = panel.querySelector('pre.code-block');
+          if (block) block.textContent = code;
+        });
+      });
+
+      // Initial render: set Python code for every demo on page load
+      document.querySelectorAll('.demo-card').forEach(card => {
+        const articleId = card.id.replace(/^demo-/, '');
+        const block = card.querySelector('pre.code-block');
+        if (block) {
+          block.textContent = (CODE_BANK[articleId] || {}).python || '';
+          block.id = 'code-block-' + articleId;  // fix placeholder id
+        }
+      });
+
+      // ---- ETL file-input wiring (Phase 27) ----
+      // Each ETL file input calls handleETLUpload(articleId, file)
+      // which reads the file via FileReader, looks up the parser in
+      // DIGEST_PARSERS (from digest-parsers.js), calls it, and
+      // injects the result into the article's ETL Report sub-tab.
+      document.querySelectorAll('input[type="file"][data-article-id]').forEach(inp => {
+        inp.addEventListener('change', (e) => {
+          const articleId = inp.dataset.articleId;
+          const file = e.target.files[0];
+          if (!file) return;
+          if (window.handleETLUpload) {
+            const maxMb = parseInt(inp.dataset.maxMb || '50', 10);
+            window.handleETLUpload(articleId, file, { max_mb: maxMb });
+          }
+        });
+      });
+
+      // ---- RSS URL copy (Phase 27) ----
+      window.copyRSSUrl = function () {
+        const inp = document.getElementById('rss-url-input');
+        if (!inp) return;
+        inp.select();
+        try {
+          navigator.clipboard.writeText(inp.value).then(() => {
+            const orig = inp.style.color;
+            inp.style.color = '#10b981';
+            setTimeout(() => { inp.style.color = orig; }, 1500);
+          }).catch(() => {
+            document.execCommand('copy');  // fallback
+          });
+        } catch (e) {
+          document.execCommand('copy');
+        }
+      };
+
+      // ---- Particle background ----
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d');
+        var W, H, P = [];
+        var N = 60, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; }
+        r();
+        addEventListener('resize', r);
+        for (var i = 0; i < N; i++) {
+          P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        }
+        function s() {
+          x.clearRect(0, 0, W, H);
+          for (var i = 0; i < N; i++) {
+            for (var j = i+1; j < N; j++) {
+              var d = Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y);
+              if (d < 100) {
+                x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')';
+                x.lineWidth = .5;
+                x.beginPath();
+                x.moveTo(P[i].x, P[i].y);
+                x.lineTo(P[j].x, P[j].y);
+                x.stroke();
+              }
+            }
+          }
+          for (var p of P) {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+            x.fillStyle = p.c; x.globalAlpha = .4;
+            x.beginPath();
+            x.arc(p.x, p.y, p.r, 0, 6.28);
+            x.fill();
+          }
+          x.globalAlpha = 1;
+          requestAnimationFrame(s);
+        }
+        s();
+      })();
+
+      // ---- Ribbon theme toggle ----
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        let initial = 'dark';
+        try { const stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', () => { const next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>
