@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Waves & Optics — AIHPC Advanced Science / Physics. fft(x) in 6 platform languages. Pure client-side." />
+    <title>Waves & Optics — AIHPC Advanced Science</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --domain:#10b981; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 980px; margin: 0 auto; padding: 56px 24px 96px; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-elevated); font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+      h1 { font-size: 38px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#a7f3d0 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 720px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 10px; }
+      p { margin: 0 0 14px; }
+      .muted { color: var(--text-muted); }
+      ul { padding-left: 22px; color: var(--text-muted); }
+      ul li { margin-bottom: 6px; } ul li strong { color: var(--text); }
+      code { background: var(--bg-elevated); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
+      .hero { position: relative; margin: 0 0 32px; height: 220px; border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, rgba(16,185,129,0.18) 0%, rgba(139,92,246,0.12) 50%, rgba(6,182,212,0.18) 100%); border: 1px solid rgba(16,185,129,0.25); }
+      .hero svg { width: 100%; height: 100%; display: block; }
+      .hero .hero-text { position: absolute; top: 50%; left: 32px; transform: translateY(-50%); max-width: 380px; pointer-events: none; }
+      .hero .hero-text .h-tag { font-size: 11px; color: rgba(167,243,208,0.9); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 6px; }
+      .hero .hero-text .h-title { font-size: 20px; font-weight: 700; color: white; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+      .hero .hero-text .h-sub { font-size: 13px; color: rgba(243,244,246,0.8); margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+      .visual-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin: 24px 0; }
+      .visual-card h3 { margin: 0 0 12px; font-size: 16px; }
+      .code-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin: 24px 0; }
+      .code-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; flex-wrap: wrap; }
+      .lang-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 9999px; overflow: hidden; flex-wrap: wrap; }
+      .lang-toggle button { background: transparent; color: var(--text-muted); border: 0; padding: 4px 10px; cursor: pointer; font-family: inherit; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+      .lang-toggle button.active { background: var(--accent); color: white; }
+      pre.code-block { margin: 8px 0 0; overflow: auto; font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 12px; line-height: 1.5; color: #e5e7eb; max-height: 360px; }
+      pre.code-block .kw { color: #c084fc; } pre.code-block .fn { color: #67e8f9; } pre.code-block .str { color: #86efac; } pre.code-block .num { color: #fbbf24; } pre.code-block .com { color: #6b7280; font-style: italic; } pre.code-block .ty { color: #f9a8d4; }
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.06), transparent 55%), #fafafa; color: #18181b; }
+      body.light .visual-card, body.light .code-card, body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary, body.light .tag { background: white; border-color: #e5e7eb; }
+      body.light pre.code-block { background: #fafafa; color: #18181b; }
+      body.light .lead, body.light .muted, body.light ul, body.light .meta { color: #4b5563; }
+      body.light code { background: #f3f4f6; border-color: #e5e7eb; }
+      body.light .hero { background: linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(139,92,246,0.06) 50%, rgba(6,182,212,0.08) 100%); border-color: rgba(16,185,129,0.25); }
+      body.light .hero .hero-text .h-tag { color: rgba(6,95,70,1); }
+      body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; }
+      body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
+      body.light .ribbon-btn-primary { color: white; }
+    </style>
+  </head>
+  <body>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../../index.html">Home</a><a href="../../index.html#live-demo">Demos</a><a href="../../dashboard.html">Dashboard</a><a href="../../graph.html">Knowledge Graph</a><a href="../../benchmark.html">Agentic Benchmark</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu">
+            <a href="../../science-biology.html">Biology Hub</a>
+            <a href="../../science-chemistry.html">Chemistry Hub</a>
+            <a href="../../science-physics.html">Physics Hub</a>
+            <a href="../../science-maths.html">Mathematics Hub</a>
+          </div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu">
+            <a href="../../dashboard.html">Temporal Knowledge Graph Dashboard</a>
+            <a href="../../concepts.html">Concept Cards</a>
+            <a href="../../concepts/replayable-decision-traces.html">Replayable Decision Traces</a>
+            <a href="../../concepts/provenance-first.html">Provenance-First Computing</a>
+            <a href="../../concepts/lazy-evaluation.html">Lazy Evaluation as UX</a>
+            <a href="../../concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a>
+            <a href="../../concepts/audience-annotations.html">Audience-Specific Annotations</a>
+          </div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../../index.html#live-demo" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../../science-physics.html">Physics Hub</a> / Waves & Optics</p>
+      <span class="tag">Science &middot; Physics &middot; Waves & Optics</span>
+      <h1>Waves & Optics</h1>
+
+      <div class="hero">
+        <svg viewBox="0 0 1000 220" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <filter id="glow1" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <g opacity="0.08" stroke="#10b981" stroke-width="0.5">
+            <line x1="0" y1="20" x2="1000" y2="20"/><line x1="0" y1="60" x2="1000" y2="60"/>
+            <line x1="0" y1="100" x2="1000" y2="100"/><line x1="0" y1="140" x2="1000" y2="140"/>
+            <line x1="0" y1="180" x2="1000" y2="180"/>
+          </g>
+          <g opacity="0.85">
+      <path d="M 0 110 Q 50 60 100 110 T 200 110 T 300 110 T 400 110 T 500 110 T 600 110 T 700 110 T 800 110 T 900 110 T 1000 110" stroke="#3b82f6" stroke-width="2.5" fill="none"/>
+      <path d="M 0 110 Q 50 160 100 110 T 200 110 T 300 110 T 400 110 T 500 110 T 600 110 T 700 110 T 800 110 T 900 110 T 1000 110" stroke="#ec4899" stroke-width="2.5" fill="none"/>
+      <path d="M 0 110 Q 25 90 50 110 T 100 110 T 150 110 T 200 110 T 250 110 T 300 110 T 350 110 T 400 110 T 450 110 T 500 110 T 550 110 T 600 110 T 650 110 T 700 110 T 750 110 T 800 110 T 850 110 T 900 110 T 950 110 T 1000 110" stroke="#06b6d4" stroke-width="1.5" fill="none" opacity="0.5"/>
+      </g>
+      <g transform="translate(800, 80)" opacity="0.7"><circle cx="0" cy="0" r="10" fill="#f59e0b"/><ellipse cx="0" cy="0" rx="40" ry="12" fill="none" stroke="#06b6d4" stroke-width="1.5" transform="rotate(15)"/><ellipse cx="0" cy="0" rx="55" ry="18" fill="none" stroke="#10b981" stroke-width="1" transform="rotate(-25)"/></g>
+      <g opacity="0.5"><circle cx="120" cy="40" r="1.5"/><circle cx="180" cy="180" r="1.5"/><circle cx="380" cy="60" r="1.5"/><circle cx="600" cy="170" r="1.5"/></g>
+        </svg>
+        <div class="hero-text">
+          <p class="h-tag">Physics &middot; waves &amp; optics</p>
+          <p class="h-title">Sine &rarr; FFT &rarr; Spectrum &rarr; Image</p>
+          <p class="h-sub">FFT-based spectroscopy, diffraction, interference.</p>
+        </div>
+      </div>
+
+      <p class="lead">Radix-2 Cooley-Tukey FFT — converts a time-domain signal to its frequency spectrum in O(n log n). Below: the same function implemented in all six platform languages.</p>
+
+      <div class="visual-card">
+        <h3>fft(x) &mdash; polyglot</h3>
+        <p class="muted" style="font-size: 13px;">Toggle to compare the same algorithm across Python / Rust / Go / C / Elixir / Scala.</p>
+        <div class="code-card">
+          <div class="code-head">
+            <span style="font-size:11px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing:0.08em;">fft(x)</span>
+            <div class="lang-toggle" id="lang-toggle">
+              <button data-lang="python" class="active">Python</button>
+              <button data-lang="rust">Rust</button>
+              <button data-lang="go">Go</button>
+              <button data-lang="c">C</button>
+              <button data-lang="elixir">Elixir</button>
+              <button data-lang="scala">Scala</button>
+            </div>
+          </div>
+          <pre class="code-block" id="code-block"></pre>
+        </div>
+      </div>
+
+      <h2>Inputs</h2>
+      <ul>
+        <li>Domain-specific input formats (varies by subdomain).</li>
+        <li>Optional reference datasets (CORS-enabled public sources or user uploads).</li>
+      </ul>
+
+      <h2>Outputs</h2>
+      <ul>
+        <li>Computed result with downloadable CSV / JSON.</li>
+        <li>Provenance receipt (see <a href="../../concepts/provenance-first.html">Provenance-First Computing</a>).</li>
+        <li>Replayable trace (see <a href="../../concepts/replayable-decision-traces.html">Replayable Decision Traces</a>).</li>
+      </ul>
+
+      <h2>Method</h2>
+      <p class="muted">See the polyglot code above for the algorithmic specifics. The same algorithm in 6 languages.</p>
+
+      <h2>Observability</h2>
+      <ul>
+        <li>Parse input → normalised data structure.</li>
+        <li>Compute (algorithm-specific).</li>
+        <li>Render result + offer download.</li>
+        <li>Trace the steps for replay.</li>
+      </ul>
+
+      <div class="meta">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/science/physics/waves.html</code>. Next.js route: <code>/science/physics/waves</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      const CODE = {"python":"<span class=\"com\"># fft.py — Python (recursive Cooley-Tukey)</span>\n<span class=\"kw\">import</span> cmath\n<span class=\"kw\">def</span> <span class=\"fn\">fft</span>(x):\n    n = <span class=\"fn\">len</span>(x)\n    <span class=\"kw\">if</span> n &lt;= <span class=\"num\">1</span>: <span class=\"kw\">return</span> x\n    <span class=\"kw\">if</span> n &amp; (n - <span class=\"num\">1</span>): <span class=\"kw\">raise</span> <span class=\"ty\">ValueError</span>(<span class=\"str\">\"n must be power of 2\"</span>)\n    even = <span class=\"fn\">fft</span>(x[<span class=\"num\">0</span>::<span class=\"num\">2</span>])\n    odd  = <span class=\"fn\">fft</span>(x[<span class=\"num\">1</span>::<span class=\"num\">2</span>])\n    <span class=\"kw\">return</span> [even[k] + cmath.<span class=\"fn\">exp</span>(-<span class=\"num\">2j</span> * cmath.pi * k / n) * odd[k]\n            <span class=\"kw\">for</span> k <span class=\"kw\">in</span> <span class=\"fn\">range</span>(n // <span class=\"num\">2</span>)] + \\\n           [even[k] - cmath.<span class=\"fn\">exp</span>(-<span class=\"num\">2j</span> * cmath.pi * k / n) * odd[k]\n            <span class=\"kw\">for</span> k <span class=\"kw\">in</span> <span class=\"fn\">range</span>(n // <span class=\"num\">2</span>)]","rust":"<span class=\"com\">// fft.rs — Rust (recursive + Complex)</span>\n<span class=\"kw\">use</span> num_complex::<span class=\"ty\">Complex</span>;\n<span class=\"kw\">type</span> <span class=\"ty\">C</span> = <span class=\"ty\">Complex</span>&lt;<span class=\"kw\">f64</span>&gt;;\n<span class=\"kw\">pub fn</span> <span class=\"fn\">fft</span>(x: &amp;[<span class=\"ty\">C</span>]) -&gt; <span class=\"ty\">Vec</span>&lt;<span class=\"ty\">C</span>&gt; {\n    <span class=\"kw\">let</span> n = x.<span class=\"fn\">len</span>();\n    <span class=\"kw\">if</span> n &lt;= <span class=\"num\">1</span> { <span class=\"kw\">return</span> x.<span class=\"fn\">to_vec</span>(); }\n    <span class=\"kw\">let</span> even: <span class=\"ty\">Vec</span>&lt;<span class=\"ty\">C</span>&gt; = <span class=\"fn\">fft</span>(&amp;x.<span class=\"fn\">iter</span>().<span class=\"fn\">step_by</span>(<span class=\"num\">2</span>).<span class=\"fn\">cloned</span>().<span class=\"fn\">collect</span>::&lt;<span class=\"ty\">Vec</span>&lt;_&gt;&gt;());\n    <span class=\"kw\">let</span> odd: <span class=\"ty\">Vec</span>&lt;<span class=\"ty\">C</span>&gt;  = <span class=\"fn\">fft</span>(&amp;x.<span class=\"fn\">iter</span>().<span class=\"fn\">skip</span>(<span class=\"num\">1</span>).<span class=\"fn\">step_by</span>(<span class=\"num\">2</span>).<span class=\"fn\">cloned</span>().<span class=\"fn\">collect</span>::&lt;<span class=\"ty\">Vec</span>&lt;_&gt;&gt;());\n    (<span class=\"num\">0</span>..n/<span class=\"num\">2</span>).<span class=\"fn\">map</span>(|k| {\n        <span class=\"kw\">let</span> t = <span class=\"ty\">C</span>::<span class=\"fn\">from_polar</span>(<span class=\"num\">1.0</span>, -<span class=\"num\">2.0</span> * std::f64::consts::<span class=\"ty\">PI</span> * k <span class=\"kw\">as</span> <span class=\"kw\">f64</span> / n <span class=\"kw\">as</span> <span class=\"kw\">f64</span>) * odd[k];\n        even[k] + t\n    }).<span class=\"fn\">chain</span>((<span class=\"num\">0</span>..n/<span class=\"num\">2</span>).<span class=\"fn\">map</span>(<span class=\"kw\">move</span> |k| {\n        <span class=\"kw\">let</span> t = <span class=\"ty\">C</span>::<span class=\"fn\">from_polar</span>(<span class=\"num\">1.0</span>, -<span class=\"num\">2.0</span> * std::f64::consts::<span class=\"ty\">PI</span> * k <span class=\"kw\">as</span> <span class=\"kw\">f64</span> / n <span class=\"kw\">as</span> <span class=\"kw\">f64</span>) * odd[k];\n        even[k] - t\n    })).<span class=\"fn\">collect</span>()\n}","go":"<span class=\"com\">// fft.go — Golang (recursive)</span>\n<span class=\"kw\">import</span> <span class=\"str\">\"math/cmplx\"</span>\n<span class=\"kw\">func</span> <span class=\"fn\">FFT</span>(x []<span class=\"ty\">complex128</span>) []<span class=\"ty\">complex128</span> {\n    n := <span class=\"fn\">len</span>(x)\n    <span class=\"kw\">if</span> n &lt;= <span class=\"num\">1</span> { <span class=\"kw\">return</span> x }\n    even := <span class=\"fn\">FFT</span>(<span class=\"fn\">even</span>(x))\n    odd := <span class=\"fn\">FFT</span>(<span class=\"fn\">odd</span>(x))\n    out := <span class=\"fn\">make</span>([]<span class=\"ty\">complex128</span>, n)\n    <span class=\"kw\">for</span> k := <span class=\"num\">0</span>; k &lt; n/<span class=\"num\">2</span>; k++ {\n        t := cmplx.<span class=\"fn\">Exp</span>(-<span class=\"num\">2i</span> * math.Pi * <span class=\"fn\">complex</span>(<span class=\"fn\">float64</span>(k), <span class=\"num\">0</span>) / <span class=\"fn\">complex</span>(<span class=\"fn\">float64</span>(n), <span class=\"num\">0</span>)) * odd[k]\n        out[k] = even[k] + t\n        out[k + n/<span class=\"num\">2</span>] = even[k] - t\n    }\n    <span class=\"kw\">return</span> out\n}","c":"<span class=\"com\">/* fft.c — C (recursive, double-complex) */</span>\n<span class=\"kw\">#include</span> <span class=\"str\">&lt;complex.h&gt;</span>\n<span class=\"kw\">typedef double complex</span> <span class=\"ty\">cplx</span>;\n<span class=\"kw\">void</span> <span class=\"fn\">fft</span>(<span class=\"ty\">cplx</span> *buf, <span class=\"ty\">cplx</span> *out, <span class=\"kw\">int</span> n, <span class=\"kw\">int</span> step) {\n    <span class=\"kw\">if</span> (n == <span class=\"num\">1</span>) { out[<span class=\"num\">0</span>] = buf[<span class=\"num\">0</span>]; <span class=\"kw\">return</span>; }\n    <span class=\"fn\">fft</span>(buf, out, n/<span class=\"num\">2</span>, step*<span class=\"num\">2</span>);\n    <span class=\"fn\">fft</span>(buf+step, out+n/<span class=\"num\">2</span>, n/<span class=\"num\">2</span>, step*<span class=\"num\">2</span>);\n    <span class=\"kw\">for</span> (<span class=\"kw\">int</span> k = <span class=\"num\">0</span>; k &lt; n/<span class=\"num\">2</span>; k++) {\n        <span class=\"ty\">cplx</span> t = cexp(-<span class=\"num\">2.0I</span>*M_PI*k/n) * out[k + n/<span class=\"num\">2</span>];\n        out[k + n/<span class=\"num\">2</span>] = out[k] - t;\n        out[k] += t;\n    }\n}","elixir":"<span class=\"com\"># fft.exs — Elixir (recursive + Enum)</span>\n<span class=\"kw\">defmodule</span> <span class=\"ty\">FFT</span> <span class=\"kw\">do</span>\n  <span class=\"kw\">def</span> <span class=\"fn\">fft</span>([<span class=\"kw\">_</span>] = x), <span class=\"kw\">do:</span> x\n  <span class=\"kw\">def</span> <span class=\"fn\">fft</span>(x) <span class=\"kw\">when</span> <span class=\"fn\">is_list</span>(x) <span class=\"kw\">do</span>\n    n = <span class=\"fn\">length</span>(x)\n    even = <span class=\"fn\">fft</span>(<span class=\"fn\">every_other</span>(x, <span class=\"num\">0</span>))\n    odd  = <span class=\"fn\">fft</span>(<span class=\"fn\">every_other</span>(x, <span class=\"num\">1</span>))\n    <span class=\"ty\">Enum</span>.<span class=\"fn\">with_index</span>(even)\n    |&gt; <span class=\"ty\">Enum</span>.<span class=\"fn\">flat_map</span>(<span class=\"kw\">fn</span> {e, k} -&gt;\n      t = :math.<span class=\"fn\">exp</span>(<span class=\"num\">-2.0</span> * :math.pi * <span class=\"num\">1.0</span>i * k / n) * <span class=\"ty\">Enum</span>.<span class=\"fn\">at</span>(odd, k)\n      [e + t, e - t]\n    <span class=\"kw\">end</span>)\n  <span class=\"kw\">end</span>\n  <span class=\"kw\">defp</span> <span class=\"fn\">every_other</span>(list, start),\n    <span class=\"kw\">do:</span> list |&gt; <span class=\"ty\">Enum</span>.<span class=\"fn\">drop</span>(start) |&gt; <span class=\"ty\">Enum</span>.<span class=\"fn\">take_every</span>(<span class=\"num\">2</span>)\n<span class=\"kw\">end</span>","scala":"<span class=\"com\">// fft.sc — Scala (recursive)</span>\n<span class=\"kw\">def</span> <span class=\"fn\">fft</span>(x: <span class=\"ty\">Vector</span>[<span class=\"ty\">Complex</span>]): <span class=\"ty\">Vector</span>[<span class=\"ty\">Complex</span>] = {\n    <span class=\"kw\">val</span> n = x.length\n    <span class=\"kw\">if</span> (n &lt;= <span class=\"num\">1</span>) x\n    <span class=\"kw\">else</span> {\n        <span class=\"kw\">val</span> even = <span class=\"fn\">fft</span>(x.<span class=\"fn\">indices</span>.<span class=\"fn\">filter</span>(_ % <span class=\"num\">2</span> == <span class=\"num\">0</span>).<span class=\"fn\">map</span>(x).<span class=\"fn\">toVector</span>)\n        <span class=\"kw\">val</span> odd  = <span class=\"fn\">fft</span>(x.<span class=\"fn\">indices</span>.<span class=\"fn\">filter</span>(_ % <span class=\"num\">2</span> == <span class=\"num\">1</span>).<span class=\"fn\">map</span>(x).<span class=\"fn\">toVector</span>)\n        (<span class=\"num\">0</span> <span class=\"kw\">until</span> n/<span class=\"num\">2</span>).<span class=\"fn\">flatMap</span> { k =&gt;\n            <span class=\"kw\">val</span> t = <span class=\"ty\">Complex</span>(<span class=\"num\">0</span>, -<span class=\"num\">2</span> * math.Pi * k / n).<span class=\"fn\">exp</span> * odd(k)\n            <span class=\"ty\">Seq</span>(even(k) + t, even(k) - t)\n        }.<span class=\"fn\">toVector</span>\n    }\n}"};
+      function renderCode(lang) {
+        document.getElementById('code-block').innerHTML = CODE[lang] || '';
+        document.querySelectorAll('#lang-toggle button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+      }
+      document.querySelectorAll('#lang-toggle button').forEach(b => b.addEventListener('click', () => renderCode(b.dataset.lang)));
+      renderCode('python');
+
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        let initial = 'dark';
+        try { const stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', () => { const next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

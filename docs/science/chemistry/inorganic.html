@@ -3,29 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Inorganic Chemistry — AIHPC Advanced Science / Chemistry. Inputs, outputs, methods, and observability for inorganic chemistry." />
+    <meta name="description" content="Inorganic Chemistry — AIHPC Advanced Science / Chemistry. cif_parse(text) in 6 platform languages. Pure client-side." />
     <title>Inorganic Chemistry — AIHPC Advanced Science</title>
     <style>
-      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --domain:#f59e0b; }
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --domain:#10b981; }
       * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
-      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(245,158,11,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
-      .ribbon {
-        position: sticky; top: 0; z-index: 50;
-        border-bottom: 1px solid rgba(139,92,246,0.25);
-        background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%);
-        backdrop-filter: blur(12px);
-        box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4);
-      }
-      .ribbon::after {
-        content: ""; position: absolute; left: 0; right: 0; bottom: -1px;
-        height: 2px;
-        background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%);
-        opacity: 0.7;
-      }
-      .ribbon.light {
-        background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%);
-        border-bottom-color: rgba(139,92,246,0.25);
-      }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
       .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
       .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
       .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
@@ -43,29 +29,45 @@
       .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
       .ribbon-icon-btn:hover { border-color: var(--accent); }
       .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
-      .container { max-width: 880px; margin: 0 auto; padding: 56px 24px 96px; }
+      .container { max-width: 980px; margin: 0 auto; padding: 56px 24px 96px; }
       .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
       .crumbs a { color: var(--text-muted); text-decoration: none; }
       .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-elevated); font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
-      h1 { font-size: 38px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#fcd34d 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
-      .lead { font-size: 18px; color: var(--text-muted); max-width: 720px; margin: 0 0 40px; }
+      h1 { font-size: 38px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#a7f3d0 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 720px; margin: 0 0 32px; }
       h2 { font-size: 22px; margin: 32px 0 10px; }
       p { margin: 0 0 14px; }
       .muted { color: var(--text-muted); }
       ul { padding-left: 22px; color: var(--text-muted); }
-      ul li { margin-bottom: 6px; }
-      ul li strong { color: var(--text); }
+      ul li { margin-bottom: 6px; } ul li strong { color: var(--text); }
       code { background: var(--bg-elevated); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
-      .stub { background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--domain); border-radius: 12px; padding: 16px 20px; margin-top: 32px; }
-      .stub h3 { margin: 0 0 8px; font-size: 16px; }
-      .stub p { margin: 0; font-size: 14px; color: var(--text-muted); }
+      .hero { position: relative; margin: 0 0 32px; height: 220px; border-radius: 20px; overflow: hidden; background: linear-gradient(135deg, rgba(16,185,129,0.18) 0%, rgba(139,92,246,0.12) 50%, rgba(6,182,212,0.18) 100%); border: 1px solid rgba(16,185,129,0.25); }
+      .hero svg { width: 100%; height: 100%; display: block; }
+      .hero .hero-text { position: absolute; top: 50%; left: 32px; transform: translateY(-50%); max-width: 380px; pointer-events: none; }
+      .hero .hero-text .h-tag { font-size: 11px; color: rgba(167,243,208,0.9); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 6px; }
+      .hero .hero-text .h-title { font-size: 20px; font-weight: 700; color: white; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+      .hero .hero-text .h-sub { font-size: 13px; color: rgba(243,244,246,0.8); margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+      .visual-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin: 24px 0; }
+      .visual-card h3 { margin: 0 0 12px; font-size: 16px; }
+      .code-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin: 24px 0; }
+      .code-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; flex-wrap: wrap; }
+      .lang-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 9999px; overflow: hidden; flex-wrap: wrap; }
+      .lang-toggle button { background: transparent; color: var(--text-muted); border: 0; padding: 4px 10px; cursor: pointer; font-family: inherit; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+      .lang-toggle button.active { background: var(--accent); color: white; }
+      pre.code-block { margin: 8px 0 0; overflow: auto; font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; font-size: 12px; line-height: 1.5; color: #e5e7eb; max-height: 360px; }
+      pre.code-block .kw { color: #c084fc; } pre.code-block .fn { color: #67e8f9; } pre.code-block .str { color: #86efac; } pre.code-block .num { color: #fbbf24; } pre.code-block .com { color: #6b7280; font-style: italic; } pre.code-block .ty { color: #f9a8d4; }
       .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
       .meta a { color: var(--text); text-decoration: none; }
       .meta a:hover { text-decoration: underline; }
-      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(245,158,11,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.06), transparent 55%), #fafafa; color: #18181b; }
-      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary, body.light .tag, body.light .stub { background: white; border-color: #e5e7eb; }
-      body.light .lead, body.light .muted, body.light ul, body.light .meta, body.light .stub p { color: #4b5563; }
+      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.06), transparent 55%), #fafafa; color: #18181b; }
+      body.light .visual-card, body.light .code-card, body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary, body.light .tag { background: white; border-color: #e5e7eb; }
+      body.light pre.code-block { background: #fafafa; color: #18181b; }
+      body.light .lead, body.light .muted, body.light ul, body.light .meta { color: #4b5563; }
       body.light code { background: #f3f4f6; border-color: #e5e7eb; }
+      body.light .hero { background: linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(139,92,246,0.06) 50%, rgba(6,182,212,0.08) 100%); border-color: rgba(16,185,129,0.25); }
+      body.light .hero .hero-text .h-tag { color: rgba(6,95,70,1); }
+      body.light .hero .hero-text .h-title { color: #18181b; text-shadow: none; }
+      body.light .hero .hero-text .h-sub { color: #4b5563; text-shadow: none; }
       body.light .ribbon-btn-primary { color: white; }
     </style>
   </head>
@@ -74,7 +76,7 @@
       <div class="ribbon-inner">
         <a href="../../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
         <nav class="ribbon-nav">
-          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../../index.html">Home</a><a href="../../index.html#live-demo">Demos</a><a href="../../dashboard.html">Dashboard</a></div></details>
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../../index.html">Home</a><a href="../../index.html#live-demo">Demos</a><a href="../../dashboard.html">Dashboard</a><a href="../../graph.html">Knowledge Graph</a><a href="../../benchmark.html">Agentic Benchmark</a></div></details>
           <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu">
             <a href="../../science-biology.html">Biology Hub</a>
             <a href="../../science-chemistry.html">Chemistry Hub</a>
@@ -101,29 +103,101 @@
       <p class="crumbs"><a href="../../science-chemistry.html">Chemistry Hub</a> / Inorganic Chemistry</p>
       <span class="tag">Science &middot; Chemistry &middot; Inorganic Chemistry</span>
       <h1>Inorganic Chemistry</h1>
-      <p class="lead">This subdomain page documents the planned interface for inorganic chemistry on AIHPC Advanced.</p>
+
+      <div class="hero">
+        <svg viewBox="0 0 1000 220" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <filter id="glow1" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <g opacity="0.08" stroke="#10b981" stroke-width="0.5">
+            <line x1="0" y1="20" x2="1000" y2="20"/><line x1="0" y1="60" x2="1000" y2="60"/>
+            <line x1="0" y1="100" x2="1000" y2="100"/><line x1="0" y1="140" x2="1000" y2="140"/>
+            <line x1="0" y1="180" x2="1000" y2="180"/>
+          </g>
+          <g opacity="0.85" transform="translate(500, 110)">
+      <polygon points="0,-50 43,-25 43,25 0,50 -43,25 -43,-25" fill="none" stroke="#f59e0b" stroke-width="2"/>
+      <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="rgba(245,158,11,0.1)" stroke="#ec4899" stroke-width="1.5"/>
+      <circle cx="0" cy="-50" r="5" fill="#06b6d4"/><circle cx="43" cy="-25" r="5" fill="#10b981"/>
+      <circle cx="43" cy="25" r="5" fill="#8b5cf6"/><circle cx="0" cy="50" r="5" fill="#ec4899"/>
+      <circle cx="-43" cy="25" r="5" fill="#f59e0b"/><circle cx="-43" cy="-25" r="5" fill="#3b82f6"/>
+      <line x1="0" y1="-50" x2="43" y2="-25" stroke="#f59e0b" stroke-width="1.5"/>
+      <line x1="43" y1="25" x2="0" y2="50" stroke="#f59e0b" stroke-width="1.5"/>
+      <line x1="-43" y1="25" x2="-43" y2="-25" stroke="#f59e0b" stroke-width="1.5"/>
+      <line x1="-43" y1="-25" x2="0" y2="-50" stroke="#f59e0b" stroke-width="1.5"/>
+      <line x1="0" y1="50" x2="43" y2="25" stroke="#f59e0b" stroke-width="1.5"/>
+      <line x1="0" y1="-30" x2="0" y2="30" stroke="rgba(236,72,153,0.6)" stroke-width="1"/>
+      </g>
+      <g opacity="0.5"><circle cx="120" cy="40" r="1.5"/><circle cx="200" cy="180" r="1.5"/><circle cx="800" cy="170" r="1.5"/><circle cx="900" cy="40" r="1.5"/></g>
+        </svg>
+        <div class="hero-text">
+          <p class="h-tag">Inorganic chemistry &middot; crystals &amp; coordination</p>
+          <p class="h-title">Atoms &rarr; Lattice &rarr; Unit cell &rarr; Crystal</p>
+          <p class="h-sub">Crystal-structure prediction, GNoME-style materials discovery.</p>
+        </div>
+      </div>
+
+      <p class="lead">CIF (Crystallographic Information File) parser — extracts space group, unit cell parameters, and fractional atomic coordinates. Below: the same function implemented in all six platform languages.</p>
+
+      <div class="visual-card">
+        <h3>cif_parse(text) &mdash; polyglot</h3>
+        <p class="muted" style="font-size: 13px;">Toggle to compare the same algorithm across Python / Rust / Go / C / Elixir / Scala.</p>
+        <div class="code-card">
+          <div class="code-head">
+            <span style="font-size:11px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing:0.08em;">cif_parse(text)</span>
+            <div class="lang-toggle" id="lang-toggle">
+              <button data-lang="python" class="active">Python</button>
+              <button data-lang="rust">Rust</button>
+              <button data-lang="go">Go</button>
+              <button data-lang="c">C</button>
+              <button data-lang="elixir">Elixir</button>
+              <button data-lang="scala">Scala</button>
+            </div>
+          </div>
+          <pre class="code-block" id="code-block"></pre>
+        </div>
+      </div>
+
       <h2>Inputs</h2>
       <ul>
-        <li>Domain-specific input formats (varies by subdomain — see the hub page).</li>
+        <li>Domain-specific input formats (varies by subdomain).</li>
         <li>Optional reference datasets (CORS-enabled public sources or user uploads).</li>
       </ul>
+
       <h2>Outputs</h2>
       <ul>
         <li>Computed result with downloadable CSV / JSON.</li>
         <li>Provenance receipt (see <a href="../../concepts/provenance-first.html">Provenance-First Computing</a>).</li>
         <li>Replayable trace (see <a href="../../concepts/replayable-decision-traces.html">Replayable Decision Traces</a>).</li>
       </ul>
+
       <h2>Method</h2>
-      <p class="muted">Specifics vary by subdomain. See the hub page for the broader methodology context.</p>
-      <div class="stub">
-        <h3>Live execution — coming in a later phase</h3>
-        <p>This is a stub today. The actual computation / visualisation will land when the corresponding demo is implemented in the <code>/demos/[id]</code> framework. For now, browse the <a href="../../concepts.html">Concept Cards</a> for the design pattern, or the <a href="../../dashboard.html">temporal dashboard</a> for the replayable-trace experience.</p>
-      </div>
+      <p class="muted">See the polyglot code above for the algorithmic specifics. The same algorithm in 6 languages.</p>
+
+      <h2>Observability</h2>
+      <ul>
+        <li>Parse input → normalised data structure.</li>
+        <li>Compute (algorithm-specific).</li>
+        <li>Render result + offer download.</li>
+        <li>Trace the steps for replay.</li>
+      </ul>
+
       <div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/science/chemistry/inorganic.html</code>. Next.js route: <code>/science/chemistry/inorganic</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>
+
     <script>
+      const CODE = {"python":"<span class=\"com\"># cif_parse.py — Python (line-based, regex)</span>\n<span class=\"kw\">import</span> re\n<span class=\"kw\">def</span> <span class=\"fn\">cif_parse</span>(text: <span class=\"ty\">str</span>) -&gt; <span class=\"ty\">dict</span>:\n    out = {<span class=\"str\">\"cell\"</span>: {}, <span class=\"str\">\"atoms\"</span>: []}\n    <span class=\"kw\">for</span> line <span class=\"kw\">in</span> text.<span class=\"fn\">splitlines</span>():\n        line = line.<span class=\"fn\">strip</span>()\n        m = re.<span class=\"fn\">match</span>(<span class=\"str\">r\"(\\w+)\\s+(\\S+)\"</span>, line)\n        <span class=\"kw\">if</span> m:\n            k, v = m.<span class=\"fn\">groups</span>()\n            <span class=\"kw\">if</span> k.<span class=\"fn\">startswith</span>(<span class=\"str\">\"_cell_length\"</span>): out[<span class=\"str\">\"cell\"</span>][<span class=\"str\">\"a\"</span>] = <span class=\"fn\">float</span>(v)\n            <span class=\"kw\">elif</span> k == <span class=\"str\">\"_space_group_name\"</span>: out[<span class=\"str\">\"sg\"</span>] = v\n            <span class=\"kw\">elif</span> k.<span class=\"fn\">startswith</span>(<span class=\"str\">\"_atom_site\"</span>): out[<span class=\"str\">\"atoms\"</span>].<span class=\"fn\">append</span>(v)\n    <span class=\"kw\">return</span> out","rust":"<span class=\"com\">// cif_parse.rs — Rust (lines + match)</span>\n<span class=\"kw\">use</span> std::collections::<span class=\"ty\">HashMap</span>;\n<span class=\"kw\">pub fn</span> <span class=\"fn\">cif_parse</span>(text: &amp;<span class=\"ty\">str</span>) -&gt; <span class=\"ty\">HashMap</span>&lt;<span class=\"ty\">String</span>, <span class=\"ty\">String</span>&gt; {\n    <span class=\"kw\">let mut</span> out = <span class=\"ty\">HashMap</span>::<span class=\"fn\">new</span>();\n    <span class=\"kw\">for</span> line <span class=\"kw\">in</span> text.<span class=\"fn\">lines</span>() {\n        <span class=\"kw\">let</span> parts: <span class=\"ty\">Vec</span>&lt;&amp;<span class=\"kw\">str</span>&gt; = line.<span class=\"fn\">split_whitespace</span>().<span class=\"fn\">collect</span>();\n        <span class=\"kw\">if</span> parts.<span class=\"fn\">len</span>() &gt;= <span class=\"num\">2</span> &amp;&amp; parts[<span class=\"num\">0</span>].<span class=\"fn\">starts_with</span>(<span class=\"str\">'_'</span>) {\n            out.<span class=\"fn\">insert</span>(parts[<span class=\"num\">0</span>].<span class=\"fn\">to_string</span>(), parts[<span class=\"num\">1</span>].<span class=\"fn\">to_string</span>());\n        }\n    }\n    out\n}","go":"<span class=\"com\">// cif_parse.go — Golang (strings.Split)</span>\n<span class=\"kw\">func</span> <span class=\"fn\">CIFParse</span>(text <span class=\"ty\">string</span>) <span class=\"kw\">map</span>[<span class=\"ty\">string</span>]<span class=\"ty\">string</span> {\n    out := <span class=\"kw\">map</span>[<span class=\"ty\">string</span>]<span class=\"ty\">string</span>{}\n    <span class=\"kw\">for</span> _, line := <span class=\"kw\">range</span> <span class=\"fn\">strings</span>.<span class=\"fn\">Split</span>(text, <span class=\"str\">\"\\n\"</span>) {\n        f := <span class=\"fn\">strings</span>.<span class=\"fn\">Fields</span>(line)\n        <span class=\"kw\">if</span> <span class=\"fn\">len</span>(f) &gt;= <span class=\"num\">2</span> &amp;&amp; <span class=\"fn\">strings</span>.<span class=\"fn\">HasPrefix</span>(f[<span class=\"num\">0</span>], <span class=\"str\">\"_\"</span>) {\n            out[f[<span class=\"num\">0</span>]] = f[<span class=\"num\">1</span>]\n        }\n    }\n    <span class=\"kw\">return</span> out\n}","c":"<span class=\"com\">/* cif_parse.c — C (sscanf) */</span>\n<span class=\"kw\">int</span> <span class=\"fn\">cif_parse</span>(<span class=\"kw\">const char</span> *text, <span class=\"kw\">char</span> keys[][<span class=\"num\">32</span>], <span class=\"kw\">char</span> vals[][<span class=\"num\">64</span>], <span class=\"kw\">int</span> max) {\n    <span class=\"kw\">int</span> n = <span class=\"num\">0</span>;\n    <span class=\"kw\">const char</span> *p = text;\n    <span class=\"kw\">while</span> (*p &amp;&amp; n &lt; max) {\n        <span class=\"kw\">char</span> k[<span class=\"num\">32</span>] = {<span class=\"num\">0</span>}, v[<span class=\"num\">64</span>] = {<span class=\"num\">0</span>};\n        <span class=\"kw\">if</span> (<span class=\"fn\">sscanf</span>(p, <span class=\"str\">\"%31s %63s\"</span>, k, v) == <span class=\"num\">2</span> &amp;&amp; k[<span class=\"num\">0</span>] == <span class=\"str\">'_'</span>) {\n            <span class=\"fn\">strncpy</span>(keys[n], k, <span class=\"num\">31</span>);\n            <span class=\"fn\">strncpy</span>(vals[n], v, <span class=\"num\">63</span>);\n            n++;\n        }\n        <span class=\"kw\">while</span> (*p &amp;&amp; *p++ != <span class=\"str\">'\\n'</span>);\n    }\n    <span class=\"kw\">return</span> n;\n}","elixir":"<span class=\"com\"># cif_parse.exs — Elixir (String.split + pattern match)</span>\n<span class=\"kw\">defmodule</span> <span class=\"ty\">CIF</span> <span class=\"kw\">do</span>\n  <span class=\"kw\">def</span> <span class=\"fn\">parse</span>(text) <span class=\"kw\">when</span> <span class=\"fn\">is_binary</span>(text) <span class=\"kw\">do</span>\n    text\n    |&gt; <span class=\"ty\">String</span>.<span class=\"fn\">split</span>(<span class=\"str\">\"\\n\"</span>)\n    |&gt; <span class=\"ty\">Enum</span>.<span class=\"fn\">reduce</span>(%{}, <span class=\"kw\">fn</span> line, acc -&gt;\n      <span class=\"kw\">case</span> <span class=\"ty\">String</span>.<span class=\"fn\">split</span>(line) <span class=\"kw\">do</span>\n        [<span class=\"str\">\"_\"</span> &lt;&gt; k | [v | _]] -&gt; <span class=\"ty\">Map</span>.<span class=\"fn\">put</span>(acc, k, v)\n        _ -&gt; acc\n      <span class=\"kw\">end</span>\n    <span class=\"kw\">end</span>)\n  <span class=\"kw\">end</span>\n<span class=\"kw\">end</span>","scala":"<span class=\"com\">// cif_parse.sc — Scala (lines + collect)</span>\n<span class=\"kw\">def</span> <span class=\"fn\">cifParse</span>(text: <span class=\"ty\">String</span>): <span class=\"ty\">Map</span>[<span class=\"ty\">String</span>, <span class=\"ty\">String</span>] =\n    text.<span class=\"fn\">lines</span>.<span class=\"fn\">flatMap</span> { line =&gt;\n        <span class=\"kw\">val</span> parts = line.<span class=\"fn\">split</span>(<span class=\"str\">\"\\s+\"</span>)\n        <span class=\"kw\">if</span> (parts.length &gt;= <span class=\"num\">2</span> &amp;&amp; parts(<span class=\"num\">0</span>).<span class=\"fn\">startsWith</span>(<span class=\"str\">\"_\"</span>))\n            <span class=\"ty\">Some</span>(parts(<span class=\"num\">0</span>) -&gt; parts(<span class=\"num\">1</span>))\n        <span class=\"kw\">else</span> <span class=\"ty\">None</span>\n    }.toMap"};
+      function renderCode(lang) {
+        document.getElementById('code-block').innerHTML = CODE[lang] || '';
+        document.querySelectorAll('#lang-toggle button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+      }
+      document.querySelectorAll('#lang-toggle button').forEach(b => b.addEventListener('click', () => renderCode(b.dataset.lang)));
+      renderCode('python');
+
       (function setupRibbonTheme() {
         const KEY = 'aihpc-theme';
         const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');

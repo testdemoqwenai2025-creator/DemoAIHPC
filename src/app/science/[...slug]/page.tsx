@@ -34,6 +34,7 @@ interface SubdomainMeta {
 
 const SUBDOMAINS: Record<string, SubdomainMeta> = {
   'biology/molecular': { hub: 'Biology', hubHref: '/science/biology', title: 'Molecular Biology', staticHref: 'https://testdemoqwenai2025-creator.github.io/DemoAIHPC/science/biology/molecular.html', color: 'emerald' },
+  'biology/proteins': { hub: 'Biology', hubHref: '/science/biology', title: 'Proteins (3D Viewer)', staticHref: 'https://testdemoqwenai2025-creator.github.io/DemoAIHPC/science/biology/proteins.html', color: 'emerald' },
   'biology/imaging': { hub: 'Biology', hubHref: '/science/biology', title: 'Cell Imaging', staticHref: 'https://testdemoqwenai2025-creator.github.io/DemoAIHPC/science/biology/imaging.html', color: 'emerald' },
   'biology/systems': { hub: 'Biology', hubHref: '/science/biology', title: 'Systems Biology', staticHref: 'https://testdemoqwenai2025-creator.github.io/DemoAIHPC/science/biology/systems.html', color: 'emerald' },
   'biology/evolutionary': { hub: 'Biology', hubHref: '/science/biology', title: 'Evolutionary Biology', staticHref: 'https://testdemoqwenai2025-creator.github.io/DemoAIHPC/science/biology/evolutionary.html', color: 'emerald' },

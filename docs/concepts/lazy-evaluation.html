@@ -390,10 +390,12 @@
         <div class="popup-footer">
           <div class="meta">All client-side · no external services · data stays in your browser</div>
           <div class="actions">
+            <button class="act" id="act-py">▶ Execute in Python (Pyodide)</button>
             <button class="act" id="act-copy">⎘ Copy β̂</button>
             <button class="act" id="act-csv">⬇ CSV</button>
             <button class="act primary" id="act-receipt">⬇ Receipt</button>
           </div>
+          <div id="py-result" style="display:none; width:100%; margin-top:8px; padding:10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius:8px; font-family: 'SF Mono', Menlo, monospace; font-size: 12px; color: var(--text);"></div>
         </div>
       </div>
     </div>
@@ -762,6 +764,88 @@
         };
         downloadBlob('aihpc-receipt-' + Date.now() + '.json', JSON.stringify(receipt, null, 2), 'application/json');
       });
+
+      // ---- Pyodide integration (real Python execution in-browser) ----
+      // Loads Pyodide from the CDN on first click of "Execute in Python".
+      // After loading, runs the compute_outliers Python implementation
+      // against the same dataset and displays the result inline.
+      let pyodidePromise = null;
+      function loadPyodide() {
+        if (pyodidePromise) return pyodidePromise;
+        pyodidePromise = new Promise(async (resolve, reject) => {
+          try {
+            // Load the Pyodide bootstrap script from CDN (jsDelivr mirror).
+            // Pyodide is an open-source CPython compiled to WASM; the CDN
+            // serves the static assets (no server-side compute).
+            if (!window.loadPyodide) {
+              await new Promise((r, j) => {
+                const s = document.createElement('script');
+                s.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js';
+                s.onload = r;
+                s.onerror = () => j(new Error('Pyodide failed to load from CDN.'));
+                document.head.appendChild(s);
+              });
+            }
+            const py = await window.loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/' });
+            resolve(py);
+          } catch (e) { reject(e); }
+        });
+        return pyodidePromise;
+      }
+      async function runPython() {
+        const btn = document.getElementById('act-py');
+        const out = document.getElementById('py-result');
+        if (!lastResult) {
+          out.style.display = 'block';
+          out.innerHTML = '<span style="color: var(--danger);">Run the demo first (▶ Launch the popup experience), then press Execute in Python.</span>';
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = 'Loading Pyodide… (one-time ~10MB download)';
+        out.style.display = 'block';
+        out.textContent = 'Loading Pyodide runtime from CDN (one-time ~10MB download)...';
+        try {
+          const py = await loadPyodide();
+          btn.textContent = 'Executing Python…';
+          out.textContent = 'Pyodide loaded. Executing compute_outliers() in Python...';
+          // The Python source — mirror of the snippet shown in the code panel
+          const pySrc = `
+import math
+def compute_outliers(values):
+    n = len(values)
+    mean = sum(values) / n
+    var  = sum((v - mean) ** 2 for v in values) / n
+    std  = math.sqrt(var)
+    threshold = mean + 2 * std
+    return {
+        "n": n, "mean": mean, "std": std, "threshold": threshold,
+        "outliers": [v for v in values if v > threshold],
+    }
+result = compute_outliers(${JSON.stringify(lastResult.all)})
+import json
+print(json.dumps(result))
+`;
+          py.runPython(pySrc);
+          const pyResultStr = py.globals.get('result');
+          // pyResultStr is a Python dict; convert via repr-like JSON
+          const json = py.runPython('import json; json.dumps(result)');
+          const pyResult = JSON.parse(json);
+          out.innerHTML = `<span style="color: var(--accent-2);">✓ Python execution complete (via Pyodide / CPython 3.12 WASM):</span><br>` +
+            `<span style="color: var(--text-muted);">mean = </span><span style="color: var(--success);">${pyResult.mean.toFixed(6)}</span><br>` +
+            `<span style="color: var(--text-muted);">std = </span><span style="color: var(--success);">${pyResult.std.toFixed(6)}</span><br>` +
+            `<span style="color: var(--text-muted);">threshold = </span><span style="color: var(--success);">${pyResult.threshold.toFixed(6)}</span><br>` +
+            `<span style="color: var(--text-muted);">outliers = </span><span style="color: var(--danger);">[${pyResult.outliers.join(', ')}]</span><br>` +
+            `<span style="color: var(--text-muted-2); font-size: 10px;">Match JS impl: ${pyResult.mean.toFixed(4) === lastResult.mean.toFixed(4) ? 'YES ✓' : 'NO (drift)'}</span>`;
+          btn.textContent = '✓ Executed in Python';
+        } catch (e) {
+          out.innerHTML = `<span style="color: var(--danger);">Pyodide error: ${e.message}</span>`;
+          btn.textContent = '▶ Execute in Python (retry)';
+        } finally {
+          btn.disabled = false;
+          setTimeout(() => { btn.textContent = '▶ Execute in Python (Pyodide)'; }, 2000);
+        }
+      }
+      document.getElementById('act-py').addEventListener('click', runPython);
 
       // ---- Ribbon theme toggle ----
       (function setupRibbonTheme() {

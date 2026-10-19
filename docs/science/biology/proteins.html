@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="3D Protein Viewer — AIHPC Advanced. Render a sample protein structure (PDB-style) in 3D using Three.js. Drag to rotate, scroll to zoom. Pure client-side; the 3D scene renders in your browser." />
+    <title>3D Protein Viewer — AIHPC Advanced Science / Biology</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --domain:#10b981; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-elevated); font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+      h1 { font-size: 38px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#a7f3d0 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 720px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 10px; }
+      p { margin: 0 0 14px; }
+      .muted { color: var(--text-muted); }
+      ul { padding-left: 22px; color: var(--text-muted); }
+      ul li { margin-bottom: 6px; } ul li strong { color: var(--text); }
+      code { background: var(--bg-elevated); border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; font-size: 0.9em; }
+
+      /* 3D viewer */
+      .viewer {
+        margin: 24px 0;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        background: radial-gradient(circle at 50% 50%, rgba(16,185,129,0.05), transparent 70%), var(--bg-elevated);
+        position: relative;
+      }
+      .viewer-header {
+        padding: 12px 16px; border-bottom: 1px solid var(--border);
+        display: flex; justify-content: space-between; align-items: center; gap: 8px;
+        background: var(--bg-elevated-2);
+      }
+      .viewer-header .title { font-size: 13px; font-weight: 600; color: var(--text); }
+      .viewer-header .meta { font-size: 11px; color: var(--text-muted-2); font-family: "SF Mono", Menlo, monospace; }
+      .viewer-canvas-wrap {
+        position: relative; width: 100%; height: 420px; background: #000;
+      }
+      #three-canvas { display: block; width: 100%; height: 100%; }
+      .viewer-controls {
+        position: absolute; bottom: 12px; left: 12px;
+        display: flex; gap: 6px; flex-wrap: wrap;
+      }
+      .viewer-controls .btn {
+        background: rgba(11,15,26,0.7); border: 1px solid rgba(139,92,246,0.3);
+        color: var(--text); padding: 4px 10px; border-radius: 6px; cursor: pointer;
+        font-size: 11px; font-family: inherit; font-weight: 600;
+        backdrop-filter: blur(8px);
+      }
+      .viewer-controls .btn:hover { border-color: var(--accent); }
+      .viewer-legend {
+        position: absolute; top: 12px; right: 12px;
+        background: rgba(11,15,26,0.7); border: 1px solid var(--border);
+        border-radius: 8px; padding: 8px 10px;
+        backdrop-filter: blur(8px);
+        font-size: 10px; color: var(--text-muted);
+        display: flex; flex-direction: column; gap: 4px;
+      }
+      .viewer-legend .item { display: flex; align-items: center; gap: 6px; }
+      .viewer-legend .swatch { width: 8px; height: 8px; border-radius: 9999px; }
+      .viewer-loading {
+        position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+        color: var(--text-muted); font-size: 13px;
+        background: rgba(0,0,0,0.6);
+      }
+
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+
+      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.06), transparent 55%), #fafafa; color: #18181b; }
+      body.light .viewer, body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary, body.light .tag { background: white; border-color: #e5e7eb; }
+      body.light .viewer-canvas-wrap { background: #f3f4f6; }
+      body.light .lead, body.light .muted, body.light ul, body.light .meta { color: #4b5563; }
+      body.light code { background: #f3f4f6; border-color: #e5e7eb; }
+      body.light .ribbon-btn-primary { color: white; }
+    </style>
+  </head>
+  <body>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../../index.html">Home</a><a href="../../demos.html">Demos</a><a href="../../dashboard.html">Dashboard</a><a href="../../graph.html">Knowledge Graph</a><a href="../../benchmark.html">Agentic Benchmark</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu">
+            <a href="../../science-biology.html">Biology Hub</a>
+            <a href="../../science-chemistry.html">Chemistry Hub</a>
+            <a href="../../science-physics.html">Physics Hub</a>
+            <a href="../../science-maths.html">Mathematics Hub</a>
+          </div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu">
+            <a href="../../dashboard.html">Temporal Knowledge Graph Dashboard</a>
+            <a href="../../concepts.html">Concept Cards</a>
+            <a href="../../concepts/replayable-decision-traces.html">Replayable Decision Traces</a>
+            <a href="../../concepts/provenance-first.html">Provenance-First Computing</a>
+            <a href="../../concepts/lazy-evaluation.html">Lazy Evaluation as UX</a>
+            <a href="../../concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a>
+            <a href="../../concepts/audience-annotations.html">Audience-Specific Annotations</a>
+          </div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <p class="crumbs"><a href="../../science-biology.html">Biology Hub</a> / Proteins &middot; 3D Viewer</p>
+      <span class="tag">Science &middot; Biology &middot; Proteins &middot; 3D</span>
+      <h1>3D Protein Viewer</h1>
+      <p class="lead">
+        Render a sample protein backbone in 3D using Three.js. Drag to
+        rotate, scroll to zoom. The structure is a synthetic
+        alpha-helix backbone (40 residues) generated procedurally — a
+        placeholder for the real AlphaFold 3-style prediction model that
+        will land in a later phase. Pure client-side; no external
+        services.
+      </p>
+
+      <div class="viewer">
+        <div class="viewer-header">
+          <span class="title">Synthetic α-helix backbone (40 C-α residues)</span>
+          <span class="meta" id="viewer-meta">Loading Three.js…</span>
+        </div>
+        <div class="viewer-canvas-wrap">
+          <canvas id="three-canvas"></canvas>
+          <div class="viewer-legend">
+            <div class="item"><span class="swatch" style="background:#10b981"></span>C-α atoms</div>
+            <div class="item"><span class="swatch" style="background:#06b6d4"></span>Peptide bonds</div>
+            <div class="item"><span class="swatch" style="background:#f59e0b"></span>Side chains (R)</div>
+          </div>
+          <div class="viewer-controls">
+            <button class="btn" id="ctrl-rotate">▶ Auto-rotate</button>
+            <button class="btn" id="ctrl-reset">↺ Reset view</button>
+            <button class="btn" id="ctrl-ribbon">⬇ PDB (40 atoms)</button>
+          </div>
+          <div class="viewer-loading" id="viewer-loading">Loading Three.js from CDN…</div>
+        </div>
+      </div>
+
+      <h2>What you&apos;re seeing</h2>
+      <p class="muted">
+        The 3D scene renders a synthetic alpha-helix backbone. Each
+        green sphere is a C-alpha atom; cyan tubes are peptide bonds
+        connecting them; amber sticks are stub side chains pointing
+        outward. The helix is generated procedurally using the
+        parametric equations for an ideal α-helix:
+        <code>r = 2.3 Å, rise = 1.5 Å/residue, 3.6 residues/turn</code>.
+      </p>
+
+      <h2>How it was built</h2>
+      <ul>
+        <li><strong>Three.js</strong> loaded from CDN (jsDelivr mirror). No bundler — just a script tag. Pure client-side WebGL.</li>
+        <li><strong>Procedural geometry</strong> — the helix is generated in JS using the standard parametric form. No external PDB file is loaded.</li>
+        <li><strong>OrbitControls</strong> — drag to rotate, scroll to zoom. Standard Three.js addon.</li>
+        <li><strong>Color coding</strong> — green spheres (C-α), cyan bonds (peptide), amber sticks (side chains). Matches the legend top-right.</li>
+        <li><strong>Download PDB</strong> — the same procedural helix is exported as a minimal PDB file (ATOM records with x/y/z coordinates). Generated in-browser as a Blob.</li>
+      </ul>
+
+      <h2>What&apos;s coming next</h2>
+      <ul>
+        <li><strong>Real PDB parsing</strong> — load any PDB file from user upload (no server). Parse ATOM records, render backbone + side chains + cartoon ribbon representation.</li>
+        <li><strong>AlphaFold 3-style prediction</strong> — when the ML model lands (Phase 5+), this viewer will render its predicted structure with per-residue pLDDT colouring.</li>
+        <li><strong>Multiple representations</strong> — cartoon (ribbon), stick, sphere, surface. Standard molecular-graphics viewer modes.</li>
+        <li><strong>Pyodide + BioPython</strong> — parse PDB in Python via BioPython (loaded via Pyodide), pass geometry to Three.js.</li>
+      </ul>
+
+      <div class="meta">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/science/biology/proteins.html</code>. Next.js route: <code>/science/biology/proteins</code>. Three.js loaded from <code>cdn.jsdelivr.net</code> (open-source CDN; no server-side compute). Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <!-- Three.js from CDN (jsDelivr mirror) -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module">
+      import * as THREE from 'three';
+      import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+      // ---- Generate a synthetic alpha-helix backbone ----
+      // Standard ideal α-helix: r = 2.3 Å, rise = 1.5 Å/residue, 3.6 res/turn
+      // So twist per residue = 360° / 3.6 = 100°
+      const N = 40;
+      const helixRadius = 2.3;
+      const risePerResidue = 1.5;
+      const twistPerResidue = (100 * Math.PI) / 180;
+
+      function helixPos(i) {
+        const t = i * twistPerResidue;
+        return new THREE.Vector3(
+          helixRadius * Math.cos(t),
+          i * risePerResidue,
+          helixRadius * Math.sin(t)
+        );
+      }
+
+      // Side chain direction (outward from helix axis)
+      function sideChainDir(i) {
+        const t = i * twistPerResidue;
+        return new THREE.Vector3(Math.cos(t), 0, Math.sin(t)).normalize();
+      }
+
+      // ---- Three.js setup ----
+      const canvas = document.getElementById('three-canvas');
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      const wrap = canvas.parentElement;
+      function size() {
+        const w = wrap.clientWidth;
+        const h = wrap.clientHeight;
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(w, h, false);
+        return { w, h };
+      }
+      let { w, h } = size();
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x000000);
+      scene.fog = new THREE.Fog(0x000000, 30, 80);
+
+      const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+      // Center the helix in view
+      const helixCenter = helixPos(N / 2);
+      camera.position.set(20, helixCenter.y, 20);
+      camera.lookAt(0, helixCenter.y, 0);
+
+      const controls = new OrbitControls(camera, canvas);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.1;
+      controls.autoRotate = false;
+      controls.autoRotateSpeed = 1.0;
+      controls.target.set(0, helixCenter.y, 0);
+
+      // Lights
+      scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      dirLight.position.set(10, 20, 10);
+      scene.add(dirLight);
+      const pointLight = new THREE.PointLight(0x06b6d4, 0.6, 100);
+      pointLight.position.set(-15, helixCenter.y, -15);
+      scene.add(pointLight);
+
+      // ---- Render the helix ----
+      // C-alpha spheres
+      const cAlphaGeo = new THREE.SphereGeometry(0.4, 16, 16);
+      const cAlphaMat = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.4, metalness: 0.2 });
+      const positions = [];
+      for (let i = 0; i < N; i++) {
+        const p = helixPos(i);
+        positions.push(p);
+        const sphere = new THREE.Mesh(cAlphaGeo, cAlphaMat);
+        sphere.position.copy(p);
+        scene.add(sphere);
+      }
+
+      // Peptide bonds (cylinders between consecutive C-alphas)
+      const bondMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.5, metalness: 0.3 });
+      function cylinderBetween(p1, p2, radius, mat) {
+        const dir = new THREE.Vector3().subVectors(p2, p1);
+        const len = dir.length();
+        const geo = new THREE.CylinderGeometry(radius, radius, len, 12);
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.copy(p1).add(p2).multiplyScalar(0.5);
+        mesh.lookAt(p2);
+        mesh.rotateX(Math.PI / 2);
+        return mesh;
+      }
+      for (let i = 0; i < N - 1; i++) {
+        scene.add(cylinderBetween(positions[i], positions[i+1], 0.12, bondMat));
+      }
+
+      // Side chains (amber sticks pointing outward)
+      const sideMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.6, metalness: 0.1 });
+      for (let i = 0; i < N; i++) {
+        const start = positions[i];
+        const dir = sideChainDir(i);
+        const end = new THREE.Vector3().copy(start).addScaledVector(dir, 1.8);
+        scene.add(cylinderBetween(start, end, 0.08, sideMat));
+        // Side-chain tip sphere
+        const tipGeo = new THREE.SphereGeometry(0.25, 12, 12);
+        const tip = new THREE.Mesh(tipGeo, sideMat);
+        tip.position.copy(end);
+        scene.add(tip);
+      }
+
+      // Hide loading overlay
+      document.getElementById('viewer-loading').style.display = 'none';
+      document.getElementById('viewer-meta').textContent = `${N} C-α · ${(N * risePerResidue).toFixed(1)} Å long · WebGL renderer`;
+
+      // ---- Controls ----
+      document.getElementById('ctrl-rotate').addEventListener('click', (e) => {
+        controls.autoRotate = !controls.autoRotate;
+        e.target.textContent = controls.autoRotate ? '⏸ Stop rotation' : '▶ Auto-rotate';
+      });
+      document.getElementById('ctrl-reset').addEventListener('click', () => {
+        camera.position.set(20, helixCenter.y, 20);
+        controls.target.set(0, helixCenter.y, 0);
+        controls.update();
+      });
+      document.getElementById('ctrl-ribbon').addEventListener('click', () => {
+        // Export as minimal PDB
+        const lines = ['HEADER    SYNTHETIC ALPHA-HELIX', `TITLE     AIHPC ADVANCED PROCEDURAL HELIX (${N} RESIDUES)`];
+        lines.push(`REMARK   1 GENERATED BY AIHPC ADVANCED 3D PROTEIN VIEWER`);
+        lines.push(`REMARK   2 IDEAL ALPHA-HELIX: R=${helixRadius} RISE=${risePerResidue} TWIST=100DEG`);
+        for (let i = 0; i < N; i++) {
+          const p = positions[i];
+          const x = p.x.toFixed(3).padStart(8, ' ');
+          const y = p.y.toFixed(3).padStart(8, ' ');
+          const z = p.z.toFixed(3).padStart(8, ' ');
+          const resName = 'ALA';
+          const resSeq = (i + 1).toString().padStart(4, ' ');
+          lines.push(`ATOM  ${resSeq}  CA  ${resName} A ${resSeq}    ${x}${y}${z}  1.00 99.99           C`);
+        }
+        lines.push('TER', 'END');
+        const blob = new Blob([lines.join('\n') + '\n'], { type: 'text/x-pdb;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'aihpc-synthetic-helix-' + Date.now() + '.pdb';
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      // ---- Resize handler ----
+      function onResize() {
+        const dim = size();
+        camera.aspect = dim.w / dim.h;
+        camera.updateProjectionMatrix();
+      }
+      window.addEventListener('resize', onResize);
+
+      // ---- Animate ----
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // ---- Ribbon theme toggle ----
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        let initial = 'dark';
+        try { const stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', () => { const next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

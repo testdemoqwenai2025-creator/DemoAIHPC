@@ -40,6 +40,7 @@ const GROUPS: NavGroup[] = [
       { href: '/demos', label: 'Demos' },
       { href: '/preview1', label: 'Preview 1' },
       { href: '/microservices', label: 'Microservices' },
+      { href: '/subscribe', label: 'Subscribe' },
     ],
   },
   {
@@ -144,6 +145,11 @@ const GROUPS: NavGroup[] = [
         href: '/concepts/audience-annotations',
         label: 'Audience-Specific Annotations',
         desc: 'Student / researcher / executive',
+      },
+      {
+        href: '/concepts/provenance-chain',
+        label: 'Provenance Chain',
+        desc: 'Footpaths & chains · how a result was assembled',
       },
     ],
   },
