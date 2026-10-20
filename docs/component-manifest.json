@@ -1,0 +1,162 @@
+{
+  "version": "46",
+  "generated": "2027-01-05",
+  "description": "AIHPC Advanced — Component Manifest (Bill of Materials). Lists all canvas-based interactive components with mount points, script paths, lazy-load status, and concept-card links. The audit script verifies every component in this manifest is loaded on its declared page and has a concept card (if applicable).",
+  "components": [
+    {
+      "name": "animated-derivation.js",
+      "global": "AIHPC_ANIM",
+      "script": "docs/animated-derivation.js",
+      "mount_pages": ["all pages with .derivation-step blocks"],
+      "lazy_load": false,
+      "concept_card": null,
+      "description": "Canvas-based Math→Code derivation animator with Play/Pause/Replay/Record-WebM/Share",
+      "phase": 28
+    },
+    {
+      "name": "graph-table-sync.js",
+      "global": "AIHPC_GTS",
+      "script": "docs/graph-table-sync.js",
+      "mount_pages": ["science-ml.html", "science/physics/quantum.html", "all concept cards with sample_data"],
+      "lazy_load": false,
+      "concept_card": null,
+      "description": "Animated graph-table sync: data table rows appear on SVG graph one at a time, with inflection-point math annotations. Supports 2D + 3D (loss-landscape trajectory) modes.",
+      "phase": "32-37"
+    },
+    {
+      "name": "nd-viewer.js",
+      "global": "AIHPC_ND",
+      "script": "docs/nd-viewer.js",
+      "mount_pages": ["concepts/lazy-evaluation.html"],
+      "lazy_load": true,
+      "concept_card": "concepts/lazy-evaluation.html",
+      "description": "N-D hypercube viewer (4-10D) — projects N-D vertices to 3D via rotation chain. Lazy-loaded in modal.",
+      "phase": 35
+    },
+    {
+      "name": "bloch-sphere.js",
+      "global": "AIHPC_BLOCH",
+      "script": "docs/bloch-sphere.js",
+      "mount_pages": ["bloch.html", "quantum-shorts.html"],
+      "lazy_load": false,
+      "concept_card": null,
+      "description": "3D Bloch sphere with 9 scenes: ground, Hadamard, Rabi, phase S, measurement, decoherence, Bell |Φ+⟩, Bell singlet |Ψ-⟩, CHSH violation. Record-WebM.",
+      "phase": "37-40"
+    },
+    {
+      "name": "ml-etl.js",
+      "global": "AIHPC_ML_ETL",
+      "script": "docs/ml-etl.js",
+      "mount_pages": ["science-ml.html", "playground.html"],
+      "lazy_load": false,
+      "concept_card": null,
+      "description": "CSV upload (y_true, y_pred) → live loss computation (MSE/MAE/log-cosh/Huber/KL/cosine) + push to GTS graphs.",
+      "phase": 37
+    },
+    {
+      "name": "molecule-3d.js",
+      "global": "AIHPC_MOL3D",
+      "script": "docs/molecule-3d.js",
+      "mount_pages": ["science-cheminformatics.html", "playground.html"],
+      "lazy_load": false,
+      "concept_card": null,
+      "description": "3D ball-and-stick molecule viewer: SMILES→3D (Fibonacci sphere layout), CPK palette, pharmacophore overlay, 3D QSAR surface, N-D property strip.",
+      "phase": 38
+    },
+    {
+      "name": "medical-imaging.js",
+      "global": "AIHPC_MEDIMG",
+      "script": "docs/medical-imaging.js",
+      "mount_pages": ["science-biology.html", "medical-atlas.html", "playground.html"],
+      "lazy_load": false,
+      "concept_card": null,
+      "description": "Multi-organ medical-imaging viewer: 6 peripheral slices (CT/MRI/X-ray/PET-CT/sagittal) with animated scanner sweep + 8 CPK-coloured organs + DICOM consumer.",
+      "phase": "39-41"
+    },
+    {
+      "name": "vqc-animator.js",
+      "global": "AIHPC_VQC",
+      "script": "docs/vqc-animator.js",
+      "mount_pages": ["science/physics/quantum.html", "quantum-shorts.html"],
+      "lazy_load": false,
+      "concept_card": null,
+      "description": "Variational quantum circuit animator: parameterised RZ gates + CNOT ring + parameter-shift training + barren-plateau variance chart. 2-8 qubits.",
+      "phase": 39
+    },
+    {
+      "name": "fock-state-viewer.js",
+      "global": "AIHPC_FOCK",
+      "script": "docs/fock-state-viewer.js",
+      "mount_pages": ["science/physics/quantum.html", "quantum-shorts.html"],
+      "lazy_load": true,
+      "concept_card": "concepts/fock-state.html",
+      "description": "Second-quantisation Fock state viewer: Hermite-polynomial wavefunctions + energy ladder + animated a/a† operators. 8 states. Record-WebM.",
+      "phase": 42
+    },
+    {
+      "name": "coupled-oscillator.js",
+      "global": "AIHPC_COUPLE",
+      "script": "docs/coupled-oscillator.js",
+      "mount_pages": ["science/physics/quantum.html"],
+      "lazy_load": true,
+      "concept_card": null,
+      "description": "Coupled quantum oscillators: 4-panel viewer (mode A/B energy levels + joint state matrix + correlation chart). Scenes: product, 2-mode squeezed, HOM, NOON.",
+      "phase": 45
+    },
+    {
+      "name": "quantum-circuit-canvas.js",
+      "global": "AIHPC_QCIRCUIT",
+      "script": "docs/quantum-circuit-canvas.js",
+      "mount_pages": ["science/physics/quantum.html"],
+      "lazy_load": true,
+      "concept_card": null,
+      "description": "Interactive quantum-circuit builder: drag-and-drop gates (H/X/Y/Z/S/T/CNOT) onto grid + real-time state vector + presets (Bell/GHZ/superposition/Grover) + measure.",
+      "phase": 46
+    },
+    {
+      "name": "attention-heatmap.js",
+      "global": "AIHPC_ATTN",
+      "script": "docs/attention-heatmap.js",
+      "mount_pages": ["science-ml.html", "playground.html"],
+      "lazy_load": false,
+      "concept_card": null,
+      "description": "Live attention heat-map: Q·K^T/√d_k weights as square heat-map with multi-head selector. Token-input box updates live.",
+      "phase": 40
+    },
+    {
+      "name": "segmentation-pipeline.js",
+      "global": "AIHPC_SEG",
+      "script": "docs/segmentation-pipeline.js",
+      "mount_pages": ["science-biology.html"],
+      "lazy_load": true,
+      "concept_card": null,
+      "description": "Medical image segmentation pipeline: MRI→prediction mask→3D reconstruction + Dice/IoU/Hausdorff/sensitivity/specificity + tumour volume (cm³).",
+      "phase": 43
+    },
+    {
+      "name": "biomolecular-dynamics.js",
+      "global": "AIHPC_BIODYN",
+      "script": "docs/biomolecular-dynamics.js",
+      "mount_pages": ["science-biology.html"],
+      "lazy_load": true,
+      "concept_card": null,
+      "description": "BioEmu2-style 4-panel biomolecular dynamics: structure prediction + large complexes + equilibrium sampling + dynamics. Live pLDDT/ΔG/RMSD.",
+      "phase": 43
+    },
+    {
+      "name": "scientific-uploader.js",
+      "global": "AIHPC_UPLOADER",
+      "script": "docs/scientific-uploader.js",
+      "mount_pages": ["science-biology.html", "science-cheminformatics.html", "medical-atlas.html", "playground.html"],
+      "lazy_load": false,
+      "concept_card": null,
+      "description": "Multi-format scientific+big-data file uploader: PDB/SDF/CSV/Parquet/Arrow/HDF5/NPY/DICOM/FITS/VTK/JSON/HDFS with magic-bytes detection + consumer registration.",
+      "phase": "40-41"
+    }
+  ],
+  "total_components": 15,
+  "total_pages_with_components": 12,
+  "concept_cards_with_components": 2,
+  "lazy_loaded_components": 6,
+  "phases_covered": "28-46"
+}

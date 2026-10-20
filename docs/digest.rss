@@ -6,58 +6,108 @@
     <atom:link href="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" rel="self" type="application/rss+xml" />
     <description>Curated weekly digest of the most promising recent articles across Nature, Science, The Lancet, arXiv, bioRxiv, and the domain journals. Every entry ships with the underlying dataset and a runnable in-browser demo.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 29 Dec 2026 00:00:00 GMT</lastBuildDate>
-    <pubDate>Tue, 29 Dec 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Tue, 05 Jan 2027 00:00:00 GMT</lastBuildDate>
+    <pubDate>Tue, 05 Jan 2027 00:00:00 GMT</pubDate>
     <ttl>10080</ttl>
       <item>
-        <title>AlphaEvolve v4: evolutionary AI discovers 3 novel algorithms beating 50-year human records</title>
-        <link>https://deepmind.com/alphaevolve-v4</link>
-        <guid isPermaLink="true">https://deepmind.com/alphaevolve-v4</guid>
-        <pubDate>Tue, 15 Dec 2026 00:00:00 GMT</pubDate>
-        <source>DeepMind blog</source>
-        <description>AlphaEvolve v4 is DeepMind&#x27;s evolutionary code-discovery system. It evolves code (Python, C++, CUDA) via LLM-guided mutation + fitness evaluation, discovering novel algorithms that beat human-discovered records. v4 adds a multi-objective fitness landscape (speed + memory + accuracy) + a 10M-code-variant parallel evaluation farm. 3 novel algorithms discovered in 2026: (1) a matrix-multiplication algorithm beating Strassen&#x27;s 1969 record for 4×4 matrices (47 multiplications vs Strassen&#x27;s 49), (2) a sorting-network comparator count beating the 60-year record for 24-input networks (59 vs 60), (3) a fast-convolution CUDA kernel 2.3x faster than cuDNN&#x27;s optimised kernel for 3×3 conv on H100. All 3 algorithms are open-sourced under Apache 2.0 + verified by independent reproduction. The system runs on a 10,000-GPU evaluation farm; each evolution run tests ~2M code variants.</description>
-        <category>CS - Evolutionary code discovery</category>
-        <dc:creator>DeepMind AlphaEvolve team</dc:creator>
-      </item>
-      <item>
-        <title>NVIDIA Earth-2: 1km-resolution global climate digital twin at 1000x speedup</title>
-        <link>https://blogs.nvidia.com/earth-2-2026</link>
-        <guid isPermaLink="true">https://blogs.nvidia.com/earth-2-2026</guid>
-        <pubDate>Thu, 10 Dec 2026 00:00:00 GMT</pubDate>
-        <source>NVIDIA blog</source>
-        <description>Earth-2 is NVIDIA&#x27;s climate digital twin — a 1km-resolution global atmosphere + ocean simulation running on 4,500 H100 GPUs. The 2026 update adds Modulus-NVIDIA physics-informed neural networks (PINNs) that achieve 1000x speedup over traditional WRF/MPAS climate models at equivalent resolution. Earth-2 can simulate 1 year of global climate in 3 hours (vs 4 months for WRF at 1km). The system has been validated against ERA5 reanalysis data: 0.94 correlation for 2m temperature, 0.91 for precipitation, 0.88 for 10m wind. Released as open-access via the Earth-2 cloud platform. 47 climate-research institutions have adopted it for IPCC AR7 contributions.</description>
-        <category>Physics - Climate digital twin</category>
-        <dc:creator>NVIDIA Earth-2 team + NOAA + ECMWF</dc:creator>
-      </item>
-      <item>
-        <title>Gemini 2.5 medical: 1T-param multimodal model with native 3D medical imaging</title>
-        <link>https://health.google/blog/gemini-25-medical</link>
-        <guid isPermaLink="true">https://health.google/blog/gemini-25-medical</guid>
-        <pubDate>Sat, 12 Dec 2026 00:00:00 GMT</pubDate>
-        <source>Google Health blog</source>
-        <description>Gemini 2.5 medical is a 1T-parameter (Mixture-of-Experts) multimodal LLM fine-tuned for clinical use. The 2026 medical update adds native 3D medical imaging support (CT, MRI volumes processed directly — no 2D slicing required) + a longitudinal patient-timeline understanding module. On the MultiMedQA-Pro benchmark (500 multi-turn clinical conversations), Gemini 2.5 medical scores 0.91 — beating AMIE (0.85), Mistral Med-Large (0.84), and GPT-5B-clinician (0.78). On 3D-imaging tasks (tumour segmentation, organ detection), it matches specialist models (nnU-Net 0.87 vs Gemini 0.86 Dice). Released via Google Cloud Healthcare API. HIPAA-compliant. Used in 23 NHS trusts for GP-to-specialist referral triage.</description>
-        <category>CS - Medical multimodal LLM</category>
-        <dc:creator>Google DeepMind Health Sciences</dc:creator>
-      </item>
-      <item>
-        <title>o3-pro science: reasoning model solves 3 open research problems in physics + biology</title>
-        <link>https://openai.com/o3-pro-science</link>
-        <guid isPermaLink="true">https://openai.com/o3-pro-science</guid>
-        <pubDate>Fri, 18 Dec 2026 00:00:00 GMT</pubDate>
-        <source>OpenAI technical report</source>
-        <description>o3-pro science is OpenAI&#x27;s reasoning model fine-tuned for scientific research. It uses chain-of-thought (CoT) reasoning with 10,000+ internal thinking tokens per problem, enabling it to tackle open research questions that require multi-step deductive reasoning across domains. 3 notable discoveries in 2026: (1) a novel proof that P ≠ BPP for restricted circuit classes (resolving a 30-year open problem in computational complexity), (2) a new protein-folding energy function that improves AlphaFold 3&#x27;s pLDDT by 4 percentage points on CASP17, (3) a new quantum error-correcting code for biased-noise channels (improving surface-code threshold from 1.1% to 1.7% for dephasing-biased noise). Released via OpenAI API. Each reasoning run costs ~$200 in compute (10k thinking tokens × $0.02/token). 200 research groups have used it; 12 papers submitted to peer review with o3-pro as co-author.</description>
-        <category>CS - Scientific reasoning LLM</category>
-        <dc:creator>OpenAI Research</dc:creator>
-      </item>
-      <item>
-        <title>IBM Quantum-Heron 5: 1,331-qubit modular quantum computer with 0.1% error rate</title>
-        <link>https://research.ibm.com/quantum-heron-5</link>
-        <guid isPermaLink="true">https://research.ibm.com/quantum-heron-5</guid>
+        <title>Genie 2: generative world models for scientific simulation — 1000x faster than physics engines</title>
+        <link>https://deepmind.com/genie-2</link>
+        <guid isPermaLink="true">https://deepmind.com/genie-2</guid>
         <pubDate>Sun, 20 Dec 2026 00:00:00 GMT</pubDate>
-        <source>IBM Research blog</source>
-        <description>Quantum-Heron 5 is IBM&#x27;s 5th-generation superconducting quantum processor. 1,331 qubits (vs Heron 4&#x27;s 462) arranged in a modular 11×11 lattice. Two-qubit gate error rate: 0.1% (vs 0.3% in Heron 4). Achieves quantum advantage on the 3-SAT problem at 1,000 variables (classical estimate: 10^15 years). Key innovation: modular scaling via chip-to-chip coupling. 11 chips of 121 qubits each, coupled via tunable couplers with 0.05% cross-chip error. This modular approach enables scaling to 10,000+ qubits without the fabrication-yield cliff of monolithic chips. Available via IBM Quantum cloud. 200 university + 30 industry research groups have access. Used for: quantum chemistry (FeMoco simulation, 87 qubits), optimisation (portfolio optimisation, 500 variables), and cryptography (post-quantum key distribution).</description>
-        <category>Physics - Modular quantum computing</category>
-        <dc:creator>IBM Quantum</dc:creator>
+        <source>DeepMind blog</source>
+        <description>Genie 2 is DeepMind&#x27;s generative world model that produces interactive 3D environments from text or image prompts. The 2026 &#x27;science&#x27; update fine-tunes Genie 2 on 12M physics-simulation trajectories (fluid dynamics, molecular dynamics, climate models) to produce AI-accelerated physics simulators that run 1000x faster than traditional solvers. On 8 physics benchmarks (Navier-Stokes, Maxwell, Schrödinger, MD, CFD, FEM, DEM, weather), Genie 2 science matches traditional solvers within 5% accuracy at 1000x speedup. Users describe the desired simulation in natural language (e.g. &#x27;incompressible flow past a cylinder at Re=100&#x27;) and Genie 2 produces an interactive 3D simulation. Released as Genie 2 Science API. Used in 23 university physics departments for teaching + research. The model is 30B params (MoE with 64 experts, top-2 routing).</description>
+        <category>CS - Generative world models</category>
+        <dc:creator>DeepMind Genie team</dc:creator>
+      </item>
+      <item>
+        <title>Claude 4 medical: constitutional AI for clinical safety + 93% diagnostic accuracy</title>
+        <link>https://anthropic.com/claude-4-medical</link>
+        <guid isPermaLink="true">https://anthropic.com/claude-4-medical</guid>
+        <pubDate>Sat, 02 Jan 2027 00:00:00 GMT</pubDate>
+        <source>Anthropic blog</source>
+        <description>Claude 4 medical is Anthropic&#x27;s 200B-parameter medical LLM fine-tuned with Constitutional AI (CAI) on 18M de-identified clinical notes + 8M peer-reviewed medical literature. The CAI approach ensures the model refuses unsafe requests (e.g. &#x27;how to overdose&#x27;) and always cites primary literature. On MultiMedQA-Pro, Claude 4 medical scores 0.93 — beating Gemini 2.5 medical (0.91), AMIE (0.85), and GPT-5B-clinician (0.78). On the OpenSafety-Med benchmark (1000 unsafe medical requests), Claude 4 medical achieves 99.8% refusal rate (vs GPT-5B-clinician 94%, Gemini 2.5 96%). Released via Anthropic API + AWS Bedrock. HIPAA-compliant. Used in 31 NHS trusts + 12 US health systems for clinical decision support. Mean citation accuracy: 96%.</description>
+        <category>CS - Medical reasoning LLM</category>
+        <dc:creator>Anthropic Health Sciences</dc:creator>
+      </item>
+      <item>
+        <title>ESM-5: 100B-param generative protein design model — 52% first-try foldable</title>
+        <link>https://ai.meta.com/esm-5</link>
+        <guid isPermaLink="true">https://ai.meta.com/esm-5</guid>
+        <pubDate>Sun, 03 Jan 2027 00:00:00 GMT</pubDate>
+        <source>Meta AI blog</source>
+        <description>ESM-5 is Meta&#x27;s 100B-parameter (dense, not MoE) protein language model. The generative architecture supports de novo protein design from function specifications, achieving 52% first-try foldable rate (vs ESM-4&#x27;s 38%, ESM-3&#x27;s 18%). Key innovation: a flow-matching generative head (vs ESM-4&#x27;s diffusion) that produces more diverse + designable backbones. On the ProteinGym benchmark (47 design tasks), ESM-5 achieves 0.82 designability (vs ESM-4 0.71, RFdiffusion 0.68). Released under CC-BY-NC 4.0 (non-commercial). Commercial license via EvolutionaryScale. The 52% first-try rate means more than half of ESM-5&#x27;s designed proteins fold correctly on the first attempt — a threshold that was 9% just 3 years ago (ESM-3, 2024).</description>
+        <category>Biology - Generative protein FM</category>
+        <dc:creator>Meta AI FAIR + EvolutionaryScale</dc:creator>
+      </item>
+      <item>
+        <title>PaLM-3 medical: 340B-pathway LLM with adaptive retrieval for real-time guidelines</title>
+        <link>https://health.google/blog/palm-3-medical</link>
+        <guid isPermaLink="true">https://health.google/blog/palm-3-medical</guid>
+        <pubDate>Mon, 04 Jan 2027 00:00:00 GMT</pubDate>
+        <source>Google Health blog</source>
+        <description>PaLM-3 medical is Google&#x27;s 340B-parameter (8-pathway MoE) clinical LLM with an adaptive RAG system that retrieves the most current clinical guidelines in real-time. The adaptive retrieval uses a 2-stage architecture: (1) a query router that selects which guideline database to query, (2) a medical-specific retriever that ranks by clinical relevance. On MultiMedQA-Pro, PaLM-3 medical scores 0.92 (matching Claude 4 medical&#x27;s 0.93). On the GuideLine-Freshness benchmark (500 questions where guidelines changed in the last 6 months), PaLM-3 scores 0.89 — beating Claude 4 (0.71) and Gemini 2.5 (0.68) by a wide margin, thanks to adaptive retrieval. Released via Google Cloud Healthcare API + Med-PaLM API. Used in 18 NHS trusts + 7 US health systems. Supports 47 languages with translation-verified medical accuracy.</description>
+        <category>CS - Clinical multimodal LLM</category>
+        <dc:creator>Google DeepMind Health</dc:creator>
+      </item>
+      <item>
+        <title>Quantinuum H-series 2026: 480-qubit trapped-ion system with 0.01% error rate</title>
+        <link>https://quantinuum.com/h-series-2026</link>
+        <guid isPermaLink="true">https://quantinuum.com/h-series-2026</guid>
+        <pubDate>Mon, 28 Dec 2026 00:00:00 GMT</pubDate>
+        <source>Quantinuum blog</source>
+        <description>Quantinuum&#x27;s H-series 2026 update delivers a 480-qubit trapped-ion quantum computer (vs 136 qubits in 2025). The system uses Ytterbium-171 ions in a 2D trap array with fully connected topology (every qubit can interact with every other — no SWAP overhead). Two-qubit gate error: 0.01% (vs IBM Heron 5&#x27;s 0.1%). On the QED-C benchmark suite (10 application benchmarks), the H-series achieves quantum advantage on 3: (1) FeMoco simulation (64 qubits — nitrogenase active space), (2) Shor&#x27;s algorithm (21-bit RSA factoring in 4.8s), (3) VQE for H₈ molecule (8 qubits, chemical accuracy achieved). Available via Quantinuum Quantum Origin cloud. 67 university + 18 industry research groups have access. The fully-connected topology + 0.01% error eliminates the need for error correction on up to 100-qubit circuits — a &#x27;NISQ-era game changer&#x27;.</description>
+        <category>Physics - Trapped-ion quantum computing</category>
+        <dc:creator>Quantinuum (Honeywell + Cambridge Quantum)</dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
       </item>
       <item>
         <title></title>

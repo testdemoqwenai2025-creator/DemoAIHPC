@@ -403,6 +403,20 @@
         </div>
       </section>
 
+      <!-- Phase 46: Interactive Quantum Circuit Builder -->
+      <section style="margin: 32px 0; padding: 24px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px);">
+        <p class="h-tag" style="color: #10b981;">Phase 46 · Interactive Quantum Circuit Builder</p>
+        <h2 style="font-size: 22px; margin: 8px 0 12px; background: linear-gradient(90deg,#10b981,#06b6d4); -webkit-background-clip: text; background-clip: text; color: transparent;">Drag-and-drop quantum gates → real-time state vector</h2>
+        <p style="font-size: 14px; color: var(--text-muted, #9ca3af); max-width: 920px;">Build your own quantum circuit: select a gate from the palette (H, X, Y, Z, S, T, CNOT), then click on the circuit grid to place it. The state vector |ψ⟩ updates in real-time as you add or remove gates. Load presets: <strong>Bell |Φ+⟩</strong>, <strong>GHZ 3-qubit</strong>, <strong>all-superposition</strong>, <strong>Grover 2-qubit</strong>. Press <strong>Measure</strong> to collapse the state (Born's rule). Works for 2-6 qubits (up to 64-element state vector). Pure client-side — no external services.</p>
+        <div style="margin-top: 20px;">
+          <div id="quantum-circuit-container"></div>
+        </div>
+        <div style="margin-top: 16px; padding: 12px; background: rgba(11,15,26,0.6); border-radius: 8px; border: 1px solid var(--border, #1f2937); font-size: 11px; line-height: 1.7; color: var(--text-muted, #9ca3af);">
+          <strong style="color: #10b981;">Math:</strong> Each gate is a 2×2 unitary matrix applied to one qubit: H = (1/√2)·[[1,1],[1,-1]], X = [[0,1],[1,0]], etc. CNOT is a 2-qubit gate: |c,t⟩ → |c, c⊕t⟩. The state |ψ⟩ evolves as each gate is applied left-to-right: |ψ_final⟩ = U_n · ... · U_2 · U_1 · |0...0⟩.<br/>
+          <strong style="color: #06b6d4;">References:</strong> Nielsen & Chuang (Quantum Computation and Quantum Information, 2010); Qiskit Textbook (IBM, 2024); Cirq (Google, 2024); PennyLane (Xanadu, 2024).
+        </div>
+      </section>
+
       <h2>Math &rarr; Code derivation</h2>
       <div class="derivation-step">
         <strong>Step 1: The qubit</strong>
@@ -565,9 +579,30 @@
           window.addEventListener('scroll', load, { once: true, passive: true });
         }
       })();
+
+      // Phase 46: lazy-mount quantum-circuit-canvas
+      (function () {
+        var loaded = false;
+        var el = document.getElementById('quantum-circuit-container');
+        if (!el) return;
+        function load() {
+          if (loaded || !window.AIHPC_QCIRCUIT) return;
+          loaded = true;
+          AIHPC_QCIRCUIT.mount('quantum-circuit-container', { nQubits: 3 });
+        }
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (e.isIntersecting) { load(); io.disconnect(); } });
+          }, { rootMargin: '200px' });
+          io.observe(el);
+        } else {
+          window.addEventListener('scroll', load, { once: true, passive: true });
+        }
+      })();
     </script>
     <script src="../../vqc-animator.js"></script>
     <script src="../../fock-state-viewer.js" defer></script>
     <script src="../../coupled-oscillator.js" defer></script>
+    <script src="../../quantum-circuit-canvas.js" defer></script>
   </body>
 </html>
