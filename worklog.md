@@ -3135,3 +3135,28 @@ Stage Summary:
 - New scripts persisted under /home/z/my-project/scripts/: patch-ribbon-add-visualisers.py, fix-ribbon-depth-aware-hrefs.py, revert-prefixed-hrefs-for-base-tagged-files.py
 - All local audit checks pass except live mirror probe (which is the regression signal we want)
 - Next step: push Phase 25-50 commits + v50 tag to private origin to trigger CI mirror — that will fix the live 404s and let live_public_endpoints pass
+
+---
+Task ID: P50-followup-2
+Agent: main
+Task: Fix CI failures (hardcoded paths in dashboard generator) + restructure audit live-check into pre-mirror/post-mirror split
+
+Work Log:
+- Downloaded v50 + v50.1 CI run logs via GitHub Actions API; identified two failure classes:
+  1. v50: scripts/gen-audit-dashboard.py crashed with FileNotFoundError: '/home/z/my-project/AETH-1-Content-Archive/docs/audit.html' — the script had ROOT hardcoded to /home/z/my-project/AETH-1-Content-Archive which doesn't exist on the CI runner (which checks out to /home/runner/work/AETH-1-Content-Archive/AETH-1-Content-Archive/...)
+  2. v50.1: audit.py itself failed because the new check_live_public_endpoints check probes the public mirror BEFORE the mirror push happens (chicken-and-egg — audit must pass for mirror push to start, but live probe can only pass after mirror push finishes)
+- Fix 1 (hardcoded paths): patched 3 CI-invoked generators to compute ROOT dynamically via os.path.dirname(os.path.dirname(os.path.abspath(__file__))): scripts/gen-audit-dashboard.py, scripts/gen-concept-cards.py, scripts/gen-ml-concept-cards.py
+- Fix 2 (chicken-and-egg live check): added two new audit.py CLI flags:
+  * --skip-live-check: skip check_live_public_endpoints (used in pre-mirror audit step in CI)
+  * --live-only: run only check_live_public_endpoints (used in new post-mirror verification job)
+- Fix 3 (CI workflow restructure): updated .github/workflows/mirror-to-public.yml:
+  * Pre-mirror "Run audit script" step now uses --skip-live-check
+  * Added new "post-mirror-verify" job that depends on mirror-to-public, waits 60s for Pages rebuild, then runs `python3 scripts/audit.py --live-only` with up to 3 retries (60s back-off between attempts)
+  * The post-mirror job fails informatively if endpoints are still 404 after 3 attempts (but doesn't block the mirror push itself)
+- Fix 4: scrubbed GitHub PAT from .git/config (was temporarily added for authenticated push; reverted to public HTTPS URL after push completed; check_git_config_clean passes again)
+
+Stage Summary:
+- Local audit (pre-mirror mode): 56/56 pass with --skip-live-check
+- Local audit (live-only mode): 1/1 fails (expected — mirror hasn't been updated yet)
+- Files changed: 5 (audit.py, gen-audit-dashboard.py, gen-concept-cards.py, gen-ml-concept-cards.py, .github/workflows/mirror-to-public.yml)
+- Next: tag v50.2 + push to trigger fresh CI run; CI should now succeed (audit passes pre-mirror, mirror pushes, post-mirror live probe retries until all endpoints return 200)

@@ -2528,9 +2528,34 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--quiet", action="store_true", help="only show failures")
     parser.add_argument("--json", action="store_true", help="machine-readable JSON output")
+    parser.add_argument("--skip-live-check", action="store_true",
+                        help="skip check_live_public_endpoints (use pre-mirror in CI; "
+                             "the live probe can only pass AFTER the mirror push)")
+    parser.add_argument("--live-only", action="store_true",
+                        help="run only the live_public_endpoints check (use post-mirror)")
     args = parser.parse_args()
 
     html_files = walk_html_files(DOCS)
+
+    # Live-only mode: run just the live check and exit. Used as a
+    # post-mirror verification step in CI.
+    if args.live_only:
+        c = check_live_public_endpoints()
+        if args.json:
+            print(json.dumps({
+                "total": 1,
+                "passed": 1 if c.passed else 0,
+                "failed": 0 if c.passed else 1,
+                "checks": [c.to_dict()],
+            }, indent=2))
+        else:
+            symbol = "✓" if c.passed else "✗"
+            print(f"{symbol} {c.name}")
+            print(f"  {c.detail}")
+            for item in c.items:
+                print(f"    - {item}")
+        sys.exit(0 if c.passed else 1)
+
     checks = [
         check_div_balance(html_files),
         check_script_style_balance(html_files),
@@ -2599,11 +2624,14 @@ def main():
         check_qkd_visualiser_loaded(),
         check_retrospective_page_present(),
         check_issue_16_published(),
-        # Phase 50+ follow-up: discoverability + orphan pages + live mirror probe
+        # Phase 50+ follow-up: discoverability + orphan pages
         check_index_links_to_platform_pages(),
         check_no_orphan_html_pages(),
-        check_live_public_endpoints(),
     ]
+    # Live check is appended last so that --skip-live-check can simply
+    # drop it without disturbing the index numbering of the other checks.
+    if not args.skip_live_check:
+        checks.append(check_live_public_endpoints())
 
     if args.json:
         print(json.dumps({

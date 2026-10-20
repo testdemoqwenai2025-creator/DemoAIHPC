@@ -34,7 +34,10 @@ import os
 import sys
 import html as html_mod
 
-ROOT = "/home/z/my-project/AETH-1-Content-Archive"
+# ROOT is the repo root, computed relative to this script's location so
+# the script works on developer machines AND inside CI runners (where the
+# checkout lives under /home/runner/work/...).
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GEN_DIGEST_PATH = os.path.join(ROOT, "scripts", "gen-digest.py")
 OUT_DIR = os.path.join(ROOT, "docs", "concepts")
 

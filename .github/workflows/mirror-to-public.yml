@@ -61,12 +61,17 @@ jobs:
 
       - name: Run audit script
         run: |
-          python3 scripts/audit.py --json > audit-results.json
-          echo "## Application audit results" >> $GITHUB_STEP_SUMMARY
+          # Pre-mirror audit: skip the live_public_endpoints check because
+          # the public mirror hasn't been updated yet (the live probe can
+          # only pass AFTER this CI run completes the mirror push).
+          # The post-mirror verification job (below) runs the live check
+          # after the Pages build has time to propagate.
+          python3 scripts/audit.py --json --skip-live-check > audit-results.json
+          echo "## Application audit results (pre-mirror, live-check deferred)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          python3 scripts/audit.py >> $GITHUB_STEP_SUMMARY 2>&1
+          python3 scripts/audit.py --skip-live-check >> $GITHUB_STEP_SUMMARY 2>&1
           # Exit with audit.py's exit code (0 = pass, 1 = any failure)
-          python3 scripts/audit.py > /dev/null 2>&1
+          python3 scripts/audit.py --skip-live-check > /dev/null 2>&1
 
       - name: Generate audit dashboard (Phase 31 — auto-updating)
         if: always()
@@ -125,3 +130,43 @@ jobs:
         run: |
           echo "Mirror pushed to DemoAIHPC at tag ${GITHUB_REF##*/}."
           echo "Public preview will rebuild at https://testdemoqwenai2025-creator.github.io/DemoAIHPC/"
+
+  post-mirror-verify:
+    name: Post-mirror live endpoint verification
+    needs: [mirror-to-public]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Wait for GitHub Pages rebuild (60s)
+        run: sleep 60
+
+      - name: Probe live public endpoints
+        # Run only the live_public_endpoints check, retrying up to 3 times
+        # with 60s back-off. Pages builds can take 1-3 minutes to propagate.
+        run: |
+          for attempt in 1 2 3; do
+            echo "::group::Live endpoint probe (attempt $attempt of 3)"
+            if python3 scripts/audit.py --live-only; then
+              echo "::endgroup::"
+              echo "✓ All platform pages serve 200 on the public mirror"
+              exit 0
+            fi
+            echo "::endgroup::"
+            if [ "$attempt" -lt 3 ]; then
+              echo "Attempt $attempt failed — waiting 60s before retry..."
+              sleep 60
+            fi
+          done
+          echo "::error::Live endpoint verification failed after 3 attempts"
+          echo "::notice::The mirror push itself succeeded, but some pages"
+          echo "::notice::are still returning 404 on the public site. Check"
+          echo "::notice::https://testdemoqwenai2025-creator.github.io/DemoAIHPC/"
+          echo "::notice::manually and re-trigger if needed."
+          exit 1

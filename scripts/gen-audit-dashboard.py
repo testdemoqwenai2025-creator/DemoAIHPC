@@ -28,7 +28,12 @@ import sys
 import re
 from datetime import datetime, timezone
 
-ROOT = "/home/z/my-project/AETH-1-Content-Archive"
+# ROOT is the repo root, computed relative to this script's location so
+# the script works on developer machines AND inside CI runners (where the
+# checkout lives under /home/runner/work/...). The previous hardcoded
+# /home/z/my-project/AETH-1-Content-Archive only worked locally and broke
+# the CI mirror step (Phase 50 follow-up fix).
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 AUDIT_PATH = os.path.join(ROOT, "scripts", "audit.py")
 OUT_PATH = os.path.join(ROOT, "docs", "audit.html")
 HISTORY_DIR = os.path.join(ROOT, "docs", "audit-history")
