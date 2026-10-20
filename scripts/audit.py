@@ -1436,6 +1436,87 @@ def check_issue_9_published():
 
 
 # ---------------------------------------------------------------------------
+# Phase 42 checks
+# ---------------------------------------------------------------------------
+
+def check_fock_viewer_loaded():
+    """Check (Phase 42): science/physics/quantum.html loads the Fock state viewer
+    + has the Math→Code→Output pedagogy block."""
+    q_path = os.path.join(DOCS, "science", "physics", "quantum.html")
+    fock_js = os.path.join(DOCS, "fock-state-viewer.js")
+    if not os.path.isfile(q_path) or not os.path.isfile(fock_js):
+        return CheckResult("fock_viewer_loaded", False,
+                           "quantum.html or fock-state-viewer.js missing")
+    page = open(q_path, encoding="utf-8").read()
+    js = open(fock_js, encoding="utf-8").read()
+    failures = []
+    if "fock-state-viewer.js" not in page:
+        failures.append("quantum.html does not load fock-state-viewer.js")
+    if 'id="quantum-fock-container"' not in page:
+        failures.append("missing #quantum-fock-container element")
+    if "AIHPC_FOCK" not in js:
+        failures.append("fock-state-viewer.js does not expose AIHPC_FOCK global")
+    if "hermite" not in js.lower():
+        failures.append("missing Hermite polynomial computation")
+    if "applyCreation" not in js or "applyAnnihilation" not in js:
+        failures.append("missing applyCreation / applyAnnihilation APIs")
+    if "IntersectionObserver" not in page:
+        failures.append("missing lazy-mount via IntersectionObserver")
+    if "Many-Body Quantum Mechanics" not in page:
+        failures.append("missing Many-Body QM section header")
+    if "Math → Code → Output" not in page and "Math → Code" not in page:
+        failures.append("missing Math→Code→Output pedagogy block")
+    if "Hermite" not in page:
+        failures.append("missing Hermite polynomial mention in pedagogy")
+    if "QuTiP" not in page:
+        failures.append("missing QuTiP reference")
+    if failures:
+        return CheckResult("fock_viewer_loaded", False,
+                           f"{len(failures)} issues with Fock viewer", failures)
+    return CheckResult("fock_viewer_loaded", True,
+                       "quantum.html loads fock-state-viewer.js + lazy-mount via IntersectionObserver + Math→Code→Output pedagogy block + Hermite polynomial + QuTiP reference")
+
+
+def check_playground_present():
+    """Check (Phase 42): docs/playground.html exists with dataset/model/viz selectors + combine button."""
+    pg_path = os.path.join(DOCS, "playground.html")
+    if not os.path.isfile(pg_path):
+        return CheckResult("playground_present", False, "docs/playground.html missing")
+    src = open(pg_path, encoding="utf-8").read()
+    failures = []
+    if "scientific-uploader.js" not in src:
+        failures.append("playground does not load scientific-uploader.js")
+    if "medical-imaging.js" not in src:
+        failures.append("playground does not load medical-imaging.js")
+    if "molecule-3d.js" not in src:
+        failures.append("playground does not load molecule-3d.js")
+    if "attention-heatmap.js" not in src:
+        failures.append("playground does not load attention-heatmap.js")
+    if "ml-etl.js" not in src:
+        failures.append("playground does not load ml-etl.js")
+    if 'id="pg-uploader-container"' not in src:
+        failures.append("missing #pg-uploader-container element")
+    if 'id="pg-model-select"' not in src:
+        failures.append("missing #pg-model-select element")
+    if 'id="pg-viz-select"' not in src:
+        failures.append("missing #pg-viz-select element")
+    if 'id="pg-combine-btn"' not in src:
+        failures.append("missing #pg-combine-btn (Combine button)")
+    if 'id="pg-stage"' not in src:
+        failures.append("missing #pg-stage output element")
+    # Preset buttons for sample datasets
+    expected_presets = ['regression-csv', 'classification-csv', 'molecule-sdf', 'dicom-dcm']
+    for p in expected_presets:
+        if 'data-preset="' + p + '"' not in src:
+            failures.append(f"missing preset button: {p}")
+    if failures:
+        return CheckResult("playground_present", False,
+                           f"{len(failures)} issues with playground page", failures)
+    return CheckResult("playground_present", True,
+                       "docs/playground.html: dataset + model + viz selectors + Combine button + stage + 4 preset samples + 5 component scripts loaded")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -1490,6 +1571,9 @@ def main():
         check_dicom_loader_wired(),
         check_medical_atlas_present(),
         check_issue_9_published(),
+        # Phase 42
+        check_fock_viewer_loaded(),
+        check_playground_present(),
     ]
 
     if args.json:

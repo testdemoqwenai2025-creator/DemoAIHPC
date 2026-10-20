@@ -295,6 +295,11 @@
         { id: 'paper:CoscientistV3', type: 'paper', label: 'Coscientist v3 (Boiko 2026)' },
         { id: 'paper:ChemBench2026', type: 'paper', label: 'ChemBench 2026 (Mirza et al.)' },
         { id: 'paper:RadFM', type: 'paper', label: 'RadFM (Wu 2023) - radiology FM' },
+        // Phase 42: Fock viewer + cross-domain playground
+        { id: 'demo:fock', type: 'demo', label: 'Fock State Viewer (fock-state-viewer.js)', href: 'science/physics/quantum.html#quantum-fock-container' },
+        { id: 'demo:playground', type: 'demo', label: 'Cross-Domain Playground (playground.html)', href: 'playground.html' },
+        { id: 'paper:SecondQuantisation', type: 'paper', label: 'Second quantisation (Dirac 1927, Fock 1932)' },
+        { id: 'paper:QuTiP', type: 'paper', label: 'QuTiP (Johansson 2012) - open quantum systems' },
         // Phase 38: Cheminformatics 3D viewer node
         { id: 'demo:mol3d', type: 'demo', label: '3D Molecule Viewer (molecule-3d.js)', href: 'science-cheminformatics.html#chem-mol3d-container' },
         // Phase 39: Medical imaging + quantum VQC
@@ -461,6 +466,17 @@
         ['demo:medical-atlas', 'demo:scientific-uploader', 'uses'],
         ['demo:medical-atlas', 'aethel:connector', 'hosted-by'],
         ['demo:medical-atlas', 'hub:biology', 'extends'],
+        // Phase 42: Fock + playground edges
+        ['demo:fock', 'paper:SecondQuantisation', 'cites'],
+        ['demo:fock', 'paper:QuTiP', 'related'],
+        ['demo:fock', 'demo:vqc', 'extends'],
+        ['demo:fock', 'bloch:shorts', 'extends'],
+        ['demo:fock', 'hub:physics', 'extends'],
+        ['demo:playground', 'demo:scientific-uploader', 'uses'],
+        ['demo:playground', 'demo:medimg', 'uses'],
+        ['demo:playground', 'demo:mol3d', 'uses'],
+        ['demo:playground', 'demo:attn-heatmap', 'uses'],
+        ['demo:playground', 'aethel:connector', 'hosted-by'],
         // Phase 37 — Digest article relationships
         ['digest:alphafold-missense-evolve', 'dataset:PDB-1AKI', 'uses'],
         ['digest:jwst-k2-18b-dms', 'dataset:OpenAlex', 'uses'],

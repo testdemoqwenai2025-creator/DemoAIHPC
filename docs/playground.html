@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Cross-Domain Playground — combine any uploaded dataset (CSV/Parquet/Arrow) with any model (ML demos) with any visualisation (GTS 2D/3D, attention heat-map, molecule-3d, medical-imaging viewer). The platform's first true labs experience. Phase 42." />
+    <title>Cross-Domain Playground — AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1400px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1400px; margin: 0 auto; padding: 24px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 42px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(196,181,253,0.2); }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 920px; margin: 0 0 32px; }
+      .playground-grid { display: grid; grid-template-columns: 320px 1fr; gap: 24px; margin-top: 24px; }
+      @media (max-width: 1000px) { .playground-grid { grid-template-columns: 1fr; } }
+      .palette { display: flex; flex-direction: column; gap: 16px; }
+      .palette-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px; padding: 16px; backdrop-filter: blur(12px); }
+      .palette-card h3 { margin: 0 0 8px; font-size: 14px; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.08em; }
+      .palette-card p { font-size: 12px; color: var(--text-muted); margin: 0 0 12px; }
+      .palette-card select, .palette-card button { width: 100%; background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 8px 12px; border-radius: 6px; font-size: 12px; font-family: inherit; cursor: pointer; }
+      .palette-card select:hover, .palette-card button:hover { border-color: var(--accent-2); }
+      .palette-card button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); border-color: transparent; color: white; font-weight: 600; }
+      .stage { background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 16px; padding: 16px; min-height: 500px; position: relative; backdrop-filter: blur(12px); }
+      .stage-empty { color: var(--text-muted-2); text-align: center; padding: 80px 20px; }
+      .stage-empty h2 { font-size: 18px; color: var(--text-muted); margin: 0 0 8px; }
+      .stage-empty p { font-size: 12px; max-width: 480px; margin: 0 auto; }
+      .preset-row { display: flex; gap: 6px; flex-wrap: wrap; }
+      .preset-row button { padding: 4px 10px; background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); border-radius: 9999px; cursor: pointer; font-size: 11px; }
+      .preset-row button:hover { border-color: var(--accent); }
+      .links-row { margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap; }
+      .links-row a { color: var(--accent-2); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-strong); background: rgba(6,182,212,0.05); }
+      .links-row a:hover { border-color: var(--accent-2); background: rgba(6,182,212,0.12); }
+    </style>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="index.html">Home</a><a href="demos.html">Demos</a><a href="dashboard.html">Dashboard</a><a href="graph.html">Knowledge Graph</a><a href="benchmark.html">Agentic Benchmark</a><a href="subscribe.html">Subscribe</a><a href="playground.html">🧪 Cross-Domain Playground</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="aethel.html">AETHEL Connector</a><a href="connectors.html">Scientific Connectors Hub</a><a href="query.html">Query Executor</a><a href="graph.html">Knowledge Graph</a><a href="workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="science-biology.html">Biology Hub</a><a href="science-chemistry.html">Chemistry Hub</a><a href="science-physics.html">Physics Hub</a><a href="science-maths.html">Mathematics Hub</a><a href="science-ml.html">🤖 Machine Learning</a><a href="science-bioinformatics.html">Bioinformatics</a><a href="science-cheminformatics.html">Cheminformatics</a><a href="bloch.html">⚛️ Bloch Sphere Shorts</a><a href="medical-atlas.html">🏥 Medical Atlas</a><a href="science/physics/quantum.html">Quantum Mechanics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="digest.html">Weekly Science Digest</a><a href="audit.html">📊 Audit Dashboard</a><a href="dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="concepts.html">Concept Cards</a><a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="concepts/provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <p class="crumbs"><a href="index.html">Home</a> / Platform / Cross-Domain Playground</p>
+      <span class="tag">Phase 42 · Cross-Domain Playground</span>
+      <h1>Cross-Domain Playground</h1>
+      <p class="lead">The platform's first true <strong>labs</strong> experience. Combine <em>any uploaded dataset</em> (CSV / Parquet / Arrow / DICOM via the scientific-uploader) with <em>any model</em> (ML loss functions via the ml-etl widget) with <em>any visualisation</em> (GTS 2D / 3D, attention heat-map, molecule-3d, medical-imaging viewer). Press <strong>Combine</strong> to wire the pipeline. Pure client-side; nothing leaves your browser.</p>
+
+      <div class="playground-grid">
+        <div class="palette">
+          <!-- 1. Dataset selector -->
+          <div class="palette-card">
+            <h3>1. Dataset</h3>
+            <p>Drop a file or pick a built-in sample. The scientific-uploader parses it; the parsed result becomes the dataset for the pipeline.</p>
+            <div id="pg-uploader-container"></div>
+            <div class="preset-row" style="margin-top: 12px;">
+              <button data-preset="regression-csv">📊 regression.csv</button>
+              <button data-preset="classification-csv">🎯 classification.csv</button>
+              <button data-preset="molecule-sdf">⚛ aspirin.sdf</button>
+              <button data-preset="dicom-dcm">🏥 sample.dcm</button>
+            </div>
+          </div>
+
+          <!-- 2. Model selector -->
+          <div class="palette-card">
+            <h3>2. Model / Transform</h3>
+            <p>Which AIHPC component consumes the dataset?</p>
+            <select id="pg-model-select">
+              <option value="ml-etl">ml-etl — compute MSE/MAE/Huber/KL live (for CSV with y_true, y_pred)</option>
+              <option value="attention-heatmap">attention-heatmap — token-token Q·Kᵀ (for text input)</option>
+              <option value="molecule-3d">molecule-3d — render 3D ball-and-stick (for PDB/SDF/MOL)</option>
+              <option value="medical-imaging">medical-imaging — multi-organ viewer (for DICOM)</option>
+              <option value="none">none — just show the raw parsed data</option>
+            </select>
+          </div>
+
+          <!-- 3. Visualisation selector -->
+          <div class="palette-card">
+            <h3>3. Visualisation</h3>
+            <p>How should the model's output be rendered?</p>
+            <select id="pg-viz-select">
+              <option value="auto">auto — pick based on model</option>
+              <option value="gts-2d">GTS 2D — animated graph-table sync</option>
+              <option value="gts-3d">GTS 3D — loss landscape trajectory</option>
+              <option value="canvas">canvas — model's native canvas</option>
+              <option value="table">table — raw data table</option>
+            </select>
+            <button id="pg-combine-btn" style="margin-top: 12px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); border-color: transparent; color: white; font-weight: 700;">⚡ Combine → run pipeline</button>
+          </div>
+
+          <!-- Status -->
+          <div class="palette-card" id="pg-status-card">
+            <h3>Pipeline status</h3>
+            <p id="pg-status" style="font-family: ui-monospace, SF Mono, Menlo, monospace; font-size: 11px; color: var(--text-muted); margin: 0;">Waiting for dataset + model + viz selection…</p>
+          </div>
+        </div>
+
+        <!-- Stage: where the combined output renders -->
+        <div class="stage" id="pg-stage">
+          <div class="stage-empty">
+            <h2>Stage is empty</h2>
+            <p>Pick a dataset (or drop a file), choose a model + visualisation, then press <strong>Combine → run pipeline</strong>. The combined output will render here.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="links-row">
+        <a href="science-biology.html">Biology Hub</a>
+        <a href="science-cheminformatics.html">Cheminformatics</a>
+        <a href="science-ml.html">ML demos</a>
+        <a href="graph.html">Knowledge Graph</a>
+        <a href="medical-atlas.html">Medical Atlas</a>
+        <a href="digest.html">Weekly Digest</a>
+        <a href="science/physics/quantum.html">Quantum Mechanics</a>
+      </div>
+    </main>
+
+    <script>
+      // ---- Particle background ----
+      (function () {
+        var canvas = document.getElementById('particle-canvas');
+        if (!canvas) return;
+        var ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        resize(); window.addEventListener('resize', resize);
+        var particles = [];
+        var colors = ['#06b6d4', '#8b5cf6', '#ec4899', '#10b981'];
+        for (var i = 0; i < 60; i++) {
+          particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25, r: Math.random() * 1.5 + 0.5, c: colors[i % colors.length] });
+        }
+        function step() {
+          ctx.fillStyle = 'rgba(11,15,26,0.2)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+          for (var i = 0; i < particles.length; i++) {
+            for (var j = i + 1; j < particles.length; j++) {
+              var d = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+              if (d < 110) { ctx.strokeStyle = 'rgba(139,92,246,' + (0.12 * (1 - d / 110)).toFixed(3) + ')'; ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke(); }
+            }
+          }
+          for (var k = 0; k < particles.length; k++) {
+            var p = particles[k]; p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
+            if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
+            ctx.fillStyle = p.c; ctx.globalAlpha = 0.4; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI); ctx.fill();
+          }
+          ctx.globalAlpha = 1; requestAnimationFrame(step);
+        }
+        step();
+      })();
+
+      // ---- Cross-domain playground state ----
+      var pgState = {
+        parsed: null,    // parsed dataset from scientific-uploader
+        fileName: null,
+        model: 'ml-etl',
+        viz: 'auto',
+      };
+
+      function setStatus(msg) {
+        var el = document.getElementById('pg-status');
+        if (el) el.textContent = msg;
+      }
+
+      // Mount scientific-uploader
+      if (window.AIHPC_UPLOADER) {
+        AIHPC_UPLOADER.mount('pg-uploader-container');
+        // Register a consumer that just stores the parsed result
+        AIHPC_UPLOADER.registerConsumer('playground-state', function (parsed, fileName) {
+          pgState.parsed = parsed;
+          pgState.fileName = fileName;
+          setStatus('✓ Parsed: ' + (parsed.format || '?').toUpperCase() + ' (' + (parsed.kind || '?') + ') — ' + fileName);
+        });
+      }
+
+      // Preset buttons: synthesise a small sample file in-memory + push to uploader
+      document.querySelectorAll('.preset-row button').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var preset = btn.dataset.preset;
+          var samples = {
+            'regression-csv': {
+              name: 'regression.csv',
+              content: 'y_true,y_pred\n3.0,2.5\n4.1,3.8\n2.7,3.0\n5.2,5.0\n1.8,2.0\n3.5,3.2\n4.0,4.1\n2.9,2.8\n5.5,5.6\n3.3,3.1\n',
+              type: 'text/csv',
+            },
+            'classification-csv': {
+              name: 'classification.csv',
+              content: 'y_true,y_pred\n0,0.1\n1,0.9\n0,0.2\n1,0.8\n1,0.95\n0,0.05\n1,0.7\n0,0.3\n',
+              type: 'text/csv',
+            },
+            'molecule-sdf': {
+              name: 'aspirin.sdf',
+              content: '\n\n\n  8  8  0  0  0  0  0  0  0  0999 V2000\n   -0.5  -0.5   0.0 C 0  0  0  0  0\n    0.5  -0.5   0.0 C 0  0  0  0  0\n    0.5   0.5   0.0 C 0  0  0  0  0\n   -0.5   0.5   0.0 C 0  0  0  0  0\n    1.5  -0.5   0.0 O 0  0  0  0  0\n    1.5   0.5   0.0 O 0  0  0  0  0\n   -1.5   0.5   0.0 N 0  0  0  0  0\n   -1.5  -0.5   0.0 O 0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  1  1  0  0  0  0\n  2  5  1  0  0  0  0\n  3  6  2  0  0  0  0\n  4  7  1  0  0  0  0\n  1  8  2  0  0  0  0\n  5  6  1  0  0  0  0\n  7  8  1  0  0  0  0\nM  END\n',
+              type: 'chemical/x-mdl-sdfile',
+            },
+            'dicom-dcm': {
+              name: 'sample.dcm',
+              content: 'DICOM synthetic marker — header parse only. Real DICOM requires cornerstone.js for pixel decode.',
+              type: 'application/dicom',
+            },
+          };
+          var s = samples[preset];
+          if (!s) return;
+          // Synthesise a File object and push through the uploader
+          var file = new File([s.content], s.name, { type: s.type });
+          if (window.AIHPC_UPLOADER) {
+            AIHPC_UPLOADER.parseFile(file).then(function (parsed) {
+              pgState.parsed = parsed;
+              pgState.fileName = s.name;
+              setStatus('✓ Preset: ' + s.name + ' → parsed ' + (parsed.format || '?').toUpperCase() + ' (' + (parsed.kind || '?') + ')');
+            }).catch(function (err) {
+              setStatus('preset failed: ' + err.message);
+            });
+          }
+        });
+      });
+
+      // Model + viz selectors
+      document.getElementById('pg-model-select').addEventListener('change', function (e) { pgState.model = e.target.value; });
+      document.getElementById('pg-viz-select').addEventListener('change', function (e) { pgState.viz = e.target.value; });
+
+      // Combine button
+      document.getElementById('pg-combine-btn').addEventListener('click', function () {
+        if (!pgState.parsed) {
+          setStatus('⚠ No dataset yet — drop a file or click a preset.');
+          return;
+        }
+        runPipeline();
+      });
+
+      function runPipeline() {
+        var stage = document.getElementById('pg-stage');
+        stage.innerHTML = '';
+        var parsed = pgState.parsed;
+        var model = pgState.model;
+        var viz = pgState.viz === 'auto' ? autoVizForModel(model, parsed) : pgState.viz;
+        setStatus('Running pipeline: ' + (parsed.format || '?').toUpperCase() + ' → ' + model + ' → ' + viz + ' …');
+
+        var container = document.createElement('div');
+        container.id = 'pg-stage-output';
+        stage.appendChild(container);
+
+        // Dispatch based on model
+        if (model === 'ml-etl' && window.AIHPC_ML_ETL && parsed.headers && parsed.headers.indexOf('y_true') >= 0) {
+          // Push parsed CSV into ml-etl's computeLosses
+          var ytCol = parsed.headers.indexOf('y_true');
+          var ypCol = parsed.headers.indexOf('y_pred');
+          var losses = AIHPC_ML_ETL.computeLosses(parsed.rows, ytCol, ypCol);
+          renderLossTable(container, losses, parsed);
+        } else if (model === 'attention-heatmap' && window.AIHPC_ATTN) {
+          var div = document.createElement('div');
+          div.id = 'pg-attn-mount';
+          container.appendChild(div);
+          AIHPC_ATTN.mount('pg-attn-mount', { tokens: ['Cross', 'domain', 'playground', 'live', 'attention'] });
+          AIHPC_ATTN.play('pg-attn-mount');
+        } else if (model === 'molecule-3d' && window.AIHPC_MOL3D) {
+          var div2 = document.createElement('div');
+          div2.id = 'pg-mol3d-mount';
+          container.appendChild(div2);
+          AIHPC_MOL3D.mount('pg-mol3d-mount');
+          if (parsed.atoms && parsed.atoms.length > 0) {
+            AIHPC_MOL3D.register('pg-mol3d-mount', 'uploaded-' + (pgState.fileName || 'mol'), {
+              id: 'uploaded',
+              smiles: '(uploaded ' + parsed.format + ')',
+              name: pgState.fileName || 'Uploaded molecule',
+              atoms: parsed.atoms,
+              bonds: parsed.bonds || [],
+              properties: { atoms: parsed.atoms.length, bonds: (parsed.bonds || []).length, format: parsed.format },
+              landscapeProperty: 'atoms',
+              caption: 'Uploaded ' + parsed.format.toUpperCase() + ' — ' + parsed.atoms.length + ' atoms + ' + (parsed.bonds || []).length + ' bonds.',
+            });
+            AIHPC_MOL3D.setActive('pg-mol3d-mount', 'uploaded-' + (pgState.fileName || 'mol'));
+            AIHPC_MOL3D.play('pg-mol3d-mount');
+          }
+        } else if (model === 'medical-imaging' && window.AIHPC_MEDIMG) {
+          var div3 = document.createElement('div');
+          div3.id = 'pg-medimg-mount';
+          container.appendChild(div3);
+          AIHPC_MEDIMG.mount('pg-medimg-mount', { organs: ['lung', 'heart', 'liver', 'kidney-left', 'kidney-right', 'spleen', 'bladder', 'bone'] });
+          AIHPC_MEDIMG.play('pg-medimg-mount');
+          if (parsed.format === 'dicom' || parsed.kind === 'image') {
+            AIHPC_MEDIMG.loadParsed('pg-medimg-mount', parsed);
+          }
+        } else {
+          // Fallback: raw table
+          renderRawTable(container, parsed);
+        }
+        setStatus('✓ Pipeline complete: ' + (parsed.format || '?').toUpperCase() + ' → ' + model + ' → ' + viz);
+      }
+
+      function autoVizForModel(model, parsed) {
+        if (model === 'ml-etl') return 'table';
+        if (model === 'attention-heatmap') return 'canvas';
+        if (model === 'molecule-3d') return 'canvas';
+        if (model === 'medical-imaging') return 'canvas';
+        return 'table';
+      }
+
+      function renderLossTable(container, losses, parsed) {
+        var html = '<div style="padding: 16px;">';
+        html += '<h3 style="margin: 0 0 12px; color: var(--accent-2); font-size: 14px;">Live loss values for ' + (pgState.fileName || 'dataset') + '</h3>';
+        html += '<table style="width: 100%; border-collapse: collapse; font-family: ui-monospace; font-size: 12px;">';
+        html += '<tr><th style="text-align:left; padding: 8px; border-bottom: 1px solid var(--border);">Loss</th><th style="text-align:right; padding: 8px; border-bottom: 1px solid var(--border);">Value</th></tr>';
+        ['mse', 'mae', 'logCosh', 'huber', 'kl', 'cosine'].forEach(function (k) {
+          var color = ({ mse: '#06b6d4', mae: '#10b981', logCosh: '#8b5cf6', huber: '#f59e0b', kl: '#ec4899', cosine: '#22d3ee' })[k];
+          html += '<tr><td style="padding: 6px 8px; color: ' + color + ';">' + k + '</td><td style="padding: 6px 8px; text-align: right; color: #f3f4f6;">' + losses[k].toFixed(4) + '</td></tr>';
+        });
+        html += '</table>';
+        html += '<p style="font-size: 11px; color: var(--text-muted); margin-top: 12px;">n = ' + losses.n + ' rows. Push to GTS graphs by visiting the <a href="science-ml.html#ml-etl-widget" style="color: var(--accent-2);">ML page ETL widget</a>.</p>';
+        html += '</div>';
+        container.innerHTML = html;
+      }
+
+      function renderRawTable(container, parsed) {
+        var html = '<div style="padding: 16px;">';
+        html += '<h3 style="margin: 0 0 12px; color: var(--accent-2); font-size: 14px;">Raw parsed data — ' + (parsed.format || '?').toUpperCase() + '</h3>';
+        if (parsed.preview) {
+          html += '<p style="font-size: 12px; color: var(--text); margin: 0 0 12px;">' + parsed.preview + '</p>';
+        }
+        if (parsed.stats && parsed.stats.length > 0) {
+          html += '<table style="width: 100%; border-collapse: collapse; font-family: ui-monospace; font-size: 11px;">';
+          parsed.stats.forEach(function (s) {
+            html += '<tr><td style="padding: 4px 8px; color: var(--text-muted);">' + s.label + '</td><td style="padding: 4px 8px; text-align: right; color: #f3f4f6;">' + s.value + '</td></tr>';
+          });
+          html += '</table>';
+        }
+        if (parsed.headers && parsed.rows) {
+          html += '<table style="width: 100%; border-collapse: collapse; font-family: ui-monospace; font-size: 10px; margin-top: 12px;">';
+          html += '<tr>' + parsed.headers.map(function (h) { return '<th style="padding: 4px 6px; border-bottom: 1px solid var(--border); color: var(--accent);">' + h + '</th>'; }).join('') + '</tr>';
+          parsed.rows.slice(0, 10).forEach(function (r) {
+            html += '<tr>' + r.map(function (c) { return '<td style="padding: 4px 6px; color: var(--text-muted);">' + c + '</td>'; }).join('') + '</tr>';
+          });
+          html += '</table>';
+          if (parsed.rows.length > 10) html += '<p style="font-size: 11px; color: var(--text-muted-2); margin-top: 6px;">… ' + parsed.rows.length + ' total rows</p>';
+        }
+        html += '</div>';
+        container.innerHTML = html;
+      }
+
+      // ---- Ribbon theme toggle ----
+      (function setupRibbonTheme() {
+        var KEY = 'aihpc-theme';
+        var body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        var initial = 'dark';
+        try { var stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () { var next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+    </script>
+    <script src="scientific-uploader.js"></script>
+    <script src="medical-imaging.js"></script>
+    <script src="molecule-3d.js"></script>
+    <script src="attention-heatmap.js"></script>
+    <script src="ml-etl.js"></script>
+  </body>
+</html>
