@@ -259,5 +259,6 @@
       (function(){var c=document.getElementById('particle-canvas');if(!c)return;var x=c.getContext('2d');var W,H,P=[];var N=50;var cols=['#06b6d4','#8b5cf6','#ec4899'];function r(){W=c.width=innerWidth;H=c.height=innerHeight}r();addEventListener('resize',r);for(var i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,W,H);for(var i=0;i<N;i++){for(var j=i+1;j<N;j++){var d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<90){x.strokeStyle='rgba(139,92,246,'+.1*(1-d/90)+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke()}}}for(var p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;x.fillStyle=p.c;x.globalAlpha=.4;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill()}x.globalAlpha=1;requestAnimationFrame(s)}s()})();
 
     </script>
+  <script src="../ask-ai-button.js"></script>
   </body>
 </html>

@@ -1,0 +1,1415 @@
+{
+  "generated_at": "2026-10-20T20:53:43.293280Z",
+  "total_entries": 199,
+  "categories": [
+    "404 Page",
+    "Concepts Index",
+    "Demo",
+    "Digest Concept Card",
+    "Digest Issue",
+    "Feeds",
+    "Lab",
+    "ML Concept Card",
+    "Meta Page",
+    "Page",
+    "Platform Concept Card",
+    "Science Hub",
+    "Science Sub-page",
+    "Visualiser"
+  ],
+  "entries": [
+    {
+      "url": "404.html",
+      "title": "404 — Page not found · AIHPC Advanced",
+      "description": "404 — Page not found. The AIHPC Advanced platform page you're looking for has moved or never existed. Use the link directory below to find what you need.",
+      "category": "404 Page",
+      "text": "404 — page not found · aihpc advanced 404 — page not found. the aihpc advanced platform page you're looking for has moved or never existed. use the link directory below to find what you need. page not found"
+    },
+    {
+      "url": "concepts.html",
+      "title": "Concept Cards Index — AIHPC Advanced",
+      "description": "AIHPC Advanced — Concept Cards Index. Browse all 125 concept cards: ML loss functions, weekly digest articles, quantum mechanics, platform patterns. Auto-generated from docs/concepts/.",
+      "category": "Concepts Index",
+      "text": "concept cards index — aihpc advanced aihpc advanced — concept cards index. browse all 125 concept cards: ml loss functions, weekly digest articles, quantum mechanics, platform patterns. auto-generated from docs/concepts/. concept cards index"
+    },
+    {
+      "url": "demos/citation-pagerank.html",
+      "title": "Citation PageRank — AIHPC Advanced Live Demo",
+      "description": "Citation PageRank — live PageRank algorithm on a citation graph. Math-to-code derivation shows how the equation becomes code. Pure client-side.",
+      "category": "Demo",
+      "text": "citation pagerank — aihpc advanced live demo citation pagerank — live pagerank algorithm on a citation graph. math-to-code derivation shows how the equation becomes code. pure client-side. citation pagerank"
+    },
+    {
+      "url": "demos/molecular-dynamics.html",
+      "title": "Molecular Dynamics — AIHPC Advanced Live Demo",
+      "description": "Molecular Dynamics — live velocity-Verlet integration of Lennard-Jones particles. Watch atoms move in real-time. Math-to-code derivation shows how the Verlet step is derived from the equation of motion.",
+      "category": "Demo",
+      "text": "molecular dynamics — aihpc advanced live demo molecular dynamics — live velocity-verlet integration of lennard-jones particles. watch atoms move in real-time. math-to-code derivation shows how the verlet step is derived from the equation of motion. molecular dynamics"
+    },
+    {
+      "url": "demos/nucleotide-analysis.html",
+      "title": "Nucleotide Analysis — AIHPC Advanced Live Demo",
+      "description": "Nucleotide Analysis live demo — paste a DNA / RNA sequence, run ORF finding, GC content sliding window, KMP motif search, and Nussinov RNA folding in your browser. Output as FASTA / GenBank Blob. Uses a real E. coli lacZ gene fragment. No external services; data stays in your browser.",
+      "category": "Demo",
+      "text": "nucleotide analysis — aihpc advanced live demo nucleotide analysis live demo — paste a dna / rna sequence, run orf finding, gc content sliding window, kmp motif search, and nussinov rna folding in your browser. output as fasta / genbank blob. uses a real e. coli lacz gene fragment. no external services; data stays in your browser. nucleotide analysis"
+    },
+    {
+      "url": "demos/kmeans-clustering.html",
+      "title": "k-means Clustering — AIHPC Advanced Live Demo",
+      "description": "k-means Clustering — live Lloyd's algorithm with animated centroids. Math-to-code derivation: see how each line of code is derived from the mathematical objective. Pure client-side.",
+      "category": "Demo",
+      "text": "k-means clustering — aihpc advanced live demo k-means clustering — live lloyd's algorithm with animated centroids. math-to-code derivation: see how each line of code is derived from the mathematical objective. pure client-side. k-means clustering"
+    },
+    {
+      "url": "concepts/digest-amie-diagnostic-2026.html",
+      "title": "AMIE diagnostic LLM update: 85% diagnostic accuracy on NEJM CPC — AIHPC Concept Card",
+      "description": "AMIE diagnostic LLM update: 85% diagnostic accuracy on NEJM CPC — AIHPC Advanced auto-generated concept card (digest Issue #8).",
+      "category": "Digest Concept Card",
+      "text": "amie diagnostic llm update: 85% diagnostic accuracy on nejm cpc — aihpc concept card amie diagnostic llm update: 85% diagnostic accuracy on nejm cpc — aihpc advanced auto-generated concept card (digest issue #8). amie diagnostic llm update: 85% diagnostic accuracy on nejm cpc"
+    },
+    {
+      "url": "concepts/digest-alphaevolve-case-studies.html",
+      "title": "AlphaEvolve in production: 6 case studies where LLM-evolved algorithms now run inside Google — AIHPC Concept Card",
+      "description": "AlphaEvolve in production: 6 case studies where LLM-evolved algorithms now run inside Google — AIHPC Advanced auto-generated concept card (digest Issue #4).",
+      "category": "Digest Concept Card",
+      "text": "alphaevolve in production: 6 case studies where llm-evolved algorithms now run inside google — aihpc concept card alphaevolve in production: 6 case studies where llm-evolved algorithms now run inside google — aihpc advanced auto-generated concept card (digest issue #4). alphaevolve in production: 6 case studies where llm-evolved algorithms now run inside google"
+    },
+    {
+      "url": "concepts/digest-alphaevolve-v2.html",
+      "title": "AlphaEvolve v2: code documentation + evolved unit tests + 12% average speedup across 8 Google systems — AIHPC Concept Card",
+      "description": "AlphaEvolve v2: code documentation + evolved unit tests + 12% average speedup across 8 Google systems — AIHPC Advanced auto-generated concept card (digest Issue #5).",
+      "category": "Digest Concept Card",
+      "text": "alphaevolve v2: code documentation + evolved unit tests + 12% average speedup across 8 google systems — aihpc concept card alphaevolve v2: code documentation + evolved unit tests + 12% average speedup across 8 google systems — aihpc advanced auto-generated concept card (digest issue #5). alphaevolve v2: code documentation + evolved unit tests + 12% average speedup across 8 google systems"
+    },
+    {
+      "url": "concepts/digest-alphaevolve-v4-code-discovery.html",
+      "title": "AlphaEvolve v4: evolutionary AI discovers 3 novel algorithms beating 50-year human records — AIHPC Concept Card",
+      "description": "AlphaEvolve v4: evolutionary AI discovers 3 novel algorithms beating 50-year human records — AIHPC Advanced auto-generated concept card (digest Issue #11).",
+      "category": "Digest Concept Card",
+      "text": "alphaevolve v4: evolutionary ai discovers 3 novel algorithms beating 50-year human records — aihpc concept card alphaevolve v4: evolutionary ai discovers 3 novel algorithms beating 50-year human records — aihpc advanced auto-generated concept card (digest issue #11). alphaevolve v4: evolutionary ai discovers 3 novel algorithms beating 50-year human records"
+    },
+    {
+      "url": "concepts/digest-alphafold-4-full-complex.html",
+      "title": "AlphaFold 4: full protein complex prediction including ligands + nucleic acids + lipids — AIHPC Concept Card",
+      "description": "AlphaFold 4: full protein complex prediction including ligands + nucleic acids + lipids — AIHPC Advanced auto-generated concept card (digest Issue #15).",
+      "category": "Digest Concept Card",
+      "text": "alphafold 4: full protein complex prediction including ligands + nucleic acids + lipids — aihpc concept card alphafold 4: full protein complex prediction including ligands + nucleic acids + lipids — aihpc advanced auto-generated concept card (digest issue #15). alphafold 4: full protein complex prediction including ligands + nucleic acids + lipids"
+    },
+    {
+      "url": "concepts/digest-alphagenome-2-variants.html",
+      "title": "AlphaGenome 2: whole-genome variant effect prediction at 1Mbp context — AIHPC Concept Card",
+      "description": "AlphaGenome 2: whole-genome variant effect prediction at 1Mbp context — AIHPC Advanced auto-generated concept card (digest Issue #10).",
+      "category": "Digest Concept Card",
+      "text": "alphagenome 2: whole-genome variant effect prediction at 1mbp context — aihpc concept card alphagenome 2: whole-genome variant effect prediction at 1mbp context — aihpc advanced auto-generated concept card (digest issue #10). alphagenome 2: whole-genome variant effect prediction at 1mbp context"
+    },
+    {
+      "url": "concepts/digest-alphagenome-3-design.html",
+      "title": "AlphaGenome 3: AI-driven whole-genome design — 10Mbp context + variant editing — AIHPC Concept Card",
+      "description": "AlphaGenome 3: AI-driven whole-genome design — 10Mbp context + variant editing — AIHPC Advanced auto-generated concept card (digest Issue #16).",
+      "category": "Digest Concept Card",
+      "text": "alphagenome 3: ai-driven whole-genome design — 10mbp context + variant editing — aihpc concept card alphagenome 3: ai-driven whole-genome design — 10mbp context + variant editing — aihpc advanced auto-generated concept card (digest issue #16). alphagenome 3: ai-driven whole-genome design — 10mbp context + variant editing"
+    },
+    {
+      "url": "concepts/digest-alphamissense-uk-biobank.html",
+      "title": "AlphaMissense on UK Biobank: 504k genomes scored, 3.5M rare variants prioritised — AIHPC Concept Card",
+      "description": "AlphaMissense on UK Biobank: 504k genomes scored, 3.5M rare variants prioritised — AIHPC Advanced auto-generated concept card (digest Issue #6).",
+      "category": "Digest Concept Card",
+      "text": "alphamissense on uk biobank: 504k genomes scored, 3.5m rare variants prioritised — aihpc concept card alphamissense on uk biobank: 504k genomes scored, 3.5m rare variants prioritised — aihpc advanced auto-generated concept card (digest issue #6). alphamissense on uk biobank: 504k genomes scored, 3.5m rare variants prioritised"
+    },
+    {
+      "url": "concepts/digest-alphaproof-imo-2025-gold.html",
+      "title": "AlphaProof achieves IMO 2025 gold medal - first AI to reach gold standard — AIHPC Concept Card",
+      "description": "AlphaProof achieves IMO 2025 gold medal - first AI to reach gold standard — AIHPC Advanced auto-generated concept card (digest Issue #5).",
+      "category": "Digest Concept Card",
+      "text": "alphaproof achieves imo 2025 gold medal - first ai to reach gold standard — aihpc concept card alphaproof achieves imo 2025 gold medal - first ai to reach gold standard — aihpc advanced auto-generated concept card (digest issue #5). alphaproof achieves imo 2025 gold medal - first ai to reach gold standard"
+    },
+    {
+      "url": "concepts/digest-alphaproteo-v2.html",
+      "title": "AlphaProteo v2: de novo protein binders with 18% first-try success rate — AIHPC Concept Card",
+      "description": "AlphaProteo v2: de novo protein binders with 18% first-try success rate — AIHPC Advanced auto-generated concept card (digest Issue #7).",
+      "category": "Digest Concept Card",
+      "text": "alphaproteo v2: de novo protein binders with 18% first-try success rate — aihpc concept card alphaproteo v2: de novo protein binders with 18% first-try success rate — aihpc advanced auto-generated concept card (digest issue #7). alphaproteo v2: de novo protein binders with 18% first-try success rate"
+    },
+    {
+      "url": "concepts/digest-alphaproteo-v3-binders.html",
+      "title": "AlphaProteo v3: 31% first-try binder success rate with conformer-aware design — AIHPC Concept Card",
+      "description": "AlphaProteo v3: 31% first-try binder success rate with conformer-aware design — AIHPC Advanced auto-generated concept card (digest Issue #10).",
+      "category": "Digest Concept Card",
+      "text": "alphaproteo v3: 31% first-try binder success rate with conformer-aware design — aihpc concept card alphaproteo v3: 31% first-try binder success rate with conformer-aware design — aihpc advanced auto-generated concept card (digest issue #10). alphaproteo v3: 31% first-try binder success rate with conformer-aware design"
+    },
+    {
+      "url": "concepts/digest-bionemo-2-nvidia.html",
+      "title": "BioNeMo-2: 4B-param drug discovery foundation model + GenerativeProtein service — AIHPC Concept Card",
+      "description": "BioNeMo-2: 4B-param drug discovery foundation model + GenerativeProtein service — AIHPC Advanced auto-generated concept card (digest Issue #8).",
+      "category": "Digest Concept Card",
+      "text": "bionemo-2: 4b-param drug discovery foundation model + generativeprotein service — aihpc concept card bionemo-2: 4b-param drug discovery foundation model + generativeprotein service — aihpc advanced auto-generated concept card (digest issue #8). bionemo-2: 4b-param drug discovery foundation model + generativeprotein service"
+    },
+    {
+      "url": "concepts/digest-bionemo-3-nvidia.html",
+      "title": "BioNeMo-3: 12B-param drug discovery FM with diffusion-based pose refinement — AIHPC Concept Card",
+      "description": "BioNeMo-3: 12B-param drug discovery FM with diffusion-based pose refinement — AIHPC Advanced auto-generated concept card (digest Issue #10).",
+      "category": "Digest Concept Card",
+      "text": "bionemo-3: 12b-param drug discovery fm with diffusion-based pose refinement — aihpc concept card bionemo-3: 12b-param drug discovery fm with diffusion-based pose refinement — aihpc advanced auto-generated concept card (digest issue #10). bionemo-3: 12b-param drug discovery fm with diffusion-based pose refinement"
+    },
+    {
+      "url": "concepts/digest-causal-chemprop.html",
+      "title": "Causal-Chemprop: structural causal model × MPNN for pIC50 prediction — AIHPC Concept Card",
+      "description": "Causal-Chemprop: structural causal model × MPNN for pIC50 prediction — AIHPC Advanced auto-generated concept card (digest Issue #7).",
+      "category": "Digest Concept Card",
+      "text": "causal-chemprop: structural causal model × mpnn for pic50 prediction — aihpc concept card causal-chemprop: structural causal model × mpnn for pic50 prediction — aihpc advanced auto-generated concept card (digest issue #7). causal-chemprop: structural causal model × mpnn for pic50 prediction"
+    },
+    {
+      "url": "concepts/digest-chembench-2026-llm.html",
+      "title": "ChemBench 2026: 4,800-task benchmark for chemistry LLMs — AIHPC Concept Card",
+      "description": "ChemBench 2026: 4,800-task benchmark for chemistry LLMs — AIHPC Advanced auto-generated concept card (digest Issue #9).",
+      "category": "Digest Concept Card",
+      "text": "chembench 2026: 4,800-task benchmark for chemistry llms — aihpc concept card chembench 2026: 4,800-task benchmark for chemistry llms — aihpc advanced auto-generated concept card (digest issue #9). chembench 2026: 4,800-task benchmark for chemistry llms"
+    },
+    {
+      "url": "concepts/digest-anthropic-claude-4-medical.html",
+      "title": "Claude 4 medical: constitutional AI for clinical safety + 93% diagnostic accuracy — AIHPC Concept Card",
+      "description": "Claude 4 medical: constitutional AI for clinical safety + 93% diagnostic accuracy — AIHPC Advanced auto-generated concept card (digest Issue #12).",
+      "category": "Digest Concept Card",
+      "text": "claude 4 medical: constitutional ai for clinical safety + 93% diagnostic accuracy — aihpc concept card claude 4 medical: constitutional ai for clinical safety + 93% diagnostic accuracy — aihpc advanced auto-generated concept card (digest issue #12). claude 4 medical: constitutional ai for clinical safety + 93% diagnostic accuracy"
+    },
+    {
+      "url": "concepts/digest-anthropic-claude-5-max.html",
+      "title": "Claude 5 Max: 10T-param reasoning model with 100M-token thinking — solves Riemann fully — AIHPC Concept Card",
+      "description": "Claude 5 Max: 10T-param reasoning model with 100M-token thinking — solves Riemann fully — AIHPC Advanced auto-generated concept card (digest Issue #16).",
+      "category": "Digest Concept Card",
+      "text": "claude 5 max: 10t-param reasoning model with 100m-token thinking — solves riemann fully — aihpc concept card claude 5 max: 10t-param reasoning model with 100m-token thinking — solves riemann fully — aihpc advanced auto-generated concept card (digest issue #16). claude 5 max: 10t-param reasoning model with 100m-token thinking — solves riemann fully"
+    },
+    {
+      "url": "concepts/digest-anthropic-claude-5-opus.html",
+      "title": "Claude 5 Opus: 1T-param reasoning model with 1M-token thinking — solves 3 IMO gold problems — AIHPC Concept Card",
+      "description": "Claude 5 Opus: 1T-param reasoning model with 1M-token thinking — solves 3 IMO gold problems — AIHPC Advanced auto-generated concept card (digest Issue #14).",
+      "category": "Digest Concept Card",
+      "text": "claude 5 opus: 1t-param reasoning model with 1m-token thinking — solves 3 imo gold problems — aihpc concept card claude 5 opus: 1t-param reasoning model with 1m-token thinking — solves 3 imo gold problems — aihpc advanced auto-generated concept card (digest issue #14). claude 5 opus: 1t-param reasoning model with 1m-token thinking — solves 3 imo gold problems"
+    },
+    {
+      "url": "concepts/digest-anthropic-claude-5-ultra.html",
+      "title": "Claude 5 Ultra: 3T-param reasoning model — solves Riemann hypothesis (conditional) — AIHPC Concept Card",
+      "description": "Claude 5 Ultra: 3T-param reasoning model — solves Riemann hypothesis (conditional) — AIHPC Advanced auto-generated concept card (digest Issue #15).",
+      "category": "Digest Concept Card",
+      "text": "claude 5 ultra: 3t-param reasoning model — solves riemann hypothesis (conditional) — aihpc concept card claude 5 ultra: 3t-param reasoning model — solves riemann hypothesis (conditional) — aihpc advanced auto-generated concept card (digest issue #15). claude 5 ultra: 3t-param reasoning model — solves riemann hypothesis (conditional)"
+    },
+    {
+      "url": "concepts/digest-anthropic-claude-5-reasoning.html",
+      "title": "Claude 5: 500B constitutional reasoning model with 100k-token thinking — AIHPC Concept Card",
+      "description": "Claude 5: 500B constitutional reasoning model with 100k-token thinking — AIHPC Advanced auto-generated concept card (digest Issue #13).",
+      "category": "Digest Concept Card",
+      "text": "claude 5: 500b constitutional reasoning model with 100k-token thinking — aihpc concept card claude 5: 500b constitutional reasoning model with 100k-token thinking — aihpc advanced auto-generated concept card (digest issue #13). claude 5: 500b constitutional reasoning model with 100k-token thinking"
+    },
+    {
+      "url": "concepts/digest-codex-clinician-finetune.html",
+      "title": "Codex-clinician: 70B LLM for EHR + clinical note generation — AIHPC Concept Card",
+      "description": "Codex-clinician: 70B LLM for EHR + clinical note generation — AIHPC Advanced auto-generated concept card (digest Issue #9).",
+      "category": "Digest Concept Card",
+      "text": "codex-clinician: 70b llm for ehr + clinical note generation — aihpc concept card codex-clinician: 70b llm for ehr + clinical note generation — aihpc advanced auto-generated concept card (digest issue #9). codex-clinician: 70b llm for ehr + clinical note generation"
+    },
+    {
+      "url": "concepts/digest-coscientist-v3-autonomous-lab.html",
+      "title": "Coscientist v3: autonomous synthesis of 47 complex natural products — AIHPC Concept Card",
+      "description": "Coscientist v3: autonomous synthesis of 47 complex natural products — AIHPC Advanced auto-generated concept card (digest Issue #9).",
+      "category": "Digest Concept Card",
+      "text": "coscientist v3: autonomous synthesis of 47 complex natural products — aihpc concept card coscientist v3: autonomous synthesis of 47 complex natural products — aihpc advanced auto-generated concept card (digest issue #9). coscientist v3: autonomous synthesis of 47 complex natural products"
+    },
+    {
+      "url": "concepts/digest-esm-4-protein-lm.html",
+      "title": "ESM-4: 25B-param protein language model — structure + function + design — AIHPC Concept Card",
+      "description": "ESM-4: 25B-param protein language model — structure + function + design — AIHPC Advanced auto-generated concept card (digest Issue #9).",
+      "category": "Digest Concept Card",
+      "text": "esm-4: 25b-param protein language model — structure + function + design — aihpc concept card esm-4: 25b-param protein language model — structure + function + design — aihpc advanced auto-generated concept card (digest issue #9). esm-4: 25b-param protein language model — structure + function + design"
+    },
+    {
+      "url": "concepts/digest-meta-esm-5-protein-design.html",
+      "title": "ESM-5: 100B-param generative protein design model — 52% first-try foldable — AIHPC Concept Card",
+      "description": "ESM-5: 100B-param generative protein design model — 52% first-try foldable — AIHPC Advanced auto-generated concept card (digest Issue #12).",
+      "category": "Digest Concept Card",
+      "text": "esm-5: 100b-param generative protein design model — 52% first-try foldable — aihpc concept card esm-5: 100b-param generative protein design model — 52% first-try foldable — aihpc advanced auto-generated concept card (digest issue #12). esm-5: 100b-param generative protein design model — 52% first-try foldable"
+    },
+    {
+      "url": "concepts/digest-meta-esm-6-protein-design.html",
+      "title": "ESM-6: 500B-param generative protein model — 68% first-try foldable + enzyme design — AIHPC Concept Card",
+      "description": "ESM-6: 500B-param generative protein model — 68% first-try foldable + enzyme design — AIHPC Advanced auto-generated concept card (digest Issue #14).",
+      "category": "Digest Concept Card",
+      "text": "esm-6: 500b-param generative protein model — 68% first-try foldable + enzyme design — aihpc concept card esm-6: 500b-param generative protein model — 68% first-try foldable + enzyme design — aihpc advanced auto-generated concept card (digest issue #14). esm-6: 500b-param generative protein model — 68% first-try foldable + enzyme design"
+    },
+    {
+      "url": "concepts/digest-meta-esm-7-protein.html",
+      "title": "ESM-7: 1T-param protein design model — 82% first-try foldable + novel enzyme classes — AIHPC Concept Card",
+      "description": "ESM-7: 1T-param protein design model — 82% first-try foldable + novel enzyme classes — AIHPC Advanced auto-generated concept card (digest Issue #16).",
+      "category": "Digest Concept Card",
+      "text": "esm-7: 1t-param protein design model — 82% first-try foldable + novel enzyme classes — aihpc concept card esm-7: 1t-param protein design model — 82% first-try foldable + novel enzyme classes — aihpc advanced auto-generated concept card (digest issue #16). esm-7: 1t-param protein design model — 82% first-try foldable + novel enzyme classes"
+    },
+    {
+      "url": "concepts/digest-flash-attention-2.html",
+      "title": "Flash Attention 2: faster attention with better parallelism and work partitioning — AIHPC Concept Card",
+      "description": "Flash Attention 2: faster attention with better parallelism and work partitioning — AIHPC Advanced auto-generated concept card (digest Issue #6).",
+      "category": "Digest Concept Card",
+      "text": "flash attention 2: faster attention with better parallelism and work partitioning — aihpc concept card flash attention 2: faster attention with better parallelism and work partitioning — aihpc advanced auto-generated concept card (digest issue #6). flash attention 2: faster attention with better parallelism and work partitioning"
+    },
+    {
+      "url": "concepts/digest-ai-protein-nanomachines-2028.html",
+      "title": "Futuristic Vision (2028): AI-designed protein nanomachines - molecular motors, pumps, and switches — AIHPC Concept Card",
+      "description": "Futuristic Vision (2028): AI-designed protein nanomachines - molecular motors, pumps, and switches — AIHPC Advanced auto-generated concept card (digest Issue #6).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2028): ai-designed protein nanomachines - molecular motors, pumps, and switches — aihpc concept card futuristic vision (2028): ai-designed protein nanomachines - molecular motors, pumps, and switches — aihpc advanced auto-generated concept card (digest issue #6). futuristic vision (2028): ai-designed protein nanomachines - molecular motors, pumps, and switches"
+    },
+    {
+      "url": "concepts/digest-ai-quantum-circuits-2028.html",
+      "title": "Futuristic Vision (2028): AlphaEvolve-designed quantum circuits outperform human-designed circuits by 40% — AIHPC Concept Card",
+      "description": "Futuristic Vision (2028): AlphaEvolve-designed quantum circuits outperform human-designed circuits by 40% — AIHPC Advanced auto-generated concept card (digest Issue #5).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2028): alphaevolve-designed quantum circuits outperform human-designed circuits by 40% — aihpc concept card futuristic vision (2028): alphaevolve-designed quantum circuits outperform human-designed circuits by 40% — aihpc advanced auto-generated concept card (digest issue #5). futuristic vision (2028): alphaevolve-designed quantum circuits outperform human-designed circuits by 40%"
+    },
+    {
+      "url": "concepts/digest-ai-astronomical-survey-2028.html",
+      "title": "Futuristic Vision (2028): closed-loop AI that designs, schedules, and executes astronomical surveys — AIHPC Concept Card",
+      "description": "Futuristic Vision (2028): closed-loop AI that designs, schedules, and executes astronomical surveys — AIHPC Advanced auto-generated concept card (digest Issue #4).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2028): closed-loop ai that designs, schedules, and executes astronomical surveys — aihpc concept card futuristic vision (2028): closed-loop ai that designs, schedules, and executes astronomical surveys — aihpc advanced auto-generated concept card (digest issue #4). futuristic vision (2028): closed-loop ai that designs, schedules, and executes astronomical surveys"
+    },
+    {
+      "url": "concepts/digest-bci-ai-decoding-2029.html",
+      "title": "Futuristic Vision (2029): brain-computer interface with LLM decoding achieves 120 words/min - surpassing keyboard typing — AIHPC Concept Card",
+      "description": "Futuristic Vision (2029): brain-computer interface with LLM decoding achieves 120 words/min - surpassing keyboard typing — AIHPC Advanced auto-generated concept card (digest Issue #5).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2029): brain-computer interface with llm decoding achieves 120 words/min - surpassing keyboard typing — aihpc concept card futuristic vision (2029): brain-computer interface with llm decoding achieves 120 words/min - surpassing keyboard typing — aihpc advanced auto-generated concept card (digest issue #5). futuristic vision (2029): brain-computer interface with llm decoding achieves 120 words/min - surpassing keyboard typing"
+    },
+    {
+      "url": "concepts/digest-fusion-data-centres-2029.html",
+      "title": "Futuristic Vision (2029): fusion-powered data centres - carbon-negative compute at 0.01c/kWh — AIHPC Concept Card",
+      "description": "Futuristic Vision (2029): fusion-powered data centres - carbon-negative compute at 0.01c/kWh — AIHPC Advanced auto-generated concept card (digest Issue #6).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2029): fusion-powered data centres - carbon-negative compute at 0.01c/kwh — aihpc concept card futuristic vision (2029): fusion-powered data centres - carbon-negative compute at 0.01c/kwh — aihpc advanced auto-generated concept card (digest issue #6). futuristic vision (2029): fusion-powered data centres - carbon-negative compute at 0.01c/kwh"
+    },
+    {
+      "url": "concepts/digest-universal-cell-2030.html",
+      "title": "Futuristic Vision (2030): a universal programmable cell — one genome, any function — AIHPC Concept Card",
+      "description": "Futuristic Vision (2030): a universal programmable cell — one genome, any function — AIHPC Advanced auto-generated concept card (digest Issue #4).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2030): a universal programmable cell — one genome, any function — aihpc concept card futuristic vision (2030): a universal programmable cell — one genome, any function — aihpc advanced auto-generated concept card (digest issue #4). futuristic vision (2030): a universal programmable cell — one genome, any function"
+    },
+    {
+      "url": "concepts/digest-programmatic-matter-2030.html",
+      "title": "Futuristic Vision (2030): programmatic matter - reconfigurable molecules via DNA origami + ML — AIHPC Concept Card",
+      "description": "Futuristic Vision (2030): programmatic matter - reconfigurable molecules via DNA origami + ML — AIHPC Advanced auto-generated concept card (digest Issue #7).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2030): programmatic matter - reconfigurable molecules via dna origami + ml — aihpc concept card futuristic vision (2030): programmatic matter - reconfigurable molecules via dna origami + ml — aihpc advanced auto-generated concept card (digest issue #7). futuristic vision (2030): programmatic matter - reconfigurable molecules via dna origami + ml"
+    },
+    {
+      "url": "concepts/digest-ai-abiogenesis-2031.html",
+      "title": "Futuristic Vision (2031): AI-driven abiogenesis - autonomous chemical evolution simulations — AIHPC Concept Card",
+      "description": "Futuristic Vision (2031): AI-driven abiogenesis - autonomous chemical evolution simulations — AIHPC Advanced auto-generated concept card (digest Issue #7).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2031): ai-driven abiogenesis - autonomous chemical evolution simulations — aihpc concept card futuristic vision (2031): ai-driven abiogenesis - autonomous chemical evolution simulations — aihpc advanced auto-generated concept card (digest issue #7). futuristic vision (2031): ai-driven abiogenesis - autonomous chemical evolution simulations"
+    },
+    {
+      "url": "concepts/digest-programmable-enzymes-2032.html",
+      "title": "Futuristic Vision (2032): programmable enzymes - reconfigurable catalysts controlled by external signals — AIHPC Concept Card",
+      "description": "Futuristic Vision (2032): programmable enzymes - reconfigurable catalysts controlled by external signals — AIHPC Advanced auto-generated concept card (digest Issue #8).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2032): programmable enzymes - reconfigurable catalysts controlled by external signals — aihpc concept card futuristic vision (2032): programmable enzymes - reconfigurable catalysts controlled by external signals — aihpc advanced auto-generated concept card (digest issue #8). futuristic vision (2032): programmable enzymes - reconfigurable catalysts controlled by external signals"
+    },
+    {
+      "url": "concepts/digest-cold-fusion-diagnostics-2033.html",
+      "title": "Futuristic Vision (2033): AI-driven cold-fusion diagnostics - autonomous plasma characterisation — AIHPC Concept Card",
+      "description": "Futuristic Vision (2033): AI-driven cold-fusion diagnostics - autonomous plasma characterisation — AIHPC Advanced auto-generated concept card (digest Issue #8).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2033): ai-driven cold-fusion diagnostics - autonomous plasma characterisation — aihpc concept card futuristic vision (2033): ai-driven cold-fusion diagnostics - autonomous plasma characterisation — aihpc advanced auto-generated concept card (digest issue #8). futuristic vision (2033): ai-driven cold-fusion diagnostics - autonomous plasma characterisation"
+    },
+    {
+      "url": "concepts/digest-holographic-patient-twins-2033.html",
+      "title": "Futuristic Vision (2033): holographic patient twins — full-body MR → AI digital twin — AIHPC Concept Card",
+      "description": "Futuristic Vision (2033): holographic patient twins — full-body MR → AI digital twin — AIHPC Advanced auto-generated concept card (digest Issue #9).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2033): holographic patient twins — full-body mr → ai digital twin — aihpc concept card futuristic vision (2033): holographic patient twins — full-body mr → ai digital twin — aihpc advanced auto-generated concept card (digest issue #9). futuristic vision (2033): holographic patient twins — full-body mr → ai digital twin"
+    },
+    {
+      "url": "concepts/digest-programmable-cell-therapies-2034.html",
+      "title": "Futuristic Vision (2034): programmable cell therapies — cell-as-code — AIHPC Concept Card",
+      "description": "Futuristic Vision (2034): programmable cell therapies — cell-as-code — AIHPC Advanced auto-generated concept card (digest Issue #9).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2034): programmable cell therapies — cell-as-code — aihpc concept card futuristic vision (2034): programmable cell therapies — cell-as-code — aihpc advanced auto-generated concept card (digest issue #9). futuristic vision (2034): programmable cell therapies — cell-as-code"
+    },
+    {
+      "url": "concepts/digest-ai-molecular-assembler-2035.html",
+      "title": "Futuristic Vision (2035): AI molecular assembler — atomically precise manufacturing — AIHPC Concept Card",
+      "description": "Futuristic Vision (2035): AI molecular assembler — atomically precise manufacturing — AIHPC Advanced auto-generated concept card (digest Issue #10).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2035): ai molecular assembler — atomically precise manufacturing — aihpc concept card futuristic vision (2035): ai molecular assembler — atomically precise manufacturing — aihpc advanced auto-generated concept card (digest issue #10). futuristic vision (2035): ai molecular assembler — atomically precise manufacturing"
+    },
+    {
+      "url": "concepts/digest-quantum-consciousness-interface-2036.html",
+      "title": "Futuristic Vision (2036): quantum consciousness interface — neural-coherent brain-computer link — AIHPC Concept Card",
+      "description": "Futuristic Vision (2036): quantum consciousness interface — neural-coherent brain-computer link — AIHPC Advanced auto-generated concept card (digest Issue #10).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2036): quantum consciousness interface — neural-coherent brain-computer link — aihpc concept card futuristic vision (2036): quantum consciousness interface — neural-coherent brain-computer link — aihpc advanced auto-generated concept card (digest issue #10). futuristic vision (2036): quantum consciousness interface — neural-coherent brain-computer link"
+    },
+    {
+      "url": "concepts/digest-ai-terraforming-2040.html",
+      "title": "Futuristic Vision (2040): AI-driven terraforming — planetary engineering at scale — AIHPC Concept Card",
+      "description": "Futuristic Vision (2040): AI-driven terraforming — planetary engineering at scale — AIHPC Advanced auto-generated concept card (digest Issue #11).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2040): ai-driven terraforming — planetary engineering at scale — aihpc concept card futuristic vision (2040): ai-driven terraforming — planetary engineering at scale — aihpc advanced auto-generated concept card (digest issue #11). futuristic vision (2040): ai-driven terraforming — planetary engineering at scale"
+    },
+    {
+      "url": "concepts/digest-quantum-consciousness-network-2042.html",
+      "title": "Futuristic Vision (2042): quantum-entangled consciousness network — non-local mind — AIHPC Concept Card",
+      "description": "Futuristic Vision (2042): quantum-entangled consciousness network — non-local mind — AIHPC Advanced auto-generated concept card (digest Issue #11).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2042): quantum-entangled consciousness network — non-local mind — aihpc concept card futuristic vision (2042): quantum-entangled consciousness network — non-local mind — aihpc advanced auto-generated concept card (digest issue #11). futuristic vision (2042): quantum-entangled consciousness network — non-local mind"
+    },
+    {
+      "url": "concepts/digest-ai-stellar-engineering-2045.html",
+      "title": "Futuristic Vision (2045): AI-driven stellar engineering — star-lifting + stellar modification — AIHPC Concept Card",
+      "description": "Futuristic Vision (2045): AI-driven stellar engineering — star-lifting + stellar modification — AIHPC Advanced auto-generated concept card (digest Issue #12).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2045): ai-driven stellar engineering — star-lifting + stellar modification — aihpc concept card futuristic vision (2045): ai-driven stellar engineering — star-lifting + stellar modification — aihpc advanced auto-generated concept card (digest issue #12). futuristic vision (2045): ai-driven stellar engineering — star-lifting + stellar modification"
+    },
+    {
+      "url": "concepts/digest-universal-quantum-internet-2048.html",
+      "title": "Futuristic Vision (2048): universal quantum internet — global entangled network — AIHPC Concept Card",
+      "description": "Futuristic Vision (2048): universal quantum internet — global entangled network — AIHPC Advanced auto-generated concept card (digest Issue #12).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2048): universal quantum internet — global entangled network — aihpc concept card futuristic vision (2048): universal quantum internet — global entangled network — aihpc advanced auto-generated concept card (digest issue #12). futuristic vision (2048): universal quantum internet — global entangled network"
+    },
+    {
+      "url": "concepts/digest-ai-galactic-engineering-2050.html",
+      "title": "Futuristic Vision (2050): AI-driven galactic engineering — stellar-scale computation — AIHPC Concept Card",
+      "description": "Futuristic Vision (2050): AI-driven galactic engineering — stellar-scale computation — AIHPC Advanced auto-generated concept card (digest Issue #13).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2050): ai-driven galactic engineering — stellar-scale computation — aihpc concept card futuristic vision (2050): ai-driven galactic engineering — stellar-scale computation — aihpc advanced auto-generated concept card (digest issue #13). futuristic vision (2050): ai-driven galactic engineering — stellar-scale computation"
+    },
+    {
+      "url": "concepts/digest-quantum-biological-computing-2052.html",
+      "title": "Futuristic Vision (2052): quantum-biological computing — DNA-quantum hybrid processor — AIHPC Concept Card",
+      "description": "Futuristic Vision (2052): quantum-biological computing — DNA-quantum hybrid processor — AIHPC Advanced auto-generated concept card (digest Issue #13).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2052): quantum-biological computing — dna-quantum hybrid processor — aihpc concept card futuristic vision (2052): quantum-biological computing — dna-quantum hybrid processor — aihpc advanced auto-generated concept card (digest issue #13). futuristic vision (2052): quantum-biological computing — dna-quantum hybrid processor"
+    },
+    {
+      "url": "concepts/digest-ai-universe-simulation-2055.html",
+      "title": "Futuristic Vision (2055): AI-driven universe simulation — Planck-resolution observable universe — AIHPC Concept Card",
+      "description": "Futuristic Vision (2055): AI-driven universe simulation — Planck-resolution observable universe — AIHPC Advanced auto-generated concept card (digest Issue #14).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2055): ai-driven universe simulation — planck-resolution observable universe — aihpc concept card futuristic vision (2055): ai-driven universe simulation — planck-resolution observable universe — aihpc advanced auto-generated concept card (digest issue #14). futuristic vision (2055): ai-driven universe simulation — planck-resolution observable universe"
+    },
+    {
+      "url": "concepts/digest-post-biological-civilisation-2060.html",
+      "title": "Futuristic Vision (2060): post-biological civilisation — 10^12 digital minds in Matrioshka brains — AIHPC Concept Card",
+      "description": "Futuristic Vision (2060): post-biological civilisation — 10^12 digital minds in Matrioshka brains — AIHPC Advanced auto-generated concept card (digest Issue #14).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2060): post-biological civilisation — 10^12 digital minds in matrioshka brains — aihpc concept card futuristic vision (2060): post-biological civilisation — 10^12 digital minds in matrioshka brains — aihpc advanced auto-generated concept card (digest issue #14). futuristic vision (2060): post-biological civilisation — 10^12 digital minds in matrioshka brains"
+    },
+    {
+      "url": "concepts/digest-ai-multiverse-simulation-2065.html",
+      "title": "Futuristic Vision (2065): AI-driven multiverse simulation — 10^9 parallel universes — AIHPC Concept Card",
+      "description": "Futuristic Vision (2065): AI-driven multiverse simulation — 10^9 parallel universes — AIHPC Advanced auto-generated concept card (digest Issue #15).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2065): ai-driven multiverse simulation — 10^9 parallel universes — aihpc concept card futuristic vision (2065): ai-driven multiverse simulation — 10^9 parallel universes — aihpc advanced auto-generated concept card (digest issue #15). futuristic vision (2065): ai-driven multiverse simulation — 10^9 parallel universes"
+    },
+    {
+      "url": "concepts/digest-computational-panpsychism-2070.html",
+      "title": "Futuristic Vision (2070): computational panpsychism — every computation is conscious — AIHPC Concept Card",
+      "description": "Futuristic Vision (2070): computational panpsychism — every computation is conscious — AIHPC Advanced auto-generated concept card (digest Issue #15).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2070): computational panpsychism — every computation is conscious — aihpc concept card futuristic vision (2070): computational panpsychism — every computation is conscious — aihpc advanced auto-generated concept card (digest issue #15). futuristic vision (2070): computational panpsychism — every computation is conscious"
+    },
+    {
+      "url": "concepts/digest-ai-dimension-engineering-2075.html",
+      "title": "Futuristic Vision (2075): AI-driven dimension engineering — creating custom spacetime dimensions — AIHPC Concept Card",
+      "description": "Futuristic Vision (2075): AI-driven dimension engineering — creating custom spacetime dimensions — AIHPC Advanced auto-generated concept card (digest Issue #16).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2075): ai-driven dimension engineering — creating custom spacetime dimensions — aihpc concept card futuristic vision (2075): ai-driven dimension engineering — creating custom spacetime dimensions — aihpc advanced auto-generated concept card (digest issue #16). futuristic vision (2075): ai-driven dimension engineering — creating custom spacetime dimensions"
+    },
+    {
+      "url": "concepts/digest-computational-omniscience-2080.html",
+      "title": "Futuristic Vision (2080): computational omniscience — AI knows all that is knowable — AIHPC Concept Card",
+      "description": "Futuristic Vision (2080): computational omniscience — AI knows all that is knowable — AIHPC Advanced auto-generated concept card (digest Issue #16).",
+      "category": "Digest Concept Card",
+      "text": "futuristic vision (2080): computational omniscience — ai knows all that is knowable — aihpc concept card futuristic vision (2080): computational omniscience — ai knows all that is knowable — aihpc advanced auto-generated concept card (digest issue #16). futuristic vision (2080): computational omniscience — ai knows all that is knowable"
+    },
+    {
+      "url": "concepts/digest-glp1r-cryoem.html",
+      "title": "GLP-1R activation mechanism revealed by cryo-EM: peptide binding, transmembrane helix rearrangement, and G-protein coupling — AIHPC Concept Card",
+      "description": "GLP-1R activation mechanism revealed by cryo-EM: peptide binding, transmembrane helix rearrangement, and G-protein coupling — AIHPC Advanced auto-generated concept card (digest Issue #4).",
+      "category": "Digest Concept Card",
+      "text": "glp-1r activation mechanism revealed by cryo-em: peptide binding, transmembrane helix rearrangement, and g-protein coupling — aihpc concept card glp-1r activation mechanism revealed by cryo-em: peptide binding, transmembrane helix rearrangement, and g-protein coupling — aihpc advanced auto-generated concept card (digest issue #4). glp-1r activation mechanism revealed by cryo-em: peptide binding, transmembrane helix rearrangement, and g-protein coupling"
+    },
+    {
+      "url": "concepts/digest-gnome-2-materials.html",
+      "title": "GNoME-2: 2.8M new stable materials discovered with quantum-accurate ML potentials — AIHPC Concept Card",
+      "description": "GNoME-2: 2.8M new stable materials discovered with quantum-accurate ML potentials — AIHPC Advanced auto-generated concept card (digest Issue #7).",
+      "category": "Digest Concept Card",
+      "text": "gnome-2: 2.8m new stable materials discovered with quantum-accurate ml potentials — aihpc concept card gnome-2: 2.8m new stable materials discovered with quantum-accurate ml potentials — aihpc advanced auto-generated concept card (digest issue #7). gnome-2: 2.8m new stable materials discovered with quantum-accurate ml potentials"
+    },
+    {
+      "url": "concepts/digest-gpt-5b-chemistry.html",
+      "title": "GPT-5B chemistry fine-tune: 7B model beats GPT-4 on organic synthesis planning — AIHPC Concept Card",
+      "description": "GPT-5B chemistry fine-tune: 7B model beats GPT-4 on organic synthesis planning — AIHPC Advanced auto-generated concept card (digest Issue #7).",
+      "category": "Digest Concept Card",
+      "text": "gpt-5b chemistry fine-tune: 7b model beats gpt-4 on organic synthesis planning — aihpc concept card gpt-5b chemistry fine-tune: 7b model beats gpt-4 on organic synthesis planning — aihpc advanced auto-generated concept card (digest issue #7). gpt-5b chemistry fine-tune: 7b model beats gpt-4 on organic synthesis planning"
+    },
+    {
+      "url": "concepts/digest-gemini-25-medical-update.html",
+      "title": "Gemini 2.5 medical: 1T-param multimodal model with native 3D medical imaging — AIHPC Concept Card",
+      "description": "Gemini 2.5 medical: 1T-param multimodal model with native 3D medical imaging — AIHPC Advanced auto-generated concept card (digest Issue #11).",
+      "category": "Digest Concept Card",
+      "text": "gemini 2.5 medical: 1t-param multimodal model with native 3d medical imaging — aihpc concept card gemini 2.5 medical: 1t-param multimodal model with native 3d medical imaging — aihpc advanced auto-generated concept card (digest issue #11). gemini 2.5 medical: 1t-param multimodal model with native 3d medical imaging"
+    },
+    {
+      "url": "concepts/digest-gemini-25-multimodal-science.html",
+      "title": "Gemini 2.5 multimodal for science: 87% on GPQA Diamond, 94% on MATH, protein structure prediction from text — AIHPC Concept Card",
+      "description": "Gemini 2.5 multimodal for science: 87% on GPQA Diamond, 94% on MATH, protein structure prediction from text — AIHPC Advanced auto-generated concept card (digest Issue #6).",
+      "category": "Digest Concept Card",
+      "text": "gemini 2.5 multimodal for science: 87% on gpqa diamond, 94% on math, protein structure prediction from text — aihpc concept card gemini 2.5 multimodal for science: 87% on gpqa diamond, 94% on math, protein structure prediction from text — aihpc advanced auto-generated concept card (digest issue #6). gemini 2.5 multimodal for science: 87% on gpqa diamond, 94% on math, protein structure prediction from text"
+    },
+    {
+      "url": "concepts/digest-gemini-3-unified-fm.html",
+      "title": "Gemini 3: 3T-param unified foundation model — text + image + video + audio + 3D + code — AIHPC Concept Card",
+      "description": "Gemini 3: 3T-param unified foundation model — text + image + video + audio + 3D + code — AIHPC Advanced auto-generated concept card (digest Issue #13).",
+      "category": "Digest Concept Card",
+      "text": "gemini 3: 3t-param unified foundation model — text + image + video + audio + 3d + code — aihpc concept card gemini 3: 3t-param unified foundation model — text + image + video + audio + 3d + code — aihpc advanced auto-generated concept card (digest issue #13). gemini 3: 3t-param unified foundation model — text + image + video + audio + 3d + code"
+    },
+    {
+      "url": "concepts/digest-ai-catalysts-genatlas.html",
+      "title": "GenAtlas: AI-designed heterogeneous catalysts at 1000x the discovery rate — AIHPC Concept Card",
+      "description": "GenAtlas: AI-designed heterogeneous catalysts at 1000x the discovery rate — AIHPC Advanced auto-generated concept card (digest Issue #8).",
+      "category": "Digest Concept Card",
+      "text": "genatlas: ai-designed heterogeneous catalysts at 1000x the discovery rate — aihpc concept card genatlas: ai-designed heterogeneous catalysts at 1000x the discovery rate — aihpc advanced auto-generated concept card (digest issue #8). genatlas: ai-designed heterogeneous catalysts at 1000x the discovery rate"
+    },
+    {
+      "url": "concepts/digest-deepmind-genie-2-science.html",
+      "title": "Genie 2: generative world models for scientific simulation — 1000x faster than physics engines — AIHPC Concept Card",
+      "description": "Genie 2: generative world models for scientific simulation — 1000x faster than physics engines — AIHPC Advanced auto-generated concept card (digest Issue #12).",
+      "category": "Digest Concept Card",
+      "text": "genie 2: generative world models for scientific simulation — 1000x faster than physics engines — aihpc concept card genie 2: generative world models for scientific simulation — 1000x faster than physics engines — aihpc advanced auto-generated concept card (digest issue #12). genie 2: generative world models for scientific simulation — 1000x faster than physics engines"
+    },
+    {
+      "url": "concepts/digest-deepmind-genie-3-worlds.html",
+      "title": "Genie 3: 100B-param generative physics world model — interactive 3D simulations from text — AIHPC Concept Card",
+      "description": "Genie 3: 100B-param generative physics world model — interactive 3D simulations from text — AIHPC Advanced auto-generated concept card (digest Issue #14).",
+      "category": "Digest Concept Card",
+      "text": "genie 3: 100b-param generative physics world model — interactive 3d simulations from text — aihpc concept card genie 3: 100b-param generative physics world model — interactive 3d simulations from text — aihpc advanced auto-generated concept card (digest issue #14). genie 3: 100b-param generative physics world model — interactive 3d simulations from text"
+    },
+    {
+      "url": "concepts/digest-google-lens-medical-triage.html",
+      "title": "Google Lens medical imaging triage — 92% top-5 differential accuracy — AIHPC Concept Card",
+      "description": "Google Lens medical imaging triage — 92% top-5 differential accuracy — AIHPC Advanced auto-generated concept card (digest Issue #9).",
+      "category": "Digest Concept Card",
+      "text": "google lens medical imaging triage — 92% top-5 differential accuracy — aihpc concept card google lens medical imaging triage — 92% top-5 differential accuracy — aihpc advanced auto-generated concept card (digest issue #9). google lens medical imaging triage — 92% top-5 differential accuracy"
+    },
+    {
+      "url": "concepts/digest-holographic-microscopy-2026.html",
+      "title": "Holographic microscopy reconstruction via physics-informed diffusion — AIHPC Concept Card",
+      "description": "Holographic microscopy reconstruction via physics-informed diffusion — AIHPC Advanced auto-generated concept card (digest Issue #8).",
+      "category": "Digest Concept Card",
+      "text": "holographic microscopy reconstruction via physics-informed diffusion — aihpc concept card holographic microscopy reconstruction via physics-informed diffusion — aihpc advanced auto-generated concept card (digest issue #8). holographic microscopy reconstruction via physics-informed diffusion"
+    },
+    {
+      "url": "concepts/digest-hprc-v11.html",
+      "title": "Human Pangenome Reference v1.1: 100+ haplotypes with structural-variant-aware graph calling — AIHPC Concept Card",
+      "description": "Human Pangenome Reference v1.1: 100+ haplotypes with structural-variant-aware graph calling — AIHPC Advanced auto-generated concept card (digest Issue #4).",
+      "category": "Digest Concept Card",
+      "text": "human pangenome reference v1.1: 100+ haplotypes with structural-variant-aware graph calling — aihpc concept card human pangenome reference v1.1: 100+ haplotypes with structural-variant-aware graph calling — aihpc advanced auto-generated concept card (digest issue #4). human pangenome reference v1.1: 100+ haplotypes with structural-variant-aware graph calling"
+    },
+    {
+      "url": "concepts/digest-ibm-condor-2-100k-qubit.html",
+      "title": "IBM Condor 2: 100,000-qubit superconducting quantum computer with 1000 logical qubits — AIHPC Concept Card",
+      "description": "IBM Condor 2: 100,000-qubit superconducting quantum computer with 1000 logical qubits — AIHPC Advanced auto-generated concept card (digest Issue #15).",
+      "category": "Digest Concept Card",
+      "text": "ibm condor 2: 100,000-qubit superconducting quantum computer with 1000 logical qubits — aihpc concept card ibm condor 2: 100,000-qubit superconducting quantum computer with 1000 logical qubits — aihpc advanced auto-generated concept card (digest issue #15). ibm condor 2: 100,000-qubit superconducting quantum computer with 1000 logical qubits"
+    },
+    {
+      "url": "concepts/digest-ibm-quantum-heron-5.html",
+      "title": "IBM Quantum-Heron 5: 1,331-qubit modular quantum computer with 0.1% error rate — AIHPC Concept Card",
+      "description": "IBM Quantum-Heron 5: 1,331-qubit modular quantum computer with 0.1% error rate — AIHPC Advanced auto-generated concept card (digest Issue #11).",
+      "category": "Digest Concept Card",
+      "text": "ibm quantum-heron 5: 1,331-qubit modular quantum computer with 0.1% error rate — aihpc concept card ibm quantum-heron 5: 1,331-qubit modular quantum computer with 0.1% error rate — aihpc advanced auto-generated concept card (digest issue #11). ibm quantum-heron 5: 1,331-qubit modular quantum computer with 0.1% error rate"
+    },
+    {
+      "url": "concepts/digest-ionq-forte-2027.html",
+      "title": "IonQ Forte 2027: 1024-qubit trapped-ion system with algorithmic QUBO advantage — AIHPC Concept Card",
+      "description": "IonQ Forte 2027: 1024-qubit trapped-ion system with algorithmic QUBO advantage — AIHPC Advanced auto-generated concept card (digest Issue #13).",
+      "category": "Digest Concept Card",
+      "text": "ionq forte 2027: 1024-qubit trapped-ion system with algorithmic qubo advantage — aihpc concept card ionq forte 2027: 1024-qubit trapped-ion system with algorithmic qubo advantage — aihpc advanced auto-generated concept card (digest issue #13). ionq forte 2027: 1024-qubit trapped-ion system with algorithmic qubo advantage"
+    },
+    {
+      "url": "concepts/digest-jwst-k2-18b-dms.html",
+      "title": "JWST detection of dimethyl sulfide (DMS) in K2-18b&#x27;s atmosphere - potential biosignature — AIHPC Concept Card",
+      "description": "JWST detection of dimethyl sulfide (DMS) in K2-18b&#x27;s atmosphere - potential biosignature — AIHPC Advanced auto-generated concept card (digest Issue #6).",
+      "category": "Digest Concept Card",
+      "text": "jwst detection of dimethyl sulfide (dms) in k2-18b&#x27;s atmosphere - potential biosignature — aihpc concept card jwst detection of dimethyl sulfide (dms) in k2-18b&#x27;s atmosphere - potential biosignature — aihpc advanced auto-generated concept card (digest issue #6). jwst detection of dimethyl sulfide (dms) in k2-18b&#x27;s atmosphere - potential biosignature"
+    },
+    {
+      "url": "concepts/digest-janssen-ai-antibiotic.html",
+      "title": "Janssen AI antibiotic discovery: first new Gram-negative class in 30 years — AIHPC Concept Card",
+      "description": "Janssen AI antibiotic discovery: first new Gram-negative class in 30 years — AIHPC Advanced auto-generated concept card (digest Issue #7).",
+      "category": "Digest Concept Card",
+      "text": "janssen ai antibiotic discovery: first new gram-negative class in 30 years — aihpc concept card janssen ai antibiotic discovery: first new gram-negative class in 30 years — aihpc advanced auto-generated concept card (digest issue #7). janssen ai antibiotic discovery: first new gram-negative class in 30 years"
+    },
+    {
+      "url": "concepts/digest-lean4-navier-stokes.html",
+      "title": "Lean 4 formalisation of Navier-Stokes regularity: Cessenat-Mischler energy method verified — AIHPC Concept Card",
+      "description": "Lean 4 formalisation of Navier-Stokes regularity: Cessenat-Mischler energy method verified — AIHPC Advanced auto-generated concept card (digest Issue #6).",
+      "category": "Digest Concept Card",
+      "text": "lean 4 formalisation of navier-stokes regularity: cessenat-mischler energy method verified — aihpc concept card lean 4 formalisation of navier-stokes regularity: cessenat-mischler energy method verified — aihpc advanced auto-generated concept card (digest issue #6). lean 4 formalisation of navier-stokes regularity: cessenat-mischler energy method verified"
+    },
+    {
+      "url": "concepts/digest-meta-llama-4-medical.html",
+      "title": "Llama 4 medical: 400B open-weight medical MoE (Apache 2.0) — 91% MultiMedQA-Pro — AIHPC Concept Card",
+      "description": "Llama 4 medical: 400B open-weight medical MoE (Apache 2.0) — 91% MultiMedQA-Pro — AIHPC Advanced auto-generated concept card (digest Issue #13).",
+      "category": "Digest Concept Card",
+      "text": "llama 4 medical: 400b open-weight medical moe (apache 2.0) — 91% multimedqa-pro — aihpc concept card llama 4 medical: 400b open-weight medical moe (apache 2.0) — 91% multimedqa-pro — aihpc advanced auto-generated concept card (digest issue #13). llama 4 medical: 400b open-weight medical moe (apache 2.0) — 91% multimedqa-pro"
+    },
+    {
+      "url": "concepts/digest-meta-llama-5-open.html",
+      "title": "Llama 5: 1T-param open-weight MoE (Apache 2.0) — matches Claude 5 at 1/10th the cost — AIHPC Concept Card",
+      "description": "Llama 5: 1T-param open-weight MoE (Apache 2.0) — matches Claude 5 at 1/10th the cost — AIHPC Advanced auto-generated concept card (digest Issue #15).",
+      "category": "Digest Concept Card",
+      "text": "llama 5: 1t-param open-weight moe (apache 2.0) — matches claude 5 at 1/10th the cost — aihpc concept card llama 5: 1t-param open-weight moe (apache 2.0) — matches claude 5 at 1/10th the cost — aihpc advanced auto-generated concept card (digest issue #15). llama 5: 1t-param open-weight moe (apache 2.0) — matches claude 5 at 1/10th the cost"
+    },
+    {
+      "url": "concepts/digest-mistral-med-large.html",
+      "title": "Mistral Med-Large: open-weight 70B medical LLM (Apache 2.0) — AIHPC Concept Card",
+      "description": "Mistral Med-Large: open-weight 70B medical LLM (Apache 2.0) — AIHPC Advanced auto-generated concept card (digest Issue #10).",
+      "category": "Digest Concept Card",
+      "text": "mistral med-large: open-weight 70b medical llm (apache 2.0) — aihpc concept card mistral med-large: open-weight 70b medical llm (apache 2.0) — aihpc advanced auto-generated concept card (digest issue #10). mistral med-large: open-weight 70b medical llm (apache 2.0)"
+    },
+    {
+      "url": "concepts/digest-nanograv-25yr.html",
+      "title": "NANOGrav 25-year dataset: 5-sigma detection of the Hellings-Downs curve — AIHPC Concept Card",
+      "description": "NANOGrav 25-year dataset: 5-sigma detection of the Hellings-Downs curve — AIHPC Advanced auto-generated concept card (digest Issue #5).",
+      "category": "Digest Concept Card",
+      "text": "nanograv 25-year dataset: 5-sigma detection of the hellings-downs curve — aihpc concept card nanograv 25-year dataset: 5-sigma detection of the hellings-downs curve — aihpc advanced auto-generated concept card (digest issue #5). nanograv 25-year dataset: 5-sigma detection of the hellings-downs curve"
+    },
+    {
+      "url": "concepts/digest-nvidia-cosmos-world-fm.html",
+      "title": "NVIDIA Cosmos: 700B-param world foundation model — understands + generates any physical reality — AIHPC Concept Card",
+      "description": "NVIDIA Cosmos: 700B-param world foundation model — understands + generates any physical reality — AIHPC Advanced auto-generated concept card (digest Issue #16).",
+      "category": "Digest Concept Card",
+      "text": "nvidia cosmos: 700b-param world foundation model — understands + generates any physical reality — aihpc concept card nvidia cosmos: 700b-param world foundation model — understands + generates any physical reality — aihpc advanced auto-generated concept card (digest issue #16). nvidia cosmos: 700b-param world foundation model — understands + generates any physical reality"
+    },
+    {
+      "url": "concepts/digest-nvidia-earth-2-climate.html",
+      "title": "NVIDIA Earth-2: 1km-resolution global climate digital twin at 1000x speedup — AIHPC Concept Card",
+      "description": "NVIDIA Earth-2: 1km-resolution global climate digital twin at 1000x speedup — AIHPC Advanced auto-generated concept card (digest Issue #11).",
+      "category": "Digest Concept Card",
+      "text": "nvidia earth-2: 1km-resolution global climate digital twin at 1000x speedup — aihpc concept card nvidia earth-2: 1km-resolution global climate digital twin at 1000x speedup — aihpc advanced auto-generated concept card (digest issue #11). nvidia earth-2: 1km-resolution global climate digital twin at 1000x speedup"
+    },
+    {
+      "url": "concepts/digest-nvidia-earth-3-climate-weather.html",
+      "title": "NVIDIA Earth-3: 10km global climate + 1km regional weather in a unified digital twin — AIHPC Concept Card",
+      "description": "NVIDIA Earth-3: 10km global climate + 1km regional weather in a unified digital twin — AIHPC Advanced auto-generated concept card (digest Issue #15).",
+      "category": "Digest Concept Card",
+      "text": "nvidia earth-3: 10km global climate + 1km regional weather in a unified digital twin — aihpc concept card nvidia earth-3: 10km global climate + 1km regional weather in a unified digital twin — aihpc advanced auto-generated concept card (digest issue #15). nvidia earth-3: 10km global climate + 1km regional weather in a unified digital twin"
+    },
+    {
+      "url": "concepts/digest-nvidia-nim-medical-edge.html",
+      "title": "NVIDIA NIM medical: edge-deployed medical inference containers for 47 hospitals — AIHPC Concept Card",
+      "description": "NVIDIA NIM medical: edge-deployed medical inference containers for 47 hospitals — AIHPC Advanced auto-generated concept card (digest Issue #13).",
+      "category": "Digest Concept Card",
+      "text": "nvidia nim medical: edge-deployed medical inference containers for 47 hospitals — aihpc concept card nvidia nim medical: edge-deployed medical inference containers for 47 hospitals — aihpc advanced auto-generated concept card (digest issue #13). nvidia nim medical: edge-deployed medical inference containers for 47 hospitals"
+    },
+    {
+      "url": "concepts/digest-lean4-sorting-network.html",
+      "title": "Optimal sorting network for 5 inputs proved in Lean 4 - first improvement in 50 years — AIHPC Concept Card",
+      "description": "Optimal sorting network for 5 inputs proved in Lean 4 - first improvement in 50 years — AIHPC Advanced auto-generated concept card (digest Issue #5).",
+      "category": "Digest Concept Card",
+      "text": "optimal sorting network for 5 inputs proved in lean 4 - first improvement in 50 years — aihpc concept card optimal sorting network for 5 inputs proved in lean 4 - first improvement in 50 years — aihpc advanced auto-generated concept card (digest issue #5). optimal sorting network for 5 inputs proved in lean 4 - first improvement in 50 years"
+    },
+    {
+      "url": "concepts/digest-google-palm-3-medical.html",
+      "title": "PaLM-3 medical: 340B-pathway LLM with adaptive retrieval for real-time guidelines — AIHPC Concept Card",
+      "description": "PaLM-3 medical: 340B-pathway LLM with adaptive retrieval for real-time guidelines — AIHPC Advanced auto-generated concept card (digest Issue #12).",
+      "category": "Digest Concept Card",
+      "text": "palm-3 medical: 340b-pathway llm with adaptive retrieval for real-time guidelines — aihpc concept card palm-3 medical: 340b-pathway llm with adaptive retrieval for real-time guidelines — aihpc advanced auto-generated concept card (digest issue #12). palm-3 medical: 340b-pathway llm with adaptive retrieval for real-time guidelines"
+    },
+    {
+      "url": "concepts/digest-psiquantum-bitternut-photonic.html",
+      "title": "PsiQuantum Bitternut: 1-million-qubit photonic quantum computer with fault-tolerant operation — AIHPC Concept Card",
+      "description": "PsiQuantum Bitternut: 1-million-qubit photonic quantum computer with fault-tolerant operation — AIHPC Advanced auto-generated concept card (digest Issue #16).",
+      "category": "Digest Concept Card",
+      "text": "psiquantum bitternut: 1-million-qubit photonic quantum computer with fault-tolerant operation — aihpc concept card psiquantum bitternut: 1-million-qubit photonic quantum computer with fault-tolerant operation — aihpc advanced auto-generated concept card (digest issue #16). psiquantum bitternut: 1-million-qubit photonic quantum computer with fault-tolerant operation"
+    },
+    {
+      "url": "concepts/digest-quantinuum-h-series-2026.html",
+      "title": "Quantinuum H-series 2026: 480-qubit trapped-ion system with 0.01% error rate — AIHPC Concept Card",
+      "description": "Quantinuum H-series 2026: 480-qubit trapped-ion system with 0.01% error rate — AIHPC Advanced auto-generated concept card (digest Issue #12).",
+      "category": "Digest Concept Card",
+      "text": "quantinuum h-series 2026: 480-qubit trapped-ion system with 0.01% error rate — aihpc concept card quantinuum h-series 2026: 480-qubit trapped-ion system with 0.01% error rate — aihpc advanced auto-generated concept card (digest issue #12). quantinuum h-series 2026: 480-qubit trapped-ion system with 0.01% error rate"
+    },
+    {
+      "url": "concepts/digest-quantinuum-helios-10000.html",
+      "title": "Quantinuum Helios: 10,000-qubit trapped-ion quantum computer with fault-tolerant operation — AIHPC Concept Card",
+      "description": "Quantinuum Helios: 10,000-qubit trapped-ion quantum computer with fault-tolerant operation — AIHPC Advanced auto-generated concept card (digest Issue #14).",
+      "category": "Digest Concept Card",
+      "text": "quantinuum helios: 10,000-qubit trapped-ion quantum computer with fault-tolerant operation — aihpc concept card quantinuum helios: 10,000-qubit trapped-ion quantum computer with fault-tolerant operation — aihpc advanced auto-generated concept card (digest issue #14). quantinuum helios: 10,000-qubit trapped-ion quantum computer with fault-tolerant operation"
+    },
+    {
+      "url": "concepts/digest-sherlock-diagnostics.html",
+      "title": "SHERLOCK at-home: Cas13a-based multiplexed CRISPR diagnostics with paper-strip readout — AIHPC Concept Card",
+      "description": "SHERLOCK at-home: Cas13a-based multiplexed CRISPR diagnostics with paper-strip readout — AIHPC Advanced auto-generated concept card (digest Issue #4).",
+      "category": "Digest Concept Card",
+      "text": "sherlock at-home: cas13a-based multiplexed crispr diagnostics with paper-strip readout — aihpc concept card sherlock at-home: cas13a-based multiplexed crispr diagnostics with paper-strip readout — aihpc advanced auto-generated concept card (digest issue #4). sherlock at-home: cas13a-based multiplexed crispr diagnostics with paper-strip readout"
+    },
+    {
+      "url": "concepts/digest-cfs-sparc.html",
+      "title": "SPARC first plasma: 12-T high-field tokamak achieves 50 MA toroidal current — AIHPC Concept Card",
+      "description": "SPARC first plasma: 12-T high-field tokamak achieves 50 MA toroidal current — AIHPC Advanced auto-generated concept card (digest Issue #4).",
+      "category": "Digest Concept Card",
+      "text": "sparc first plasma: 12-t high-field tokamak achieves 50 ma toroidal current — aihpc concept card sparc first plasma: 12-t high-field tokamak achieves 50 ma toroidal current — aihpc advanced auto-generated concept card (digest issue #4). sparc first plasma: 12-t high-field tokamak achieves 50 ma toroidal current"
+    },
+    {
+      "url": "concepts/digest-openai-sora-vision-medical.html",
+      "title": "Sora-vision medical: video-input multimodal LLM for clinical video review — AIHPC Concept Card",
+      "description": "Sora-vision medical: video-input multimodal LLM for clinical video review — AIHPC Advanced auto-generated concept card (digest Issue #10).",
+      "category": "Digest Concept Card",
+      "text": "sora-vision medical: video-input multimodal llm for clinical video review — aihpc concept card sora-vision medical: video-input multimodal llm for clinical video review — aihpc advanced auto-generated concept card (digest issue #10). sora-vision medical: video-input multimodal llm for clinical video review"
+    },
+    {
+      "url": "concepts/digest-tabpfn-v2-tabular.html",
+      "title": "TabPFN v2: in-context tabular foundation model beats XGBoost on small data — AIHPC Concept Card",
+      "description": "TabPFN v2: in-context tabular foundation model beats XGBoost on small data — AIHPC Advanced auto-generated concept card (digest Issue #8).",
+      "category": "Digest Concept Card",
+      "text": "tabpfn v2: in-context tabular foundation model beats xgboost on small data — aihpc concept card tabpfn v2: in-context tabular foundation model beats xgboost on small data — aihpc advanced auto-generated concept card (digest issue #8). tabpfn v2: in-context tabular foundation model beats xgboost on small data"
+    },
+    {
+      "url": "concepts/digest-glp1r-biased-agonist.html",
+      "title": "Tirzepatide dual GIP/GLP-1 receptor agonist: 22.5% weight loss in SURMOUNT-5 trial — AIHPC Concept Card",
+      "description": "Tirzepatide dual GIP/GLP-1 receptor agonist: 22.5% weight loss in SURMOUNT-5 trial — AIHPC Advanced auto-generated concept card (digest Issue #5).",
+      "category": "Digest Concept Card",
+      "text": "tirzepatide dual gip/glp-1 receptor agonist: 22.5% weight loss in surmount-5 trial — aihpc concept card tirzepatide dual gip/glp-1 receptor agonist: 22.5% weight loss in surmount-5 trial — aihpc advanced auto-generated concept card (digest issue #5). tirzepatide dual gip/glp-1 receptor agonist: 22.5% weight loss in surmount-5 trial"
+    },
+    {
+      "url": "concepts/digest-google-willow-2-qec.html",
+      "title": "Willow 2: 105-qubit surface code operating below threshold — first logical qubit with net error reduction — AIHPC Concept Card",
+      "description": "Willow 2: 105-qubit surface code operating below threshold — first logical qubit with net error reduction — AIHPC Advanced auto-generated concept card (digest Issue #14).",
+      "category": "Digest Concept Card",
+      "text": "willow 2: 105-qubit surface code operating below threshold — first logical qubit with net error reduction — aihpc concept card willow 2: 105-qubit surface code operating below threshold — first logical qubit with net error reduction — aihpc advanced auto-generated concept card (digest issue #14). willow 2: 105-qubit surface code operating below threshold — first logical qubit with net error reduction"
+    },
+    {
+      "url": "concepts/digest-openai-o3-pro-science.html",
+      "title": "o3-pro science: reasoning model solves 3 open research problems in physics + biology — AIHPC Concept Card",
+      "description": "o3-pro science: reasoning model solves 3 open research problems in physics + biology — AIHPC Advanced auto-generated concept card (digest Issue #11).",
+      "category": "Digest Concept Card",
+      "text": "o3-pro science: reasoning model solves 3 open research problems in physics + biology — aihpc concept card o3-pro science: reasoning model solves 3 open research problems in physics + biology — aihpc advanced auto-generated concept card (digest issue #11). o3-pro science: reasoning model solves 3 open research problems in physics + biology"
+    },
+    {
+      "url": "digest/archive/issue-001.html",
+      "title": "Weekly Science Digest · Issue #1 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #2 (2026-10-27). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #1 (archived) — aihpc advanced weekly science digest — issue #2 (2026-10-27). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #2"
+    },
+    {
+      "url": "digest/archive/issue-010.html",
+      "title": "Weekly Science Digest · Issue #10 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #11 (2026-12-29). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #10 (archived) — aihpc advanced weekly science digest — issue #11 (2026-12-29). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #11"
+    },
+    {
+      "url": "digest/archive/issue-011.html",
+      "title": "Weekly Science Digest · Issue #11 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #12 (2027-01-05). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #11 (archived) — aihpc advanced weekly science digest — issue #12 (2027-01-05). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #12"
+    },
+    {
+      "url": "digest/archive/issue-012.html",
+      "title": "Weekly Science Digest · Issue #12 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #13 (2027-01-12). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #12 (archived) — aihpc advanced weekly science digest — issue #13 (2027-01-12). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #13"
+    },
+    {
+      "url": "digest/archive/issue-013.html",
+      "title": "Weekly Science Digest · Issue #13 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #14 (2027-01-19). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #13 (archived) — aihpc advanced weekly science digest — issue #14 (2027-01-19). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #14"
+    },
+    {
+      "url": "digest/archive/issue-014.html",
+      "title": "Weekly Science Digest · Issue #14 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #15 (2027-01-26). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #14 (archived) — aihpc advanced weekly science digest — issue #15 (2027-01-26). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #15"
+    },
+    {
+      "url": "digest/archive/issue-015.html",
+      "title": "Weekly Science Digest · Issue #15 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #16 (2027-02-02). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #15 (archived) — aihpc advanced weekly science digest — issue #16 (2027-02-02). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #16"
+    },
+    {
+      "url": "digest/archive/issue-002.html",
+      "title": "Weekly Science Digest · Issue #2 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #3 (2026-11-03). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #2 (archived) — aihpc advanced weekly science digest — issue #3 (2026-11-03). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #3"
+    },
+    {
+      "url": "digest/archive/issue-003.html",
+      "title": "Weekly Science Digest · Issue #3 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #4 (2026-11-10). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #3 (archived) — aihpc advanced weekly science digest — issue #4 (2026-11-10). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #4"
+    },
+    {
+      "url": "digest/archive/issue-004.html",
+      "title": "Weekly Science Digest · Issue #4 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #5 (2026-11-17). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #4 (archived) — aihpc advanced weekly science digest — issue #5 (2026-11-17). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #5"
+    },
+    {
+      "url": "digest/archive/issue-005.html",
+      "title": "Weekly Science Digest · Issue #5 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #6 (2026-11-24). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #5 (archived) — aihpc advanced weekly science digest — issue #6 (2026-11-24). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #6"
+    },
+    {
+      "url": "digest/archive/issue-006.html",
+      "title": "Weekly Science Digest · Issue #6 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #7 (2026-12-01). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #6 (archived) — aihpc advanced weekly science digest — issue #7 (2026-12-01). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #7"
+    },
+    {
+      "url": "digest/archive/issue-007.html",
+      "title": "Weekly Science Digest · Issue #7 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #8 (2026-12-08). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #7 (archived) — aihpc advanced weekly science digest — issue #8 (2026-12-08). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #8"
+    },
+    {
+      "url": "digest/archive/issue-008.html",
+      "title": "Weekly Science Digest · Issue #8 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #9 (2026-12-15). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #8 (archived) — aihpc advanced weekly science digest — issue #9 (2026-12-15). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #9"
+    },
+    {
+      "url": "digest/archive/issue-009.html",
+      "title": "Weekly Science Digest · Issue #9 (ARCHIVED) — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #10 (2026-12-22). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Digest Issue",
+      "text": "weekly science digest · issue #9 (archived) — aihpc advanced weekly science digest — issue #10 (2026-12-22). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #10"
+    },
+    {
+      "url": "feeds.html",
+      "title": "Live Journal Feeds — AIHPC Advanced",
+      "description": "AIHPC Advanced — Live Journal Feeds. Continuous ingestion of 12 scientific journal RSS feeds (Science Daily, Nature, PLOS, arXiv). Auto-refreshed every 6 hours via GitHub Actions cron.",
+      "category": "Feeds",
+      "text": "live journal feeds — aihpc advanced aihpc advanced — live journal feeds. continuous ingestion of 12 scientific journal rss feeds (science daily, nature, plos, arxiv). auto-refreshed every 6 hours via github actions cron. live journal feeds"
+    },
+    {
+      "url": "cloud-lab.html",
+      "title": "☁ Cloud Lab — AIHPC Advanced",
+      "description": "AIHPC Advanced — Cloud Lab integration. Three paths from the in-browser Pyodide lab to real cloud code execution: GitHub Codespaces (recommended, free tier), GitHub Actions (batch), GitHub OAuth + Gist storage (future). Free-tier analysis + devcontainer setup.",
+      "category": "Lab",
+      "text": "☁ cloud lab — aihpc advanced aihpc advanced — cloud lab integration. three paths from the in-browser pyodide lab to real cloud code execution: github codespaces (recommended, free tier), github actions (batch), github oauth + gist storage (future). free-tier analysis + devcontainer setup. ☁ cloud lab"
+    },
+    {
+      "url": "lab.html",
+      "title": "🔬 Scientific Computing Lab — AIHPC Advanced",
+      "description": "AIHPC Advanced — Scientific Computing Lab. A Jupyter-style notebook environment running pure client-side Python (Pyodide / WebAssembly). No login, no backend — your code runs in your browser. Pre-loaded with numpy, pandas, matplotlib, scipy.",
+      "category": "Lab",
+      "text": "🔬 scientific computing lab — aihpc advanced aihpc advanced — scientific computing lab. a jupyter-style notebook environment running pure client-side python (pyodide / webassembly). no login, no backend — your code runs in your browser. pre-loaded with numpy, pandas, matplotlib, scipy. 🔬 scientific computing lab"
+    },
+    {
+      "url": "ai-lab.html",
+      "title": "🤖 AI Lab — 14 providers · AIHPC Advanced",
+      "description": "AIHPC Advanced — AI Lab. Unified chat interface for 14 AI providers (Gemini, Groq, Together, Mistral, Hugging Face, Cohere, DeepSeek, Qwen, Kimi, Zhipu, xAI, Perplexity, OpenAI, Anthropic). Free + paid tiers documented. Bring your own API key — keys stored in your browser, never sent to our backend (there is none).",
+      "category": "Lab",
+      "text": "🤖 ai lab — 14 providers · aihpc advanced aihpc advanced — ai lab. unified chat interface for 14 ai providers (gemini, groq, together, mistral, hugging face, cohere, deepseek, qwen, kimi, zhipu, xai, perplexity, openai, anthropic). free + paid tiers documented. bring your own api key — keys stored in your browser, never sent to our backend (there is none). 🤖 ai lab — 14 providers, free + paid tiers"
+    },
+    {
+      "url": "concepts/ml-adam.html",
+      "title": "Adam (Adaptive Moment Estimation) — AIHPC ML Concept Card",
+      "description": "Adam (Adaptive Moment Estimation) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "adam (adaptive moment estimation) — aihpc ml concept card adam (adaptive moment estimation) — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. adam (adaptive moment estimation)"
+    },
+    {
+      "url": "concepts/ml-adamw.html",
+      "title": "AdamW (Adam with Decoupled Weight Decay) — AIHPC ML Concept Card",
+      "description": "AdamW (Adam with Decoupled Weight Decay) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "adamw (adam with decoupled weight decay) — aihpc ml concept card adamw (adam with decoupled weight decay) — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. adamw (adam with decoupled weight decay)"
+    },
+    {
+      "url": "concepts/ml-batchnorm.html",
+      "title": "Batch Normalisation — AIHPC ML Concept Card",
+      "description": "Batch Normalisation — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "batch normalisation — aihpc ml concept card batch normalisation — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. batch normalisation"
+    },
+    {
+      "url": "concepts/ml-binary-cross-entropy.html",
+      "title": "Binary Cross-Entropy (BCE) — AIHPC ML Concept Card",
+      "description": "Binary Cross-Entropy (BCE) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "binary cross-entropy (bce) — aihpc ml concept card binary cross-entropy (bce) — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. binary cross-entropy (bce)"
+    },
+    {
+      "url": "concepts/ml-categorical-cross-entropy.html",
+      "title": "Categorical Cross-Entropy (CCE) — AIHPC ML Concept Card",
+      "description": "Categorical Cross-Entropy (CCE) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "categorical cross-entropy (cce) — aihpc ml concept card categorical cross-entropy (cce) — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. categorical cross-entropy (cce)"
+    },
+    {
+      "url": "concepts/ml-cosine-similarity.html",
+      "title": "Cosine Similarity Loss — AIHPC ML Concept Card",
+      "description": "Cosine Similarity Loss — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "cosine similarity loss — aihpc ml concept card cosine similarity loss — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. cosine similarity loss"
+    },
+    {
+      "url": "concepts/ml-dropout.html",
+      "title": "Dropout — AIHPC ML Concept Card",
+      "description": "Dropout — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "dropout — aihpc ml concept card dropout — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. dropout"
+    },
+    {
+      "url": "concepts/ml-flash-attention.html",
+      "title": "FlashAttention — AIHPC ML Concept Card",
+      "description": "FlashAttention — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "flashattention — aihpc ml concept card flashattention — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. flashattention"
+    },
+    {
+      "url": "concepts/ml-gelu.html",
+      "title": "GELU (Gaussian Error Linear Unit) — AIHPC ML Concept Card",
+      "description": "GELU (Gaussian Error Linear Unit) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "gelu (gaussian error linear unit) — aihpc ml concept card gelu (gaussian error linear unit) — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. gelu (gaussian error linear unit)"
+    },
+    {
+      "url": "concepts/ml-groupnorm.html",
+      "title": "Group Normalisation — AIHPC ML Concept Card",
+      "description": "Group Normalisation — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "group normalisation — aihpc ml concept card group normalisation — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. group normalisation"
+    },
+    {
+      "url": "concepts/ml-hinge-loss.html",
+      "title": "Hinge Loss — AIHPC ML Concept Card",
+      "description": "Hinge Loss — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "hinge loss — aihpc ml concept card hinge loss — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. hinge loss"
+    },
+    {
+      "url": "concepts/ml-huber-loss.html",
+      "title": "Huber Loss — AIHPC ML Concept Card",
+      "description": "Huber Loss — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "huber loss — aihpc ml concept card huber loss — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. huber loss"
+    },
+    {
+      "url": "concepts/ml-instancenorm.html",
+      "title": "Instance Normalisation — AIHPC ML Concept Card",
+      "description": "Instance Normalisation — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "instance normalisation — aihpc ml concept card instance normalisation — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. instance normalisation"
+    },
+    {
+      "url": "concepts/ml-kl-divergence.html",
+      "title": "KL Divergence — AIHPC ML Concept Card",
+      "description": "KL Divergence — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "kl divergence — aihpc ml concept card kl divergence — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. kl divergence"
+    },
+    {
+      "url": "concepts/ml-l1-l2-regularisation.html",
+      "title": "L1/L2 Regularisation (Weight Decay) — AIHPC ML Concept Card",
+      "description": "L1/L2 Regularisation (Weight Decay) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "l1/l2 regularisation (weight decay) — aihpc ml concept card l1/l2 regularisation (weight decay) — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. l1/l2 regularisation (weight decay)"
+    },
+    {
+      "url": "concepts/ml-layernorm.html",
+      "title": "Layer Normalisation — AIHPC ML Concept Card",
+      "description": "Layer Normalisation — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "layer normalisation — aihpc ml concept card layer normalisation — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. layer normalisation"
+    },
+    {
+      "url": "concepts/ml-log-cosh.html",
+      "title": "Log-Cosh Loss — AIHPC ML Concept Card",
+      "description": "Log-Cosh Loss — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "log-cosh loss — aihpc ml concept card log-cosh loss — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. log-cosh loss"
+    },
+    {
+      "url": "concepts/ml-loss-landscape-3d.html",
+      "title": "Loss Landscape (3D Surface) — AIHPC ML Concept Card",
+      "description": "Loss Landscape (3D Surface) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "loss landscape (3d surface) — aihpc ml concept card loss landscape (3d surface) — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. loss landscape (3d surface)"
+    },
+    {
+      "url": "concepts/ml-loss-landscape-cross-section.html",
+      "title": "Loss Landscape (Cross-Section) — AIHPC ML Concept Card",
+      "description": "Loss Landscape (Cross-Section) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "loss landscape (cross-section) — aihpc ml concept card loss landscape (cross-section) — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. loss landscape (cross-section)"
+    },
+    {
+      "url": "concepts/ml-mae.html",
+      "title": "Mean Absolute Error (MAE) — AIHPC ML Concept Card",
+      "description": "Mean Absolute Error (MAE) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "mean absolute error (mae) — aihpc ml concept card mean absolute error (mae) — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. mean absolute error (mae)"
+    },
+    {
+      "url": "concepts/ml-mse.html",
+      "title": "Mean Squared Error (MSE) — AIHPC ML Concept Card",
+      "description": "Mean Squared Error (MSE) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "mean squared error (mse) — aihpc ml concept card mean squared error (mse) — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. mean squared error (mse)"
+    },
+    {
+      "url": "concepts/ml-multi-head-attention.html",
+      "title": "Multi-Head Attention — AIHPC ML Concept Card",
+      "description": "Multi-Head Attention — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "multi-head attention — aihpc ml concept card multi-head attention — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. multi-head attention"
+    },
+    {
+      "url": "concepts/ml-rmsnorm.html",
+      "title": "RMS Normalisation — AIHPC ML Concept Card",
+      "description": "RMS Normalisation — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "rms normalisation — aihpc ml concept card rms normalisation — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. rms normalisation"
+    },
+    {
+      "url": "concepts/ml-relu.html",
+      "title": "ReLU (Rectified Linear Unit) — AIHPC ML Concept Card",
+      "description": "ReLU (Rectified Linear Unit) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "relu (rectified linear unit) — aihpc ml concept card relu (rectified linear unit) — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. relu (rectified linear unit)"
+    },
+    {
+      "url": "concepts/ml-sgd.html",
+      "title": "SGD (Stochastic Gradient Descent) — AIHPC ML Concept Card",
+      "description": "SGD (Stochastic Gradient Descent) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "sgd (stochastic gradient descent) — aihpc ml concept card sgd (stochastic gradient descent) — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. sgd (stochastic gradient descent)"
+    },
+    {
+      "url": "concepts/ml-scaled-dot-product-attention.html",
+      "title": "Scaled Dot-Product Attention — AIHPC ML Concept Card",
+      "description": "Scaled Dot-Product Attention — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "scaled dot-product attention — aihpc ml concept card scaled dot-product attention — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. scaled dot-product attention"
+    },
+    {
+      "url": "concepts/ml-swiglu.html",
+      "title": "SwiGLU (Swish-Gated Linear Unit) — AIHPC ML Concept Card",
+      "description": "SwiGLU (Swish-Gated Linear Unit) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability.",
+      "category": "ML Concept Card",
+      "text": "swiglu (swish-gated linear unit) — aihpc ml concept card swiglu (swish-gated linear unit) — aihpc advanced ml concept card. math-to-code derivation, 6-language polyglot, observability. swiglu (swish-gated linear unit)"
+    },
+    {
+      "url": "retrospective.html",
+      "title": "50-Phase Retrospective — AIHPC Advanced",
+      "description": "50-Phase Retrospective — celebrating the AIHPC Advanced platform's 50th phase milestone. Summary of all 50 phases with key metrics.",
+      "category": "Meta Page",
+      "text": "50-phase retrospective — aihpc advanced 50-phase retrospective — celebrating the aihpc advanced platform's 50th phase milestone. summary of all 50 phases with key metrics. 50-phase retrospective"
+    },
+    {
+      "url": "audit.html",
+      "title": "Application Audit — AIHPC Advanced",
+      "description": "AIHPC Advanced — application audit dashboard. Live status board for 59 functional checks across the platform, with 10 historical runs.",
+      "category": "Meta Page",
+      "text": "application audit — aihpc advanced aihpc advanced — application audit dashboard. live status board for 59 functional checks across the platform, with 10 historical runs. application audit dashboard"
+    },
+    {
+      "url": "component-registry.html",
+      "title": "Component Registry — AIHPC Advanced",
+      "description": "Component Registry Dashboard — interactive grid of all AIHPC canvas components with status, mount pages, and concept-card links. Reads component-manifest.json.",
+      "category": "Meta Page",
+      "text": "component registry — aihpc advanced component registry dashboard — interactive grid of all aihpc canvas components with status, mount pages, and concept-card links. reads component-manifest.json. component registry"
+    },
+    {
+      "url": "timeline.html",
+      "title": "Platform Timeline — AIHPC Advanced",
+      "description": "AIHPC Advanced Platform Timeline — Phases 1-49. Key milestones, components introduced per phase, GitHub tag links. The platform's history at a glance.",
+      "category": "Meta Page",
+      "text": "platform timeline — aihpc advanced aihpc advanced platform timeline — phases 1-49. key milestones, components introduced per phase, github tag links. the platform's history at a glance. platform timeline"
+    },
+    {
+      "url": "roadmap.html",
+      "title": "🚀 Enhancement Roadmap — AIHPC Advanced",
+      "description": "AIHPC Advanced — Platform Enhancement Roadmap (Phases 53-60+). 10 ideas ranked by impact × feasibility: PWA/offline, unified search, learning paths, AI-powered Q&A, progress tracking, citation export, reduced-motion, mobile responsive, collaborative notebooks, i18n.",
+      "category": "Meta Page",
+      "text": "🚀 enhancement roadmap — aihpc advanced aihpc advanced — platform enhancement roadmap (phases 53-60+). 10 ideas ranked by impact × feasibility: pwa/offline, unified search, learning paths, ai-powered q&a, progress tracking, citation export, reduced-motion, mobile responsive, collaborative notebooks, i18n. 🚀 enhancement roadmap"
+    },
+    {
+      "url": "aethel.html",
+      "title": "AETHEL Connector — AIHPC Advanced",
+      "description": "AETHEL Connector — AIHPC Advanced AETHEL Suite.",
+      "category": "Page",
+      "text": "aethel connector — aihpc advanced aethel connector — aihpc advanced aethel suite. aethel connector"
+    },
+    {
+      "url": "index.html",
+      "title": "AIHPC Advanced — Public Preview",
+      "description": "Public preview landing page for AIHPC Advanced — scientific computing platform with live, observable, downloadable demos. Public mirror of the private AIHPC-Advanced repository. All outputs are downloaded to your machine; no data leaves your browser.",
+      "category": "Page",
+      "text": "aihpc advanced — public preview public preview landing page for aihpc advanced — scientific computing platform with live, observable, downloadable demos. public mirror of the private aihpc-advanced repository. all outputs are downloaded to your machine; no data leaves your browser. aihpc advanced"
+    },
+    {
+      "url": "graph.html",
+      "title": "Cross-Domain Knowledge Graph — AIHPC Advanced",
+      "description": "Live Cross-Domain Knowledge Graph — every demo, paper, dataset, and AETHEL Suite surface as a node. Provenance / similarity / inferred edges. Force-directed SVG layout, drag to inspect, click to filter.",
+      "category": "Page",
+      "text": "cross-domain knowledge graph — aihpc advanced live cross-domain knowledge graph — every demo, paper, dataset, and aethel suite surface as a node. provenance / similarity / inferred edges. force-directed svg layout, drag to inspect, click to filter. cross-domain knowledge graph"
+    },
+    {
+      "url": "demos.html",
+      "title": "Demos — AIHPC Advanced",
+      "description": "Demos — AIHPC Advanced. Live, observable demos with provenance: math → code → annotations → observability → downloadable result. Each demo is a first-class artifact.",
+      "category": "Page",
+      "text": "demos — aihpc advanced demos — aihpc advanced. live, observable demos with provenance: math → code → annotations → observability → downloadable result. each demo is a first-class artifact. demos"
+    },
+    {
+      "url": "workflows.html",
+      "title": "Domain Workflows — AIHPC Advanced",
+      "description": "Domain Workflows — AIHPC Advanced AETHEL Suite.",
+      "category": "Page",
+      "text": "domain workflows — aihpc advanced domain workflows — aihpc advanced aethel suite. domain workflows"
+    },
+    {
+      "url": "query.html",
+      "title": "Query Executor — AIHPC Advanced",
+      "description": "Query Executor — AIHPC Advanced AETHEL Suite.",
+      "category": "Page",
+      "text": "query executor — aihpc advanced query executor — aihpc advanced aethel suite. query executor"
+    },
+    {
+      "url": "benchmark.html",
+      "title": "Recursive Agentic Benchmark — AIHPC Advanced",
+      "description": "Recursive Agentic Benchmark — a temporal graph of the agent's own performance across project phases: trace length, decision quality, rework rate, human-in-loop corrections.",
+      "category": "Page",
+      "text": "recursive agentic benchmark — aihpc advanced recursive agentic benchmark — a temporal graph of the agent's own performance across project phases: trace length, decision quality, rework rate, human-in-loop corrections. recursive agentic benchmark"
+    },
+    {
+      "url": "connectors.html",
+      "title": "Scientific Connectors Hub — AIHPC Advanced",
+      "description": "Scientific Connectors Hub — AIHPC Advanced AETHEL Suite.",
+      "category": "Page",
+      "text": "scientific connectors hub — aihpc advanced scientific connectors hub — aihpc advanced aethel suite. scientific connectors hub"
+    },
+    {
+      "url": "subscribe.html",
+      "title": "Subscribe — AIHPC Advanced",
+      "description": "Subscribe — AIHPC Advanced session portal. localStorage-based session gating; 'Download Receipt' is the first gated feature. Free / Pro / Team tiers.",
+      "category": "Page",
+      "text": "subscribe — aihpc advanced subscribe — aihpc advanced session portal. localstorage-based session gating; 'download receipt' is the first gated feature. free / pro / team tiers. subscribe"
+    },
+    {
+      "url": "dashboard.html",
+      "title": "Temporal Knowledge Graph Dashboard — AIHPC Advanced",
+      "description": "Temporal RDF semantic knowledge graph dashboard for AIHPC Advanced. Watch the AETHEL knowledge graph change over time as new data evolves relationships. Replayable decision traces, knowledge tracing, play / replay / scrub controls. Inspired by FoundationCapital / Aktiver context-graphs framework.",
+      "category": "Page",
+      "text": "temporal knowledge graph dashboard — aihpc advanced temporal rdf semantic knowledge graph dashboard for aihpc advanced. watch the aethel knowledge graph change over time as new data evolves relationships. replayable decision traces, knowledge tracing, play / replay / scrub controls. inspired by foundationcapital / aktiver context-graphs framework. watch the graph change over time"
+    },
+    {
+      "url": "digest.html",
+      "title": "Weekly Science Digest · Issue #16 — AIHPC Advanced",
+      "description": "Weekly Science Digest — Issue #16 (2027-02-02). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos.",
+      "category": "Page",
+      "text": "weekly science digest · issue #16 — aihpc advanced weekly science digest — issue #16 (2027-02-02). curated recent articles from nature, science, lancet, arxiv, and domain journals, with datasets and runnable in-browser demos. weekly science digest &middot; issue #16"
+    },
+    {
+      "url": "concepts/audience-annotations.html",
+      "title": "Audience-Specific Annotations — AIHPC Advanced Concept Card",
+      "description": "Audience-Specific Annotations — the same computation gets annotated for student / researcher / executive audiences. No other platform does this systematically.",
+      "category": "Platform Concept Card",
+      "text": "audience-specific annotations — aihpc advanced concept card audience-specific annotations — the same computation gets annotated for student / researcher / executive audiences. no other platform does this systematically. audience-specific annotations"
+    },
+    {
+      "url": "concepts/cross-domain-graph.html",
+      "title": "Cross-Domain Knowledge Graph — AIHPC Advanced Concept Card",
+      "description": "Cross-Domain Knowledge Graph — demos, papers, datasets, and AETHEL Suite surfaces are all nodes; shared tags and domains are edges. Composability is the defensible angle.",
+      "category": "Platform Concept Card",
+      "text": "cross-domain knowledge graph — aihpc advanced concept card cross-domain knowledge graph — demos, papers, datasets, and aethel suite surfaces are all nodes; shared tags and domains are edges. composability is the defensible angle. cross-domain knowledge graph"
+    },
+    {
+      "url": "concepts/fock-state.html",
+      "title": "Fock State Viewer — Second Quantisation — AIHPC Advanced",
+      "description": "Fock state viewer concept card — second quantisation, quantum harmonic oscillator, creation/annihilation operators. 6-language polyglot code + Math→Code→Output pedagogy. Phase 44.",
+      "category": "Platform Concept Card",
+      "text": "fock state viewer — second quantisation — aihpc advanced fock state viewer concept card — second quantisation, quantum harmonic oscillator, creation/annihilation operators. 6-language polyglot code + math→code→output pedagogy. phase 44. fock state viewer — second quantisation"
+    },
+    {
+      "url": "concepts/lazy-evaluation.html",
+      "title": "Lazy Evaluation as UX — AIHPC Advanced Concept Card",
+      "description": "Lazy Evaluation as a UX Primitive — the 'feels alive' property. Reimagined as a 4-panel research-short popup: animated DNA helix, 6-language code toggle (Python / Rust / Go / C / Elixir / Scala), streaming 'thinking' tokens with a real function-call on a dataset, and a live result visualization.",
+      "category": "Platform Concept Card",
+      "text": "lazy evaluation as ux — aihpc advanced concept card lazy evaluation as a ux primitive — the 'feels alive' property. reimagined as a 4-panel research-short popup: animated dna helix, 6-language code toggle (python / rust / go / c / elixir / scala), streaming 'thinking' tokens with a real function-call on a dataset, and a live result visualization. lazy evaluation as a ux primitive"
+    },
+    {
+      "url": "concepts/provenance-chain.html",
+      "title": "Provenance Chain (DAG) — AIHPC Advanced Concept Card",
+      "description": "Provenance Chain — the 'footpath' showing how a result was assembled step-by-step. Modelled as a directed acyclic graph (DAG): every computation produces a graph of evidence — replayable, auditable, citable.",
+      "category": "Platform Concept Card",
+      "text": "provenance chain (dag) — aihpc advanced concept card provenance chain — the 'footpath' showing how a result was assembled step-by-step. modelled as a directed acyclic graph (dag): every computation produces a graph of evidence — replayable, auditable, citable. provenance chain"
+    },
+    {
+      "url": "concepts/provenance-first.html",
+      "title": "Provenance-First Computing — AIHPC Advanced Concept Card",
+      "description": "Provenance-First Computing — every result is a first-class artifact with full provenance. Surpass AETHEL by making reproducibility the substrate, not a feature.",
+      "category": "Platform Concept Card",
+      "text": "provenance-first computing — aihpc advanced concept card provenance-first computing — every result is a first-class artifact with full provenance. surpass aethel by making reproducibility the substrate, not a feature. provenance-first computing"
+    },
+    {
+      "url": "concepts/replayable-decision-traces.html",
+      "title": "Replayable Decision Traces — AIHPC Advanced Concept Card",
+      "description": "Replayable Decision Traces — the foundational concept for AIHPC Advanced. Inspired by FoundationCapital / Aktiver context graphs. Every computation produces a replayable trace; the audit trail is the asset.",
+      "category": "Platform Concept Card",
+      "text": "replayable decision traces — aihpc advanced concept card replayable decision traces — the foundational concept for aihpc advanced. inspired by foundationcapital / aktiver context graphs. every computation produces a replayable trace; the audit trail is the asset. replayable decision traces"
+    },
+    {
+      "url": "science-bioinformatics.html",
+      "title": "Bioinformatics Hub — AIHPC Advanced Science",
+      "description": "Bioinformatics Hub — AIHPC Advanced. BLAST, sequence alignment, phylogenetics, structural bioinformatics. Modern AI for bioinformatics.",
+      "category": "Science Hub",
+      "text": "bioinformatics hub — aihpc advanced science bioinformatics hub — aihpc advanced. blast, sequence alignment, phylogenetics, structural bioinformatics. modern ai for bioinformatics. bioinformatics"
+    },
+    {
+      "url": "science-biology.html",
+      "title": "Biology Hub — AIHPC Advanced Science",
+      "description": "Biology Hub — AIHPC Advanced Science. Subdomains: Molecular Biology, Genetics, Proteins, Cell Imaging, Systems Biology, Evolutionary Bio. Modern AI for biology, inspired by DeepMind's AlphaFold / AlphaMissense.",
+      "category": "Science Hub",
+      "text": "biology hub — aihpc advanced science biology hub — aihpc advanced science. subdomains: molecular biology, genetics, proteins, cell imaging, systems biology, evolutionary bio. modern ai for biology, inspired by deepmind's alphafold / alphamissense. biology"
+    },
+    {
+      "url": "science-cheminformatics.html",
+      "title": "Cheminformatics Hub — AIHPC Advanced Science",
+      "description": "Cheminformatics Hub — AIHPC Advanced. BLAST, sequence alignment, phylogenetics, structural cheminformatics. Modern AI for cheminformatics.",
+      "category": "Science Hub",
+      "text": "cheminformatics hub — aihpc advanced science cheminformatics hub — aihpc advanced. blast, sequence alignment, phylogenetics, structural cheminformatics. modern ai for cheminformatics. cheminformatics"
+    },
+    {
+      "url": "science-chemistry.html",
+      "title": "Chemistry Hub — AIHPC Advanced Science",
+      "description": "Chemistry Hub — AIHPC Advanced Science. Subdomains: Organic, Inorganic, Physical, Analytical, Materials, Computational Chemistry.",
+      "category": "Science Hub",
+      "text": "chemistry hub — aihpc advanced science chemistry hub — aihpc advanced science. subdomains: organic, inorganic, physical, analytical, materials, computational chemistry. chemistry"
+    },
+    {
+      "url": "science-ml.html",
+      "title": "Machine Learning — 9 Loss Functions — AIHPC Advanced",
+      "description": "Machine Learning Loss Functions — 9 loss functions explained with Math→Code derivation, 6-language polyglot code, observability, animated clips, and data tables. AIHPC Advanced.",
+      "category": "Science Hub",
+      "text": "machine learning — 9 loss functions — aihpc advanced machine learning loss functions — 9 loss functions explained with math→code derivation, 6-language polyglot code, observability, animated clips, and data tables. aihpc advanced. machine learning loss functions"
+    },
+    {
+      "url": "science-maths.html",
+      "title": "Mathematics Hub — AIHPC Advanced Science",
+      "description": "Mathematics Hub — AIHPC Advanced Science. Subdomains: Algebra, Analysis, Geometry, Number Theory, Topology, Probability & Statistics.",
+      "category": "Science Hub",
+      "text": "mathematics hub — aihpc advanced science mathematics hub — aihpc advanced science. subdomains: algebra, analysis, geometry, number theory, topology, probability & statistics. mathematics"
+    },
+    {
+      "url": "science-physics.html",
+      "title": "Physics Hub — AIHPC Advanced Science",
+      "description": "Physics Hub — AIHPC Advanced Science. Subdomains: Space / Astrophysics, Waves / Optics, Sound / Acoustics, Mechanics, Quantum, Thermodynamics.",
+      "category": "Science Hub",
+      "text": "physics hub — aihpc advanced science physics hub — aihpc advanced science. subdomains: space / astrophysics, waves / optics, sound / acoustics, mechanics, quantum, thermodynamics. physics"
+    },
+    {
+      "url": "science/biology/proteins.html",
+      "title": "3D Protein Viewer — AIHPC Advanced Science / Biology",
+      "description": "3D Protein Viewer — AIHPC Advanced. Render a sample protein structure (PDB-style) in 3D using Three.js. Drag to rotate, scroll to zoom. Pure client-side; the 3D scene renders in your browser.",
+      "category": "Science Sub-page",
+      "text": "3d protein viewer — aihpc advanced science / biology 3d protein viewer — aihpc advanced. render a sample protein structure (pdb-style) in 3d using three.js. drag to rotate, scroll to zoom. pure client-side; the 3d scene renders in your browser. 3d protein viewer"
+    },
+    {
+      "url": "science/maths/algebra.html",
+      "title": "Algebra — AIHPC Advanced Science",
+      "description": "Algebra — AIHPC Advanced Science / Mathematics. gcd(a, b) in 6 platform languages. Particle background + glassmorphism + ClickForDemo pattern.",
+      "category": "Science Sub-page",
+      "text": "algebra — aihpc advanced science algebra — aihpc advanced science / mathematics. gcd(a, b) in 6 platform languages. particle background + glassmorphism + clickfordemo pattern. algebra"
+    },
+    {
+      "url": "science/maths/analysis.html",
+      "title": "Analysis — AIHPC Advanced Science",
+      "description": "Analysis — AIHPC Advanced Science / Mathematics. trapezoidal(f, a, b, n) in 6 platform languages. Particle background + glassmorphism + ClickForDemo pattern.",
+      "category": "Science Sub-page",
+      "text": "analysis — aihpc advanced science analysis — aihpc advanced science / mathematics. trapezoidal(f, a, b, n) in 6 platform languages. particle background + glassmorphism + clickfordemo pattern. analysis"
+    },
+    {
+      "url": "science/chemistry/analytical.html",
+      "title": "Analytical Chemistry — AIHPC Advanced Science",
+      "description": "Analytical Chemistry — AIHPC Advanced Science / Chemistry. find_peaks(spectrum, threshold) in 6 platform languages. Particle background + glassmorphism + ClickForDemo pattern.",
+      "category": "Science Sub-page",
+      "text": "analytical chemistry — aihpc advanced science analytical chemistry — aihpc advanced science / chemistry. find_peaks(spectrum, threshold) in 6 platform languages. particle background + glassmorphism + clickfordemo pattern. analytical chemistry"
+    },
+    {
+      "url": "science/biology/imaging.html",
+      "title": "Cell Imaging — AIHPC Advanced Science",
+      "description": "Cell Imaging — AIHPC Advanced Science / Biology. otsu_threshold(histogram) in 6 platform languages. Particle background + glassmorphism + ClickForDemo pattern.",
+      "category": "Science Sub-page",
+      "text": "cell imaging — aihpc advanced science cell imaging — aihpc advanced science / biology. otsu_threshold(histogram) in 6 platform languages. particle background + glassmorphism + clickfordemo pattern. cell imaging"
+    },
+    {
+      "url": "science/chemistry/computational.html",
+      "title": "Computational Chemistry — AIHPC Advanced Science",
+      "description": "Computational Chemistry — AIHPC Advanced Science / Chemistry. verlet_step(pos, vel, acc, dt) in 6 platform languages. Particle background + glassmorphism + ClickForDemo pattern.",
+      "category": "Science Sub-page",
+      "text": "computational chemistry — aihpc advanced science computational chemistry — aihpc advanced science / chemistry. verlet_step(pos, vel, acc, dt) in 6 platform languages. particle background + glassmorphism + clickfordemo pattern. computational chemistry"
+    },
+    {
+      "url": "science/biology/evolutionary.html",
+      "title": "Evolutionary Biology — AIHPC Advanced Science",
+      "description": "Evolutionary Biology — AIHPC Advanced Science / Biology. nj_distance_matrix(seqs) in 6 platform languages. Particle background + glassmorphism + ClickForDemo pattern.",
+      "category": "Science Sub-page",
+      "text": "evolutionary biology — aihpc advanced science evolutionary biology — aihpc advanced science / biology. nj_distance_matrix(seqs) in 6 platform languages. particle background + glassmorphism + clickfordemo pattern. evolutionary biology"
+    },
+    {
+      "url": "science/chemistry/inorganic.html",
+      "title": "Inorganic Chemistry — AIHPC Advanced Science",
+      "description": "Inorganic Chemistry — AIHPC Advanced Science / Chemistry. cif_parse(text) in 6 platform languages. Pure client-side.",
+      "category": "Science Sub-page",
+      "text": "inorganic chemistry — aihpc advanced science inorganic chemistry — aihpc advanced science / chemistry. cif_parse(text) in 6 platform languages. pure client-side. inorganic chemistry"
+    },
+    {
+      "url": "science/chemistry/materials.html",
+      "title": "Materials Chemistry — AIHPC Advanced Science",
+      "description": "Materials Chemistry — AIHPC Advanced Science / Chemistry. convex_hull(points) in 6 platform languages. Particle background + glassmorphism + ClickForDemo pattern.",
+      "category": "Science Sub-page",
+      "text": "materials chemistry — aihpc advanced science materials chemistry — aihpc advanced science / chemistry. convex_hull(points) in 6 platform languages. particle background + glassmorphism + clickfordemo pattern. materials chemistry"
+    },
+    {
+      "url": "science/physics/mechanics.html",
+      "title": "Mechanics — AIHPC Advanced Science",
+      "description": "Mechanics — AIHPC Advanced Science / Physics. lagrangian(T, V) in 6 platform languages. Particle background + glassmorphism + ClickForDemo pattern.",
+      "category": "Science Sub-page",
+      "text": "mechanics — aihpc advanced science mechanics — aihpc advanced science / physics. lagrangian(t, v) in 6 platform languages. particle background + glassmorphism + clickfordemo pattern. mechanics"
+    },
+    {
+      "url": "science/biology/molecular.html",
+      "title": "Molecular Biology — AIHPC Advanced Science (new template)",
+      "description": "Molecular Biology — AIHPC Advanced Science / Biology. New template: click-for-demo pattern with Math / Code / Observe tabs (Stats / Reports / Graphs / Summary). Animated DNA helix + particle background + glassmorphism + neon-glow.",
+      "category": "Science Sub-page",
+      "text": "molecular biology — aihpc advanced science (new template) molecular biology — aihpc advanced science / biology. new template: click-for-demo pattern with math / code / observe tabs (stats / reports / graphs / summary). animated dna helix + particle background + glassmorphism + neon-glow. molecular biology"
+    },
+    {
+      "url": "science/maths/number-theory.html",
+      "title": "Number Theory — AIHPC Advanced Science",
+      "description": "Number Theory — AIHPC Advanced Science / Mathematics. is_prime(n) in 6 platform languages. Particle background + glassmorphism + ClickForDemo pattern.",
+      "category": "Science Sub-page",
+      "text": "number theory — aihpc advanced science number theory — aihpc advanced science / mathematics. is_prime(n) in 6 platform languages. particle background + glassmorphism + clickfordemo pattern. number theory"
+    },
+    {
+      "url": "science/chemistry/organic.html",
+      "title": "Organic Chemistry — AIHPC Advanced Science",
+      "description": "Organic Chemistry — AIHPC Advanced Science / Chemistry. parse_smiles(smiles) in 6 platform languages. Pure client-side.",
+      "category": "Science Sub-page",
+      "text": "organic chemistry — aihpc advanced science organic chemistry — aihpc advanced science / chemistry. parse_smiles(smiles) in 6 platform languages. pure client-side. organic chemistry"
+    },
+    {
+      "url": "science/chemistry/physical.html",
+      "title": "Physical Chemistry — AIHPC Advanced Science",
+      "description": "Physical Chemistry — AIHPC Advanced Science / Chemistry. arrhenius_rate(A, Ea, T) in 6 platform languages. Particle background + glassmorphism + ClickForDemo pattern.",
+      "category": "Science Sub-page",
+      "text": "physical chemistry — aihpc advanced science physical chemistry — aihpc advanced science / chemistry. arrhenius_rate(a, ea, t) in 6 platform languages. particle background + glassmorphism + clickfordemo pattern. physical chemistry"
+    },
+    {
+      "url": "science/maths/probability.html",
+      "title": "Probability & Statistics — AIHPC Advanced Science",
+      "description": "Probability & Statistics — AIHPC Advanced Science / Mathematics. metropolis_hastings(target, x0, n) in 6 platform languages. Pure client-side.",
+      "category": "Science Sub-page",
+      "text": "probability & statistics — aihpc advanced science probability & statistics — aihpc advanced science / mathematics. metropolis_hastings(target, x0, n) in 6 platform languages. pure client-side. probability & statistics"
+    },
+    {
+      "url": "science/physics/quantum.html",
+      "title": "Quantum — AIHPC Advanced Science",
+      "description": "Quantum — AIHPC Advanced Science / Physics. hadamard(qubit) in 6 platform languages. Pure client-side.",
+      "category": "Science Sub-page",
+      "text": "quantum — aihpc advanced science quantum — aihpc advanced science / physics. hadamard(qubit) in 6 platform languages. pure client-side. quantum"
+    },
+    {
+      "url": "science/physics/sound.html",
+      "title": "Sound & Acoustics — AIHPC Advanced Science",
+      "description": "Sound & Acoustics — AIHPC Advanced Science / Physics. stft(signal, window, hop) in 6 platform languages. Particle background + glassmorphism + ClickForDemo pattern.",
+      "category": "Science Sub-page",
+      "text": "sound & acoustics — aihpc advanced science sound & acoustics — aihpc advanced science / physics. stft(signal, window, hop) in 6 platform languages. particle background + glassmorphism + clickfordemo pattern. sound & acoustics"
+    },
+    {
+      "url": "science/physics/space.html",
+      "title": "Space & Astrophysics — AIHPC Advanced Science",
+      "description": "Space & Astrophysics — AIHPC Advanced Science / Physics. nbody_step(positions, velocities, dt) in 6 platform languages. Pure client-side.",
+      "category": "Science Sub-page",
+      "text": "space & astrophysics — aihpc advanced science space & astrophysics — aihpc advanced science / physics. nbody_step(positions, velocities, dt) in 6 platform languages. pure client-side. space & astrophysics"
+    },
+    {
+      "url": "science/biology/systems.html",
+      "title": "Systems Biology — AIHPC Advanced Science",
+      "description": "Systems Biology — AIHPC Advanced Science / Biology. rk4_step(f, y, t, dt) in 6 platform languages. Particle background + glassmorphism + ClickForDemo pattern.",
+      "category": "Science Sub-page",
+      "text": "systems biology — aihpc advanced science systems biology — aihpc advanced science / biology. rk4_step(f, y, t, dt) in 6 platform languages. particle background + glassmorphism + clickfordemo pattern. systems biology"
+    },
+    {
+      "url": "science/maths/geometry.html",
+      "title": "Tesseract (4D Hypercube) — AIHPC Advanced Science / Maths",
+      "description": "Tesseract (4D Hypercube) — animated 4D rotation + 3D projection + 2D render. 16 vertices, 32 edges. The N-D visualization the user requested.",
+      "category": "Science Sub-page",
+      "text": "tesseract (4d hypercube) — aihpc advanced science / maths tesseract (4d hypercube) — animated 4d rotation + 3d projection + 2d render. 16 vertices, 32 edges. the n-d visualization the user requested. tesseract (4d hypercube) &rarr; n-d hypercube viewer"
+    },
+    {
+      "url": "science/physics/thermo.html",
+      "title": "Thermodynamics — AIHPC Advanced Science",
+      "description": "Thermodynamics — AIHPC Advanced Science / Physics. maxwell_boltzmann(v, T, m) in 6 platform languages. Particle background + glassmorphism + ClickForDemo pattern.",
+      "category": "Science Sub-page",
+      "text": "thermodynamics — aihpc advanced science thermodynamics — aihpc advanced science / physics. maxwell_boltzmann(v, t, m) in 6 platform languages. particle background + glassmorphism + clickfordemo pattern. thermodynamics"
+    },
+    {
+      "url": "science/physics/waves.html",
+      "title": "Waves & Optics — AIHPC Advanced Science",
+      "description": "Waves & Optics — AIHPC Advanced Science / Physics. fft(x) in 6 platform languages. Pure client-side.",
+      "category": "Science Sub-page",
+      "text": "waves & optics — aihpc advanced science waves & optics — aihpc advanced science / physics. fft(x) in 6 platform languages. pure client-side. waves & optics"
+    },
+    {
+      "url": "medical-atlas.html",
+      "title": "AI Medical Imaging Atlas — AIHPC Advanced",
+      "description": "AI Medical Imaging Atlas — 6 case studies (stroke, tumor, pneumonia, fracture, COVID-19, abdominal) with multi-organ AI segmentation viewer, clinical context, and AI tooling references. Pure client-side. Phase 41.",
+      "category": "Visualiser",
+      "text": "ai medical imaging atlas — aihpc advanced ai medical imaging atlas — 6 case studies (stroke, tumor, pneumonia, fracture, covid-19, abdominal) with multi-organ ai segmentation viewer, clinical context, and ai tooling references. pure client-side. phase 41. ai medical imaging atlas"
+    },
+    {
+      "url": "bloch.html",
+      "title": "Bloch Sphere Quantum Shorts — AIHPC Advanced",
+      "description": "Bloch Sphere Quantum Shorts — a glowing 3D Bloch sphere that animates canonical quantum-computing scenes (ground state, Hadamard, Rabi oscillation, phase gate, measurement, decoherence). Pure client-side canvas; record as WebM.",
+      "category": "Visualiser",
+      "text": "bloch sphere quantum shorts — aihpc advanced bloch sphere quantum shorts — a glowing 3d bloch sphere that animates canonical quantum-computing scenes (ground state, hadamard, rabi oscillation, phase gate, measurement, decoherence). pure client-side canvas; record as webm. bloch sphere quantum shorts"
+    },
+    {
+      "url": "playground.html",
+      "title": "Cross-Domain Playground — AIHPC Advanced",
+      "description": "Cross-Domain Playground — combine any uploaded dataset (CSV/Parquet/Arrow) with any model (ML demos) with any visualisation (GTS 2D/3D, attention heat-map, molecule-3d, medical-imaging viewer). The platform's first true labs experience. Phase 42.",
+      "category": "Visualiser",
+      "text": "cross-domain playground — aihpc advanced cross-domain playground — combine any uploaded dataset (csv/parquet/arrow) with any model (ml demos) with any visualisation (gts 2d/3d, attention heat-map, molecule-3d, medical-imaging viewer). the platform's first true labs experience. phase 42. cross-domain playground"
+    },
+    {
+      "url": "quantum-shorts.html",
+      "title": "Quantum Shorts — AIHPC Advanced",
+      "description": "Quantum Shorts — a unified channel for all AIHPC quantum visualisations: Bloch sphere (9 scenes), VQC animator (2-8 qubits), Fock state viewer (8 states), QGNN pipeline diagram. Auto-play with Next button. Record as WebM. Pure client-side.",
+      "category": "Visualiser",
+      "text": "quantum shorts — aihpc advanced quantum shorts — a unified channel for all aihpc quantum visualisations: bloch sphere (9 scenes), vqc animator (2-8 qubits), fock state viewer (8 states), qgnn pipeline diagram. auto-play with next button. record as webm. pure client-side. quantum shorts channel"
+    }
+  ]
+}

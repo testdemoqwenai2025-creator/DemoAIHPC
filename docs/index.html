@@ -10,6 +10,14 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="dark" />
     <meta name="apple-mobile-web-app-title" content="AIHPC" />
+    <script src="accessibility.js"></script>
+    <style>
+      /* Phase 59: respect prefers-reduced-motion */
+      @media (prefers-reduced-motion: reduce) {
+        #particle-canvas { display: none !important; }
+        * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+      }
+    </style>
     <meta
       name="description"
       content="Public preview landing page for AIHPC Advanced — scientific computing platform with live, observable, downloadable demos. Public mirror of the private AIHPC-Advanced repository. All outputs are downloaded to your machine; no data leaves your browser."
@@ -852,7 +860,7 @@
           <details class="ribbon-dropdown"><summary>Visualisers</summary><div class="ribbon-menu"><a href="playground.html">Cross-Domain Playground</a><a href="quantum-shorts.html">Quantum Shorts Channel</a><a href="bloch.html">Bloch Sphere Shorts</a><a href="medical-atlas.html">Medical Imaging Atlas</a><a href="science/physics/quantum.html">Quantum Mechanics Hub</a></div></details>
           <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="aethel.html">AETHEL Connector</a><a href="connectors.html">Scientific Connectors Hub</a><a href="query.html">Query Executor</a><a href="graph.html">Knowledge Graph</a><a href="workflows.html">Domain Workflows</a></div></details>
           <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="science-biology.html">Biology Hub</a><a href="science-chemistry.html">Chemistry Hub</a><a href="science-physics.html">Physics Hub</a><a href="science-maths.html">Mathematics Hub</a><a href="science-ml.html">🤖 Machine Learning</a><a href="science-bioinformatics.html">Bioinformatics</a><a href="science-cheminformatics.html">Cheminformatics</a></div></details>
-          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="feeds.html">📡 Live Journal Feeds</a><a href="digest.html">Weekly Science Digest</a><a href="audit.html">📊 Audit Dashboard</a><a href="404.html">🚧 404 page</a><a href="lab.html">🔬 Lab</a><a href="ai-lab.html">🤖 AI Lab</a><a href="cloud-lab.html">☁ Cloud Lab</a><a href="dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="concepts.html">Concept Cards</a><a href="concepts/replayable-decision-traces.html">Replayable Decision Traces</a><a href="concepts/provenance-first.html">Provenance-First Computing</a><a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a><a href="concepts/audience-annotations.html">Audience-Specific Annotations</a><a href="concepts/provenance-chain.html">Provenance Chain</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="search.html">🔍 Search</a><a href="paths.html">📚 Learning Paths</a><a href="feeds.html">📡 Live Journal Feeds</a><a href="digest.html">Weekly Science Digest</a><a href="audit.html">📊 Audit Dashboard</a><a href="404.html">🚧 404 page</a><a href="lab.html">🔬 Lab</a><a href="ai-lab.html">🤖 AI Lab</a><a href="cloud-lab.html">☁ Cloud Lab</a><a href="roadmap.html">🚀 Roadmap</a><a href="dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="concepts.html">Concept Cards</a><a href="concepts/replayable-decision-traces.html">Replayable Decision Traces</a><a href="concepts/provenance-first.html">Provenance-First Computing</a><a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a><a href="concepts/audience-annotations.html">Audience-Specific Annotations</a><a href="concepts/provenance-chain.html">Provenance Chain</a></div></details>
         </nav>
         <div class="ribbon-actions">
           <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme">
@@ -1245,9 +1253,13 @@
       <section style="margin-top: 48px; padding: 20px; background: rgba(18,24,38,0.5); border: 1px solid rgba(139,92,246,0.2); border-radius: 12px;">
         <div style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">Platform meta pages · self-tests + history + meta-navigation</div>
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px;">
-          <a href="404.html" style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; background: rgba(11,15,26,0.6); border: 1px solid rgba(239,68,68,0.3); border-radius: 6px; text-decoration: none; transition: all 0.2s;">
-            <span style="font-size: 11px; color: #fca5a5; font-weight: 700;">🚧 404 page</span>
-            <span style="font-size: 10px; color: #9ca3af;">Branded not-found page · 22 link cards</span>
+          <a href="search.html" style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; background: rgba(11,15,26,0.6); border: 1px solid rgba(6,182,212,0.3); border-radius: 6px; text-decoration: none; transition: all 0.2s;">
+            <span style="font-size: 11px; color: #67e8f9; font-weight: 700;">🔍 Unified Search</span>
+            <span style="font-size: 10px; color: #9ca3af;">Search 199 pages · concept cards + demos + feeds</span>
+          </a>
+          <a href="paths.html" style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; background: rgba(11,15,26,0.6); border: 1px solid rgba(139,92,246,0.3); border-radius: 6px; text-decoration: none; transition: all 0.2s;">
+            <span style="font-size: 11px; color: #c4b5fd; font-weight: 700;">📚 Learning Paths</span>
+            <span style="font-size: 10px; color: #9ca3af;">5 guided tutorials · progress tracked</span>
           </a>
           <a href="audit.html" style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; background: rgba(11,15,26,0.6); border: 1px solid rgba(16,185,129,0.3); border-radius: 6px; text-decoration: none; transition: all 0.2s;">
             <span style="font-size: 11px; color: #6ee7b7; font-weight: 700;">📊 Audit Dashboard</span>

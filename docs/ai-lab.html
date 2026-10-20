@@ -927,6 +927,26 @@
       renderProviderList();
       selectProvider(activeProvider);
       loadHistory();
+
+      // Phase 56: check for ?context= URL param (from "Ask AI about this concept" button)
+      (function checkContext() {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var ctx = params.get('context');
+          if (ctx && chatHistory.length === 0) {
+            // Pre-load the context as a system message
+            chatHistory.push({
+              role: 'system',
+              content: '📚 Context loaded from concept card:\n\n' + decodeURIComponent(ctx) + '\n\nYou can now ask questions about this concept. The AI has the above context as background.',
+            });
+            // Pre-fill the chat input with a suggested question
+            var input = document.getElementById('chat-input');
+            if (input) input.value = 'Can you explain this concept in simpler terms?';
+            saveHistory();
+          }
+        } catch (e) { /* URLSearchParams not available */ }
+      })();
+
       renderMessages();
     </script>
   </body>

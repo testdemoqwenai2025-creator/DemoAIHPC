@@ -165,6 +165,8 @@ def check_ribbon(html_files):
         os.path.join(DOCS, "cloud-lab.html"),  # Phase 52 cloud integration docs
         os.path.join(DOCS, "ai-lab.html"),  # Phase 52 AI providers lab
         os.path.join(DOCS, "roadmap.html"),  # Phase 53 enhancement roadmap
+        os.path.join(DOCS, "search.html"),  # Phase 54 unified search
+        os.path.join(DOCS, "paths.html"),  # Phase 55 learning paths
     }
     failures = []
     required = ["Platform", "AETHEL Suite", "Science", "Insights"]

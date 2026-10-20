@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AIHPC Advanced — Unified Search. Search across all 200 platform pages: concept cards, ML demos, feed entries, digest issues, science hubs, labs, and more. Pure client-side." />
+    <title>🔍 Unified Search — AIHPC Advanced</title>
+    <style>
+      :root { --bg: #0b0f1a; --bg-elevated: #121826; --border: #1f2937; --text: #f3f4f6; --text-muted: #9ca3af; --accent: #8b5cf6; --accent-2: #06b6d4; }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.5; min-height: 100vh; }
+      body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%); pointer-events: none; z-index: 0; }
+      .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; position: relative; z-index: 1; }
+      h1 { font-size: 32px; margin: 0 0 4px; background: linear-gradient(90deg, #06b6d4, #8b5cf6, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 14px; color: var(--text-muted); margin: 0 0 24px; }
+      .back-link { display: inline-block; font-size: 13px; color: var(--accent-2); text-decoration: none; margin-bottom: 16px; }
+      .search-row { display: flex; gap: 8px; margin-bottom: 16px; }
+      .search-input { flex: 1; background: var(--bg-elevated); border: 1px solid #2a3548; border-radius: 8px; padding: 14px 18px; color: var(--text); font-size: 15px; font-family: inherit; }
+      .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139,92,246,0.2); }
+      .stat-line { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; font-family: ui-monospace, monospace; }
+      .result { display: flex; flex-direction: column; gap: 4px; padding: 12px 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; text-decoration: none; color: var(--text); transition: all 0.15s; }
+      .result:hover { border-color: var(--accent); transform: translateY(-1px); }
+      .result .r-cat { font-size: 10px; padding: 2px 8px; border-radius: 9999px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; }
+      .result .r-title { font-size: 14px; font-weight: 700; margin: 0; }
+      .result .r-desc { font-size: 12px; color: var(--text-muted); margin: 0; line-height: 1.4; }
+      .result .r-url { font-size: 10px; color: #6b7280; font-family: ui-monospace, monospace; }
+      .empty { text-align: center; padding: 48px; color: var(--text-muted); }
+      .cat-color-0 { background: rgba(6,182,212,0.15); color: #67e8f9; }
+      .cat-color-1 { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+      .cat-color-2 { background: rgba(236,72,153,0.15); color: #f9a8d4; }
+      .cat-color-3 { background: rgba(245,158,11,0.15); color: #fcd34d; }
+      .cat-color-4 { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .cat-color-5 { background: rgba(59,130,246,0.15); color: #93c5fd; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="index.html" class="back-link">← Home</a>
+      <h1>🔍 Unified Search</h1>
+      <p class="lead">Search across all platform content: 126 concept cards, 27 ML demos, 15 digest issues, 22 science sub-pages, labs, feeds, and more. Pure client-side — no backend.</p>
+      <div class="search-row">
+        <input class="search-input" id="search-input" placeholder="🔍 Search 199 pages by title, description, or keyword…" autocomplete="off" autofocus />
+      </div>
+      <div class="stat-line" id="stat-line">Loading search index…</div>
+      <div id="results"></div>
+    </div>
+    <script>
+      var INDEX = null;
+      var catColorIdx = {};
+      var catIdx = 0;
+
+      function catColor(cat) {
+        if (!(cat in catColorIdx)) catColorIdx[cat] = 'cat-color-' + (catIdx++ % 6);
+        return catColorIdx[cat];
+      }
+
+      function escapeHtml(s) {
+        return String(s || '').replace(/[&<>"']/g, function (c) {
+          return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+        });
+      }
+
+      function renderResults(query) {
+        var container = document.getElementById('results');
+        var stat = document.getElementById('stat-line');
+        if (!INDEX) { container.innerHTML = ''; return; }
+        if (!query) {
+          container.innerHTML = '<div class="empty">Start typing to search ' + INDEX.total_entries + ' pages…</div>';
+          stat.textContent = INDEX.total_entries + ' pages indexed across ' + INDEX.categories.length + ' categories';
+          return;
+        }
+        var q = query.toLowerCase();
+        var results = INDEX.entries.filter(function (e) {
+          return e.text.indexOf(q) >= 0;
+        });
+        // Score by position of match in title (earlier = better)
+        results.sort(function (a, b) {
+          var ai = (a.title || '').toLowerCase().indexOf(q);
+          var bi = (b.title || '').toLowerCase().indexOf(q);
+          if (ai >= 0 && bi < 0) return -1;
+          if (bi >= 0 && ai < 0) return 1;
+          if (ai < bi) return -1;
+          if (bi < ai) return 1;
+          return 0;
+        });
+        stat.textContent = results.length + ' result' + (results.length === 1 ? '' : 's') + ' for "' + escapeHtml(query) + '"';
+        if (results.length === 0) {
+          container.innerHTML = '<div class="empty">No results. Try different keywords.</div>';
+          return;
+        }
+        container.innerHTML = results.slice(0, 100).map(function (e) {
+          var desc = escapeHtml(e.description || '');
+          if (desc.length > 160) desc = desc.slice(0, 157) + '…';
+          return '<a class="result" href="' + escapeHtml(e.url) + '">'
+               + '<span class="r-cat ' + catColor(e.category) + '">' + escapeHtml(e.category) + '</span>'
+               + '<p class="r-title">' + escapeHtml(e.title) + '</p>'
+               + (desc ? '<p class="r-desc">' + desc + '</p>' : '')
+               + '<span class="r-url">' + escapeHtml(e.url) + '</span>'
+               + '</a>';
+        }).join('');
+        if (results.length > 100) {
+          container.innerHTML += '<div class="empty">' + (results.length - 100) + ' more results not shown — refine your search.</div>';
+        }
+      }
+
+      document.getElementById('search-input').addEventListener('input', function (e) {
+        renderResults(e.target.value.trim());
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+          e.preventDefault();
+          document.getElementById('search-input').focus();
+        }
+      });
+
+      fetch('search-index.json?nocache=' + Date.now())
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          INDEX = data;
+          document.getElementById('stat-line').textContent = INDEX.total_entries + ' pages indexed across ' + INDEX.categories.length + ' categories. Start typing to search.';
+          renderResults('');
+        })
+        .catch(function (err) {
+          document.getElementById('results').innerHTML = '<div class="empty">Could not load search index: ' + escapeHtml(err.message) + '</div>';
+        });
+    </script>
+  </body>
+</html>

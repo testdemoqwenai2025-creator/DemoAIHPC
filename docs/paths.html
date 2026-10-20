@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AIHPC Advanced — Learning Paths. Guided tutorials that chain concept cards + lab notebooks + demos into structured learning sequences. 5 paths: Intro to ML, Quantum Foundations, Bioinformatics, Statistical Methods, Cheminformatics. Progress tracked in localStorage." />
+    <title>📚 Learning Paths — AIHPC Advanced</title>
+    <style>
+      :root { --bg: #0b0f1a; --bg-elevated: #121826; --border: #1f2937; --text: #f3f4f6; --text-muted: #9ca3af; --accent: #8b5cf6; --accent-2: #06b6d4; --success: #10b981; }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.5; min-height: 100vh; }
+      body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%); pointer-events: none; z-index: 0; }
+      .container { max-width: 1000px; margin: 0 auto; padding: 32px 24px; position: relative; z-index: 1; }
+      h1 { font-size: 32px; margin: 0 0 4px; background: linear-gradient(90deg, #06b6d4, #8b5cf6, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 14px; color: var(--text-muted); margin: 0 0 24px; max-width: 700px; }
+      .back-link { display: inline-block; font-size: 13px; color: var(--accent-2); text-decoration: none; margin-bottom: 16px; }
+
+      .path-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+      .path-card .path-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+      .path-card h2 { font-size: 18px; margin: 0; display: flex; align-items: center; gap: 8px; }
+      .path-card .progress-bar { width: 200px; height: 8px; background: rgba(148,163,184,0.15); border-radius: 4px; overflow: hidden; }
+      .path-card .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-2), var(--accent)); border-radius: 4px; transition: width 0.3s; }
+      .path-card .progress-text { font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .path-card .path-desc { font-size: 13px; color: var(--text-muted); margin: 0 0 12px; }
+      .step { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 6px; transition: all 0.15s; }
+      .step:hover { border-color: var(--accent); }
+      .step .step-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; font-family: ui-monospace, monospace; flex-shrink: 0; }
+      .step-num.todo { background: rgba(148,163,184,0.15); color: var(--text-muted); border: 1px solid rgba(148,163,184,0.3); }
+      .step-num.done { background: var(--success); color: white; }
+      .step .step-content { flex: 1; min-width: 0; }
+      .step .step-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 0; }
+      .step .step-meta { font-size: 11px; color: var(--text-muted); margin: 0; }
+      .step a { color: var(--accent-2); text-decoration: none; font-size: 12px; font-weight: 600; white-space: nowrap; }
+      .step a:hover { text-decoration: underline; }
+      .step .check-btn { width: 24px; height: 24px; border-radius: 6px; border: 1px solid var(--border); background: transparent; cursor: pointer; font-size: 14px; color: var(--text-muted); flex-shrink: 0; }
+      .step .check-btn:hover { border-color: var(--success); color: var(--success); }
+      .step .check-btn.done { background: var(--success); border-color: var(--success); color: white; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="index.html" class="back-link">← Home</a>
+      <h1>📚 Learning Paths</h1>
+      <p class="lead">Guided tutorials that chain concept cards, lab notebooks, and demos into structured learning sequences. Each path has 6-10 steps. Mark each step as complete to track your progress. Progress is stored in your browser's localStorage — no login needed.</p>
+      <div id="paths"></div>
+    </div>
+    <script>
+      var PATHS = [
+        {
+          id: 'intro-ml',
+          emoji: '🤖',
+          name: 'Intro to Machine Learning',
+          description: 'From loss functions to optimisers to training visualisation. 10 steps covering the mathematical foundations of ML regression.',
+          color: '#06b6d4',
+          steps: [
+            { title: 'Mean Squared Error (MSE)', meta: 'Concept card · the default regression loss', url: 'concepts/ml-mse.html' },
+            { title: 'Mean Absolute Error (MAE)', meta: 'Concept card · robust to outliers', url: 'concepts/ml-mae.html' },
+            { title: 'Huber Loss', meta: 'Concept card · best of MSE + MAE', url: 'concepts/ml-huber-loss.html' },
+            { title: 'Log-Cosh Loss', meta: 'Concept card · smooth + differentiable', url: 'concepts/ml-log-cosh.html' },
+            { title: 'KL Divergence', meta: 'Concept card · distribution matching', url: 'concepts/ml-kl-divergence.html' },
+            { title: 'ReLU Activation', meta: 'Concept card · the workhorse activation', url: 'concepts/ml-relu.html' },
+            { title: 'GELU Activation', meta: 'Concept card · smoother than ReLU', url: 'concepts/ml-gelu.html' },
+            { title: 'SGD Optimiser', meta: 'Concept card · vanilla gradient descent', url: 'concepts/ml-sgd.html' },
+            { title: 'Adam Optimiser', meta: 'Concept card · adaptive learning rates', url: 'concepts/ml-adam.html' },
+            { title: 'Loss Landscape 3D', meta: 'Demo · see how optimisers navigate the surface', url: 'science-ml.html#demo-loss-landscape-3d' },
+          ],
+        },
+        {
+          id: 'quantum-foundations',
+          emoji: '⚛',
+          name: 'Quantum Computing Foundations',
+          description: 'From single-qubit states to Bell pairs to CHSH inequality violation. 8 steps through the quantum visualisation suite.',
+          color: '#8b5cf6',
+          steps: [
+            { title: 'Bloch Sphere: Ground state |0⟩', meta: 'Quantum short · the north pole', url: 'quantum-shorts.html' },
+            { title: 'Bloch: Hadamard → |+⟩', meta: 'Quantum short · superposition', url: 'bloch.html' },
+            { title: 'Bloch: Rabi oscillation', meta: 'Quantum short · resonant drive', url: 'bloch.html' },
+            { title: 'Bloch: Phase gate S', meta: 'Quantum short · Z-rotation', url: 'bloch.html' },
+            { title: 'Bloch: Measurement collapse', meta: 'Quantum short · wavefunction collapse', url: 'bloch.html' },
+            { title: 'Bloch: Bell state |Φ+⟩', meta: 'Quantum short · entanglement', url: 'bloch.html' },
+            { title: 'Bloch: CHSH violation', meta: 'Quantum short · Bell inequality |S|=2√2', url: 'bloch.html' },
+            { title: 'Quantum Circuit Builder', meta: 'Interactive · drag-and-drop gates', url: 'science/physics/quantum.html' },
+          ],
+        },
+        {
+          id: 'bioinformatics',
+          emoji: '🧬',
+          name: 'Bioinformatics',
+          description: 'From DNA sequences to protein structures to medical imaging. 8 steps through the biology + bioinformatics hubs.',
+          color: '#10b981',
+          steps: [
+            { title: 'Nucleotide Analysis Demo', meta: 'Demo · ORF finding, GC content', url: 'demos/nucleotide-analysis.html' },
+            { title: 'Protein Stats (Lab notebook)', meta: 'Lab · amino-acid composition + Ramachandran', url: 'lab.html' },
+            { title: 'Molecular Dynamics Demo', meta: 'Demo · Verlet integration', url: 'demos/molecular-dynamics.html' },
+            { title: 'Medical Imaging Viewer', meta: 'Component · multi-organ 3D viewer', url: 'science-biology.html' },
+            { title: 'Medical Imaging Atlas', meta: 'Visualiser · 6 case studies', url: 'medical-atlas.html' },
+            { title: 'Biomolecular Dynamics (BioEmu2)', meta: 'Component · 4-panel MD simulation', url: 'science-biology.html' },
+            { title: 'Segmentation Pipeline', meta: 'Component · MRI→mask→3D + Dice/IoU', url: 'science-biology.html' },
+            { title: 'Genomic VCF Analysis (Playground)', meta: 'Playground · genome browser view', url: 'playground.html' },
+          ],
+        },
+        {
+          id: 'statistical-methods',
+          emoji: '📊',
+          name: 'Statistical Methods',
+          description: 'From OLS regression to k-means clustering to PageRank. 10 steps through the platform\'s statistical demos.',
+          color: '#f59e0b',
+          steps: [
+            { title: 'OLS Regression Demo', meta: 'Home page · ordinary least squares by hand', url: 'index.html#live-demo' },
+            { title: 'k-Means Clustering Demo', meta: 'Demo · unsupervised learning', url: 'demos/kmeans-clustering.html' },
+            { title: 'Citation PageRank Demo', meta: 'Demo · graph eigenvalue centrality', url: 'demos/citation-pagerank.html' },
+            { title: 'MSE Loss Analysis (Playground)', meta: 'Playground · live loss computation', url: 'playground.html' },
+            { title: 'Attention Heatmap', meta: 'Component · Q·Kᵀ/√d_k visualization', url: 'science-ml.html#demo-scaled-dot-product-attention' },
+            { title: 'Multi-Head Attention', meta: 'Demo · parallel attention heads', url: 'science-ml.html#demo-multi-head-attention' },
+            { title: 'Flash Attention', meta: 'Demo · IO-aware attention', url: 'science-ml.html#demo-flash-attention' },
+            { title: 'BatchNorm', meta: 'Concept card · batch normalisation', url: 'concepts/ml-batchnorm.html' },
+            { title: 'LayerNorm', meta: 'Concept card · layer normalisation', url: 'concepts/ml-layernorm.html' },
+            { title: 'Loss Landscape Cross-Section', meta: 'Demo · 2D slice of the loss surface', url: 'science-ml.html#demo-loss-landscape-cross-section' },
+          ],
+        },
+        {
+          id: 'cheminformatics',
+          emoji: '⚗',
+          name: 'Cheminformatics',
+          description: 'From 3D molecules to pharmacophore to QSAR. 6 steps through the cheminformatics hub + playground.',
+          color: '#ec4899',
+          steps: [
+            { title: '3D Molecule Viewer', meta: 'Component · ball-and-stick with CPK colours', url: 'science-cheminformatics.html' },
+            { title: 'Molecule SDF (Playground)', meta: 'Playground · parse + render aspirin.sdf', url: 'playground.html' },
+            { title: 'Pharmacophore Overlay', meta: 'Component · HBD/HBA/HYD features', url: 'science-cheminformatics.html' },
+            { title: 'QSAR Landscape Surface', meta: 'Component · property wireframe sphere', url: 'science-cheminformatics.html' },
+            { title: 'Scientific Uploader', meta: 'Component · 15+ format parser', url: 'science-cheminformatics.html' },
+            { title: 'N-D Property Axis', meta: 'Component · logP/MW/TPSA in N-D', url: 'science-cheminformatics.html' },
+          ],
+        },
+      ];
+
+      var STORAGE_KEY = 'aihpc-learning-paths';
+
+      function getProgress() {
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (e) { return {}; }
+      }
+      function saveProgress(p) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch (e) {} }
+      function toggleStep(pathId, stepIdx) {
+        var p = getProgress();
+        var key = pathId + '-' + stepIdx;
+        if (p[key]) delete p[key]; else p[key] = true;
+        saveProgress(p);
+        render();
+      }
+
+      function render() {
+        var progress = getProgress();
+        var container = document.getElementById('paths');
+        container.innerHTML = PATHS.map(function (path) {
+          var doneCount = path.steps.filter(function (_, i) { return progress[path.id + '-' + i]; }).length;
+          var pct = Math.round(doneCount / path.steps.length * 100);
+          var stepsHtml = path.steps.map(function (step, i) {
+            var isDone = progress[path.id + '-' + i];
+            return '<div class="step">'
+              + '<span class="step-num ' + (isDone ? 'done' : 'todo') + '">' + (isDone ? '✓' : (i+1)) + '</span>'
+              + '<div class="step-content">'
+              + '<p class="step-title">' + step.title + '</p>'
+              + '<p class="step-meta">' + step.meta + '</p>'
+              + '</div>'
+              + '<a href="' + step.url + '" target="_blank" rel="noreferrer noopener">Open →</a>'
+              + '<button class="check-btn ' + (isDone ? 'done' : '') + '" onclick="toggleStep(\'' + path.id + '\', ' + i + ')" title="' + (isDone ? 'Mark as not done' : 'Mark as complete') + '">' + (isDone ? '✓' : '○') + '</button>'
+              + '</div>';
+          }).join('');
+          return '<div class="path-card" style="border-left: 4px solid ' + path.color + ';">'
+            + '<div class="path-header">'
+            + '<h2 style="color: ' + path.color + ';">' + path.emoji + ' ' + path.name + '</h2>'
+            + '<div style="display: flex; align-items: center; gap: 8px;">'
+            + '<div class="progress-bar"><div class="progress-fill" style="width: ' + pct + '%; background: linear-gradient(90deg, ' + path.color + ', var(--accent));"></div></div>'
+            + '<span class="progress-text">' + doneCount + '/' + path.steps.length + '</span>'
+            + '</div>'
+            + '</div>'
+            + '<p class="path-desc">' + path.description + '</p>'
+            + stepsHtml
+            + '</div>';
+        }).join('');
+      }
+      render();
+    </script>
+  </body>
+</html>
