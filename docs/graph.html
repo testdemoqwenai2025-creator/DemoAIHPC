@@ -260,6 +260,16 @@
         { id: 'digest:bci-ai-decoding-2029', type: 'digest', label: 'BCI AI decoding 2029', href: 'concepts/digest-bci-ai-decoding-2029.html', meta: 'Issue #6' },
         { id: 'digest:glp1r-biased-agonist', type: 'digest', label: 'GLP1R biased agonist', href: 'concepts/digest-glp1r-biased-agonist.html', meta: 'Issue #6' },
         { id: 'digest:alphamissense-uk-biobank', type: 'digest', label: 'AlphaMissense UK Biobank', href: 'concepts/digest-alphamissense-uk-biobank.html', meta: 'Issue #6' },
+        // Phase 38: Issue #7 digest articles (5 real + 2 futuristic)
+        { id: 'digest:causal-chemprop', type: 'digest', label: 'Causal-Chemprop (ACS JCIM 2026)', href: 'concepts/digest-causal-chemprop.html', meta: 'Issue #7' },
+        { id: 'digest:alphaproteo-v2', type: 'digest', label: 'AlphaProteo v2 (DeepMind 2026)', href: 'concepts/digest-alphaproteo-v2.html', meta: 'Issue #7' },
+        { id: 'digest:gpt-5b-chemistry', type: 'digest', label: 'GPT-5B chemistry (OpenAI 2026)', href: 'concepts/digest-gpt-5b-chemistry.html', meta: 'Issue #7' },
+        { id: 'digest:janssen-ai-antibiotic', type: 'digest', label: 'Janssen AI antibiotic (Nature 2026)', href: 'concepts/digest-janssen-ai-antibiotic.html', meta: 'Issue #7' },
+        { id: 'digest:gnome-2-materials', type: 'digest', label: 'GNoME-2 materials (NVIDIA 2026)', href: 'concepts/digest-gnome-2-materials.html', meta: 'Issue #7' },
+        { id: 'digest:programmatic-matter-2030', type: 'digest', label: 'Programmatic matter 2030', href: 'concepts/digest-programmatic-matter-2030.html', meta: 'Issue #7' },
+        { id: 'digest:ai-abiogenesis-2031', type: 'digest', label: 'AI abiogenesis 2031', href: 'concepts/digest-ai-abiogenesis-2031.html', meta: 'Issue #7' },
+        // Phase 38: Cheminformatics 3D viewer node
+        { id: 'demo:mol3d', type: 'demo', label: '3D Molecule Viewer (molecule-3d.js)', href: 'science-cheminformatics.html#chem-mol3d-container' },
         // Science sub-pages (22)
         { id: 'science:biology/evolutionary', type: 'science', label: 'Evolutionary Biology', href: 'science/biology/evolutionary.html', meta: 'biology' },
         { id: 'science:biology/imaging', type: 'science', label: 'Bio-Imaging', href: 'science/biology/imaging.html', meta: 'biology' },
@@ -368,6 +378,17 @@
         ['bloch:shorts', 'science:physics/quantum', 'extends'],
         ['hub:physics', 'science:physics/quantum', 'contains'],
         ['bloch:shorts', 'aethel:connector', 'hosted-by'],
+        // Phase 38: Issue #7 — new edges
+        ['digest:causal-chemprop', 'demo:mol3d', 'instantiated-by'],
+        ['digest:causal-chemprop', 'paper:AlphaFold2021', 'cites'],  // weak analog
+        ['digest:alphaproteo-v2', 'paper:AlphaFold2021', 'cites'],
+        ['digest:janssen-ai-antibiotic', 'dataset:PDB-1AKI', 'uses'],
+        ['digest:gnome-2-materials', 'hub:chemistry', 'related'],
+        ['digest:programmatic-matter-2030', 'hub:chemistry', 'futuristic'],
+        ['digest:ai-abiogenesis-2031', 'hub:chemistry', 'futuristic'],
+        ['digest:causal-chemprop', 'hub:chemistry', 'contains'],
+        ['demo:mol3d', 'aethel:connector', 'hosted-by'],
+        ['demo:mol3d', 'hub:chemistry', 'extends'],
         // Phase 37 — Digest article relationships
         ['digest:alphafold-missense-evolve', 'dataset:PDB-1AKI', 'uses'],
         ['digest:jwst-k2-18b-dms', 'dataset:OpenAlex', 'uses'],

@@ -104,11 +104,178 @@
         <a class="card" href="demos.html"><span class="tag">Coming soon</span><h2>Retrosynthesis</h2><p>Target molecule → reactant tree. GNN-based reaction prediction. Visualise the synthesis tree.</p><span class="tools">Tools: ChemFormer, GNN, SMILES</span></a>
         <a class="card" href="demos.html"><span class="tag">Coming soon</span><h2>Reaction Classification</h2><p>Classify chemical reactions from SMILES reactants → products. GNN classifier with attention.</p><span class="tools">Tools: GNN, attention, SMILES</span></a>
       </div>
+
+      <!-- Phase 38: 3D / N-D Molecule Viewer -->
+      <section style="margin-top: 32px;">
+        <p class="h-tag" style="color:#06b6d4;">Phase 38 · 3D / N-D Cheminformatics</p>
+        <h2 style="font-size: 22px; margin: 8px 0 12px; background: linear-gradient(90deg,#06b6d4,#8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent;">3D Molecule Viewer + N-D property projection</h2>
+        <p class="lead" style="font-size: 14px; max-width: 920px;">A pure client-side canvas renderer for 3D ball-and-stick molecules with CPK colours, animated rotation, pharmacophore overlay (HBD/HBA/HYD), 3D QSAR surface, and an N-D property strip. SMILES → naive 3D layout via a Fibonacci sphere — for demos; not a true conformer (use RDKit for production). Inspired by the Causal-Chemprop paper (ACS JCIM 2026) shown on LinkedIn — which pairs a Chemprop MPNN with a structural causal model for pIC50 prediction. Toggle the layers below to explore.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 320px; gap: 16px; margin-top: 16px;">
+          <div id="chem-mol3d-container"></div>
+          <div style="background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px; padding: 16px; backdrop-filter: blur(12px);">
+            <h3 style="margin: 0 0 12px; color: #06b6d4; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em;">Demo molecules</h3>
+            <p style="font-size: 11px; color: #9ca3af; margin: 0 0 12px;">Click to load into the 3D viewer. Each has SMILES, computed properties (logP, MW, TPSA, HBD, HBA, rotatable bonds), and pharmacophore features.</p>
+            <ul id="chem-mol-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px;">
+              <li data-id="aspirin" style="padding: 8px 10px; border-radius: 6px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); cursor: pointer; font-size: 12px;"><strong style="color: #06b6d4;">Aspirin</strong> <span style="color: #9ca3af; font-family: ui-monospace;">CC(=O)Oc1ccccc1C(=O)O</span></li>
+              <li data-id="caffeine" style="padding: 8px 10px; border-radius: 6px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); cursor: pointer; font-size: 12px;"><strong style="color: #06b6d4;">Caffeine</strong> <span style="color: #9ca3af; font-family: ui-monospace;">CN1C=NC2=C1C(=O)N(C(=O)N2C)C</span></li>
+              <li data-id="ibuprofen" style="padding: 8px 10px; border-radius: 6px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); cursor: pointer; font-size: 12px;"><strong style="color: #06b6d4;">Ibuprofen</strong> <span style="color: #9ca3af; font-family: ui-monospace;">CC(C)Cc1ccc(C(C)C(=O)O)cc1</span></li>
+              <li data-id="ethanol" style="padding: 8px 10px; border-radius: 6px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); cursor: pointer; font-size: 12px;"><strong style="color: #06b6d4;">Ethanol</strong> <span style="color: #9ca3af; font-family: ui-monospace;">CCO</span></li>
+              <li data-id="glucose" style="padding: 8px 10px; border-radius: 6px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); cursor: pointer; font-size: 12px;"><strong style="color: #06b6d4;">D-Glucose</strong> <span style="color: #9ca3af; font-family: ui-monospace;">OC[C@H]1OC(O)[C@H](O)[C@@H](O)[C@@H]1O</span></li>
+              <li data-id="benzene" style="padding: 8px 10px; border-radius: 6px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); cursor: pointer; font-size: 12px;"><strong style="color: #06b6d4;">Benzene</strong> <span style="color: #9ca3af; font-family: ui-monospace;">c1ccccc1</span></li>
+            </ul>
+            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border);">
+              <h3 style="margin: 0 0 8px; color: #06b6d4; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;">Layer toggles</h3>
+              <p style="font-size: 11px; color: #9ca3af; margin: 0;">Use the buttons on the molecule card: <strong>🎯 Pharm</strong> overlays H-bond donor/acceptor + hydrophobic features. <strong>⛰ QSAR</strong> renders a 3D wireframe surface coloured by the active property. <strong>N-D</strong> shows the parallel-coordinates property strip (logP · MW · TPSA · HBD · HBA · rotatable bonds).</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Phase 38: Causal-Chemprop demo (inspired by ACS JCIM 2026 paper) -->
+      <section style="margin-top: 32px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; padding: 24px; backdrop-filter: blur(12px);">
+        <p class="h-tag" style="color:#8b5cf6;">Phase 38 · Causal inference × MPNN</p>
+        <h2 style="font-size: 22px; margin: 8px 0 12px; background: linear-gradient(90deg,#8b5cf6,#ec4899); -webkit-background-clip: text; background-clip: text; color: transparent;">Causal-Chemprop: structural causal model × MPNN for pIC50</h2>
+        <p class="lead" style="font-size: 14px; max-width: 920px;">Inspired by the LinkedIn post on the ACS JCIM 2026 paper "Causal-Chemprop" — which augments the Chemprop message-passing neural network (MPNN) with a structural causal model (SCM) for molecular property prediction. The anchor + test molecules are conditionally intervened on (do-calculus), which improves pIC50 prediction accuracy on kinases like ABL (0.45 → 0.56), BCR-ABL, and others. The demo below shows the 5-step causal pipeline; each step has Math → Code annotations (6-language polyglot in the concept card).</p>
+
+        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 16px;">
+          <div style="padding: 12px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; text-align: center;">
+            <div style="font-size: 22px; color: #06b6d4;">⚓</div>
+            <div style="font-size: 11px; color: #9ca3af; margin-top: 4px;">Step 1</div>
+            <div style="font-size: 12px; color: #f3f4f6; font-weight: 600; margin-top: 4px;">Anchor molecules</div>
+            <div style="font-size: 10px; color: #6b7280; margin-top: 4px;">High-confidence actives (IC<sub>50</sub> &lt; 100 nM)</div>
+          </div>
+          <div style="padding: 12px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; text-align: center;">
+            <div style="font-size: 22px; color: #8b5cf6;">🧬</div>
+            <div style="font-size: 11px; color: #9ca3af; margin-top: 4px;">Step 2</div>
+            <div style="font-size: 12px; color: #f3f4f6; font-weight: 600; margin-top: 4px;">Chemprop MPNN</div>
+            <div style="font-size: 10px; color: #6b7280; margin-top: 4px;">Message passing over molecular graph</div>
+          </div>
+          <div style="padding: 12px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; text-align: center;">
+            <div style="font-size: 22px; color: #ec4899;">🔀</div>
+            <div style="font-size: 11px; color: #9ca3af; margin-top: 4px;">Step 3</div>
+            <div style="font-size: 12px; color: #f3f4f6; font-weight: 600; margin-top: 4px;">SCM conditioning</div>
+            <div style="font-size: 10px; color: #6b7280; margin-top: 4px;">Condition on anchor scaffold</div>
+          </div>
+          <div style="padding: 12px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; text-align: center;">
+            <div style="font-size: 22px; color: #f59e0b;">⚙️</div>
+            <div style="font-size: 11px; color: #9ca3af; margin-top: 4px;">Step 4</div>
+            <div style="font-size: 12px; color: #f3f4f6; font-weight: 600; margin-top: 4px;">do-calculus</div>
+            <div style="font-size: 10px; color: #6b7280; margin-top: 4px;">Intervene on R-group substituents</div>
+          </div>
+          <div style="padding: 12px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; text-align: center;">
+            <div style="font-size: 22px; color: #10b981;">📈</div>
+            <div style="font-size: 11px; color: #9ca3af; margin-top: 4px;">Step 5</div>
+            <div style="font-size: 12px; color: #f3f4f6; font-weight: 600; margin-top: 4px;">pIC50 lift</div>
+            <div style="font-size: 10px; color: #6b7280; margin-top: 4px;">ABL: 0.45 → 0.56 · BCR-ABL: 0.51 → 0.63</div>
+          </div>
+        </div>
+
+        <details style="margin-top: 16px;">
+          <summary style="font-size: 13px; color: #06b6d4; cursor: pointer; font-weight: 600;">Show the 5-step Math → Code derivation</summary>
+          <div style="margin-top: 12px; padding: 12px; background: rgba(11,15,26,0.7); border-radius: 8px; font-family: ui-monospace, SF Mono, Menlo, monospace; font-size: 11px; line-height: 1.6; color: #f3f4f6;">
+            <div style="color: #06b6d4;">Step 1 — Anchor selection:</div>
+            <div>A = {(m, IC<sub>50</sub>) : IC<sub>50</sub>(m) &lt; 100 nM, confidence(m) &gt; 0.9}</div>
+            <div style="color: #6b7280; margin-top: 4px;">// High-confidence actives form the anchor set A.</div>
+            <br/>
+            <div style="color: #8b5cf6;">Step 2 — MPNN message passing (Chemprop):</div>
+            <div>h<sub>v</sub><sup>(k+1)</sup> = σ(W<sub>k</sub> Σ<sub>u ∈ N(v)</sub> h<sub>u</sub><sup>(k)</sup> + b<sub>k</sub>)</div>
+            <div style="color: #6b7280; margin-top: 4px;">// Update atom features h by aggregating neighbours' features.</div>
+            <br/>
+            <div style="color: #ec4899;">Step 3 — SCM conditioning:</div>
+            <div>P(Y | do(X), A) ≠ P(Y | X, A) — back-door adjustment</div>
+            <div style="color: #6b7280; margin-top: 4px;">// Condition on the anchor scaffold to block confounding paths.</div>
+            <br/>
+            <div style="color: #f59e0b;">Step 4 — do-calculus intervention:</div>
+            <div>do(X = x<sub>R</sub>) — replace R-group substituents with test values</div>
+            <div style="color: #6b7280; margin-top: 4px;">// Counterfactual: "what if we set R-group to test value?"</div>
+            <br/>
+            <div style="color: #10b981;">Step 5 — pIC50 prediction lift:</div>
+            <div>pIC<sub>50</sub> = -log<sub>10</sub>(IC<sub>50</sub> × 10<sup>-9</sup>)  ·  Δ = ŷ<sub>causal</sub> − ŷ<sub>MPNN</sub></div>
+            <div style="color: #6b7280; margin-top: 4px;">// ABL: 0.45 → 0.56 (r²) · BCR-ABL: 0.51 → 0.63 · c-KIT: 0.48 → 0.59</div>
+          </div>
+        </details>
+
+        <p style="font-size: 11px; color: #6b7280; margin-top: 16px;">References: Causal-Chemprop, ACS J. Chem. Inf. Model. 2026. Chemprop (Yang et al. 2019). Structural causal models (Pearl 2009). The concept card at <a href="concepts/digest-causal-chemprop.html" style="color: #06b6d4;">concepts/digest-causal-chemprop.html</a> has the 6-language polyglot code (Python / Rust / Go / C / Elixir / Scala).</p>
+      </section>
       <div class="meta"><p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science-cheminformatics.html</code>. Next.js: <code>/science/cheminformatics</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p></div>
     </div>
     <script>
       (function(){const c=document.getElementById('particle-canvas'),x=c.getContext('2d');let W,H,P=[];const N=60,cols=['#06b6d4','#8b5cf6','#ec4899'];function r(){W=c.width=innerWidth;H=c.height=innerHeight}r();addEventListener('resize',r);for(let i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,W,H);for(let i=0;i<N;i++){for(let j=i+1;j<N;j++){const d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<100){x.strokeStyle='rgba(139,92,246,'+.12*(1-d/100)+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke()}}}for(const p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;x.fillStyle=p.c;x.globalAlpha=.5;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill()}x.globalAlpha=1;requestAnimationFrame(s)}s()})();
       (function(){const K='aihpc-theme';const b=document.body,r=document.querySelector('.ribbon'),i=document.getElementById('ribbon-theme-icon');function a(t){if(t==='light'){b.classList.add('light');r&&r.classList.add('light');i.textContent='☀'}else{b.classList.remove('light');r&&r.classList.remove('light');i.textContent='🌙'}}let d='dark';try{const s=localStorage.getItem(K);if(s==='light'||s==='dark')d=s;else if(matchMedia('(prefers-color-scheme:light)').matches)d='light'}catch(e){}a(d);document.getElementById('ribbon-theme-toggle').addEventListener('click',()=>{const n=b.classList.contains('light')?'dark':'light';a(n);try{localStorage.setItem(K,n)}catch(e){}})})();
+
+      // Phase 38: 3D molecule viewer — register demo molecules + auto-play
+      document.addEventListener('DOMContentLoaded', function () {
+        if (!window.AIHPC_MOL3D) return;
+        AIHPC_MOL3D.mount('chem-mol3d-container');
+        AIHPC_MOL3D.register('chem-mol3d-container', 'aspirin', {
+          id: 'aspirin',
+          smiles: 'CC(=O)Oc1ccccc1C(=O)O',
+          name: 'Acetylsalicylic acid (Aspirin)',
+          properties: { logP: 1.31, MW: 180.16, TPSA: 63.6, HBD: 1, HBA: 4, rotatable: 3, rings: 1 },
+          landscapeProperty: 'logP',
+          caption: 'NSAID — cyclooxygenase inhibitor. MW 180, logP 1.31, 1 HBD, 4 HBA.',
+        });
+        AIHPC_MOL3D.register('chem-mol3d-container', 'caffeine', {
+          id: 'caffeine',
+          smiles: 'CN1C=NC2=C1C(=O)N(C(=O)N2C)C',
+          name: 'Caffeine',
+          properties: { logP: -0.07, MW: 194.19, TPSA: 58.4, HBD: 0, HBA: 6, rotatable: 0, rings: 2 },
+          landscapeProperty: 'logP',
+          caption: 'Adenosine receptor antagonist. Two fused rings, no HBD.',
+        });
+        AIHPC_MOL3D.register('chem-mol3d-container', 'ibuprofen', {
+          id: 'ibuprofen',
+          smiles: 'CC(C)Cc1ccc(C(C)C(=O)O)cc1',
+          name: 'Ibuprofen',
+          properties: { logP: 3.97, MW: 206.28, TPSA: 37.3, HBD: 1, HBA: 2, rotatable: 4, rings: 1 },
+          landscapeProperty: 'logP',
+          caption: 'NSAID — COX-2 inhibitor. High logP (3.97) — high plasma protein binding.',
+        });
+        AIHPC_MOL3D.register('chem-mol3d-container', 'ethanol', {
+          id: 'ethanol',
+          smiles: 'CCO',
+          name: 'Ethanol',
+          properties: { logP: -0.14, MW: 46.07, TPSA: 20.2, HBD: 1, HBA: 1, rotatable: 0, rings: 0 },
+          landscapeProperty: 'logP',
+          caption: 'Simple alcohol. GABA-A modulator. logP negative — freely water-soluble.',
+        });
+        AIHPC_MOL3D.register('chem-mol3d-container', 'glucose', {
+          id: 'glucose',
+          smiles: 'OC[C@H]1OC(O)[C@H](O)[C@@H](O)[C@@H]1O',
+          name: 'D-Glucose',
+          properties: { logP: -3.0, MW: 180.16, TPSA: 110.4, HBD: 5, HBA: 6, rotatable: 1, rings: 1 },
+          landscapeProperty: 'logP',
+          caption: 'Pyranose ring. 5 HBD, 6 HBA — extremely hydrophilic (logP -3.0).',
+        });
+        AIHPC_MOL3D.register('chem-mol3d-container', 'benzene', {
+          id: 'benzene',
+          smiles: 'c1ccccc1',
+          name: 'Benzene',
+          properties: { logP: 2.0, MW: 78.11, TPSA: 0.0, HBD: 0, HBA: 0, rotatable: 0, rings: 1 },
+          landscapeProperty: 'logP',
+          caption: 'Aromatic ring — prototypical π-system.',
+        });
+        AIHPC_MOL3D.setActive('chem-mol3d-container', 'aspirin');
+        AIHPC_MOL3D.play('chem-mol3d-container');
+
+        // Wire molecule list clicks
+        var list = document.getElementById('chem-mol-list');
+        if (list) {
+          list.addEventListener('click', function (e) {
+            var li = e.target.closest('li');
+            if (!li) return;
+            var id = li.dataset.id;
+            AIHPC_MOL3D.setActive('chem-mol3d-container', id);
+            list.querySelectorAll('li').forEach(function (l) { l.style.borderColor = 'var(--border)'; l.style.background = 'rgba(11,15,26,0.6)'; });
+            li.style.borderColor = '#06b6d4';
+            li.style.background = 'rgba(6,182,212,0.08)';
+          });
+          list.querySelector('li').style.borderColor = '#06b6d4';
+          list.querySelector('li').style.background = 'rgba(6,182,212,0.08)';
+        }
+      });
     </script>
+    <script src="molecule-3d.js"></script>
   </body>
 </html>

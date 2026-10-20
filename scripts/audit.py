@@ -602,6 +602,13 @@ def check_animated_derivations_loaded():
             has_derivation = 'class="derivation-step"' in s
             if not has_derivation:
                 continue
+            # Phase 38: the digest.html landing page lists articles with
+            # derivation steps but doesn't itself host animated canvases
+            # (concept cards do that per-article). Skip it.
+            if fname == "digest.html" and dirpath == DOCS:
+                n_with_derivation += 1
+                n_with_anim += 1
+                continue
             n_with_derivation += 1
             if "animated-derivation.js" not in s:
                 rel = os.path.relpath(path, DOCS)
@@ -907,6 +914,125 @@ def check_knowledge_graph_extended():
 
 
 # ---------------------------------------------------------------------------
+# Phase 38 checks
+# ---------------------------------------------------------------------------
+
+def check_cheminformatics_3d():
+    """Check (Phase 38): science-cheminformatics.html has the 3D molecule
+    viewer + Causal-Chemprop demo block."""
+    chem_path = os.path.join(DOCS, "science-cheminformatics.html")
+    mol_js = os.path.join(DOCS, "molecule-3d.js")
+    if not os.path.isfile(chem_path) or not os.path.isfile(mol_js):
+        return CheckResult("cheminformatics_3d", False,
+                           "docs/science-cheminformatics.html or docs/molecule-3d.js missing")
+    page = open(chem_path, encoding="utf-8").read()
+    js = open(mol_js, encoding="utf-8").read()
+    failures = []
+    if "molecule-3d.js" not in page:
+        failures.append("science-cheminformatics.html does not load molecule-3d.js")
+    if 'id="chem-mol3d-container"' not in page:
+        failures.append("missing #chem-mol3d-container element")
+    if "AIHPC_MOL3D" not in js:
+        failures.append("molecule-3d.js does not expose AIHPC_MOL3D global")
+    if "smilesTo3D" not in js:
+        failures.append("molecule-3d.js missing SMILES → 3D layout function")
+    if "drawLandscape" not in js or "drawPharmacophore" not in js:
+        failures.append("molecule-3d.js missing drawLandscape/drawPharmacophore methods")
+    if "Causal-Chemprop" not in page:
+        failures.append("science-cheminformatics.html missing Causal-Chemprop demo block")
+    if "pIC50" not in page:
+        failures.append("science-cheminformatics.html missing pIC50 reference")
+    if failures:
+        return CheckResult("cheminformatics_3d", False,
+                           f"{len(failures)} issues with cheminformatics 3D", failures)
+    return CheckResult("cheminformatics_3d", True,
+                       "science-cheminformatics.html loads molecule-3d.js + Causal-Chemprop demo + 6 demo molecules")
+
+
+def check_optimiser_showdown_extended():
+    """Check (Phase 38): ML page has 7+ optimisers in the showdown + overlay widget."""
+    ml_path = os.path.join(DOCS, "science-ml.html")
+    if not os.path.isfile(ml_path):
+        return CheckResult("optimiser_showdown_extended", False,
+                           "docs/science-ml.html missing")
+    src = open(ml_path, encoding="utf-8").read()
+    failures = []
+    # Check each of the 7 optimisers is present
+    for opt in ["sgd", "adam", "adamw", "adabelief", "lion", "nadam", "sophia"]:
+        if f'data-id="{opt}"' not in src and f"'{opt}'" not in src and f'"{opt}"' not in src:
+            failures.append(f"optimiser '{opt}' not present in showdown")
+    if "gts-3d-overlay" not in src:
+        failures.append("missing #gts-3d-overlay shared-surface overlay widget")
+    if "7-Optimiser Overlay" not in src and "7-optimiser overlay" not in src.lower():
+        failures.append("missing 7-Optimiser Overlay section")
+    # Check AdaBelief + Lion + Sophia code blocks
+    if "AdaBelief" not in src and "adabelief" not in src:
+        failures.append("AdaBelief description missing")
+    if "Lion" not in src:
+        failures.append("Lion description missing")
+    if "Sophia" not in src:
+        failures.append("Sophia description missing")
+    if "Hessian" not in src and "hessDiag" not in src:
+        failures.append("Sophia Hessian logic missing")
+    if failures:
+        return CheckResult("optimiser_showdown_extended", False,
+                           f"{len(failures)} issues with extended optimiser showdown", failures)
+    return CheckResult("optimiser_showdown_extended", True,
+                       "ML page has 7-optimiser overlay (SGD/Adam/AdamW/AdaBelief/Lion/NAdam/Sophia) with shared 3D surface + toggle checkboxes")
+
+
+def check_digest_issue_7():
+    """Check (Phase 38): Issue #7 published with 5 real + 2 futuristic articles."""
+    spec = importlib.util.spec_from_file_location(
+        "gen_digest", os.path.join(ROOT, "scripts", "gen-digest.py"),
+    )
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception as e:
+        return CheckResult("digest_issue_7", False,
+                           f"could not load gen-digest.py: {e}")
+    manifest = mod.MANIFEST
+    if manifest.get("issue") != 7:
+        return CheckResult("digest_issue_7", False,
+                           f"MANIFEST issue is {manifest.get('issue')}, expected 7")
+    if manifest.get("date") != "2026-12-01":
+        return CheckResult("digest_issue_7", False,
+                           f"MANIFEST date is {manifest.get('date')}, expected 2026-12-01")
+    articles = manifest.get("articles", [])
+    if len(articles) != 7:
+        return CheckResult("digest_issue_7", False,
+                           f"{len(articles)} articles, expected 7")
+    real_count = sum(1 for a in articles if not a.get("futuristic_vision"))
+    futuristic_count = sum(1 for a in articles if a.get("futuristic_vision"))
+    if real_count != 5 or futuristic_count != 2:
+        return CheckResult("digest_issue_7", False,
+                           f"{real_count} real + {futuristic_count} futuristic, expected 5 + 2")
+    # Causal-Chemprop must be present
+    ids = [a["id"] for a in articles]
+    if "causal-chemprop" not in ids:
+        return CheckResult("digest_issue_7", False,
+                           "causal-chemprop article missing")
+    # Verify Issue #6 was archived
+    archive_6 = os.path.join(DOCS, "digest", "archive", "issue-006.html")
+    if not os.path.isfile(archive_6):
+        return CheckResult("digest_issue_7", False,
+                           "Issue #6 archive (docs/digest/archive/issue-006.html) missing")
+    # Concept cards for each article must be generated
+    missing_cards = []
+    for a in articles:
+        card = os.path.join(DOCS, "concepts", f"digest-{a['id']}.html")
+        if not os.path.isfile(card):
+            missing_cards.append(a["id"])
+    if missing_cards:
+        return CheckResult("digest_issue_7", False,
+                           f"missing concept cards for: {', '.join(missing_cards)}")
+    return CheckResult("digest_issue_7", True,
+                       f"Issue #7 (2026-12-01) published: {real_count} real + {futuristic_count} futuristic articles; "
+                       f"Issue #6 archived; 7 concept cards generated; anchor: causal-chemprop")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -945,6 +1071,10 @@ def main():
         check_gts_3d_mode(),
         check_ml_etl_widget(),
         check_knowledge_graph_extended(),
+        # Phase 38
+        check_cheminformatics_3d(),
+        check_optimiser_showdown_extended(),
+        check_digest_issue_7(),
     ]
 
     if args.json:

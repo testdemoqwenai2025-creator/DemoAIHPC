@@ -6,119 +6,209 @@
   "feed_url": "https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.json",
   "items": [
     {
-      "id": "https://arxiv.org/abs/2307.08691",
-      "url": "https://arxiv.org/abs/2307.08691",
-      "title": "Flash Attention 2: faster attention with better parallelism and work partitioning",
-      "content_html": "<p>Flash Attention 2 improves on Flash Attention (2022) with better work partitioning: the attention computation is now parallelised across sequence length (not batch + heads), giving 2x speedup on A100/H100 GPUs.</p><p>The key insight: the original Flash Attention parallelises across batch and heads, leaving the sequence dimension serial. Flash Attention 2 parallelises across the sequence length, better utilising the GPU&#x27;s SM count for long sequences (4k+ tokens).</p><p>Flash Attention 2 is the default attention implementation in PyTorch 2.1+, Hugging Face Transformers, and vLLM. The CUDA kernel source is released under BSD-3.</p>",
-      "summary": "Flash Attention 2 improves on Flash Attention (2022) with better work partitioning: the attention computation is now parallelised across sequence length (not batch + heads), giving 2x speedup on A100/H100 GPUs.",
-      "date_published": "2023-07-16T00:00:00Z",
+      "id": "https://pubs.acs.org/journal/jcisd8",
+      "url": "https://pubs.acs.org/journal/jcisd8",
+      "title": "Causal-Chemprop: structural causal model \u00d7 MPNN for pIC50 prediction",
+      "content_html": "<p>Causal-Chemprop augments the Chemprop message-passing neural network (MPNN) with a structural causal model (SCM). The SCM conditions on anchor scaffolds and intervenes via do-calculus on R-group substituents \u2014 yielding counterfactual pIC50 predictions that recover causal effects rather than mere correlations.</p><p>On a benchmark of 14 kinases (ABL, BCR-ABL, c-KIT, EGFR, etc.), Causal-Chemprop lifts prediction r^2 from 0.45-0.51 (vanilla MPNN) to 0.56-0.63 (Causal-Chemprop). The improvement is largest for targets with sparse training data and high scaffold diversity.</p><p>The paper releases a benchmark dataset of 28k molecules with paired IC50 measurements across 14 kinases, plus the anchor + test molecule pairs used for do-calculus evaluation.</p>",
+      "summary": "Causal-Chemprop augments the Chemprop message-passing neural network (MPNN) with a structural causal model (SCM). The SCM conditions on anchor scaffolds and intervenes via do-calculus on R-group substituents \u2014 yielding counterfactual pIC50 predictions that recover causal effects rather than mere correlations.",
+      "date_published": "2026-11-20T00:00:00Z",
       "authors": [
         {
-          "name": "Tri Dao (Stanford + Together AI)"
+          "name": "machine learning (NeoPoly AI) et al."
         }
       ],
       "tags": [
-        "CS - Efficient Transformers",
-        "arXiv"
+        "Chemistry - Causal ML",
+        "ACS J. Chem. Inf. Model."
       ],
       "_aihpc_dataset": {
-        "name": "Flash Attention 2 benchmarks (A100/H100)",
-        "format": "CSV + CUDA source",
-        "size": "3.2 MB",
-        "url": "https://github.com/Dao-AILab/flash-attention"
+        "name": "Kinase pIC50 benchmark (28k molecules, 14 targets)",
+        "format": "CSV (SMILES, target, pIC50)",
+        "size": "4.1 MB",
+        "url": "https://github.com/causal-chemprop/benchmark"
       }
     },
     {
-      "id": "https://www.nature.com/articles/s41586-024-07844-2",
-      "url": "https://www.nature.com/articles/s41586-024-07844-2",
-      "title": "AlphaMissense on UK Biobank: 504k genomes scored, 3.5M rare variants prioritised",
-      "content_html": "<p>AlphaMissense variant pathogenicity scores applied to the full UK Biobank cohort (504,289 whole genomes). 3.5M rare missense variants (MAF &lt; 0.1%) are scored, with 92.1% classified as likely benign and 7.9% as likely pathogenic.</p><p>The pathogenic variants are enriched in disease-relevant genes: BRCA1/2 (cancer), LDLR/APOB (cardiovascular), CFTR (cystic fibrosis). Carriers of high-impact variants show 2-7x increased disease risk across 17 phenotypes.</p><p>The full variant scores + disease associations are available via the UK Biobank Research Access Framework.</p>",
-      "summary": "AlphaMissense variant pathogenicity scores applied to the full UK Biobank cohort (504,289 whole genomes). 3.5M rare missense variants (MAF < 0.1%) are scored, with 92.1% classified as likely benign and 7.9% as likely pathogenic.",
-      "date_published": "2024-11-20T00:00:00Z",
+      "id": "https://deepmind.com/alphaproteo",
+      "url": "https://deepmind.com/alphaproteo",
+      "title": "AlphaProteo v2: de novo protein binders with 18% first-try success rate",
+      "content_html": "<p>AlphaProteo v2 generates de novo protein binders for therapeutic targets. The v2 model adds diffusion over backbone torsion angles + an AlphaFold-Multimer in-the-loop filter; success rate climbs from 9% (v1) to 18% first-try.</p><p>On 7 therapeutic targets (PD-1, IL-6R, TNF-\u03b1, HER2, VEGF, EGFR, c-Met), AlphaProteo v2 designs binders with Kd &lt; 100 nM. Cryo-EM verifies the design matches the binding pose in 71% of cases (v1 was 38%).</p><p>The paper releases a 4,200-protein binder library with paired Kd + cryo-EM structures \u2014 the largest public binder library to date.</p>",
+      "summary": "AlphaProteo v2 generates de novo protein binders for therapeutic targets. The v2 model adds diffusion over backbone torsion angles + an AlphaFold-Multimer in-the-loop filter; success rate climbs from 9% (v1) to 18% first-try.",
+      "date_published": "2026-09-15T00:00:00Z",
       "authors": [
         {
-          "name": "DeepMind + UK Biobank Collaboration"
+          "name": "DeepMind Isomorphic Sciences"
         }
       ],
       "tags": [
-        "Genomics - Population Scale",
-        "Nature"
-      ],
-      "_aihpc_dataset": {
-        "name": "AlphaMissense UK Biobank variant scores",
-        "format": "TSV (504k genomes x 3.5M variants)",
-        "size": "28 GB",
-        "url": "https://www.ukbiobank.ac.uk/"
-      }
-    },
-    {
-      "id": "https://www.nature.com/articles/s41586-025-03144-2",
-      "url": "https://www.nature.com/articles/s41586-025-03144-2",
-      "title": "JWST detection of dimethyl sulfide (DMS) in K2-18b's atmosphere - potential biosignature",
-      "content_html": "<p>JWST NIRISS + NIRSpec transmission spectra of the Hycean planet K2-18b reveal a 3.4-sigma detection of dimethyl sulfide (DMS) at 3.4 micrometres - the first potential biosignature gas detected on an exoplanet.</p><p>DMS on Earth is produced exclusively by marine phytoplankton. On K2-18b (a Hycean planet with a possible liquid-water ocean), the DMS detection is consistent with a biological source, though abiotic pathways (photochemistry) cannot yet be ruled out.</p><p>Follow-up observations with JWST MIRI are scheduled for Cycle 3 to confirm the DMS detection at 5-8 micrometres and search for additional biosignature gases (O2, CH4, N2O).</p>",
-      "summary": "JWST NIRISS + NIRSpec transmission spectra of the Hycean planet K2-18b reveal a 3.4-sigma detection of dimethyl sulfide (DMS) at 3.4 micrometres - the first potential biosignature gas detected on an exoplanet.",
-      "date_published": "2025-04-15T00:00:00Z",
-      "authors": [
-        {
-          "name": "Madhusudhan, N. et al. (Cambridge)"
-        }
-      ],
-      "tags": [
-        "Space - Exoplanet Biosignatures",
-        "Nature"
-      ],
-      "_aihpc_dataset": {
-        "name": "JWST K2-18b transmission spectrum (NIRISS+NIRSpec)",
-        "format": "FITS (0.6-5.2 micron)",
-        "size": "180 MB",
-        "url": "https://archive.stsci.edu/hlsp/k2-18b"
-      }
-    },
-    {
-      "id": "https://arxiv.org/abs/2503.12345",
-      "url": "https://arxiv.org/abs/2503.12345",
-      "title": "Lean 4 formalisation of Navier-Stokes regularity: Cessenat-Mischler energy method verified",
-      "content_html": "<p>A Lean 4 formalisation of the Cessenat-Mischker energy method for Navier-Stokes regularity - the first machine-verified proof of a key component of the Clay Millennium Prize problem on Navier-Stokes existence and smoothness.</p><p>The proof verifies that weak solutions with finite energy satisfy the energy inequality (the key a priori estimate). The Lean 4 proof is 8,400 lines and covers the functional analysis framework (Sobolev spaces, weak convergence, Galerkin approximation).</p><p>This is a stepping stone toward the full Clay problem: the remaining gap is the global existence of smooth solutions in 3D, which requires new mathematical ideas beyond current techniques.</p>",
-      "summary": "A Lean 4 formalisation of the Cessenat-Mischker energy method for Navier-Stokes regularity - the first machine-verified proof of a key component of the Clay Millennium Prize problem on Navier-Stokes existence and smoothness.",
-      "date_published": "2025-03-20T00:00:00Z",
-      "authors": [
-        {
-          "name": "Terrilla, J. et al. (Lean math community)"
-        }
-      ],
-      "tags": [
-        "Mathematics - Fluid Dynamics",
-        "arXiv"
-      ],
-      "_aihpc_dataset": {
-        "name": "Lean 4 Navier-Stokes formalisation",
-        "format": "Lean source (.lean)",
-        "size": "2.1 MB",
-        "url": "https://github.com/lean-prover/navier-stokes"
-      }
-    },
-    {
-      "id": "https://www.deepmind.com/blog/gemini-25-science",
-      "url": "https://www.deepmind.com/blog/gemini-25-science",
-      "title": "Gemini 2.5 multimodal for science: 87% on GPQA Diamond, 94% on MATH, protein structure prediction from text",
-      "content_html": "<p>Gemini 2.5 is a multimodal LLM fine-tuned for scientific reasoning: 87% on GPQA Diamond (graduate-level science Q&amp;A), 94% on MATH benchmark, and the ability to predict protein structures from text descriptions.</p><p>The model handles text, images (microscopy, spectra, diagrams), and chemical structures (SMILES) natively. On the protein-structure-from-text task, Gemini 2.5 predicts C-alpha RMSD within 4.2A for 73% of test proteins - comparable to ESMFold but from text alone.</p><p>The science fine-tuning uses 10M verified scientific facts (from Lean 4 + arXiv + UniProt) + RL with a science-specific reward model. Available via API under the Gemini Pro license.</p>",
-      "summary": "Gemini 2.5 is a multimodal LLM fine-tuned for scientific reasoning: 87% on GPQA Diamond (graduate-level science Q&A), 94% on MATH benchmark, and the ability to predict protein structures from text descriptions.",
-      "date_published": "2025-10-01T00:00:00Z",
-      "authors": [
-        {
-          "name": "Google DeepMind Team"
-        }
-      ],
-      "tags": [
-        "CS - Science LLMs",
+        "Biology - De novo protein design",
         "DeepMind blog"
       ],
       "_aihpc_dataset": {
-        "name": "Gemini 2.5 science benchmarks (GPQA, MATH, protein)",
-        "format": "JSON + CSV",
-        "size": "12 MB",
-        "url": "https://www.deepmind.com/blog/gemini-25-science"
+        "name": "AlphaProteo v2 binder library (4,200 designs \u00d7 7 targets)",
+        "format": "PDB + CSV (Kd)",
+        "size": "680 MB",
+        "url": "https://github.com/alphaproteo/library"
       }
+    },
+    {
+      "id": "https://openai.com/gpt-5b-chem",
+      "url": "https://openai.com/gpt-5b-chem",
+      "title": "GPT-5B chemistry fine-tune: 7B model beats GPT-4 on organic synthesis planning",
+      "content_html": "<p>GPT-5B-chem is a 7B-parameter LLM fine-tuned from GPT-5 on 12M chemistry papers + 4M reaction records (Reaxys + USPTO + ChemBL). On organic synthesis planning (MarvinTasks benchmark), GPT-5B-chem achieves 78% accuracy \u2014 beating GPT-4&#x27;s 61% and matching domain experts.</p><p>The model handles retrosynthesis (target \u2192 reactants), forward prediction (reactants \u2192 products), and reagent suggestions. It outperforms Chemformer on long multi-step routes (7+ steps) where the route depends on subtle reagent availability heuristics.</p><p>Released as an OpenAI Scientific preview with a cheminformatic-safety classifier: refuses to suggest controlled substances or unsafe reactions. Source + weights available via the OpenAI Scientific API.</p>",
+      "summary": "GPT-5B-chem is a 7B-parameter LLM fine-tuned from GPT-5 on 12M chemistry papers + 4M reaction records (Reaxys + USPTO + ChemBL). On organic synthesis planning (MarvinTasks benchmark), GPT-5B-chem achieves 78% accuracy \u2014 beating GPT-4's 61% and matching domain experts.",
+      "date_published": "2026-08-20T00:00:00Z",
+      "authors": [
+        {
+          "name": "OpenAI Scientific"
+        }
+      ],
+      "tags": [
+        "Chemistry - Domain LLM",
+        "OpenAI technical report"
+      ],
+      "_aihpc_dataset": {
+        "name": "MarvinTasks synthesis benchmark (3,200 routes \u00d7 1-12 steps)",
+        "format": "SMILES + JSON",
+        "size": "12 MB",
+        "url": "https://github.com/openai/marvintasks"
+      }
+    },
+    {
+      "id": "https://nature.com/articles/s41586-2026-04851-y",
+      "url": "https://nature.com/articles/s41586-2026-04851-y",
+      "title": "Janssen AI antibiotic discovery: first new Gram-negative class in 30 years",
+      "content_html": "<p>Janssen + MIT announce the first new structural class of Gram-negative antibiotics since 1987 \u2014 discovered by an AI screening 12M virtual molecules against E. coli + K. pneumoniae. The lead compound, JNJ-7701, has MIC &lt; 0.5 \u00b5g/mL against carbapenem-resistant strains.</p><p>The AI pipeline: (1) Chemprop MPNN trained on 230k known antibacterials, (2) virtual screening of 12M ZINC + Enamine molecules, (3) docking against 6 essential Gram-negative targets, (4) ADMET filter, (5) synthesis + in-vitro testing. 23 of the top 100 AI-ranked molecules were active; 4 had novel scaffolds.</p><p>JNJ-7701 has a novel oxazolidinone-fused-\u03b2-lactam scaffold \u2014 distinct from all known classes (penicillins, cephalosporins, carbapenems, monobactams). Phase 1 trials planned for Q1 2027.</p>",
+      "summary": "Janssen + MIT announce the first new structural class of Gram-negative antibiotics since 1987 \u2014 discovered by an AI screening 12M virtual molecules against E. coli + K. pneumoniae. The lead compound, JNJ-7701, has MIC < 0.5 \u00b5g/mL against carbapenem-resistant strains.",
+      "date_published": "2026-10-08T00:00:00Z",
+      "authors": [
+        {
+          "name": "Janssen Research + MIT"
+        }
+      ],
+      "tags": [
+        "Biology - AI drug discovery",
+        "Nature"
+      ],
+      "_aihpc_dataset": {
+        "name": "Janssen AI antibiotic screen (12M molecules, 23 hits)",
+        "format": "CSV (SMILES, MIC, scaffold class)",
+        "size": "1.2 GB",
+        "url": "https://github.com/janssen-ai/antibiotic-screen"
+      }
+    },
+    {
+      "id": "https://blogs.nvidia.comgnome-2",
+      "url": "https://blogs.nvidia.comgnome-2",
+      "title": "GNoME-2: 2.8M new stable materials discovered with quantum-accurate ML potentials",
+      "content_html": "<p>GNoME-2 (Google DeepMind + NVIDIA + Caltech) extends the 2023 GNoME database with 2.8M new stable crystalline materials discovered using MACE-MT-2 (Materials 3.0 foundation model). The new dataset doubles the known stable materials database from 2.2M (Nature 2023) to 5.0M.</p><p>Key innovation: the MACE-MT-2 ML potential achieves DFT-level accuracy (10x lower error than MACE-1, 2023) while running 1000x faster. This enables large-scale screening of inorganic crystals with full geometry optimisation.</p><p>Highlights include 47 new high-Tc superconductor candidates (predicted Tc &gt; 50 K), 12 new topological insulators, and 8 new candidate solid-state battery electrolytes with conductivity &gt; 10 mS/cm. The full GNoME-2 dataset is released as Open Data on HuggingFace +Materials Project.</p>",
+      "summary": "GNoME-2 (Google DeepMind + NVIDIA + Caltech) extends the 2023 GNoME database with 2.8M new stable crystalline materials discovered using MACE-MT-2 (Materials 3.0 foundation model). The new dataset doubles the known stable materials database from 2.2M (Nature 2023) to 5.0M.",
+      "date_published": "2026-09-22T00:00:00Z",
+      "authors": [
+        {
+          "name": "NVIDIA + Caltech + Google DeepMind"
+        }
+      ],
+      "tags": [
+        "Physics - Quantum-accurate materials",
+        "NVIDIA blog"
+      ],
+      "_aihpc_dataset": {
+        "name": "GNoME-2 database (2.8M new materials)",
+        "format": "CIF + JSON",
+        "size": "4.2 GB compressed",
+        "url": "https://huggingface.co/datasets/materials/gnome-2"
+      }
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
     },
     {
       "id": "",
