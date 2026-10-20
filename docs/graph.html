@@ -300,6 +300,9 @@
         { id: 'demo:playground', type: 'demo', label: 'Cross-Domain Playground (playground.html)', href: 'playground.html' },
         { id: 'paper:SecondQuantisation', type: 'paper', label: 'Second quantisation (Dirac 1927, Fock 1932)' },
         { id: 'paper:QuTiP', type: 'paper', label: 'QuTiP (Johansson 2012) - open quantum systems' },
+        // Phase 44: Quantum Shorts channel + Fock concept card
+        { id: 'demo:quantum-shorts', type: 'demo', label: 'Quantum Shorts Channel (quantum-shorts.html)', href: 'quantum-shorts.html' },
+        { id: 'concept:fock-state', type: 'concept', label: 'Fock State Viewer concept card', href: 'concepts/fock-state.html' },
         // Phase 38: Cheminformatics 3D viewer node
         { id: 'demo:mol3d', type: 'demo', label: '3D Molecule Viewer (molecule-3d.js)', href: 'science-cheminformatics.html#chem-mol3d-container' },
         // Phase 39: Medical imaging + quantum VQC
@@ -477,6 +480,14 @@
         ['demo:playground', 'demo:mol3d', 'uses'],
         ['demo:playground', 'demo:attn-heatmap', 'uses'],
         ['demo:playground', 'aethel:connector', 'hosted-by'],
+        // Phase 44: Quantum Shorts + Fock concept card edges
+        ['demo:quantum-shorts', 'bloch:shorts', 'extends'],
+        ['demo:quantum-shorts', 'demo:fock', 'extends'],
+        ['demo:quantum-shorts', 'demo:vqc', 'extends'],
+        ['demo:quantum-shorts', 'aethel:connector', 'hosted-by'],
+        ['concept:fock-state', 'demo:fock', 'instantiated-by'],
+        ['concept:fock-state', 'paper:SecondQuantisation', 'cites'],
+        ['concept:fock-state', 'paper:QuTiP', 'related'],
         // Phase 37 — Digest article relationships
         ['digest:alphafold-missense-evolve', 'dataset:PDB-1AKI', 'uses'],
         ['digest:jwst-k2-18b-dms', 'dataset:OpenAlex', 'uses'],

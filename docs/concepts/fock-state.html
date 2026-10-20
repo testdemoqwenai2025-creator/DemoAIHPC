@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Fock state viewer concept card — second quantisation, quantum harmonic oscillator, creation/annihilation operators. 6-language polyglot code + Math→Code→Output pedagogy. Phase 44." />
+<title>Fock State Viewer — Second Quantisation — AIHPC Advanced</title>
+<style>
+:root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#8b5cf6; --accent-2:#06b6d4; }
+* { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+.container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+h1 { font-size: 32px; background: linear-gradient(90deg,#06b6d4,#8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+h2 { font-size: 20px; margin: 24px 0 12px; color: var(--accent-2); }
+h3 { font-size: 14px; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.08em; }
+pre { background: var(--bg-elevated); padding: 14px; border-radius: 8px; overflow-x: auto; font-size: 12px; line-height: 1.6; color: #f3f4f6; font-family: SF Mono, Menlo, monospace; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 11px; font-family: ui-monospace, SF Mono, monospace; }
+th, td { padding: 6px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+th { color: var(--accent-2); }
+td { color: var(--text-muted); }
+.ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+.ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+.ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+.ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+.ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+.ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+.ribbon-nav { display: flex; align-items: center; gap: 4px; }
+.ribbon-dropdown { position: relative; }
+.ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); }
+.ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+.ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+.ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+.ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid #2a3548; border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+.ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+.ribbon-actions { margin-left: auto; }
+.ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+</style>
+</head>
+<body>
+<header class="ribbon"><div class="ribbon-inner"><a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a><nav class="ribbon-nav"><details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../subscribe.html">Subscribe</a><a href="../playground.html">🧪 Playground</a></div></details><details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Connectors</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Workflows</a></div></details><details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Maths Hub</a><a href="../science-ml.html">🤖 ML</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a><a href="../bloch.html">⚛️ Bloch Shorts</a><a href="../quantum-shorts.html">🎬 Quantum Shorts</a><a href="../medical-atlas.html">🏥 Medical Atlas</a><a href="../science/physics/quantum.html">Quantum Mechanics</a></div></details><details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">📊 Audit Dashboard</a><a href="../dashboard.html">KG Dashboard</a><a href="../concepts.html">Concept Cards</a></div></details></nav><div class="ribbon-actions"><a href="../science-physics.html" class="ribbon-btn-primary">Physics Hub</a></div></div></header>
+<div class="container">
+<p style="font-size: 13px; color: var(--text-muted);"><a href="../science/physics/quantum.html" style="color: var(--accent-2); text-decoration: none;">← Back to Quantum Mechanics</a></p>
+<h1>Fock State Viewer — Second Quantisation</h1>
+<p style="font-size: 14px; color: var(--text-muted); margin: 0 0 24px;">Concept card for the Fock state viewer (Phase 42). Visualises the quantum harmonic oscillator in the Fock (number-state) basis with animated creation (a†) and annihilation (a) operators. Part of the Bloch → VQC → second-quantisation triad. <a href="../science/physics/quantum.html#quantum-fock-container" style="color: var(--accent-2);">View live on the quantum page →</a></p>
+<section style="margin: 16px 0; padding: 12px; background: rgba(11,15,26,0.6); border-radius: 10px; border: 1px solid var(--border);"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#06b6d4;margin-bottom:8px;">📊 N-D properties strip</div><div style="display:flex;align-items:flex-start;overflow-x:auto;"><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border);"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Component</div><div style="font-size:10px;color:#f3f4f6;font-family:SF Mono,Menlo,monospace;">fock-state-viewer.js</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border);"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Phase</div><div style="font-size:10px;color:#f3f4f6;font-family:SF Mono,Menlo,monospace;">42</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border);"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Max states</div><div style="font-size:10px;color:#f3f4f6;font-family:SF Mono,Menlo,monospace;">|0⟩ to |8⟩</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border);"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Wavefunction</div><div style="font-size:10px;color:#f3f4f6;font-family:SF Mono,Menlo,monospace;">Hermite polynomial</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border);"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Operators</div><div style="font-size:10px;color:#f3f4f6;font-family:SF Mono,Menlo,monospace;">a, a† (ladder)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border);"><div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Record</div><div style="font-size:10px;color:#f3f4f6;font-family:SF Mono,Menlo,monospace;">WebM (9:16)</div></div></div></section>
+<h2>Math → Code → Output</h2>
+<div style="background: rgba(6,182,212,0.05); border-left: 3px solid #06b6d4; padding: 12px 14px; margin-bottom: 12px; border-radius: 0 6px 6px 0;"><div style="font-size: 11px; color: #06b6d4; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">📐 Mathematical expression</div><div style="font-family: Cambria Math, Georgia, serif; font-size: 14px; color: #f3f4f6; line-height: 1.7;">ψ<sub>n</sub>(x) = (1/√(2<sup>n</sup> n!)) · (mω/πℏ)<sup>1/4</sup> · H<sub>n</sub>(ξ) · e<sup>(-ξ²/2)</sup><br/>E<sub>n</sub> = (n + ½) · ℏω<br/>a |n⟩ = √n · |n-1⟩  (annihilation)<br/>a† |n⟩ = √(n+1) · |n+1⟩  (creation)<br/>[a, a†] = 1  (canonical commutator)</div></div>
+<h2>6-language polyglot code</h2>
+<div style="display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap;">
+<button data-lang="python" class="lang-toggle active" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: 1px solid transparent; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">python</button>
+<button data-lang="rust" class="lang-toggle " style="background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">rust</button>
+<button data-lang="go" class="lang-toggle " style="background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">go</button>
+<button data-lang="c" class="lang-toggle " style="background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">c</button>
+<button data-lang="elixir" class="lang-toggle " style="background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">elixir</button>
+<button data-lang="scala" class="lang-toggle " style="background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">scala</button>
+</div>
+<pre class="code-block" data-lang="python" style="display: block;"># ψ_n(x) = (1/√(2^n · n!)) · H_n(ξ) · e^(-ξ²/2)
+# a|n⟩ = √n · |n-1⟩  a†|n⟩ = √(n+1) · |n+1⟩
+# n -&gt; Fock state index  x -&gt; position  H -&gt; Hermite polynomial
+import numpy as np
+from scipy.special import hermite
+
+def psi(n, x, hw=1.0):
+    norm = 1.0 / np.sqrt(2**n * np.math.factorial(n) * np.sqrt(np.pi))
+    H_n = hermite(n)  # Hermite polynomial
+    gaussian = np.exp(-x*x / 2)
+    return norm * H_n(x) * gaussian
+
+def annihilate(n):
+    # a|n⟩ = √n · |n-1⟩
+    return (np.sqrt(n), n - 1) if n &gt; 0 else (0.0, n)
+
+def create(n, max_n=8):
+    # a†|n⟩ = √(n+1) · |n+1⟩
+    return (np.sqrt(n + 1), n + 1) if n &lt; max_n else (0.0, n)</pre>
+<pre class="code-block" data-lang="rust" style="display: none;">fn hermite(n: u32, x: f64) -&gt; f64 {
+    if n == 0 { return 1.0; }
+    if n == 1 { return 2.0 * x; }
+    let mut h_prev = 1.0;
+    let mut h_cur = 2.0 * x;
+    for k in 2..=n {
+        let h_next = 2.0 * x * h_cur - 2.0 * (k - 1) as f64 * h_prev;
+        h_prev = h_cur; h_cur = h_next;
+    }
+    h_cur
+}
+fn psi(n: u32, x: f64) -&gt; f64 {
+    let norm = 1.0 / (2.0_f64.powi(n as i32) * (1..=n).product::&lt;u32&gt;() as f64 * (std::f64::consts::PI).sqrt()).sqrt();
+    norm * hermite(n, x) * (-x*x / 2.0).exp()
+}
+fn annihilate(n: u32) -&gt; (f64, i32) {
+    if n &gt; 0 { ((n as f64).sqrt(), (n - 1) as i32) } else { (0.0, n as i32) }
+}
+fn create(n: u32, max_n: u32) -&gt; (f64, u32) {
+    if n &lt; max_n { ((n + 1) as f64).sqrt(), n + 1) } else { (0.0, n) }
+}</pre>
+<pre class="code-block" data-lang="go" style="display: none;">func Hermite(n uint, x float64) float64 {
+	if n == 0 { return 1.0 }
+	if n == 1 { return 2.0 * x }
+	hPrev, hCur := 1.0, 2.0*x
+	for k := uint(2); k &lt;= n; k++ {
+		hNext := 2.0*x*hCur - 2.0*float64(k-1)*hPrev
+		hPrev, hCur = hCur, hNext
+	}
+	return hCur
+}
+func Psi(n uint, x float64) float64 {
+	norm := 1.0 / math.Sqrt(math.Pow(2, float64(n)) * float64(factorial(n)) * math.Sqrt(math.Pi))
+	return norm * Hermite(n, x) * math.Exp(-x*x/2)
+}
+func Annihilate(n uint) (float64, int) {
+	if n &gt; 0 { return math.Sqrt(float64(n)), int(n - 1) }
+	return 0.0, int(n)
+}
+func Create(n, maxN uint) (float64, uint) {
+	if n &lt; maxN { return math.Sqrt(float64(n + 1)), n + 1 }
+	return 0.0, n
+}</pre>
+<pre class="code-block" data-lang="c" style="display: none;">double hermite(unsigned n, double x) {
+    if (n == 0) return 1.0;
+    if (n == 1) return 2.0 * x;
+    double h_prev = 1.0, h_cur = 2.0 * x;
+    for (unsigned k = 2; k &lt;= n; k++) {
+        double h_next = 2.0 * x * h_cur - 2.0 * (k - 1) * h_prev;
+        h_prev = h_cur; h_cur = h_next;
+    }
+    return h_cur;
+}
+double psi(unsigned n, double x) {
+    double norm = 1.0 / sqrt(pow(2, n) * factorial(n) * sqrt(M_PI));
+    return norm * hermite(n, x) * exp(-x * x / 2.0);
+}
+void annihilate(unsigned n, double* coef, int* new_n) {
+    *coef = n &gt; 0 ? sqrt((double)n) : 0.0;
+    *new_n = n &gt; 0 ? (int)(n - 1) : (int)n;
+}
+void create(unsigned n, unsigned max_n, double* coef, unsigned* new_n) {
+    *coef = n &lt; max_n ? sqrt((double)(n + 1)) : 0.0;
+    *new_n = n &lt; max_n ? n + 1 : n;
+}</pre>
+<pre class="code-block" data-lang="elixir" style="display: none;">defmodule Fock do
+  def hermite(0, _x), do: 1.0
+  def hermite(1, x), do: 2.0 * x
+  def hermite(n, x) do
+    hermite_rec(n, x, 1.0, 2.0 * x, 2)
+  end
+  defp hermite_rec(n, _x, _h_prev, h_cur, k) when k &gt; n, do: h_cur
+  defp hermite_rec(n, x, h_prev, h_cur, k) do
+    h_next = 2.0 * x * h_cur - 2.0 * (k - 1) * h_prev
+    hermite_rec(n, x, h_cur, h_next, k + 1)
+  end
+
+  def psi(n, x) do
+    norm = 1.0 / :math.sqrt(:math.pow(2, n) * factorial(n) * :math.sqrt(:math.pi))
+    norm * hermite(n, x) * :math.exp(-x * x / 2.0)
+  end
+
+  def annihilate(0), do: {0.0, 0}
+  def annihilate(n), do: {:math.sqrt(n * 1.0), n - 1}
+
+  def create(n, max_n) when n &lt; max_n, do: {:math.sqrt((n + 1) * 1.0), n + 1}
+  def create(n, _max_n), do: {0.0, n}
+end</pre>
+<pre class="code-block" data-lang="scala" style="display: none;">def hermite(n: Int, x: Double): Double = {
+  if (n == 0) 1.0
+  else if (n == 1) 2.0 * x
+  else {
+    var hPrev = 1.0; var hCur = 2.0 * x
+    for (k &lt;- 2 to n) {
+      val hNext = 2.0 * x * hCur - 2.0 * (k - 1) * hPrev
+      hPrev = hCur; hCur = hNext
+    }
+    hCur
+  }
+}
+def psi(n: Int, x: Double): Double = {
+  val norm = 1.0 / math.sqrt(math.pow(2, n) * factorial(n) * math.sqrt(math.Pi))
+  norm * hermite(n, x) * math.exp(-x * x / 2.0)
+}
+def annihilate(n: Int): (Double, Int) =
+  if (n &gt; 0) (math.sqrt(n), n - 1) else (0.0, n)
+def create(n: Int, maxN: Int): (Double, Int) =
+  if (n &lt; maxN) (math.sqrt(n + 1), n + 1) else (0.0, n)</pre>
+<h2>5-step Math → Code derivation</h2>
+<div style="background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 0 8px 8px 0; padding: 12px 14px; margin-bottom: 10px;"><strong>Step 1: The wavefunction</strong><div style="font-family: Cambria Math, Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px;">ψ_n(x) = (1/√(2^n · n!)) · (mω/πℏ)^(1/4) · H_n(ξ) · e^(-ξ²/2)</div><div style="font-size: 12px; color: var(--text-muted);">Each Fock state |n⟩ has a wavefunction ψ_n(x) given by a Gaussian envelope e^(-ξ²/2) multiplied by the n-th Hermite polynomial H_n(ξ), where ξ = x·√(mω/ℏ) is the dimensionless position. The normalization ensures ∫|ψ_n|² dx = 1.</div></div>
+<div style="background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 0 8px 8px 0; padding: 12px 14px; margin-bottom: 10px;"><strong>Step 2: Energy quantisation</strong><div style="font-family: Cambria Math, Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px;">E_n = (n + ½) · ℏω</div><div style="font-size: 12px; color: var(--text-muted);">Energy is quantised in units of ℏω. The ground state |0⟩ has zero-point energy ½ℏω — a purely quantum effect with no classical analogue. Each excited state adds exactly one quantum ℏω.</div></div>
+<div style="background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 0 8px 8px 0; padding: 12px 14px; margin-bottom: 10px;"><strong>Step 3: Annihilation operator</strong><div style="font-family: Cambria Math, Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px;">a|n⟩ = √n · |n-1⟩</div><div style="font-size: 12px; color: var(--text-muted);">The annihilation operator a removes one quantum of energy. The coefficient √n arises from the normalisation: ⟨n|a†a|n⟩ = n (the number operator). At n=0, a|0⟩ = 0 (cannot remove a quantum from the vacuum).</div></div>
+<div style="background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 0 8px 8px 0; padding: 12px 14px; margin-bottom: 10px;"><strong>Step 4: Creation operator</strong><div style="font-family: Cambria Math, Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px;">a†|n⟩ = √(n+1) · |n+1⟩</div><div style="font-size: 12px; color: var(--text-muted);">The creation operator a† adds one quantum. The coefficient √(n+1) ensures that a†a (the number operator N̂) gives N̂|n⟩ = n|n⟩. Together, a and a† satisfy the canonical commutation relation [a, a†] = 1.</div></div>
+<div style="background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 0 8px 8px 0; padding: 12px 14px; margin-bottom: 10px;"><strong>Step 5: Hermite polynomial recurrence</strong><div style="font-family: Cambria Math, Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px;">H_{n+1}(ξ) = 2ξ·H_n(ξ) - 2n·H_{n-1}(ξ)</div><div style="font-size: 12px; color: var(--text-muted);">Hermite polynomials satisfy a three-term recurrence: H_0=1, H_1=2ξ, and each subsequent H_n is computed from the previous two. This makes ψ_n(x) efficiently computable for any n via O(n) multiplications — the foundation of all quantum-oscillator numerics.</div></div>
+<h2>Observe</h2>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+<div><h3>Stats</h3><table>
+<tr><td>Type</td><td style="text-align: right; color: var(--text);">Second quantisation</td></tr>
+<tr><td>Basis</td><td style="text-align: right; color: var(--text);">Fock (number) states |n⟩</td></tr>
+<tr><td>Energy</td><td style="text-align: right; color: var(--text);">E_n = (n+½)ℏω</td></tr>
+<tr><td>Wavefunction</td><td style="text-align: right; color: var(--text);">ψ_n = H_n(ξ)·e^(-ξ²/2)</td></tr>
+<tr><td>Ladder operators</td><td style="text-align: right; color: var(--text);">a, a† with [a,a†]=1</td></tr>
+<tr><td>Used in</td><td style="text-align: right; color: var(--text);">QuTiP, PennyLane-SF, Qiskit, GKP codes</td></tr>
+</table></div>
+<div><h3>Graph</h3><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="160" width="60" height="20" fill="#06b6d4"/><text x="70" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">|0⟩ ½ℏω</text><rect x="130" y="140" width="60" height="40" fill="#8b5cf6"/><text x="160" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">|1⟩ 3/2ℏω</text><rect x="220" y="120" width="60" height="60" fill="#ec4899"/><text x="250" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">|2⟩ 5/2ℏω</text><rect x="310" y="100" width="60" height="80" fill="#f59e0b"/><text x="340" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">|3⟩ 7/2ℏω</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">Energy ladder E_n = (n+½)ℏω</text></svg></div>
+</div>
+<p style="font-size: 13px; color: var(--text-muted); margin: 12px 0;">The quantum harmonic oscillator in the Fock (number-state) basis is the building block of second quantisation, quantum field theory, and condensed-matter physics. Fock states |n⟩ have quantised energy E_n = (n+½)ℏω with wavefunctions ψ_n(x) involving the n-th Hermite polynomial. The ladder operators a (annihilation, removes 1 quantum) and a† (creation, adds 1 quantum) satisfy [a, a†] = 1. The number operator N̂ = a†a counts quanta: N̂|n⟩ = n|n⟩. Pure client-side: Hermite polynomials via recurrence; factorial precomputed. For large bosonic systems (n &gt; 100) use QuTiP server-side.</p>
+<h3>Summary</h3><ul style="color: var(--text-muted); font-size: 12px;">
+<li>Fock states |n⟩ are the energy eigenstates of the quantum harmonic oscillator.</li>
+<li>E_n = (n+½)ℏω — energy is quantised in units of ℏω, with zero-point energy ½ℏω.</li>
+<li>Ladder operators: a|n⟩ = √n·|n-1⟩ (annihilation), a†|n⟩ = √(n+1)·|n+1⟩ (creation).</li>
+<li>Wavefunctions via Hermite polynomials: H_{n+1} = 2ξ·H_n - 2n·H_{n-1}.</li>
+</ul>
+<h2>Sample data — Fock state properties</h2>
+<p style="font-size: 12px; color: var(--text-muted); margin: 0 0 8px;">Fock state properties: energy levels E_n = (n+½)ℏω, wavefunction nodes (= n), and ladder operator coefficients √n / √(n+1).</p>
+<table><thead><tr>
+<th>n</th>
+<th>E_n / ℏω</th>
+<th>nodes</th>
+<th>a|n⟩ coef √n</th>
+<th>a†|n⟩ coef √(n+1)</th>
+</tr></thead><tbody>
+<tr>
+<td>0</td>
+<td>0.5</td>
+<td>0</td>
+<td>0.000</td>
+<td>1.000</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1.5</td>
+<td>1</td>
+<td>1.000</td>
+<td>1.414</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2.5</td>
+<td>2</td>
+<td>1.414</td>
+<td>1.732</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3.5</td>
+<td>3</td>
+<td>1.732</td>
+<td>2.000</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4.5</td>
+<td>4</td>
+<td>2.000</td>
+<td>2.236</td>
+</tr>
+<tr>
+<td>5</td>
+<td>5.5</td>
+<td>5</td>
+<td>2.236</td>
+<td>2.449</td>
+</tr>
+<tr>
+<td>6</td>
+<td>6.5</td>
+<td>6</td>
+<td>2.449</td>
+<td>2.646</td>
+</tr>
+<tr>
+<td>7</td>
+<td>7.5</td>
+<td>7</td>
+<td>2.646</td>
+<td>2.828</td>
+</tr>
+<tr>
+<td>8</td>
+<td>8.5</td>
+<td>8</td>
+<td>2.828</td>
+<td>3.000</td>
+</tr>
+</tbody></table>
+<div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap;"><a href="../science/physics/quantum.html" style="color: var(--accent-2); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);">← Quantum Mechanics</a><a href="../bloch.html" style="color: var(--accent-2); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);">Bloch Sphere Shorts</a><a href="../quantum-shorts.html" style="color: var(--accent-2); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);">Quantum Shorts Channel</a></div>
+<script>document.querySelectorAll(".lang-toggle").forEach(btn => { btn.addEventListener("click", () => { const lang = btn.dataset.lang; document.querySelectorAll(".lang-toggle").forEach(b => { b.classList.remove("active"); b.style.background = "var(--bg-elevated)"; b.style.color = "var(--text-muted)"; b.style.border = "1px solid var(--border)"; }); btn.classList.add("active"); btn.style.background = "linear-gradient(90deg,#8b5cf6,#06b6d4)"; btn.style.color = "white"; btn.style.border = "1px solid transparent"; document.querySelectorAll(".code-block").forEach(c => { c.style.display = c.dataset.lang === lang ? "block" : "none"; }); }); });</script>
+</div></body></html>
