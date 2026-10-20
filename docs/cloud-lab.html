@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AIHPC Advanced — Cloud Lab integration. Three paths from the in-browser Pyodide lab to real cloud code execution: GitHub Codespaces (recommended, free tier), GitHub Actions (batch), GitHub OAuth + Gist storage (future). Free-tier analysis + devcontainer setup." />
+    <title>☁ Cloud Lab — AIHPC Advanced</title>
+    <style>
+      :root {
+        --bg: #0b0f1a;
+        --bg-elevated: #121826;
+        --bg-elevated-2: #1a2133;
+        --border: #1f2937;
+        --border-strong: #2a3548;
+        --text: #f3f4f6;
+        --text-muted: #9ca3af;
+        --text-muted-2: #6b7280;
+        --accent: #8b5cf6;
+        --accent-2: #06b6d4;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.5; min-height: 100vh; }
+      body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.15), transparent 60%), radial-gradient(900px 500px at 90% 110%, rgba(139,92,246,0.12), transparent 60%); pointer-events: none; z-index: 0; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; position: relative; z-index: 1; }
+      h1 { font-size: 36px; margin: 0 0 8px; background: linear-gradient(90deg, #10b981, #06b6d4, #8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 16px; color: var(--text-muted); margin: 0 0 32px; max-width: 700px; }
+      .back-link { display: inline-block; font-size: 13px; color: var(--accent-2); text-decoration: none; margin-bottom: 16px; }
+
+      /* Approach cards */
+      .approach { background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+      .approach.recommended { border-color: var(--success); box-shadow: 0 0 24px rgba(16,185,129,0.12); }
+      .approach h2 { font-size: 22px; margin: 0 0 8px; display: flex; align-items: center; gap: 10px; }
+      .approach .badge { font-size: 10px; padding: 3px 10px; border-radius: 9999px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .badge.recommended { background: var(--success); color: white; }
+      .badge.built { background: var(--accent-2); color: white; }
+      .badge.future { background: var(--warning); color: white; }
+      .approach .summary { font-size: 14px; color: var(--text-muted); margin: 0 0 16px; }
+      .approach .details { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px; }
+      .approach .detail-card { background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+      .approach .detail-card h4 { font-size: 11px; font-weight: 700; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 6px; }
+      .approach .detail-card p { font-size: 12px; color: var(--text-muted); margin: 0; line-height: 1.5; }
+      .approach .cta-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+      .cta { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 600; transition: all 0.2s; }
+      .cta.primary { background: linear-gradient(90deg, var(--success), var(--accent-2)); color: white; }
+      .cta.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(16,185,129,0.3); }
+      .cta.secondary { background: rgba(18,24,38,0.7); border: 1px solid var(--border-strong); color: var(--text); }
+      .cta.secondary:hover { border-color: var(--accent); }
+      .cta.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+
+      /* Code block */
+      pre { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; overflow-x: auto; font-family: ui-monospace, SF Mono, Menlo, monospace; font-size: 12px; line-height: 1.5; color: #e5e7eb; margin: 12px 0; }
+      code { font-family: ui-monospace, SF Mono, Menlo, monospace; font-size: 12px; color: var(--accent-2); }
+      pre code { color: inherit; }
+
+      /* Comparison table */
+      .compare-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 16px 0; }
+      .compare-table th { background: var(--bg-elevated-2); color: var(--text); padding: 8px 10px; text-align: left; border: 1px solid var(--border); font-weight: 700; }
+      .compare-table td { padding: 8px 10px; border: 1px solid var(--border); vertical-align: top; }
+      .compare-table tr:nth-child(even) td { background: rgba(18,24,38,0.4); }
+      .compare-table .yes { color: var(--success); font-weight: 700; }
+      .compare-table .no { color: var(--danger); font-weight: 700; }
+      .compare-table .partial { color: var(--warning); font-weight: 700; }
+
+      /* Footer */
+      .footer { font-size: 11px; color: var(--text-muted-2); margin-top: 32px; padding: 16px; background: rgba(11,15,26,0.5); border-radius: 8px; border-left: 3px solid var(--accent-2); font-family: ui-monospace, monospace; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="index.html" class="back-link">← Home</a>
+      <h1>☁ Cloud Lab</h1>
+      <p class="lead">
+        The in-browser <a href="lab.html" style="color: var(--accent-2);">🔬 Scientific Computing Lab</a> uses Pyodide (Python compiled to WebAssembly) — it runs entirely in your browser with no backend. When you outgrow the browser sandbox (need more memory, GPU, or non-Python languages), three paths lead to real cloud code execution. All use GitHub's free tier — no credit card required.
+      </p>
+
+      <!-- ============ APPROACH A: CODESPACES (RECOMMENDED) ============ -->
+      <div class="approach recommended">
+        <h2>
+          🚀 Approach A — GitHub Codespaces
+          <span class="badge recommended">Recommended</span>
+          <span class="badge built">Available now</span>
+        </h2>
+        <p class="summary">
+          A real Linux VM in the cloud with VS Code in your browser. Pre-configured with Python 3.11, R 4.4, Julia 1.10, JupyterLab, and ~30 scientific packages. Free for 120 core-hours/month per GitHub account. The cleanest bridge from the in-browser lab to real cloud execution.
+        </p>
+        <div class="details">
+          <div class="detail-card">
+            <h4>What it gives you</h4>
+            <p>Full Linux environment with real compilers. Python + R + Julia + Node. Persistent storage between sessions. Real JupyterLab (not browser-Pyodide). All scientific packages pre-installed via <code>post-create.sh</code>.</p>
+          </div>
+          <div class="detail-card">
+            <h4>Free tier</h4>
+            <p><strong>120 core-hours/month</strong> per GitHub personal account + 15 GB storage. A 2-core Codespace = 60 hours of use. Quota resets monthly. Check usage at <code>github.com/settings/billing/summary</code>.</p>
+          </div>
+          <div class="detail-card">
+            <h4>Setup time</h4>
+            <p>First launch: ~3-5 minutes (installs Python + R + Julia + ~30 packages). Subsequent launches: ~30 seconds (Codespace is cached). No manual configuration — the <code>devcontainer.json</code> handles everything.</p>
+          </div>
+          <div class="detail-card">
+            <h4>Limitations</h4>
+            <p>Requires a GitHub account (free). Free-tier quota shared across all your Codespaces. Not suitable for 24/7 workloads — Codespaces auto-stop after 30 min idle (configurable). GPU requires paid tier.</p>
+          </div>
+        </div>
+        <div class="cta-row">
+          <a href="https://codespaces.new/testdemoqwenai2025-creator/DemoAIHPC?ref=main" target="_blank" rel="noreferrer noopener" class="cta primary">
+            🚀 Open in GitHub Codespaces →
+          </a>
+          <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/tree/main/.devcontainer" target="_blank" rel="noreferrer noopener" class="cta secondary">
+            📄 View devcontainer.json
+          </a>
+          <a href="lab.html" class="cta secondary">
+            ← Back to in-browser lab
+          </a>
+        </div>
+      </div>
+
+      <!-- ============ APPROACH B: GITHUB ACTIONS ============ -->
+      <div class="approach">
+        <h2>
+          ⚙ Approach B — GitHub Actions batch execution
+          <span class="badge future">Future phase</span>
+        </h2>
+        <p class="summary">
+          Submit a notebook for server-side execution via GitHub Actions. The workflow runs the notebook in a real Linux environment with all packages installed, then returns the executed notebook + any output files as a downloadable artifact. Free unlimited minutes for public repos.
+        </p>
+        <div class="details">
+          <div class="detail-card">
+            <h4>What it gives you</h4>
+            <p>True server-side execution. Run long-running jobs (hours) without keeping your browser open. Real GPU access via GitHub Actions runners. Unlimited minutes on public repos (2000 min/month on private).</p>
+          </div>
+          <div class="detail-card">
+            <h4>Free tier</h4>
+            <p><strong>Unlimited minutes for public repos</strong>. 2000 minutes/month for private repos. 1 minute = 1 minute on 1-core runner, 0.5 min on 2-core. No per-user quota — limited by repo visibility.</p>
+          </div>
+          <div class="detail-card">
+            <h4>Limitations</h4>
+            <p>Not interactive — notebook runs to completion before you see results. 30-60 second start-up time (runner provisioning + container pull). Output is a downloadable artifact, not live cells. 6-hour max per job (24-hour max configurable).</p>
+          </div>
+          <div class="detail-card">
+            <h4>Planned UX</h4>
+            <p>Upload <code>.ipynb</code> in the in-browser lab → "Submit to cloud" button → GitHub Actions runs notebook in scientific-Linux container → results page shows execution log + downloadable executed notebook. Implementation target: Phase 53.</p>
+          </div>
+        </div>
+        <div class="cta-row">
+          <a href="https://github.com/testdemoqwenai2025-creator/DemoAIHPC/actions" target="_blank" rel="noreferrer noopener" class="cta secondary">
+            📊 View existing Actions runs
+          </a>
+          <span class="cta disabled">⏳ Submit-notebook button (Phase 53)</span>
+        </div>
+      </div>
+
+      <!-- ============ APPROACH C: GITHUB OAUTH + GIST ============ -->
+      <div class="approach">
+        <h2>
+          🔐 Approach C — GitHub OAuth + Gist storage
+          <span class="badge future">Future phase</span>
+        </h2>
+        <p class="summary">
+          "Sign in with GitHub" to save your notebooks as private Gists under your own GitHub account. Notebooks become shareable via Gist URL — no backend, no database, no per-user quota. Still uses Pyodide for execution; the cloud is for storage + sharing only.
+        </p>
+        <div class="details">
+          <div class="detail-card">
+            <h4>What it gives you</h4>
+            <p>True per-user notebook storage tied to your GitHub identity. Shareable via Gist URL. Public (shareable) or secret (private) Gists. No backend database needed — GitHub Gists API is the storage layer.</p>
+          </div>
+          <div class="detail-card">
+            <h4>Free tier</h4>
+            <p><strong>Free, unlimited Gists</strong> per GitHub account. Each Gist can have multiple files (so one notebook = one Gist). 1 MB per file soft limit, 10 MB hard limit — easily fits any reasonable notebook.</p>
+          </div>
+          <div class="detail-card">
+            <h4>Limitations</h4>
+            <p>Requires GitHub OAuth flow (needs either a tiny backend OR the GitHub Device Flow). Still Pyodide for execution (not real cloud). Gists are read-only without explicit refresh — concurrent edits can conflict.</p>
+          </div>
+          <div class="detail-card">
+            <h4>Planned UX</h4>
+            <p>"Sign in with GitHub" button → OAuth Device Flow (no backend needed) → token stored in localStorage → "Save to my Gists" button in lab → notebooks appear under <code>gist.github.com/&lt;your-username&gt;</code>. Implementation target: Phase 60+.</p>
+          </div>
+        </div>
+        <div class="cta-row">
+          <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/authorizing-oauth-apps" target="_blank" rel="noreferrer noopener" class="cta secondary">
+            📖 GitHub OAuth docs
+          </a>
+          <a href="https://docs.github.com/en/rest/gists" target="_blank" rel="noreferrer noopener" class="cta secondary">
+            📖 Gists API docs
+          </a>
+          <span class="cta disabled">⏳ Sign-in button (Phase 60+)</span>
+        </div>
+      </div>
+
+      <!-- ============ COMPARISON TABLE ============ -->
+      <h2 style="font-size: 22px; margin-top: 40px; margin-bottom: 12px;">📊 Side-by-side comparison</h2>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>In-browser (Pyodide)</th>
+            <th>A: Codespaces</th>
+            <th>B: Actions (batch)</th>
+            <th>C: OAuth + Gists</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Real Python interpreter</strong></td>
+            <td class="partial">CPython in WASM</td>
+            <td class="yes">Yes (native)</td>
+            <td class="yes">Yes (native)</td>
+            <td class="partial">CPython in WASM</td>
+          </tr>
+          <tr>
+            <td><strong>R / Julia</strong></td>
+            <td class="no">Python only</td>
+            <td class="yes">Yes (both)</td>
+            <td class="yes">Yes (both)</td>
+            <td class="no">Python only</td>
+          </tr>
+          <tr>
+            <td><strong>GPU access</strong></td>
+            <td class="no">No</td>
+            <td class="partial">Paid tier only</td>
+            <td class="yes">Yes (cloud runners)</td>
+            <td class="no">No</td>
+          </tr>
+          <tr>
+            <td><strong>Interactive (live cells)</strong></td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes (JupyterLab)</td>
+            <td class="no">No (batch)</td>
+            <td class="yes">Yes (Pyodide)</td>
+          </tr>
+          <tr>
+            <td><strong>Free quota</strong></td>
+            <td class="yes">Unlimited</td>
+            <td class="partial">120 core-h/month</td>
+            <td class="yes">Unlimited (public)</td>
+            <td class="yes">Unlimited Gists</td>
+          </tr>
+          <tr>
+            <td><strong>Requires GitHub account</strong></td>
+            <td class="no">No</td>
+            <td class="yes">Yes</td>
+            <td class="yes">Yes (repo access)</td>
+            <td class="yes">Yes</td>
+          </tr>
+          <tr>
+            <td><strong>Requires backend</strong></td>
+            <td class="no">No</td>
+            <td class="no">No (GitHub-hosted)</td>
+            <td class="no">No (Actions runner)</td>
+            <td class="partial">No (Device Flow)</td>
+          </tr>
+          <tr>
+            <td><strong>Per-user notebook storage</strong></td>
+            <td class="partial">localStorage only</td>
+            <td class="yes">Persistent volume</td>
+            <td class="partial">Artifacts (90 days)</td>
+            <td class="yes">Gists (forever)</td>
+          </tr>
+          <tr>
+            <td><strong>Shareable via URL</strong></td>
+            <td class="no">No</td>
+            <td class="partial">Codespace URL (temporary)</td>
+            <td class="yes">Actions run URL</td>
+            <td class="yes">Gist URL (permanent)</td>
+          </tr>
+          <tr>
+            <td><strong>Setup cost</strong></td>
+            <td class="yes">Zero</td>
+            <td class="yes">Zero (one click)</td>
+            <td class="partial">Workflow file</td>
+            <td class="partial">OAuth setup</td>
+          </tr>
+          <tr>
+            <td><strong>Status</strong></td>
+            <td class="yes">Live (Phase 52)</td>
+            <td class="yes">Live (Phase 52)</td>
+            <td class="partial">Planned (Phase 53)</td>
+            <td class="partial">Planned (Phase 60+)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ============ DEVCONTAINER OVERVIEW ============ -->
+      <h2 style="font-size: 22px; margin-top: 40px; margin-bottom: 12px;">🧩 The devcontainer.json file</h2>
+      <p style="font-size: 14px; color: var(--text-muted); margin: 0 0 12px;">
+        When you click "Open in GitHub Codespaces", GitHub reads the <code>.devcontainer/devcontainer.json</code> file from the repo and uses it to configure the VM. Here's a summary of what's installed:
+      </p>
+      <pre><code>{
+  "name": "AIHPC Advanced — Scientific Computing Lab",
+  "image": "mcr.microsoft.com/devcontainers/universal:2-linux",
+  "features": {
+    "Python 3.11": "with pip, virtualenv, pipx",
+    "R 4.4":        "with RMarkdown",
+    "Julia 1.10":   "with Pkg manager",
+    "Node.js 20":   "for the Next.js platform app",
+    "Docker":       "for containerised workloads"
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "forwardPorts": [3000 (Next.js), 8888 (JupyterLab), 8080 (http.server)],
+  "vscode": {
+    "extensions": [
+      "Python", "Jupyter", "R", "Julia", "Copilot",
+      "Docker", "GitLens", "YAML"
+    ]
+  }
+}</code></pre>
+      <p style="font-size: 14px; color: var(--text-muted); margin: 12px 0;">
+        The <code>post-create.sh</code> script installs ~30 Python packages (numpy, pandas, matplotlib, scipy, scikit-learn, sympy, biopython, rdkit, qiskit, pennylane, xgboost, lightgbm, etc.), ~10 R packages (tidyverse, caret, forecast, lme4), and ~10 Julia packages (DataFrames, Plots, Flux, QuantumOptics, DifferentialEquations). It also auto-starts JupyterLab on port 8888.
+      </p>
+
+      <!-- ============ FREE TIER EXPLAINER ============ -->
+      <h2 style="font-size: 22px; margin-top: 40px; margin-bottom: 12px;">💸 Free-tier breakdown (per GitHub personal account)</h2>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Free quota</th>
+            <th>Real-world capacity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>GitHub Codespaces</strong></td>
+            <td>120 core-hours / month + 15 GB storage</td>
+            <td>~60 hours of 2-core Codespace use, OR 30 hours of 4-core, OR 15 hours of 8-core. Enough for ~2 hours/day of cloud development across a month.</td>
+          </tr>
+          <tr>
+            <td><strong>GitHub Actions (public repo)</strong></td>
+            <td>Unlimited minutes</td>
+            <td>No limit. Each job up to 6 hours (24 with config). ~30 GB of artifact storage per repo.</td>
+          </tr>
+          <tr>
+            <td><strong>GitHub Actions (private repo)</strong></td>
+            <td>2000 minutes / month</td>
+            <td>~33 hours of 1-core execution, ~16 hours of 2-core. Shared across all workflows in all your private repos.</td>
+          </tr>
+          <tr>
+            <td><strong>GitHub Gists</strong></td>
+            <td>Unlimited</td>
+            <td>1 MB per file soft limit (10 MB hard). 300 file creations per minute rate limit. Each Gist is a separate git repo.</td>
+          </tr>
+          <tr>
+            <td><strong>GitHub Pages</strong></td>
+            <td>Unlimited</td>
+            <td>1 GB per repo soft limit. 100 GB bandwidth / month. Used by this platform already.</td>
+          </tr>
+          <tr>
+            <td><strong>GitHub Container Registry</strong></td>
+            <td>Free for public images, 500 MB free for private</td>
+            <td>Used to host custom Docker images for the devcontainer.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="footer">
+        AIHPC Advanced · Phase 52 · Cloud Lab integration · <a href="lab.html" style="color: var(--accent-2);">← Back to in-browser lab</a> · <a href="index.html" style="color: var(--accent-2);">Home</a> · <a href="audit.html" style="color: var(--accent-2);">Audit Dashboard</a>
+      </div>
+    </div>
+  </body>
+</html>

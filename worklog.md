@@ -3656,3 +3656,61 @@ Stage Summary:
 - Six starter notebooks demonstrate platform integration (feeds, ML loss functions, Bloch sphere, etc.)
 - Full .ipynb export/import for portability to other Jupyter environments
 - Available at https://testdemoqwenai2025-creator.github.io/DemoAIHPC/lab.html
+
+---
+Task ID: P52-followup
+Agent: main
+Task: Cloud Lab integration — GitHub Codespaces + devcontainer.json + cloud-lab.html documentation page
+
+User question: "don't you think from the browser base scenario you could push them to their respective cloud portal, or if they truly need such a tool will prepare placeholder presently when time comes will build all the bells and whistle, but can't we work along free tier and using github...github got all the compilers and other needs in their platform"
+
+Analysis of GitHub free-tier options for cloud code execution:
+1. GitHub Codespaces — 120 core-hours/month + 15GB storage per user. Full Linux VM with any compilers, VS Code in browser, persistent storage. Best fit for "push browser-lab users to cloud IDE".
+2. GitHub Actions — Unlimited minutes for public repos (2000 min/month private). Server-side batch execution (not interactive). Good for "submit notebook → get results".
+3. GitHub OAuth + Gists — Free, unlimited Gists. Per-user storage + sharing without a backend database.
+4. GitHub Container Registry — Free for public images. Used to host custom Docker images.
+5. GitHub Pages — Already used for the platform.
+
+Recommended: Build Approach A (Codespaces) now — highest value per effort, works immediately for any GitHub user.
+
+Implementation:
+
+1. NEW FILE: .devcontainer/devcontainer.json — Codespaces config with:
+   - Base image: mcr.microsoft.com/devcontainers/universal:2-linux
+   - Features: Python 3.11, R 4.4, Julia 1.10, Node.js 20, Docker-outside-of-docker
+   - VS Code extensions: Python, Jupyter, R, Julia, Copilot, Docker, GitLens, YAML
+   - Forwarded ports: 3000 (Next.js), 8888 (JupyterLab), 8080 (http.server)
+   - Auto-forward JupyterLab to browser on launch
+
+2. NEW FILE: .devcontainer/post-create.sh — auto-runs on Codespace creation:
+   - pip installs ~30 Python packages: numpy, pandas, matplotlib, scipy, scikit-learn, sympy, statsmodels, seaborn, plotly, bokeh, jupyterlab, notebook, ipywidgets, biopython, rdkit, networkx, pint, astroquery, qiskit, pennylane, optuna, xgboost, lightgbm
+   - Rscript installs ~10 R packages: tidyverse, data.table, ggplot2, shiny, rmarkdown, knitr, caret, forecast, lme4, MASS
+   - julia installs ~10 packages: DataFrames, Plots, PyPlot, StatsBase, Distributions, LinearAlgebra, Flux, QuantumOptics, DifferentialEquations, Optim, JuMP
+   - npm install for the Next.js app
+   - Auto-starts JupyterLab on port 8888 in background (no-browser, no-token, allow-origin=*)
+   - Prints a welcome message with languages + services + free-tier quota info
+
+3. NEW PAGE: docs/cloud-lab.html — documentation page describing all 3 cloud integration options:
+   - Approach A: GitHub Codespaces (Recommended, Available now) — full approach card with green border + 4 detail cards (what it gives you, free tier, setup time, limitations) + "🚀 Open in Codespaces →" CTA button
+   - Approach B: GitHub Actions batch execution (Future phase) — 4 detail cards + disabled "Submit-notebook" button (target: Phase 53)
+   - Approach C: GitHub OAuth + Gist storage (Future phase) — 4 detail cards + disabled "Sign-in" button (target: Phase 60+)
+   - 11-row side-by-side comparison table covering: real Python, R/Julia, GPU, interactive, free quota, requires GitHub account, requires backend, per-user storage, shareable URL, setup cost, status
+   - devcontainer.json summary showing the config structure
+   - Free-tier breakdown table: Codespaces (120 core-h/month), Actions public (unlimited), Actions private (2000 min/month), Gists (unlimited), Pages (unlimited), Container Registry (free for public)
+
+4. LAB PAGE UPDATE: Added "🚀 Open in Codespaces" button to lab.html toolbar (between Import .ipynb and Delete notebook). Green-cyan gradient, opens https://codespaces.new/testdemoqwenai2025-creator/DemoAIHPC?ref=main in new tab. Also added "☁ Cloud options" button linking to cloud-lab.html.
+
+5. HOME PAGE UPDATE: Added ☁ Cloud Lab card to the Platform Meta Pages section (between 🔬 Scientific Computing Lab and the end of the grid). Green border, "Codespaces · Actions · OAuth+Gist · free tier" subtitle.
+
+6. AUDIT DASHBOARD UPDATE: Added ☁ Cloud Lab button to the quick-links section (between 🔬 Lab (Pyodide) and 📡 Live feeds).
+
+7. AUDIT: Added cloud-lab.html to check_ribbon MINIMAL_PAGES allowlist. Total audit checks: 58 (no new check needed).
+
+Local verification: audit 58/58 pass with --skip-live-check. Home page has 3 references to (cloud-)lab.html (lab + cloud-lab in meta section, plus lab in actions row).
+
+Stage Summary:
+- The user can now go from in-browser Pyodide lab → real cloud IDE (Codespaces) with one click
+- The devcontainer auto-installs Python + R + Julia + ~50 scientific packages + JupyterLab
+- Three documented approaches with honest "Available now" vs "Future phase" badges
+- Free-tier breakdown table makes it clear what users get without paying
+- Public mirror will be at HEAD commit (P52-followup) once pushed
