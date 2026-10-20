@@ -444,6 +444,20 @@
         </div>
       </section>
 
+      <!-- Phase 49: Quantum Teleportation -->
+      <section style="margin: 32px 0; padding: 24px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px);">
+        <p class="h-tag" style="color: #06b6d4;">Phase 49 · Quantum Teleportation</p>
+        <h2 style="font-size: 22px; margin: 8px 0 12px; background: linear-gradient(90deg,#06b6d4,#8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent;">Quantum teleportation — information without matter transfer</h2>
+        <p style="font-size: 14px; color: var(--text-muted, #9ca3af); max-width: 920px;">Watch the full quantum teleportation protocol: entangle A-B → Bell measurement on A+C → classical communication (2 bits) → Pauli correction on B → state |ψ⟩ teleported from Alice's qubit C to Bob's qubit B. The original state on C is destroyed (no-cloning theorem). No quantum information is transmitted through the classical channel — only 2 bits. This is the foundation of quantum networking + quantum key distribution.</p>
+        <div style="margin-top: 20px;">
+          <div id="quantum-teleport-container"></div>
+        </div>
+        <div style="margin-top: 16px; padding: 12px; background: rgba(11,15,26,0.6); border-radius: 8px; border: 1px solid var(--border, #1f2937); font-size: 11px; line-height: 1.7; color: var(--text-muted, #9ca3af);">
+          <strong style="color: #06b6d4;">Math:</strong> |ψ⟩_C = α|0⟩ + β|1⟩. Bell pair: |Φ+⟩_AB = (|00⟩+|11⟩)/√2. Bell measurement on A+C → 2 classical bits. Correction: 00→I, 01→X, 10→Z, 11→XZ. Result: |ψ⟩_B = α|0⟩ + β|1⟩ (teleported).<br/>
+          <strong style="color: #8b5cf6;">References:</strong> Bennett et al. (1993, Phys. Rev. Lett.) — original teleportation paper; Zeilinger (1997, Nature) — first experimental demonstration; Nobel Prize 2022 (Aspect, Clauser, Zeilinger).
+        </div>
+      </section>
+
       <h2>Math &rarr; Code derivation</h2>
       <div class="derivation-step">
         <strong>Step 1: The qubit</strong>
@@ -667,6 +681,27 @@
           window.addEventListener('scroll', load, { once: true, passive: true });
         }
       })();
+
+      // Phase 49: lazy-mount quantum-teleportation viewer
+      (function () {
+        var loaded = false;
+        var el = document.getElementById('quantum-teleport-container');
+        if (!el) return;
+        function load() {
+          if (loaded || !window.AIHPC_QTELEPORT) return;
+          loaded = true;
+          AIHPC_QTELEPORT.mount('quantum-teleport-container');
+          setTimeout(function () { AIHPC_QTELEPORT.play('quantum-teleport-container'); }, 200);
+        }
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (e.isIntersecting) { load(); io.disconnect(); } });
+          }, { rootMargin: '200px' });
+          io.observe(el);
+        } else {
+          window.addEventListener('scroll', load, { once: true, passive: true });
+        }
+      })();
     </script>
     <script src="../../vqc-animator.js"></script>
     <script src="../../fock-state-viewer.js" defer></script>
@@ -674,5 +709,6 @@
     <script src="../../quantum-circuit-canvas.js" defer></script>
     <script src="../../quantum-algorithm-visualiser.js" defer></script>
     <script src="../../surface-code-visualiser.js" defer></script>
+    <script src="../../quantum-teleportation.js" defer></script>
   </body>
 </html>

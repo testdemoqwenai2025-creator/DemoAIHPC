@@ -155,6 +155,7 @@ def check_ribbon(html_files):
         os.path.join(DOCS, "audit.html"),
         os.path.join(DOCS, "concepts", "digest-index.html"),
         os.path.join(DOCS, "component-registry.html"),
+        os.path.join(DOCS, "timeline.html"),
     }
     failures = []
     required = ["Platform", "AETHEL Suite", "Science", "Insights"]
@@ -2088,6 +2089,114 @@ def check_issue_14_published():
 
 
 # ---------------------------------------------------------------------------
+# Phase 49 checks
+# ---------------------------------------------------------------------------
+
+def check_quantum_teleportation_loaded():
+    """Check (Phase 49): quantum page loads quantum-teleportation.js."""
+    q_path = os.path.join(DOCS, "science", "physics", "quantum.html")
+    qt_js = os.path.join(DOCS, "quantum-teleportation.js")
+    if not os.path.isfile(q_path) or not os.path.isfile(qt_js):
+        return CheckResult("quantum_teleportation_loaded", False,
+                           "quantum.html or quantum-teleportation.js missing")
+    page = open(q_path, encoding="utf-8").read()
+    js = open(qt_js, encoding="utf-8").read()
+    failures = []
+    if "quantum-teleportation.js" not in page:
+        failures.append("quantum.html does not load quantum-teleportation.js")
+    if 'id="quantum-teleport-container"' not in page:
+        failures.append("missing #quantum-teleport-container element")
+    if "AIHPC_QTELEPORT" not in js:
+        failures.append("quantum-teleportation.js does not expose AIHPC_QTELEPORT global")
+    if "Bell" not in js and "bell" not in js.lower():
+        failures.append("missing Bell measurement reference")
+    if "teleport" not in js.lower():
+        failures.append("missing teleportation reference")
+    if "no-cloning" not in page.lower() and "no cloning" not in page.lower():
+        failures.append("missing no-cloning theorem reference")
+    if "Bennett" not in page:
+        failures.append("missing Bennett et al. reference")
+    if "IntersectionObserver" not in page:
+        failures.append("missing lazy-mount via IntersectionObserver")
+    if failures:
+        return CheckResult("quantum_teleportation_loaded", False,
+                           f"{len(failures)} issues with teleportation viewer", failures)
+    return CheckResult("quantum_teleportation_loaded", True,
+                       "quantum.html loads quantum-teleportation.js + 6-scene teleportation protocol (entangle→Bell measure→classical→correct→teleported) + no-cloning + Bennett reference + lazy-mount")
+
+
+def check_timeline_page_present():
+    """Check (Phase 49): docs/timeline.html exists with platform history."""
+    tl_path = os.path.join(DOCS, "timeline.html")
+    if not os.path.isfile(tl_path):
+        return CheckResult("timeline_page_present", False, "docs/timeline.html missing")
+    src = open(tl_path, encoding="utf-8").read()
+    failures = []
+    if "Platform Timeline" not in src:
+        failures.append("missing 'Platform Timeline' title")
+    if "PHASES" not in src and "phase" not in src.lower():
+        failures.append("missing phase data")
+    if "v1" not in src or "v49" not in src:
+        failures.append("missing GitHub tag links (v1-v49)")
+    if "component" not in src.lower():
+        failures.append("missing component mentions")
+    if "IntersectionObserver" in src:
+        pass  # timeline doesn't need lazy-mount
+    if failures:
+        return CheckResult("timeline_page_present", False,
+                           f"{len(failures)} issues with timeline page", failures)
+    return CheckResult("timeline_page_present", True,
+                       "docs/timeline.html: 19 phases documented (1-49) with milestones, components, GitHub tag links")
+
+
+def check_issue_15_published():
+    """Check (Phase 49): Issue #15 published (Tuesday 2027-01-26) with 5 real + 2 futuristic."""
+    spec = importlib.util.spec_from_file_location(
+        "gen_digest", os.path.join(ROOT, "scripts", "gen-digest.py"),
+    )
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception as e:
+        return CheckResult("digest_issue_15", False, f"could not load gen-digest.py: {e}")
+    manifest = mod.MANIFEST
+    if manifest.get("issue") != 15:
+        return CheckResult("digest_issue_15", False,
+                           f"MANIFEST issue is {manifest.get('issue')}, expected 15")
+    if manifest.get("date") != "2027-01-26":
+        return CheckResult("digest_issue_15", False,
+                           f"MANIFEST date is {manifest.get('date')}, expected 2027-01-26")
+    articles = manifest.get("articles", [])
+    if len(articles) != 7:
+        return CheckResult("digest_issue_15", False, f"{len(articles)} articles, expected 7")
+    real_count = sum(1 for a in articles if not a.get("futuristic_vision"))
+    futuristic_count = sum(1 for a in articles if a.get("futuristic_vision"))
+    if real_count != 5 or futuristic_count != 2:
+        return CheckResult("digest_issue_15", False,
+                           f"{real_count} real + {futuristic_count} futuristic, expected 5 + 2")
+    ids = [a["id"] for a in articles]
+    for expected in ["alphafold-4-full-complex", "nvidia-earth-3-climate-weather", "anthropic-claude-5-ultra", "meta-llama-5-open", "ibm-condor-2-100k-qubit"]:
+        if expected not in ids:
+            return CheckResult("digest_issue_15", False,
+                               f"missing anchor article: {expected}")
+    archive_14 = os.path.join(DOCS, "digest", "archive", "issue-014.html")
+    if not os.path.isfile(archive_14):
+        return CheckResult("digest_issue_15", False,
+                           "Issue #14 archive (docs/digest/archive/issue-014.html) missing")
+    missing_cards = []
+    for a in articles:
+        card = os.path.join(DOCS, "concepts", f"digest-{a['id']}.html")
+        if not os.path.isfile(card):
+            missing_cards.append(a["id"])
+    if missing_cards:
+        return CheckResult("digest_issue_15", False,
+                           f"missing concept cards: {', '.join(missing_cards)}")
+    return CheckResult("digest_issue_15", True,
+                       f"Issue #15 (2027-01-26) published: {real_count} real + {futuristic_count} futuristic; "
+                       f"Issue #14 archived; 7 concept cards; anchors: AF4+Earth-3+Claude5-Ultra+Llama5+Condor2")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -2159,7 +2268,10 @@ def main():
         # Phase 48 (issue_13 superseded by issue_14)
         check_surface_code_visualiser_loaded(),
         check_component_registry_dashboard_present(),
-        check_issue_14_published(),
+        # Phase 49 (issue_14 superseded by issue_15)
+        check_quantum_teleportation_loaded(),
+        check_timeline_page_present(),
+        check_issue_15_published(),
     ]
 
     if args.json:

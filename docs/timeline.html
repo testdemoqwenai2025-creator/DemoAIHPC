@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AIHPC Advanced Platform Timeline — Phases 1-49. Key milestones, components introduced per phase, GitHub tag links. The platform's history at a glance." />
+    <title>Platform Timeline — AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#8b5cf6; --accent-2:#06b6d4; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+      h1 { font-size: 36px; background: linear-gradient(90deg,#06b6d4,#8b5cf6,#ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; margin-bottom: 12px; }
+      .timeline { position: relative; padding-left: 32px; }
+      .timeline::before { content: ""; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, #06b6d4, #8b5cf6, #ec4899, #f59e0b, #10b981); }
+      .phase { position: relative; margin-bottom: 24px; padding: 16px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.2); border-radius: 12px; backdrop-filter: blur(8px); }
+      .phase::before { content: ""; position: absolute; left: -32px; top: 24px; width: 16px; height: 16px; border-radius: 50%; background: var(--accent-2); border: 3px solid var(--bg); box-shadow: 0 0 8px var(--accent-2); }
+      .phase h3 { margin: 0 0 6px; font-size: 14px; color: var(--accent-2); font-family: ui-monospace; }
+      .phase .tag-line { font-size: 11px; color: var(--text-muted); margin: 0 0 8px; font-family: ui-monospace; }
+      .phase .components { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+      .phase .components strong { color: var(--text); }
+      .stats-row { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+      .stat-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px; padding: 16px; min-width: 120px; text-align: center; }
+      .stat-card .num { font-size: 28px; font-weight: 800; background: linear-gradient(90deg,#06b6d4,#8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .stat-card .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+      .links-row { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+      .links-row a { color: var(--accent-2); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); }
+      .links-row a:hover { border-color: var(--accent-2); }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <p style="font-size: 13px; color: var(--text-muted);"><a href="index.html" style="color: var(--accent-2); text-decoration: none;">← Home</a></p>
+      <span class="tag">Phase 49 · Platform Timeline</span>
+      <h1>Platform Timeline</h1>
+      <p class="lead">The complete history of AIHPC Advanced, from Phase 1 to Phase 49. Each phase introduced new components, features, and audit checks. Click any phase to see its GitHub tag.</p>
+
+      <div class="stats-row">
+        <div class="stat-card"><div class="num">49</div><div class="label">Phases</div></div>
+        <div class="stat-card"><div class="num">17</div><div class="label">Canvas components</div></div>
+        <div class="stat-card"><div class="num">15</div><div class="label">Weekly digests</div></div>
+        <div class="stat-card"><div class="num">50+</div><div class="label">Audit checks</div></div>
+        <div class="stat-card"><div class="num">27</div><div class="label">ML demos</div></div>
+        <div class="stat-card"><div class="num">0</div><div class="label">External services</div></div>
+      </div>
+
+      <div class="timeline" id="timeline"></div>
+
+      <div class="links-row">
+        <a href="component-registry.html">Component Registry</a>
+        <a href="audit.html">Audit Dashboard</a>
+        <a href="graph.html">Knowledge Graph</a>
+        <a href="digest.html">Weekly Digest</a>
+        <a href="playground.html">Cross-Domain Playground</a>
+        <a href="quantum-shorts.html">Quantum Shorts</a>
+        <a href="bloch.html">Bloch Sphere Shorts</a>
+        <a href="medical-atlas.html">Medical Atlas</a>
+      </div>
+    </div>
+    <script>
+      var PHASES = [
+        { phase: 1, tag: 'v1', date: '2026-Q3', title: 'Foundation — static HTML + GitHub Pages', components: 'index.html, demos.html, dashboard.html, ribbon navigation, particle background', milestone: 'Platform launched with 5 static pages + GitHub Pages deployment' },
+        { phase: 23, tag: 'v23', date: '2026-Q3', title: 'Math→Code derivations + DAG provenance', components: 'Math→Code derivation pattern on 22 science sub-pages + DAG provenance chain', milestone: 'First Math→Code derivation pattern introduced' },
+        { phase: 25, tag: 'v25', date: '2026-Q3', title: 'Weekly Science Digest + ETL parsers', components: 'Weekly Digest (Issue #1), 11 ETL parsers (PDB/VCF/GFA/Lean/FASTA/CSV)', milestone: 'First weekly digest published' },
+        { phase: 28, tag: 'v28', date: '2026-Q4', title: 'Animated derivation clips + audit dashboard', components: 'animated-derivation.js (Play/Pause/Replay/Record-WebM), audit.py (22 checks), audit.html dashboard', milestone: 'First canvas component + audit system' },
+        { phase: 30, tag: 'v30', date: '2026-Q4', title: 'ML page — 18 demos', components: '9 loss functions + 3 activations + 3 optimisers + 3 regularisation demos, graph-table-sync.js (2D)', milestone: 'First ML page with 18 demos' },
+        { phase: 32, tag: 'v32', date: '2026-Q4', title: 'Math-in-code + GTS component', components: 'Math-to-code annotations, graph-table-sync.js (animated graph-table sync)', milestone: 'GTS component introduced — animated data table + SVG graph' },
+        { phase: 35, tag: 'v35', date: '2026-Q4', title: 'N-D viewer + ML concept cards', components: 'nd-viewer.js (4-10D hypercube), 18 ML concept cards (auto-generated)', milestone: 'N-D viewer + concept card auto-generation' },
+        { phase: 37, tag: 'v37', date: '2026-Q4', title: 'Bloch sphere + cross-domain KG + 9 ML demos', components: 'bloch-sphere.js (9 scenes), ml-etl.js, knowledge graph (80+ nodes), 9 new ML demos (attention+norm+landscape)', milestone: 'Bloch sphere + 27 ML demos total + extended knowledge graph' },
+        { phase: 39, tag: 'v39', date: '2026-Q4', title: 'Medical imaging + QGNN pipeline', components: 'medical-imaging.js (multi-organ viewer), vqc-animator.js (VQE training + barren plateau), QGNN pipeline diagram', milestone: 'Medical imaging lab + quantum ML section' },
+        { phase: 40, tag: 'v40', date: '2026-Q4', title: 'Scientific uploader + attention heat-map + KG search', components: 'scientific-uploader.js (15 formats), attention-heatmap.js, KG free-text search, concept-card N-D strip', milestone: 'Multi-format uploader + attention heat-map' },
+        { phase: 41, tag: 'v41', date: '2026-Q4', title: 'DICOM loader + Medical Atlas + Issue #9', components: 'DICOM parser in scientific-uploader, medical-atlas.html (6 case studies), Issue #9', milestone: 'DICOM loader wired into medical-imaging viewer' },
+        { phase: 42, tag: 'v42', date: '2026-Q4', title: 'Fock state viewer + cross-domain playground + Math→Code pedagogy', components: 'fock-state-viewer.js (Hermite wavefunctions + a/a† operators), playground.html, Math→Code→Output pedagogy block', milestone: 'Second quantisation viewer + platform labs experience' },
+        { phase: 43, tag: 'v43', date: '2026-Q4', title: 'Segmentation pipeline + BioEmu2 dynamics + Issue #10', components: 'segmentation-pipeline.js (MRI→mask→3D + Dice/IoU), biomolecular-dynamics.js (4-panel BioEmu2), Issue #10', milestone: 'Medical image segmentation + biomolecular dynamics' },
+        { phase: 44, tag: 'v44', date: '2026-Q4', title: 'Quantum Shorts channel + Fock concept card', components: 'quantum-shorts.html (12 shorts, YouTube-style channel), concepts/fock-state.html (6-language polyglot)', milestone: 'Quantum visualisation suite consolidated into channel' },
+        { phase: 45, tag: 'v45', date: '2026-Q4', title: 'Issue #11 + Recipe Library + Coupled oscillator', components: 'Issue #11, playground Recipe Library (6 recipes), coupled-oscillator.js (HOM/NOON/2-mode squeezing)', milestone: 'CV quantum optics + one-click recipes' },
+        { phase: 46, tag: 'v46', date: '2026-Q4', title: 'Issue #12 + Quantum circuit builder + Component manifest', components: 'Issue #12, quantum-circuit-canvas.js (drag-and-drop gates), component-manifest.json (17 components)', milestone: 'Interactive circuit builder + bill of materials' },
+        { phase: 47, tag: 'v47', date: '2026-Q4', title: 'Issue #13 + Algorithm visualiser + Registry auto-generator', components: 'Issue #13, quantum-algorithm-visualiser.js (Deutsch-Jozsa/Grover/QFT), gen-component-registry.py', milestone: 'Famous quantum algorithms animated step-by-step' },
+        { phase: 48, tag: 'v48', date: '2026-Q4', title: 'Issue #14 + Surface code QEC + Registry dashboard', components: 'Issue #14, surface-code-visualiser.js (syndrome+correction), component-registry.html (interactive dashboard)', milestone: 'Quantum error correction + component registry dashboard' },
+        { phase: 49, tag: 'v49', date: '2027-Q1', title: 'Issue #15 + Quantum teleportation + Platform timeline', components: 'Issue #15, quantum-teleportation.js (full teleportation protocol), timeline.html (this page)', milestone: 'Quantum teleportation visualised + platform history documented' },
+      ];
+
+      var tl = document.getElementById('timeline');
+      PHASES.forEach(function (p) {
+        var div = document.createElement('div');
+        div.className = 'phase';
+        div.innerHTML = ''
+          + '<h3>Phase ' + p.phase + ' <span style="color: #6b7280; font-weight: 400;">· ' + p.date + ' · <a href="https://github.com/testdemoqwenai2025-creator/AETH-1-Content-Archive/releases/tag/' + p.tag + '" style="color: var(--accent-2); text-decoration: none;">' + p.tag + '</a></span></h3>'
+          + '<p class="tag-line">' + p.title + '</p>'
+          + '<div class="components">' + p.components + '</div>'
+          + '<div class="components" style="margin-top: 6px; color: var(--accent-2); font-size: 11px;"><strong>★ Milestone:</strong> ' + p.milestone + '</div>';
+        tl.appendChild(div);
+      });
+    </script>
+  </body>
+</html>
