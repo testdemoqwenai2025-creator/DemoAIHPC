@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AIHPC Advanced — AI Lab. Unified chat interface for 14 AI providers (Gemini, Groq, Together, Mistral, Hugging Face, Cohere, DeepSeek, Qwen, Kimi, Zhipu, xAI, Perplexity, OpenAI, Anthropic). Free + paid tiers documented. Bring your own API key — keys stored in your browser, never sent to our backend (there is none)." />
+    <title>🤖 AI Lab — 14 providers · AIHPC Advanced</title>
+    <style>
+      :root {
+        --bg: #0b0f1a;
+        --bg-elevated: #121826;
+        --bg-elevated-2: #1a2133;
+        --border: #1f2937;
+        --border-strong: #2a3548;
+        --text: #f3f4f6;
+        --text-muted: #9ca3af;
+        --text-muted-2: #6b7280;
+        --accent: #8b5cf6;
+        --accent-2: #06b6d4;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.5; min-height: 100vh; font-size: 14px; }
+      body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), radial-gradient(900px 500px at 90% 110%, rgba(6,182,212,0.12), transparent 60%); pointer-events: none; z-index: 0; }
+
+      /* Ribbon */
+      .ribbon { position: sticky; top: 0; z-index: 50; background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); border-bottom: 1px solid rgba(139,92,246,0.25); backdrop-filter: blur(12px); }
+      .ribbon-inner { max-width: 1400px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 700; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; background: linear-gradient(135deg, #06b6d4, #8b5cf6); color: white; font-size: 14px; }
+      .ribbon-nav { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+      .ribbon-dropdown > summary { padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text); list-style: none; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; margin-left: 4px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated-2); }
+      .ribbon-menu { position: absolute; margin-top: 4px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 8px; padding: 6px; min-width: 220px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); z-index: 100; }
+      .ribbon-menu a { display: block; padding: 6px 10px; color: var(--text); text-decoration: none; border-radius: 4px; font-size: 13px; }
+      .ribbon-menu a:hover { background: var(--bg-elevated-2); }
+
+      /* Layout */
+      .container { max-width: 1400px; margin: 0 auto; padding: 16px; position: relative; z-index: 1; }
+      .page-header { margin-bottom: 16px; }
+      .page-header h1 { font-size: 28px; margin: 0 0 4px; background: linear-gradient(90deg, #06b6d4, #8b5cf6, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .page-header .lead { font-size: 13px; color: var(--text-muted); margin: 0; max-width: 800px; }
+      .page-header .back-link { font-size: 12px; color: var(--accent-2); text-decoration: none; }
+      .page-header .back-link:hover { text-decoration: underline; }
+
+      /* Layout grid */
+      .ai-lab-layout { display: grid; grid-template-columns: 320px 1fr; gap: 16px; }
+      @media (max-width: 900px) { .ai-lab-layout { grid-template-columns: 1fr; } }
+
+      /* Sidebar */
+      .sidebar { display: flex; flex-direction: column; gap: 12px; }
+      .sidebar-section { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+      .sidebar-section h3 { font-size: 11px; font-weight: 700; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 8px; }
+
+      /* Provider picker */
+      .provider-list { display: flex; flex-direction: column; gap: 6px; max-height: 420px; overflow-y: auto; }
+      .provider-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--bg-elevated-2); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: all 0.15s; }
+      .provider-item:hover { border-color: var(--accent); }
+      .provider-item.active { border-color: var(--accent-2); background: rgba(6,182,212,0.1); }
+      .provider-item .pi-emoji { font-size: 18px; }
+      .provider-item .pi-info { flex: 1; min-width: 0; }
+      .provider-item .pi-name { font-size: 12px; font-weight: 700; color: var(--text); }
+      .provider-item .pi-meta { font-size: 10px; color: var(--text-muted); }
+      .provider-item .pi-free { font-size: 9px; padding: 2px 6px; border-radius: 9999px; font-weight: 700; text-transform: uppercase; }
+      .pi-free.yes { background: rgba(16,185,129,0.2); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.4); }
+      .pi-free.no { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4); }
+      .pi-free.partial { background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.4); }
+
+      /* Selected provider details */
+      .provider-detail { padding: 10px 12px; background: var(--bg-elevated-2); border: 1px solid var(--border); border-radius: 6px; font-size: 11px; line-height: 1.5; color: var(--text-muted); }
+      .provider-detail strong { color: var(--text); }
+      .provider-detail a { color: var(--accent-2); text-decoration: none; }
+      .provider-detail a:hover { text-decoration: underline; }
+
+      /* API key input */
+      .key-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+      .key-row label { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+      .key-input { background: var(--bg-elevated-2); border: 1px solid var(--border-strong); border-radius: 6px; padding: 8px 10px; color: var(--text); font-size: 12px; font-family: ui-monospace, monospace; }
+      .key-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(139,92,246,0.2); }
+      .key-hint { font-size: 10px; color: var(--text-muted-2); margin: 4px 0 0; line-height: 1.4; }
+      .key-hint code { color: var(--accent-2); font-family: ui-monospace, monospace; }
+
+      /* Model picker */
+      .model-select { background: var(--bg-elevated-2); border: 1px solid var(--border-strong); border-radius: 6px; padding: 8px 10px; color: var(--text); font-size: 12px; font-family: inherit; width: 100%; }
+
+      /* Chat panel */
+      .chat-panel { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; min-height: 600px; max-height: 80vh; }
+      .chat-messages { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 10px; }
+      .message { padding: 10px 14px; border-radius: 10px; max-width: 85%; word-wrap: break-word; }
+      .message.user { align-self: flex-end; background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: white; border-bottom-right-radius: 2px; }
+      .message.assistant { align-self: flex-start; background: var(--bg-elevated-2); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 2px; }
+      .message.system { align-self: center; background: rgba(245,158,11,0.1); border: 1px dashed rgba(245,158,11,0.4); color: #fcd34d; font-size: 12px; }
+      .message pre { background: rgba(0,0,0,0.3); border-radius: 6px; padding: 8px 10px; overflow-x: auto; font-size: 11px; line-height: 1.4; margin: 6px 0; }
+      .message code { font-family: ui-monospace, SF Mono, Menlo, monospace; }
+      .message p { margin: 6px 0; }
+
+      /* Chat input */
+      .chat-input-row { display: flex; gap: 8px; padding: 8px 8px 0; border-top: 1px solid var(--border); }
+      .chat-input { flex: 1; background: var(--bg-elevated-2); border: 1px solid var(--border-strong); border-radius: 8px; padding: 10px 14px; color: var(--text); font-size: 13px; font-family: inherit; resize: none; min-height: 44px; max-height: 120px; }
+      .chat-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(139,92,246,0.2); }
+      .send-btn { padding: 10px 20px; border-radius: 8px; border: none; background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: white; cursor: pointer; font-size: 13px; font-weight: 600; }
+      .send-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(139,92,246,0.3); }
+      .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+      /* Toolbar */
+      .chat-toolbar { display: flex; gap: 6px; padding: 8px 8px 4px; flex-wrap: wrap; align-items: center; }
+      .chat-toolbar button { padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg-elevated-2); color: var(--text-muted); cursor: pointer; font-size: 11px; font-weight: 600; }
+      .chat-toolbar button:hover { border-color: var(--accent); color: var(--text); }
+
+      /* Empty state */
+      .empty-state { text-align: center; padding: 48px; color: var(--text-muted); }
+      .empty-state h3 { margin: 0 0 8px; color: var(--text); }
+      .empty-state p { margin: 0 0 16px; font-size: 12px; max-width: 460px; margin: 0 auto 16px; }
+      .empty-state .sample-questions { display: flex; flex-direction: column; gap: 6px; max-width: 400px; margin: 16px auto 0; }
+      .empty-state .sample-q { padding: 8px 12px; background: var(--bg-elevated-2); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 12px; color: var(--text-muted); text-align: left; }
+      .empty-state .sample-q:hover { border-color: var(--accent); color: var(--text); }
+
+      /* Footer */
+      .ai-lab-footer { margin-top: 16px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 10px; color: var(--text-muted-2); font-family: ui-monospace, monospace; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+      .ai-lab-footer code { color: var(--accent-2); }
+
+      /* Security notice */
+      .security-notice { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.3); border-radius: 8px; padding: 10px 12px; font-size: 11px; color: #fcd34d; line-height: 1.5; margin-bottom: 8px; }
+      .security-notice strong { color: #fcd34d; }
+      .security-notice code { color: #fde68a; }
+    </style>
+  </head>
+  <body>
+    <!-- Ribbon (consistent with platform) -->
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="index.html" class="ribbon-brand">
+          <span class="ribbon-logo">A</span>
+          <span>AIHPC Advanced</span>
+        </a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu">
+            <a href="index.html">Home</a>
+            <a href="lab.html">🔬 Scientific Lab</a>
+            <a href="ai-lab.html">🤖 AI Lab</a>
+            <a href="cloud-lab.html">☁ Cloud Lab</a>
+            <a href="demos.html">Demos</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="graph.html">Knowledge Graph</a>
+            <a href="benchmark.html">Agentic Benchmark</a>
+            <a href="timeline.html">Platform Timeline</a>
+            <a href="retrospective.html">50-Phase Retrospective</a>
+            <a href="component-registry.html">Component Registry</a>
+          </div></details>
+          <details class="ribbon-dropdown"><summary>Visualisers</summary><div class="ribbon-menu">
+            <a href="playground.html">Cross-Domain Playground</a>
+            <a href="quantum-shorts.html">Quantum Shorts Channel</a>
+            <a href="bloch.html">Bloch Sphere Shorts</a>
+            <a href="medical-atlas.html">Medical Imaging Atlas</a>
+            <a href="science/physics/quantum.html">Quantum Mechanics Hub</a>
+          </div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu">
+            <a href="science-biology.html">Biology Hub</a>
+            <a href="science-chemistry.html">Chemistry Hub</a>
+            <a href="science-physics.html">Physics Hub</a>
+            <a href="science-maths.html">Mathematics Hub</a>
+            <a href="science-ml.html">🤖 Machine Learning</a>
+            <a href="science-bioinformatics.html">Bioinformatics</a>
+            <a href="science-cheminformatics.html">Cheminformatics</a>
+          </div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu">
+            <a href="feeds.html">📡 Live Journal Feeds</a>
+            <a href="digest.html">Weekly Science Digest</a>
+            <a href="audit.html">📊 Audit Dashboard</a>
+            <a href="404.html">🚧 404 page</a>
+            <a href="lab.html">🔬 Lab</a>
+            <a href="ai-lab.html">🤖 AI Lab</a>
+            <a href="cloud-lab.html">☁ Cloud Lab</a>
+            <a href="concepts.html">Concept Cards</a>
+          </div></details>
+        </nav>
+        <div style="display: flex; gap: 6px;">
+          <a href="index.html" style="padding: 6px 14px; border-radius: 6px; background: rgba(18,24,38,0.7); border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px;">← Home</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="page-header">
+        <a href="index.html" class="back-link">← Home</a>
+        <h1>🤖 AI Lab — 14 providers, free + paid tiers</h1>
+        <p class="lead">A unified chat interface for 14 AI providers — Gemini, Groq, Together, Mistral, Hugging Face, Cohere, DeepSeek, Qwen, Kimi, Zhipu, xAI, Perplexity, OpenAI, Anthropic. Bring your own API key — keys stored in your browser's localStorage, never sent to our backend (there is none). Start with the free tiers; subscribe when you need more tokens for complicated scenarios.</p>
+      </div>
+
+      <div class="security-notice">
+        <strong>⚠ Security:</strong> Your API key is stored only in your browser's <code>localStorage</code> and sent directly to the AI provider's API endpoint — never to AIHPC Advanced's infrastructure (there is no backend). To revoke access, clear your browser's localStorage or click "Clear all keys" in the toolbar. Never share your API key with anyone — they could consume your quota.
+      </div>
+
+      <div class="ai-lab-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="sidebar-section">
+            <h3>🧠 Provider</h3>
+            <div class="provider-list" id="provider-list">
+              <!-- Providers injected by JS -->
+            </div>
+          </div>
+
+          <div class="sidebar-section">
+            <h3>⚙ Configuration</h3>
+            <div class="key-row">
+              <label for="model-select">Model</label>
+              <select class="model-select" id="model-select"></select>
+            </div>
+            <div class="key-row">
+              <label for="api-key">Your API key <span style="color: var(--text-muted-2);">(stored locally)</span></label>
+              <input type="password" class="key-input" id="api-key" placeholder="sk-..." autocomplete="off" />
+              <p class="key-hint">Get a free key from the provider's dashboard — link in the provider details below. Your key is stored in <code>localStorage</code> and sent only to the AI provider's API.</p>
+            </div>
+            <div class="key-row">
+              <label for="temperature">Temperature</label>
+              <input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7" style="width: 100%;" />
+              <p class="key-hint"><span id="temp-display">0.7</span> — 0 = deterministic, 2 = creative</p>
+            </div>
+            <div class="key-row">
+              <label for="max-tokens">Max output tokens</label>
+              <input type="number" class="key-input" id="max-tokens" value="1024" min="1" max="8192" style="width: 100%;" />
+            </div>
+          </div>
+
+          <div class="sidebar-section">
+            <h3>📊 Provider details</h3>
+            <div class="provider-detail" id="provider-detail">
+              <!-- Provider details injected by JS -->
+            </div>
+          </div>
+
+          <div class="sidebar-section">
+            <h3>📝 Code sample (Python)</h3>
+            <div class="provider-detail" id="code-sample">
+              <!-- Python code sample injected by JS -->
+            </div>
+          </div>
+        </aside>
+
+        <!-- Chat panel -->
+        <main class="chat-panel">
+          <div class="chat-toolbar">
+            <button onclick="clearChat()">🗑 Clear chat</button>
+            <button onclick="clearKeys()">🔐 Clear all keys</button>
+            <button onclick="exportChat()">⬇ Export chat (.txt)</button>
+            <span style="flex: 1;"></span>
+            <span id="status-text" style="font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace;">Ready.</span>
+          </div>
+
+          <div class="chat-messages" id="chat-messages">
+            <div class="empty-state" id="empty-state">
+              <h3>👋 Welcome to the AI Lab</h3>
+              <p>Pick a provider on the left, paste your API key, then type a message below. Start with the free tiers (Gemini, Groq, Together, Hugging Face) — they're generous enough for prototyping. When you outgrow them, subscribe for more tokens via the provider's dashboard.</p>
+              <div class="sample-questions">
+                <div class="sample-q" onclick="useSampleQuestion(this.textContent)">Explain the math behind gradient descent in 3 sentences</div>
+                <div class="sample-q" onclick="useSampleQuestion(this.textContent)">Write Python code to compute the Bloch sphere coordinates of a qubit state</div>
+                <div class="sample-q" onclick="useSampleQuestion(this.textContent)">Summarise the latest breakthrough in AlphaFold protein structure prediction</div>
+                <div class="sample-q" onclick="useSampleQuestion(this.textContent)">What's the difference between MSE and MAE for regression? When use which?</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-input-row">
+            <textarea class="chat-input" id="chat-input" placeholder="Type your message… (Shift+Enter for newline, Enter to send)" rows="1"></textarea>
+            <button class="send-btn" id="send-btn" onclick="sendMessage()">Send →</button>
+          </div>
+        </main>
+      </div>
+
+      <div class="ai-lab-footer">
+        <span>🤖 AIHPC Advanced · AI Lab · 14 providers · pure client-side · keys in <code>localStorage</code></span>
+        <span>Tip: hit free-tier quota? Subscribe at the provider's dashboard — link in the provider details panel.</span>
+      </div>
+    </div>
+
+    <script>
+      // ===== Provider registry =====
+      // Each entry has: id, name, emoji, models[], apiBase, freeTier, paidTier,
+      // corsSupport (bool), subscribeUrl, getKeyUrl, apiFormat ('openai'|'gemini'|'cohere'|'hf'|'anthropic')
+      var PROVIDERS = [
+        {
+          id: 'gemini',
+          name: 'Google Gemini',
+          emoji: '✨',
+          models: ['gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-pro'],
+          apiBase: 'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent',
+          apiFormat: 'gemini',
+          freeTier: 'Generous free tier — 60 req/min, 1000 req/day for Gemini 2.5 Flash. Free for personal use.',
+          paidTier: '$1.25/M input tokens, $10/M output for Gemini 2.5 Pro. Pay-as-you-go.',
+          corsSupport: true,
+          subscribeUrl: 'https://ai.google.dev/pricing',
+          getKeyUrl: 'https://aistudio.google.com/apikey',
+          keyHint: 'Get a free API key from Google AI Studio — no credit card required.',
+        },
+        {
+          id: 'groq',
+          name: 'Groq (Llama 3.3 70B)',
+          emoji: '⚡',
+          models: ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'mixtral-8x7b-32768', 'gemma2-9b-it'],
+          apiBase: 'https://api.groq.com/openai/v1/chat/completions',
+          apiFormat: 'openai',
+          freeTier: 'Free tier — 30 req/min, 14,400 req/day. The fastest inference available (700+ tokens/sec).',
+          paidTier: 'Pay-as-you-go at ~$0.59/M tokens (Llama 3.3 70B). No subscription required.',
+          corsSupport: true,
+          subscribeUrl: 'https://groq.com/pricing/',
+          getKeyUrl: 'https://console.groq.com/keys',
+          keyHint: 'Get a free API key from Groq Console — no credit card required.',
+        },
+        {
+          id: 'together',
+          name: 'Together AI',
+          emoji: '🤝',
+          models: ['meta-llama/Llama-3.3-70B-Instruct-Turbo', 'Qwen/Qwen2.5-72B-Instruct-Turbo', 'deepseek-ai/DeepSeek-V3', 'meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo'],
+          apiBase: 'https://api.together.xyz/v1/chat/completions',
+          apiFormat: 'openai',
+          freeTier: '$5 free credit on signup. Enough for ~10M tokens of Llama 3.3 70B.',
+          paidTier: 'Pay-as-you-go — $0.88/M input, $0.88/M output for Llama 3.3 70B.',
+          corsSupport: true,
+          subscribeUrl: 'https://www.together.ai/pricing',
+          getKeyUrl: 'https://api.together.xyz/settings/api-keys',
+          keyHint: 'Get an API key from Together AI — $5 free credit on signup.',
+        },
+        {
+          id: 'mistral',
+          name: 'Mistral AI',
+          emoji: '🌬',
+          models: ['mistral-large-latest', 'codestral-latest', 'open-mistral-7b', 'open-mixtral-8x7b', 'open-mistral-nemo'],
+          apiBase: 'https://api.mistral.ai/v1/chat/completions',
+          apiFormat: 'openai',
+          freeTier: 'Free tier via La Plateforme — generous limits for experimentation.',
+          paidTier: '$2/M input, $6/M output for Mistral Large. Cheaper models from $0.25/M.',
+          corsSupport: true,
+          subscribeUrl: 'https://mistral.ai/products/la-plateforme',
+          getKeyUrl: 'https://console.mistral.ai/api-keys/',
+          keyHint: 'Get an API key from Mistral Console — free tier available.',
+        },
+        {
+          id: 'hf',
+          name: 'Hugging Face',
+          emoji: '🤗',
+          models: ['meta-llama/Llama-3.3-70B-Instruct', 'Qwen/Qwen2.5-72B-Instruct', 'deepseek-ai/DeepSeek-V3', 'mistralai/Mistral-7B-Instruct-v0.3'],
+          apiBase: 'https://api-inference.huggingface.co/models/{model}/v1/chat/completions',
+          apiFormat: 'openai',
+          freeTier: 'Free tier for Inference API — generous limits for prototyping any open-source model.',
+          paidTier: 'Pay-as-you-go at $0.001/1000 tokens. Or rent dedicated GPUs.',
+          corsSupport: true,
+          subscribeUrl: 'https://huggingface.co/pricing',
+          getKeyUrl: 'https://huggingface.co/settings/tokens',
+          keyHint: 'Get a free API token from Hugging Face settings — no credit card required.',
+        },
+        {
+          id: 'cohere',
+          name: 'Cohere (Command R+)',
+          emoji: '🔗',
+          models: ['command-r-plus', 'command-r', 'command-r-08-2024', 'command-r7b-12-2024'],
+          apiBase: 'https://api.cohere.com/v2/chat',
+          apiFormat: 'cohere',
+          freeTier: 'Trial keys available — 1000 calls/month for development.',
+          paidTier: '$2.50/M input, $10/M output for Command R+. Volume discounts available.',
+          corsSupport: true,
+          subscribeUrl: 'https://cohere.com/pricing',
+          getKeyUrl: 'https://dashboard.cohere.com/api-keys',
+          keyHint: 'Get a trial key from Cohere Dashboard — 1000 calls/month free.',
+        },
+        {
+          id: 'deepseek',
+          name: 'DeepSeek',
+          emoji: '🐋',
+          models: ['deepseek-chat', 'deepseek-reasoner', 'deepseek-coder'],
+          apiBase: 'https://api.deepseek.com/chat/completions',
+          apiFormat: 'openai',
+          freeTier: 'Cheap — $0.27/M tokens (cache hit) for DeepSeek V3. No free tier but extremely low cost.',
+          paidTier: '$0.27/M input (cache hit), $1.10/M output. Subscribe via top-up.',
+          corsSupport: true,
+          subscribeUrl: 'https://api-docs.deepseek.com/quick_start/pricing',
+          getKeyUrl: 'https://platform.deepseek.com/api_keys',
+          keyHint: 'Get an API key from DeepSeek Platform — top up with $1 to start.',
+        },
+        {
+          id: 'qwen',
+          name: 'Qwen (DashScope)',
+          emoji: '🐉',
+          models: ['qwen3-235b-a22b', 'qwen-plus', 'qwen-turbo', 'qwen-max'],
+          apiBase: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+          apiFormat: 'openai',
+          freeTier: 'Generous free tier — Qwen Turbo has 1M free tokens/month for new accounts.',
+          paidTier: '$0.40/M input, $1.20/M output for Qwen Plus. Qwen Max from $1.60/M.',
+          corsSupport: true,
+          subscribeUrl: 'https://help.aliyun.com/zh/model-studio/getting-started/models',
+          getKeyUrl: 'https://dashscope.console.aliyun.com/apiKey',
+          keyHint: 'Get an API key from Alibaba DashScope — free tier available.',
+        },
+        {
+          id: 'kimi',
+          name: 'Kimi (Moonshot)',
+          emoji: '🌙',
+          models: ['moonshot-v1-128k', 'moonshot-v1-32k', 'moonshot-v1-8k', 'kimi-k2-0905-preview'],
+          apiBase: 'https://api.moonshot.cn/v1/chat/completions',
+          apiFormat: 'openai',
+          freeTier: 'Free trial credits for new accounts — enough for experimentation.',
+          paidTier: '$1.65/M input, $4.13/M output for Kimi K2.',
+          corsSupport: true,
+          subscribeUrl: 'https://platform.moonshot.cn/docs/pricing',
+          getKeyUrl: 'https://platform.moonshot.cn/console/api-keys',
+          keyHint: 'Get an API key from Moonshot Platform — free trial credits.',
+        },
+        {
+          id: 'zhipu',
+          name: 'Zhipu (GLM-4.5)',
+          emoji: '🧬',
+          models: ['glm-4.5', 'glm-4.5-air', 'glm-4-plus', 'glm-4-air'],
+          apiBase: 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
+          apiFormat: 'openai',
+          freeTier: 'Trial tokens for new accounts — enough to test the platform.',
+          paidTier: '$0.35/M input, $1.40/M output for GLM-4.5 Air.',
+          corsSupport: true,
+          subscribeUrl: 'https://open.bigmodel.cn/pricing',
+          getKeyUrl: 'https://open.bigmodel.cn/usercenter/apikeys',
+          keyHint: 'Get an API key from Zhipu BigModel — trial tokens available.',
+        },
+        {
+          id: 'xai',
+          name: 'xAI Grok',
+          emoji: '🚀',
+          models: ['grok-3', 'grok-3-fast', 'grok-2-vision', 'grok-2-1212'],
+          apiBase: 'https://api.x.ai/v1/chat/completions',
+          apiFormat: 'openai',
+          freeTier: 'No free tier — paid only. $5/month credit for new X Premium+ subscribers.',
+          paidTier: '$5/M input, $15/M output for Grok 3. Fast variant is cheaper.',
+          corsSupport: true,
+          subscribeUrl: 'https://x.ai/api',
+          getKeyUrl: 'https://console.x.ai',
+          keyHint: 'Get an API key from xAI Console — paid only.',
+        },
+        {
+          id: 'perplexity',
+          name: 'Perplexity Sonar',
+          emoji: '🔍',
+          models: ['sonar-pro', 'sonar', 'sonar-reasoning', 'sonar-reasoning-pro'],
+          apiBase: 'https://api.perplexity.ai/chat/completions',
+          apiFormat: 'openai',
+          freeTier: '$5 free credit on signup. Sonar is the cheapest web-grounded LLM.',
+          paidTier: '$1/M input, $1/M output for Sonar. Pro variants from $2/M.',
+          corsSupport: true,
+          subscribeUrl: 'https://docs.perplexity.ai/guides/pricing',
+          getKeyUrl: 'https://www.perplexity.ai/settings/api',
+          keyHint: 'Get an API key from Perplexity Settings — $5 free credit.',
+        },
+        {
+          id: 'openai',
+          name: 'OpenAI (GPT-4o)',
+          emoji: '🟢',
+          models: ['gpt-4o', 'gpt-4o-mini', 'o3-mini', 'gpt-4-turbo'],
+          apiBase: 'https://api.openai.com/v1/chat/completions',
+          apiFormat: 'openai',
+          freeTier: 'No free tier — paid only. $5 credit for new OpenAI account sometimes.',
+          paidTier: '$2.50/M input, $10/M output for GPT-4o. Mini is much cheaper ($0.15/$0.60).',
+          corsSupport: 'partial',
+          subscribeUrl: 'https://openai.com/pricing/',
+          getKeyUrl: 'https://platform.openai.com/api-keys',
+          keyHint: 'Get an API key from OpenAI Platform — paid only, requires $5 min credit.',
+        },
+        {
+          id: 'anthropic',
+          name: 'Anthropic Claude',
+          emoji: '🟠',
+          models: ['claude-opus-4-5', 'claude-sonnet-4-5', 'claude-haiku-4-5', 'claude-3-5-sonnet-20241022'],
+          apiBase: 'https://api.anthropic.com/v1/messages',
+          apiFormat: 'anthropic',
+          freeTier: 'No free tier via API — Claude.ai has free chat but no API access.',
+          paidTier: '$15/M input, $75/M output for Opus 4.5. Sonnet 4.5 is $3/$15.',
+          corsSupport: 'partial',
+          subscribeUrl: 'https://www.anthropic.com/pricing',
+          getKeyUrl: 'https://console.anthropic.com/settings/keys',
+          keyHint: 'Get an API key from Anthropic Console — paid only.',
+        },
+      ];
+
+      // ===== State =====
+      var activeProvider = PROVIDERS[0];
+      var activeModel = PROVIDERS[0].models[0];
+      var chatHistory = [];
+      var STORAGE_KEY_PREFIX = 'aihpc-ai-lab-key-';
+      var HISTORY_KEY = 'aihpc-ai-lab-history';
+      var PROVIDER_PREF = 'aihpc-ai-lab-provider';
+      var MODEL_PREF = 'aihpc-ai-lab-model';
+
+      // ===== Render provider list =====
+      function renderProviderList() {
+        var list = document.getElementById('provider-list');
+        list.innerHTML = PROVIDERS.map(function (p) {
+          var freeBadge;
+          if (p.freeTier && p.freeTier.toLowerCase().indexOf('free tier') >= 0) {
+            freeBadge = '<span class="pi-free yes">Free</span>';
+          } else if (p.freeTier.toLowerCase().indexOf('trial') >= 0 || p.freeTier.toLowerCase().indexOf('credit') >= 0 || p.freeTier.toLowerCase().indexOf('cheap') >= 0) {
+            freeBadge = '<span class="pi-free partial">Trial</span>';
+          } else {
+            freeBadge = '<span class="pi-free no">Paid</span>';
+          }
+          var isActive = p.id === activeProvider.id ? ' active' : '';
+          return '<div class="provider-item' + isActive + '" data-provider="' + p.id + '">'
+               + '<span class="pi-emoji">' + p.emoji + '</span>'
+               + '<div class="pi-info">'
+               +   '<div class="pi-name">' + p.name + '</div>'
+               +   '<div class="pi-meta">' + p.models.length + ' models</div>'
+               + '</div>'
+               + freeBadge
+               + '</div>';
+        }).join('');
+        list.querySelectorAll('.provider-item').forEach(function (el) {
+          el.addEventListener('click', function () {
+            var pid = el.dataset.provider;
+            var p = PROVIDERS.find(function (x) { return x.id === pid; });
+            if (p) selectProvider(p);
+          });
+        });
+      }
+
+      function selectProvider(p) {
+        activeProvider = p;
+        activeModel = p.models[0];
+        try { localStorage.setItem(PROVIDER_PREF, p.id); } catch (e) {}
+        document.getElementById('model-select').innerHTML = p.models.map(function (m) {
+          return '<option value="' + m + '">' + m + '</option>';
+        }).join('');
+        document.getElementById('model-select').value = activeModel;
+        renderProviderList();
+        renderProviderDetail();
+        renderCodeSample();
+        loadApiKey();
+      }
+
+      function renderProviderDetail() {
+        var p = activeProvider;
+        var corsBadge = p.corsSupport === true ? '<span style="color: #6ee7b7;">✓ Yes</span>' :
+                       p.corsSupport === 'partial' ? '<span style="color: #fcd34d;">⚠ Partial</span>' :
+                       '<span style="color: #fca5a5;">✗ No</span>';
+        document.getElementById('provider-detail').innerHTML =
+            '<div style="margin-bottom: 8px;"><strong>' + p.emoji + ' ' + p.name + '</strong></div>'
+          + '<div style="margin-bottom: 8px;"><strong>Free tier:</strong><br>' + p.freeTier + '</div>'
+          + '<div style="margin-bottom: 8px;"><strong>Paid:</strong><br>' + p.paidTier + '</div>'
+          + '<div style="margin-bottom: 8px;"><strong>CORS (browser-direct):</strong> ' + corsBadge + '</div>'
+          + '<div style="margin-bottom: 8px;"><strong>API base:</strong><br><code style="font-family: ui-monospace; color: #06b6d4; word-break: break-all;">' + p.apiBase + '</code></div>'
+          + '<div style="margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap;">'
+          +   '<a href="' + p.getKeyUrl + '" target="_blank" rel="noreferrer noopener" style="display: inline-block; padding: 6px 12px; border-radius: 6px; background: linear-gradient(90deg, #06b6d4, #8b5cf6); color: white; text-decoration: none; font-size: 11px; font-weight: 600;">🔑 Get API key</a>'
+          +   '<a href="' + p.subscribeUrl + '" target="_blank" rel="noreferrer noopener" style="display: inline-block; padding: 6px 12px; border-radius: 6px; background: rgba(18,24,38,0.7); border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 11px; font-weight: 600;">💳 Pricing</a>'
+          + '</div>';
+      }
+
+      function renderCodeSample() {
+        var p = activeProvider;
+        var model = activeModel;
+        var code = '';
+        if (p.apiFormat === 'openai') {
+          code = '# Python — ' + p.name + ' (OpenAI-compatible)\n'
+               + '# pip install openai\n'
+               + 'from openai import OpenAI\n'
+               + '\n'
+               + 'client = OpenAI(\n'
+               + '    api_key="YOUR_API_KEY",\n'
+               + '    base_url="' + p.apiBase.replace('/chat/completions', '') + '",\n'
+               + ')\n'
+               + '\n'
+               + 'response = client.chat.completions.create(\n'
+               + '    model="' + model + '",\n'
+               + '    messages=[\n'
+               + '        {"role": "user", "content": "Explain quantum entanglement in 2 sentences"}\n'
+               + '    ],\n'
+               + '    temperature=0.7,\n'
+               + '    max_tokens=1024,\n'
+               + ')\n'
+               + 'print(response.choices[0].message.content)';
+        } else if (p.apiFormat === 'gemini') {
+          code = '# Python — Google Gemini (native API)\n'
+               + '# pip install google-genai\n'
+               + 'from google import genai\n'
+               + '\n'
+               + 'client = genai.Client(api_key="YOUR_API_KEY")\n'
+               + '\n'
+               + 'response = client.models.generate_content(\n'
+               + '    model="' + model + '",\n'
+               + '    contents="Explain quantum entanglement in 2 sentences",\n'
+               + ')\n'
+               + 'print(response.text)';
+        } else if (p.apiFormat === 'anthropic') {
+          code = '# Python — Anthropic Claude (native API)\n'
+               + '# pip install anthropic\n'
+               + 'import anthropic\n'
+               + '\n'
+               + 'client = anthropic.Anthropic(api_key="YOUR_API_KEY")\n'
+               + '\n'
+               + 'response = client.messages.create(\n'
+               + '    model="' + model + '",\n'
+               + '    max_tokens=1024,\n'
+               + '    messages=[\n'
+               + '        {"role": "user", "content": "Explain quantum entanglement in 2 sentences"}\n'
+               + '    ],\n'
+               + ')\n'
+               + 'print(response.content[0].text)';
+        } else if (p.apiFormat === 'cohere') {
+          code = '# Python — Cohere (Command R+)\n'
+               + '# pip install cohere\n'
+               + 'import cohere\n'
+               + '\n'
+               + 'client = cohere.Client("YOUR_API_KEY")\n'
+               + '\n'
+               + 'response = client.chat(\n'
+               + '    model="' + model + '",\n'
+               + '    message="Explain quantum entanglement in 2 sentences",\n'
+               + '    temperature=0.7,\n'
+               + ')\n'
+               + 'print(response.text)';
+        }
+        document.getElementById('code-sample').innerHTML = '<pre style="margin: 0; font-family: ui-monospace, SF Mono, Menlo, monospace; font-size: 10px; line-height: 1.5; white-space: pre-wrap; word-break: break-word; color: #e5e7eb;">' + escapeHtml(code) + '</pre>';
+      }
+
+      // ===== API key management =====
+      function loadApiKey() {
+        var key = '';
+        try { key = localStorage.getItem(STORAGE_KEY_PREFIX + activeProvider.id) || ''; } catch (e) {}
+        document.getElementById('api-key').value = key;
+      }
+
+      function saveApiKey() {
+        var key = document.getElementById('api-key').value.trim();
+        try {
+          if (key) {
+            localStorage.setItem(STORAGE_KEY_PREFIX + activeProvider.id, key);
+          } else {
+            localStorage.removeItem(STORAGE_KEY_PREFIX + activeProvider.id);
+          }
+        } catch (e) {}
+      }
+
+      function clearKeys() {
+        if (!confirm('Clear all stored API keys from your browser? This cannot be undone.')) return;
+        PROVIDERS.forEach(function (p) {
+          try { localStorage.removeItem(STORAGE_KEY_PREFIX + p.id); } catch (e) {}
+        });
+        document.getElementById('api-key').value = '';
+        setStatus('🔐 All API keys cleared.');
+      }
+
+      // ===== Send message =====
+      async function sendMessage() {
+        var input = document.getElementById('chat-input');
+        var text = input.value.trim();
+        if (!text) return;
+        var apiKey = document.getElementById('api-key').value.trim();
+        if (!apiKey) {
+          alert('Please enter your API key for ' + activeProvider.name + '. Get a free key from the link in the provider details panel.');
+          return;
+        }
+        saveApiKey();
+
+        // Add user message
+        chatHistory.push({ role: 'user', content: text });
+        renderMessages();
+        input.value = '';
+        autoResizeInput();
+        document.getElementById('send-btn').disabled = true;
+        setStatus('⏳ Sending to ' + activeProvider.name + ' (' + activeModel + ')…');
+
+        // Build request based on provider format
+        var temperature = parseFloat(document.getElementById('temperature').value);
+        var maxTokens = parseInt(document.getElementById('max-tokens').value) || 1024;
+        var messages = chatHistory.filter(function (m) { return m.role === 'user' || m.role === 'assistant'; }).map(function (m) {
+          return { role: m.role, content: m.content };
+        });
+
+        try {
+          var response = '';
+          if (activeProvider.apiFormat === 'openai') {
+            response = await callOpenAICompatible(messages, apiKey, temperature, maxTokens);
+          } else if (activeProvider.apiFormat === 'gemini') {
+            response = await callGemini(messages, apiKey, temperature, maxTokens);
+          } else if (activeProvider.apiFormat === 'anthropic') {
+            response = await callAnthropic(messages, apiKey, temperature, maxTokens);
+          } else if (activeProvider.apiFormat === 'cohere') {
+            response = await callCohere(messages, apiKey, temperature, maxTokens);
+          }
+
+          // Add assistant message
+          chatHistory.push({ role: 'assistant', content: response, provider: activeProvider.name, model: activeModel });
+          renderMessages();
+          saveHistory();
+          setStatus('✓ Response received from ' + activeProvider.name + ' · ' + new Date().toLocaleTimeString());
+        } catch (err) {
+          chatHistory.push({ role: 'system', content: '✗ Error: ' + err.message });
+          renderMessages();
+          setStatus('✗ Error: ' + err.message);
+        } finally {
+          document.getElementById('send-btn').disabled = false;
+        }
+      }
+
+      async function callOpenAICompatible(messages, apiKey, temperature, maxTokens) {
+        var url = activeProvider.apiBase;
+        if (url.indexOf('{model}') >= 0) url = url.replace('{model}', encodeURIComponent(activeModel));
+        var body = JSON.stringify({
+          model: activeModel,
+          messages: messages,
+          temperature: temperature,
+          max_tokens: maxTokens,
+        });
+        var resp = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + apiKey,
+          },
+          body: body,
+        });
+        if (!resp.ok) {
+          var errText = await resp.text();
+          throw new Error('HTTP ' + resp.status + ': ' + errText.slice(0, 300));
+        }
+        var data = await resp.json();
+        return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '(no response)';
+      }
+
+      async function callGemini(messages, apiKey, temperature, maxTokens) {
+        var url = activeProvider.apiBase.replace('{model}', activeModel) + '?key=' + encodeURIComponent(apiKey);
+        // Convert OpenAI-style messages to Gemini format
+        var contents = messages.map(function (m) {
+          return {
+            role: m.role === 'assistant' ? 'model' : 'user',
+            parts: [{ text: m.content }],
+          };
+        });
+        var body = JSON.stringify({
+          contents: contents,
+          generationConfig: { temperature: temperature, maxOutputTokens: maxTokens },
+        });
+        var resp = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: body,
+        });
+        if (!resp.ok) {
+          var errText = await resp.text();
+          throw new Error('HTTP ' + resp.status + ': ' + errText.slice(0, 300));
+        }
+        var data = await resp.json();
+        return (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text) || '(no response)';
+      }
+
+      async function callAnthropic(messages, apiKey, temperature, maxTokens) {
+        var url = activeProvider.apiBase;
+        var body = JSON.stringify({
+          model: activeModel,
+          max_tokens: maxTokens,
+          temperature: temperature,
+          messages: messages,
+        });
+        var resp = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true',
+          },
+          body: body,
+        });
+        if (!resp.ok) {
+          var errText = await resp.text();
+          throw new Error('HTTP ' + resp.status + ': ' + errText.slice(0, 300));
+        }
+        var data = await resp.json();
+        return (data.content && data.content[0] && data.content[0].text) || '(no response)';
+      }
+
+      async function callCohere(messages, apiKey, temperature, maxTokens) {
+        var url = activeProvider.apiBase;
+        var body = JSON.stringify({
+          model: activeModel,
+          messages: messages,
+          temperature: temperature,
+          max_tokens: maxTokens,
+        });
+        var resp = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + apiKey,
+          },
+          body: body,
+        });
+        if (!resp.ok) {
+          var errText = await resp.text();
+          throw new Error('HTTP ' + resp.status + ': ' + errText.slice(0, 300));
+        }
+        var data = await resp.json();
+        return (data.message && data.message.content && data.message.content[0] && data.message.content[0].text) || '(no response)';
+      }
+
+      // ===== Render messages =====
+      function renderMessages() {
+        var container = document.getElementById('chat-messages');
+        if (chatHistory.length === 0) {
+          container.innerHTML = document.getElementById('empty-state').outerHTML;
+          return;
+        }
+        container.innerHTML = chatHistory.map(function (m) {
+          var escaped = escapeHtml(m.content);
+          // Basic markdown rendering: code blocks (```), inline code, paragraphs
+          var rendered = escaped
+            .replace(/```(\w*)\n([\s\S]*?)```/g, function (_, lang, code) {
+              return '<pre><code>' + code + '</code></pre>';
+            })
+            .replace(/`([^`]+)`/g, '<code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 3px;">$1</code>')
+            .replace(/\n\n/g, '</p><p>')
+            .replace(/\n/g, '<br>');
+          return '<div class="message ' + m.role + '">'
+               + (m.role === 'assistant' && m.provider ? '<div style="font-size: 10px; color: var(--text-muted-2); margin-bottom: 4px;">— ' + escapeHtml(m.provider) + ' · ' + escapeHtml(m.model || '') + '</div>' : '')
+               + '<p style="margin: 0;">' + rendered + '</p>'
+               + '</div>';
+        }).join('');
+        // Scroll to bottom
+        container.scrollTop = container.scrollHeight;
+      }
+
+      function escapeHtml(s) {
+        return String(s || '').replace(/[&<>"']/g, function (c) {
+          return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+        });
+      }
+
+      // ===== Toolbar =====
+      function clearChat() {
+        if (!confirm('Clear chat history? API keys are preserved in localStorage.')) return;
+        chatHistory = [];
+        saveHistory();
+        renderMessages();
+        setStatus('🗑 Chat cleared.');
+      }
+
+      function exportChat() {
+        if (chatHistory.length === 0) { alert('No messages to export.'); return; }
+        var txt = chatHistory.map(function (m) {
+          var prefix = m.role === 'user' ? 'YOU' : (m.role === 'assistant' ? (m.provider || 'AI').toUpperCase() : 'SYSTEM');
+          return '[' + prefix + ']\n' + m.content + '\n\n';
+        }).join('---\n\n');
+        var blob = new Blob([txt], { type: 'text/plain' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'ai-lab-chat-' + Date.now() + '.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function setStatus(text) {
+        document.getElementById('status-text').textContent = text;
+      }
+
+      function useSampleQuestion(q) {
+        document.getElementById('chat-input').value = q;
+        autoResizeInput();
+        document.getElementById('chat-input').focus();
+      }
+
+      // ===== History persistence =====
+      function saveHistory() {
+        try {
+          // Cap history to last 50 messages to avoid localStorage limits
+          var trimmed = chatHistory.slice(-50);
+          localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
+        } catch (e) {}
+      }
+
+      function loadHistory() {
+        try {
+          var raw = localStorage.getItem(HISTORY_KEY);
+          if (!raw) return;
+          chatHistory = JSON.parse(raw) || [];
+        } catch (e) {}
+      }
+
+      // ===== Auto-resize input =====
+      function autoResizeInput() {
+        var input = document.getElementById('chat-input');
+        input.style.height = 'auto';
+        input.style.height = Math.min(120, input.scrollHeight) + 'px';
+      }
+
+      // ===== Wire up =====
+      document.getElementById('model-select').addEventListener('change', function (e) {
+        activeModel = e.target.value;
+        try { localStorage.setItem(MODEL_PREF, activeModel); } catch (e) {}
+        renderCodeSample();
+      });
+      document.getElementById('api-key').addEventListener('input', saveApiKey);
+      document.getElementById('temperature').addEventListener('input', function (e) {
+        document.getElementById('temp-display').textContent = e.target.value;
+      });
+      document.getElementById('chat-input').addEventListener('input', autoResizeInput);
+      document.getElementById('chat-input').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+
+      // ===== Boot =====
+      // Restore provider preference from localStorage
+      try {
+        var prefId = localStorage.getItem(PROVIDER_PREF);
+        if (prefId) {
+          var p = PROVIDERS.find(function (x) { return x.id === prefId; });
+          if (p) activeProvider = p;
+        }
+      } catch (e) {}
+      try {
+        var prefModel = localStorage.getItem(MODEL_PREF);
+        if (prefModel && activeProvider.models.indexOf(prefModel) >= 0) {
+          activeModel = prefModel;
+        }
+      } catch (e) {}
+
+      renderProviderList();
+      selectProvider(activeProvider);
+      loadHistory();
+      renderMessages();
+    </script>
+  </body>
+</html>

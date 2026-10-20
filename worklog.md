@@ -3762,3 +3762,73 @@ Stage Summary:
 - The user can now navigate from the home button (ribbon Insights dropdown) to lab.html + cloud-lab.html
 - 17 files that the previous patcher had missed now have the lab + cloud-lab links in their Insights dropdowns
 - All 195 HTML pages now consistently link to lab + cloud-lab from their ribbon Insights dropdown (where applicable)
+
+---
+Task ID: P52-followup-3
+Agent: main
+Task: Build AI Lab — unified chat interface for 14 AI providers (Gemini, Groq, Together, Mistral, HF, Cohere, DeepSeek, Qwen, Kimi, Zhipu, xAI, Perplexity, OpenAI, Anthropic)
+
+User question: "need to add all the freely and subscription base AI platform (qwenai, kimi, gemini, deepseek, hugging face, etc etc), they should be able to use the free tier, if needed they can subscribe for complicated or more challenging scenarios, where greater volume of tokens needed"
+
+Architectural analysis: pure client-side platform means we cannot expose our own API keys. Users must bring their own — keys go directly from their browser to the AI provider's API, never touching our infrastructure.
+
+Implementation: docs/ai-lab.html — a unified chat interface for 14 AI providers:
+
+1. PROVIDER REGISTRY (14 providers):
+   - Gemini (Google) — generous free tier, CORS yes
+   - Groq (Llama 3.3 70B) — free tier, fastest inference, CORS yes
+   - Together AI — $5 free credit, CORS yes
+   - Mistral AI — free tier via La Plateforme, CORS yes
+   - Hugging Face — free tier for any open-source model, CORS yes
+   - Cohere (Command R+) — trial keys, CORS yes
+   - DeepSeek (V3 / R1) — cheap, $0.27/M tokens, CORS yes
+   - Qwen (DashScope) — free tier, 1M tokens/month for Qwen Turbo, CORS yes
+   - Kimi (Moonshot) — free trial credits, CORS yes
+   - Zhipu (GLM-4.5) — trial tokens, CORS yes
+   - xAI Grok — paid only, CORS yes
+   - Perplexity Sonar — $5 free credit, CORS yes
+   - OpenAI (GPT-4o) — paid only, CORS partial (dangerouslyAllowBrowser)
+   - Anthropic Claude — paid only, CORS partial (anthropic-dangerous-direct-browser-access)
+
+2. UNIFIED API FORMAT SUPPORT — 4 API formats handled:
+   - 'openai' format — used by OpenAI, Groq, Together, Mistral, HF, DeepSeek, Qwen, Kimi, Zhipu, xAI, Perplexity (11 of 14)
+   - 'gemini' format — native Google Gemini API
+   - 'anthropic' format — native Claude API with anthropic-dangerous-direct-browser-access header
+   - 'cohere' format — native Cohere chat API
+
+3. CHAT UI:
+   - Sidebar (320px) with provider list (14 providers, free/partial/paid badges), configuration (model select + API key input + temperature slider + max tokens), provider details panel (free tier + paid tier + CORS status + API base + get-key + pricing links), Python code sample (auto-generated per provider+model)
+   - Main chat panel: chat toolbar (Clear chat / Clear all keys / Export chat .txt / status indicator), chat messages (user right-aligned gradient, assistant left-aligned with provider+model badge, system centered warning), chat input (auto-resizing textarea, Enter to send / Shift+Enter for newline)
+   - Security notice at top warning users that keys are stored in localStorage, never sent to our backend (there is none)
+
+4. KEY MANAGEMENT:
+   - Keys stored in localStorage with key 'aihpc-ai-lab-key-<provider-id>' (per-provider)
+   - Clear all keys button removes all 14 provider keys at once
+   - Key input is type=password so it's masked
+   - Keys never sent anywhere except the AI provider's API endpoint
+
+5. CHAT HISTORY:
+   - Last 50 messages persisted in localStorage (capped to avoid quota)
+   - Export to .txt file with provider+model badges per message
+   - Basic markdown rendering: code blocks, inline code, paragraphs
+
+6. SAMPLE QUESTIONS — 4 sample-question cards on the empty state:
+   - "Explain the math behind gradient descent in 3 sentences"
+   - "Write Python code to compute the Bloch sphere coordinates of a qubit state"
+   - "Summarise the latest breakthrough in AlphaFold protein structure prediction"
+   - "What's the difference between MSE and MAE for regression? When use which?"
+
+7. PYTHON CODE SAMPLES — auto-generated for each provider+model combo:
+   - OpenAI-compatible providers: shows the standard OpenAI client pattern with the provider's base_url
+   - Gemini: native google-genai SDK pattern
+   - Anthropic: native anthropic SDK pattern
+   - Cohere: native cohere SDK pattern
+
+8. AUDIT — added ai-lab.html to check_ribbon MINIMAL_PAGES allowlist. Total: 58 checks.
+
+9. RIBBON NAVIGATION:
+   - Added 🤖 AI Lab to home page Insights dropdown (between 🔬 Lab and ☁ Cloud Lab)
+   - Added 🤖 AI Lab card to home page Platform Meta Pages section (between 🔬 Scientific Computing Lab and ☁ Cloud Lab)
+   - ai-lab.html itself has its own ribbon with Platform / Visualisers / Science / Insights dropdowns, including itself in the Insights list
+
+Local audit: 58/58 pass with --skip-live-check. Home page has 2 ai-lab.html references (ribbon + meta section).
