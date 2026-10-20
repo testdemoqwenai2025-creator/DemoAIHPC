@@ -1517,6 +1517,137 @@ def check_playground_present():
 
 
 # ---------------------------------------------------------------------------
+# Phase 43 checks
+# ---------------------------------------------------------------------------
+
+def check_segmentation_pipeline_loaded():
+    """Check (Phase 43): science-biology.html loads the medical-image
+    segmentation pipeline viewer + has the Levels of Investigation framework."""
+    bio_path = os.path.join(DOCS, "science-biology.html")
+    seg_js = os.path.join(DOCS, "segmentation-pipeline.js")
+    if not os.path.isfile(bio_path) or not os.path.isfile(seg_js):
+        return CheckResult("segmentation_pipeline_loaded", False,
+                           "science-biology.html or segmentation-pipeline.js missing")
+    page = open(bio_path, encoding="utf-8").read()
+    js = open(seg_js, encoding="utf-8").read()
+    failures = []
+    if "segmentation-pipeline.js" not in page:
+        failures.append("science-biology.html does not load segmentation-pipeline.js")
+    if 'id="bio-seg-container"' not in page:
+        failures.append("missing #bio-seg-container element")
+    if "AIHPC_SEG" not in js:
+        failures.append("segmentation-pipeline.js does not expose AIHPC_SEG global")
+    if "Dice" not in page:
+        failures.append("missing Dice coefficient mention")
+    if "IoU" not in page:
+        failures.append("missing IoU mention")
+    if "Hausdorff" not in page:
+        failures.append("missing Hausdorff distance mention")
+    if "Levels of Investigation" not in page:
+        failures.append("missing Levels of Investigation framework")
+    if "Tier 1" not in page or "Tier 2" not in page or "Tier 3" not in page:
+        failures.append("missing Tier 1/2/3 sub-sections")
+    if "Viz.ai" not in page:
+        failures.append("missing Viz.ai reference (Tier 1)")
+    if "TotalSegmentator" not in page:
+        failures.append("missing TotalSegmentator reference (Tier 2)")
+    if "OpenMM" not in page:
+        failures.append("missing OpenMM reference (Tier 3)")
+    if failures:
+        return CheckResult("segmentation_pipeline_loaded", False,
+                           f"{len(failures)} issues with segmentation pipeline", failures)
+    return CheckResult("segmentation_pipeline_loaded", True,
+                       "science-biology.html loads segmentation-pipeline.js + 3-column pipeline (MRI → mask → 3D) + Dice/IoU/Hausdorff metrics + Levels of Investigation (Tier 1/2/3)")
+
+
+def check_biomolecular_dynamics_loaded():
+    """Check (Phase 43): science-biology.html loads BioEmu2-style biomolecular dynamics viewer."""
+    bio_path = os.path.join(DOCS, "science-biology.html")
+    bd_js = os.path.join(DOCS, "biomolecular-dynamics.js")
+    if not os.path.isfile(bio_path) or not os.path.isfile(bd_js):
+        return CheckResult("biomolecular_dynamics_loaded", False,
+                           "science-biology.html or biomolecular-dynamics.js missing")
+    page = open(bio_path, encoding="utf-8").read()
+    js = open(bd_js, encoding="utf-8").read()
+    failures = []
+    if "biomolecular-dynamics.js" not in page:
+        failures.append("science-biology.html does not load biomolecular-dynamics.js")
+    if 'id="bio-biodyn-container"' not in page:
+        failures.append("missing #bio-biodyn-container element")
+    if "AIHPC_BIODYN" not in js:
+        failures.append("biomolecular-dynamics.js does not expose AIHPC_BIODYN global")
+    if "BioEmu2" not in page:
+        failures.append("missing BioEmu2 reference")
+    if "Structure prediction" not in page:
+        failures.append("missing Structure prediction panel mention")
+    if "Large complexes" not in page:
+        failures.append("missing Large complexes panel mention")
+    if "Equilibrium sampling" not in page:
+        failures.append("missing Equilibrium sampling panel mention")
+    if "Dynamics" not in page:
+        failures.append("missing Dynamics panel mention")
+    if "AlphaFold 3" not in page:
+        failures.append("missing AlphaFold 3 reference")
+    if "ESM-3" not in page:
+        failures.append("missing ESM-3 reference")
+    if "MACE-MT-2" not in page:
+        failures.append("missing MACE-MT-2 reference")
+    if failures:
+        return CheckResult("biomolecular_dynamics_loaded", False,
+                           f"{len(failures)} issues with biomolecular dynamics viewer", failures)
+    return CheckResult("biomolecular_dynamics_loaded", True,
+                       "science-biology.html loads biomolecular-dynamics.js + 4-panel BioEmu2-style viewer + Structure/Complex/Ensemble/Dynamics panels + AlphaFold3/ESM-3/MACE-MT-2 references")
+
+
+def check_issue_10_published():
+    """Check (Phase 43): Issue #10 published (Tuesday 2026-12-22) with 5 real + 2 futuristic."""
+    spec = importlib.util.spec_from_file_location(
+        "gen_digest", os.path.join(ROOT, "scripts", "gen-digest.py"),
+    )
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception as e:
+        return CheckResult("digest_issue_10", False, f"could not load gen-digest.py: {e}")
+    manifest = mod.MANIFEST
+    if manifest.get("issue") != 10:
+        return CheckResult("digest_issue_10", False,
+                           f"MANIFEST issue is {manifest.get('issue')}, expected 10")
+    if manifest.get("date") != "2026-12-22":
+        return CheckResult("digest_issue_10", False,
+                           f"MANIFEST date is {manifest.get('date')}, expected 2026-12-22")
+    articles = manifest.get("articles", [])
+    if len(articles) != 7:
+        return CheckResult("digest_issue_10", False,
+                           f"{len(articles)} articles, expected 7")
+    real_count = sum(1 for a in articles if not a.get("futuristic_vision"))
+    futuristic_count = sum(1 for a in articles if a.get("futuristic_vision"))
+    if real_count != 5 or futuristic_count != 2:
+        return CheckResult("digest_issue_10", False,
+                           f"{real_count} real + {futuristic_count} futuristic, expected 5 + 2")
+    ids = [a["id"] for a in articles]
+    for expected in ["alphaproteo-v3-binders", "bionemo-3-nvidia", "alphagenome-2-variants", "mistral-med-large", "openai-sora-vision-medical"]:
+        if expected not in ids:
+            return CheckResult("digest_issue_10", False,
+                               f"missing anchor article: {expected}")
+    archive_9 = os.path.join(DOCS, "digest", "archive", "issue-009.html")
+    if not os.path.isfile(archive_9):
+        return CheckResult("digest_issue_10", False,
+                           "Issue #9 archive (docs/digest/archive/issue-009.html) missing")
+    missing_cards = []
+    for a in articles:
+        card = os.path.join(DOCS, "concepts", f"digest-{a['id']}.html")
+        if not os.path.isfile(card):
+            missing_cards.append(a["id"])
+    if missing_cards:
+        return CheckResult("digest_issue_10", False,
+                           f"missing concept cards: {', '.join(missing_cards)}")
+    return CheckResult("digest_issue_10", True,
+                       f"Issue #10 (2026-12-22) published: {real_count} real + {futuristic_count} futuristic; "
+                       f"Issue #9 archived; 7 concept cards; anchors: AlphaProteo-v3+BioNeMo-3+AlphaGenome-2+Mistral-Med+Sora-vision-medical")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -1570,10 +1701,13 @@ def main():
         # Phase 41 (issue_8 superseded by issue_9)
         check_dicom_loader_wired(),
         check_medical_atlas_present(),
-        check_issue_9_published(),
         # Phase 42
         check_fock_viewer_loaded(),
         check_playground_present(),
+        # Phase 43 (issue_9 superseded by issue_10)
+        check_segmentation_pipeline_loaded(),
+        check_biomolecular_dynamics_loaded(),
+        check_issue_10_published(),
     ]
 
     if args.json:

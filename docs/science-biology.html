@@ -165,6 +165,96 @@
         <div id="bio-uploader-container"></div>
       </section>
 
+      <!-- Phase 43: Modern AI Medical Image Analysis — segmentation pipeline + BioEmu2 dynamics + Levels of Investigation -->
+      <section style="margin: 32px 0;">
+        <p class="h-tag" style="color: #06b6d4;">Phase 43 · Modern AI Medical Image Analysis</p>
+        <h2 style="font-size: 24px; margin: 8px 0 12px; background: linear-gradient(90deg,#06b6d4,#8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent;">Medical Image Segmentation pipeline · BioEmu2 dynamics · Levels of Investigation</h2>
+        <p style="font-size: 14px; color: var(--text-muted, #9ca3af); max-width: 920px;">Inspired by the LinkedIn infographics <em>"Medical Image Segmentation: More Than Drawing a Boundary"</em> (MRI → prediction mask → 3D reconstruction, Dice / IoU / tumour volume) and <em>BioEmu2: Scalable emulation of biomolecular dynamics</em> (Microsoft Research, José Jiménez Luna — structure prediction / large complexes / equilibrium sampling / dynamics). Two live viewers below + a 3-tier 'Levels of Investigation' framework + recent research references.</p>
+
+        <!-- 1. Medical Image Segmentation Pipeline viewer -->
+        <div style="margin-top: 24px;">
+          <h3 style="font-size: 16px; color: #06b6d4; margin: 0 0 8px;">1. Medical Image Segmentation pipeline — MRI → AI mask → 3D reconstruction</h3>
+          <p style="font-size: 12px; color: var(--text-muted, #9ca3af); margin: 0 0 12px;">Three columns animate in lock-step: raw MRI T1c slice (left), AI prediction mask with scanner sweep + confidence (middle), 3D tumour reconstruction from the slice stack (right). Live metrics at the bottom: Dice coefficient, IoU, tumour volume (cm³), Hausdorff distance (mm), sensitivity, specificity. The pipeline mirrors what nnU-Net, MedSAM, and TotalSegmentator do clinically — except here it runs in-browser on procedural slices.</p>
+          <div id="bio-seg-container"></div>
+          <p style="font-size: 11px; color: var(--text-muted-2, #6b7280); margin-top: 8px;">Press <strong>Play sweep</strong> to animate the scanner. The confidence starts at 0.5 (early scan) and grows to 0.94 (full prediction). Hausdorff distance decreases as confidence rises — exactly as in real AI-segmented clinical workflows.</p>
+        </div>
+
+        <!-- 2. BioEmu2-style Biomolecular Dynamics viewer -->
+        <div style="margin-top: 32px;">
+          <h3 style="font-size: 16px; color: #8b5cf6; margin: 0 0 8px;">2. BioEmu2-style biomolecular dynamics — 4-panel foundation model</h3>
+          <p style="font-size: 12px; color: var(--text-muted, #9ca3af); margin: 0 0 12px;">A 2×2 panel grid mimicking the BioEmu2 infographic. Each panel runs a separate visualisation: (1) <strong>Structure prediction</strong> — single-chain 3D fold (alpha-helix backbone) with live pLDDT; (2) <strong>Large complexes</strong> — 4-chain multi-colour assembly; (3) <strong>Equilibrium sampling</strong> — Boltzmann-distributed conformational ensemble with live ΔG; (4) <strong>Dynamics</strong> — MD trajectory with motion trail + live RMSD (Å). All 4 panels rotate together; press Play to see them animate.</p>
+          <div id="bio-biodyn-container"></div>
+          <p style="font-size: 11px; color: var(--text-muted-2, #6b7280); margin-top: 8px;">Inspired by <strong>BioEmu2</strong> (Microsoft Research 2024+, MIT licence) — a foundation model for biomolecular structure, dynamics, and function. The viewer is procedural (no real MD trajectories); for production molecular-dynamics use OpenMM, GROMACS, or BioEmu's official weights.</p>
+        </div>
+
+        <!-- 3. Levels of Investigation framework -->
+        <div style="margin-top: 32px; padding: 20px; background: rgba(18,24,38,0.6); border: 1px solid var(--border, #1f2937); border-radius: 12px;">
+          <h3 style="font-size: 16px; color: #06b6d4; margin: 0 0 8px;">3. Levels of Investigation — modern AI tooling by depth</h3>
+          <p style="font-size: 12px; color: var(--text-muted, #9ca3af); margin: 0 0 16px;">Different clinical + research questions need different depths of analysis. The AIHPC Levels of Investigation framework maps each tier to the appropriate modern AI tooling + expected runtime + output.</p>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+            <!-- Tier 1: Quick triage -->
+            <div style="padding: 16px; background: rgba(6,182,212,0.08); border: 1px solid rgba(6,182,212,0.3); border-radius: 10px;">
+              <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #06b6d4;">Tier 1 — Quick triage</div>
+              <div style="font-size: 24px; font-weight: 800; color: #06b6d4; margin: 4px 0;">1-5 sec</div>
+              <p style="font-size: 11px; color: var(--text-muted, #9ca3af); margin: 0 0 8px;">Single-structure segmentation or quick triage. Goal: rule-in / rule-out for time-critical cases (stroke, pneumothorax, intracranial haemorrhage).</p>
+              <ul style="margin: 0; padding-left: 16px; font-size: 10px; color: var(--text-muted, #9ca3af); line-height: 1.6;">
+                <li><strong>Google Lens medical</strong> (3B on-device) — top-5 differential in 1.5s</li>
+                <li><strong>Viz.ai LVO</strong> — large-vessel-occlusion detection on NCCT</li>
+                <li><strong>Aidoc IH</strong> — intracranial haemorrhage triage</li>
+                <li><strong>CheXNet</strong> — CXR rule-out pneumonia / PTX</li>
+              </ul>
+              <p style="font-size: 10px; color: var(--text-muted-2, #6b7280); margin-top: 8px;">Output: 0/1 triage flag + 1-line reasoning.</p>
+            </div>
+            <!-- Tier 2: Detailed analysis -->
+            <div style="padding: 16px; background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.3); border-radius: 10px;">
+              <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8b5cf6;">Tier 2 — Detailed analysis</div>
+              <div style="font-size: 24px; font-weight: 800; color: #8b5cf6; margin: 4px 0;">1-5 min</div>
+              <p style="font-size: 11px; color: var(--text-muted, #9ca3af); margin: 0 0 8px;">Multi-organ segmentation, structure prediction, basic dynamics. Goal: surgical planning, RT planning, longitudinal tracking.</p>
+              <ul style="margin: 0; padding-left: 16px; font-size: 10px; color: var(--text-muted, #9ca3af); line-height: 1.6;">
+                <li><strong>TotalSegmentator</strong> (Wass 2023) — 117 organs / 6 s CT</li>
+                <li><strong>nnU-Net v2</strong> (Isensee 2021) — self-configuring pipeline</li>
+                <li><strong>MedSAM</strong> (Ma 2024) — generalist medical SAM</li>
+                <li><strong>AlphaFold 3</strong> (Abramson 2024) — complex structure + interaction</li>
+                <li><strong>ESM-3</strong> (Meta 2024) — protein sequence → function</li>
+              </ul>
+              <p style="font-size: 10px; color: var(--text-muted-2, #6b7280); margin-top: 8px;">Output: full segmentation mask + Dice / IoU + 3D volume + report.</p>
+            </div>
+            <!-- Tier 3: Research-grade -->
+            <div style="padding: 16px; background: rgba(236,72,153,0.08); border: 1px solid rgba(236,72,153,0.3); border-radius: 10px;">
+              <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #ec4899;">Tier 3 — Research-grade</div>
+              <div style="font-size: 24px; font-weight: 800; color: #ec4899; margin: 4px 0;">1-5 hr</div>
+              <p style="font-size: 11px; color: var(--text-muted, #9ca3af); margin: 0 0 8px;">Full conformational ensemble, long MD trajectory, multi-modal fusion. Goal: drug discovery, mechanism-of-action, paper-grade results.</p>
+              <ul style="margin: 0; padding-left: 16px; font-size: 10px; color: var(--text-muted, #9ca3af); line-height: 1.6;">
+                <li><strong>BioEmu2</strong> (MSR 2024) — Boltzmann-weighted ensemble</li>
+                <li><strong>OpenMM</strong> (Eastman 2017) — GPU-accelerated MD</li>
+                <li><strong>GROMACS</strong> (Páll 2020) — exascale MD</li>
+                <li><strong>MAISI</strong> (NVIDIA 2024) — synthetic CT/MRI</li>
+                <li><strong>MACE-MT-2</strong> (2026) — DFT-accurate materials</li>
+              </ul>
+              <p style="font-size: 10px; color: var(--text-muted-2, #6b7280); margin-top: 8px;">Output: paper-grade figures + raw ensembles (HDF5) + reproducibility receipt.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Recent research references -->
+        <div style="margin-top: 24px; padding: 16px; background: rgba(11,15,26,0.6); border-radius: 10px; border: 1px solid var(--border, #1f2937);">
+          <h3 style="margin: 0 0 8px; font-size: 13px; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.08em;">Recent research supporting this section</h3>
+          <ul style="margin: 0; padding-left: 18px; color: var(--text-muted, #9ca3af); font-size: 11px; line-height: 1.7;">
+            <li><strong style="color: var(--accent-2, #06b6d4);">TotalSegmentator</strong> — Wassermann et al. 2023, Radiology. 117 organs in 6 s/CT; nnU-Net backbone; Apache 2.0.</li>
+            <li><strong style="color: var(--accent-2, #06b6d4);">nnU-Net v2</strong> — Isensee et al. 2021, Nature Methods. Self-configuring pipeline; still SOTA backbone.</li>
+            <li><strong style="color: var(--accent-2, #06b6d4);">MedSAM</strong> — Ma et al. 2024, Nature Communications. 1.5M-image SAM fine-tune; generalist medical SAM.</li>
+            <li><strong style="color: var(--accent-2, #06b6d4);">BioEmu2</strong> — Microsoft Research (Jiménez Luna et al.) 2024+. Scalable emulation of biomolecular dynamics; MIT licence; foundation model for structure + dynamics + function.</li>
+            <li><strong style="color: var(--accent-2, #06b6d4);">AlphaFold 3</strong> — Abramson et al. 2024, Nature. Diffusion-based complex structure + interaction prediction.</li>
+            <li><strong style="color: var(--accent-2, #06b6d4);">ESM-3</strong> — Hayet et al. 2024. Meta FAIR; 7B-param protein language model; structure + function + design.</li>
+            <li><strong style="color: var(--accent-2, #06b6d4);">MACE-MT-2</strong> — NVIDIA + Caltech 2026. DFT-accurate materials ML potential; foundation for GNoME-2.</li>
+            <li><strong style="color: var(--accent-2, #06b6d4);">BioNeMo-2</strong> — NVIDIA 2026. 4B-param drug discovery FM; CASP GDT_TS 0.85.</li>
+            <li><strong style="color: var(--accent-2, #06b6d4);">RadFM</strong> — Wu et al. 2023. Radiology Foundation Model: 2D + 3D medical LLM.</li>
+            <li><strong style="color: var(--accent-2, #06b6d4);">Med-Gemini</strong> — Saab et al. 2024, Nature. Gemini multimodal for medical reasoning.</li>
+          </ul>
+          <p style="margin: 8px 0 0; color: var(--text-muted-2, #6b7280); font-size: 11px;">Pure client-side — all slices + backbones are procedurally generated. For production use TotalSegmentator, nnU-Net v2, MedSAM, BioEmu2 (open weights via HuggingFace), AlphaFold 3 (via server), ESM-3, OpenMM, GROMACS, MACE-MT-2.</p>
+        </div>
+      </section>
+
       <div class="cards">
         <a class="card" href="science/biology/molecular.html">
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M12 2a10 10 0 0 1 0 20M2 12a10 10 0 0 1 20 0"/></svg></div>
@@ -240,15 +330,51 @@
         });
         AIHPC_MEDIMG.play('bio-medimg-container');
         // Phase 41: register this viewer as a consumer of the scientific-uploader
-        // (so dropping a .dcm/.dicom file pushes the parsed DICOM into the viewer)
         AIHPC_MEDIMG.registerAsUploaderConsumer('bio-medimg-container');
-        // Mount the scientific-uploader widget under the medical-imaging lab
         if (window.AIHPC_UPLOADER) {
           AIHPC_UPLOADER.mount('bio-uploader-container');
         }
       });
+
+      // Phase 43: lazy-mount segmentation pipeline + biomolecular-dynamics viewers
+      // (only when scrolled into view, per the lazy-evaluation concept)
+      (function () {
+        var segLoaded = false, biodynLoaded = false;
+        var segEl = document.getElementById('bio-seg-container');
+        var biodynEl = document.getElementById('bio-biodyn-container');
+        function loadSeg() {
+          if (segLoaded || !window.AIHPC_SEG || !segEl) return;
+          segLoaded = true;
+          AIHPC_SEG.mount('bio-seg-container');
+          setTimeout(function () { AIHPC_SEG.play('bio-seg-container'); }, 200);
+        }
+        function loadBiodyn() {
+          if (biodynLoaded || !window.AIHPC_BIODYN || !biodynEl) return;
+          biodynLoaded = true;
+          AIHPC_BIODYN.mount('bio-biodyn-container');
+          setTimeout(function () { AIHPC_BIODYN.play('bio-biodyn-container'); }, 200);
+        }
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                if (e.target === segEl) { loadSeg(); }
+                if (e.target === biodynEl) { loadBiodyn(); }
+                io.unobserve(e.target);
+              }
+            });
+          }, { rootMargin: '200px' });
+          if (segEl) io.observe(segEl);
+          if (biodynEl) io.observe(biodynEl);
+        } else {
+          // Fallback
+          window.addEventListener('scroll', function () { loadSeg(); loadBiodyn(); }, { once: true, passive: true });
+        }
+      })();
     </script>
     <script src="medical-imaging.js"></script>
     <script src="scientific-uploader.js"></script>
+    <script src="segmentation-pipeline.js" defer></script>
+    <script src="biomolecular-dynamics.js" defer></script>
   </body>
 </html>

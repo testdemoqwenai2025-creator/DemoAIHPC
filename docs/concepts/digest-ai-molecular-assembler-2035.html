@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Futuristic Vision (2035): AI molecular assembler — atomically precise manufacturing — AIHPC Advanced auto-generated concept card (digest Issue #10)." />
+    <title>Futuristic Vision (2035): AI molecular assembler — atomically precise manufacturing — AIHPC Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.1), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(196,181,253,0.2); }
+      .lead { font-size: 17px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .abstract p { font-size: 14px; color: var(--text-muted); margin: 0 0 10px; }
+      .dataset-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin: 16px 0 32px; }
+      .dataset-card .ds-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-3); margin-bottom: 8px; }
+      .dataset-card .ds-row { display: grid; grid-template-columns: 80px 1fr; gap: 8px; font-size: 12px; color: var(--text-muted); padding: 2px 0; }
+      .dataset-card .ds-row .k { color: var(--text-muted-2); font-weight: 600; }
+      .dataset-card .ds-row .v { color: var(--text); }
+      .dataset-card .ds-row .v a { color: var(--accent-2); text-decoration: none; word-break: break-all; }
+      .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); margin-bottom: 16px; }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px 0; }
+      .demo-tab-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, Consolas, monospace; }
+      .meta a { color: var(--text); text-decoration: none; }
+      body.light { background: #fafafa; color: #18181b; }
+      body.light .dataset-card, body.light .derivation-step, body.light .stats-grid .stat, body.light .report-block, body.light pre.code-block { background: white; border-color: #e5e7eb; }
+      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .abstract p, body.light .summary-block ul, body.light .meta, body.light .crumbs { color: #4b5563; }
+      body.light .ribbon-btn-primary { color: white; }
+
+    </style>
+    <script src="../subscribe-gate.js"></script>
+    <script src="../digest-parsers.js"></script>
+    <script src="../animated-derivation.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">📊 Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="lazy-evaluation.html">Lazy Evaluation as UX</a><a href="provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../concepts.html">Concept Cards</a> / <a href="../digest.html">Weekly Digest Issue #10</a> / Chemistry - Atomically Precise Manufacturing (Futuristic Vision)</p>
+      <span class="tag">🚀 Futuristic Vision · Auto-generated · Issue #10</span>
+      <h1>Futuristic Vision (2035): AI molecular assembler — atomically precise manufacturing</h1>
+      <p class="lead">AIHPC Editorial Board - extrapolated from BioEmu2, AlphaProteo, programmable enzymes (2024-2032) · AIHPC Futuristic Vision · 2035-Q3 (extrapolated)</p>
+
+      <h2>Abstract</h2>
+      <div class="abstract">
+        <p>This is a futuristic vision, not a real publication. We extrapolate from BioEmu2 (2024), AlphaProteo v3 (2026), programmable enzymes (2032), and STM-based atom placement (2030) to predict that by Q3 2035, AI-driven molecular assemblers will enable atomically precise manufacturing — building any molecule atom-by-atom from a digital spec.</p>
+        <p>The vision: an AI &#x27;molecular compiler&#x27; (MC v5) takes a target structure (PDB, SDF, or arbitrary 3D layout) and produces a step-by-step atomic-placement plan that a scanning tunnelling microscope (STM) array executes. The compiler chooses reagent molecules, designs the STM path, predicts failure modes, and self-corrects via in-situ AFM verification.</p>
+        <p>By 2035, 4 commercial assembler platforms are operational (IBM Assembler-1, Zyvex-3, Oxford Instruments APM, Hitachi AtomFab). Throughput: 10k atoms/sec (vs 1 atom/sec in 2030).</p>
+      </div>
+      <div class="dataset-card">
+        <div class="ds-title">📁 Dataset — accompanying open data</div>
+        <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic molecular-compiler library (1000 targets × compiled plans)</span></div>
+        <div class="ds-row"><span class="k">Format</span><span class="v">PDB + JSON + AFM traces</span></div>
+        <div class="ds-row"><span class="k">Size</span><span class="v">12 TB nationally</span></div>
+        <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.molecular-assembler.org/2035" target="_blank" rel="noopener">https://www.molecular-assembler.org/2035</a></span></div>
+      </div>
+      <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 31</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a target molecule to receive a compiled assembly plan.</div>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+            📂 Upload .pdb,.sdf,.json
+            <input type="file" id="etl-input-ai-molecular-assembler-2035" accept=".pdb,.sdf,.json" data-article-id="ai-molecular-assembler-2035" style="display:none;" />
+          </label>
+          <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+        </div>
+        <div id="etl-report-ai-molecular-assembler-2035" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+      </div>
+      <section style="margin: 24px 0; padding: 14px 16px; background: rgba(11,15,26,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; backdrop-filter: blur(12px);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#06b6d4;">📊 N-D properties strip</span>
+          <span style="font-size:10px;color:var(--text-muted-2, #6b7280);">Phase 40 · auto-generated · 13 properties</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;overflow-x:auto;"><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Issue</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">10</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Source</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">AIHPC Futuristic Vision</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Published</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">2035-Q3 (extrapolated)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Authors</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">AIHPC Editorial Board - extrap</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Dataset</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Synthetic molecular-compiler l</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Format</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">PDB + JSON + AFM traces</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Size</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">12 TB nationally</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Throughput</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">10k atoms/sec (2030: 1)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">AFM pass rate</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">94% (first try)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Re-plan iterations</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">≤ 3 (99.2% complete)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Commercial platforms</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">4 (IBM, Zyvex, Oxford, Hitachi)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Temperature</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">&lt; 5 K (cryogenic)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Year</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">2035</div></div></div>
+        <p style="font-size:10px;color:var(--text-muted-2, #6b7280);margin:8px 0 0;">Parallel-coordinates strip — read left-to-right across the article's metadata. Use for cross-article comparison (e.g. for two concept cards, the strip shows dataset sizes / publication dates at a glance).</p>
+      </section>
+      <h2>Demo — molecular_assembler(target_pdb, mc_v5, stm_array) - 5-step atomically precise manufacturing</h2>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">5-step: target parse, atomic placement plan, STM path planning, in-situ AFM verification, self-correction.</p>
+      <h2>Math &rarr; Code derivation</h2>
+      <div class="math-panel" style="padding: 14px; background: rgba(6,182,212,0.05); border-left: 3px solid var(--accent-2); border-radius: 8px; margin-bottom: 16px;">
+        <div class="math-eq" style="font-family: 'Cambria Math', Georgia, serif; font-size: 16px; color: var(--accent-2); margin-bottom: 6px;">plan = MC_v5(target);  structure = STM_array.execute(plan);  verified = AFM_verify(structure, target)</div>
+        <div class="math-plain" style="font-size: 13px; color: var(--text-muted);">The molecular compiler produces a placement plan; the STM array executes it; AFM verifies; if mismatch, the compiler re-plans the failed region.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 1: Target parse</strong>
+        <div class="step-math">target = parse(target_pdb);  atoms = target.atoms;  bonds = target.bonds</div>
+        <div class="step-explain">Parse the target molecule. Identify each atom + bond that needs to be placed.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Atomic placement plan</strong>
+        <div class="step-math">plan = MC_v5(target, constraints={T&lt;5K, vacuum, STM_array_geometry})</div>
+        <div class="step-explain">MC v5 produces an ordered placement plan: which atom goes where, in what order, with what reagent molecule. Considers constraints: temperature (5K), vacuum level, STM array geometry.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: STM path planning</strong>
+        <div class="step-math">paths = plan_stm_trajectory(plan, array_geometry, collision_avoidance=True)</div>
+        <div class="step-explain">Plan the physical trajectory each STM tip follows to place atoms. Collision-avoidance between tips is critical for throughput.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: In-situ AFM verification</strong>
+        <div class="step-math">verified = AFM_verify(structure, target, tol=0.5 Å)</div>
+        <div class="step-explain">After each batch of 100 atoms, AFM verifies the structure matches the target within 0.5 Å RMSD. 94% of batches pass on first try.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Self-correction</strong>
+        <div class="step-math">if !verified: re_plan(region, omit=failed_atoms)</div>
+        <div class="step-explain">When a batch fails AFM verification, MC v5 re-plans that region only — omitting the failed atoms and finding an alternative placement order. 99.2% of structures complete within 3 re-plan iterations.</div>
+      </div>
+      <h2>Polyglot code (6 languages)</h2>
+      <div class="code-panel">
+        <div class="lang-toggle">
+          <button data-lang="python" class="active">Python</button>
+          <button data-lang="rust">Rust</button>
+          <button data-lang="go">Go</button>
+          <button data-lang="c">C</button>
+          <button data-lang="elixir">Elixir</button>
+          <button data-lang="scala">Scala</button>
+        </div>
+        <pre class="code-block" id="code-block-ai-molecular-assembler-2035"></pre>
+      </div>
+      <h2>Observe</h2>
+      <div class="demo-tabs">
+        <button class="active" data-tab="stats">Stats</button>
+        <button data-tab="reports">Reports</button>
+        <button data-tab="graphs">Graphs</button>
+        <button data-tab="summary">Summary</button>
+        <button data-tab="etl">ETL Report</button>
+      </div>
+      <div class="demo-tab-content active" data-tab="stats">
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="l">Throughput</div>
+            <div class="v">10k atoms/sec (2030: 1)</div>
+          </div>
+          <div class="stat">
+            <div class="l">AFM pass rate</div>
+            <div class="v">94% (first try)</div>
+          </div>
+          <div class="stat">
+            <div class="l">Re-plan iterations</div>
+            <div class="v">≤ 3 (99.2% complete)</div>
+          </div>
+          <div class="stat">
+            <div class="l">Commercial platforms</div>
+            <div class="v">4 (IBM, Zyvex, Oxford, Hitachi)</div>
+          </div>
+          <div class="stat">
+            <div class="l">Temperature</div>
+            <div class="v">&lt; 5 K (cryogenic)</div>
+          </div>
+          <div class="stat">
+            <div class="l">Year</div>
+            <div class="v">2035</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-tab-content" data-tab="reports">
+        <div class="report-block">2035 vision: AI molecular assembler enables atomically precise manufacturing. MC v5 compiles a target molecule to an atomic-placement plan; STM array executes at 10k atoms/sec; AFM verifies within 0.5 Å RMSD. 4 commercial platforms operational. Throughput 10000x better than 2030&#x27;s 1 atom/sec.</div>
+      </div>
+      <div class="demo-tab-content" data-tab="graphs">
+        <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><path d="M 20 175 Q 100 170 200 130 Q 280 80 380 30" stroke="#f59e0b" stroke-width="2" fill="none"/><text x="50" y="170" font-size="9" fill="#f59e0b" font-family="ui-monospace">2030: 1 at/s</text><text x="350" y="25" font-size="9" fill="#f59e0b" font-family="ui-monospace">2035: 10k at/s</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">AI molecular assembler throughput (atoms/sec)</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">atoms/sec</text></svg></div>
+      </div>
+      <div class="demo-tab-content" data-tab="summary">
+        <div class="summary-block"><ul>
+          <li>AI molecular assembler: atomically precise manufacturing (2035).</li>
+          <li>MC v5 compiles target → atomic-placement plan; STM array executes.</li>
+          <li>Throughput 10k atoms/sec (10000x better than 2030).</li>
+          <li>4 commercial platforms operational; AFM self-correction 99.2%.</li>
+        </ul></div>
+      </div>
+      <div class="demo-tab-content" data-tab="etl">
+        <div class="report-block" id="etl-result-ai-molecular-assembler-2035" style="min-height: 60px;">
+          <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+        </div>
+      </div>
+      <h2>🎬 Animated derivation clip</h2>
+      <div class="anim-container" style="padding: 20px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px); margin: 24px 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2, #06b6d4);">Phase 28 — animated Math→Code derivation</div>
+          <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">▶ Play</button>
+            <button class="anim-pause" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⏸ Pause</button>
+            <button class="anim-replay" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">↺ Replay</button>
+            <button class="anim-record" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⬇ Record WebM</button>
+            <button class="anim-share" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">🔗 Share</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="concept-ai-molecular-assembler-2035" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;"></canvas>
+      </div>
+      <script>
+        // Register the derivation for this concept card
+        AIHPC_ANIM.register('concept-ai-molecular-assembler-2035', {
+          title: "Futuristic Vision (2035): AI molecular assembler \u2014 atomically precise manufacturing",
+          steps: [{"title": "Step 1: Target parse", "math": "target = parse(target_pdb);  atoms = target.atoms;  bonds = target.bonds", "explain": "Parse the target molecule. Identify each atom + bond that needs to be placed."}, {"title": "Step 2: Atomic placement plan", "math": "plan = MC_v5(target, constraints={T<5K, vacuum, STM_array_geometry})", "explain": "MC v5 produces an ordered placement plan: which atom goes where, in what order, with what reagent molecule. Considers constraints: temperature (5K), vacuum level, STM array geometry."}, {"title": "Step 3: STM path planning", "math": "paths = plan_stm_trajectory(plan, array_geometry, collision_avoidance=True)", "explain": "Plan the physical trajectory each STM tip follows to place atoms. Collision-avoidance between tips is critical for throughput."}, {"title": "Step 4: In-situ AFM verification", "math": "verified = AFM_verify(structure, target, tol=0.5 \u00c5)", "explain": "After each batch of 100 atoms, AFM verifies the structure matches the target within 0.5 \u00c5 RMSD. 94% of batches pass on first try."}, {"title": "Step 5: Self-correction", "math": "if !verified: re_plan(region, omit=failed_atoms)", "explain": "When a batch fails AFM verification, MC v5 re-plans that region only \u2014 omitting the failed atoms and finding an alternative placement order. 99.2% of structures complete within 3 re-plan iterations."}],
+          duration: 12.0,
+        });
+        // CODE_BANK for the polyglot code panel
+        const CODE_BANK = {"python": "# plan = MC_v5(target); structure = STM_array.execute(plan); verified = AFM_verify(structure, target)\n# target -> PDB  plan -> ordered atom placements  STM -> scanning tunnelling microscope array\ndef molecular_assembler(target_pdb, mc_v5, stm_array):\n    target = parse(target_pdb)\n    plan = mc_v5.compile(target, constraints={'T':5, 'vacuum':True})\n    paths = stm_array.plan_trajectory(plan, collision_avoidance=True)\n    for batch in chunk(paths, 100):\n        stm_array.execute(batch)\n        if not afm_verify(stm_array.current_structure, target, tol=0.5):\n            plan = mc_v5.re_plan(target, omit=stm_array.failed_atoms)\n    return stm_array.current_structure", "rust": "fn molecular_assembler(target_pdb: &PDB, mc: &MCv5, stm: &STMArray) -> Structure {\n    let target = parse(target_pdb);\n    let mut plan = mc.compile(&target, Constraints { t: 5.0, vacuum: true });\n    let paths = stm.plan_trajectory(&plan, true);\n    for batch in paths.chunks(100) {\n        stm.execute(batch);\n        if !afm_verify(&stm.current_structure, &target, 0.5) {\n            plan = mc.re_plan(&target, &stm.failed_atoms);\n        }\n    }\n    stm.current_structure.clone()\n}", "go": "func MolecularAssembler(targetPDB *PDB, mc *MCv5, stm *STMArray) *Structure {\n\ttarget := Parse(targetPDB)\n\tplan := mc.Compile(target, Constraints{T: 5, Vacuum: true})\n\tpaths := stm.PlanTrajectory(plan, true)\n\tfor batch := range Chunks(paths, 100) {\n\t\tstm.Execute(batch)\n\t\tif !AFMVerify(stm.CurrentStructure, target, 0.5) {\n\t\t\tplan = mc.RePlan(target, stm.FailedAtoms)\n\t\t}\n\t}\n\treturn stm.CurrentStructure\n}", "c": "Structure* molecular_assembler(PDB* target_pdb, MCv5* mc, STMArray* stm) {\n    PDB* target = parse(target_pdb);\n    Plan* plan = mc_compile(mc, target, 5.0, 1);\n    Path* paths; int n_paths; stm_plan_trajectory(stm, plan, 1, &paths, &n_paths);\n    for (int i = 0; i < n_paths; i += 100) {\n        int batch_n = (n_paths - i < 100) ? n_paths - i : 100;\n        stm_execute(stm, paths + i, batch_n);\n        if (!afm_verify(stm->current_structure, target, 0.5)) {\n            plan = mc_re_plan(mc, target, stm->failed_atoms);\n            // re-plan trajectories for the failed region\n            stm_plan_trajectory(stm, plan, 1, &paths, &n_paths);\n            i = -100;  // restart this region\n        }\n    }\n    return stm->current_structure;\n}", "elixir": "defmodule MolecularAssembler do\n  def run(target_pdb, mc, stm) do\n    target = parse(target_pdb)\n    plan = mc.compile(target, %{t: 5, vacuum: true})\n    paths = stm.plan_trajectory(plan, true)\n    Enum.reduce(Enum.chunk_every(paths, 100), plan, fn batch, current_plan ->\n      stm.execute(batch)\n      if afm_verify?(stm.current_structure, target, 0.5) do\n        current_plan\n      else\n        mc.re_plan(target, stm.failed_atoms)\n      end\n    end)\n    stm.current_structure\n  end\nend", "scala": "def molecularAssembler(targetPDB: PDB, mc: MCv5, stm: STMArray): Structure = {\n  val target = parse(targetPDB)\n  var plan = mc.compile(target, Constraints(5.0, true))\n  val paths = stm.planTrajectory(plan, true)\n  for (batch <- paths.grouped(100)) {\n    stm.execute(batch)\n    if (!afmVerify(stm.currentStructure, target, 0.5)) {\n      plan = mc.rePlan(target, stm.failedAtoms)\n    }\n  }\n  stm.currentStructure\n}"};
+        // Initial render: set Python code on page load
+        document.addEventListener('DOMContentLoaded', function () {
+          var block = document.getElementById('code-block-ai-molecular-assembler-2035');
+          if (block) block.textContent = CODE_BANK.python || '';
+          // Wire up language toggles
+          document.querySelectorAll('.code-panel .lang-toggle button').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var panel = btn.closest('.code-panel');
+              panel.querySelectorAll('.lang-toggle button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+              var lang = btn.dataset.lang;
+              var block = panel.querySelector('pre.code-block');
+              if (block) block.textContent = CODE_BANK[lang] || '// code not available for ' + lang;
+            });
+          });
+          // Wire up observe tabs
+          document.querySelectorAll('.demo-tabs button').forEach(function (tab) {
+            tab.addEventListener('click', function () {
+              var target = tab.dataset.tab;
+              document.querySelectorAll('.demo-tabs button').forEach(function (t) { t.classList.toggle('active', t === tab); });
+              document.querySelectorAll('.demo-tab-content').forEach(function (c) { c.classList.toggle('active', c.dataset.tab === target); });
+            });
+          });
+          // Init the animated-derivation canvas
+          AIHPC_ANIM.init();
+          // Phase 31: wire ETL file inputs to handleETLUpload
+          document.querySelectorAll('input[type="file"][data-article-id]').forEach(function (inp) {
+            inp.addEventListener('change', function (e) {
+              var articleId = inp.dataset.articleId;
+              var file = e.target.files[0];
+              if (!file) return;
+              if (window.handleETLUpload) {
+                var maxMb = parseInt(inp.dataset.maxMb || '50', 10);
+                window.handleETLUpload(articleId, file, { max_mb: maxMb });
+              }
+            });
+          });
+        });
+      </script>
+      <div class="meta" style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Auto-generated concept card from <a href="../digest.html">Weekly Digest Issue #10</a> (article id: <code>ai-molecular-assembler-2035</code>). Generated by <code>scripts/gen-concept-cards.py</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      // Particle background
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d');
+        var W, H, P = [];
+        var N = 50, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; }
+        r();
+        addEventListener('resize', r);
+        for (var i = 0; i < N; i++) {
+          P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        }
+        function s() {
+          x.clearRect(0, 0, W, H);
+          for (var i = 0; i < N; i++) {
+            for (var j = i+1; j < N; j++) {
+              var d = Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y);
+              if (d < 100) {
+                x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')';
+                x.lineWidth = .5;
+                x.beginPath();
+                x.moveTo(P[i].x, P[i].y);
+                x.lineTo(P[j].x, P[j].y);
+                x.stroke();
+              }
+            }
+          }
+          for (var p of P) {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+            x.fillStyle = p.c; x.globalAlpha = .4;
+            x.beginPath();
+            x.arc(p.x, p.y, p.r, 0, 6.28);
+            x.fill();
+          }
+          x.globalAlpha = 1;
+          requestAnimationFrame(s);
+        }
+        s();
+      })();
+
+      // ---- Ribbon theme toggle ----
+      (function () {
+        var KEY = 'aihpc-theme';
+        var b = document.body, r = document.querySelector('.ribbon'), i = document.getElementById('ribbon-theme-icon');
+        function a(t) {
+          if (t === 'light') { b.classList.add('light'); r && r.classList.add('light'); if (i) i.textContent = '☀'; }
+          else { b.classList.remove('light'); r && r.classList.remove('light'); if (i) i.textContent = '🌙'; }
+        }
+        var d = 'dark';
+        try { var s = localStorage.getItem(KEY); if (s === 'light' || s === 'dark') d = s; else if (matchMedia('(prefers-color-scheme:light)').matches) d = 'light'; } catch (e) {}
+        a(d);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () { var n = b.classList.contains('light') ? 'dark' : 'light'; a(n); try { localStorage.setItem(KEY, n); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>
