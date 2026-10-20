@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Loss Landscape (Cross-Section) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability." />
+    <title>Loss Landscape (Cross-Section) — AIHPC ML Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .container { max-width: 1000px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .math-panel .math-eq { font-family: "Cambria Math", Georgia, serif; font-size: 17px; color: var(--accent-2); padding: 10px 14px; background: rgba(6,182,212,0.05); border-radius: 8px; border-left: 3px solid var(--accent-2); margin: 8px 0 12px; }
+      .math-panel .math-plain { font-size: 13px; color: var(--text-muted); }
+      .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, monospace; }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); margin-bottom: 16px; }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px 0; }
+      .demo-tab-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .data-table-container { overflow-x: auto; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+      .data-table-container table { width: 100%; border-collapse: collapse; }
+      .data-table-container th { padding: 6px 10px; text-align: left; font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+      .data-table-container td { padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: "SF Mono", Menlo, monospace; }
+      .data-table-hidden { display: none; }
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+    </style>
+    <script src="../animated-derivation.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-ml.html">Machine Learning</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="lazy-evaluation.html">Lazy Evaluation as UX</a><a href="provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../science-ml.html">ML Hub</a> / Loss Landscape</p>
+      <span class="tag">ML Concept Card · Loss Landscape</span>
+      <h1>Loss Landscape (Cross-Section)</h1>
+      <p class="lead">A 1D cross-section of the loss landscape — fix a starting point theta_0 and a direction vector, vary a scalar alpha, plot L. Cross-sections are the standard tool for visualising sharp vs flat minima: a sharp minimum has steep walls (high curvature), a flat minimum has shallow walls. Flat minima generalise better (Keskar et al. 2017) — they&#x27;re more robust to small parameter perturbations.</p>
+
+      <h2>Math → Code</h2>
+      <div class="math-panel"><div class="math-eq">L(alpha) = L(theta_0 + alpha * direction)  — 1D slice along a direction</div></div>
+      <div class="derivation-step"><strong>Step 1</strong><div class="step-math">direction = random unit vector or Hessian eigenvector</div><div class="step-explain">Pick a direction in parameter space. Random directions give a generic slice; Hessian eigenvectors (sorted by eigenvalue) give the directions of maximum/minimum curvature — most informative for sharp vs flat analysis.</div></div>
+      <div class="derivation-step"><strong>Step 2</strong><div class="step-math">theta(alpha) = theta_0 + alpha * direction</div><div class="step-explain">Move along the direction vector by step alpha. Plot L(theta(alpha)) as a function of alpha. The shape of this curve tells us about the local geometry around theta_0.</div></div>
+      <div class="derivation-step"><strong>Step 3</strong><div class="step-math">kappa = L&#x27;&#x27;(0) ≈ (L(h) - 2*L(0) + L(-h)) / h^2</div><div class="step-explain">Finite-difference second derivative at theta_0. High curvature = sharp minimum; low curvature = flat minimum. The Hessian&#x27;s top eigenvalue is the maximum curvature over all directions.</div></div>
+      <div class="derivation-step"><strong>Step 4</strong><div class="step-math">Sharp: deep + narrow;  Flat: shallow + wide</div><div class="step-explain">Keskar et al. (2017) showed that sharp minima (high curvature) correlate with poor generalisation; flat minima (low curvature) correlate with good generalisation. Large-batch SGD finds sharp minima; small-batch SGD finds flat minima — the noise escapes sharp basins.</div></div>
+      <div class="derivation-step"><strong>Step 5</strong><div class="step-math">Flat = robust to perturbation = better test loss</div><div class="step-explain">A flat minimum is robust to small parameter changes (e.g., the test set perturbs the loss landscape slightly). A sharp minimum is sensitive — small parameter shifts drastically change the loss. This is why SGD with small batches tends to generalise better than large-batch methods.</div></div>
+      <h2>Polyglot Code (6 languages)</h2>
+      <div class="code-panel"><div class="lang-toggle">
+        <button data-lang="python" class="active">Python</button>
+        <button data-lang="rust">Rust</button>
+        <button data-lang="go">Go</button>
+        <button data-lang="c">C</button>
+        <button data-lang="elixir">Elixir</button>
+        <button data-lang="scala">Scala</button>
+      </div><pre class="code-block" id="code-block-loss-landscape-cross-section"></pre></div>
+      <h2>Observe</h2>
+      <div class="demo-tabs">
+        <button class="active" data-tab="stats">Stats</button>
+        <button data-tab="reports">Reports</button>
+        <button data-tab="graphs">Graphs</button>
+        <button data-tab="summary">Summary</button>
+        <button data-tab="data">Data</button>
+      </div>
+      <div class="demo-tab-content active" data-tab="stats"><div class="stats-grid">
+        <div class="stat"><div class="l">Type</div><div class="v">1D slice</div></div>
+        <div class="stat"><div class="l">Direction</div><div class="v">Random or Hessian eigenvec</div></div>
+        <div class="stat"><div class="l">Curvature</div><div class="v">L&#x27;&#x27;(0) via finite diff</div></div>
+        <div class="stat"><div class="l">Sharp vs Flat</div><div class="v">Keskar 2017</div></div>
+        <div class="stat"><div class="l">Generalisation</div><div class="v">Flat &gt; Sharp</div></div>
+        <div class="stat"><div class="l">Batch effect</div><div class="v">Small batch → flat</div></div>
+      </div></div>
+      <div class="demo-tab-content" data-tab="reports"><div class="report-block">A 1D cross-section of the loss landscape — fix theta_0, vary a scalar alpha along a direction, plot L(theta_0 + alpha*direction). The shape of this curve tells us about sharp vs flat minima. Keskar et al. (2017) showed that sharp minima (high curvature) generalise worse than flat minima. Small-batch SGD noise escapes sharp basins → finds flat minima → better test loss. This is why practitioners using large batches need explicit regularisation (weight decay, label smoothing) — to compensate for losing the natural noise that finds flat minima.</div></div>
+      <div class="demo-tab-content" data-tab="graphs"><div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><path d="M 20 60 L 80 30 L 140 90 L 200 170 L 260 90 L 320 30 L 380 60" stroke="#06b6d4" stroke-width="2" fill="none"/><path d="M 20 100 L 80 80 L 140 90 L 200 130 L 260 90 L 320 80 L 380 100" stroke="#ec4899" stroke-width="2" fill="none" stroke-dasharray="3 3"/><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">alpha (step along direction)</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">loss</text><text x="280" y="30" font-size="9" fill="#06b6d4" font-family="ui-monospace">sharp (k=85)</text><text x="280" y="80" font-size="9" fill="#ec4899" font-family="ui-monospace">flat (k=12)</text></svg></div></div>
+      <div class="demo-tab-content" data-tab="summary"><div class="summary-block"><ul>
+        <li>Cross-section = L(theta_0 + alpha * direction) — 1D slice of high-dim loss.</li>
+        <li>Curvature = L&#x27;&#x27;(0) via finite differences — sharp (high) vs flat (low).</li>
+        <li>Flat minima generalise better than sharp (Keskar et al. 2017).</li>
+        <li>Small-batch SGD noise escapes sharp basins — finds flat minima.</li>
+      </ul></div></div>
+      <div class="demo-tab-content" data-tab="data">
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Sharp vs flat minimum cross-sections — flat is 7x wider, ~7x more robust to parameter perturbation</p>
+        <div class="data-table-container"><table class="data-table"><thead><tr><th>[&#x27;a&#x27;, &#x27;l&#x27;, &#x27;p&#x27;, &#x27;h&#x27;, &#x27;a&#x27;]</th><th>[&#x27;L&#x27;, &#x27; &#x27;, &#x27;(&#x27;, &#x27;s&#x27;, &#x27;h&#x27;, &#x27;a&#x27;, &#x27;r&#x27;, &#x27;p&#x27;, &#x27;)&#x27;]</th><th>[&#x27;L&#x27;, &#x27; &#x27;, &#x27;(&#x27;, &#x27;f&#x27;, &#x27;l&#x27;, &#x27;a&#x27;, &#x27;t&#x27;, &#x27;)&#x27;]</th><th>[&#x27;s&#x27;, &#x27;h&#x27;, &#x27;a&#x27;, &#x27;r&#x27;, &#x27;p&#x27;, &#x27; &#x27;, &#x27;k&#x27;]</th><th>[&#x27;f&#x27;, &#x27;l&#x27;, &#x27;a&#x27;, &#x27;t&#x27;, &#x27; &#x27;, &#x27;k&#x27;]</th></tr></thead><tbody><tr class="data-table-row"><td>-0.10</td><td>0.85</td><td>0.12</td><td>85</td><td>12</td></tr>
+<tr class="data-table-row"><td>-0.05</td><td>0.21</td><td>0.03</td><td>85</td><td>12</td></tr>
+<tr class="data-table-row"><td>0.00</td><td>0.00</td><td>0.00</td><td>85</td><td>12</td></tr>
+<tr class="data-table-row"><td>0.05</td><td>0.21</td><td>0.03</td><td>85</td><td>12</td></tr>
+<tr class="data-table-row"><td>0.10</td><td>0.85</td><td>0.12</td><td>85</td><td>12</td></tr></tbody></table>
+        </div></div>
+      <h2>Animated Derivation Clip</h2>
+      <div class="anim-container" style="padding:20px;background:rgba(18,24,38,0.6);border:1px solid rgba(139,92,246,0.25);border-radius:16px;margin:24px 0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#06b6d4;">Phase 28</span>
+          <div style="display:flex;gap:4px;">
+            <button class="anim-play" style="background:linear-gradient(90deg,#8b5cf6,#06b6d4);border:none;color:white;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;">Play</button>
+            <button class="anim-replay" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">Replay</button>
+            <button class="anim-record" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">WebM</button>
+            <button class="anim-share" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">Share</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="ml-cc-loss-landscape-cross-section" style="display:block;max-width:100%;height:auto;border-radius:6px;background:#0b0f1a;"></canvas>
+      </div>
+      <div class="meta">
+        <p>Auto-generated ML concept card from <a href="../science-ml.html">science-ml.html</a> (demo id: <code>loss-landscape-cross-section</code>). Generated by <code>scripts/gen-ml-concept-cards.py</code>.</p>
+      </div>
+    </div>
+    <script>
+      var CODE_BANK = {"python": "# L(alpha) = L(theta_0 + alpha * direction)\n# alpha -> scalar step  direction -> unit vector in parameter space\nimport numpy as np\ndef loss_cross_section(theta0, direction, alpha, L):\n    return L(theta0 + alpha * direction)\ndef curvature_at(theta0, direction, L, h=1e-3):\n    L0 = L(theta0)\n    Lp = L(theta0 + h*direction)\n    Lm = L(theta0 - h*direction)\n    return (Lp - 2*L0 + Lm) / (h*h)", "rust": "fn loss_cross<F: Fn(f64) -> f64>(alpha: f64, l: F) -> f64 { l(alpha) }\nfn curvature<F: Fn(f64) -> f64>(l: &F, h: f64) -> f64 {\n    let l0 = l(0.0); let lp = l(h); let lm = l(-h);\n    (lp - 2.0*l0 + lm) / (h*h)\n}", "go": "func Curvature(L func(float64) float64, h float64) float64 {\n\tl0 := L(0); lp := L(h); lm := L(-h)\n\treturn (lp - 2*l0 + lm) / (h * h)\n}", "c": "typedef double (*LossFn)(double);\ndouble curvature(LossFn L, double h) {\n    double l0 = L(0); double lp = L(h); double lm = L(-h);\n    return (lp - 2*l0 + lm) / (h*h);\n}", "elixir": "defmodule CS do\n  def curvature(l, h) do\n    l0 = l.(0.0); lp = l.(h); lm = l.(-h)\n    (lp - 2*l0 + lm) / (h*h)\n  end\nend", "scala": "def curvature(L: Double => Double, h: Double = 1e-3): Double = {\n  val l0 = L(0); val lp = L(h); val lm = L(-h)\n  (lp - 2*l0 + lm) / (h*h)\n}"};
+      AIHPC_ANIM.register('ml-cc-loss-landscape-cross-section', {
+        title: "Loss Landscape (Cross-Section)",
+        steps: [{"title": "Step 1: Choose direction", "math": "direction = random unit vector or Hessian eigenvector", "explain": "Pick a direction in parameter space. Random directions give a generic slice; Hessian eigenvectors (sorted by eigenvalue) give the directions of maximum/minimum curvature \u2014 most informative for sharp vs flat analysis."}, {"title": "Step 2: Vary alpha", "math": "theta(alpha) = theta_0 + alpha * direction", "explain": "Move along the direction vector by step alpha. Plot L(theta(alpha)) as a function of alpha. The shape of this curve tells us about the local geometry around theta_0."}, {"title": "Step 3: Measure curvature", "math": "kappa = L''(0) \u2248 (L(h) - 2*L(0) + L(-h)) / h^2", "explain": "Finite-difference second derivative at theta_0. High curvature = sharp minimum; low curvature = flat minimum. The Hessian's top eigenvalue is the maximum curvature over all directions."}, {"title": "Step 4: Compare minima", "math": "Sharp: deep + narrow;  Flat: shallow + wide", "explain": "Keskar et al. (2017) showed that sharp minima (high curvature) correlate with poor generalisation; flat minima (low curvature) correlate with good generalisation. Large-batch SGD finds sharp minima; small-batch SGD finds flat minima \u2014 the noise escapes sharp basins."}, {"title": "Step 5: Generalisation principle", "math": "Flat = robust to perturbation = better test loss", "explain": "A flat minimum is robust to small parameter changes (e.g., the test set perturbs the loss landscape slightly). A sharp minimum is sensitive \u2014 small parameter shifts drastically change the loss. This is why SGD with small batches tends to generalise better than large-batch methods."}],
+        duration: 12.0,
+      });
+      function dataTableShowMore(btn) {
+        var table = btn.closest('.data-table-container').querySelector('.data-table');
+        var visible = parseInt(table.dataset.visibleRows || '5', 10);
+        var total = parseInt(table.dataset.totalRows || '0', 10);
+        var newVisible = Math.min(total, visible + 10);
+        table.querySelectorAll('.data-table-row').forEach(function(r, i) { if (i < newVisible) r.classList.remove('data-table-hidden'); });
+        table.dataset.visibleRows = newVisible;
+        var remaining = total - newVisible;
+        if (remaining > 0) btn.textContent = 'Show more (' + remaining + ' hidden)';
+        else { btn.textContent = 'All ' + total + ' rows shown'; btn.disabled = true; btn.style.opacity = '0.5'; }
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        var block = document.getElementById('code-block-loss-landscape-cross-section');
+        if (block) block.textContent = CODE_BANK.python || '';
+        document.querySelectorAll('.code-panel .lang-toggle button').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var panel = btn.closest('.code-panel');
+            panel.querySelectorAll('.lang-toggle button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+            var block = panel.querySelector('pre.code-block');
+            if (block) block.textContent = CODE_BANK[btn.dataset.lang] || '';
+          });
+        });
+        document.querySelectorAll('.demo-tabs button').forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            var target = tab.dataset.tab;
+            document.querySelectorAll('.demo-tabs button').forEach(function (t) { t.classList.toggle('active', t === tab); });
+            document.querySelectorAll('.demo-tab-content').forEach(function (c) { c.classList.toggle('active', c.dataset.tab === target); });
+          });
+        });
+        AIHPC_ANIM.init();
+      });
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d'); var W, H, P = []; var N = 50, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; } r(); addEventListener('resize', r);
+        for (var i = 0; i < N; i++) P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        function s() { x.clearRect(0,0,W,H); for (var i = 0; i < N; i++) { for (var j = i+1; j < N; j++) { var d = Math.hypot(P[i].x-P[j].x, P[i].y-P[j].y); if (d < 100) { x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')'; x.lineWidth = .5; x.beginPath(); x.moveTo(P[i].x, P[i].y); x.lineTo(P[j].x, P[j].y); x.stroke(); } } for (var p of P) { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = W; if (p.x > W) p.x = 0; if (p.y < 0) p.y = H; if (p.y > H) p.y = 0; x.fillStyle = p.c; x.globalAlpha = .4; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.28); x.fill(); } x.globalAlpha = 1; requestAnimationFrame(s); } } s();
+      })();
+      (function () {
+        var KEY = 'aihpc-theme'; var b = document.body, r = document.querySelector('.ribbon'), i = document.getElementById('ribbon-theme-icon');
+        function a(t) { if (t === 'light') { b.classList.add('light'); r && r.classList.add('light'); if (i) i.textContent = 'Sun'; } else { b.classList.remove('light'); r && r.classList.remove('light'); if (i) i.textContent = 'Moon'; } }
+        var d = 'dark'; try { var s = localStorage.getItem(KEY); if (s === 'light' || s === 'dark') d = s; } catch (e) {} a(d);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () { var n = b.classList.contains('light') ? 'dark' : 'light'; a(n); try { localStorage.setItem(KEY, n); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

@@ -126,12 +126,20 @@
               <div class="item"><span class="swatch" style="background:#8b5cf6"></span>AETHEL Suite</div>
               <div class="item"><span class="swatch" style="background:#ec4899"></span>concept card</div>
               <div class="item"><span class="swatch" style="background:#3b82f6"></span>science hub</div>
+              <div class="item"><span class="swatch" style="background:#fbbf24"></span>digest article</div>
+              <div class="item"><span class="swatch" style="background:#a3e635"></span>science sub-page</div>
+              <div class="item"><span class="swatch" style="background:#22d3ee"></span>ML demo</div>
+              <div class="item"><span class="swatch" style="background:#f472b6"></span>ML concept card</div>
             </div>
             <div class="graph-controls">
               <button class="btn" id="filter-all">All</button>
-              <button class="btn" id="filter-demo">Demos only</button>
-              <button class="btn" id="filter-paper">Papers only</button>
+              <button class="btn" id="filter-demo">Demos</button>
+              <button class="btn" id="filter-paper">Papers</button>
               <button class="btn" id="filter-aethel">AETHEL Suite</button>
+              <button class="btn" id="filter-digest">Digest</button>
+              <button class="btn" id="filter-science">Science sub-pages</button>
+              <button class="btn" id="filter-ml">ML demos</button>
+              <button class="btn" id="filter-mlconcept">ML concept cards</button>
               <button class="btn" id="reheat">↺ Reheat</button>
             </div>
           </div>
@@ -226,6 +234,93 @@
         { id: 'hub:chemistry', type: 'hub', label: 'Chemistry Hub', href: 'science-chemistry.html' },
         { id: 'hub:physics', type: 'hub', label: 'Physics Hub', href: 'science-physics.html' },
         { id: 'hub:maths', type: 'hub', label: 'Mathematics Hub', href: 'science-maths.html' },
+        // Phase 37: Bloch sphere quantum shorts
+        { id: 'bloch:shorts', type: 'demo', label: 'Bloch Sphere Quantum Shorts', href: 'bloch.html' },
+        { id: 'science:physics/quantum', type: 'science', label: 'Quantum Mechanics', href: 'science/physics/quantum.html', meta: 'physics' },
+        // Phase 37 extended nodes — Weekly Digest articles
+        { id: 'digest:alphafold-missense-evolve', type: 'digest', label: 'AlphaFold → AlphaMissense → AlphaEvolve', href: 'concepts/digest-alphafold-missense-evolve.html', meta: 'Issue #1' },
+        { id: 'digest:neurips-2025-svd-kmeans', type: 'digest', label: 'NeurIPS 2025 digest', href: 'concepts/digest-neurips-2025-svd-kmeans.html', meta: 'Issue #2' },
+        { id: 'digest:lean4-navier-stokes-proof', type: 'digest', label: 'Lean4 Navier-Stokes proof', href: 'concepts/digest-lean4-navier-stokes-proof.html', meta: 'Issue #3' },
+        { id: 'digest:lean4-sorting-network', type: 'digest', label: 'Lean4 sorting network', href: 'concepts/digest-lean4-sorting-network.html', meta: 'Issue #3' },
+        { id: 'digest:jwst-k2-18b-dms', type: 'digest', label: 'JWST K2-18b DMS discovery', href: 'concepts/digest-jwst-k2-18b-dms.html', meta: 'Issue #4' },
+        { id: 'digest:cfs-sparc', type: 'digest', label: 'CFS-SPARC fusion milestone', href: 'concepts/digest-cfs-sparc.html', meta: 'Issue #4' },
+        { id: 'digest:alphaproof-imo-2025-gold', type: 'digest', label: 'AlphaProof IMO 2025 gold', href: 'concepts/digest-alphaproof-imo-2025-gold.html', meta: 'Issue #5' },
+        { id: 'digest:glp1r-cryoem', type: 'digest', label: 'GLP1R cryo-EM structure', href: 'concepts/digest-glp1r-cryoem.html', meta: 'Issue #5' },
+        { id: 'digest:nanograv-25yr', type: 'digest', label: 'NANOGrav 25yr gravitational-wave background', href: 'concepts/digest-nanograv-25yr.html', meta: 'Issue #5' },
+        { id: 'digest:hprc-v11', type: 'digest', label: 'HPRC v11 human pangenome', href: 'concepts/digest-hprc-v11.html', meta: 'Issue #5' },
+        { id: 'digest:sherlock-diagnostics', type: 'digest', label: 'SHERLOCK diagnostics case study', href: 'concepts/digest-sherlock-diagnostics.html', meta: 'Issue #5' },
+        { id: 'digest:flash-attention-2', type: 'digest', label: 'FlashAttention-2 kernel', href: 'concepts/digest-flash-attention-2.html', meta: 'Issue #6' },
+        { id: 'digest:alphaevolve-v2', type: 'digest', label: 'AlphaEvolve v2 case studies', href: 'concepts/digest-alphaevolve-v2.html', meta: 'Issue #6' },
+        { id: 'digest:gemini-25-multimodal-science', type: 'digest', label: 'Gemini 2.5 multimodal science', href: 'concepts/digest-gemini-25-multimodal-science.html', meta: 'Issue #6' },
+        { id: 'digest:universal-cell-2030', type: 'digest', label: 'Universal cell 2030 vision', href: 'concepts/digest-universal-cell-2030.html', meta: 'Issue #6' },
+        { id: 'digest:ai-astronomical-survey-2028', type: 'digest', label: 'AI astronomical survey 2028', href: 'concepts/digest-ai-astronomical-survey-2028.html', meta: 'Issue #6' },
+        { id: 'digest:ai-protein-nanomachines-2028', type: 'digest', label: 'AI protein nanomachines 2028', href: 'concepts/digest-ai-protein-nanomachines-2028.html', meta: 'Issue #6' },
+        { id: 'digest:ai-quantum-circuits-2028', type: 'digest', label: 'AI quantum circuits 2028', href: 'concepts/digest-ai-quantum-circuits-2028.html', meta: 'Issue #6' },
+        { id: 'digest:fusion-data-centres-2029', type: 'digest', label: 'Fusion data centres 2029', href: 'concepts/digest-fusion-data-centres-2029.html', meta: 'Issue #6' },
+        { id: 'digest:bci-ai-decoding-2029', type: 'digest', label: 'BCI AI decoding 2029', href: 'concepts/digest-bci-ai-decoding-2029.html', meta: 'Issue #6' },
+        { id: 'digest:glp1r-biased-agonist', type: 'digest', label: 'GLP1R biased agonist', href: 'concepts/digest-glp1r-biased-agonist.html', meta: 'Issue #6' },
+        { id: 'digest:alphamissense-uk-biobank', type: 'digest', label: 'AlphaMissense UK Biobank', href: 'concepts/digest-alphamissense-uk-biobank.html', meta: 'Issue #6' },
+        // Science sub-pages (22)
+        { id: 'science:biology/evolutionary', type: 'science', label: 'Evolutionary Biology', href: 'science/biology/evolutionary.html', meta: 'biology' },
+        { id: 'science:biology/imaging', type: 'science', label: 'Bio-Imaging', href: 'science/biology/imaging.html', meta: 'biology' },
+        { id: 'science:biology/molecular', type: 'science', label: 'Molecular Biology', href: 'science/biology/molecular.html', meta: 'biology' },
+        { id: 'science:biology/proteins', type: 'science', label: 'Protein Science', href: 'science/biology/proteins.html', meta: 'biology' },
+        { id: 'science:biology/systems', type: 'science', label: 'Systems Biology', href: 'science/biology/systems.html', meta: 'biology' },
+        { id: 'science:chemistry/analytical', type: 'science', label: 'Analytical Chemistry', href: 'science/chemistry/analytical.html', meta: 'chemistry' },
+        { id: 'science:chemistry/computational', type: 'science', label: 'Computational Chemistry', href: 'science/chemistry/computational.html', meta: 'chemistry' },
+        { id: 'science:chemistry/inorganic', type: 'science', label: 'Inorganic Chemistry', href: 'science/chemistry/inorganic.html', meta: 'chemistry' },
+        { id: 'science:chemistry/materials', type: 'science', label: 'Materials Chemistry', href: 'science/chemistry/materials.html', meta: 'chemistry' },
+        { id: 'science:chemistry/organic', type: 'science', label: 'Organic Chemistry', href: 'science/chemistry/organic.html', meta: 'chemistry' },
+        { id: 'science:chemistry/physical', type: 'science', label: 'Physical Chemistry', href: 'science/chemistry/physical.html', meta: 'chemistry' },
+        { id: 'science:maths/algebra', type: 'science', label: 'Algebra', href: 'science/maths/algebra.html', meta: 'maths' },
+        { id: 'science:maths/analysis', type: 'science', label: 'Real & Functional Analysis', href: 'science/maths/analysis.html', meta: 'maths' },
+        { id: 'science:maths/geometry', type: 'science', label: 'Geometry & Topology', href: 'science/maths/geometry.html', meta: 'maths' },
+        { id: 'science:maths/number-theory', type: 'science', label: 'Number Theory', href: 'science/maths/number-theory.html', meta: 'maths' },
+        { id: 'science:maths/probability', type: 'science', label: 'Probability & Statistics', href: 'science/maths/probability.html', meta: 'maths' },
+        { id: 'science:physics/mechanics', type: 'science', label: 'Classical Mechanics', href: 'science/physics/mechanics.html', meta: 'physics' },
+        { id: 'science:physics/quantum', type: 'science', label: 'Quantum Mechanics', href: 'science/physics/quantum.html', meta: 'physics' },
+        { id: 'science:physics/sound', type: 'science', label: 'Acoustics', href: 'science/physics/sound.html', meta: 'physics' },
+        { id: 'science:physics/space', type: 'science', label: 'Astrophysics & Cosmology', href: 'science/physics/space.html', meta: 'physics' },
+        { id: 'science:physics/thermo', type: 'science', label: 'Thermodynamics', href: 'science/physics/thermo.html', meta: 'physics' },
+        { id: 'science:physics/waves', type: 'science', label: 'Waves & Optics', href: 'science/physics/waves.html', meta: 'physics' },
+        // Machine Learning demos (18)
+        { id: 'ml:mse', type: 'ml', label: 'MSE Loss', href: 'science-ml.html#demo-mse' },
+        { id: 'ml:mae', type: 'ml', label: 'MAE Loss', href: 'science-ml.html#demo-mae' },
+        { id: 'ml:binary-cross-entropy', type: 'ml', label: 'Binary Cross-Entropy', href: 'science-ml.html#demo-binary-cross-entropy' },
+        { id: 'ml:categorical-cross-entropy', type: 'ml', label: 'Categorical Cross-Entropy', href: 'science-ml.html#demo-categorical-cross-entropy' },
+        { id: 'ml:hinge-loss', type: 'ml', label: 'Hinge Loss', href: 'science-ml.html#demo-hinge-loss' },
+        { id: 'ml:log-cosh', type: 'ml', label: 'Log-Cosh Loss', href: 'science-ml.html#demo-log-cosh' },
+        { id: 'ml:huber-loss', type: 'ml', label: 'Huber Loss', href: 'science-ml.html#demo-huber-loss' },
+        { id: 'ml:kl-divergence', type: 'ml', label: 'KL Divergence', href: 'science-ml.html#demo-kl-divergence' },
+        { id: 'ml:cosine-similarity', type: 'ml', label: 'Cosine Similarity', href: 'science-ml.html#demo-cosine-similarity' },
+        { id: 'ml:relu', type: 'ml', label: 'ReLU Activation', href: 'science-ml.html#demo-relu' },
+        { id: 'ml:gelu', type: 'ml', label: 'GELU Activation', href: 'science-ml.html#demo-gelu' },
+        { id: 'ml:swiglu', type: 'ml', label: 'SwiGLU Activation', href: 'science-ml.html#demo-swiglu' },
+        { id: 'ml:sgd', type: 'ml', label: 'SGD Optimiser', href: 'science-ml.html#demo-sgd' },
+        { id: 'ml:adam', type: 'ml', label: 'Adam Optimiser', href: 'science-ml.html#demo-adam' },
+        { id: 'ml:adamw', type: 'ml', label: 'AdamW Optimiser', href: 'science-ml.html#demo-adamw' },
+        { id: 'ml:dropout', type: 'ml', label: 'Dropout', href: 'science-ml.html#demo-dropout' },
+        { id: 'ml:l1-l2-regularisation', type: 'ml', label: 'L1/L2 Regularisation', href: 'science-ml.html#demo-l1-l2-regularisation' },
+        { id: 'ml:batchnorm', type: 'ml', label: 'BatchNorm', href: 'science-ml.html#demo-batchnorm' },
+        // ML concept cards (18)
+        { id: 'ml-concept:mse', type: 'ml-concept', label: 'ML Card: MSE Loss', href: 'concepts/ml-mse.html' },
+        { id: 'ml-concept:mae', type: 'ml-concept', label: 'ML Card: MAE Loss', href: 'concepts/ml-mae.html' },
+        { id: 'ml-concept:binary-cross-entropy', type: 'ml-concept', label: 'ML Card: Binary Cross-Entropy', href: 'concepts/ml-binary-cross-entropy.html' },
+        { id: 'ml-concept:categorical-cross-entropy', type: 'ml-concept', label: 'ML Card: Categorical Cross-Entropy', href: 'concepts/ml-categorical-cross-entropy.html' },
+        { id: 'ml-concept:hinge-loss', type: 'ml-concept', label: 'ML Card: Hinge Loss', href: 'concepts/ml-hinge-loss.html' },
+        { id: 'ml-concept:log-cosh', type: 'ml-concept', label: 'ML Card: Log-Cosh Loss', href: 'concepts/ml-log-cosh.html' },
+        { id: 'ml-concept:huber-loss', type: 'ml-concept', label: 'ML Card: Huber Loss', href: 'concepts/ml-huber-loss.html' },
+        { id: 'ml-concept:kl-divergence', type: 'ml-concept', label: 'ML Card: KL Divergence', href: 'concepts/ml-kl-divergence.html' },
+        { id: 'ml-concept:cosine-similarity', type: 'ml-concept', label: 'ML Card: Cosine Similarity', href: 'concepts/ml-cosine-similarity.html' },
+        { id: 'ml-concept:relu', type: 'ml-concept', label: 'ML Card: ReLU Activation', href: 'concepts/ml-relu.html' },
+        { id: 'ml-concept:gelu', type: 'ml-concept', label: 'ML Card: GELU Activation', href: 'concepts/ml-gelu.html' },
+        { id: 'ml-concept:swiglu', type: 'ml-concept', label: 'ML Card: SwiGLU Activation', href: 'concepts/ml-swiglu.html' },
+        { id: 'ml-concept:sgd', type: 'ml-concept', label: 'ML Card: SGD Optimiser', href: 'concepts/ml-sgd.html' },
+        { id: 'ml-concept:adam', type: 'ml-concept', label: 'ML Card: Adam Optimiser', href: 'concepts/ml-adam.html' },
+        { id: 'ml-concept:adamw', type: 'ml-concept', label: 'ML Card: AdamW Optimiser', href: 'concepts/ml-adamw.html' },
+        { id: 'ml-concept:dropout', type: 'ml-concept', label: 'ML Card: Dropout', href: 'concepts/ml-dropout.html' },
+        { id: 'ml-concept:l1-l2-regularisation', type: 'ml-concept', label: 'ML Card: L1/L2 Regularisation', href: 'concepts/ml-l1-l2-regularisation.html' },
+        { id: 'ml-concept:batchnorm', type: 'ml-concept', label: 'ML Card: BatchNorm', href: 'concepts/ml-batchnorm.html' },
       ];
       const EDGES = [
         // demo uses dataset
@@ -269,20 +364,94 @@
         ['aethel:connectors-hub', 'aethel:connector', 'part-of'],
         ['aethel:query', 'aethel:knowledge-graph', 'queries'],
         ['aethel:workflows', 'aethel:connector', 'orchestrates'],
+        // Phase 37: Bloch sphere quantum shorts
+        ['bloch:shorts', 'science:physics/quantum', 'extends'],
+        ['hub:physics', 'science:physics/quantum', 'contains'],
+        ['bloch:shorts', 'aethel:connector', 'hosted-by'],
+        // Phase 37 — Digest article relationships
+        ['digest:alphafold-missense-evolve', 'dataset:PDB-1AKI', 'uses'],
+        ['digest:jwst-k2-18b-dms', 'dataset:OpenAlex', 'uses'],
+        ['digest:hprc-v11', 'dataset:OpenAlex', 'uses'],
+        ['digest:alphamissense-uk-biobank', 'dataset:OpenAlex', 'uses'],
+        ['digest:glp1r-cryoem', 'dataset:PDB-1AKI', 'uses'],
+        ['digest:alphafold-missense-evolve', 'paper:AlphaFold2021', 'cites'],
+        ['digest:alphaproof-imo-2025-gold', 'paper:Page1998', 'cites'],
+        ['digest:flash-attention-2', 'paper:Seber2003', 'cites'],
+        ['digest:alphamissense-uk-biobank', 'paper:AlphaMissense2023', 'cites'],
+        ['digest:alphafold-missense-evolve', 'demo:nucleotide', 'related'],
+        ['digest:flash-attention-2', 'ml:adam', 'related'],
+        ['digest:alphaevolve-v2', 'demo:ols', 'related'],
+        // Science hub -> sub-page contains
+        ['hub:biology', 'science:biology/evolutionary', 'contains'],
+        ['hub:biology', 'science:biology/imaging', 'contains'],
+        ['hub:biology', 'science:biology/molecular', 'contains'],
+        ['hub:biology', 'science:biology/proteins', 'contains'],
+        ['hub:biology', 'science:biology/systems', 'contains'],
+        ['hub:chemistry', 'science:chemistry/analytical', 'contains'],
+        ['hub:chemistry', 'science:chemistry/computational', 'contains'],
+        ['hub:chemistry', 'science:chemistry/inorganic', 'contains'],
+        ['hub:chemistry', 'science:chemistry/materials', 'contains'],
+        ['hub:chemistry', 'science:chemistry/organic', 'contains'],
+        ['hub:chemistry', 'science:chemistry/physical', 'contains'],
+        ['hub:maths', 'science:maths/algebra', 'contains'],
+        ['hub:maths', 'science:maths/analysis', 'contains'],
+        ['hub:maths', 'science:maths/geometry', 'contains'],
+        ['hub:maths', 'science:maths/number-theory', 'contains'],
+        ['hub:maths', 'science:maths/probability', 'contains'],
+        ['hub:physics', 'science:physics/mechanics', 'contains'],
+        ['hub:physics', 'science:physics/quantum', 'contains'],
+        ['hub:physics', 'science:physics/sound', 'contains'],
+        ['hub:physics', 'science:physics/space', 'contains'],
+        ['hub:physics', 'science:physics/thermo', 'contains'],
+        ['hub:physics', 'science:physics/waves', 'contains'],
+        ['science:physics/quantum', 'demo:md', 'cross-references'],
+        ['science:physics/thermo', 'paper:Verlet1967', 'cross-references'],
+        ['science:biology/molecular', 'demo:nucleotide', 'cross-references'],
+        ['science:biology/proteins', 'paper:AlphaFold2021', 'cross-references'],
+        ['science:maths/probability', 'paper:Page1998', 'cross-references'],
+        ['science:maths/algebra', 'demo:ols', 'cross-references'],
+        ['science:physics/mechanics', 'paper:Verlet1967', 'cross-references'],
+        // ML demos -> papers + concept cards
+        ['ml:adam', 'paper:Page1998', 'cites'],
+        ['ml:sgd', 'paper:Seber2003', 'cites'],
+        ['ml:batchnorm', 'paper:AlphaFold2021', 'cites'],
+        ['ml:mse', 'paper:Seber2003', 'cites'],
+        ['ml:mse', 'ml-concept:mse', 'instantiated-by'],
+        ['ml:mae', 'ml-concept:mae', 'instantiated-by'],
+        ['ml:binary-cross-entropy', 'ml-concept:binary-cross-entropy', 'instantiated-by'],
+        ['ml:categorical-cross-entropy', 'ml-concept:categorical-cross-entropy', 'instantiated-by'],
+        ['ml:hinge-loss', 'ml-concept:hinge-loss', 'instantiated-by'],
+        ['ml:log-cosh', 'ml-concept:log-cosh', 'instantiated-by'],
+        ['ml:huber-loss', 'ml-concept:huber-loss', 'instantiated-by'],
+        ['ml:kl-divergence', 'ml-concept:kl-divergence', 'instantiated-by'],
+        ['ml:cosine-similarity', 'ml-concept:cosine-similarity', 'instantiated-by'],
+        ['ml:relu', 'ml-concept:relu', 'instantiated-by'],
+        ['ml:gelu', 'ml-concept:gelu', 'instantiated-by'],
+        ['ml:swiglu', 'ml-concept:swiglu', 'instantiated-by'],
+        ['ml:sgd', 'ml-concept:sgd', 'instantiated-by'],
+        ['ml:adam', 'ml-concept:adam', 'instantiated-by'],
+        ['ml:adamw', 'ml-concept:adamw', 'instantiated-by'],
+        ['ml:dropout', 'ml-concept:dropout', 'instantiated-by'],
+        ['ml:l1-l2-regularisation', 'ml-concept:l1-l2-regularisation', 'instantiated-by'],
+        ['ml:batchnorm', 'ml-concept:batchnorm', 'instantiated-by'],
+        ['ml:adam', 'aethel:connector', 'hosted-by'],
+        ['ml:mse', 'aethel:connector', 'hosted-by'],
       ];
 
       const COLORS = {
         demo: '#06b6d4', paper: '#f59e0b', dataset: '#10b981',
         aethel: '#8b5cf6', concept: '#ec4899', hub: '#3b82f6',
+        digest: '#fbbf24', science: '#a3e635', ml: '#22d3ee', 'ml-concept': '#f472b6',
       };
       const TYPE_LABELS = {
         demo: 'Live demo', paper: 'Research paper', dataset: 'Dataset',
         aethel: 'AETHEL Suite', concept: 'Concept card', hub: 'Science hub',
+        digest: 'Digest article', science: 'Science sub-page', ml: 'ML demo', 'ml-concept': 'ML concept card',
       };
 
       // ---- Force-directed layout (simple) ----
       const W = 900, H = 520;
-      const nodes = NODES.map(n => ({ ...n, x: W/2 + (Math.random()-0.5)*200, y: H/2 + (Math.random()-0.5)*200, vx: 0, vy: 0, r: n.type === 'hub' ? 14 : n.type === 'aethel' ? 12 : 9 }));
+      const nodes = NODES.map(n => ({ ...n, x: W/2 + (Math.random()-0.5)*200, y: H/2 + (Math.random()-0.5)*200, vx: 0, vy: 0, r: n.type === 'hub' ? 14 : n.type === 'aethel' ? 12 : n.type === 'digest' ? 11 : n.type === 'science' ? 10 : n.type === 'ml' ? 10 : n.type === 'ml-concept' ? 8 : 9 }));
       const nodeById = Object.fromEntries(nodes.map(n => [n.id, n]));
       const edges = EDGES.map(([f, t, label]) => ({ from: f, to: t, label, source: nodeById[f], target: nodeById[t] }));
 
@@ -434,6 +603,10 @@
       document.getElementById('filter-demo').addEventListener('click', () => { filterType = 'demo'; updateFilterButtons(); render(); });
       document.getElementById('filter-paper').addEventListener('click', () => { filterType = 'paper'; updateFilterButtons(); render(); });
       document.getElementById('filter-aethel').addEventListener('click', () => { filterType = 'aethel'; updateFilterButtons(); render(); });
+      document.getElementById('filter-digest').addEventListener('click', () => { filterType = 'digest'; updateFilterButtons(); render(); });
+      document.getElementById('filter-science').addEventListener('click', () => { filterType = 'science'; updateFilterButtons(); render(); });
+      document.getElementById('filter-ml').addEventListener('click', () => { filterType = 'ml'; updateFilterButtons(); render(); });
+      document.getElementById('filter-mlconcept').addEventListener('click', () => { filterType = 'ml-concept'; updateFilterButtons(); render(); });
       document.getElementById('reheat').addEventListener('click', () => {
         for (const n of nodes) { n.vx = (Math.random()-0.5)*30; n.vy = (Math.random()-0.5)*30; }
       });

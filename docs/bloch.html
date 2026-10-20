@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Bloch Sphere Quantum Shorts — a glowing 3D Bloch sphere that animates canonical quantum-computing scenes (ground state, Hadamard, Rabi oscillation, phase gate, measurement, decoherence). Pure client-side canvas; record as WebM." />
+    <title>Bloch Sphere Quantum Shorts — AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 24px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 12px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 920px; margin: 0 0 24px; }
+      .shorts-grid { display: grid; grid-template-columns: 360px 1fr; gap: 24px; margin-top: 24px; }
+      @media (max-width: 900px) { .shorts-grid { grid-template-columns: 1fr; } }
+      .info-card { background: rgba(18, 24, 38, 0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px; padding: 20px; backdrop-filter: blur(12px); }
+      .info-card h3 { margin-top: 0; color: #06b6d4; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; }
+      .scene-list { list-style: none; padding: 0; margin: 16px 0 0; display: flex; flex-direction: column; gap: 8px; }
+      .scene-list li { padding: 8px 10px; border-radius: 6px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+      .scene-list li:hover { border-color: var(--accent); }
+      .scene-list li.active { border-color: var(--accent-2); background: rgba(6,182,212,0.1); }
+      .scene-list li .num { display: inline-block; width: 22px; height: 22px; line-height: 22px; text-align: center; background: linear-gradient(135deg,#06b6d4,#8b5cf6); color: white; font-size: 11px; font-weight: 700; border-radius: 50%; margin-right: 8px; }
+      .scene-list li .title { font-size: 13px; color: var(--text); }
+      .scene-list li .desc { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+      .links-row { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+      .links-row a { color: var(--accent-2); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-strong); background: rgba(6,182,212,0.05); }
+      .links-row a:hover { border-color: var(--accent-2); background: rgba(6,182,212,0.12); }
+    </style>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="index.html">Home</a><a href="demos.html">Demos</a><a href="dashboard.html">Dashboard</a><a href="graph.html">Knowledge Graph</a><a href="benchmark.html">Agentic Benchmark</a><a href="subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="aethel.html">AETHEL Connector</a><a href="connectors.html">Scientific Connectors Hub</a><a href="query.html">Query Executor</a><a href="graph.html">Knowledge Graph</a><a href="workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="science-biology.html">Biology Hub</a><a href="science-chemistry.html">Chemistry Hub</a><a href="science-physics.html">Physics Hub</a><a href="science-maths.html">Mathematics Hub</a><a href="science-ml.html">🤖 Machine Learning</a><a href="science-bioinformatics.html">Bioinformatics</a><a href="science-cheminformatics.html">Cheminformatics</a><a href="bloch.html">⚛️ Bloch Sphere Shorts</a><a href="science/physics/quantum.html">Quantum Mechanics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="digest.html">Weekly Science Digest</a><a href="audit.html">📊 Audit Dashboard</a><a href="dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="concepts.html">Concept Cards</a><a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="concepts/provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <p class="crumbs"><a href="index.html">Home</a> / Science / Physics / Bloch Sphere Shorts</p>
+      <span class="tag">Phase 37 · Quantum Shorts</span>
+      <h1>Bloch Sphere Quantum Shorts</h1>
+      <p class="lead">A glowing 3D Bloch sphere that animates the canonical scenes of quantum computing — ground state, Hadamard, Rabi oscillation, phase gate, measurement collapse, and decoherence. Pure client-side canvas. Hit ▶ Play to watch, then <strong>Record WebM</strong> to download a 9:16 shorts clip you can post anywhere. Inspired by LinkedIn qubit-visualisation posts that mention Schrödinger, POVM, and T<sub>2</sub> decoherence — rendered in the AIHPC Advanced style with particle background, glassmorphism, and zero external services.</p>
+
+      <div class="shorts-grid">
+        <div id="bloch-container"></div>
+
+        <div class="info-card">
+          <h3>The six scenes</h3>
+          <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 12px;">Each scene narrates a key quantum-computing concept. The state vector (coloured arrow) traces a trajectory on the Bloch sphere. Click any scene to jump.</p>
+          <ol class="scene-list" id="scene-list">
+            <li data-idx="0"><span class="num">1</span><span class="title">Ground state |0⟩</span><div class="desc">North pole — the qubit's resting state, classical 0.</div></li>
+            <li data-idx="1"><span class="num">2</span><span class="title">Hadamard → |+⟩</span><div class="desc">Equal superposition (1/√2)(|0⟩ + |1⟩). The Hadamard gate.</div></li>
+            <li data-idx="2"><span class="num">3</span><span class="title">Rabi oscillation</span><div class="desc">Resonant drive; state rotates around Y at the Rabi frequency Ω.</div></li>
+            <li data-idx="3"><span class="num">4</span><span class="title">Phase gate S</span><div class="desc">S|+⟩ = (1/√2)(|0⟩ + i|1⟩) = |+i⟩. Rotates around Z.</div></li>
+            <li data-idx="4"><span class="num">5</span><span class="title">Measurement collapse</span><div class="desc">P(|0⟩) = |α|²; P(|1⟩) = |β|². The state vector jumps.</div></li>
+            <li data-idx="5"><span class="num">6</span><span class="title">Decoherence</span><div class="desc">Bloch vector spirals inward; off-diagonals decay with T<sub>2</sub>.</div></li>
+          </ol>
+
+          <h3 style="margin-top: 24px;">Why a Bloch sphere?</h3>
+          <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 12px;">The Bloch sphere is the geometric representation of a single qubit's pure state. Every pure state |ψ⟩ = α|0⟩ + β|1⟩ (with |α|² + |β|² = 1) corresponds to a unique point on the unit sphere — parametrised by polar angle θ (population) and azimuthal angle φ (phase). The Bloch sphere makes quantum gates geometric: a single-qubit unitary is a rigid rotation of the sphere.</p>
+          <p style="font-size: 13px; color: var(--text-muted);">Mixed states (after decoherence) live <em>inside</em> the sphere — the length of the Bloch vector is the state's <em>purity</em>. Scene 6 shows this shrinkage.</p>
+
+          <div class="links-row">
+            <a href="science/physics/quantum.html">Quantum Mechanics Hub</a>
+            <a href="graph.html">Knowledge Graph</a>
+            <a href="digest.html">Weekly Science Digest</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // ---- Particle background (canvas) ----
+      (function () {
+        var canvas = document.getElementById('particle-canvas');
+        if (!canvas) return;
+        var ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        resize(); window.addEventListener('resize', resize);
+        var particles = [];
+        var colors = ['#8b5cf6', '#06b6d4', '#ec4899', '#fbbf24'];
+        for (var i = 0; i < 60; i++) {
+          particles.push({
+            x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+            r: Math.random() * 1.6 + 0.4, color: colors[Math.floor(Math.random() * colors.length)],
+          });
+        }
+        function step() {
+          ctx.fillStyle = 'rgba(11,15,26,0.2)';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          // Connection lines (nearest 4)
+          for (var i = 0; i < particles.length; i++) {
+            var pi = particles[i];
+            for (var j = i + 1; j < particles.length; j++) {
+              var pj = particles[j];
+              var dx = pi.x - pj.x, dy = pi.y - pj.y;
+              var d = Math.sqrt(dx * dx + dy * dy);
+              if (d < 120) {
+                ctx.strokeStyle = 'rgba(139,92,246,' + (0.15 * (1 - d / 120)).toFixed(3) + ')';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(pi.x, pi.y); ctx.lineTo(pj.x, pj.y); ctx.stroke();
+              }
+            }
+          }
+          for (var k = 0; k < particles.length; k++) {
+            var p = particles[k];
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
+            if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
+            ctx.fillStyle = p.color; ctx.globalAlpha = 0.5;
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+          requestAnimationFrame(step);
+        }
+        step();
+      })();
+
+      // ---- Mount Bloch component ----
+      document.addEventListener('DOMContentLoaded', function () {
+        if (window.AIHPC_BLOCH) {
+          AIHPC_BLOCH.mount('bloch-container');
+          // Auto-play
+          setTimeout(function () { AIHPC_BLOCH.play('bloch-container'); }, 600);
+        }
+        // Wire scene list clicks
+        var list = document.getElementById('scene-list');
+        if (list) {
+          list.addEventListener('click', function (e) {
+            var li = e.target.closest('li');
+            if (!li) return;
+            var idx = parseInt(li.dataset.idx, 10);
+            if (window.AIHPC_BLOCH) AIHPC_BLOCH.seek('bloch-container', idx);
+            list.querySelectorAll('li').forEach(function (l) { l.classList.remove('active'); });
+            li.classList.add('active');
+          });
+          list.querySelector('li').classList.add('active');
+        }
+      });
+
+      // ---- Ribbon theme toggle ----
+      (function setupRibbonTheme() {
+        var KEY = 'aihpc-theme';
+        var body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        var initial = 'dark';
+        try { var stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () { var next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+    </script>
+    <script src="bloch-sphere.js"></script>
+  </body>
+</html>

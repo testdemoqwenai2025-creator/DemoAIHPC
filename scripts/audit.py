@@ -770,6 +770,143 @@ def check_concept_card_etl():
 
 
 # ---------------------------------------------------------------------------
+# Phase 37 checks
+# ---------------------------------------------------------------------------
+
+def check_bloch_component():
+    """Check (Phase 37): Bloch sphere quantum shorts component is present."""
+    bloch_page = os.path.join(DOCS, "bloch.html")
+    bloch_js = os.path.join(DOCS, "bloch-sphere.js")
+    if not os.path.isfile(bloch_page) or not os.path.isfile(bloch_js):
+        return CheckResult("bloch_component_loaded", False,
+                           "docs/bloch.html or docs/bloch-sphere.js missing")
+    page_src = open(bloch_page, encoding="utf-8").read()
+    js_src = open(bloch_js, encoding="utf-8").read()
+    failures = []
+    if "bloch-sphere.js" not in page_src:
+        failures.append("bloch.html does not load bloch-sphere.js")
+    if 'id="bloch-container"' not in page_src:
+        failures.append("bloch.html has no #bloch-container element")
+    if "AIHPC_BLOCH" not in js_src:
+        failures.append("bloch-sphere.js does not expose AIHPC_BLOCH global")
+    if "MediaRecorder" not in js_src:
+        failures.append("bloch-sphere.js does not support WebM recording")
+    if "Rabi" not in js_src and "Hadamard" not in js_src:
+        failures.append("bloch-sphere.js missing canonical scenes (Rabi/Hadamard)")
+    if failures:
+        return CheckResult("bloch_component_loaded", False,
+                           f"{len(failures)} issues with Bloch component", failures)
+    return CheckResult("bloch_component_loaded", True,
+                       "docs/bloch.html + docs/bloch-sphere.js present with AIHPC_BLOCH global + WebM recording + canonical scenes")
+
+
+def check_gts_3d_mode():
+    """Check (Phase 37): graph-table-sync.js supports 3D trajectory rendering."""
+    gts_path = os.path.join(DOCS, "graph-table-sync.js")
+    if not os.path.isfile(gts_path):
+        return CheckResult("gts_3d_mode", False,
+                           "docs/graph-table-sync.js missing")
+    src = open(gts_path, encoding="utf-8").read()
+    failures = []
+    if "draw3D" not in src:
+        failures.append("draw3D method not present")
+    if "mode === '3d'" not in src and "cfg.mode === '3d'" not in src:
+        failures.append("drawGraph dispatch for 3D mode not wired")
+    if "surfaceFn" not in src:
+        failures.append("surfaceFn (loss-surface callback) not supported")
+    if "trajCols" not in src:
+        failures.append("trajCols (trajectory column indices) not supported")
+    # Verify the ML page uses 3D mode
+    ml_path = os.path.join(DOCS, "science-ml.html")
+    if os.path.isfile(ml_path):
+        ml_src = open(ml_path, encoding="utf-8").read()
+        if "gts-3d-sgd" not in ml_src or "gts-3d-adam" not in ml_src or "gts-3d-adamw" not in ml_src:
+            failures.append("science-ml.html does not register all 3 optimiser showdown widgets")
+        if "Optimiser Showdown" not in ml_src and "3D Optimiser Showdown" not in ml_src:
+            failures.append("science-ml.html missing Optimiser Showdown section")
+    else:
+        failures.append("docs/science-ml.html missing")
+    if failures:
+        return CheckResult("gts_3d_mode", False,
+                           f"{len(failures)} issues with GTS 3D mode", failures)
+    return CheckResult("gts_3d_mode", True,
+                       "graph-table-sync.js supports 3D trajectory mode + ML page wires SGD/Adam/AdamW showdown")
+
+
+def check_ml_etl_widget():
+    """Check (Phase 37): ML page has live ETL widget that pushes CSV → GTS graphs."""
+    ml_path = os.path.join(DOCS, "science-ml.html")
+    if not os.path.isfile(ml_path):
+        return CheckResult("ml_etl_widget", False,
+                           "docs/science-ml.html missing")
+    etl_js = os.path.join(DOCS, "ml-etl.js")
+    if not os.path.isfile(etl_js):
+        return CheckResult("ml_etl_widget", False,
+                           "docs/ml-etl.js missing")
+    ml_src = open(ml_path, encoding="utf-8").read()
+    js_src = open(etl_js, encoding="utf-8").read()
+    failures = []
+    if "ml-etl.js" not in ml_src:
+        failures.append("science-ml.html does not load ml-etl.js")
+    if 'id="ml-etl-widget"' not in ml_src:
+        failures.append("science-ml.html has no #ml-etl-widget container")
+    if "AIHPC_ML_ETL" not in js_src:
+        failures.append("ml-etl.js does not expose AIHPC_ML_ETL global")
+    if "computeLosses" not in js_src:
+        failures.append("ml-etl.js missing computeLosses function")
+    if "pushToGTS" not in js_src:
+        failures.append("ml-etl.js missing pushToGTS function")
+    if "y_true" not in js_src or "y_pred" not in js_src:
+        failures.append("ml-etl.js missing y_true/y_pred column detection")
+    if failures:
+        return CheckResult("ml_etl_widget", False,
+                           f"{len(failures)} issues with ML ETL widget", failures)
+    return CheckResult("ml_etl_widget", True,
+                       "ML page loads ml-etl.js + has #ml-etl-widget container + CSV parser pushes to GTS graphs")
+
+
+def check_knowledge_graph_extended():
+    """Check (Phase 37): graph.html has the extended node types
+    (digest articles, science sub-pages, ML demos, ML concept cards)."""
+    graph_path = os.path.join(DOCS, "graph.html")
+    if not os.path.isfile(graph_path):
+        return CheckResult("knowledge_graph_extended", False,
+                           "docs/graph.html missing")
+    src = open(graph_path, encoding="utf-8").read()
+    failures = []
+    # New node types must be in COLORS + TYPE_LABELS
+    for new_type in ["digest:", "science:", "ml:", "ml-concept:"]:
+        if new_type not in src:
+            failures.append(f"node type prefix '{new_type}' not present")
+    # Filter buttons for new types
+    for btn_id in ["filter-digest", "filter-science", "filter-ml", "filter-mlconcept"]:
+        if btn_id not in src:
+            failures.append(f"filter button #{btn_id} not present")
+    # New colors
+    if "#fbbf24" not in src or "#a3e635" not in src or "#22d3ee" not in src or "#f472b6" not in src:
+        failures.append("new node-type colors (#fbbf24 #a3e635 #22d3ee #f472b6) not all present")
+    # Count nodes
+    n_digest = src.count("type: 'digest'") + src.count('type: \'digest\'')
+    n_science = src.count("type: 'science'") + src.count('type: \'science\'')
+    n_ml = src.count("type: 'ml'") + src.count('type: \'ml\'')
+    n_ml_concept = src.count("type: 'ml-concept'") + src.count('type: \'ml-concept\'')
+    # Each should have at least 5 entries (we added 22/22/18/18)
+    if n_digest < 5:
+        failures.append(f"only {n_digest} digest article nodes (expected ≥5)")
+    if n_science < 5:
+        failures.append(f"only {n_science} science sub-page nodes (expected ≥5)")
+    if n_ml < 5:
+        failures.append(f"only {n_ml} ML demo nodes (expected ≥5)")
+    if n_ml_concept < 5:
+        failures.append(f"only {n_ml_concept} ML concept card nodes (expected ≥5)")
+    if failures:
+        return CheckResult("knowledge_graph_extended", False,
+                           f"{len(failures)} issues with extended knowledge graph", failures)
+    return CheckResult("knowledge_graph_extended", True,
+                       f"graph.html extended: {n_digest} digest + {n_science} science + {n_ml} ML demos + {n_ml_concept} ML concept cards")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -803,6 +940,11 @@ def main():
         check_concept_cards_generated(),
         check_data_tables_present(),
         check_concept_card_etl(),
+        # Phase 37
+        check_bloch_component(),
+        check_gts_3d_mode(),
+        check_ml_etl_widget(),
+        check_knowledge_graph_extended(),
     ]
 
     if args.json:

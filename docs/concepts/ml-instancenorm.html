@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Instance Normalisation — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability." />
+    <title>Instance Normalisation — AIHPC ML Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .container { max-width: 1000px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .math-panel .math-eq { font-family: "Cambria Math", Georgia, serif; font-size: 17px; color: var(--accent-2); padding: 10px 14px; background: rgba(6,182,212,0.05); border-radius: 8px; border-left: 3px solid var(--accent-2); margin: 8px 0 12px; }
+      .math-panel .math-plain { font-size: 13px; color: var(--text-muted); }
+      .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, monospace; }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); margin-bottom: 16px; }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px 0; }
+      .demo-tab-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .data-table-container { overflow-x: auto; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+      .data-table-container table { width: 100%; border-collapse: collapse; }
+      .data-table-container th { padding: 6px 10px; text-align: left; font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+      .data-table-container td { padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: "SF Mono", Menlo, monospace; }
+      .data-table-hidden { display: none; }
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+    </style>
+    <script src="../animated-derivation.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-ml.html">Machine Learning</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="lazy-evaluation.html">Lazy Evaluation as UX</a><a href="provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../science-ml.html">ML Hub</a> / Normalisation</p>
+      <span class="tag">ML Concept Card · Normalisation</span>
+      <h1>Instance Normalisation</h1>
+      <p class="lead">InstanceNorm (Ulyanov et al. 2016) normalises each channel of each sample independently — like a per-channel LayerNorm but with statistics computed per-sample-per-channel (over the spatial axes only). Originally designed for style transfer — InstanceNorm normalises image contrast/style without normalising content. Now also used in GANs (BigGAN, StyleGAN) and diffusion models (DDPM).</p>
+
+      <h2>Math → Code</h2>
+      <div class="math-panel"><div class="math-eq">y = gamma * (x - mu_c) / sqrt(sigma_c^2 + eps) + beta  where mu_c per-sample per-channel</div></div>
+      <div class="derivation-step"><strong>Step 1</strong><div class="step-math">mu_c = mean(x over H, W);  sigma_c^2 = var(x over H, W)</div><div class="step-explain">For each sample B and each channel C, compute the mean and variance over the spatial axes (H, W). The statistics are independent of batch and independent across channels — each (B, C) pair has its own stats.</div></div>
+      <div class="derivation-step"><strong>Step 2</strong><div class="step-math">x_hat = (x - mu_c) / sqrt(sigma_c^2 + eps)</div><div class="step-explain">Each element is normalised by its channel&#x27;s statistics. The output has zero mean and unit variance per (B, C) — image content (relative structure) is preserved, but absolute contrast (per-channel scale) is removed.</div></div>
+      <div class="derivation-step"><strong>Step 3</strong><div class="step-math">y = gamma * x_hat + beta  (per channel, optional)</div><div class="step-explain">Unlike BatchNorm where affine is critical, InstanceNorm&#x27;s affine is often dropped (e.g. in StyleGAN where gamma/beta come from style modulation). When present, gamma/beta are per-channel.</div></div>
+      <div class="derivation-step"><strong>Step 4</strong><div class="step-math">Normalises contrast = removes style, preserves content</div><div class="step-explain">In style transfer, content is the spatial structure (edges, shapes), style is the per-channel statistics (contrast, color). InstanceNorm normalises per-channel statistics → removes style → forces the network to generate output with the target&#x27;s per-channel statistics → matches target style.</div></div>
+      <div class="derivation-step"><strong>Step 5</strong><div class="step-math">Style transfer, GANs (BigGAN, StyleGAN), diffusion models</div><div class="step-explain">InstanceNorm is the standard normaliser for generative models where per-image statistics matter. In diffusion models (DDPM, Stable Diffusion), InstanceNorm (or a GroupNorm-with-G=...) provides per-image normalisation that helps the model handle diverse input scales.</div></div>
+      <h2>Polyglot Code (6 languages)</h2>
+      <div class="code-panel"><div class="lang-toggle">
+        <button data-lang="python" class="active">Python</button>
+        <button data-lang="rust">Rust</button>
+        <button data-lang="go">Go</button>
+        <button data-lang="c">C</button>
+        <button data-lang="elixir">Elixir</button>
+        <button data-lang="scala">Scala</button>
+      </div><pre class="code-block" id="code-block-instancenorm"></pre></div>
+      <h2>Observe</h2>
+      <div class="demo-tabs">
+        <button class="active" data-tab="stats">Stats</button>
+        <button data-tab="reports">Reports</button>
+        <button data-tab="graphs">Graphs</button>
+        <button data-tab="summary">Summary</button>
+        <button data-tab="data">Data</button>
+      </div>
+      <div class="demo-tab-content active" data-tab="stats"><div class="stats-grid">
+        <div class="stat"><div class="l">Type</div><div class="v">Per-sample per-channel</div></div>
+        <div class="stat"><div class="l">Axes</div><div class="v">H, W only</div></div>
+        <div class="stat"><div class="l">Batch dep</div><div class="v">No</div></div>
+        <div class="stat"><div class="l">Style transfer</div><div class="v">Removes style</div></div>
+        <div class="stat"><div class="l">Used in</div><div class="v">StyleGAN, BigGAN, DDPM</div></div>
+        <div class="stat"><div class="l">Year</div><div class="v">2016</div></div>
+      </div></div>
+      <div class="demo-tab-content" data-tab="reports"><div class="report-block">InstanceNorm (Ulyanov et al. 2016) normalises each channel of each sample independently — statistics over the spatial axes only, per (B, C) pair. Originally for style transfer: normalising per-channel statistics removes style (contrast, color) while preserving content (structure). Now standard in GANs (StyleGAN, BigGAN) and diffusion models (DDPM, Stable Diffusion) where per-image normalisation helps with diverse scales.</div></div>
+      <div class="demo-tab-content" data-tab="graphs"><div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="30" y="40" width="100" height="30" fill="rgba(139,92,246,0.3)" stroke="#8b5cf6"/><rect x="150" y="40" width="100" height="30" fill="rgba(6,182,212,0.3)" stroke="#06b6d4"/><rect x="270" y="40" width="100" height="30" fill="rgba(236,72,153,0.3)" stroke="#ec4899"/><text x="80" y="30" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">ch 0 (mu=0.42, std=1.1)</text><text x="200" y="30" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">ch 1 (mu=-0.18, std=0.95)</text><text x="320" y="30" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">ch 2 (mu=0.05, std=1.0)</text><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">spatial position</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">pixel</text></svg></div></div>
+      <div class="demo-tab-content" data-tab="summary"><div class="summary-block"><ul>
+        <li>InstanceNorm = gamma * (x - mu_c) / sqrt(sigma_c^2 + eps) + beta — per (B, C).</li>
+        <li>Statistics over spatial axes only — preserves content, removes contrast.</li>
+        <li>Style transfer: normalising per-channel stats removes style.</li>
+        <li>Standard in StyleGAN, BigGAN, DDPM, Stable Diffusion.</li>
+      </ul></div></div>
+      <div class="demo-tab-content" data-tab="data">
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">InstanceNorm on a 4-channel RGBA image (32×32) — each channel normalised independently</p>
+        <div class="data-table-container"><table class="data-table"><thead><tr><th>[&#x27;c&#x27;, &#x27;h&#x27;, &#x27;a&#x27;, &#x27;n&#x27;, &#x27;n&#x27;, &#x27;e&#x27;, &#x27;l&#x27;]</th><th>[&#x27;H&#x27;, &#x27;×&#x27;, &#x27;W&#x27;, &#x27; &#x27;, &#x27;p&#x27;, &#x27;o&#x27;, &#x27;s&#x27;, &#x27;i&#x27;, &#x27;t&#x27;, &#x27;i&#x27;, &#x27;o&#x27;, &#x27;n&#x27;, &#x27;s&#x27;]</th><th>[&#x27;m&#x27;, &#x27;u&#x27;, &#x27;_&#x27;, &#x27;c&#x27;]</th><th>[&#x27;s&#x27;, &#x27;i&#x27;, &#x27;g&#x27;, &#x27;m&#x27;, &#x27;a&#x27;, &#x27;_&#x27;, &#x27;c&#x27;]</th><th>[&#x27;a&#x27;, &#x27;f&#x27;, &#x27;t&#x27;, &#x27;e&#x27;, &#x27;r&#x27;, &#x27;-&#x27;, &#x27;n&#x27;, &#x27;o&#x27;, &#x27;r&#x27;, &#x27;m&#x27;, &#x27; &#x27;, &#x27;r&#x27;, &#x27;a&#x27;, &#x27;n&#x27;, &#x27;g&#x27;, &#x27;e&#x27;]</th></tr></thead><tbody><tr class="data-table-row"><td>0 (red)</td><td>32×32</td><td>0.42</td><td>1.10</td><td>[-2.1, 2.3]</td></tr>
+<tr class="data-table-row"><td>1 (green)</td><td>32×32</td><td>-0.18</td><td>0.95</td><td>[-1.9, 2.1]</td></tr>
+<tr class="data-table-row"><td>2 (blue)</td><td>32×32</td><td>0.05</td><td>1.00</td><td>[-2.0, 2.0]</td></tr>
+<tr class="data-table-row"><td>3 (alpha)</td><td>32×32</td><td>0.78</td><td>1.30</td><td>[-1.6, 1.4]</td></tr></tbody></table>
+        </div></div>
+      <h2>Animated Derivation Clip</h2>
+      <div class="anim-container" style="padding:20px;background:rgba(18,24,38,0.6);border:1px solid rgba(139,92,246,0.25);border-radius:16px;margin:24px 0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#06b6d4;">Phase 28</span>
+          <div style="display:flex;gap:4px;">
+            <button class="anim-play" style="background:linear-gradient(90deg,#8b5cf6,#06b6d4);border:none;color:white;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;">Play</button>
+            <button class="anim-replay" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">Replay</button>
+            <button class="anim-record" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">WebM</button>
+            <button class="anim-share" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">Share</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="ml-cc-instancenorm" style="display:block;max-width:100%;height:auto;border-radius:6px;background:#0b0f1a;"></canvas>
+      </div>
+      <div class="meta">
+        <p>Auto-generated ML concept card from <a href="../science-ml.html">science-ml.html</a> (demo id: <code>instancenorm</code>). Generated by <code>scripts/gen-ml-concept-cards.py</code>.</p>
+      </div>
+    </div>
+    <script>
+      var CODE_BANK = {"python": "# y = gamma * (x - mu_c) / sqrt(sigma_c^2 + eps) + beta\n# mu_c, sigma_c^2 -> per-sample per-channel stats over spatial axes\nimport numpy as np\ndef instancenorm(x, gamma=1.0, beta=0.0, eps=1e-5):\n    # x shape: [C, H, W]\n    mu = x.mean(axis=(-2, -1), keepdims=True)\n    var = x.var(axis=(-2, -1), keepdims=True)\n    return gamma * (x - mu) / np.sqrt(var + eps) + beta", "rust": "fn instancenorm(x: &mut [f64], c: usize, hw: usize, gamma: f64, beta: f64, eps: f64) {\n    for ci in 0..c {\n        let mut sum = 0.0; let mut sq = 0.0; let n = hw as f64;\n        for h in 0..hw { let v = x[ci*hw + h]; sum += v; sq += v*v; }\n        let mu = sum / n; let var = sq/n - mu*mu; let inv_std = 1.0 / (var + eps).sqrt();\n        for h in 0..hw { let idx = ci*hw + h; x[idx] = gamma * (x[idx] - mu) * inv_std + beta; }\n    }\n}", "go": "func InstanceNorm(x []float64, c, hw int, gamma, beta, eps float64) []float64 {\n\tfor ci := 0; ci < c; ci++ {\n\t\tvar sum, sq float64; n := float64(hw)\n\t\tfor h := 0; h < hw; h++ { v := x[ci*hw+h]; sum += v; sq += v*v }\n\t\tmu := sum / n; v := sq/n - mu*mu; invStd := 1.0 / math.Sqrt(v+eps)\n\t\tfor h := 0; h < hw; h++ { idx := ci*hw + h; x[idx] = gamma*(x[idx]-mu)*invStd + beta }\n\t}\n\treturn x\n}", "c": "void instancenorm(double* x, int c, int hw, double gamma, double beta, double eps) {\n    for (int ci = 0; ci < c; ci++) {\n        double sum = 0, sq = 0;\n        for (int h = 0; h < hw; h++) { double v = x[ci*hw + h]; sum += v; sq += v*v; }\n        double mu = sum / hw; double v = sq/hw - mu*mu; double inv_std = 1.0 / sqrt(v + eps);\n        for (int h = 0; h < hw; h++) { int idx = ci*hw + h; x[idx] = gamma * (x[idx] - mu) * inv_std + beta; }\n    }\n}", "elixir": "defmodule IN do\n  def f(x, gamma, beta, eps) do\n    Enum.map(x, fn row ->\n      n = length(row) * 1.0\n      mu = Enum.sum(row) / n\n      var = Enum.map(row, fn v -> (v - mu)*(v - mu) end) |> Enum.sum() / n\n      Enum.map(row, fn v -> gamma * (v - mu) / :math.sqrt(var + eps) + beta end)\n    end)\n  end\nend", "scala": "def instancenorm(x: Array[Array[Double]], gamma: Double = 1.0, beta: Double = 0.0, eps: Double = 1e-5): Array[Array[Double]] = {\n  x.map { row =>\n    val n = row.length.toDouble\n    val mu = row.sum / n\n    val v = row.map(v => (v - mu) * (v - mu)).sum / n\n    row.map(v => gamma * (v - mu) / math.sqrt(v + eps) + beta)\n  }\n}"};
+      AIHPC_ANIM.register('ml-cc-instancenorm', {
+        title: "Instance Normalisation",
+        steps: [{"title": "Step 1: Per-sample per-channel stats", "math": "mu_c = mean(x over H, W);  sigma_c^2 = var(x over H, W)", "explain": "For each sample B and each channel C, compute the mean and variance over the spatial axes (H, W). The statistics are independent of batch and independent across channels \u2014 each (B, C) pair has its own stats."}, {"title": "Step 2: Normalise", "math": "x_hat = (x - mu_c) / sqrt(sigma_c^2 + eps)", "explain": "Each element is normalised by its channel's statistics. The output has zero mean and unit variance per (B, C) \u2014 image content (relative structure) is preserved, but absolute contrast (per-channel scale) is removed."}, {"title": "Step 3: Affine", "math": "y = gamma * x_hat + beta  (per channel, optional)", "explain": "Unlike BatchNorm where affine is critical, InstanceNorm's affine is often dropped (e.g. in StyleGAN where gamma/beta come from style modulation). When present, gamma/beta are per-channel."}, {"title": "Step 4: Style transfer insight", "math": "Normalises contrast = removes style, preserves content", "explain": "In style transfer, content is the spatial structure (edges, shapes), style is the per-channel statistics (contrast, color). InstanceNorm normalises per-channel statistics \u2192 removes style \u2192 forces the network to generate output with the target's per-channel statistics \u2192 matches target style."}, {"title": "Step 5: Use cases", "math": "Style transfer, GANs (BigGAN, StyleGAN), diffusion models", "explain": "InstanceNorm is the standard normaliser for generative models where per-image statistics matter. In diffusion models (DDPM, Stable Diffusion), InstanceNorm (or a GroupNorm-with-G=...) provides per-image normalisation that helps the model handle diverse input scales."}],
+        duration: 12.0,
+      });
+      function dataTableShowMore(btn) {
+        var table = btn.closest('.data-table-container').querySelector('.data-table');
+        var visible = parseInt(table.dataset.visibleRows || '5', 10);
+        var total = parseInt(table.dataset.totalRows || '0', 10);
+        var newVisible = Math.min(total, visible + 10);
+        table.querySelectorAll('.data-table-row').forEach(function(r, i) { if (i < newVisible) r.classList.remove('data-table-hidden'); });
+        table.dataset.visibleRows = newVisible;
+        var remaining = total - newVisible;
+        if (remaining > 0) btn.textContent = 'Show more (' + remaining + ' hidden)';
+        else { btn.textContent = 'All ' + total + ' rows shown'; btn.disabled = true; btn.style.opacity = '0.5'; }
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        var block = document.getElementById('code-block-instancenorm');
+        if (block) block.textContent = CODE_BANK.python || '';
+        document.querySelectorAll('.code-panel .lang-toggle button').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var panel = btn.closest('.code-panel');
+            panel.querySelectorAll('.lang-toggle button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+            var block = panel.querySelector('pre.code-block');
+            if (block) block.textContent = CODE_BANK[btn.dataset.lang] || '';
+          });
+        });
+        document.querySelectorAll('.demo-tabs button').forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            var target = tab.dataset.tab;
+            document.querySelectorAll('.demo-tabs button').forEach(function (t) { t.classList.toggle('active', t === tab); });
+            document.querySelectorAll('.demo-tab-content').forEach(function (c) { c.classList.toggle('active', c.dataset.tab === target); });
+          });
+        });
+        AIHPC_ANIM.init();
+      });
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d'); var W, H, P = []; var N = 50, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; } r(); addEventListener('resize', r);
+        for (var i = 0; i < N; i++) P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        function s() { x.clearRect(0,0,W,H); for (var i = 0; i < N; i++) { for (var j = i+1; j < N; j++) { var d = Math.hypot(P[i].x-P[j].x, P[i].y-P[j].y); if (d < 100) { x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')'; x.lineWidth = .5; x.beginPath(); x.moveTo(P[i].x, P[i].y); x.lineTo(P[j].x, P[j].y); x.stroke(); } } for (var p of P) { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = W; if (p.x > W) p.x = 0; if (p.y < 0) p.y = H; if (p.y > H) p.y = 0; x.fillStyle = p.c; x.globalAlpha = .4; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.28); x.fill(); } x.globalAlpha = 1; requestAnimationFrame(s); } } s();
+      })();
+      (function () {
+        var KEY = 'aihpc-theme'; var b = document.body, r = document.querySelector('.ribbon'), i = document.getElementById('ribbon-theme-icon');
+        function a(t) { if (t === 'light') { b.classList.add('light'); r && r.classList.add('light'); if (i) i.textContent = 'Sun'; } else { b.classList.remove('light'); r && r.classList.remove('light'); if (i) i.textContent = 'Moon'; } }
+        var d = 'dark'; try { var s = localStorage.getItem(KEY); if (s === 'light' || s === 'dark') d = s; } catch (e) {} a(d);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () { var n = b.classList.contains('light') ? 'dark' : 'light'; a(n); try { localStorage.setItem(KEY, n); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>
