@@ -828,6 +828,7 @@
     #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.25; }
       body.light #particle-canvas { opacity: 0.1; }
     </style>
+      <script src="subscribe-gate.js"></script>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -1026,7 +1027,9 @@
         <div class="demo-footer">
           <div class="demo-run">
             <button class="btn btn-primary" id="run-btn">▶ Run &amp; observe</button>
-            <button class="btn btn-ghost" id="download-btn" disabled>⬇ Download CSV</button>
+            <button class="btn btn-ghost" id="download-btn" disabled>⬇ Download CSV</button>            <button class="btn" id="gated-receipt-btn" title="Pro tier required — sign in at /subscribe.html" style="opacity: 0.5;">⬇ Receipt</button>
+            <span data-aihpc-tier-badge="1" id="demo-tier-badge" style="margin-left: auto;"></span>
+
           </div>
           <div class="demo-status" id="demo-status">Idle.</div>
         </div>
@@ -1257,6 +1260,51 @@
       // dataset edited in the table lives only in this page's memory;
       // the result is downloadable as a CSV Blob.
       // ============================================================
+
+      
+      // ---- Subscription gating (Phase 31) ----
+      if (window.AIHPC) {
+        // Mount tier badge
+        var badge = document.getElementById('demo-tier-badge');
+        if (badge) AIHPC.mountTierBadge(badge);
+        // Wire the receipt button
+        var rBtn = document.getElementById('gated-receipt-btn');
+        if (rBtn) {
+          var tier = AIHPC.getTier();
+          if (tier === 'free') {
+            rBtn.style.opacity = '0.5';
+            rBtn.title = '🔒 Pro tier required — sign in at /subscribe.html';
+          } else {
+            rBtn.style.opacity = '1';
+            rBtn.title = 'Download provenance receipt (' + tier + ' tier)';
+          }
+          rBtn.addEventListener('click', function () {
+            if (!AIHPC.requireTier('pro', { feature: 'Provenance receipt' })) return;
+            // Generate a minimal receipt
+            var receipt = {
+              '@context': 'https://aihpc.advanced/prov/v1',
+              '@type': 'aihpc:ProvenanceReceipt',
+              demo: window.location.pathname,
+              tier: AIHPC.getTier(),
+              timestamp: new Date().toISOString(),
+            };
+            var blob = new Blob([JSON.stringify(receipt, null, 2)], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'aihpc-receipt-' + Date.now() + '.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          });
+        }
+        // Cross-tab session updates
+        AIHPC.onChange(function () {
+          var b = document.getElementById('demo-tier-badge');
+          if (b) AIHPC.mountTierBadge(b);
+        });
+      }
 
       // ---- Ribbon theme toggle (mirrors src/components/site/ThemeProvider) ----
       (function setupRibbonTheme() {

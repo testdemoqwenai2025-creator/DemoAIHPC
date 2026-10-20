@@ -68,12 +68,22 @@ jobs:
           # Exit with audit.py's exit code (0 = pass, 1 = any failure)
           python3 scripts/audit.py > /dev/null 2>&1
 
+      - name: Generate audit dashboard (Phase 31 — auto-updating)
+        if: always()
+        run: |
+          python3 scripts/gen-audit-dashboard.py
+          # The dashboard + history JSONs are now updated in docs/
+          # They'll be included in the mirror push below
+
       - name: Upload audit results as artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: audit-results
-          path: audit-results.json
+          path: |
+            audit-results.json
+            docs/audit.html
+            docs/audit-history/
           retention-days: 30
 
   mirror-to-public:
@@ -90,6 +100,12 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          # Phase 31: regenerate audit dashboard before mirror so it's
+          # always up-to-date on the public site
+          python3 scripts/gen-audit-dashboard.py || true
+          # Stage the updated dashboard + history for the mirror
+          git add docs/audit.html docs/audit-history/ 2>/dev/null || true
+          git commit -m "CI: auto-update audit dashboard" 2>/dev/null || true
           git remote add public "https://x-access-token:${{ secrets.MIRROR_PAT }}@github.com/testdemoqwenai2025-creator/DemoAIHPC.git"
           git push --force-with-lease public "refs/tags/${GITHUB_REF##*/}:refs/tags/${GITHUB_REF##*/}"
           git push --force-with-lease public HEAD:main
