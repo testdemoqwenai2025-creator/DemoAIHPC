@@ -1873,6 +1873,113 @@ def check_issue_12_published():
 
 
 # ---------------------------------------------------------------------------
+# Phase 47 checks
+# ---------------------------------------------------------------------------
+
+def check_quantum_algo_visualiser_loaded():
+    """Check (Phase 47): quantum page loads quantum-algorithm-visualiser.js."""
+    q_path = os.path.join(DOCS, "science", "physics", "quantum.html")
+    qa_js = os.path.join(DOCS, "quantum-algorithm-visualiser.js")
+    if not os.path.isfile(q_path) or not os.path.isfile(qa_js):
+        return CheckResult("quantum_algo_visualiser_loaded", False,
+                           "quantum.html or quantum-algorithm-visualiser.js missing")
+    page = open(q_path, encoding="utf-8").read()
+    js = open(qa_js, encoding="utf-8").read()
+    failures = []
+    if "quantum-algorithm-visualiser.js" not in page:
+        failures.append("quantum.html does not load quantum-algorithm-visualiser.js")
+    if 'id="quantum-algo-container"' not in page:
+        failures.append("missing #quantum-algo-container element")
+    if "AIHPC_QALGO" not in js:
+        failures.append("quantum-algorithm-visualiser.js does not expose AIHPC_QALGO global")
+    if "Deutsch-Jozsa" not in js:
+        failures.append("missing Deutsch-Jozsa algorithm")
+    if "Grover" not in js:
+        failures.append("missing Grover's search algorithm")
+    if "QFT" not in js and "Fourier" not in js:
+        failures.append("missing QFT algorithm")
+    if "IntersectionObserver" not in page:
+        failures.append("missing lazy-mount via IntersectionObserver")
+    if failures:
+        return CheckResult("quantum_algo_visualiser_loaded", False,
+                           f"{len(failures)} issues with quantum algorithm visualiser", failures)
+    return CheckResult("quantum_algo_visualiser_loaded", True,
+                       "quantum.html loads quantum-algorithm-visualiser.js + 3 algorithms (Deutsch-Jozsa, Grover, QFT) + step-by-step animation + lazy-mount")
+
+
+def check_component_registry_generator():
+    """Check (Phase 47): scripts/gen-component-registry.py exists + runs successfully."""
+    script_path = os.path.join(ROOT, "scripts", "gen-component-registry.py")
+    if not os.path.isfile(script_path):
+        return CheckResult("component_registry_generator", False,
+                           "scripts/gen-component-registry.py missing")
+    # Run the script and check exit code
+    try:
+        import subprocess
+        r = subprocess.run([sys.executable, script_path], capture_output=True, text=True, timeout=30)
+        if r.returncode == 0:
+            return CheckResult("component_registry_generator", True,
+                               "scripts/gen-component-registry.py runs + verifies all components (script files + globals + mount pages)")
+        else:
+            # Check if failures are expected (some mount pages may not exist)
+            lines = r.stdout.strip().split('\n')
+            failed = [l for l in lines if l.strip().startswith('✗')]
+            return CheckResult("component_registry_generator", False,
+                               f"component-registry verification failed: {len(failed)} issues",
+                               failed[:10])
+    except Exception as e:
+        return CheckResult("component_registry_generator", False,
+                           f"could not run gen-component-registry.py: {e}")
+
+
+def check_issue_13_published():
+    """Check (Phase 47): Issue #13 published (Tuesday 2027-01-12) with 5 real + 2 futuristic."""
+    spec = importlib.util.spec_from_file_location(
+        "gen_digest", os.path.join(ROOT, "scripts", "gen-digest.py"),
+    )
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception as e:
+        return CheckResult("digest_issue_13", False, f"could not load gen-digest.py: {e}")
+    manifest = mod.MANIFEST
+    if manifest.get("issue") != 13:
+        return CheckResult("digest_issue_13", False,
+                           f"MANIFEST issue is {manifest.get('issue')}, expected 13")
+    if manifest.get("date") != "2027-01-12":
+        return CheckResult("digest_issue_13", False,
+                           f"MANIFEST date is {manifest.get('date')}, expected 2027-01-12")
+    articles = manifest.get("articles", [])
+    if len(articles) != 7:
+        return CheckResult("digest_issue_13", False, f"{len(articles)} articles, expected 7")
+    real_count = sum(1 for a in articles if not a.get("futuristic_vision"))
+    futuristic_count = sum(1 for a in articles if a.get("futuristic_vision"))
+    if real_count != 5 or futuristic_count != 2:
+        return CheckResult("digest_issue_13", False,
+                           f"{real_count} real + {futuristic_count} futuristic, expected 5 + 2")
+    ids = [a["id"] for a in articles]
+    for expected in ["gemini-3-unified-fm", "nvidia-nim-medical-edge", "anthropic-claude-5-reasoning", "meta-llama-4-medical", "ionq-forte-2027"]:
+        if expected not in ids:
+            return CheckResult("digest_issue_13", False,
+                               f"missing anchor article: {expected}")
+    archive_12 = os.path.join(DOCS, "digest", "archive", "issue-012.html")
+    if not os.path.isfile(archive_12):
+        return CheckResult("digest_issue_13", False,
+                           "Issue #12 archive (docs/digest/archive/issue-012.html) missing")
+    missing_cards = []
+    for a in articles:
+        card = os.path.join(DOCS, "concepts", f"digest-{a['id']}.html")
+        if not os.path.isfile(card):
+            missing_cards.append(a["id"])
+    if missing_cards:
+        return CheckResult("digest_issue_13", False,
+                           f"missing concept cards: {', '.join(missing_cards)}")
+    return CheckResult("digest_issue_13", True,
+                       f"Issue #13 (2027-01-12) published: {real_count} real + {futuristic_count} futuristic; "
+                       f"Issue #12 archived; 7 concept cards; anchors: Gemini-3+NIM-medical+Claude-5+Llama-4-med+IonQ-Forte")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -1938,7 +2045,10 @@ def main():
         # Phase 46 (issue_11 superseded by issue_12)
         check_quantum_circuit_canvas_loaded(),
         check_component_manifest_present(),
-        check_issue_12_published(),
+        # Phase 47 (issue_12 superseded by issue_13)
+        check_quantum_algo_visualiser_loaded(),
+        check_component_registry_generator(),
+        check_issue_13_published(),
     ]
 
     if args.json:

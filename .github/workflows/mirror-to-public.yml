@@ -3,7 +3,7 @@ name: Mirror to public on tag push
 # Triggered on tag push (safer than every commit on main).
 # Runs three pre-checks in sequence:
 #   1. Gitleaks secret-scan (catches leaked tokens)
-#   2. Application audit (Phase 26 / 27 — scripts/audit.py with 46 checks:
+#   2. Application audit (Phase 26 / 27 — scripts/audit.py with 47 checks:
 #      div balance, ribbon presence, subscribe-gate, math derivations,
 #      JS syntax, .git/config clean, internal links, all 5 seed demos,
 #      digest pattern, weekly digest in ribbon, generator scripts,
@@ -42,7 +42,7 @@ jobs:
           # GitHub PATs, Stripe keys, etc.) and any *.env / *.key files.
 
   application-audit:
-    name: Application audit (46 checks)
+    name: Application audit (47 checks)
     needs: secret-scan
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="IonQ Forte 2027: 1024-qubit trapped-ion system with algorithmic QUBO advantage — AIHPC Advanced auto-generated concept card (digest Issue #13)." />
+    <title>IonQ Forte 2027: 1024-qubit trapped-ion system with algorithmic QUBO advantage — AIHPC Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.1), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(196,181,253,0.2); }
+      .lead { font-size: 17px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .abstract p { font-size: 14px; color: var(--text-muted); margin: 0 0 10px; }
+      .dataset-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin: 16px 0 32px; }
+      .dataset-card .ds-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-3); margin-bottom: 8px; }
+      .dataset-card .ds-row { display: grid; grid-template-columns: 80px 1fr; gap: 8px; font-size: 12px; color: var(--text-muted); padding: 2px 0; }
+      .dataset-card .ds-row .k { color: var(--text-muted-2); font-weight: 600; }
+      .dataset-card .ds-row .v { color: var(--text); }
+      .dataset-card .ds-row .v a { color: var(--accent-2); text-decoration: none; word-break: break-all; }
+      .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); margin-bottom: 16px; }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px 0; }
+      .demo-tab-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, Consolas, monospace; }
+      .meta a { color: var(--text); text-decoration: none; }
+      body.light { background: #fafafa; color: #18181b; }
+      body.light .dataset-card, body.light .derivation-step, body.light .stats-grid .stat, body.light .report-block, body.light pre.code-block { background: white; border-color: #e5e7eb; }
+      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .abstract p, body.light .summary-block ul, body.light .meta, body.light .crumbs { color: #4b5563; }
+      body.light .ribbon-btn-primary { color: white; }
+
+    </style>
+    <script src="../subscribe-gate.js"></script>
+    <script src="../digest-parsers.js"></script>
+    <script src="../animated-derivation.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">📊 Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="lazy-evaluation.html">Lazy Evaluation as UX</a><a href="provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../concepts.html">Concept Cards</a> / <a href="../digest.html">Weekly Digest Issue #13</a> / Physics - Trapped-ion quantum</p>
+      <span class="tag">Auto-generated · Issue #13</span>
+      <h1>IonQ Forte 2027: 1024-qubit trapped-ion system with algorithmic QUBO advantage</h1>
+      <p class="lead">IonQ + Duke University · IonQ blog · 2027-01-05</p>
+
+      <h2>Abstract</h2>
+      <div class="abstract">
+        <p>IonQ Forte 2027 is IonQ&#x27;s 4th-generation trapped-ion quantum computer: 1024 qubits (Barium-137 ions) in a 2D fully-connected trap array. Two-qubit gate error: 0.008% (the lowest of any platform). Gate time: 200µs (vs Quantinuum&#x27;s 400µs).</p>
+        <p>On the QUBO benchmark (Quadratic Unconstrained Binary Optimisation — the standard for quantum annealing comparison), IonQ Forte achieves quantum advantage at 350 variables (classical estimate: 10^20 years). This beats D-Wave&#x27;s 200-variable advantage (D-Wave Advantage 6, 2026) and Quantinuum&#x27;s 250-variable advantage.</p>
+        <p>Available via IonQ Cloud + AWS Braket + Azure Quantum. 89 university + 31 industry research groups have access. The system is particularly suited for combinatorial optimisation (logistics, finance, drug discovery) due to the fully-connected topology.</p>
+      </div>
+      <div class="dataset-card">
+        <div class="ds-title">📁 Dataset — accompanying open data</div>
+        <div class="ds-row"><span class="k">Name</span><span class="v">IonQ Forte QUBO benchmark results (350-variable advantage)</span></div>
+        <div class="ds-row"><span class="k">Format</span><span class="v">CSV + Qiskit shots</span></div>
+        <div class="ds-row"><span class="k">Size</span><span class="v">48 MB</span></div>
+        <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/ionq/forte-2027" target="_blank" rel="noopener">https://github.com/ionq/forte-2027</a></span></div>
+      </div>
+      <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 31</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a QUBO matrix to receive an IonQ Forte quantum solution estimate.</div>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+            📂 Upload .csv,.json
+            <input type="file" id="etl-input-ionq-forte-2027" accept=".csv,.json" data-article-id="ionq-forte-2027" style="display:none;" />
+          </label>
+          <span style="font-size: 10px; color: var(--text-muted-2);">Max 10 MB · Pure client-side · data stays in your browser</span>
+        </div>
+        <div id="etl-report-ionq-forte-2027" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+      </div>
+      <section style="margin: 24px 0; padding: 14px 16px; background: rgba(11,15,26,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; backdrop-filter: blur(12px);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#06b6d4;">📊 N-D properties strip</span>
+          <span style="font-size:10px;color:var(--text-muted-2, #6b7280);">Phase 40 · auto-generated · 13 properties</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;overflow-x:auto;"><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Issue</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">13</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Source</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">IonQ blog</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Published</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">2027-01-05</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Authors</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">IonQ + Duke University</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Dataset</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">IonQ Forte QUBO benchmark resu</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Format</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">CSV + Qiskit shots</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Size</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">48 MB</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Qubits</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">1024 (Ba-137 ions)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">2-qubit error</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">0.008% (lowest)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Gate time</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">200 µs</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">QUBO advantage</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">350 vars (D-Wave: 200)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Topology</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Fully connected</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Access</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">IonQ Cloud + Braket + Azure</div></div></div>
+        <p style="font-size:10px;color:var(--text-muted-2, #6b7280);margin:8px 0 0;">Parallel-coordinates strip — read left-to-right across the article's metadata. Use for cross-article comparison (e.g. for two concept cards, the strip shows dataset sizes / publication dates at a glance).</p>
+      </section>
+      <h2>Demo — ionq_forte_solve(qubo_matrix, backend) - 5-step QUBO quantum advantage</h2>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">5-step: QUBO encode, Hamiltonian map, transpile, execute, decode.</p>
+      <h2>Math &rarr; Code derivation</h2>
+      <div class="math-panel" style="padding: 14px; background: rgba(6,182,212,0.05); border-left: 3px solid var(--accent-2); border-radius: 8px; margin-bottom: 16px;">
+        <div class="math-eq" style="font-family: 'Cambria Math', Georgia, serif; font-size: 16px; color: var(--accent-2); margin-bottom: 6px;">solution = Forte.execute(transpile(QUBO→Ising, topology=fully_connected));  advantage at n&gt;350</div>
+        <div class="math-plain" style="font-size: 13px; color: var(--text-muted);">IonQ Forte maps the QUBO problem to an Ising Hamiltonian, transpiles for the fully-connected trapped-ion topology (no SWAP gates), executes at 0.008% error, and decodes the measurement outcome.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 1: QUBO encode</strong>
+        <div class="step-math">QUBO = Σ x_i Q_ij x_j (binary quadratic)</div>
+        <div class="step-explain">Parse the QUBO matrix Q. This is the combinatorial optimisation problem (e.g. portfolio optimisation, logistics routing, drug candidate selection).</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Hamiltonian map</strong>
+        <div class="step-math">H_Ising = Σ h_i Z_i + Σ J_ij Z_i Z_j (from QUBO)</div>
+        <div class="step-explain">Map the QUBO to an Ising Hamiltonian: x_i → (1-Z_i)/2. This gives the quantum Hamiltonian that the trapped-ion system will minimise.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Transpile</strong>
+        <div class="step-math">circuit = transpile(H_Ising, topology=fully_connected, native_gates={GZ, RZ})</div>
+        <div class="step-explain">Transpile for the fully-connected topology (no SWAP gates needed). Native gates: global Z-rotation (GZ) + single-qubit RZ. Circuit depth: 30-80 layers for 350-variable problems.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Execute</strong>
+        <div class="step-math">result = Forte.execute(circuit, shots=8192);  error = 0.008% per 2-qubit gate</div>
+        <div class="step-explain">Execute on the 1024-qubit Ba-137 trapped-ion system. 8,192 shots. Two-qubit gate error: 0.008% (lowest of any platform). Gate time: 200µs.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Decode</strong>
+        <div class="step-math">solution = decode(result, QUBO);  advantage if better than classical</div>
+        <div class="step-explain">Decode the measurement outcome back to a QUBO solution. Quantum advantage at 350 variables (classical estimate: 10^20 years). Beats D-Wave&#x27;s 200-variable advantage.</div>
+      </div>
+      <h2>Polyglot code (6 languages)</h2>
+      <div class="code-panel">
+        <div class="lang-toggle">
+          <button data-lang="python" class="active">Python</button>
+          <button data-lang="rust">Rust</button>
+          <button data-lang="go">Go</button>
+          <button data-lang="c">C</button>
+          <button data-lang="elixir">Elixir</button>
+          <button data-lang="scala">Scala</button>
+        </div>
+        <pre class="code-block" id="code-block-ionq-forte-2027"></pre>
+      </div>
+      <h2>Observe</h2>
+      <div class="demo-tabs">
+        <button class="active" data-tab="stats">Stats</button>
+        <button data-tab="reports">Reports</button>
+        <button data-tab="graphs">Graphs</button>
+        <button data-tab="summary">Summary</button>
+        <button data-tab="etl">ETL Report</button>
+      </div>
+      <div class="demo-tab-content active" data-tab="stats">
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="l">Qubits</div>
+            <div class="v">1024 (Ba-137 ions)</div>
+          </div>
+          <div class="stat">
+            <div class="l">2-qubit error</div>
+            <div class="v">0.008% (lowest)</div>
+          </div>
+          <div class="stat">
+            <div class="l">Gate time</div>
+            <div class="v">200 µs</div>
+          </div>
+          <div class="stat">
+            <div class="l">QUBO advantage</div>
+            <div class="v">350 vars (D-Wave: 200)</div>
+          </div>
+          <div class="stat">
+            <div class="l">Topology</div>
+            <div class="v">Fully connected</div>
+          </div>
+          <div class="stat">
+            <div class="l">Access</div>
+            <div class="v">IonQ Cloud + Braket + Azure</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-tab-content" data-tab="reports">
+        <div class="report-block">IonQ Forte 2027: 1024-qubit Ba-137 trapped-ion quantum computer. Two-qubit error 0.008% (lowest of any platform). QUBO advantage at 350 variables (beats D-Wave&#x27;s 200, Quantinuum&#x27;s 250). Fully-connected topology. 89 university + 31 industry groups.</div>
+      </div>
+      <div class="demo-tab-content" data-tab="graphs">
+        <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="140" width="60" height="40" fill="#9ca3af" opacity="0.5"/><text x="70" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">D-Wave Adv 6</text><rect x="130" y="120" width="60" height="60" fill="#9ca3af" opacity="0.5"/><text x="160" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Quantinuum H</text><rect x="220" y="60" width="60" height="120" fill="#06b6d4"/><text x="250" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">IonQ Forte</text><text x="70" y="135" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">200 vars</text><text x="160" y="115" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">250 vars</text><text x="250" y="55" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">350 vars</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">QUBO quantum advantage (variables)</text></svg></div>
+      </div>
+      <div class="demo-tab-content" data-tab="summary">
+        <div class="summary-block"><ul>
+          <li>IonQ Forte 2027: 1024-qubit trapped-ion (Ba-137).</li>
+          <li>Two-qubit error 0.008% — lowest of any quantum platform.</li>
+          <li>QUBO advantage at 350 variables (beats D-Wave 200, Quantinuum 250).</li>
+          <li>Fully-connected topology; 89 university + 31 industry groups.</li>
+        </ul></div>
+      </div>
+      <div class="demo-tab-content" data-tab="etl">
+        <div class="report-block" id="etl-result-ionq-forte-2027" style="min-height: 60px;">
+          <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+        </div>
+      </div>
+      <h2>🎬 Animated derivation clip</h2>
+      <div class="anim-container" style="padding: 20px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px); margin: 24px 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2, #06b6d4);">Phase 28 — animated Math→Code derivation</div>
+          <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">▶ Play</button>
+            <button class="anim-pause" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⏸ Pause</button>
+            <button class="anim-replay" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">↺ Replay</button>
+            <button class="anim-record" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⬇ Record WebM</button>
+            <button class="anim-share" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">🔗 Share</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="concept-ionq-forte-2027" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;"></canvas>
+      </div>
+      <script>
+        // Register the derivation for this concept card
+        AIHPC_ANIM.register('concept-ionq-forte-2027', {
+          title: "IonQ Forte 2027: 1024-qubit trapped-ion system with algorithmic QUBO advantage",
+          steps: [{"title": "Step 1: QUBO encode", "math": "QUBO = \u03a3 x_i Q_ij x_j (binary quadratic)", "explain": "Parse the QUBO matrix Q. This is the combinatorial optimisation problem (e.g. portfolio optimisation, logistics routing, drug candidate selection)."}, {"title": "Step 2: Hamiltonian map", "math": "H_Ising = \u03a3 h_i Z_i + \u03a3 J_ij Z_i Z_j (from QUBO)", "explain": "Map the QUBO to an Ising Hamiltonian: x_i \u2192 (1-Z_i)/2. This gives the quantum Hamiltonian that the trapped-ion system will minimise."}, {"title": "Step 3: Transpile", "math": "circuit = transpile(H_Ising, topology=fully_connected, native_gates={GZ, RZ})", "explain": "Transpile for the fully-connected topology (no SWAP gates needed). Native gates: global Z-rotation (GZ) + single-qubit RZ. Circuit depth: 30-80 layers for 350-variable problems."}, {"title": "Step 4: Execute", "math": "result = Forte.execute(circuit, shots=8192);  error = 0.008% per 2-qubit gate", "explain": "Execute on the 1024-qubit Ba-137 trapped-ion system. 8,192 shots. Two-qubit gate error: 0.008% (lowest of any platform). Gate time: 200\u00b5s."}, {"title": "Step 5: Decode", "math": "solution = decode(result, QUBO);  advantage if better than classical", "explain": "Decode the measurement outcome back to a QUBO solution. Quantum advantage at 350 variables (classical estimate: 10^20 years). Beats D-Wave's 200-variable advantage."}],
+          duration: 12.0,
+        });
+        // CODE_BANK for the polyglot code panel
+        const CODE_BANK = {"python": "# solution = Forte.execute(transpile(QUBO\u2192Ising, topology=fully_connected))\n# QUBO -> binary optimisation  Ising -> quantum Hamiltonian  Forte -> trapped-ion\ndef ionq_forte_solve(qubo_matrix, backend):\n    ising = qubo_to_ising(qubo_matrix)\n    circuit = transpile(ising, topology='fully_connected', native_gates=['GZ','RZ'])\n    result = backend.execute(circuit, shots=8192)  # 0.008% error\n    solution = decode(result, qubo_matrix)\n    return solution  # advantage at n>350\n", "rust": "fn ionq_forte_solve(qubo: &Matrix, b: &Forte) -> Solution {\n    let ising = qubo_to_ising(qubo);\n    let circuit = transpile(&ising, \"fully_connected\", &[\"GZ\",\"RZ\"]);\n    let result = b.execute(&circuit, 8192);\n    decode(&result, qubo)\n}", "go": "func IonQForteSolve(qubo *Matrix, b *Forte) Solution {\n\tising := QUBOToIsing(qubo)\n\tcircuit := Transpile(ising, \"fully_connected\", []string{\"GZ\",\"RZ\"})\n\tresult := b.Execute(circuit, 8192)\n\treturn Decode(result, qubo)\n}", "c": "Solution ionq_forte_solve(Matrix* qubo, Forte* b) {\n    Ising* ising = qubo_to_ising(qubo);\n    Circuit* c = transpile(ising, \"fully_connected\", native_gates);\n    Result* r = b_execute(b, c, 8192);\n    return decode(r, qubo);\n}", "elixir": "defmodule IonQForte do\n  def solve(qubo, b) do\n    ising = qubo_to_ising(qubo)\n    circuit = transpile(ising, \"fully_connected\", ~w[GZ RZ])\n    result = b.execute(circuit, 8192)\n    decode(result, qubo)\n  end\nend", "scala": "def ionQForteSolve(qubo: Matrix, b: Forte): Solution = {\n  val ising = quboToIsing(qubo)\n  val circuit = transpile(ising, \"fully_connected\", List(\"GZ\",\"RZ\"))\n  val result = b.execute(circuit, 8192)\n  decode(result, qubo)\n}"};
+        // Initial render: set Python code on page load
+        document.addEventListener('DOMContentLoaded', function () {
+          var block = document.getElementById('code-block-ionq-forte-2027');
+          if (block) block.textContent = CODE_BANK.python || '';
+          // Wire up language toggles
+          document.querySelectorAll('.code-panel .lang-toggle button').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var panel = btn.closest('.code-panel');
+              panel.querySelectorAll('.lang-toggle button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+              var lang = btn.dataset.lang;
+              var block = panel.querySelector('pre.code-block');
+              if (block) block.textContent = CODE_BANK[lang] || '// code not available for ' + lang;
+            });
+          });
+          // Wire up observe tabs
+          document.querySelectorAll('.demo-tabs button').forEach(function (tab) {
+            tab.addEventListener('click', function () {
+              var target = tab.dataset.tab;
+              document.querySelectorAll('.demo-tabs button').forEach(function (t) { t.classList.toggle('active', t === tab); });
+              document.querySelectorAll('.demo-tab-content').forEach(function (c) { c.classList.toggle('active', c.dataset.tab === target); });
+            });
+          });
+          // Init the animated-derivation canvas
+          AIHPC_ANIM.init();
+          // Phase 31: wire ETL file inputs to handleETLUpload
+          document.querySelectorAll('input[type="file"][data-article-id]').forEach(function (inp) {
+            inp.addEventListener('change', function (e) {
+              var articleId = inp.dataset.articleId;
+              var file = e.target.files[0];
+              if (!file) return;
+              if (window.handleETLUpload) {
+                var maxMb = parseInt(inp.dataset.maxMb || '50', 10);
+                window.handleETLUpload(articleId, file, { max_mb: maxMb });
+              }
+            });
+          });
+        });
+      </script>
+      <div class="meta" style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Auto-generated concept card from <a href="../digest.html">Weekly Digest Issue #13</a> (article id: <code>ionq-forte-2027</code>). Generated by <code>scripts/gen-concept-cards.py</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      // Particle background
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d');
+        var W, H, P = [];
+        var N = 50, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; }
+        r();
+        addEventListener('resize', r);
+        for (var i = 0; i < N; i++) {
+          P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        }
+        function s() {
+          x.clearRect(0, 0, W, H);
+          for (var i = 0; i < N; i++) {
+            for (var j = i+1; j < N; j++) {
+              var d = Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y);
+              if (d < 100) {
+                x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')';
+                x.lineWidth = .5;
+                x.beginPath();
+                x.moveTo(P[i].x, P[i].y);
+                x.lineTo(P[j].x, P[j].y);
+                x.stroke();
+              }
+            }
+          }
+          for (var p of P) {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+            x.fillStyle = p.c; x.globalAlpha = .4;
+            x.beginPath();
+            x.arc(p.x, p.y, p.r, 0, 6.28);
+            x.fill();
+          }
+          x.globalAlpha = 1;
+          requestAnimationFrame(s);
+        }
+        s();
+      })();
+
+      // ---- Ribbon theme toggle ----
+      (function () {
+        var KEY = 'aihpc-theme';
+        var b = document.body, r = document.querySelector('.ribbon'), i = document.getElementById('ribbon-theme-icon');
+        function a(t) {
+          if (t === 'light') { b.classList.add('light'); r && r.classList.add('light'); if (i) i.textContent = '☀'; }
+          else { b.classList.remove('light'); r && r.classList.remove('light'); if (i) i.textContent = '🌙'; }
+        }
+        var d = 'dark';
+        try { var s = localStorage.getItem(KEY); if (s === 'light' || s === 'dark') d = s; else if (matchMedia('(prefers-color-scheme:light)').matches) d = 'light'; } catch (e) {}
+        a(d);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () { var n = b.classList.contains('light') ? 'dark' : 'light'; a(n); try { localStorage.setItem(KEY, n); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

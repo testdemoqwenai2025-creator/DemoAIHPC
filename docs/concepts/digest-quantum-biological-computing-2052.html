@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Futuristic Vision (2052): quantum-biological computing — DNA-quantum hybrid processor — AIHPC Advanced auto-generated concept card (digest Issue #13)." />
+    <title>Futuristic Vision (2052): quantum-biological computing — DNA-quantum hybrid processor — AIHPC Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.1), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(196,181,253,0.2); }
+      .lead { font-size: 17px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .abstract p { font-size: 14px; color: var(--text-muted); margin: 0 0 10px; }
+      .dataset-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin: 16px 0 32px; }
+      .dataset-card .ds-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-3); margin-bottom: 8px; }
+      .dataset-card .ds-row { display: grid; grid-template-columns: 80px 1fr; gap: 8px; font-size: 12px; color: var(--text-muted); padding: 2px 0; }
+      .dataset-card .ds-row .k { color: var(--text-muted-2); font-weight: 600; }
+      .dataset-card .ds-row .v { color: var(--text); }
+      .dataset-card .ds-row .v a { color: var(--accent-2); text-decoration: none; word-break: break-all; }
+      .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); margin-bottom: 16px; }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px 0; }
+      .demo-tab-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, Consolas, monospace; }
+      .meta a { color: var(--text); text-decoration: none; }
+      body.light { background: #fafafa; color: #18181b; }
+      body.light .dataset-card, body.light .derivation-step, body.light .stats-grid .stat, body.light .report-block, body.light pre.code-block { background: white; border-color: #e5e7eb; }
+      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .abstract p, body.light .summary-block ul, body.light .meta, body.light .crumbs { color: #4b5563; }
+      body.light .ribbon-btn-primary { color: white; }
+
+    </style>
+    <script src="../subscribe-gate.js"></script>
+    <script src="../digest-parsers.js"></script>
+    <script src="../animated-derivation.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">📊 Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="lazy-evaluation.html">Lazy Evaluation as UX</a><a href="provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../concepts.html">Concept Cards</a> / <a href="../digest.html">Weekly Digest Issue #13</a> / Biology - Quantum-Biological (Futuristic Vision)</p>
+      <span class="tag">🚀 Futuristic Vision · Auto-generated · Issue #13</span>
+      <h1>Futuristic Vision (2052): quantum-biological computing — DNA-quantum hybrid processor</h1>
+      <p class="lead">AIHPC Editorial Board - extrapolated from ESM-5 (2027), quantum consciousness (2036), DNA data storage (2030), Matrioshka brains (2050) · AIHPC Futuristic Vision · 2052-Q2 (extrapolated)</p>
+
+      <h2>Abstract</h2>
+      <div class="abstract">
+        <p>This is a futuristic vision, not a real publication. We extrapolate from ESM-5 protein design (2027), quantum consciousness interface (2036), DNA data storage (2030), and Matrioshka brains (2050) to predict that by Q2 2052, quantum-biological hybrid processors will combine DNA storage (10^21 bits/g) with quantum coherence (NV-centre readout) in a single biological-quantum chip.</p>
+        <p>The vision: a DNA-quantum hybrid processor (DQHP v1) stores data in synthetic DNA strands (10^21 bits per gram) and reads/writes via NV-centre quantum magnetometry. The DNA strand is the memory; the NV-centre array is the processor. Each NV-centre can read one DNA base in 1 µs — giving 10^6 base reads/second per NV-centre, 10^12 reads/second with 10^6 NV-centres.</p>
+        <p>By 2052, DQHP v1 achieves: 10^21 bits storage in 1 g of DNA, 10^12 reads/second quantum readout, and biological self-repair (the DNA strand is replicated by a cell-free polymerase system every 24 hours, correcting bit-flip errors). The chip is fully biodegradable.</p>
+      </div>
+      <div class="dataset-card">
+        <div class="ds-title">📁 Dataset — accompanying open data</div>
+        <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic DQHP DNA-quantum readout trace (10^12 reads × 1 day)</span></div>
+        <div class="ds-row"><span class="k">Format</span><span class="v">FASTA + HDF5</span></div>
+        <div class="ds-row"><span class="k">Size</span><span class="v">10^15 bytes (1 PB)</span></div>
+        <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.quantum-bio.org/2052" target="_blank" rel="noopener">https://www.quantum-bio.org/2052</a></span></div>
+      </div>
+      <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 31</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a DNA sequence to receive a DQHP-style storage capacity estimate.</div>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+            📂 Upload .fasta,.h5,.csv
+            <input type="file" id="etl-input-quantum-biological-computing-2052" accept=".fasta,.h5,.csv" data-article-id="quantum-biological-computing-2052" style="display:none;" />
+          </label>
+          <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+        </div>
+        <div id="etl-report-quantum-biological-computing-2052" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+      </div>
+      <section style="margin: 24px 0; padding: 14px 16px; background: rgba(11,15,26,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; backdrop-filter: blur(12px);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#06b6d4;">📊 N-D properties strip</span>
+          <span style="font-size:10px;color:var(--text-muted-2, #6b7280);">Phase 40 · auto-generated · 13 properties</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;overflow-x:auto;"><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Issue</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">13</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Source</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">AIHPC Futuristic Vision</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Published</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">2052-Q2 (extrapolated)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Authors</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">AIHPC Editorial Board - extrap</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Dataset</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Synthetic DQHP DNA-quantum rea</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Format</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">FASTA + HDF5</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Size</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">10^15 bytes (1 PB)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Storage density</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">10^21 bits/g (DNA)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Read rate</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">10^12 bases/s</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">NV-centres</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">10^6</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Self-repair</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Every 24h (polymerase)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Error rate (post-repair)</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">10^-21 per bit</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Biodegradable</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Yes (zero e-waste)</div></div></div>
+        <p style="font-size:10px;color:var(--text-muted-2, #6b7280);margin:8px 0 0;">Parallel-coordinates strip — read left-to-right across the article's metadata. Use for cross-article comparison (e.g. for two concept cards, the strip shows dataset sizes / publication dates at a glance).</p>
+      </section>
+      <h2>Demo — dqhp_compute(data, dna_storage, nv_array) - 5-step quantum-biological computing</h2>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">5-step: DNA encode, NV-centre write, quantum readout, biological repair, output.</p>
+      <h2>Math &rarr; Code derivation</h2>
+      <div class="math-panel" style="padding: 14px; background: rgba(6,182,212,0.05); border-left: 3px solid var(--accent-2); border-radius: 8px; margin-bottom: 16px;">
+        <div class="math-eq" style="font-family: 'Cambria Math', Georgia, serif; font-size: 16px; color: var(--accent-2); margin-bottom: 6px;">stored = DNA.encode(data, density=10^21 bits/g);  read = NV_array.read(stored, rate=10^12/s)</div>
+        <div class="math-plain" style="font-size: 13px; color: var(--text-muted);">DQHP stores data in DNA at 10^21 bits/gram, reads via NV-centre quantum magnetometry at 10^12 reads/second, and self-repairs via cell-free DNA replication.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 1: DNA encode</strong>
+        <div class="step-math">stored = DNA.encode(data, codec=Reed-Solomon, density=10^21 bits/g)</div>
+        <div class="step-explain">Encode the data into synthetic DNA strands using Reed-Solomon error-correcting codes. Density: 10^21 bits per gram of DNA (vs 10^9 for flash storage — 10^12x denser).</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: NV-centre write</strong>
+        <div class="step-math">written = NV_array.write(stored, via=microwave_pulses)</div>
+        <div class="step-explain">Write the DNA strands via NV-centre microwave pulses. Each NV-centre is positioned over a DNA strand and emits targeted microwave pulses that modify the DNA bases (A↔T, C↔G flips).</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Quantum readout</strong>
+        <div class="step-math">read = NV_array.read(stored, rate=10^6/s per NV, n_NV=10^6)</div>
+        <div class="step-explain">Read the DNA via NV-centre quantum magnetometry. Each NV-centre detects the magnetic signature of one DNA base in 1 µs. With 10^6 NV-centres, total read rate: 10^12 bases/second.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Biological repair</strong>
+        <div class="step-math">repaired = polymerase.replicate(stored, every=24h, error_correction=True)</div>
+        <div class="step-explain">Every 24 hours, a cell-free DNA polymerase system replicates the stored DNA strands. This corrects bit-flip errors (DNA damage from background radiation) — biological self-repair. Error rate after repair: 10^-21 per bit.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Output</strong>
+        <div class="step-math">output = decode(read, codec=Reed-Solomon);  biodegradable at end-of-life</div>
+        <div class="step-explain">Decode the readout via Reed-Solomon. The entire chip is biodegradable — at end-of-life, the DNA is digested by naturally-occurring nucleases, leaving zero e-waste.</div>
+      </div>
+      <h2>Polyglot code (6 languages)</h2>
+      <div class="code-panel">
+        <div class="lang-toggle">
+          <button data-lang="python" class="active">Python</button>
+          <button data-lang="rust">Rust</button>
+          <button data-lang="go">Go</button>
+          <button data-lang="c">C</button>
+          <button data-lang="elixir">Elixir</button>
+          <button data-lang="scala">Scala</button>
+        </div>
+        <pre class="code-block" id="code-block-quantum-biological-computing-2052"></pre>
+      </div>
+      <h2>Observe</h2>
+      <div class="demo-tabs">
+        <button class="active" data-tab="stats">Stats</button>
+        <button data-tab="reports">Reports</button>
+        <button data-tab="graphs">Graphs</button>
+        <button data-tab="summary">Summary</button>
+        <button data-tab="etl">ETL Report</button>
+      </div>
+      <div class="demo-tab-content active" data-tab="stats">
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="l">Storage density</div>
+            <div class="v">10^21 bits/g (DNA)</div>
+          </div>
+          <div class="stat">
+            <div class="l">Read rate</div>
+            <div class="v">10^12 bases/s</div>
+          </div>
+          <div class="stat">
+            <div class="l">NV-centres</div>
+            <div class="v">10^6</div>
+          </div>
+          <div class="stat">
+            <div class="l">Self-repair</div>
+            <div class="v">Every 24h (polymerase)</div>
+          </div>
+          <div class="stat">
+            <div class="l">Error rate (post-repair)</div>
+            <div class="v">10^-21 per bit</div>
+          </div>
+          <div class="stat">
+            <div class="l">Biodegradable</div>
+            <div class="v">Yes (zero e-waste)</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-tab-content" data-tab="reports">
+        <div class="report-block">2052 vision: DNA-quantum hybrid processor (DQHP). Stores 10^21 bits/g in DNA. Reads via 10^6 NV-centre quantum magnetometers at 10^12 reads/s. Self-repairs via cell-free polymerase every 24h (error: 10^-21). Fully biodegradable — zero e-waste at end-of-life.</div>
+      </div>
+      <div class="demo-tab-content" data-tab="graphs">
+        <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><text x="200" y="15" text-anchor="middle" font-size="10" fill="#10b981" font-family="ui-monospace">Storage density (bits per gram)</text><rect x="40" y="170" width="50" height="10" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">Flash</text><rect x="110" y="150" width="50" height="30" fill="#9ca3af" opacity="0.5"/><text x="135" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">SSD</text><rect x="180" y="120" width="50" height="60" fill="#9ca3af" opacity="0.5"/><text x="205" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">DNA (2030)</text><rect x="250" y="20" width="50" height="160" fill="#10b981"/><text x="275" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">DQHP DNA</text><text x="65" y="165" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="ui-monospace">10^9</text><text x="135" y="145" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="ui-monospace">10^12</text><text x="205" y="115" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="ui-monospace">10^18</text><text x="275" y="15" text-anchor="middle" font-size="9" fill="#10b981" font-family="ui-monospace">10^21</text></svg></div>
+      </div>
+      <div class="demo-tab-content" data-tab="summary">
+        <div class="summary-block"><ul>
+          <li>DQHP: DNA-quantum hybrid processor (2052).</li>
+          <li>10^21 bits/g storage in DNA; 10^12 reads/s via NV-centre magnetometry.</li>
+          <li>Biological self-repair every 24h (polymerase); error 10^-21 per bit.</li>
+          <li>Fully biodegradable — zero e-waste at end-of-life.</li>
+        </ul></div>
+      </div>
+      <div class="demo-tab-content" data-tab="etl">
+        <div class="report-block" id="etl-result-quantum-biological-computing-2052" style="min-height: 60px;">
+          <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+        </div>
+      </div>
+      <h2>🎬 Animated derivation clip</h2>
+      <div class="anim-container" style="padding: 20px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px); margin: 24px 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2, #06b6d4);">Phase 28 — animated Math→Code derivation</div>
+          <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">▶ Play</button>
+            <button class="anim-pause" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⏸ Pause</button>
+            <button class="anim-replay" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">↺ Replay</button>
+            <button class="anim-record" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⬇ Record WebM</button>
+            <button class="anim-share" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">🔗 Share</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="concept-quantum-biological-computing-2052" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;"></canvas>
+      </div>
+      <script>
+        // Register the derivation for this concept card
+        AIHPC_ANIM.register('concept-quantum-biological-computing-2052', {
+          title: "Futuristic Vision (2052): quantum-biological computing \u2014 DNA-quantum hybrid processor",
+          steps: [{"title": "Step 1: DNA encode", "math": "stored = DNA.encode(data, codec=Reed-Solomon, density=10^21 bits/g)", "explain": "Encode the data into synthetic DNA strands using Reed-Solomon error-correcting codes. Density: 10^21 bits per gram of DNA (vs 10^9 for flash storage \u2014 10^12x denser)."}, {"title": "Step 2: NV-centre write", "math": "written = NV_array.write(stored, via=microwave_pulses)", "explain": "Write the DNA strands via NV-centre microwave pulses. Each NV-centre is positioned over a DNA strand and emits targeted microwave pulses that modify the DNA bases (A\u2194T, C\u2194G flips)."}, {"title": "Step 3: Quantum readout", "math": "read = NV_array.read(stored, rate=10^6/s per NV, n_NV=10^6)", "explain": "Read the DNA via NV-centre quantum magnetometry. Each NV-centre detects the magnetic signature of one DNA base in 1 \u00b5s. With 10^6 NV-centres, total read rate: 10^12 bases/second."}, {"title": "Step 4: Biological repair", "math": "repaired = polymerase.replicate(stored, every=24h, error_correction=True)", "explain": "Every 24 hours, a cell-free DNA polymerase system replicates the stored DNA strands. This corrects bit-flip errors (DNA damage from background radiation) \u2014 biological self-repair. Error rate after repair: 10^-21 per bit."}, {"title": "Step 5: Output", "math": "output = decode(read, codec=Reed-Solomon);  biodegradable at end-of-life", "explain": "Decode the readout via Reed-Solomon. The entire chip is biodegradable \u2014 at end-of-life, the DNA is digested by naturally-occurring nucleases, leaving zero e-waste."}],
+          duration: 12.0,
+        });
+        // CODE_BANK for the polyglot code panel
+        const CODE_BANK = {"python": "# stored = DNA.encode(data, density=10^21 bits/g); read = NV_array.read(stored, rate=10^12/s)\n# data -> input  DNA -> storage medium  NV -> diamond quantum magnetometer\ndef dqhp_compute(data, dna_storage, nv_array):\n    stored = dna_storage.encode(data, codec='reed-solomon', density=10**21)\n    written = nv_array.write(stored, via='microwave')\n    read = nv_array.read(written, rate=10**6, n_nv=10**6)  # 10^12/s\n    repaired = dna_storage.polymerase_replicate(written, every=24*3600)\n    output = decode(read, codec='reed-solomon')\n    return output  # biodegradable at end-of-life\n", "rust": "fn dqhp_compute(data: &Data, dna: &DNAStorage, nv: &NVArray) -> Output {\n    let stored = dna.encode(data, \"reed-solomon\", 10u128.pow(21));\n    let written = nv.write(&stored, \"microwave\");\n    let read = nv.read(&written, 1_000_000, 1_000_000);\n    let _repaired = dna.polymerase_replicate(&written, 86400);\n    decode(&read, \"reed-solomon\")\n}", "go": "func DQHPCompute(data *Data, dna *DNAStorage, nv *NVArray) Output {\n\tstored := dna.Encode(data, \"reed-solomon\", 1e21)\n\twritten := nv.Write(stored, \"microwave\")\n\tread := nv.Read(written, 1_000_000, 1_000_000)\n\t_ = dna.PolymeraseReplicate(written, 86400)\n\treturn Decode(read, \"reed-solomon\")\n}", "c": "Output dqhp_compute(Data* data, DNAStorage* dna, NVArray* nv) {\n    Stored* stored = dna_encode(dna, data, \"reed-solomon\", 1e21);\n    Stored* written = nv_write(nv, stored, \"microwave\");\n    Read* read = nv_read(nv, written, 1000000, 1000000);\n    dna_polymerase_replicate(dna, written, 86400);\n    return decode(read, \"reed-solomon\");\n}", "elixir": "defmodule DQHP do\n  def compute(data, dna, nv) do\n    stored = dna.encode(data, \"reed-solomon\", 1.0e21)\n    written = nv.write(stored, \"microwave\")\n    read = nv.read(written, 1_000_000, 1_000_000)\n    _ = dna.polymerase_replicate(written, 86400)\n    decode(read, \"reed-solomon\")\n  end\nend", "scala": "def dqhpCompute(data: Data, dna: DNAStorage, nv: NVArray): Output = {\n  val stored = dna.encode(data, \"reed-solomon\", 1e21)\n  val written = nv.write(stored, \"microwave\")\n  val read = nv.read(written, 1000000, 1000000)\n  dna.polymeraseReplicate(written, 86400)\n  decode(read, \"reed-solomon\")\n}"};
+        // Initial render: set Python code on page load
+        document.addEventListener('DOMContentLoaded', function () {
+          var block = document.getElementById('code-block-quantum-biological-computing-2052');
+          if (block) block.textContent = CODE_BANK.python || '';
+          // Wire up language toggles
+          document.querySelectorAll('.code-panel .lang-toggle button').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var panel = btn.closest('.code-panel');
+              panel.querySelectorAll('.lang-toggle button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+              var lang = btn.dataset.lang;
+              var block = panel.querySelector('pre.code-block');
+              if (block) block.textContent = CODE_BANK[lang] || '// code not available for ' + lang;
+            });
+          });
+          // Wire up observe tabs
+          document.querySelectorAll('.demo-tabs button').forEach(function (tab) {
+            tab.addEventListener('click', function () {
+              var target = tab.dataset.tab;
+              document.querySelectorAll('.demo-tabs button').forEach(function (t) { t.classList.toggle('active', t === tab); });
+              document.querySelectorAll('.demo-tab-content').forEach(function (c) { c.classList.toggle('active', c.dataset.tab === target); });
+            });
+          });
+          // Init the animated-derivation canvas
+          AIHPC_ANIM.init();
+          // Phase 31: wire ETL file inputs to handleETLUpload
+          document.querySelectorAll('input[type="file"][data-article-id]').forEach(function (inp) {
+            inp.addEventListener('change', function (e) {
+              var articleId = inp.dataset.articleId;
+              var file = e.target.files[0];
+              if (!file) return;
+              if (window.handleETLUpload) {
+                var maxMb = parseInt(inp.dataset.maxMb || '50', 10);
+                window.handleETLUpload(articleId, file, { max_mb: maxMb });
+              }
+            });
+          });
+        });
+      </script>
+      <div class="meta" style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Auto-generated concept card from <a href="../digest.html">Weekly Digest Issue #13</a> (article id: <code>quantum-biological-computing-2052</code>). Generated by <code>scripts/gen-concept-cards.py</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      // Particle background
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d');
+        var W, H, P = [];
+        var N = 50, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; }
+        r();
+        addEventListener('resize', r);
+        for (var i = 0; i < N; i++) {
+          P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        }
+        function s() {
+          x.clearRect(0, 0, W, H);
+          for (var i = 0; i < N; i++) {
+            for (var j = i+1; j < N; j++) {
+              var d = Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y);
+              if (d < 100) {
+                x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')';
+                x.lineWidth = .5;
+                x.beginPath();
+                x.moveTo(P[i].x, P[i].y);
+                x.lineTo(P[j].x, P[j].y);
+                x.stroke();
+              }
+            }
+          }
+          for (var p of P) {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+            x.fillStyle = p.c; x.globalAlpha = .4;
+            x.beginPath();
+            x.arc(p.x, p.y, p.r, 0, 6.28);
+            x.fill();
+          }
+          x.globalAlpha = 1;
+          requestAnimationFrame(s);
+        }
+        s();
+      })();
+
+      // ---- Ribbon theme toggle ----
+      (function () {
+        var KEY = 'aihpc-theme';
+        var b = document.body, r = document.querySelector('.ribbon'), i = document.getElementById('ribbon-theme-icon');
+        function a(t) {
+          if (t === 'light') { b.classList.add('light'); r && r.classList.add('light'); if (i) i.textContent = '☀'; }
+          else { b.classList.remove('light'); r && r.classList.remove('light'); if (i) i.textContent = '🌙'; }
+        }
+        var d = 'dark';
+        try { var s = localStorage.getItem(KEY); if (s === 'light' || s === 'dark') d = s; else if (matchMedia('(prefers-color-scheme:light)').matches) d = 'light'; } catch (e) {}
+        a(d);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () { var n = b.classList.contains('light') ? 'dark' : 'light'; a(n); try { localStorage.setItem(KEY, n); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

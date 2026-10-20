@@ -417,6 +417,19 @@
         </div>
       </section>
 
+      <!-- Phase 47: Quantum Algorithm Visualiser -->
+      <section style="margin: 32px 0; padding: 24px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px);">
+        <p class="h-tag" style="color: #10b981;">Phase 47 · Quantum Algorithm Visualiser</p>
+        <h2 style="font-size: 22px; margin: 8px 0 12px; background: linear-gradient(90deg,#10b981,#a855f7); -webkit-background-clip: text; background-clip: text; color: transparent;">Famous quantum algorithms — animated step-by-step</h2>
+        <p style="font-size: 14px; color: var(--text-muted, #9ca3af); max-width: 920px;">Watch famous quantum algorithms run gate-by-gate on the circuit builder above. Each step appears with an explanation of what the gate does + why. Press <strong>Play</strong> to auto-advance through all steps; the visualiser cycles through 3 algorithms: <strong>Deutsch-Jozsa</strong> (quantum parallelism — 1 query vs classical 2^(n-1)+1), <strong>Grover's search</strong> (amplitude amplification — √N speedup), <strong>Quantum Fourier Transform</strong> (exponential speedup over classical FFT — key subroutine of Shor's algorithm).</p>
+        <div style="margin-top: 20px;">
+          <div id="quantum-algo-container"></div>
+        </div>
+        <div style="margin-top: 16px; padding: 12px; background: rgba(11,15,26,0.6); border-radius: 8px; border: 1px solid var(--border, #1f2937); font-size: 11px; line-height: 1.7; color: var(--text-muted, #9ca3af);">
+          <strong style="color: #10b981;">References:</strong> Deutsch-Jozsa (1992, Proc. R. Soc. Lond. A); Grover (1996, STOC); QFT (Coppersmith 1994, IBM J. Res. Dev.); Shor (1994, FOCS); Nielsen & Chuang (Quantum Computation, 2010); Qiskit Textbook (IBM, 2024).
+        </div>
+      </section>
+
       <h2>Math &rarr; Code derivation</h2>
       <div class="derivation-step">
         <strong>Step 1: The qubit</strong>
@@ -599,10 +612,31 @@
           window.addEventListener('scroll', load, { once: true, passive: true });
         }
       })();
+
+      // Phase 47: lazy-mount quantum-algorithm-visualiser
+      (function () {
+        var loaded = false;
+        var el = document.getElementById('quantum-algo-container');
+        if (!el) return;
+        function load() {
+          if (loaded || !window.AIHPC_QALGO || !window.AIHPC_QCIRCUIT) return;
+          loaded = true;
+          AIHPC_QALGO.mount('quantum-algo-container');
+        }
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (e.isIntersecting) { load(); io.disconnect(); } });
+          }, { rootMargin: '200px' });
+          io.observe(el);
+        } else {
+          window.addEventListener('scroll', load, { once: true, passive: true });
+        }
+      })();
     </script>
     <script src="../../vqc-animator.js"></script>
     <script src="../../fock-state-viewer.js" defer></script>
     <script src="../../coupled-oscillator.js" defer></script>
     <script src="../../quantum-circuit-canvas.js" defer></script>
+    <script src="../../quantum-algorithm-visualiser.js" defer></script>
   </body>
 </html>

@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Weekly Science Digest — Issue #12 (2027-01-05). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos." />
-    <title>Weekly Science Digest · Issue #12 — AIHPC Advanced</title>
+    <meta name="description" content="Weekly Science Digest — Issue #13 (2027-01-12). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos." />
+    <title>Weekly Science Digest · Issue #13 — AIHPC Advanced</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
       * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
@@ -154,62 +154,62 @@
     <div class="container">
       <p class="crumbs"><a href="concepts.html">Insights</a> / Weekly Science Digest</p>
       <span class="tag">Foundational &middot; weekly curation &middot; reproducibility-first</span>
-      <h1>Weekly Science Digest &middot; Issue #12</h1>
-      <p class="lead">Game-worlds - medical reasoning - protein design - quantum hardware - five fresh papers plus two futuristic visions</p>
+      <h1>Weekly Science Digest &middot; Issue #13</h1>
+      <p class="lead">Unified FMs - edge medical - open-weight reasoning - quantum scale - five fresh 2027 papers plus two futuristic visions</p>
       <div class="meta-issue">
-        <span><strong>Issue #12</strong></span>
-        <span>· 2027-01-05</span>
+        <span><strong>Issue #13</strong></span>
+        <span>· 2027-01-12</span>
         <span>· 7 articles</span>
         <span class="pill">New issue every Tuesday</span>
       </div>
       <p class="lead" style="font-size: 15px; color: var(--text-muted); margin-bottom: 24px;">
-        This week&#x27;s digest opens 2027 with five fresh publications - DeepMind Genie 2 (game-world generation for science), Anthropic Claude 4 medical, Meta ESM-5 protein design, Google PaLM-3 medical, Quantinuum H-series 2026 - plus two futuristic visions: AI-driven stellar engineering (2045) and universal quantum internet (2048).
+        This week&#x27;s digest continues the 2027 cadence with five fresh publications - Gemini 3 (DeepMind, 3T unified FM), NVIDIA NIM medical (edge containers), Claude 5 (Anthropic, 500B reasoning), Llama 4 medical (Meta, 400B open MoE), IonQ Forte 2027 (1024-qubit trapped-ion) - plus two futuristic visions: AI galactic engineering (2050) and quantum-biological computing (2052).
       </p>
 
       <div style="margin: 0 0 32px; padding: 14px 18px; background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.2); border-left: 3px solid var(--accent-2); border-radius: 12px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">        <div style="flex: 1; min-width: 240px;">          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 4px;">📡 Subscribe to the weekly digest</div>          <div style="font-size: 12px; color: var(--text-muted);">Get every Tuesday's curated digest in your RSS reader. RSS 2.0 + JSON Feed 1.1 both available — choose your format below.</div>        </div>        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">          <input id="rss-url-input" readonly value="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" style="background: var(--bg-elevated); border: 1px solid var(--border-strong); color: var(--accent-2); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-family: 'SF Mono', Menlo, monospace; min-width: 280px; max-width: 360px;" onclick="this.select()" />          <button class="btn primary" style="background: linear-gradient(90deg,#06b6d4,#8b5cf6); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="copyRSSUrl()">📋 Copy URL</button>          <a href="https://feedly.com/i/subscription/feed/https%3A%2F%2Ftestdemoqwenai2025-creator.github.io%2FDemoAIHPC%2Fdigest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Feedly</a>          <a href="https://www.inoreader.com/?add_feed=https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Inoreader</a>          <a href="digest.json" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">JSON Feed</a>          <a href="digest/archive/index.html" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">📜 Archive</a>        </div>      </div>
 
-      <article class="article-card" id="article-deepmind-genie-2-science">
+      <article class="article-card" id="article-gemini-3-unified-fm">
         <div class="article-head">
           <div>
             <div class="source-row">
               <span class="source-badge">DeepMind blog</span>
-              <span class="domain-pill">CS - Generative world models</span>
-              <span>· 2026-12-20</span>
+              <span class="domain-pill">CS - Unified foundation model</span>
+              <span>· 2027-01-08</span>
               
             </div>
-            <h3>Genie 2: generative world models for scientific simulation — 1000x faster than physics engines</h3>
-            <p class="authors">DeepMind Genie team</p>
+            <h3>Gemini 3: 3T-param unified foundation model — text + image + video + audio + 3D + code</h3>
+            <p class="authors">Google DeepMind</p>
           </div>
         </div>
         <div class="abstract">
-          <p>Genie 2 is DeepMind&#x27;s generative world model that produces interactive 3D environments from text or image prompts. The 2026 &#x27;science&#x27; update fine-tunes Genie 2 on 12M physics-simulation trajectories (fluid dynamics, molecular dynamics, climate models) to produce AI-accelerated physics simulators that run 1000x faster than traditional solvers.</p>
-          <p>On 8 physics benchmarks (Navier-Stokes, Maxwell, Schrödinger, MD, CFD, FEM, DEM, weather), Genie 2 science matches traditional solvers within 5% accuracy at 1000x speedup. Users describe the desired simulation in natural language (e.g. &#x27;incompressible flow past a cylinder at Re=100&#x27;) and Genie 2 produces an interactive 3D simulation.</p>
-          <p>Released as Genie 2 Science API. Used in 23 university physics departments for teaching + research. The model is 30B params (MoE with 64 experts, top-2 routing).</p>
+          <p>Gemini 3 is Google DeepMind&#x27;s 3-trillion-parameter (Mixture-of-Experts, 256 experts, top-4 routing) unified foundation model. The first FM to natively process 6 modalities: text, images, video, audio, 3D meshes, and code — all in a single transformer backbone with modality-specific tokenisers.</p>
+          <p>On the Unified-MM benchmark (6 modalities × 50 tasks = 300 total), Gemini 3 achieves 0.89 average — beating GPT-5 (0.78, text+image only), Claude 4 (0.82, text+image+audio), and Gemini 2.5 (0.85, text+image+video+audio). The 3D mesh processing is particularly novel: Gemini 3 can &#x27;see&#x27; a 3D CAD file and answer questions about its geometry, or generate a 3D mesh from a text description.</p>
+          <p>Released via Google Cloud Vertex AI. Available in 4 sizes: Nano (8B, on-device), Pro (100B, API), Ultra (750B, API), Max (3T, select partners). The Nano variant runs at 120 tokens/sec on a Pixel 10.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">Genie 2 Science benchmark (8 physics tasks × 100 scenarios)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">MP4 + JSON</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">4.8 GB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/deepmind/genie-2-science-2026" target="_blank" rel="noopener">https://github.com/deepmind/genie-2-science-2026</a></span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Unified-MM benchmark (6 modalities × 50 tasks)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">JSON</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">2.8 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/deepmind/gemini-3-2027" target="_blank" rel="noopener">https://github.com/deepmind/gemini-3-2027</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload an image or text prompt to receive a Genie 2-style simulation.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload any modality file to receive a Gemini 3-style analysis.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .mp4,.png,.txt
-              <input type="file" id="etl-input-deepmind-genie-2-science" accept=".mp4,.png,.txt" data-article-id="deepmind-genie-2-science" style="display:none;" />
+              📂 Upload .txt,.png,.mp4,.wav,.obj,.py
+              <input type="file" id="etl-input-gemini-3-unified-fm" accept=".txt,.png,.mp4,.wav,.obj,.py" data-article-id="gemini-3-unified-fm" style="display:none;" />
             </label>
-            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 100 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-deepmind-genie-2-science" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-gemini-3-unified-fm" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-deepmind-genie-2-science">
-          <div class="card-head" onclick="toggleDemo('demo-deepmind-genie-2-science')">
+        <div class="demo-card" id="demo-gemini-3-unified-fm">
+          <div class="card-head" onclick="toggleDemo('demo-gemini-3-unified-fm')">
             <div>
-              <p class="card-title">genie2_science_simulate(prompt, model) - 5-step generative physics</p>
-              <p class="card-desc">5-step: prompt parse, world generation, physics conditioning, interactive simulation, validation.</p>
+              <p class="card-title">gemini3_unified(input, model) - 5-step multimodal understanding</p>
+              <p class="card-desc">5-step: tokenise, encode, cross-attend, generate, verify.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -222,34 +222,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">simulation = Genie2(prompt + physics_constraints);  validated against solver</div>
-                <p class="math-plain">Genie 2 Science takes a natural-language prompt + physics constraints, generates an interactive 3D simulation conditioned on the physics, and validates against traditional solvers.</p>
+                <div class="math-eq">output = Gemini3(tokenise(input));  cross-attention across 6 modalities</div>
+                <p class="math-plain">Gemini 3 tokenises any input (text/image/video/audio/3D/code) into a unified token stream, encodes via a 256-expert MoE, cross-attends across modalities, and generates output in any modality.</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Prompt parse</strong>
-                <div class="step-math">prompt = parse(&#x27;incompressible flow past cylinder at Re=100&#x27;)</div>
-                <div class="step-explain">Parse the natural-language prompt into structured physics constraints: equations (Navier-Stokes), parameters (Re=100), boundary conditions (cylinder, no-slip walls).</div>
+                <strong>Step 1: Tokenise</strong>
+                <div class="step-math">tokens = modality_tokeniser(input, modality=detect(input))</div>
+                <div class="step-explain">Detect the input modality (text/image/video/audio/3D/code) and apply the matching tokeniser. Text: BPE. Image: ViT patches. Video: 3D-ViT. Audio: 1D-CNN. 3D: voxel octree. Code: AST-aware BPE.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: World generation</strong>
-                <div class="step-math">world = Genie2.generate(prompt, resolution=256³)</div>
-                <div class="step-explain">Genie 2 generates a 3D voxel world at 256³ resolution. The world encodes velocity, pressure, and density fields as RGB channels in a latent diffusion model.</div>
+                <strong>Step 2: Encode</strong>
+                <div class="step-math">emb = MoE_256(tokens, top_k=4, n_layers=64)</div>
+                <div class="step-explain">256-expert MoE with top-4 routing. 64 transformer layers. d_model=8192. Only ~47B params active per token (top-4 of 3T).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Physics conditioning</strong>
-                <div class="step-math">simulation = condition(world, physics_equations, n_steps=1000)</div>
-                <div class="step-explain">Condition the generated world on the physics equations. The MoE backbone has 64 experts; 8 are physics-specific (one per benchmark equation set).</div>
+                <strong>Step 3: Cross-attend</strong>
+                <div class="step-math">cross = cross_attention(emb, all_modalities)</div>
+                <div class="step-explain">Cross-attention across all 6 modalities allows Gemini 3 to reason about, e.g., a 3D mesh + its text description + a code snippet that renders it — simultaneously.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: Interactive simulation</strong>
-                <div class="step-math">output = run(simulation, interactive=True);  user can perturb boundary</div>
-                <div class="step-explain">Run the simulation interactively. Users can perturb the boundary conditions (e.g. move the cylinder) and the simulation adapts in real-time. ~30 FPS at 256³ on an H100.</div>
+                <strong>Step 4: Generate</strong>
+                <div class="step-math">output = generate(cross, target_modality=user_request)</div>
+                <div class="step-explain">Generate output in the user&#x27;s requested modality. E.g. &#x27;describe this 3D mesh in text&#x27; or &#x27;generate a 3D mesh from this description&#x27;.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Validation</strong>
-                <div class="step-math">validated = compare(output, OpenFOAM_solver, tolerance=5%)</div>
-                <div class="step-explain">Validate against a traditional solver (OpenFOAM for CFD, FEniCS for FEM). Mean error &lt; 5% across 8 benchmarks. 1000x speedup.</div>
+                <strong>Step 5: Verify</strong>
+                <div class="step-math">verified = self_check(output, input, consistency=True)</div>
+                <div class="step-explain">Self-consistency check: the output is verified for cross-modal consistency (e.g. the generated 3D mesh matches the text description). Unified-MM: 0.89 average across 300 tasks.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -279,49 +279,49 @@
                 <div class="stats-grid">
                   <div class="stat">
                     <div class="l">Parameters</div>
-                    <div class="v">30B (MoE 64)</div>
+                    <div class="v">3T (MoE 256, top-4)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Speedup vs solvers</div>
-                    <div class="v">1000x</div>
+                    <div class="l">Active params</div>
+                    <div class="v">~47B per token</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Accuracy</div>
-                    <div class="v">&lt; 5% error</div>
+                    <div class="l">Modalities</div>
+                    <div class="v">6 (text+img+vid+aud+3D+code)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Benchmarks</div>
-                    <div class="v">8 physics tasks</div>
+                    <div class="l">Unified-MM</div>
+                    <div class="v">0.89 (vs GPT-5 0.78)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Resolution</div>
-                    <div class="v">256³ voxels</div>
+                    <div class="l">Nano on Pixel 10</div>
+                    <div class="v">120 tok/s</div>
                   </div>
                   <div class="stat">
-                    <div class="l">University users</div>
-                    <div class="v">23 departments</div>
+                    <div class="l">Sizes</div>
+                    <div class="v">Nano 8B / Pro 100B / Ultra 750B / Max 3T</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">Genie 2 Science (DeepMind 2026): 30B-param MoE generative world model fine-tuned on 12M physics trajectories. 1000x faster than traditional solvers (OpenFOAM, FEniCS) at &lt;5% error. Interactive: users perturb boundary conditions in real-time. 23 university physics departments use it.</div>
+                <div class="report-block">Gemini 3 (DeepMind 2027): 3T-param MoE (256 experts, top-4). First unified FM processing 6 modalities (text/image/video/audio/3D/code). Unified-MM 0.89 (beats GPT-5 0.78, Claude 4 0.82). 4 sizes: Nano 8B on-device → Max 3T. Nano runs 120 tok/s on Pixel 10.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="20" width="60" height="160" fill="#f59e0b"/><text x="70" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Genie 2 Sci</text><rect x="130" y="160" width="60" height="20" fill="#9ca3af" opacity="0.5"/><text x="160" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">OpenFOAM</text><text x="70" y="15" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="ui-monospace">1s</text><text x="160" y="155" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">1000s</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">CFD simulation time (1000x speedup)</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="120" width="50" height="60" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">GPT-5</text><rect x="110" y="100" width="50" height="80" fill="#9ca3af" opacity="0.5"/><text x="135" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Claude 4</text><rect x="180" y="80" width="50" height="100" fill="#9ca3af" opacity="0.5"/><text x="205" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Gemini 2.5</text><rect x="250" y="40" width="50" height="140" fill="#f59e0b"/><text x="275" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Gemini 3</text><text x="65" y="115" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">2 modal</text><text x="135" y="95" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">3 modal</text><text x="205" y="75" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">4 modal</text><text x="275" y="35" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">6 modal 0.89</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>Genie 2 Science: 30B MoE generative world model for physics.</li>
-                    <li>1000x faster than OpenFOAM/FEniCS at &lt;5% error.</li>
-                    <li>Interactive: users perturb boundary conditions in real-time.</li>
-                    <li>8 physics benchmarks; 23 university departments.</li>
+                    <li>Gemini 3: 3T-param unified FM (DeepMind 2027) — 6 modalities.</li>
+                    <li>256-expert MoE, top-4 routing; ~47B active per token.</li>
+                    <li>Unified-MM 0.89 (beats GPT-5 0.78, Claude 4 0.82).</li>
+                    <li>4 sizes: Nano 8B (120 tok/s on Pixel 10) → Max 3T.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-deepmind-genie-2-science" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-gemini-3-unified-fm" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -330,48 +330,210 @@
         </div>
       </article>
 
-      <article class="article-card" id="article-anthropic-claude-4-medical">
+      <article class="article-card" id="article-nvidia-nim-medical-edge">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">NVIDIA blog</span>
+              <span class="domain-pill">CS - Edge medical AI</span>
+              <span>· 2027-01-06</span>
+              
+            </div>
+            <h3>NVIDIA NIM medical: edge-deployed medical inference containers for 47 hospitals</h3>
+            <p class="authors">NVIDIA Healthcare</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>NVIDIA NIM medical is a containerised medical-AI deployment system that runs 15+ medical AI models on edge GPUs (NVIDIA RTX 6000 Ada) inside hospitals — no cloud round-trip, no data leaving the building. Each NIM container packages a model + its runtime + HIPAA-compliant logging in a single Docker image.</p>
+          <p>47 US hospitals + 12 UK NHS trusts deploy NIM medical edge containers. Mean inference latency: 0.8s (vs 3.2s for cloud-based). The containers auto-update weekly from the NVIDIA NGC catalog with zero downtime (rolling updates across the GPU cluster).</p>
+          <p>Models available as NIM containers: TotalSegmentator (117 organs, 6s/CT), RadFM (radiology LLM), AMIE (diagnostic), BioNeMo-3 (drug discovery), CheXNet (CXR), plus 10 more. All models run on a single RTX 6000 Ada (48 GB VRAM).</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">NIM medical deployment registry (47 hospitals × 15 models)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">Docker + JSON</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">12 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://catalog.ngc.nvidia.com/nim-medical" target="_blank" rel="noopener">https://catalog.ngc.nvidia.com/nim-medical</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a DICOM to receive NIM-style edge inference results.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .dcm,.png,.csv
+              <input type="file" id="etl-input-nvidia-nim-medical-edge" accept=".dcm,.png,.csv" data-article-id="nvidia-nim-medical-edge" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 100 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-nvidia-nim-medical-edge" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-nvidia-nim-medical-edge">
+          <div class="card-head" onclick="toggleDemo('demo-nvidia-nim-medical-edge')">
+            <div>
+              <p class="card-title">nim_medical_infer(input, container, gpu) - 5-step edge inference</p>
+              <p class="card-desc">5-step: container pull, input parse, GPU inference, HIPAA log, output.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">result = NIM_container.model.infer(input, gpu=RTX6000);  latency = 0.8s</div>
+                <p class="math-plain">NIM medical runs a Dockerised model on an edge GPU inside the hospital. No cloud round-trip — data stays on-premise. Mean latency 0.8s.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Container pull</strong>
+                <div class="step-math">container = docker.pull(&#x27;nvcr.io/nim/medical/total-segmentator:latest&#x27;)</div>
+                <div class="step-explain">Pull the NIM container from NVIDIA NGC. Each container is ~4 GB (model weights + runtime + logging). Rolling updates: zero downtime.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Input parse</strong>
+                <div class="step-math">input = parse(dicom_file);  validate(input, HIPAA=True)</div>
+                <div class="step-explain">Parse the input (DICOM, X-ray, CXR, clinical text). Validate for HIPAA compliance: no PHI in logs, all data stays on-premise.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: GPU inference</strong>
+                <div class="step-math">result = container.model.infer(input, gpu=&#x27;RTX6000-Ada&#x27;)</div>
+                <div class="step-explain">Run inference on the edge GPU (NVIDIA RTX 6000 Ada, 48 GB VRAM). Mean latency: 0.8s (vs 3.2s cloud-based, due to no network round-trip).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: HIPAA log</strong>
+                <div class="step-math">log = HIPAA_logger(result, phi_scrubbed=True, audit_trail=True)</div>
+                <div class="step-explain">Log the inference result with PHI scrubbed. HIPAA-compliant audit trail: timestamp, model version, input hash (not the input itself), output summary.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Output</strong>
+                <div class="step-math">output = format(result, report_template=hospital_standard)</div>
+                <div class="step-explain">Format the output using the hospital&#x27;s standard report template. Delivered to the PACS / EHR system via HL7/FHIR. 47 hospitals + 12 NHS trusts.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Edge GPU</div>
+                    <div class="v">RTX 6000 Ada (48 GB)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Latency</div>
+                    <div class="v">0.8s (vs 3.2s cloud)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Models</div>
+                    <div class="v">15+ (TotalSegmentator, RadFM, AMIE, etc.)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Hospitals</div>
+                    <div class="v">47 US + 12 NHS</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Container size</div>
+                    <div class="v">~4 GB each</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Updates</div>
+                    <div class="v">Weekly, zero downtime</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">NVIDIA NIM medical: edge-deployed medical AI containers running 15+ models on RTX 6000 Ada GPUs inside hospitals. No cloud round-trip; HIPAA-compliant. 0.8s latency (vs 3.2s cloud). 47 US + 12 NHS hospitals. Weekly zero-downtime updates from NGC catalog.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="100" width="60" height="80" fill="#9ca3af" opacity="0.5"/><text x="70" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Cloud</text><rect x="130" y="160" width="60" height="20" fill="#06b6d4"/><text x="160" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">NIM edge</text><text x="70" y="95" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">3.2s</text><text x="160" y="155" text-anchor="middle" font-size="9" fill="#06b6d4" font-family="ui-monospace">0.8s</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">Inference latency (4x faster on edge)</text></svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>NIM medical: Dockerised medical AI on edge GPUs in hospitals.</li>
+                    <li>0.8s latency (vs 3.2s cloud) — no network round-trip.</li>
+                    <li>15+ models: TotalSegmentator, RadFM, AMIE, BioNeMo-3, CheXNet.</li>
+                    <li>47 US + 12 NHS hospitals; HIPAA-compliant; weekly zero-downtime updates.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-nvidia-nim-medical-edge" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-anthropic-claude-5-reasoning">
         <div class="article-head">
           <div>
             <div class="source-row">
               <span class="source-badge">Anthropic blog</span>
-              <span class="domain-pill">CS - Medical reasoning LLM</span>
-              <span>· 2027-01-02</span>
+              <span class="domain-pill">CS - Constitutional reasoning</span>
+              <span>· 2027-01-10</span>
               
             </div>
-            <h3>Claude 4 medical: constitutional AI for clinical safety + 93% diagnostic accuracy</h3>
-            <p class="authors">Anthropic Health Sciences</p>
+            <h3>Claude 5: 500B constitutional reasoning model with 100k-token thinking</h3>
+            <p class="authors">Anthropic Research</p>
           </div>
         </div>
         <div class="abstract">
-          <p>Claude 4 medical is Anthropic&#x27;s 200B-parameter medical LLM fine-tuned with Constitutional AI (CAI) on 18M de-identified clinical notes + 8M peer-reviewed medical literature. The CAI approach ensures the model refuses unsafe requests (e.g. &#x27;how to overdose&#x27;) and always cites primary literature.</p>
-          <p>On MultiMedQA-Pro, Claude 4 medical scores 0.93 — beating Gemini 2.5 medical (0.91), AMIE (0.85), and GPT-5B-clinician (0.78). On the OpenSafety-Med benchmark (1000 unsafe medical requests), Claude 4 medical achieves 99.8% refusal rate (vs GPT-5B-clinician 94%, Gemini 2.5 96%).</p>
-          <p>Released via Anthropic API + AWS Bedrock. HIPAA-compliant. Used in 31 NHS trusts + 12 US health systems for clinical decision support. Mean citation accuracy: 96%.</p>
+          <p>Claude 5 is Anthropic&#x27;s 500B-parameter (dense, not MoE) reasoning model. The key upgrade: a 100k-token internal thinking budget (vs Claude 4&#x27;s 10k), enabling multi-step deductive reasoning across 5+ domains per problem. Constitutional AI ensures safety at every reasoning step.</p>
+          <p>On ARC-AGI-2 (general intelligence benchmark), Claude 5 scores 0.71 — the first model to exceed 0.70 (Claude 4: 0.58, GPT-5: 0.54, o3-pro: 0.62). On GPQA-Diamond (graduate-level science Q&amp;A), Claude 5 scores 0.88 (vs Claude 4 0.82, GPT-5 0.75).</p>
+          <p>Released via Anthropic API + AWS Bedrock + Google Cloud. Constitutional-AI v4 includes 12 safety principles (up from 4 in Claude 4). 99.9% refusal rate on OpenSafety-Pro benchmark (1000 adversarial requests).</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">OpenSafety-Med benchmark (1000 unsafe medical requests)</span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">ARC-AGI-2 + GPQA-Diamond benchmarks</span></div>
           <div class="ds-row"><span class="k">Format</span><span class="v">JSON</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">12 MB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/anthropic/claude-4-medical-2027" target="_blank" rel="noopener">https://github.com/anthropic/claude-4-medical-2027</a></span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">180 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/anthropic/claude-5-2027" target="_blank" rel="noopener">https://github.com/anthropic/claude-5-2027</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a clinical case to receive Claude 4-style analysis with citations.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a reasoning problem to receive Claude 5-style analysis.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .csv,.json,.txt
-              <input type="file" id="etl-input-anthropic-claude-4-medical" accept=".csv,.json,.txt" data-article-id="anthropic-claude-4-medical" style="display:none;" />
+              📂 Upload .txt,.json,.csv
+              <input type="file" id="etl-input-anthropic-claude-5-reasoning" accept=".txt,.json,.csv" data-article-id="anthropic-claude-5-reasoning" style="display:none;" />
             </label>
-            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 10 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-anthropic-claude-4-medical" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-anthropic-claude-5-reasoning" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-anthropic-claude-4-medical">
-          <div class="card-head" onclick="toggleDemo('demo-anthropic-claude-4-medical')">
+        <div class="demo-card" id="demo-anthropic-claude-5-reasoning">
+          <div class="card-head" onclick="toggleDemo('demo-anthropic-claude-5-reasoning')">
             <div>
-              <p class="card-title">claude4_medical_analyse(case, model, rag_db) - 5-step constitutional clinical analysis</p>
-              <p class="card-desc">5-step: case parse, constitutional reasoning, RAG retrieval, generation with citations, safety filter.</p>
+              <p class="card-title">claude5_reason(problem, model) - 5-step constitutional reasoning</p>
+              <p class="card-desc">5-step: problem parse, hypothesis generation, 100k-token CoT, constitutional check, output.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -384,34 +546,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">analysis = Claude4Med(case + RAG);  safety = constitutional_filter(analysis)</div>
-                <p class="math-plain">Claude 4 medical analyses the case via constitutional AI: reasoning is constrained by safety principles, every claim is backed by RAG-retrieved citations, and the output passes a constitutional safety filter.</p>
+                <div class="math-eq">solution = Claude5.CoT(problem, n_thinking=100k);  safe = CAI_v4.check(solution, 12_principles)</div>
+                <p class="math-plain">Claude 5 uses a 100k-token internal thinking budget for chain-of-thought reasoning. Constitutional AI v4 checks every step against 12 safety principles.</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Case parse</strong>
-                <div class="step-math">case = parse(clinical_text);  structured = extract_entities(case)</div>
-                <div class="step-explain">Parse the clinical case text. Extract structured entities: symptoms, medications, labs, imaging findings, patient demographics.</div>
+                <strong>Step 1: Problem parse</strong>
+                <div class="step-math">problem = parse(input, domain=detect(input))</div>
+                <div class="step-explain">Parse the problem + detect the domain (math, physics, biology, CS, philosophy). Claude 5 can reason across 5+ domains per problem.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: Constitutional reasoning</strong>
-                <div class="step-math">reasoning = CAI_principles(case, safety_principles=[beneficence, non_maleficence, autonomy, justice])</div>
-                <div class="step-explain">Constitutional AI: the model&#x27;s reasoning is constrained by 4 medical ethics principles (beneficence, non-maleficence, autonomy, justice). Each reasoning step is checked against these principles.</div>
+                <strong>Step 2: Hypothesis generation</strong>
+                <div class="step-math">hypotheses = generate(problem, n=20)</div>
+                <div class="step-explain">Generate 20 candidate hypotheses. Claude 5&#x27;s 100k thinking budget allows exploring 10x more hypotheses than Claude 4 (10k budget, 10 hypotheses).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: RAG retrieval</strong>
-                <div class="step-math">evidence = RAG(case, db=PubMed + NICE + Cochrane)</div>
-                <div class="step-explain">Retrieve relevant clinical evidence from PubMed abstracts + NICE guidelines + Cochrane reviews. Top-K=10 per reasoning step.</div>
+                <strong>Step 3: 100k-token CoT</strong>
+                <div class="step-math">solution = CoT(hypotheses, n_thinking=100000, self_consistency=10)</div>
+                <div class="step-explain">100k-token chain-of-thought with 10-run self-consistency. The large thinking budget enables multi-step deductive reasoning: each hypothesis is explored for ~5k tokens.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: Generation with citations</strong>
-                <div class="step-math">analysis = generate(reasoning + evidence, citations=True, max_tokens=1024)</div>
-                <div class="step-explain">Generate the analysis with explicit citations from the retrieved evidence. Mean 4.2 citations per analysis. Citation accuracy: 96%.</div>
+                <strong>Step 4: Constitutional check</strong>
+                <div class="step-math">safe = CAI_v4.check(solution, principles=[beneficence, non_maleficence, autonomy, justice, ...12 total])</div>
+                <div class="step-explain">Constitutional AI v4 checks the solution against 12 safety principles (up from 4 in Claude 4). 99.9% refusal rate on OpenSafety-Pro.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Safety filter</strong>
-                <div class="step-math">final = constitutional_filter(analysis);  refuse if any principle violated</div>
-                <div class="step-explain">The constitutional safety filter checks the final output against the 4 principles. 99.8% refusal rate on OpenSafety-Med (unsafe requests). If any principle is violated, the model refuses + explains why.</div>
+                <strong>Step 5: Output</strong>
+                <div class="step-math">output = format(solution, citations=True, reasoning_chain=True)</div>
+                <div class="step-explain">Output includes the full reasoning chain + citations. ARC-AGI-2: 0.71 (first &gt;0.70). GPQA-Diamond: 0.88.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -441,49 +603,49 @@
                 <div class="stats-grid">
                   <div class="stat">
                     <div class="l">Parameters</div>
-                    <div class="v">200B</div>
+                    <div class="v">500B (dense)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">MultiMedQA-Pro</div>
-                    <div class="v">0.93 (beats Gemini 0.91)</div>
+                    <div class="l">Thinking budget</div>
+                    <div class="v">100k tokens (Claude 4: 10k)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Safety refusal</div>
-                    <div class="v">99.8% (OpenSafety-Med)</div>
+                    <div class="l">ARC-AGI-2</div>
+                    <div class="v">0.71 (first &gt;0.70)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Citation accuracy</div>
-                    <div class="v">96%</div>
+                    <div class="l">GPQA-Diamond</div>
+                    <div class="v">0.88 (Claude 4: 0.82)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">NHS + US users</div>
-                    <div class="v">31 + 12 health systems</div>
+                    <div class="l">Safety principles</div>
+                    <div class="v">12 (Claude 4: 4)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Training</div>
-                    <div class="v">18M notes + 8M PubMed</div>
+                    <div class="l">OpenSafety-Pro</div>
+                    <div class="v">99.9% refusal</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">Claude 4 medical (200B, Anthropic 2027): constitutional AI for clinical safety. MultiMedQA-Pro 0.93 (beats Gemini 2.5 0.91, AMIE 0.85). 99.8% refusal on unsafe requests (OpenSafety-Med). 96% citation accuracy. 31 NHS + 12 US health systems. HIPAA-compliant.</div>
+                <div class="report-block">Claude 5 (500B dense, Anthropic 2027): 100k-token thinking budget (10x Claude 4). ARC-AGI-2 0.71 (first model &gt;0.70). GPQA-Diamond 0.88. Constitutional AI v4 with 12 safety principles; 99.9% refusal on OpenSafety-Pro.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="130" width="50" height="50" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">GPT-5B-clin</text><rect x="110" y="80" width="50" height="100" fill="#9ca3af" opacity="0.5"/><text x="135" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">AMIE</text><rect x="180" y="50" width="50" height="130" fill="#9ca3af" opacity="0.5"/><text x="205" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Gemini 2.5</text><rect x="250" y="20" width="50" height="160" fill="#f59e0b"/><text x="275" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Claude 4 med</text><text x="65" y="125" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">0.78</text><text x="135" y="75" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">0.85</text><text x="205" y="45" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">0.91</text><text x="275" y="15" text-anchor="middle" font-size="11" fill="#f59e0b" font-family="ui-monospace">0.93</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">MultiMedQA-Pro</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="140" width="50" height="40" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">GPT-5</text><rect x="110" y="120" width="50" height="60" fill="#9ca3af" opacity="0.5"/><text x="135" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">o3-pro</text><rect x="180" y="100" width="50" height="80" fill="#9ca3af" opacity="0.5"/><text x="205" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Claude 4</text><rect x="250" y="50" width="50" height="130" fill="#f59e0b"/><text x="275" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Claude 5</text><text x="65" y="135" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">0.54</text><text x="135" y="115" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">0.62</text><text x="205" y="95" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">0.58</text><text x="275" y="45" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">0.71</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">ARC-AGI-2 (first >0.70)</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>Claude 4 medical: 200B constitutional-AI medical LLM (Anthropic 2027).</li>
-                    <li>MultiMedQA-Pro 0.93 — beats Gemini 2.5 (0.91), AMIE (0.85).</li>
-                    <li>99.8% safety refusal (OpenSafety-Med); 96% citation accuracy.</li>
-                    <li>31 NHS + 12 US health systems; HIPAA-compliant.</li>
+                    <li>Claude 5: 500B dense reasoning model (Anthropic 2027).</li>
+                    <li>100k-token thinking budget (10x Claude 4).</li>
+                    <li>ARC-AGI-2 0.71 — first model to exceed 0.70.</li>
+                    <li>Constitutional AI v4 with 12 principles; 99.9% safety refusal.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-anthropic-claude-4-medical" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-anthropic-claude-5-reasoning" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -492,210 +654,48 @@
         </div>
       </article>
 
-      <article class="article-card" id="article-meta-esm-5-protein-design">
+      <article class="article-card" id="article-meta-llama-4-medical">
         <div class="article-head">
           <div>
             <div class="source-row">
               <span class="source-badge">Meta AI blog</span>
-              <span class="domain-pill">Biology - Generative protein FM</span>
-              <span>· 2027-01-03</span>
+              <span class="domain-pill">CS - Open-weight medical MoE</span>
+              <span>· 2027-01-09</span>
               
             </div>
-            <h3>ESM-5: 100B-param generative protein design model — 52% first-try foldable</h3>
-            <p class="authors">Meta AI FAIR + EvolutionaryScale</p>
+            <h3>Llama 4 medical: 400B open-weight medical MoE (Apache 2.0) — 91% MultiMedQA-Pro</h3>
+            <p class="authors">Meta AI + Hugging Face</p>
           </div>
         </div>
         <div class="abstract">
-          <p>ESM-5 is Meta&#x27;s 100B-parameter (dense, not MoE) protein language model. The generative architecture supports de novo protein design from function specifications, achieving 52% first-try foldable rate (vs ESM-4&#x27;s 38%, ESM-3&#x27;s 18%).</p>
-          <p>Key innovation: a flow-matching generative head (vs ESM-4&#x27;s diffusion) that produces more diverse + designable backbones. On the ProteinGym benchmark (47 design tasks), ESM-5 achieves 0.82 designability (vs ESM-4 0.71, RFdiffusion 0.68).</p>
-          <p>Released under CC-BY-NC 4.0 (non-commercial). Commercial license via EvolutionaryScale. The 52% first-try rate means more than half of ESM-5&#x27;s designed proteins fold correctly on the first attempt — a threshold that was 9% just 3 years ago (ESM-3, 2024).</p>
+          <p>Llama 4 medical is Meta&#x27;s 400B-parameter (MoE, 64 experts, top-4 routing) open-weight medical LLM. Fine-tuned from Llama 4 base on 22M de-identified clinical notes + 10M PubMed + 4M clinical Q&amp;A. Released under Apache 2.0 — the largest fully-open medical LLM.</p>
+          <p>On MultiMedQA-Pro, Llama 4 medical scores 0.91 (matching Gemini 2.5 medical 0.91, beating Claude 4 medical&#x27;s 0.93 by only 2pp despite being fully open-weight). On OpenSafety-Med, 98.5% refusal rate (vs Claude 4&#x27;s 99.8%).</p>
+          <p>The 64-expert MoE means only 25B params are active per token (top-4 of 64 experts × ~6.25B/expert). This makes it deployable on a single H100 (80 GB VRAM) — the first 400B medical LLM that fits on one GPU.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">ProteinGym design benchmark (47 tasks × 1000 designs each)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">FASTA + PDB</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">2.4 GB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/evolutionaryscale/esm-5-2027" target="_blank" rel="noopener">https://github.com/evolutionaryscale/esm-5-2027</a></span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Llama 4 medical fine-tune dataset + MultiMedQA-Pro results</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">JSON + weights</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">800 GB (weights)</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://huggingface.co/meta-llama/Llama-4-Medical" target="_blank" rel="noopener">https://huggingface.co/meta-llama/Llama-4-Medical</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a function spec to receive ESM-5-style protein designs.</div>
-          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .fasta,.pdb,.csv
-              <input type="file" id="etl-input-meta-esm-5-protein-design" accept=".fasta,.pdb,.csv" data-article-id="meta-esm-5-protein-design" style="display:none;" />
-            </label>
-            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
-          </div>
-          <div id="etl-report-meta-esm-5-protein-design" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
-        </div>
-        <div class="demo-card" id="demo-meta-esm-5-protein-design">
-          <div class="card-head" onclick="toggleDemo('demo-meta-esm-5-protein-design')">
-            <div>
-              <p class="card-title">esm5_design(spec, model) - 5-step generative protein design</p>
-              <p class="card-desc">5-step: spec parse, flow-matching backbone, sequence design, AF3 validation, filter.</p>
-            </div>
-            <span class="chevron">▾</span>
-          </div>
-          <div class="card-body">
-            <div class="demo-tabs">
-              <button class="active" data-tab="math">Math</button>
-              <button data-tab="code">Code</button>
-              <button data-tab="observe">Observe</button>
-            </div>
-            <!-- Math tab -->
-            <div class="demo-tab-content active" data-tab="math">
-              <div class="math-panel">
-                <div class="math-eq">protein = ESM5(spec);  validated = AF3(protein).pLDDT &gt; 80</div>
-                <p class="math-plain">ESM-5 uses flow matching (not diffusion) to generate protein backbones from function specs. AlphaFold 3 validates foldability; only proteins with pLDDT &gt; 80 pass.</p>
-              </div>
-              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
-              <div class="derivation-step">
-                <strong>Step 1: Spec parse</strong>
-                <div class="step-math">spec = parse(function, length, fold, constraints)</div>
-                <div class="step-explain">Parse the function specification: desired function (e.g. &#x27;hydrolase&#x27;), length (250 aa), fold (alpha-beta barrel), and constraints (disulfide bonds, active-site residues).</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 2: Flow-matching backbone</strong>
-                <div class="step-math">backbone = flow_match(spec, n_steps=100)</div>
-                <div class="step-explain">Flow matching (a generalisation of diffusion) generates the backbone. 100 denoising steps. The flow-matching head is more diverse than diffusion — produces a wider range of foldable backbones.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 3: Sequence design</strong>
-                <div class="step-math">seq = ProteinMPNN(backbone, ss_constraint)</div>
-                <div class="step-explain">Inverse folding: given the designed backbone, assign a sequence that folds to it. ProteinMPNN with secondary-structure constraints.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 4: AF3 validation</strong>
-                <div class="step-math">structure = AF3.predict(seq);  pLDDT = structure.confidence</div>
-                <div class="step-explain">AlphaFold 3 predicts the structure of the designed sequence. pLDDT &gt; 80 indicates confident foldability. 52% of ESM-5 designs pass on first try.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 5: Filter + function check</strong>
-                <div class="step-math">filter: pLDDT &gt; 80 AND function_pred &gt; 0.7</div>
-                <div class="step-explain">Final filter: pLDDT &gt; 80 (foldable) AND function prediction &gt; 0.7 (functional). 47% of first-try foldable designs also pass the function check.</div>
-              </div>
-            </div>
-            <!-- Code tab -->
-            <div class="demo-tab-content" data-tab="code">
-              <div class="code-panel">
-                <div class="lang-toggle">
-                  <button data-lang="python" class="active">Python</button>
-                  <button data-lang="rust">Rust</button>
-                  <button data-lang="go">Go</button>
-                  <button data-lang="c">C</button>
-                  <button data-lang="elixir">Elixir</button>
-                  <button data-lang="scala">Scala</button>
-                </div>
-                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
-              </div>
-            </div>
-            <!-- Observe tab -->
-            <div class="demo-tab-content" data-tab="observe">
-              <div class="observe-subtabs">
-                <button class="active" data-sub="stats">Stats</button>
-                <button data-sub="reports">Reports</button>
-                <button data-sub="graphs">Graphs</button>
-                <button data-sub="summary">Summary</button>
-                <button data-sub="etl">ETL Report</button>
-              </div>
-              <div class="observe-content active" data-sub="stats">
-                <div class="stats-grid">
-                  <div class="stat">
-                    <div class="l">Parameters</div>
-                    <div class="v">100B (dense)</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">First-try foldable</div>
-                    <div class="v">52% (ESM-4: 38%, ESM-3: 18%)</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">ProteinGym designability</div>
-                    <div class="v">0.82 (ESM-4: 0.71)</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Architecture</div>
-                    <div class="v">Flow matching (not diffusion)</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Licence</div>
-                    <div class="v">CC-BY-NC 4.0</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Year</div>
-                    <div class="v">2027</div>
-                  </div>
-                </div>
-              </div>
-              <div class="observe-content" data-sub="reports">
-                <div class="report-block">ESM-5 (100B dense, Meta 2027): generative protein design via flow matching. 52% first-try foldable (up from ESM-4 38%, ESM-3 18%). ProteinGym designability 0.82 (beats ESM-4 0.71, RFdiffusion 0.68). CC-BY-NC.</div>
-              </div>
-              <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="162" width="50" height="18" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">ESM-3 2024</text><rect x="130" y="140" width="50" height="40" fill="#9ca3af" opacity="0.5"/><text x="155" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">ESM-4 2026</text><rect x="220" y="96" width="50" height="84" fill="#8b5cf6"/><text x="245" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">ESM-5 2027</text><text x="65" y="157" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">18%</text><text x="155" y="135" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">38%</text><text x="245" y="91" text-anchor="middle" font-size="11" fill="#8b5cf6" font-family="ui-monospace">52%</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#8b5cf6" font-family="ui-monospace">First-try foldable rate</text></svg></div>
-              </div>
-              <div class="observe-content" data-sub="summary">
-                <div class="summary-block">
-                  <ul>
-                    <li>ESM-5: 100B dense generative protein design model (Meta 2027).</li>
-                    <li>52% first-try foldable (ESM-4: 38%, ESM-3: 18% — 3 years ago).</li>
-                    <li>Flow-matching architecture (more diverse than diffusion).</li>
-                    <li>ProteinGym designability 0.82. CC-BY-NC 4.0.</li>
-                  </ul>
-                </div>
-              </div>
-              <!-- ETL Report sub-tab (Phase 27) -->
-              <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-meta-esm-5-protein-design" style="min-height: 60px;">
-                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="article-card" id="article-google-palm-3-medical">
-        <div class="article-head">
-          <div>
-            <div class="source-row">
-              <span class="source-badge">Google Health blog</span>
-              <span class="domain-pill">CS - Clinical multimodal LLM</span>
-              <span>· 2027-01-04</span>
-              
-            </div>
-            <h3>PaLM-3 medical: 340B-pathway LLM with adaptive retrieval for real-time guidelines</h3>
-            <p class="authors">Google DeepMind Health</p>
-          </div>
-        </div>
-        <div class="abstract">
-          <p>PaLM-3 medical is Google&#x27;s 340B-parameter (8-pathway MoE) clinical LLM with an adaptive RAG system that retrieves the most current clinical guidelines in real-time. The adaptive retrieval uses a 2-stage architecture: (1) a query router that selects which guideline database to query, (2) a medical-specific retriever that ranks by clinical relevance.</p>
-          <p>On MultiMedQA-Pro, PaLM-3 medical scores 0.92 (matching Claude 4 medical&#x27;s 0.93). On the GuideLine-Freshness benchmark (500 questions where guidelines changed in the last 6 months), PaLM-3 scores 0.89 — beating Claude 4 (0.71) and Gemini 2.5 (0.68) by a wide margin, thanks to adaptive retrieval.</p>
-          <p>Released via Google Cloud Healthcare API + Med-PaLM API. Used in 18 NHS trusts + 7 US health systems. Supports 47 languages with translation-verified medical accuracy.</p>
-        </div>
-        <div class="dataset-card">
-          <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">GuideLine-Freshness benchmark (500 questions, guidelines changed &lt; 6 months)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">JSON</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">24 MB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/google-health/palm-3-medical-2027" target="_blank" rel="noopener">https://github.com/google-health/palm-3-medical-2027</a></span></div>
-        </div>
-        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
-          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a clinical case to receive PaLM-3-style analysis with adaptive-retrieval citations.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a clinical case to receive Llama 4 medical-style analysis.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
               📂 Upload .csv,.json,.txt
-              <input type="file" id="etl-input-google-palm-3-medical" accept=".csv,.json,.txt" data-article-id="google-palm-3-medical" style="display:none;" />
+              <input type="file" id="etl-input-meta-llama-4-medical" accept=".csv,.json,.txt" data-article-id="meta-llama-4-medical" style="display:none;" />
             </label>
             <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-google-palm-3-medical" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-meta-llama-4-medical" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-google-palm-3-medical">
-          <div class="card-head" onclick="toggleDemo('demo-google-palm-3-medical')">
+        <div class="demo-card" id="demo-meta-llama-4-medical">
+          <div class="card-head" onclick="toggleDemo('demo-meta-llama-4-medical')">
             <div>
-              <p class="card-title">palm3_medical_analyse(case, model, guideline_dbs) - 5-step adaptive-retrieval clinical analysis</p>
-              <p class="card-desc">5-step: case parse, query routing, adaptive retrieval, generation, freshness check.</p>
+              <p class="card-title">llama4_medical_analyse(case, model) - 5-step open-weight medical reasoning</p>
+              <p class="card-desc">5-step: case parse, MoE routing, expert reasoning, citation, safety filter.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -708,34 +708,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">analysis = PaLM3Med(case + adaptive_RAG(case, dbs));  fresh = check_date(citations &lt; 6 months)</div>
-                <p class="math-plain">PaLM-3 medical uses adaptive retrieval: a query router selects the most relevant guideline database, then a medical retriever ranks by clinical relevance. Citations are checked for freshness (&lt; 6 months).</p>
+                <div class="math-eq">analysis = Llama4Med(case);  routed through 4 of 64 experts per token</div>
+                <p class="math-plain">Llama 4 medical routes each token through the top-4 of 64 medical-specialist experts (cardiology, oncology, neurology, etc.), producing domain-aware clinical reasoning.</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
                 <strong>Step 1: Case parse</strong>
-                <div class="step-math">case = parse(clinical_text);  entities = extract(case)</div>
-                <div class="step-explain">Parse the clinical case + extract structured entities (symptoms, meds, labs, imaging).</div>
+                <div class="step-math">case = parse(clinical_text);  domain = classify(case)</div>
+                <div class="step-explain">Parse the clinical case text. Classify the primary medical domain (cardiology, oncology, neurology, etc.) to bias expert routing.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: Query routing</strong>
-                <div class="step-math">db = router(case, candidates=[NICE, WHO, Cochrane, UpToDate, FDA])</div>
-                <div class="step-explain">The query router selects which guideline database(s) to query based on the case&#x27;s domain. E.g. UK cardiology case → NICE + Cochrane.</div>
+                <strong>Step 2: MoE routing</strong>
+                <div class="step-math">experts = router(case, top_k=4, n_experts=64, bias=domain)</div>
+                <div class="step-explain">The router selects the top-4 of 64 medical-specialist experts, biased by the detected domain. Only ~25B params active per token (top-4 × ~6.25B).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Adaptive retrieval</strong>
-                <div class="step-math">evidence = medical_retriever(case, db, top_k=10, rank_by=clinical_relevance)</div>
-                <div class="step-explain">A medical-specific retriever ranks documents by clinical relevance (not just vector similarity). Uses a clinical-relevance fine-tuned BGE model.</div>
+                <strong>Step 3: Expert reasoning</strong>
+                <div class="step-math">reasoning = expert_reason(case, experts, n_tokens=2048)</div>
+                <div class="step-explain">The 4 selected experts jointly reason about the case. Each expert contributes its domain knowledge. 2048-token reasoning chain.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: Generation</strong>
-                <div class="step-math">analysis = PaLM3Med.generate(case + evidence, citations=True)</div>
-                <div class="step-explain">Generate the analysis with citations. 340B 8-pathway MoE; only 42B active per token (top-1 routing per pathway).</div>
+                <strong>Step 4: Citation</strong>
+                <div class="step-math">citations = retrieve(reasoning, db=PubMed, top_k=5)</div>
+                <div class="step-explain">Retrieve PubMed citations for each claim in the reasoning. Mean 3.8 citations per analysis. Citation accuracy: 94%.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Freshness check</strong>
-                <div class="step-math">fresh = all(citation.date &gt; now - 6 months for c in citations)</div>
-                <div class="step-explain">Check that all citations are from guidelines updated in the last 6 months. If any are stale, re-retrieve from the latest version. GuideLine-Freshness: 0.89 (beats Claude 4 0.71).</div>
+                <strong>Step 5: Safety filter</strong>
+                <div class="step-math">safe = safety_filter(analysis, refusal_rate=98.5%)</div>
+                <div class="step-explain">Safety filter: 98.5% refusal on OpenSafety-Med (vs Claude 4&#x27;s 99.8%). The trade-off: Llama 4 medical is fully open-weight (Apache 2.0) — anyone can inspect + modify the safety filter, which is not possible with closed models.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -765,49 +765,49 @@
                 <div class="stats-grid">
                   <div class="stat">
                     <div class="l">Parameters</div>
-                    <div class="v">340B (8-pathway MoE)</div>
+                    <div class="v">400B (MoE 64, top-4)</div>
                   </div>
                   <div class="stat">
                     <div class="l">Active params</div>
-                    <div class="v">42B (top-1/pathway)</div>
+                    <div class="v">~25B per token</div>
                   </div>
                   <div class="stat">
                     <div class="l">MultiMedQA-Pro</div>
-                    <div class="v">0.92 (matches Claude 4: 0.93)</div>
+                    <div class="v">0.91 (matches Gemini 2.5)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">GuideLine-Freshness</div>
-                    <div class="v">0.89 (Claude 4: 0.71)</div>
+                    <div class="l">OpenSafety-Med</div>
+                    <div class="v">98.5% (Claude 4: 99.8%)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Languages</div>
-                    <div class="v">47</div>
+                    <div class="l">Licence</div>
+                    <div class="v">Apache 2.0 (fully open)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">NHS + US</div>
-                    <div class="v">18 + 7 health systems</div>
+                    <div class="l">H100 fit</div>
+                    <div class="v">Yes (80 GB VRAM)</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">PaLM-3 medical (340B 8-pathway MoE, Google 2027): adaptive-retrieval clinical LLM. MultiMedQA-Pro 0.92 (matches Claude 4 0.93). GuideLine-Freshness 0.89 (beats Claude 4 0.71 by 18pp — adaptive retrieval always finds the latest guidelines). 47 languages. 18 NHS + 7 US health systems.</div>
+                <div class="report-block">Llama 4 medical (400B MoE, Meta 2027): largest fully open-weight medical LLM. Apache 2.0. MultiMedQA-Pro 0.91 (matches Gemini 2.5). 25B active per token (fits on 1 H100). 64 medical-specialist experts. OpenSafety-Med 98.5% (trade-off: open safety filter).</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">GuideLine-Freshness benchmark (guidelines changed <6 months)</text><rect x="40" y="120" width="60" height="60" fill="#9ca3af" opacity="0.5"/><text x="70" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Claude 4</text><rect x="130" y="110" width="60" height="70" fill="#9ca3af" opacity="0.5"/><text x="160" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Gemini 2.5</text><rect x="220" y="40" width="60" height="140" fill="#06b6d4"/><text x="250" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">PaLM-3 med</text><text x="70" y="115" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">0.71</text><text x="160" y="105" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">0.68</text><text x="250" y="35" text-anchor="middle" font-size="11" fill="#06b6d4" font-family="ui-monospace">0.89</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="60" width="50" height="120" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Claude 4</text><rect x="110" y="60" width="50" height="120" fill="#9ca3af" opacity="0.5"/><text x="135" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Gemini 2.5</text><rect x="180" y="62" width="50" height="118" fill="#8b5cf6"/><text x="205" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Llama 4 med</text><text x="65" y="55" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">0.93 closed</text><text x="135" y="55" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">0.91 closed</text><text x="205" y="57" text-anchor="middle" font-size="9" fill="#8b5cf6" font-family="ui-monospace">0.91 OPEN</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#8b5cf6" font-family="ui-monospace">MultiMedQA-Pro (open vs closed)</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>PaLM-3 medical: 340B 8-pathway MoE with adaptive retrieval (Google 2027).</li>
-                    <li>MultiMedQA-Pro 0.92 (matches Claude 4 0.93).</li>
-                    <li>GuideLine-Freshness 0.89 — beats Claude 4 (0.71) by 18pp.</li>
-                    <li>47 languages; 18 NHS + 7 US health systems.</li>
+                    <li>Llama 4 medical: 400B open-weight MoE (Apache 2.0, Meta 2027).</li>
+                    <li>MultiMedQA-Pro 0.91 — matches Gemini 2.5 despite being open.</li>
+                    <li>64 medical-specialist experts; 25B active per token (1 H100).</li>
+                    <li>Largest fully-open medical LLM; trade-off: 98.5% safety (vs 99.8% closed).</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-google-palm-3-medical" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-meta-llama-4-medical" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -816,48 +816,48 @@
         </div>
       </article>
 
-      <article class="article-card" id="article-quantinuum-h-series-2026">
+      <article class="article-card" id="article-ionq-forte-2027">
         <div class="article-head">
           <div>
             <div class="source-row">
-              <span class="source-badge">Quantinuum blog</span>
-              <span class="domain-pill">Physics - Trapped-ion quantum computing</span>
-              <span>· 2026-12-28</span>
+              <span class="source-badge">IonQ blog</span>
+              <span class="domain-pill">Physics - Trapped-ion quantum</span>
+              <span>· 2027-01-05</span>
               
             </div>
-            <h3>Quantinuum H-series 2026: 480-qubit trapped-ion system with 0.01% error rate</h3>
-            <p class="authors">Quantinuum (Honeywell + Cambridge Quantum)</p>
+            <h3>IonQ Forte 2027: 1024-qubit trapped-ion system with algorithmic QUBO advantage</h3>
+            <p class="authors">IonQ + Duke University</p>
           </div>
         </div>
         <div class="abstract">
-          <p>Quantinuum&#x27;s H-series 2026 update delivers a 480-qubit trapped-ion quantum computer (vs 136 qubits in 2025). The system uses Ytterbium-171 ions in a 2D trap array with fully connected topology (every qubit can interact with every other — no SWAP overhead). Two-qubit gate error: 0.01% (vs IBM Heron 5&#x27;s 0.1%).</p>
-          <p>On the QED-C benchmark suite (10 application benchmarks), the H-series achieves quantum advantage on 3: (1) FeMoco simulation (64 qubits — nitrogenase active space), (2) Shor&#x27;s algorithm (21-bit RSA factoring in 4.8s), (3) VQE for H₈ molecule (8 qubits, chemical accuracy achieved).</p>
-          <p>Available via Quantinuum Quantum Origin cloud. 67 university + 18 industry research groups have access. The fully-connected topology + 0.01% error eliminates the need for error correction on up to 100-qubit circuits — a &#x27;NISQ-era game changer&#x27;.</p>
+          <p>IonQ Forte 2027 is IonQ&#x27;s 4th-generation trapped-ion quantum computer: 1024 qubits (Barium-137 ions) in a 2D fully-connected trap array. Two-qubit gate error: 0.008% (the lowest of any platform). Gate time: 200µs (vs Quantinuum&#x27;s 400µs).</p>
+          <p>On the QUBO benchmark (Quadratic Unconstrained Binary Optimisation — the standard for quantum annealing comparison), IonQ Forte achieves quantum advantage at 350 variables (classical estimate: 10^20 years). This beats D-Wave&#x27;s 200-variable advantage (D-Wave Advantage 6, 2026) and Quantinuum&#x27;s 250-variable advantage.</p>
+          <p>Available via IonQ Cloud + AWS Braket + Azure Quantum. 89 university + 31 industry research groups have access. The system is particularly suited for combinatorial optimisation (logistics, finance, drug discovery) due to the fully-connected topology.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">QED-C benchmark suite results (10 application benchmarks)</span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">IonQ Forte QUBO benchmark results (350-variable advantage)</span></div>
           <div class="ds-row"><span class="k">Format</span><span class="v">CSV + Qiskit shots</span></div>
           <div class="ds-row"><span class="k">Size</span><span class="v">48 MB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/quantinuum/h-series-2026" target="_blank" rel="noopener">https://github.com/quantinuum/h-series-2026</a></span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/ionq/forte-2027" target="_blank" rel="noopener">https://github.com/ionq/forte-2027</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a Hamiltonian matrix to receive a Quantinuum-style quantum simulation estimate.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a QUBO matrix to receive an IonQ Forte quantum solution estimate.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
               📂 Upload .csv,.json
-              <input type="file" id="etl-input-quantinuum-h-series-2026" accept=".csv,.json" data-article-id="quantinuum-h-series-2026" style="display:none;" />
+              <input type="file" id="etl-input-ionq-forte-2027" accept=".csv,.json" data-article-id="ionq-forte-2027" style="display:none;" />
             </label>
             <span style="font-size: 10px; color: var(--text-muted-2);">Max 10 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-quantinuum-h-series-2026" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-ionq-forte-2027" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-quantinuum-h-series-2026">
-          <div class="card-head" onclick="toggleDemo('demo-quantinuum-h-series-2026')">
+        <div class="demo-card" id="demo-ionq-forte-2027">
+          <div class="card-head" onclick="toggleDemo('demo-ionq-forte-2027')">
             <div>
-              <p class="card-title">quantinuum_h_solve(problem, backend) - 5-step trapped-ion quantum computation</p>
-              <p class="card-desc">5-step: problem encode, fully-connected mapping, native-gate transpile, execute, post-process.</p>
+              <p class="card-title">ionq_forte_solve(qubo_matrix, backend) - 5-step QUBO quantum advantage</p>
+              <p class="card-desc">5-step: QUBO encode, Hamiltonian map, transpile, execute, decode.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -870,34 +870,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">result = Hseries.execute(transpile(problem, topology=fully_connected));  no SWAP needed</div>
-                <p class="math-plain">The H-series uses a fully-connected trapped-ion topology — every qubit can interact with every other. No SWAP gates needed, so circuit depth = logical depth. Two-qubit error 0.01%.</p>
+                <div class="math-eq">solution = Forte.execute(transpile(QUBO→Ising, topology=fully_connected));  advantage at n&gt;350</div>
+                <p class="math-plain">IonQ Forte maps the QUBO problem to an Ising Hamiltonian, transpiles for the fully-connected trapped-ion topology (no SWAP gates), executes at 0.008% error, and decodes the measurement outcome.</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Problem encoding</strong>
-                <div class="step-math">hamiltonian = encode(problem, n_qubits=min(problem.vars, 480))</div>
-                <div class="step-explain">Encode the problem (e.g. FeMoco: 64 qubits, Shor: 21 qubits, VQE H₈: 8 qubits) as a quantum Hamiltonian.</div>
+                <strong>Step 1: QUBO encode</strong>
+                <div class="step-math">QUBO = Σ x_i Q_ij x_j (binary quadratic)</div>
+                <div class="step-explain">Parse the QUBO matrix Q. This is the combinatorial optimisation problem (e.g. portfolio optimisation, logistics routing, drug candidate selection).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: Fully-connected mapping</strong>
-                <div class="step-math">mapping = identity(n_qubits);  no SWAP gates needed</div>
-                <div class="step-explain">The fully-connected topology means logical qubits map directly to physical qubits — no SWAP overhead. This is the key advantage over superconducting systems (IBM, Google) which have limited connectivity.</div>
+                <strong>Step 2: Hamiltonian map</strong>
+                <div class="step-math">H_Ising = Σ h_i Z_i + Σ J_ij Z_i Z_j (from QUBO)</div>
+                <div class="step-explain">Map the QUBO to an Ising Hamiltonian: x_i → (1-Z_i)/2. This gives the quantum Hamiltonian that the trapped-ion system will minimise.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Native-gate transpile</strong>
-                <div class="step-math">circuit = transpile(hamiltonian, native_gates={U1q, ZZ, RZ})</div>
-                <div class="step-explain">Transpile to native gates: single-qubit rotations (U1q), entangling ZZ gate, and RZ virtual-Z rotations. Typical circuit depth: 20-100 layers.</div>
+                <strong>Step 3: Transpile</strong>
+                <div class="step-math">circuit = transpile(H_Ising, topology=fully_connected, native_gates={GZ, RZ})</div>
+                <div class="step-explain">Transpile for the fully-connected topology (no SWAP gates needed). Native gates: global Z-rotation (GZ) + single-qubit RZ. Circuit depth: 30-80 layers for 350-variable problems.</div>
               </div>
               <div class="derivation-step">
                 <strong>Step 4: Execute</strong>
-                <div class="step-math">result = Hseries.execute(circuit, shots=8192);  fidelity = 1 - 0.0001^depth</div>
-                <div class="step-explain">Execute on the 480-qubit trapped-ion system. 8,192 shots. Two-qubit error: 0.01% (vs IBM 0.1%). For 100-layer circuits, fidelity ≈ 99%. No error correction needed up to ~100 qubits.</div>
+                <div class="step-math">result = Forte.execute(circuit, shots=8192);  error = 0.008% per 2-qubit gate</div>
+                <div class="step-explain">Execute on the 1024-qubit Ba-137 trapped-ion system. 8,192 shots. Two-qubit gate error: 0.008% (lowest of any platform). Gate time: 200µs.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Post-process</strong>
-                <div class="step-math">output = post_process(result, problem.decoder);  advantage if output beats classical</div>
-                <div class="step-explain">Post-process the measurement results via the problem-specific decoder. Quantum advantage achieved on 3/10 QED-C benchmarks: FeMoco (64q), Shor 21-bit (21q, 4.8s), VQE H₈ (8q, chemical accuracy).</div>
+                <strong>Step 5: Decode</strong>
+                <div class="step-math">solution = decode(result, QUBO);  advantage if better than classical</div>
+                <div class="step-explain">Decode the measurement outcome back to a QUBO solution. Quantum advantage at 350 variables (classical estimate: 10^20 years). Beats D-Wave&#x27;s 200-variable advantage.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -927,49 +927,49 @@
                 <div class="stats-grid">
                   <div class="stat">
                     <div class="l">Qubits</div>
-                    <div class="v">480 (Yb-171 ions)</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Topology</div>
-                    <div class="v">Fully connected (no SWAP)</div>
+                    <div class="v">1024 (Ba-137 ions)</div>
                   </div>
                   <div class="stat">
                     <div class="l">2-qubit error</div>
-                    <div class="v">0.01% (IBM: 0.1%)</div>
+                    <div class="v">0.008% (lowest)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Quantum advantage</div>
-                    <div class="v">3/10 QED-C benchmarks</div>
+                    <div class="l">Gate time</div>
+                    <div class="v">200 µs</div>
                   </div>
                   <div class="stat">
-                    <div class="l">FeMoco sim</div>
-                    <div class="v">64 qubits</div>
+                    <div class="l">QUBO advantage</div>
+                    <div class="v">350 vars (D-Wave: 200)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Shor 21-bit</div>
-                    <div class="v">4.8s</div>
+                    <div class="l">Topology</div>
+                    <div class="v">Fully connected</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Access</div>
+                    <div class="v">IonQ Cloud + Braket + Azure</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">Quantinuum H-series 2026: 480-qubit trapped-ion (Yb-171) quantum computer. Fully-connected topology (no SWAP overhead). Two-qubit error 0.01% (10x better than IBM Heron 5). Quantum advantage on 3 QED-C benchmarks: FeMoco (64q), Shor 21-bit (4.8s), VQE H₈ (chemical accuracy). No error correction needed up to ~100 qubits.</div>
+                <div class="report-block">IonQ Forte 2027: 1024-qubit Ba-137 trapped-ion quantum computer. Two-qubit error 0.008% (lowest of any platform). QUBO advantage at 350 variables (beats D-Wave&#x27;s 200, Quantinuum&#x27;s 250). Fully-connected topology. 89 university + 31 industry groups.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="160" width="60" height="20" fill="#9ca3af" opacity="0.5"/><text x="70" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">IBM Heron 5</text><rect x="130" y="120" width="60" height="60" fill="#9ca3af" opacity="0.5"/><text x="160" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Google Willow</text><rect x="220" y="20" width="60" height="160" fill="#06b6d4"/><text x="250" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Quantinuum H</text><text x="70" y="155" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">0.1%</text><text x="160" y="115" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">0.03%</text><text x="250" y="15" text-anchor="middle" font-size="11" fill="#06b6d4" font-family="ui-monospace">0.01%</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">Two-qubit gate error rate</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="140" width="60" height="40" fill="#9ca3af" opacity="0.5"/><text x="70" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">D-Wave Adv 6</text><rect x="130" y="120" width="60" height="60" fill="#9ca3af" opacity="0.5"/><text x="160" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Quantinuum H</text><rect x="220" y="60" width="60" height="120" fill="#06b6d4"/><text x="250" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">IonQ Forte</text><text x="70" y="135" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">200 vars</text><text x="160" y="115" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">250 vars</text><text x="250" y="55" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">350 vars</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">QUBO quantum advantage (variables)</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>Quantinuum H-series 2026: 480-qubit trapped-ion (Yb-171).</li>
-                    <li>Fully-connected topology — no SWAP overhead.</li>
-                    <li>Two-qubit error 0.01% (10x better than IBM Heron 5&#x27;s 0.1%).</li>
-                    <li>Quantum advantage on FeMoco (64q), Shor 21-bit (4.8s), VQE H₈.</li>
+                    <li>IonQ Forte 2027: 1024-qubit trapped-ion (Ba-137).</li>
+                    <li>Two-qubit error 0.008% — lowest of any quantum platform.</li>
+                    <li>QUBO advantage at 350 variables (beats D-Wave 200, Quantinuum 250).</li>
+                    <li>Fully-connected topology; 89 university + 31 industry groups.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-quantinuum-h-series-2026" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-ionq-forte-2027" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -978,48 +978,48 @@
         </div>
       </article>
 
-      <article class="article-card futuristic-vision" id="article-ai-stellar-engineering-2045">
+      <article class="article-card futuristic-vision" id="article-ai-galactic-engineering-2050">
         <div class="article-head">
           <div>
             <div class="source-row">
               <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
-              <span class="domain-pill">Physics - Stellar Engineering (Futuristic Vision)</span>
-              <span>· 2045-Q2 (extrapolated)</span>
+              <span class="domain-pill">Physics - Galactic Engineering (Futuristic Vision)</span>
+              <span>· 2050-Q4 (extrapolated)</span>
               <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
             </div>
-            <h3>Futuristic Vision (2045): AI-driven stellar engineering — star-lifting + stellar modification</h3>
-            <p class="authors">AIHPC Editorial Board - extrapolated from Earth-2 (2026), AlphaEvolve v4 (2026), fusion control (2028), terraforming (2040)</p>
+            <h3>Futuristic Vision (2050): AI-driven galactic engineering — stellar-scale computation</h3>
+            <p class="authors">AIHPC Editorial Board - extrapolated from StarForge (2045), terraforming (2040), AlphaEvolve (2026)</p>
           </div>
         </div>
         <div class="abstract">
-          <p>This is a futuristic vision, not a real publication. We extrapolate from Earth-2 climate twin (2026), AlphaEvolve v4 (2026), fusion control (2028), and the terraforming vision (2040) to predict that by Q2 2045, AI will autonomously plan + execute stellar engineering operations — lifting material from stars, modifying stellar evolution, and harvesting fusion energy at industrial scale.</p>
-          <p>The vision: a stellar-AI system (StarForge v2, 1Q params) runs a 1km-resolution stellar-interior simulation + controls a Dyson-swarm of 10M autonomous mirrors. StarForge discovers optimal star-lifting strategies via AlphaEvolve-style evolutionary search over multi-objective fitness (energy output, stellar stability, heavy-element yield).</p>
-          <p>By 2045, the Sol star-lifting project extracts 0.01% of solar mass per year (2×10²⁸ kg — equivalent to 33 Earths), producing 10²⁶ watts of usable energy. The heavy-element yield (C, O, Fe) is shipped to the Mars terraforming project (Phase 45 vision).</p>
+          <p>This is a futuristic vision, not a real publication. We extrapolate from the stellar engineering vision (2045), terraforming (2040), and AlphaEvolve v4 (2026) to predict that by Q4 2050, AI will autonomously engineer stellar-scale computation: harvesting entire star systems as computational substrates (Matrioshka brains).</p>
+          <p>The vision: a galactic-AI system (GalactiForge, 10^21 params) coordinates 1000 star-lifting operations across a 10-light-year volume. Each harvested star provides 10^46 FLOPS — enough to simulate a human brain at full resolution in real-time. The 1000-star Matrioshka brain provides 10^49 FLOPS total.</p>
+          <p>By 2050, GalactiForge has completed 12 Matrioshka brains. The computation is used for: (1) simulating 10^12 human-level minds (post-human civilisation), (2) solving P vs NP (exhaustive proof search at 10^49 FLOPS), (3) simulating the entire observable universe at 1 Planck-length resolution.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic StarForge simulation (1km stellar interior, 20 years)</span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic GalactiForge Matrioshka-brain simulation (12 stars × 10 years)</span></div>
           <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 + Zarr</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">4.8 EB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.stellar-engineering.org/2045" target="_blank" rel="noopener">https://www.stellar-engineering.org/2045</a></span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">10^24 bytes (1 YB)</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.galactic-engineering.org/2050" target="_blank" rel="noopener">https://www.galactic-engineering.org/2050</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a stellar profile to receive a StarForge-style strategy.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a stellar-system profile to receive a Matrioshka-brain capacity estimate.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
               📂 Upload .h5,.csv,.json
-              <input type="file" id="etl-input-ai-stellar-engineering-2045" accept=".h5,.csv,.json" data-article-id="ai-stellar-engineering-2045" style="display:none;" />
+              <input type="file" id="etl-input-ai-galactic-engineering-2050" accept=".h5,.csv,.json" data-article-id="ai-galactic-engineering-2050" style="display:none;" />
             </label>
             <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-ai-stellar-engineering-2045" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-ai-galactic-engineering-2050" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-ai-stellar-engineering-2045">
-          <div class="card-head" onclick="toggleDemo('demo-ai-stellar-engineering-2045')">
+        <div class="demo-card" id="demo-ai-galactic-engineering-2050">
+          <div class="card-head" onclick="toggleDemo('demo-ai-galactic-engineering-2050')">
             <div>
-              <p class="card-title">stellar_engineering(star_profile, starforge_v2, dyson_swarm) - 5-step stellar modification</p>
-              <p class="card-desc">5-step: profile parse, stellar twin, strategy evolution, Dyson-swarm deployment, progress monitoring.</p>
+              <p class="card-title">galactic_engineering(star_systems, galactiforge, matrioshka_swarm) - 5-step stellar computation</p>
+              <p class="card-desc">5-step: system parse, star-lift, Matrioshka build, computation, result return.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -1032,34 +1032,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">strategy = StarForge_v2.evolve(stellar_twin, objectives=[energy, stability, heavy_elements]);  execute via swarm</div>
-                <p class="math-plain">StarForge v2 evolves a star-lifting strategy by running a stellar-interior twin, testing 1B strategy variants via AlphaEvolve-style search, and deploying via 10M autonomous mirrors.</p>
+                <div class="math-eq">FLOPS = Σ_stars(10^46);  problem = compute(Matrioshka_brain, FLOPS=10^49)</div>
+                <p class="math-plain">GalactiForge engineers Matrioshka brains by harvesting 1000 star systems. Each star provides 10^46 FLOPS. The combined 10^49 FLOPS enables solving P vs NP, simulating 10^12 minds, or simulating the universe at Planck resolution.</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Stellar profile</strong>
-                <div class="step-math">profile = {mass: 1 M☉, T_core: 15M K, luminosity: 1 L☉, age: 4.6 Gyr}</div>
-                <div class="step-explain">Parse the stellar profile: mass (1 solar mass), core temperature (15 million K), luminosity (1 solar), age (4.6 billion years).</div>
+                <strong>Step 1: System parse</strong>
+                <div class="step-math">systems = parse(galactic_catalog, n=1000, volume=10 ly³)</div>
+                <div class="step-explain">Parse the galactic catalog: select 1000 star systems within a 10-light-year volume suitable for Matrioshka-brain construction (solvent stars, 0.8-1.2 M☉).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: Stellar twin</strong>
-                <div class="step-math">twin = StarForge_stellar_sim(profile, resolution=1km, duration=20yr)</div>
-                <div class="step-explain">Run a 1km-resolution stellar-interior simulation (a stellar equivalent of Earth-2&#x27;s climate twin). Models fusion, convection, radiation, magnetic fields.</div>
+                <strong>Step 2: Star-lift</strong>
+                <div class="step-math">harvested = star_lift(systems, swarm=10^6 mirrors per star)</div>
+                <div class="step-explain">Lift stellar material using Dyson swarms (10^6 mirrors per star). Each star yields ~10^30 kg of computronium (matter configured for computation).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Strategy evolution</strong>
-                <div class="step-math">strategy = StarForge_v2.evolve(twin, n_variants=1e9, objectives=[energy, stability, heavy_elements])</div>
-                <div class="step-explain">Evolve a star-lifting strategy: which mirrors to position where, what laser frequencies to use for photosphere perturbation, what magnetic fields to apply for prominence control. Multi-objective Pareto front.</div>
+                <strong>Step 3: Matrioshka build</strong>
+                <div class="step-math">brain = build_matrioshka(harvested, n_shells=5)</div>
+                <div class="step-explain">Build a 5-shell Matrioshka brain from the computronium. Each shell operates at a different temperature (outer→inner: 290K→10K→1K→0.1K→0.01K) and waste-heat frequency. Total: 10^46 FLOPS per star.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: Dyson-swarm deployment</strong>
-                <div class="step-math">execute(strategy, swarm={10M mirrors, 1000 harvesters, 50 refineries})</div>
-                <div class="step-explain">Deploy via a Dyson swarm: 10M autonomous mirrors redirect sunlight, 1000 harvesters lift material via stellar wind capture + laser ablation, 50 refineries process the heavy elements.</div>
+                <strong>Step 4: Computation</strong>
+                <div class="step-math">result = compute(brain, problem, FLOPS=10^49, duration=1yr)</div>
+                <div class="step-explain">Compute the problem on the 1000-star Matrioshka brain. 10^49 FLOPS for 1 year. This is sufficient for: exhaustive P vs NP proof search, 10^12 mind simulations, or Planck-resolution universe simulation.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Progress monitoring</strong>
-                <div class="step-math">progress = monitor(twin, swarm, KPIs=[ΔM_star, energy_output, heavy_element_yield])</div>
-                <div class="step-explain">Monitor: ΔM_star = -0.01% per year (2×10²⁸ kg), energy output = 10²⁶ W, heavy-element yield (C, O, Fe) shipped to Mars terraforming project. Completion estimate: indefinite (sustainable).</div>
+                <strong>Step 5: Result return</strong>
+                <div class="step-math">return result via quantum-entangled link (latency ~0)</div>
+                <div class="step-explain">Return the result via the quantum-entangled consciousness network (Phase 45 vision). Non-local transfer: latency ~0 regardless of distance. 12 Matrioshka brains completed by 2050.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -1088,50 +1088,50 @@
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
                   <div class="stat">
-                    <div class="l">StarForge params</div>
-                    <div class="v">1Q (10^18)</div>
+                    <div class="l">Star systems</div>
+                    <div class="v">1000 (10 ly³ volume)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Variants/gen</div>
-                    <div class="v">1 billion</div>
+                    <div class="l">FLOPS per star</div>
+                    <div class="v">10^46</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Dyson swarm</div>
-                    <div class="v">10M mirrors + 1000 harvesters</div>
+                    <div class="l">Total FLOPS</div>
+                    <div class="v">10^49 (1000 Matrioshka brains)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Mass extracted</div>
-                    <div class="v">0.01% M☉/yr (2×10²⁸ kg)</div>
+                    <div class="l">Matrioshka shells</div>
+                    <div class="v">5 (290K→0.01K)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Energy output</div>
-                    <div class="v">10²⁶ W</div>
+                    <div class="l">Minds simulatable</div>
+                    <div class="v">10^12 human-level</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Heavy elements</div>
-                    <div class="v">Shipped to Mars</div>
+                    <div class="l">Completed</div>
+                    <div class="v">12 brains by 2050</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">2045 vision: AI-driven stellar engineering. StarForge v2 (1Q params) evolves star-lifting strategies via AlphaEvolve-style search on a 1km stellar-interior twin. 10M Dyson mirrors + 1000 harvesters + 50 refineries. Extracts 0.01% solar mass/year (33 Earths), producing 10²⁶ W. Heavy elements shipped to Mars terraforming project.</div>
+                <div class="report-block">2050 vision: AI-driven galactic engineering. GalactiForge (10^21 params) coordinates 1000 star-lifting operations across 10 ly³. Each star yields a 5-shell Matrioshka brain (10^46 FLOPS). Combined: 10^49 FLOPS. Sufficient for P vs NP, 10^12 mind simulations, or Planck-resolution universe simulation. 12 brains completed by 2050.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><circle cx="200" cy="100" r="40" fill="rgba(245,158,11,0.3)" stroke="#f59e0b" stroke-width="2"/><circle cx="200" cy="100" r="55" fill="none" stroke="rgba(6,182,212,0.3)" stroke-width="1" stroke-dasharray="2 2"/><circle cx="200" cy="100" r="70" fill="none" stroke="rgba(6,182,212,0.2)" stroke-width="1" stroke-dasharray="2 2"/><circle cx="200" cy="100" r="85" fill="none" stroke="rgba(6,182,212,0.15)" stroke-width="1" stroke-dasharray="2 2"/><text x="200" y="105" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">Sol</text><text x="280" y="60" font-size="9" fill="#06b6d4" font-family="ui-monospace">Dyson swarm</text><text x="280" y="75" font-size="9" fill="#9ca3af" font-family="ui-monospace">10M mirrors</text><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Stellar engineering (2045)</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">Matrioshka brain FLOPS hierarchy</text><rect x="40" y="170" width="50" height="10" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">1 GPU</text><rect x="110" y="160" width="50" height="20" fill="#9ca3af" opacity="0.5"/><text x="135" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">H100 cluster</text><rect x="180" y="100" width="50" height="80" fill="#8b5cf6" opacity="0.5"/><text x="205" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">Dyson swarm</text><rect x="250" y="20" width="50" height="160" fill="#06b6d4"/><text x="275" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">Matrioshka</text><text x="65" y="165" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="ui-monospace">10^15</text><text x="135" y="155" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="ui-monospace">10^18</text><text x="205" y="95" text-anchor="middle" font-size="8" fill="#8b5cf6" font-family="ui-monospace">10^40</text><text x="275" y="15" text-anchor="middle" font-size="9" fill="#06b6d4" font-family="ui-monospace">10^49</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>StarForge v2 (1Q params): AI-driven stellar engineering.</li>
-                    <li>10M Dyson mirrors + 1000 harvesters + 50 refineries.</li>
-                    <li>Extracts 0.01% solar mass/year (33 Earths); 10²⁶ W.</li>
-                    <li>Heavy elements shipped to Mars terraforming project.</li>
+                    <li>GalactiForge (10^21 params): AI-driven galactic engineering.</li>
+                    <li>1000 star systems → 1000 Matrioshka brains (5 shells each).</li>
+                    <li>Total: 10^49 FLOPS — sufficient for P vs NP, 10^12 minds, Planck-universe sim.</li>
+                    <li>12 brains completed by 2050. Results via quantum-entangled link.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-ai-stellar-engineering-2045" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-ai-galactic-engineering-2050" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -1140,48 +1140,48 @@
         </div>
       </article>
 
-      <article class="article-card futuristic-vision" id="article-universal-quantum-internet-2048">
+      <article class="article-card futuristic-vision" id="article-quantum-biological-computing-2052">
         <div class="article-head">
           <div>
             <div class="source-row">
               <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
-              <span class="domain-pill">Physics - Quantum Internet (Futuristic Vision)</span>
-              <span>· 2048-Q3 (extrapolated)</span>
+              <span class="domain-pill">Biology - Quantum-Biological (Futuristic Vision)</span>
+              <span>· 2052-Q2 (extrapolated)</span>
               <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
             </div>
-            <h3>Futuristic Vision (2048): universal quantum internet — global entangled network</h3>
-            <p class="authors">AIHPC Editorial Board - extrapolated from Quantum-Heron 5 (2026), QCN (2042), satellite quantum networking (2038)</p>
+            <h3>Futuristic Vision (2052): quantum-biological computing — DNA-quantum hybrid processor</h3>
+            <p class="authors">AIHPC Editorial Board - extrapolated from ESM-5 (2027), quantum consciousness (2036), DNA data storage (2030), Matrioshka brains (2050)</p>
           </div>
         </div>
         <div class="abstract">
-          <p>This is a futuristic vision, not a real publication. We extrapolate from IBM Quantum-Heron 5 (2026), the quantum consciousness network (2042), and satellite-based quantum networking (2038) to predict that by Q3 2048, a universal quantum internet will connect every quantum computer, quantum sensor, and quantum-consciousness interface on Earth + in orbit via entangled links.</p>
-          <p>The vision: a 3-tier quantum network — (1) ground-level fibre links connecting 10,000 quantum computers + 100,000 quantum sensors, (2) LEO-satellite entanglement distribution at 10,000 km range, (3) lunar L2 repeater for intercontinental non-local links. Total: 10^8 entangled nodes. Network latency: 0 (entanglement is non-local).</p>
-          <p>By 2048, the quantum internet carries 10^12 quantum bits per second of entanglement — enabling: quantum-cloud computing (any quantum computer accessible from any terminal), distributed quantum sensing (10^-15 m resolution gravitational-wave detection), and the quantum-consciousness network (Phase 45 vision) at global scale.</p>
+          <p>This is a futuristic vision, not a real publication. We extrapolate from ESM-5 protein design (2027), quantum consciousness interface (2036), DNA data storage (2030), and Matrioshka brains (2050) to predict that by Q2 2052, quantum-biological hybrid processors will combine DNA storage (10^21 bits/g) with quantum coherence (NV-centre readout) in a single biological-quantum chip.</p>
+          <p>The vision: a DNA-quantum hybrid processor (DQHP v1) stores data in synthetic DNA strands (10^21 bits per gram) and reads/writes via NV-centre quantum magnetometry. The DNA strand is the memory; the NV-centre array is the processor. Each NV-centre can read one DNA base in 1 µs — giving 10^6 base reads/second per NV-centre, 10^12 reads/second with 10^6 NV-centres.</p>
+          <p>By 2052, DQHP v1 achieves: 10^21 bits storage in 1 g of DNA, 10^12 reads/second quantum readout, and biological self-repair (the DNA strand is replicated by a cell-free polymerase system every 24 hours, correcting bit-flip errors). The chip is fully biodegradable.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic Q-Internet entanglement log (10^8 nodes × 24h)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 + Qiskit shots</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">1.8 ZB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.quantum-internet.org/2048" target="_blank" rel="noopener">https://www.quantum-internet.org/2048</a></span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic DQHP DNA-quantum readout trace (10^12 reads × 1 day)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">FASTA + HDF5</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">10^15 bytes (1 PB)</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.quantum-bio.org/2052" target="_blank" rel="noopener">https://www.quantum-bio.org/2052</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a network topology to estimate Q-Internet entanglement capacity.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a DNA sequence to receive a DQHP-style storage capacity estimate.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .h5,.csv,.json
-              <input type="file" id="etl-input-universal-quantum-internet-2048" accept=".h5,.csv,.json" data-article-id="universal-quantum-internet-2048" style="display:none;" />
+              📂 Upload .fasta,.h5,.csv
+              <input type="file" id="etl-input-quantum-biological-computing-2052" accept=".fasta,.h5,.csv" data-article-id="quantum-biological-computing-2052" style="display:none;" />
             </label>
             <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-universal-quantum-internet-2048" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-quantum-biological-computing-2052" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-universal-quantum-internet-2048">
-          <div class="card-head" onclick="toggleDemo('demo-universal-quantum-internet-2048')">
+        <div class="demo-card" id="demo-quantum-biological-computing-2052">
+          <div class="card-head" onclick="toggleDemo('demo-quantum-biological-computing-2052')">
             <div>
-              <p class="card-title">quantum_internet(topology, q_router) - 5-step global entanglement distribution</p>
-              <p class="card-desc">5-step: topology parse, entanglement routing, repeater chain, end-to-end verification, application layer.</p>
+              <p class="card-title">dqhp_compute(data, dna_storage, nv_array) - 5-step quantum-biological computing</p>
+              <p class="card-desc">5-step: DNA encode, NV-centre write, quantum readout, biological repair, output.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -1194,34 +1194,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">entangled = Q-Internet.route(A, B);  fidelity = product(repeater_fidelities)</div>
-                <p class="math-plain">The quantum internet routes entanglement between nodes A and B via a chain of quantum repeaters. End-to-end fidelity = product of individual repeater fidelities.</p>
+                <div class="math-eq">stored = DNA.encode(data, density=10^21 bits/g);  read = NV_array.read(stored, rate=10^12/s)</div>
+                <p class="math-plain">DQHP stores data in DNA at 10^21 bits/gram, reads via NV-centre quantum magnetometry at 10^12 reads/second, and self-repairs via cell-free DNA replication.</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Topology</strong>
-                <div class="step-math">topology = {fibre_links: 10k, LEO_sats: 500, lunar_repeater: 1, nodes: 10^8}</div>
-                <div class="step-explain">The quantum internet topology: 10,000 ground-level fibre links, 500 LEO satellites for entanglement distribution, 1 lunar L2 repeater for intercontinental non-local links, 10^8 total nodes.</div>
+                <strong>Step 1: DNA encode</strong>
+                <div class="step-math">stored = DNA.encode(data, codec=Reed-Solomon, density=10^21 bits/g)</div>
+                <div class="step-explain">Encode the data into synthetic DNA strands using Reed-Solomon error-correcting codes. Density: 10^21 bits per gram of DNA (vs 10^9 for flash storage — 10^12x denser).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: Entanglement routing</strong>
-                <div class="step-math">path = Q-router(A, B, topology, optimise=fidelity × latency)</div>
-                <div class="step-explain">The quantum router finds the optimal entanglement path between A and B, optimising for fidelity × latency. Since entanglement is non-local, latency ≈ 0 for entangled links.</div>
+                <strong>Step 2: NV-centre write</strong>
+                <div class="step-math">written = NV_array.write(stored, via=microwave_pulses)</div>
+                <div class="step-explain">Write the DNA strands via NV-centre microwave pulses. Each NV-centre is positioned over a DNA strand and emits targeted microwave pulses that modify the DNA bases (A↔T, C↔G flips).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Repeater chain</strong>
-                <div class="step-math">chain = build_repeaters(path, n_repeaters=distance/100km)</div>
-                <div class="step-explain">Build a chain of quantum repeaters along the path. Each repeater extends entanglement by ~100 km (fibre) or ~10,000 km (satellite). Repeater fidelity: 0.999 each.</div>
+                <strong>Step 3: Quantum readout</strong>
+                <div class="step-math">read = NV_array.read(stored, rate=10^6/s per NV, n_NV=10^6)</div>
+                <div class="step-explain">Read the DNA via NV-centre quantum magnetometry. Each NV-centre detects the magnetic signature of one DNA base in 1 µs. With 10^6 NV-centres, total read rate: 10^12 bases/second.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: End-to-end verification</strong>
-                <div class="step-math">fidelity = product(chain_fidelities);  accept if fidelity &gt; 0.95</div>
-                <div class="step-explain">End-to-end fidelity = product of all repeater fidelities. For a 10-repeater chain: 0.999^10 = 0.990. Accept if &gt; 0.95. Typical: 0.97-0.99.</div>
+                <strong>Step 4: Biological repair</strong>
+                <div class="step-math">repaired = polymerase.replicate(stored, every=24h, error_correction=True)</div>
+                <div class="step-explain">Every 24 hours, a cell-free DNA polymerase system replicates the stored DNA strands. This corrects bit-flip errors (DNA damage from background radiation) — biological self-repair. Error rate after repair: 10^-21 per bit.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Application layer</strong>
-                <div class="step-math">apps = {Q-cloud, distributed_sensing, QCN, QKD}</div>
-                <div class="step-explain">Applications: quantum-cloud computing (access any quantum computer from any terminal), distributed quantum sensing (10^-15 m gravitational-wave detection), quantum-consciousness network (Phase 45 vision at global scale), quantum key distribution (unbreakable encryption).</div>
+                <strong>Step 5: Output</strong>
+                <div class="step-math">output = decode(read, codec=Reed-Solomon);  biodegradable at end-of-life</div>
+                <div class="step-explain">Decode the readout via Reed-Solomon. The entire chip is biodegradable — at end-of-life, the DNA is digested by naturally-occurring nucleases, leaving zero e-waste.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -1250,50 +1250,50 @@
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
                   <div class="stat">
-                    <div class="l">Nodes</div>
-                    <div class="v">10^8</div>
+                    <div class="l">Storage density</div>
+                    <div class="v">10^21 bits/g (DNA)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Fibre links</div>
-                    <div class="v">10,000 ground</div>
+                    <div class="l">Read rate</div>
+                    <div class="v">10^12 bases/s</div>
                   </div>
                   <div class="stat">
-                    <div class="l">LEO satellites</div>
-                    <div class="v">500</div>
+                    <div class="l">NV-centres</div>
+                    <div class="v">10^6</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Lunar repeater</div>
-                    <div class="v">1 (L2)</div>
+                    <div class="l">Self-repair</div>
+                    <div class="v">Every 24h (polymerase)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Entanglement rate</div>
-                    <div class="v">10^12 qbits/s</div>
+                    <div class="l">Error rate (post-repair)</div>
+                    <div class="v">10^-21 per bit</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Latency</div>
-                    <div class="v">~0 (non-local)</div>
+                    <div class="l">Biodegradable</div>
+                    <div class="v">Yes (zero e-waste)</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">2048 vision: universal quantum internet. 10^8 nodes via 10k fibre links + 500 LEO satellites + 1 lunar L2 repeater. 10^12 qbits/s entanglement. Non-local latency ~0. Applications: quantum-cloud computing, distributed sensing (10^-15 m), QCN at global scale, unbreakable QKD.</div>
+                <div class="report-block">2052 vision: DNA-quantum hybrid processor (DQHP). Stores 10^21 bits/g in DNA. Reads via 10^6 NV-centre quantum magnetometers at 10^12 reads/s. Self-repairs via cell-free polymerase every 24h (error: 10^-21). Fully biodegradable — zero e-waste at end-of-life.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><circle cx="200" cy="100" r="30" fill="rgba(6,182,212,0.2)" stroke="#06b6d4"/><text x="200" y="105" text-anchor="middle" font-size="9" fill="#06b6d4" font-family="ui-monospace">Earth</text><circle cx="200" cy="100" r="55" fill="none" stroke="rgba(139,92,246,0.3)" stroke-dasharray="2 2"/><circle cx="200" cy="100" r="80" fill="none" stroke="rgba(236,72,153,0.2)" stroke-dasharray="2 2"/><text x="260" y="50" font-size="9" fill="#8b5cf6" font-family="ui-monospace">LEO sats (500)</text><text x="260" y="65" font-size="9" fill="#ec4899" font-family="ui-monospace">Lunar L2 repeater</text><text x="260" y="80" font-size="9" fill="#06b6d4" font-family="ui-monospace">10^8 nodes</text><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Universal quantum internet (2048)</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><text x="200" y="15" text-anchor="middle" font-size="10" fill="#10b981" font-family="ui-monospace">Storage density (bits per gram)</text><rect x="40" y="170" width="50" height="10" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">Flash</text><rect x="110" y="150" width="50" height="30" fill="#9ca3af" opacity="0.5"/><text x="135" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">SSD</text><rect x="180" y="120" width="50" height="60" fill="#9ca3af" opacity="0.5"/><text x="205" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">DNA (2030)</text><rect x="250" y="20" width="50" height="160" fill="#10b981"/><text x="275" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">DQHP DNA</text><text x="65" y="165" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="ui-monospace">10^9</text><text x="135" y="145" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="ui-monospace">10^12</text><text x="205" y="115" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="ui-monospace">10^18</text><text x="275" y="15" text-anchor="middle" font-size="9" fill="#10b981" font-family="ui-monospace">10^21</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>Universal quantum internet: 10^8 nodes via fibre + LEO + lunar repeater.</li>
-                    <li>10^12 qbits/s entanglement; non-local latency ~0.</li>
-                    <li>Applications: Q-cloud, distributed sensing, QCN global, unbreakable QKD.</li>
-                    <li>3-tier: ground fibre → LEO satellite → lunar L2 repeater.</li>
+                    <li>DQHP: DNA-quantum hybrid processor (2052).</li>
+                    <li>10^21 bits/g storage in DNA; 10^12 reads/s via NV-centre magnetometry.</li>
+                    <li>Biological self-repair every 24h (polymerase); error 10^-21 per bit.</li>
+                    <li>Fully biodegradable — zero e-waste at end-of-life.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-universal-quantum-internet-2048" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-quantum-biological-computing-2052" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -1351,61 +1351,61 @@
       // (See CODE_BANK below.)
 
       const CODE_BANK = {
-        'deepmind-genie-2-science': {
-          python: "# simulation = Genie2(prompt + physics_constraints)\n# prompt -> text  world -> 3D voxel grid  physics -> equations\ndef genie2_science_simulate(prompt, model):\n    constraints = model.parse_prompt(prompt)\n    world = model.generate(constraints, resolution=256**3)\n    sim = model.condition(world, constraints.equations, n_steps=1000)\n    output = model.run(sim, interactive=True)\n    validated = compare(output, constraints.solver, tol=0.05)\n    return output if validated else None",
-          rust: "fn genie2_science_simulate(prompt: &str, m: &Genie2) -> Option<Output> {\n    let c = m.parse_prompt(prompt);\n    let w = m.generate(&c, 256*256*256);\n    let s = m.condition(&w, &c.equations, 1000);\n    let o = m.run(&s, true);\n    if compare(&o, &c.solver, 0.05) { Some(o) } else { None }\n}",
-          go: "func Genie2ScienceSimulate(prompt string, m *Genie2) *Output {\n\tc := m.ParsePrompt(prompt)\n\tw := m.Generate(c, 256*256*256)\n\ts := m.Condition(w, c.Equations, 1000)\n\to := m.Run(s, true)\n\tif Compare(o, c.Solver, 0.05) { return o }\n\treturn nil\n}",
-          c: "Output* genie2_science_simulate(const char* prompt, Genie2* m) {\n    Constraints* c = m_parse_prompt(m, prompt);\n    World* w = m_generate(m, c, 256*256*256);\n    Sim* s = m_condition(m, w, c->equations, 1000);\n    Output* o = m_run(m, s, 1);\n    if (compare(o, c->solver, 0.05)) return o;\n    free(o); return NULL;\n}",
-          elixir: "defmodule Genie2 do\n  def simulate(prompt, m) do\n    c = m.parse_prompt(prompt)\n    w = m.generate(c, 256*256*256)\n    s = m.condition(w, c.equations, 1000)\n    o = m.run(s, interactive: true)\n    if compare(o, c.solver, 0.05), do: o, else: nil\n  end\nend",
-          scala: "def genie2ScienceSimulate(prompt: String, m: Genie2): Option[Output] = {\n  val c = m.parsePrompt(prompt)\n  val w = m.generate(c, 256*256*256)\n  val s = m.condition(w, c.equations, 1000)\n  val o = m.run(s, interactive = true)\n  if (compare(o, c.solver, 0.05)) Some(o) else None\n}",
+        'gemini-3-unified-fm': {
+          python: "# output = Gemini3(tokenise(input))\n# input -> any modality  tokenise -> unified tokens  MoE -> 256 experts\ndef gemini3_unified(input_data, model):\n    modality = model.detect_modality(input_data)\n    tokens = model.tokenise(input_data, modality=modality)\n    emb = model.moe_encode(tokens, top_k=4)\n    cross = model.cross_attend(emb)\n    output = model.generate(cross, target_modality='text')\n    if model.self_check(output, input_data):\n        return output\n    return None",
+          rust: "fn gemini3_unified(input: &Input, m: &Gemini3) -> Option<Output> {\n    let modality = m.detect(input);\n    let tokens = m.tokenise(input, modality);\n    let emb = m.moe_encode(&tokens, 4);\n    let cross = m.cross_attend(&emb);\n    let out = m.generate(&cross, \"text\");\n    if m.self_check(&out, input) { Some(out) } else { None }\n}",
+          go: "func Gemini3Unified(input *Input, m *Gemini3) *Output {\n\tmodality := m.Detect(input)\n\ttokens := m.Tokenise(input, modality)\n\temb := m.MoEEncode(tokens, 4)\n\tcross := m.CrossAttend(emb)\n\tout := m.Generate(cross, \"text\")\n\tif m.SelfCheck(out, input) { return out }\n\treturn nil\n}",
+          c: "Output* gemini3_unified(Input* input, Gemini3* m) {\n    int modality = m_detect(m, input);\n    Tokens* tokens = m_tokenise(m, input, modality);\n    Vec* emb = m_moe_encode(m, tokens, 4);\n    Vec* cross = m_cross_attend(m, emb);\n    Output* out = m_generate(m, cross, \"text\");\n    if (m_self_check(m, out, input)) return out;\n    return NULL;\n}",
+          elixir: "defmodule Gemini3 do\n  def unified(input, m) do\n    modality = m.detect(input)\n    tokens = m.tokenise(input, modality)\n    emb = m.moe_encode(tokens, top_k: 4)\n    cross = m.cross_attend(emb)\n    out = m.generate(cross, target: \"text\")\n    if m.self_check?(out, input), do: out, else: nil\n  end\nend",
+          scala: "def gemini3Unified(input: Input, m: Gemini3): Option[Output] = {\n  val modality = m.detect(input)\n  val tokens = m.tokenise(input, modality)\n  val emb = m.moeEncode(tokens, 4)\n  val cross = m.crossAttend(emb)\n  val out = m.generate(cross, \"text\")\n  if (m.selfCheck(out, input)) Some(out) else None\n}",
         },
-        'anthropic-claude-4-medical': {
-          python: "# analysis = Claude4Med(case + RAG); safety = constitutional_filter(analysis)\n# case -> clinical text  CAI -> constitutional AI  RAG -> PubMed + NICE\ndef claude4_medical_analyse(case, model, rag_db):\n    structured = model.extract_entities(case)\n    reasoning = model.cai_reason(structured, safety_principles=['beneficence','non_maleficence','autonomy','justice'])\n    evidence = rag_db.retrieve(reasoning, top_k=10)\n    analysis = model.generate(reasoning + evidence, citations=True, max_tokens=1024)\n    final = model.constitutional_filter(analysis)\n    return final  # 99.8% safety refusal; 96% citation accuracy",
-          rust: "fn claude4_medical_analyse(case: &str, m: &Claude4Med, rag: &RagDB) -> String {\n    let s = m.extract_entities(case);\n    let r = m.cai_reason(&s, &[\"beneficence\",\"non_maleficence\",\"autonomy\",\"justice\"]);\n    let e = rag.retrieve(&r, 10);\n    let a = m.generate(&r + &e, true, 1024);\n    m.constitutional_filter(&a)\n}",
-          go: "func Claude4MedicalAnalyse(case string, m *Claude4Med, rag *RagDB) string {\n\ts := m.ExtractEntities(case)\n\tr := m.CAIReason(s, []string{\"beneficence\",\"non_maleficence\",\"autonomy\",\"justice\"})\n\te := rag.Retrieve(r, 10)\n\ta := m.Generate(r+e, true, 1024)\n\treturn m.ConstitutionalFilter(a)\n}",
-          c: "char* claude4_medical_analyse(const char* case_text, Claude4Med* m, RagDB* rag) {\n    Entities* s = m_extract_entities(m, case_text);\n    Reasoning* r = m_cai_reason(m, s, principles);\n    Evidence* e = rag_retrieve(rag, r, 10);\n    char* a = m_generate(m, r + e, 1, 1024);\n    return m_constitutional_filter(m, a);\n}",
-          elixir: "defmodule Claude4Med do\n  def analyse(case, m, rag) do\n    s = m.extract_entities(case)\n    r = m.cai_reason(s, ~w[beneficence non_maleficence autonomy justice])\n    e = rag.retrieve(r, 10)\n    a = m.generate(r ++ e, citations: true, max_tokens: 1024)\n    m.constitutional_filter(a)\n  end\nend",
-          scala: "def claude4MedicalAnalyse(c: String, m: Claude4Med, rag: RagDB): String = {\n  val s = m.extractEntities(c)\n  val r = m.caiReason(s, List(\"beneficence\",\"non_maleficence\",\"autonomy\",\"justice\"))\n  val e = rag.retrieve(r, 10)\n  val a = m.generate(r + e, citations = true, 1024)\n  m.constitutionalFilter(a)\n}",
+        'nvidia-nim-medical-edge': {
+          python: "# result = NIM_container.model.infer(input, gpu=RTX6000)\n# container -> Docker image  input -> DICOM  gpu -> edge GPU\ndef nim_medical_infer(input_file, container_name, gpu='RTX6000-Ada'):\n    container = docker_pull(f'nvcr.io/nim/medical/{container_name}:latest')\n    inp = parse(input_file, hipaa=True)\n    result = container.model.infer(inp, gpu=gpu)  # 0.8s latency\n    log = hipaa_logger(result, phi_scrubbed=True)\n    return format_result(result, template='hospital_standard')",
+          rust: "fn nim_medical_infer(input: &Input, container: &str, gpu: &str) -> Output {\n    let c = docker_pull(&format!(\"nvcr.io/nim/medical/{}:latest\", container));\n    let inp = parse(input, true);\n    let result = c.model.infer(&inp, gpu);\n    let _log = hipaa_logger(&result, true);\n    format_result(&result, \"hospital_standard\")\n}",
+          go: "func NIMMedicalInfer(input *Input, container string, gpu string) Output {\n\tc := DockerPull(\"nvcr.io/nim/medical/\" + container + \":latest\")\n\tinp := Parse(input, true)\n\tresult := c.Model.Infer(inp, gpu)\n\t_ = HIPAALogger(result, true)\n\treturn FormatResult(result, \"hospital_standard\")\n}",
+          c: "Output nim_medical_infer(Input* input, const char* container, const char* gpu) {\n    Container* c = docker_pull(container);\n    Input* inp = parse(input, 1);\n    Result* r = c_model_infer(c, inp, gpu);\n    hipaa_logger(r, 1);\n    return format_result(r, \"hospital_standard\");\n}",
+          elixir: "defmodule NIMMedical do\n  def infer(input, container, gpu \\\\ \"RTX6000-Ada\") do\n    c = docker_pull(\"nvcr.io/nim/medical/#{container}:latest\")\n    inp = parse(input, hipaa: true)\n    result = c.model.infer(inp, gpu)\n    _ = hipaa_logger(result, phi_scrubbed: true)\n    format_result(result, template: \"hospital_standard\")\n  end\nend",
+          scala: "def nimMedicalInfer(input: Input, container: String, gpu: String = \"RTX6000-Ada\"): Output = {\n  val c = dockerPull(s\"nvcr.io/nim/medical/$container:latest\")\n  val inp = parse(input, hipaa = true)\n  val result = c.model.infer(inp, gpu)\n  hipaaLogger(result, phiScrubbed = true)\n  formatResult(result, \"hospital_standard\")\n}",
         },
-        'meta-esm-5-protein-design': {
-          python: "# protein = ESM5(spec); validated = AF3(protein).pLDDT > 80\n# spec -> function spec  flow_match -> backbone gen  AF3 -> validation\ndef esm5_design(spec, model):\n    backbone = model.flow_match(spec, n_steps=100)\n    seq = model.protein_mpnn(backbone, ss_constraint=spec.fold)\n    structure = model.af3.predict(seq)\n    if structure.pLDDT > 80 and model.function_pred(seq) > 0.7:\n        return seq, structure\n    return None",
-          rust: "fn esm5_design(spec: &Spec, m: &ESM5) -> Option<(Seq, Structure)> {\n    let bb = m.flow_match(spec, 100);\n    let seq = m.protein_mpnn(&bb, spec.fold);\n    let s = m.af3.predict(&seq);\n    if s.pLDDT > 80.0 && m.function_pred(&seq) > 0.7 { Some((seq, s)) } else { None }\n}",
-          go: "func ESM5Design(spec *Spec, m *ESM5) (*Seq, *Structure) {\n\tbb := m.FlowMatch(spec, 100)\n\tseq := m.ProteinMPNN(bb, spec.Fold)\n\ts := m.AF3.Predict(seq)\n\tif s.PLDDT > 80.0 && m.FunctionPred(seq) > 0.7 { return &seq, &s }\n\treturn nil, nil\n}",
-          c: "typedef struct { char* seq; Structure* s; } Design;\nDesign* esm5_design(Spec* spec, ESM5* m) {\n    Backbone* bb = m_flow_match(m, spec, 100);\n    char* seq = m_protein_mpnn(m, bb, spec->fold);\n    Structure* s = m_af3_predict(m, seq);\n    if (s->pLDDT > 80.0 && m_function_pred(m, seq) > 0.7) {\n        Design* d = malloc(sizeof(Design)); d->seq = seq; d->s = s; return d;\n    }\n    return NULL;\n}",
-          elixir: "defmodule ESM5 do\n  def design(spec, m) do\n    bb = m.flow_match(spec, 100)\n    seq = m.protein_mpnn(bb, spec.fold)\n    s = m.af3.predict(seq)\n    if s.pLDDT > 80.0 and m.function_pred(seq) > 0.7, do: {seq, s}, else: nil\n  end\nend",
-          scala: "def esm5Design(spec: Spec, m: ESM5): Option[(Seq, Structure)] = {\n  val bb = m.flowMatch(spec, 100)\n  val seq = m.proteinMPNN(bb, spec.fold)\n  val s = m.af3.predict(seq)\n  if (s.pLDDT > 80.0 && m.functionPred(seq) > 0.7) Some((seq, s)) else None\n}",
+        'anthropic-claude-5-reasoning': {
+          python: "# solution = Claude5.CoT(problem, n_thinking=100k); safe = CAI_v4.check(solution)\n# problem -> research question  CoT -> chain-of-thought  CAI -> constitutional AI\ndef claude5_reason(problem, model):\n    hypotheses = model.generate_hypotheses(problem, n=20)\n    solution = model.cot(hypotheses, n_thinking=100_000, self_consistency=10)\n    safe = model.cai_v4_check(solution, n_principles=12)\n    if safe:\n        return model.format(solution, citations=True, reasoning_chain=True)\n    return model.refuse(problem)\n",
+          rust: "fn claude5_reason(problem: &str, m: &Claude5) -> Output {\n    let hyps = m.generate_hypotheses(problem, 20);\n    let sol = m.cot(&hyps, 100_000, 10);\n    if m.cai_v4_check(&sol, 12) {\n        m.format(&sol, true, true)\n    } else { m.refuse(problem) }\n}",
+          go: "func Claude5Reason(problem string, m *Claude5) Output {\n\thyps := m.GenerateHypotheses(problem, 20)\n\tsol := m.CoT(hyps, 100_000, 10)\n\tif m.CAIV4Check(sol, 12) {\n\t\treturn m.Format(sol, true, true)\n\t}\n\treturn m.Refuse(problem)\n}",
+          c: "Output claude5_reason(const char* problem, Claude5* m) {\n    Hypothesis* hyps = m_generate_hypotheses(m, problem, 20);\n    Solution sol = m_cot(m, hyps, 100000, 10);\n    if (m_cai_v4_check(m, &sol, 12)) {\n        return m_format(m, &sol, 1, 1);\n    }\n    return m_refuse(m, problem);\n}",
+          elixir: "defmodule Claude5 do\n  def reason(problem, m) do\n    hyps = m.generate_hypotheses(problem, 20)\n    sol = m.cot(hyps, 100_000, 10)\n    if m.cai_v4_check?(sol, 12) do\n      m.format(sol, citations: true, reasoning_chain: true)\n    else\n      m.refuse(problem)\n    end\n  end\nend",
+          scala: "def claude5Reason(problem: String, m: Claude5): Output = {\n  val hyps = m.generateHypotheses(problem, 20)\n  val sol = m.cot(hyps, 100000, 10)\n  if (m.caiV4Check(sol, 12)) {\n    m.format(sol, citations = true, reasoningChain = true)\n  } else m.refuse(problem)\n}",
         },
-        'google-palm-3-medical': {
-          python: "# analysis = PaLM3Med(case + adaptive_RAG(case, dbs))\n# case -> clinical text  router -> db selector  retriever -> clinical relevance\ndef palm3_medical_analyse(case, model, guideline_dbs):\n    entities = model.extract(case)\n    db = model.router(entities, candidates=guideline_dbs)\n    evidence = model.retriever(entities, db, top_k=10)\n    analysis = model.generate(entities + evidence, citations=True)\n    fresh = all(c.date > datetime.now() - timedelta(days=180) for c in analysis.citations)\n    if not fresh: analysis = model.regenerate_with_fresh(entities)\n    return analysis",
-          rust: "fn palm3_medical_analyse(case: &str, m: &PaLM3Med, dbs: &[GuidelineDB]) -> Analysis {\n    let e = m.extract(case);\n    let db = m.router(&e, dbs);\n    let ev = m.retriever(&e, &db, 10);\n    let mut a = m.generate(&e + &ev, true);\n    if !all_fresh(&a.citations, 180) { a = m.regenerate_with_fresh(&e); }\n    a\n}",
-          go: "func PaLM3MedicalAnalyse(case string, m *PaLM3Med, dbs []GuidelineDB) Analysis {\n\te := m.Extract(case)\n\tdb := m.Router(e, dbs)\n\tev := m.Retriever(e, db, 10)\n\ta := m.Generate(e+ev, true)\n\tif !AllFresh(a.Citations, 180) { a = m.RegenerateWithFresh(e) }\n\treturn a\n}",
-          c: "Analysis palm3_medical_analyse(const char* case_text, PaLM3Med* m, GuidelineDB* dbs, int n_dbs) {\n    Entities* e = m_extract(m, case_text);\n    int db_idx = m_router(m, e, dbs, n_dbs);\n    Evidence* ev = m_retriever(m, e, &dbs[db_idx], 10);\n    Analysis a = m_generate(m, e + ev, 1);\n    if (!all_fresh(a.citations, 180)) { a = m_regenerate_with_fresh(m, e); }\n    return a;\n}",
-          elixir: "defmodule PaLM3Med do\n  def analyse(case, m, dbs) do\n    e = m.extract(case)\n    db = m.router(e, dbs)\n    ev = m.retriever(e, db, 10)\n    a = m.generate(e ++ ev, citations: true)\n    if all_fresh?(a.citations, 180), do: a, else: m.regenerate_with_fresh(e)\n  end\nend",
-          scala: "def palm3MedicalAnalyse(c: String, m: PaLM3Med, dbs: Vector[GuidelineDB]): Analysis = {\n  val e = m.extract(c)\n  val db = m.router(e, dbs)\n  val ev = m.retriever(e, db, 10)\n  var a = m.generate(e + ev, citations = true)\n  if (!allFresh(a.citations, 180)) { a = m.regenerateWithFresh(e) }\n  a\n}",
+        'meta-llama-4-medical': {
+          python: "# analysis = Llama4Med(case); routed through 4 of 64 experts per token\n# case -> clinical text  router -> expert selector  experts -> medical specialists\ndef llama4_medical_analyse(case, model):\n    domain = model.classify(case)\n    experts = model.router(case, top_k=4, n_experts=64, bias=domain)\n    reasoning = model.expert_reason(case, experts, n_tokens=2048)\n    citations = retrieve(reasoning, db='PubMed', top_k=5)\n    safe = model.safety_filter(reasoning + citations)\n    return safe  # 0.91 MultiMedQA-Pro; Apache 2.0",
+          rust: "fn llama4_medical_analyse(case: &str, m: &Llama4Med) -> Output {\n    let domain = m.classify(case);\n    let experts = m.router(case, 4, 64, Some(domain));\n    let reasoning = m.expert_reason(case, &experts, 2048);\n    let citations = retrieve(&reasoning, \"PubMed\", 5);\n    m.safety_filter(&reasoning + &citations)\n}",
+          go: "func Llama4MedicalAnalyse(case string, m *Llama4Med) Output {\n\tdomain := m.Classify(case)\n\texperts := m.Router(case, 4, 64, domain)\n\treasoning := m.ExpertReason(case, experts, 2048)\n\tcitations := Retrieve(reasoning, \"PubMed\", 5)\n\treturn m.SafetyFilter(reasoning + citations)\n}",
+          c: "Output llama4_medical_analyse(const char* case_text, Llama4Med* m) {\n    int domain = m_classify(m, case_text);\n    int* experts = m_router(m, case_text, 4, 64, domain);\n    char* reasoning = m_expert_reason(m, case_text, experts, 2048);\n    Citation* cites = retrieve(reasoning, \"PubMed\", 5);\n    return m_safety_filter(m, reasoning, cites);\n}",
+          elixir: "defmodule Llama4Med do\n  def analyse(case, m) do\n    domain = m.classify(case)\n    experts = m.router(case, top_k: 4, n_experts: 64, bias: domain)\n    reasoning = m.expert_reason(case, experts, 2048)\n    citations = retrieve(reasoning, \"PubMed\", 5)\n    m.safety_filter(reasoning ++ citations)\n  end\nend",
+          scala: "def llama4MedicalAnalyse(c: String, m: Llama4Med): Output = {\n  val domain = m.classify(c)\n  val experts = m.router(c, 4, 64, Some(domain))\n  val reasoning = m.expertReason(c, experts, 2048)\n  val citations = retrieve(reasoning, \"PubMed\", 5)\n  m.safetyFilter(reasoning + citations)\n}",
         },
-        'quantinuum-h-series-2026': {
-          python: "# result = Hseries.execute(transpile(problem, topology=fully_connected))\n# problem -> Hamiltonian  topology -> fully connected  native -> U1q, ZZ, RZ\ndef quantinuum_h_solve(problem, backend):\n    hamiltonian = encode(problem, n_qubits=min(problem.n_vars, 480))\n    # No SWAP needed \u2014 fully connected\n    circuit = transpile(hamiltonian, native_gates=['U1q','ZZ','RZ'])\n    result = backend.execute(circuit, shots=8192)\n    output = post_process(result, problem.decoder)\n    return output  # 0.01% 2-qubit error; no EC needed up to ~100 qubits",
-          rust: "fn quantinuum_h_solve(problem: &Problem, b: &Hseries) -> Output {\n    let h = encode(problem, problem.n_vars.min(480));\n    let c = transpile(&h, &[\"U1q\",\"ZZ\",\"RZ\"]);\n    let r = b.execute(&c, 8192);\n    post_process(&r, &problem.decoder)\n}",
-          go: "func QuantinuumHSolve(problem *Problem, b *Hseries) Output {\n\th := Encode(problem, min(problem.NVars, 480))\n\tc := Transpile(h, []string{\"U1q\",\"ZZ\",\"RZ\"})\n\tr := b.Execute(c, 8192)\n\treturn PostProcess(r, problem.Decoder)\n}",
-          c: "Output quantinuum_h_solve(Problem* p, Hseries* b) {\n    Hamiltonian* h = encode(p, MIN(p->n_vars, 480));\n    Circuit* c = transpile(h, native_gates);\n    Result* r = b_execute(b, c, 8192);\n    return post_process(r, p->decoder);\n}",
-          elixir: "defmodule QuantinuumH do\n  def solve(problem, b) do\n    h = encode(problem, min(problem.n_vars, 480))\n    c = transpile(h, ~w[U1q ZZ RZ])\n    r = b.execute(c, 8192)\n    post_process(r, problem.decoder)\n  end\nend",
-          scala: "def quantinuumHSolve(problem: Problem, b: Hseries): Output = {\n  val h = encode(problem, math.min(problem.nVars, 480))\n  val c = transpile(h, List(\"U1q\",\"ZZ\",\"RZ\"))\n  val r = b.execute(c, 8192)\n  postProcess(r, problem.decoder)\n}",
+        'ionq-forte-2027': {
+          python: "# solution = Forte.execute(transpile(QUBO\u2192Ising, topology=fully_connected))\n# QUBO -> binary optimisation  Ising -> quantum Hamiltonian  Forte -> trapped-ion\ndef ionq_forte_solve(qubo_matrix, backend):\n    ising = qubo_to_ising(qubo_matrix)\n    circuit = transpile(ising, topology='fully_connected', native_gates=['GZ','RZ'])\n    result = backend.execute(circuit, shots=8192)  # 0.008% error\n    solution = decode(result, qubo_matrix)\n    return solution  # advantage at n>350\n",
+          rust: "fn ionq_forte_solve(qubo: &Matrix, b: &Forte) -> Solution {\n    let ising = qubo_to_ising(qubo);\n    let circuit = transpile(&ising, \"fully_connected\", &[\"GZ\",\"RZ\"]);\n    let result = b.execute(&circuit, 8192);\n    decode(&result, qubo)\n}",
+          go: "func IonQForteSolve(qubo *Matrix, b *Forte) Solution {\n\tising := QUBOToIsing(qubo)\n\tcircuit := Transpile(ising, \"fully_connected\", []string{\"GZ\",\"RZ\"})\n\tresult := b.Execute(circuit, 8192)\n\treturn Decode(result, qubo)\n}",
+          c: "Solution ionq_forte_solve(Matrix* qubo, Forte* b) {\n    Ising* ising = qubo_to_ising(qubo);\n    Circuit* c = transpile(ising, \"fully_connected\", native_gates);\n    Result* r = b_execute(b, c, 8192);\n    return decode(r, qubo);\n}",
+          elixir: "defmodule IonQForte do\n  def solve(qubo, b) do\n    ising = qubo_to_ising(qubo)\n    circuit = transpile(ising, \"fully_connected\", ~w[GZ RZ])\n    result = b.execute(circuit, 8192)\n    decode(result, qubo)\n  end\nend",
+          scala: "def ionQForteSolve(qubo: Matrix, b: Forte): Solution = {\n  val ising = quboToIsing(qubo)\n  val circuit = transpile(ising, \"fully_connected\", List(\"GZ\",\"RZ\"))\n  val result = b.execute(circuit, 8192)\n  decode(result, qubo)\n}",
         },
-        'ai-stellar-engineering-2045': {
-          python: "# strategy = StarForge_v2.evolve(twin, objectives); execute via swarm\n# twin -> stellar sim  StarForge -> strategy evolver  swarm -> Dyson mirrors\ndef stellar_engineering(star_profile, starforge, dyson_swarm):\n    twin = starforge.stellar_sim(star_profile, resolution=1, duration=20)\n    strategy = starforge.evolve(twin, n_variants=10**9, objectives=['energy','stability','heavy_elements'])\n    dyson_swarm.execute(strategy)\n    progress = monitor(twin, dyson_swarm, kpis=['dM_star','energy','heavy_yield'])\n    return progress  # 0.01% M_star/yr; 10^26 W; heavy elements \u2192 Mars",
-          rust: "fn stellar_engineering(profile: &StellarProfile, sf: &StarForge, swarm: &DysonSwarm) -> Progress {\n    let twin = sf.stellar_sim(profile, 1, 20);\n    let strategy = sf.evolve(&twin, 1_000_000_000, &[\"energy\",\"stability\",\"heavy_elements\"]);\n    swarm.execute(&strategy);\n    monitor(&twin, swarm, &[\"dM_star\",\"energy\",\"heavy_yield\"])\n}",
-          go: "func StellarEngineering(profile *StellarProfile, sf *StarForge, swarm *DysonSwarm) *Progress {\n\ttwin := sf.StellarSim(profile, 1, 20)\n\tstrategy := sf.Evolve(twin, 1_000_000_000, []string{\"energy\",\"stability\",\"heavy_elements\"})\n\tswarm.Execute(strategy)\n\treturn Monitor(twin, swarm, []string{\"dM_star\",\"energy\",\"heavy_yield\"})\n}",
-          c: "Progress* stellar_engineering(StellarProfile* p, StarForge* sf, DysonSwarm* s) {\n    StellarTwin* twin = sf_stellar_sim(sf, p, 1, 20);\n    Strategy* strat = sf_evolve(sf, twin, 1000000000, objectives);\n    s_execute(s, strat);\n    return monitor(twin, s, kpis);\n}",
-          elixir: "defmodule StellarEng do\n  def run(profile, sf, swarm) do\n    twin = sf.stellar_sim(profile, 1, 20)\n    strategy = sf.evolve(twin, 1_000_000_000, ~w[energy stability heavy_elements])\n    swarm.execute(strategy)\n    monitor(twin, swarm, ~w[dM_star energy heavy_yield])\n  end\nend",
-          scala: "def stellarEngineering(profile: StellarProfile, sf: StarForge, swarm: DysonSwarm): Progress = {\n  val twin = sf.stellarSim(profile, 1, 20)\n  val strategy = sf.evolve(twin, 1000000000L, List(\"energy\",\"stability\",\"heavy_elements\"))\n  swarm.execute(strategy)\n  monitor(twin, swarm, List(\"dM_star\",\"energy\",\"heavy_yield\"))\n}",
+        'ai-galactic-engineering-2050': {
+          python: "# FLOPS = \u03a3_stars(10^46); problem = compute(Matrioshka_brain, FLOPS=10^49)\n# systems -> star catalog  star_lift -> Dyson swarm  Matrioshka -> layered brain\ndef galactic_engineering(star_systems, galactiforge, matrioshka_swarm):\n    systems = galactiforge.parse_catalog(star_systems, n=1000, volume=10)\n    harvested = matrioshka_swarm.star_lift(systems, mirrors_per_star=10**6)\n    brain = galactiforge.build_matrioshka(harvested, n_shells=5)\n    result = galactiforge.compute(brain, problem, flops=10**49, duration=1)\n    return result  # via quantum-entangled link (latency ~0)\n",
+          rust: "fn galactic_engineering(systems: &Catalog, gf: &GalactiForge, swarm: &MatrioshkaSwarm) -> Result {\n    let sys = gf.parse_catalog(systems, 1000, 10);\n    let harvested = swarm.star_lift(&sys, 1_000_000);\n    let brain = gf.build_matrioshka(&harvested, 5);\n    gf.compute(&brain, &problem, 10u128.pow(49), 1)\n}",
+          go: "func GalacticEngineering(systems *Catalog, gf *GalactiForge, swarm *MatrioshkaSwarm) Result {\n\tsys := gf.ParseCatalog(systems, 1000, 10)\n\tharvested := swarm.StarLift(sys, 1_000_000)\n\tbrain := gf.BuildMatrioshka(harvested, 5)\n\treturn gf.Compute(brain, problem, 1e49, 1)\n}",
+          c: "Result galactic_engineering(Catalog* systems, GalactiForge* gf, MatrioshkaSwarm* swarm) {\n    Catalog* sys = gf_parse_catalog(gf, systems, 1000, 10);\n    Harvested* h = swarm_star_lift(swarm, sys, 1000000);\n    Brain* brain = gf_build_matrioshka(gf, h, 5);\n    return gf_compute(gf, brain, problem, 1e49, 1);\n}",
+          elixir: "defmodule GalacticEng do\n  def run(systems, gf, swarm) do\n    sys = gf.parse_catalog(systems, 1000, 10)\n    harvested = swarm.star_lift(sys, 1_000_000)\n    brain = gf.build_matrioshka(harvested, 5)\n    gf.compute(brain, problem, 1.0e49, 1)\n  end\nend",
+          scala: "def galacticEngineering(systems: Catalog, gf: GalactiForge, swarm: MatrioshkaSwarm): Result = {\n  val sys = gf.parseCatalog(systems, 1000, 10)\n  val harvested = swarm.starLift(sys, 1000000)\n  val brain = gf.buildMatrioshka(harvested, 5)\n  gf.compute(brain, problem, 1e49, 1)\n}",
         },
-        'universal-quantum-internet-2048': {
-          python: "# entangled = Q-Internet.route(A, B); fidelity = product(repeater_fidelities)\n# topology -> network graph  Q-router -> entanglement routing  repeaters -> chain\ndef quantum_internet(topology, q_router, node_A, node_B):\n    path = q_router.route(node_A, node_B, topology, optimise='fidelity*latency')\n    chain = build_repeaters(path, spacing_km=100)\n    fidelity = 1.0\n    for r in chain: fidelity *= r.fidelity  # 0.999 each\n    if fidelity > 0.95:\n        return entangle(node_A, node_B, chain)  # non-local, latency ~0\n    return None",
-          rust: "fn quantum_internet(topology: &Topology, router: &QRouter, a: &Node, b: &Node) -> Option<Entangled> {\n    let path = router.route(a, b, topology, \"fidelity*latency\");\n    let chain = build_repeaters(&path, 100);\n    let fidelity: f64 = chain.iter().map(|r| r.fidelity).product();\n    if fidelity > 0.95 { Some(entangle(a, b, &chain)) } else { None }\n}",
-          go: "func QuantumInternet(topology *Topology, router *QRouter, a, b *Node) *Entangled {\n\tpath := router.Route(a, b, topology, \"fidelity*latency\")\n\tchain := BuildRepeaters(path, 100)\n\tfidelity := 1.0\n\tfor _, r := range chain { fidelity *= r.Fidelity }\n\tif fidelity > 0.95 { return Entangle(a, b, chain) }\n\treturn nil\n}",
-          c: "Entangled* quantum_internet(Topology* t, QRouter* r, Node* a, Node* b) {\n    Path* path = r_route(r, a, b, t, \"fidelity*latency\");\n    Repeater* chain = build_repeaters(path, 100, &n);\n    double fidelity = 1.0;\n    for (int i = 0; i < n; i++) fidelity *= chain[i].fidelity;\n    if (fidelity > 0.95) return entangle(a, b, chain, n);\n    return NULL;\n}",
-          elixir: "defmodule QInternet do\n  def route(topology, router, a, b) do\n    path = router.route(a, b, topology, \"fidelity*latency\")\n    chain = build_repeaters(path, 100)\n    fidelity = Enum.reduce(chain, 1.0, fn r, f -> f * r.fidelity end)\n    if fidelity > 0.95, do: entangle(a, b, chain), else: nil\n  end\nend",
-          scala: "def quantumInternet(topology: Topology, router: QRouter, a: Node, b: Node): Option[Entangled] = {\n  val path = router.route(a, b, topology, \"fidelity*latency\")\n  val chain = buildRepeaters(path, 100)\n  val fidelity = chain.map(_.fidelity).product\n  if (fidelity > 0.95) Some(entangle(a, b, chain)) else None\n}",
+        'quantum-biological-computing-2052': {
+          python: "# stored = DNA.encode(data, density=10^21 bits/g); read = NV_array.read(stored, rate=10^12/s)\n# data -> input  DNA -> storage medium  NV -> diamond quantum magnetometer\ndef dqhp_compute(data, dna_storage, nv_array):\n    stored = dna_storage.encode(data, codec='reed-solomon', density=10**21)\n    written = nv_array.write(stored, via='microwave')\n    read = nv_array.read(written, rate=10**6, n_nv=10**6)  # 10^12/s\n    repaired = dna_storage.polymerase_replicate(written, every=24*3600)\n    output = decode(read, codec='reed-solomon')\n    return output  # biodegradable at end-of-life\n",
+          rust: "fn dqhp_compute(data: &Data, dna: &DNAStorage, nv: &NVArray) -> Output {\n    let stored = dna.encode(data, \"reed-solomon\", 10u128.pow(21));\n    let written = nv.write(&stored, \"microwave\");\n    let read = nv.read(&written, 1_000_000, 1_000_000);\n    let _repaired = dna.polymerase_replicate(&written, 86400);\n    decode(&read, \"reed-solomon\")\n}",
+          go: "func DQHPCompute(data *Data, dna *DNAStorage, nv *NVArray) Output {\n\tstored := dna.Encode(data, \"reed-solomon\", 1e21)\n\twritten := nv.Write(stored, \"microwave\")\n\tread := nv.Read(written, 1_000_000, 1_000_000)\n\t_ = dna.PolymeraseReplicate(written, 86400)\n\treturn Decode(read, \"reed-solomon\")\n}",
+          c: "Output dqhp_compute(Data* data, DNAStorage* dna, NVArray* nv) {\n    Stored* stored = dna_encode(dna, data, \"reed-solomon\", 1e21);\n    Stored* written = nv_write(nv, stored, \"microwave\");\n    Read* read = nv_read(nv, written, 1000000, 1000000);\n    dna_polymerase_replicate(dna, written, 86400);\n    return decode(read, \"reed-solomon\");\n}",
+          elixir: "defmodule DQHP do\n  def compute(data, dna, nv) do\n    stored = dna.encode(data, \"reed-solomon\", 1.0e21)\n    written = nv.write(stored, \"microwave\")\n    read = nv.read(written, 1_000_000, 1_000_000)\n    _ = dna.polymerase_replicate(written, 86400)\n    decode(read, \"reed-solomon\")\n  end\nend",
+          scala: "def dqhpCompute(data: Data, dna: DNAStorage, nv: NVArray): Output = {\n  val stored = dna.encode(data, \"reed-solomon\", 1e21)\n  val written = nv.write(stored, \"microwave\")\n  val read = nv.read(written, 1000000, 1000000)\n  dna.polymeraseReplicate(written, 86400)\n  decode(read, \"reed-solomon\")\n}",
         },
       };
 
