@@ -3041,3 +3041,70 @@ blocks, audit.html dashboard present.
 - docs/audit.html live audit dashboard (18,946 bytes).
 - CI workflow now runs audit.py before mirror push.
 - Push + tag v28 + Pages build verification pending.
+
+---
+
+## Phase 30 — Machine Learning page (9 loss functions) + Science dropdown + CI audit
+
+### Task ID: 30
+### Agent: main (this run)
+
+### Work Log
+
+- Built `scripts/gen-ml-page.py` — a self-contained Python generator
+  that emits `docs/science-ml.html` with 9 loss function demos
+  inspired by Greg Coquillo's LinkedIn post "9 Machine Learning
+  Loss Functions Explained!":
+  
+  1. Mean Squared Error (MSE) — regression, quadratic penalty
+  2. Mean Absolute Error (MAE) — regression, linear penalty
+  3. Binary Cross-Entropy (BCE) — binary classification
+  4. Categorical Cross-Entropy (CCE) — multi-class
+  5. Hinge Loss — SVM / max-margin
+  6. Log-Cosh Loss — smooth regression (MSE+MAE blend)
+  7. Huber Loss — robust regression (quadratic→linear at δ)
+  8. KL Divergence — probability distribution matching
+  9. Cosine Similarity Loss — embeddings (magnitude-invariant)
+  
+  Each loss function has a full ClickForDemo:
+  - Math tab: equation + explanation + 5-step Math→Code derivation
+    + animated-derivation canvas (Phase 28 component)
+  - Code tab: 6-language polyglot (Python / Rust / Go / C / Elixir
+    / Scala) with language toggle
+  - Observe tab: Stats (6 stat tiles) + Reports (1 paragraph) +
+    Graphs (inline SVG) + Summary (4 bullets)
+  - Data tab: collapsible data table with headers + first 5 rows
+    visible + "Show more" button (Phase 29 component)
+  
+  Generated page: 142 KB, 9 demos, all divs balanced, JS syntax
+  validated.
+
+- Added "🤖 Machine Learning" link to the Science dropdown across
+  all 57 pages (root + 1-deep + 2-deep). Fixed the 2-deep path
+  bug (`../science-ml.html` → `../../science-ml.html` for
+  /science/<domain>/*.html pages — same pattern as the Phase 25
+  digest path fix).
+
+- Extended the audit dashboard to 4 historical runs (Phase 29's
+  history system now has 4 data points across Phases 28-30).
+
+### Audit results
+```
+21 checks | 21 passed | 0 failed
+```
+
+### Stage Summary
+- `docs/science-ml.html` — 142 KB, 9 loss function demos, each
+  with Math→Code derivation + 6-language polyglot + Observe (Stats/
+  Reports/Graphs/Summary) + animated-derivation canvas + data
+  table.
+- Linked from the Science dropdown on all 57 pages.
+- CI audit gate (Phase 28) now protects every release.
+- Audit dashboard (Phase 28+29) now shows 4 historical runs.
+
+## Phase 30 status note
+- All 21 audit checks pass.
+- ML page generated (142 KB, 9 demos).
+- 57 pages patched with ML link in Science dropdown.
+- 22 2-deep pages path-fixed (../ → ../../).
+- Push + tag v30 + Pages build verification pending.
