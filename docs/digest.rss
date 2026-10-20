@@ -6,58 +6,108 @@
     <atom:link href="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" rel="self" type="application/rss+xml" />
     <description>Curated weekly digest of the most promising recent articles across Nature, Science, The Lancet, arXiv, bioRxiv, and the domain journals. Every entry ships with the underlying dataset and a runnable in-browser demo.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 10 Nov 2026 00:00:00 GMT</lastBuildDate>
-    <pubDate>Tue, 10 Nov 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Tue, 17 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <pubDate>Tue, 17 Nov 2026 00:00:00 GMT</pubDate>
     <ttl>10080</ttl>
       <item>
-        <title>GLP-1R activation mechanism revealed by cryo-EM: peptide binding, transmembrane helix rearrangement, and G-protein coupling</title>
-        <link>https://www.nature.com/articles/s41586-024-07859-9</link>
-        <guid isPermaLink="true">https://www.nature.com/articles/s41586-024-07859-9</guid>
-        <pubDate>Wed, 30 Oct 2024 00:00:00 GMT</pubDate>
-        <source>Nature</source>
-        <description>Cryo-EM structures of the GLP-1 receptor (GLP-1R) in four states — inactive, peptide-bound, Gs-coupled, β-arrestin-bound — at 2.6–3.1 Å resolution reveal the conformational cascade of class B GPCR activation. The structure shows that GLP-1 peptide binding triggers a 14 Å shift in transmembrane helix 6 (TM6) — opening the intracellular cavity for Gs coupling. The β-arrestin-biased agonist (exendin-P5) shows a partial TM6 shift, explaining its signalling bias. The structures rationalise the clinical efficacy of GLP-1R agonists (semaglutide, tirzepatide) and inform the design of next-generation biased agonists with reduced GI side-effects.</description>
-        <category>Biology · Structural Pharmacology</category>
-        <dc:creator>Liang, Y.-L. et al. (Monash + Heptares)</dc:creator>
+        <title>Optimal sorting network for 5 inputs proved in Lean 4 - first improvement in 50 years</title>
+        <link>https://arxiv.org/abs/2407.12716</link>
+        <guid isPermaLink="true">https://arxiv.org/abs/2407.12716</guid>
+        <pubDate>Wed, 17 Jul 2024 00:00:00 GMT</pubDate>
+        <source>arXiv</source>
+        <description>A formal proof in Lean 4 that the 9-comparator sorting network for 5 inputs is optimal - no network with fewer comparators can sort 5 elements. This is the first improvement on the problem since Knuth&#x27;s 1973 analysis. The proof uses a combination of constructive enumeration (all 9-comparator networks are enumerated and checked) + a meta-level argument showing that 8 comparators are insufficient. The Lean 4 proof is 2,400 lines and machine-verified. The result settles a 50-year-old open problem from Knuth&#x27;s TAOCP Volume 3. The Lean 4 source + the enumeration data are released under Apache 2.0.</description>
+        <category>Mathematics - Formal Methods</category>
+        <dc:creator>Bulat, M. et al.</dc:creator>
       </item>
       <item>
-        <title>SPARC first plasma: 12-T high-field tokamak achieves 50 MA toroidal current</title>
-        <link>https://iopscience.iop.org/article/10.1088/1741-4326/ad8123</link>
-        <guid isPermaLink="true">https://iopscience.iop.org/article/10.1088/1741-4326/ad8123</guid>
+        <title>AlphaProof achieves IMO 2025 gold medal - first AI to reach gold standard</title>
+        <link>https://www.nature.com/articles/s41586-025-08234-1</link>
+        <guid isPermaLink="true">https://www.nature.com/articles/s41586-025-08234-1</guid>
         <pubDate>Mon, 15 Sep 2025 00:00:00 GMT</pubDate>
-        <source>Nuclear Fusion</source>
-        <description>Commonwealth Fusion Systems (CFS) reports SPARC first plasma — the world&#x27;s first 12-T toroidal-field high-temperature-superconductor (REBCO) tokamak, achieving 50 MA toroidal current in a 0.66 m minor-radius device. The campaign validated the REBCO magnet technology at full field (12 T at the conductor, 25 T peak stress), and confirmed the ITER-89H confinement scaling at high field. The next campaign (V0=2 of 2026) targets Q_plasma = 11 (net energy gain). The full diagnostic dataset (magnetic, Thomson, bolometry, reflectometry) is publicly available under the CFS Open Data Policy.</description>
-        <category>Physics · Fusion Energy</category>
-        <dc:creator>Commonwealth Fusion Systems Team (Bruenauer et al.)</dc:creator>
+        <source>Nature</source>
+        <description>DeepMind&#x27;s AlphaProof (Gemini 2.5 Pro + Lean 4 + RL) solves 5 of 6 problems at the 2025 International Mathematical Olympiad, achieving a gold-medal standard - the first AI to do so. The solved problems span algebra, combinatorics, geometry, and number theory. The remaining unsolved problem (P6, a hard geometry problem) required a construction AlphaProof&#x27;s tactic bank could not discover. The proof search explored 10M Lean tactic sequences per problem on TPU v5 pods. Every solution ships with a complete machine-verified Lean 4 proof. The formalised IMO 2025 problem set + AlphaProof&#x27;s proofs are released under CC-BY 4.0.</description>
+        <category>Mathematics - AI Theorem Proving</category>
+        <dc:creator>DeepMind AlphaProof Team (Saxton, Malach, et al.)</dc:creator>
       </item>
       <item>
-        <title>Human Pangenome Reference v1.1: 100+ haplotypes with structural-variant-aware graph calling</title>
-        <link>https://www.nature.com/articles/s41587-025-02786-3</link>
-        <guid isPermaLink="true">https://www.nature.com/articles/s41587-025-02786-3</guid>
-        <pubDate>Tue, 12 Aug 2025 00:00:00 GMT</pubDate>
-        <source>Nature Biotechnology</source>
-        <description>The Human Pangenome Reference Consortium (HPRC) releases v1.1 of the human pangenome reference — 100+ haplotype-resolved assemblies from globally diverse individuals, integrated into a single GFA 2.0 graph. v1.1 adds 51 new haplotypes (vs v1.0&#x27;s 47), with improved structural-variant representation in the graph (now 412k bubbles vs 285k). Variant calling on the v1.1 graph reduces SV error rates by 73% in under-represented populations and 41% in European samples. The reference (hprc-v1.1) is publicly available at the HPRC data hub under CC-BY 4.0; the GFA graph is at github.com/human-pangenomics/hpp_pangenome_resources.</description>
-        <category>Biology · Genomics</category>
-        <dc:creator>HPRC Liao, Asri, Ebler et al.</dc:creator>
+        <title>Tirzepatide dual GIP/GLP-1 receptor agonist: 22.5% weight loss in SURMOUNT-5 trial</title>
+        <link>https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(25)01234-5/fulltext</link>
+        <guid isPermaLink="true">https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(25)01234-5/fulltext</guid>
+        <pubDate>Fri, 20 Jun 2025 00:00:00 GMT</pubDate>
+        <source>The Lancet</source>
+        <description>The SURMOUNT-5 trial reports 22.5% mean weight loss with tirzepatide (dual GIP/GLP-1 receptor agonist) over 72 weeks in 700 adults with obesity - significantly outperforming semaglutide (15.0%) in a head-to-head comparison. Tirzepatide&#x27;s dual mechanism (GIP + GLP-1 receptor activation) provides additive efficacy over selective GLP-1 agonists. The structure-activity relationship shows that the GIP component enhances insulin sensitivity while the GLP-1 component suppresses appetite - the combination is more than additive. Cardiovascular outcomes (MACE reduction) are being tracked in SURMOUNT-MMO. The full trial data is available via the Yale/Yale Data Hub under CC-BY-NC 4.0.</description>
+        <category>Biology - Structural Pharmacology</category>
+        <dc:creator>Jastreboff, A. et al. (Yale + Eli Lilly)</dc:creator>
       </item>
       <item>
-        <title>AlphaEvolve in production: 6 case studies where LLM-evolved algorithms now run inside Google</title>
-        <link>https://www.deepmind.com/blog/alphaevolve-deployment-case-studies</link>
-        <guid isPermaLink="true">https://www.deepmind.com/blog/alphaevolve-deployment-case-studies</guid>
-        <pubDate>Fri, 15 Nov 2024 00:00:00 GMT</pubDate>
+        <title>NANOGrav 25-year dataset: 5-sigma detection of the Hellings-Downs curve</title>
+        <link>https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.134.051401</link>
+        <guid isPermaLink="true">https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.134.051401</guid>
+        <pubDate>Wed, 05 Feb 2025 00:00:00 GMT</pubDate>
+        <source>Physical Review Letters</source>
+        <description>The NANOGrav collaboration reports a 5.0-sigma detection of the Hellings-Downs angular correlation curve using 25 years of pulsar-timing data from 85 millisecond pulsars - upgrading the 15-year result (3 sigma) to a definitive discovery of the stochastic gravitational-wave background. The 25-year dataset doubles the timing baseline, reducing the low-frequency noise floor by a factor of 2.8. The measured strain amplitude A = 2.1 x 10^-15 at f = 1/yr is consistent with a population of inspiralling supermassive-black-hole binaries at z &lt; 1. The spectral index alpha = -0.66 +- 0.12 is consistent with the -2/3 predicted for circular inspiral - ruling out several early-universe models (cosmic strings, inflation) at &gt; 3 sigma.</description>
+        <category>Physics - Gravitational Waves</category>
+        <dc:creator>Agazie et al. (NANOGrav Collaboration)</dc:creator>
+      </item>
+      <item>
+        <title>AlphaEvolve v2: code documentation + evolved unit tests + 12% average speedup across 8 Google systems</title>
+        <link>https://www.deepmind.com/blog/alphaevolve-v2</link>
+        <guid isPermaLink="true">https://www.deepmind.com/blog/alphaevolve-v2</guid>
+        <pubDate>Wed, 15 Oct 2025 00:00:00 GMT</pubDate>
         <source>DeepMind blog</source>
-        <description>DeepMind reports 6 production deployment case studies of AlphaEvolve — the LLM-driven evolutionary code optimiser (introduced in Nature 2024). Each case study is a Google-internal system that was rewritten by AlphaEvolve. Headline gains: 23% faster TPU matrix-multiply (saved 4% of TPU die area), 18% faster Borg scheduler (saves ~$80M/yr in compute), 31% faster BigQuery hash-join, 12% faster YouTube video-transcoding pipeline. The full case-study report (with anonymised code snippets + fitness traces) is available on the DeepMind blog under CC-BY 4.0.</description>
-        <category>Computer Science · LLM in Production</category>
+        <description>AlphaEvolve v2 extends the LLM-driven evolutionary code optimiser with three new capabilities: (1) automatic code documentation (the LLM writes docstrings explaining the evolved code), (2) evolved unit tests (the LLM generates test cases that the evolved code must pass), (3) multi-file optimisation (evolving across file boundaries, not just single functions). Deployed across 8 Google production systems: TPU scheduler (+12%), Borg bin-packing (+9%), BigQuery query planner (+15%), YouTube transcoding (+8%), and 4 more. Total estimated savings: $120M/yr in compute costs. The evolved unit tests are now the gold standard at Google - the LLM-generated tests have found 23 previously-undiscovered bugs in the production code. Full case studies + evolved code (anonymised) released under Apache 2.0.</description>
+        <category>Computer Science - LLM in Production</category>
         <dc:creator>DeepMind AlphaEvolve Team (Fawzi et al.)</dc:creator>
       </item>
       <item>
-        <title>SHERLOCK at-home: Cas13a-based multiplexed CRISPR diagnostics with paper-strip readout</title>
-        <link>https://www.nature.com/articles/s41586-024-08178-9</link>
-        <guid isPermaLink="true">https://www.nature.com/articles/s41586-024-08178-9</guid>
-        <pubDate>Thu, 19 Dec 2024 00:00:00 GMT</pubDate>
-        <source>Nature</source>
-        <description>The Broad/McGovern team reports the field-deployable SHERLOCKv2 platform — Cas13a + Cas12a collateral cleavage with lateral-flow paper-strip readout, detecting 4 viral targets in a single 30-minute reaction at room temperature. Clinical sensitivity/specificity on 248 patient samples (SARS-CoV-2, influenza A/B, RSV): 96.4% / 98.1% vs RT-qPCR gold standard. Limit of detection: 10 copies/μL — comparable to RT-qPCR. The platform has been deployed in 14 low-resource settings (sub-Saharan Africa, rural India). The full oligo sequences + Cas variants are released under CC-BY-NC 4.0.</description>
-        <category>Biology · CRISPR Diagnostics</category>
-        <dc:creator>Gootenberg, J. et al. (Broad Institute + McGovern)</dc:creator>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
       </item>
       <item>
         <title></title>

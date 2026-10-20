@@ -676,9 +676,25 @@ def check_concept_cards_generated():
 
 def check_data_tables_present():
     """Check (Phase 29): concept cards have data tables with the
-    Show-more functionality."""
+    Show-more functionality, but only when the article declares
+    sample_data in the manifest."""
+    # Import the manifest to check which articles have sample_data
+    spec = importlib.util.spec_from_file_location(
+        "gen_digest",
+        os.path.join(ROOT, "scripts", "gen-digest.py"),
+    )
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception as e:
+        return CheckResult("data_tables_present", False,
+                           f"could not load gen-digest.py: {e}")
+    manifest = mod.MANIFEST
+    articles_with_sample_data = {a["id"] for a in manifest["articles"] if a.get("sample_data")}
+
     failures = []
     n_with_tables = 0
+    n_expected = 0
     concept_dir = os.path.join(DOCS, "concepts")
     if not os.path.isdir(concept_dir):
         return CheckResult("data_tables_present", False,
@@ -688,22 +704,27 @@ def check_data_tables_present():
             continue
         if fname == "digest-index.html":
             continue
+        # Extract article id from filename: digest-<id>.html
+        aid = fname.replace("digest-", "").replace(".html", "")
+        # Only check if the article has sample_data in the manifest
+        if aid not in articles_with_sample_data:
+            continue
+        n_expected += 1
         path = os.path.join(concept_dir, fname)
         with open(path, "r", encoding="utf-8") as f:
             s = f.read()
         has_table = 'class="data-table"' in s
         has_show_more = 'dataTableShowMore' in s
-        has_hidden_rows = 'data-table-hidden' in s or 'data-table-row' in s
         if not (has_table and has_show_more):
             failures.append(f"{fname}: missing data-table or Show-more")
         else:
             n_with_tables += 1
     if failures:
         return CheckResult("data_tables_present", False,
-                           f"{len(failures)} concept cards missing data tables",
+                           f"{len(failures)} concept cards missing data tables (of {n_expected} expected)",
                            failures)
     return CheckResult("data_tables_present", True,
-                       f"data-table component with Show-more present on all {n_with_tables} concept cards")
+                       f"data-table component with Show-more present on all {n_with_tables}/{n_expected} concept cards with sample_data")
 
 
 def check_concept_card_etl():
