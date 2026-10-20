@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-10-20T16:44:36.181754Z",
+  "total_entries": 413,
+  "feeds_polled": 12,
+  "feeds_succeeded": 11,
+  "feeds_failed": 0,
+  "per_feed_stats": [
+    {
+      "id": "science-daily-chem",
+      "name": "Science Daily — Chemistry",
+      "status": "ok",
+      "entries": 60
+    },
+    {
+      "id": "science-daily-bio",
+      "name": "Science Daily — Biology",
+      "status": "ok",
+      "entries": 60
+    },
+    {
+      "id": "science-daily-physics",
+      "name": "Science Daily — Physics",
+      "status": "ok",
+      "entries": 60
+    },
+    {
+      "id": "science-daily-cs",
+      "name": "Science Daily — Computer Science",
+      "status": "ok",
+      "entries": 60
+    },
+    {
+      "id": "science-daily-med",
+      "name": "Science Daily — Health & Medicine",
+      "status": "ok",
+      "entries": 60
+    },
+    {
+      "id": "nature-all",
+      "name": "Nature — All subjects",
+      "status": "ok",
+      "entries": 75
+    },
+    {
+      "id": "arxiv-cs-lg",
+      "name": "arXiv — Machine Learning (cs.LG)",
+      "status": "ok",
+      "entries": 0
+    },
+    {
+      "id": "arxiv-q-bio",
+      "name": "arXiv — Quantitative Biology (q-bio)",
+      "status": "ok",
+      "entries": 0
+    },
+    {
+      "id": "arxiv-physics",
+      "name": "arXiv — Physics (physics)",
+      "status": "ok",
+      "entries": 0
+    },
+    {
+      "id": "plos-bio",
+      "name": "PLOS Biology — Latest",
+      "status": "ok",
+      "entries": 30
+    },
+    {
+      "id": "plos-compbio",
+      "name": "PLOS Computational Biology — Latest",
+      "status": "ok",
+      "entries": 30
+    },
+    {
+      "id": "cell-press",
+      "name": "Cell Press — Latest articles",
+      "status": "skipped",
+      "entries": 0
+    }
+  ]
+}

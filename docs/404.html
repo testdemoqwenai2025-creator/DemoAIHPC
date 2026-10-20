@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="404 — Page not found. The AIHPC Advanced platform page you're looking for has moved or never existed. Use the link directory below to find what you need." />
+    <title>404 — Page not found · AIHPC Advanced</title>
+    <style>
+      :root {
+        --bg: #0b0f1a;
+        --bg-elevated: #121826;
+        --border: #1f2937;
+        --text: #f3f4f6;
+        --text-muted: #9ca3af;
+        --accent: #8b5cf6;
+        --accent-2: #06b6d4;
+        --danger: #ef4444;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.5; min-height: 100vh; overflow-x: hidden; }
+      body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(1000px 600px at 30% 0%, rgba(239,68,68,0.10), transparent 60%), radial-gradient(800px 500px at 80% 100%, rgba(139,92,246,0.12), transparent 60%); pointer-events: none; z-index: 0; }
+      .container { max-width: 900px; margin: 0 auto; padding: 48px 24px; position: relative; z-index: 1; }
+
+      .hero { text-align: center; margin-bottom: 48px; }
+      .hero .code { font-size: 120px; font-weight: 900; line-height: 1; margin: 0; font-family: ui-monospace, SF Mono, Menlo, monospace; background: linear-gradient(135deg, #ef4444, #f59e0b, #8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -0.05em; }
+      .hero h1 { font-size: 28px; margin: 0 0 8px; color: var(--text); }
+      .hero p { font-size: 16px; color: var(--text-muted); margin: 0 auto; max-width: 540px; }
+
+      .search-row { display: flex; gap: 8px; margin: 32px auto; max-width: 480px; }
+      .search-input { flex: 1; background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; color: var(--text); font-size: 14px; font-family: inherit; }
+      .search-input:focus { outline: none; border-color: var(--accent); }
+      .search-input::placeholder { color: var(--text-muted); }
+      .search-btn { background: linear-gradient(90deg, var(--accent), var(--accent-2)); border: none; color: white; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; }
+
+      .section-title { font-size: 11px; font-weight: 700; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.08em; margin: 32px 0 12px; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+      .card { background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; text-decoration: none; color: var(--text); transition: all 0.2s; display: block; }
+      .card:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(139,92,246,0.15); }
+      .card .card-title { font-size: 13px; font-weight: 700; margin: 0 0 4px; }
+      .card .card-desc { font-size: 11px; color: var(--text-muted); margin: 0; line-height: 1.4; }
+      .card .card-cat { font-size: 10px; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; font-family: ui-monospace, monospace; }
+
+      .back-home { display: inline-block; margin-top: 48px; padding: 12px 24px; background: linear-gradient(90deg, var(--accent-2), var(--accent)); color: white; text-decoration: none; border-radius: 9999px; font-weight: 600; font-size: 14px; box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
+      .back-home:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(6,182,212,0.4); }
+
+      .footer { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 48px; font-family: ui-monospace, monospace; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="hero">
+        <div class="code">404</div>
+        <h1>Page not found</h1>
+        <p>The page you're looking for has moved, been renamed, or never existed. Try searching the concept cards index, or use one of the link directories below.</p>
+      </div>
+
+      <div class="search-row">
+        <input class="search-input" id="search-input" placeholder="🔍 Search 125 concept cards by title or keyword…" autocomplete="off" />
+        <button class="search-btn" onclick="document.getElementById('search-input').focus()">Search</button>
+      </div>
+
+      <div class="section-title">Platform</div>
+      <div class="grid">
+        <a href="index.html" class="card"><div class="card-cat">Home</div><h3 class="card-title">AIHPC Advanced home</h3><p class="card-desc">Start here — featured demos + ribbon navigation to all platform sections.</p></a>
+        <a href="concepts.html" class="card"><div class="card-cat">Concepts</div><h3 class="card-title">Concept Cards Index</h3><p class="card-desc">Browse all 125 concept cards: ML, digest articles, quantum mechanics, platform patterns.</p></a>
+        <a href="timeline.html" class="card"><div class="card-cat">Timeline</div><h3 class="card-title">Platform Timeline</h3><p class="card-desc">50 phases of platform evolution, with GitHub tag links per phase.</p></a>
+        <a href="retrospective.html" class="card"><div class="card-cat">Retrospective</div><h3 class="card-title">50-Phase Retrospective</h3><p class="card-desc">Architecture, design principles, and metrics per phase.</p></a>
+        <a href="component-registry.html" class="card"><div class="card-cat">Registry</div><h3 class="card-title">Component Registry</h3><p class="card-desc">All 18 canvas components with their global namespace + mount pages.</p></a>
+        <a href="audit.html" class="card"><div class="card-cat">Audit</div><h3 class="card-title">Audit Dashboard</h3><p class="card-desc">58 machine-checked invariants + history of past runs.</p></a>
+      </div>
+
+      <div class="section-title">Visualisers</div>
+      <div class="grid">
+        <a href="playground.html" class="card"><div class="card-cat">Playground</div><h3 class="card-title">Cross-Domain Playground</h3><p class="card-desc">Dataset + model + viz selectors with 11 presets and 6 recipes.</p></a>
+        <a href="quantum-shorts.html" class="card"><div class="card-cat">Quantum</div><h3 class="card-title">Quantum Shorts Channel</h3><p class="card-desc">12 quantum animations: Bloch, VQC, Fock, QGNN pipeline.</p></a>
+        <a href="bloch.html" class="card"><div class="card-cat">Quantum</div><h3 class="card-title">Bloch Sphere Shorts</h3><p class="card-desc">9 scenes: ground → Hadamard → Rabi → phase → measurement → decoherence → Bell → CHSH.</p></a>
+        <a href="medical-atlas.html" class="card"><div class="card-cat">Medical</div><h3 class="card-title">Medical Imaging Atlas</h3><p class="card-desc">6 case studies across modalities (MRI, CT, X-ray, ultrasound, PET, fMRI).</p></a>
+        <a href="science/physics/quantum.html" class="card"><div class="card-cat">Quantum Hub</div><h3 class="card-title">Quantum Mechanics Hub</h3><p class="card-desc">9 canvas components: Bloch, VQC, Fock, Coupled, Circuit, Algo, Surface Code, Teleport, QKD.</p></a>
+      </div>
+
+      <div class="section-title">Science hubs</div>
+      <div class="grid">
+        <a href="science-biology.html" class="card"><div class="card-cat">Biology</div><h3 class="card-title">Biology Hub</h3><p class="card-desc">5 sub-pages + medical imaging + BioEmu2 dynamics.</p></a>
+        <a href="science-chemistry.html" class="card"><div class="card-cat">Chemistry</div><h3 class="card-title">Chemistry Hub</h3><p class="card-desc">6 sub-pages + 3D molecules + pharmacophore + QSAR.</p></a>
+        <a href="science-physics.html" class="card"><div class="card-cat">Physics</div><h3 class="card-title">Physics Hub</h3><p class="card-desc">6 sub-pages + quantum mechanics + sound + waves + thermo.</p></a>
+        <a href="science-maths.html" class="card"><div class="card-cat">Maths</div><h3 class="card-title">Mathematics Hub</h3><p class="card-desc">5 sub-pages + algebra + analysis + geometry + probability + number theory.</p></a>
+        <a href="science-ml.html" class="card"><div class="card-cat">ML</div><h3 class="card-title">Machine Learning Hub</h3><p class="card-desc">27 demos: 9 loss + 3 activation + 3 optimiser + 3 regularisation + 5 normalisation + 4 attention + 2 loss landscape.</p></a>
+        <a href="science-bioinformatics.html" class="card"><div class="card-cat">Bioinformatics</div><h3 class="card-title">Bioinformatics Hub</h3><p class="card-desc">Sequence analysis + alignment + variant calling.</p></a>
+        <a href="science-cheminformatics.html" class="card"><div class="card-cat">Cheminformatics</div><h3 class="card-title">Cheminformatics Hub</h3><p class="card-desc">3D molecules + uploader + pharmacophore + QSAR landscape.</p></a>
+      </div>
+
+      <div class="section-title">Insights</div>
+      <div class="grid">
+        <a href="digest.html" class="card"><div class="card-cat">Digest</div><h3 class="card-title">Weekly Science Digest</h3><p class="card-desc">Issue #16 (latest) + 15 archived issues. 5 real + 2 futuristic articles per issue.</p></a>
+        <a href="graph.html" class="card"><div class="card-cat">Knowledge Graph</div><h3 class="card-title">Cross-Domain Knowledge Graph</h3><p class="card-desc">163 nodes + 165 edges + free-text search + type filter.</p></a>
+        <a href="demos.html" class="card"><div class="card-cat">Demos</div><h3 class="card-title">Demos Catalogue</h3><p class="card-desc">All 5 seed demos: OLS regression, k-means, citation PageRank, molecular dynamics, nucleotide analysis.</p></a>
+        <a href="benchmark.html" class="card"><div class="card-cat">Benchmark</div><h3 class="card-title">Agentic Benchmark</h3><p class="card-desc">Performance benchmarks for the platform's components.</p></a>
+      </div>
+
+      <div style="text-align: center;">
+        <a href="index.html" class="back-home">← Back to home</a>
+      </div>
+
+      <div class="footer">
+        AIHPC Advanced · pure client-side platform · 58 audit checks · 18 canvas components · 125 concept cards · 16 weekly digest issues
+      </div>
+    </div>
+
+    <script>
+      // Focus the search input on load
+      document.getElementById('search-input').focus();
+      // On Enter, redirect to concepts.html with the search query as hash
+      document.getElementById('search-input').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          var q = e.target.value.trim();
+          if (q) {
+            window.location.href = 'concepts.html#search=' + encodeURIComponent(q);
+          } else {
+            window.location.href = 'concepts.html';
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

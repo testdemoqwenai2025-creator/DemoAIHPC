@@ -1,0 +1,587 @@
+{
+  "domain": "medical",
+  "generated_at": "2026-10-20T16:44:36.181754Z",
+  "total_entries": 58,
+  "entries": [
+    {
+      "title": "A 47-year study reveals the age when your body starts losing strength",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261014000912.htm",
+      "summary": "A 47-year study has uncovered a surprising turning point in physical aging: fitness and strength begin declining around age 35, even among people who exercise regularly. Researchers found that this decline accelerates as people get older, but starting to exercise in adulthood can still improve physi",
+      "published": "Wed, 14 Oct 2026 20:28:19 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261014000912.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Cancer is rising in younger adults, and scientists can't fully explain why",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261013015837.htm",
+      "summary": "A major study found that several cancers are rising faster among younger adults in England, even as smoking, diet, and other established risk factors have generally improved. Excess weight explains only part of the increase, leaving scientists searching for other possible causes, including changes i",
+      "published": "Wed, 14 Oct 2026 18:03:26 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261013015837.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists reveal why some workout recovery tricks can backfire",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261013015805.htm",
+      "summary": "Ice baths, massages, compression garments, and recovery supplements promise faster muscle recovery, but research suggests their benefits are often overstated, and some techniques may even undermine long-term gains. Scientists say the most effective recovery methods are far simpler and cheaper: getti",
+      "published": "Wed, 14 Oct 2026 08:04:20 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261013015805.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "The secret to easier exercise as an adult may start in childhood",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261013015811.htm",
+      "summary": "Exercise during childhood could have a surprising lifelong benefit, potentially making physical activity less exhausting in adulthood. In a study involving guinea fowl, researchers discovered that birds accustomed to carrying weights while growing up could carry those weights as adults without using",
+      "published": "Wed, 14 Oct 2026 07:36:23 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261013015811.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists may have overlooked a hidden Alzheimer's culprit for decades",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261013015838.htm",
+      "summary": "For decades, scientists have focused on amyloid beta as a major culprit behind Alzheimer’s disease, spending billions of dollars developing treatments that have often delivered disappointing results. Now, researchers at UC Santa Cruz are drawing attention to a largely overlooked peptide called P3 th",
+      "published": "Wed, 14 Oct 2026 07:06:19 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261013015838.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists discover how harmful “zombie cells” hide from the immune system",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261013015800.htm",
+      "summary": "Scientists have discovered a protein that may help harmful aging cells hide from the immune system, allowing them to accumulate and fuel age-related health problems. Blocking the protein in mice reduced these cells and inflammation while improving blood sugar regulation and strength, offering a prom",
+      "published": "Wed, 14 Oct 2026 06:17:58 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261013015800.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "New knee arthritis treatment delivers lasting pain relief without surgery",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261013234801.htm",
+      "summary": "A promising new treatment for knee arthritis uses tiny, dissolvable particles to block abnormal blood vessels, easing inflammation and pain without joint replacement surgery. In a study of 194 patients, 80% experienced clinically meaningful pain relief lasting at least 12 months.",
+      "published": "Wed, 14 Oct 2026 00:39:11 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261013234801.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists finally uncover why statins can cause muscle pain",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261019093447.htm",
+      "summary": "Scientists have uncovered a surprising reason why statins, the widely prescribed cholesterol-lowering drugs that help prevent heart attacks and strokes, can sometimes cause muscle pain, weakness, and even severe muscle damage. Using advanced imaging technology, researchers discovered that statins ca",
+      "published": "Tue, 20 Oct 2026 09:00:56 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261019093447.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists discover a way to kill dangerous gut bacteria without killing the good",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261019093353.htm",
+      "summary": "Scientists have discovered a natural compound that targets dangerous C. difficile bacteria without wiping out the gut's beneficial microbes. Successful early tests suggest it could lead to a gentler, more effective treatment for stubborn intestinal infections that frequently return.",
+      "published": "Tue, 20 Oct 2026 08:07:49 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261019093353.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Your aging brain may be trading memory for something more valuable",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261019093357.htm",
+      "summary": "The aging brain may be undergoing a remarkable transformation rather than simply losing its abilities, shifting its focus from remembering details to understanding the bigger picture. Scientists suggest this change could be an evolutionary adaptation that helps older adults develop wisdom and share",
+      "published": "Tue, 20 Oct 2026 07:31:22 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261019093357.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists find a way to fight Alzheimer’s brain damage without removing toxic tau",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261019093355.htm",
+      "summary": "Scientists have found a promising way to protect the brain from Alzheimer’s-related damage by blocking immune cells that contribute to the destruction of neurons. In mice, the treatment preserved roughly 40% more tissue in memory centers and improved memory, even without removing harmful tau protein",
+      "published": "Tue, 20 Oct 2026 05:52:35 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261019093355.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists discover a surprising link between vitamin C and cancer survival",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261019093437.htm",
+      "summary": "A surprising clinical trial suggests that taking vitamin C daily could improve survival in people with precancerous blood disorders and early-stage blood cancers. Patients receiving the supplement had fewer adverse events and showed a promising survival advantage, raising hopes that a common vitamin",
+      "published": "Tue, 20 Oct 2026 00:21:35 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261019093437.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists discover a surprising paradox in how our cells age",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261012185009.htm",
+      "summary": "Scientists have discovered that the body's cellular recycling system behaves very differently during aging than previously believed, with higher activity sometimes linked to worse physical health. A small study suggests that even gentle exercise could help restore more youthful cellular recycling pa",
+      "published": "Tue, 13 Oct 2026 07:01:38 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261012185009.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists uncover a hidden map of the brain with 539 distinct regions",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261012185011.htm",
+      "summary": "Scientists have uncovered a hidden layer of organization in the brain by creating the first detailed 3D map of its lipids, the fatty molecules essential for brain structure and communication. By analyzing millions of measurements from mouse brains, researchers identified 539 distinct chemical zones,",
+      "published": "Tue, 13 Oct 2026 01:00:55 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261012185011.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists discover how exercise reverses muscle aging",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261015003550.htm",
+      "summary": "Scientists have uncovered a hidden biological mechanism that helps explain how exercise can reverse some of the damage caused by muscle aging. The key is a gene called DEAF1, which becomes overactive with age and interferes with the muscles’ ability to clear damaged proteins and repair themselves. E",
+      "published": "Thu, 15 Oct 2026 20:41:45 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261015003550.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Eating late at night linked to up to 30% higher risk of liver disease",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261014015503.htm",
+      "summary": "Eating late at night could be putting your liver at risk, according to a large study led by Oregon Health & Science University. Researchers analyzed data from nearly 200,000 people and found that those who regularly ate after dinner or around bedtime had a 20% to 30% higher risk of liver disease, in",
+      "published": "Thu, 15 Oct 2026 08:26:16 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261014015503.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists discover a surprising danger in smaller cancer cells",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261013015835.htm",
+      "summary": "Scientists have discovered that unusually small cancer cells carrying extra chromosomes can be far more aggressive than larger ones, growing faster, spreading more readily, and resisting common treatments. The surprising finding could help explain why some tumors are especially dangerous and provide",
+      "published": "Thu, 15 Oct 2026 07:27:40 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261013015835.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Rare study reveals a striking divide inside an Alzheimer’s patient’s brain",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261013015814.htm",
+      "summary": "A rare examination of an Alzheimer’s patient’s brain revealed that regions cleared of amyloid plaques had remarkably little of the harmful tau buildup associated with memory loss, while neighboring areas showed extensive damage. The discovery suggests that removing amyloid may have lasting protectiv",
+      "published": "Thu, 15 Oct 2026 06:05:24 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261013015814.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Strokes have nearly doubled among younger adults, and scientists aren't sure why",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261014015459.htm",
+      "summary": "Strokes are becoming alarmingly common among younger adults, with rates nearly doubling among people ages 20 to 54 over nearly three decades. Researchers found that blocked blood vessels in the brain accounted for much of the increase, while high blood pressure, diabetes, and substance use also beca",
+      "published": "Thu, 15 Oct 2026 01:28:14 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261014015459.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Ozempic and Wegovy linked to rare risk of sudden vision loss",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261014015521.htm",
+      "summary": "Popular diabetes and weight loss drugs such as Ozempic and Wegovy have been linked to a slightly increased risk of a rare condition that can cause sudden, potentially permanent vision loss. Although the risk remains very low, Rutgers researchers say the findings warrant attention as millions of peop",
+      "published": "Thu, 15 Oct 2026 00:14:55 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261014015521.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Fatty liver disease is actually five different conditions, scientists discover",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261016070642.htm",
+      "summary": "A common liver disease affecting nearly 30% of adults worldwide may be far more complicated than scientists previously realized. Mayo Clinic researchers have discovered that fatty liver disease actually consists of five distinct biological subtypes, each carrying different risks for liver failure, c",
+      "published": "Sun, 18 Oct 2026 22:35:09 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261016070642.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Modern neuroscience is rediscovering a surprising idea freud had 130 years ago",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261018084028.htm",
+      "summary": "Researchers have identified striking parallels between Sigmund Freud’s century-old theories and modern neuroscience, suggesting that the brain’s constant predictions shape how we experience reality. The findings could help explain why harmful thought patterns are so difficult to break and offer new",
+      "published": "Sun, 18 Oct 2026 20:32:07 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261018084028.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists discover a natural compound that could protect the brain from too much salt",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261017230032.htm",
+      "summary": "Eating too much salt may do more than raise blood pressure. It could also harm memory and social behavior. In a new study, Japanese researchers discovered that a soy-derived compound called LPC70 helped protect mice from several damaging effects of a high-salt diet. Mice given the supplement had low",
+      "published": "Sun, 18 Oct 2026 09:46:34 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261017230032.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Eating blueberries every day may have a surprising effect on your mood",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261017230028.htm",
+      "summary": "Eating blueberries every day could have surprising effects on mood, according to a small study that found greater reductions in depressive symptoms among older adults who consumed the fruit for three months. Researchers also detected changes in gut microbial enzymes, suggesting a possible gut-brain",
+      "published": "Sun, 18 Oct 2026 09:22:24 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261017230028.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists link a strange sugar in red meat to a 63% higher diabetes risk",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261017230031.htm",
+      "summary": "A study of nearly 90,000 adults found that people consuming the most of a little-known sugar found in red meat had a 63% higher risk of developing type 2 diabetes. Scientists suspect the sugar may trigger chronic inflammation, potentially revealing a hidden connection between red meat and diabetes t",
+      "published": "Sun, 18 Oct 2026 09:09:01 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261017230031.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Magic mushroom ingredient takes the fight out of aggressive fish",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261017230036.htm",
+      "summary": "A psychedelic compound found in magic mushrooms appears to have an unexpected effect: calming highly aggressive fish. Researchers discovered that low doses of psilocybin significantly reduced aggressive attacks in mangrove rivulus fish without disrupting their normal social interactions. The finding",
+      "published": "Sun, 18 Oct 2026 08:52:13 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261017230036.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists uncover 3 key brain pathways linked to lasting depression relief",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261017230021.htm",
+      "summary": "Researchers have uncovered three brain pathways linked to lasting improvements in people receiving deep brain stimulation for severe, treatment-resistant depression. They also discovered that patients who failed to improve after two years shared a striking pattern: insufficient stimulation of a cruc",
+      "published": "Sun, 18 Oct 2026 08:19:08 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261017230021.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists discover that male and female skin play by different rules",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261017230020.htm",
+      "summary": "Scientists have uncovered a surprising difference in how male and female skin repairs and renews itself. By tracking individual skin stem cells in living mice for five months, researchers discovered that female cells work together in a highly coordinated way, while male cells operate more independen",
+      "published": "Sun, 18 Oct 2026 06:52:51 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261017230020.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Just 10 minutes of daily exercise could unlock deeper sleep",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261008102721.htm",
+      "summary": "Getting better sleep might be as simple as moving a little more every day. Researchers at The University of Texas at Austin found that people who exercised more frequently experienced more deep, restorative sleep, which is essential for brain recovery, memory, and emotional well-being. Surprisingly,",
+      "published": "Sun, 11 Oct 2026 20:51:31 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261008102721.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "The hidden math of Alzheimer's could point to new treatments",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261008102714.htm",
+      "summary": "Mathematics may hold unexpected clues to understanding Alzheimer’s disease. Scientists have developed a model showing how common metals like copper and zinc may influence the buildup of proteins associated with the disease, while also exploring possible ways to stop the process. The findings could h",
+      "published": "Sun, 11 Oct 2026 15:24:25 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261008102714.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "New injection makes fat cells self-destruct",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261008102713.htm",
+      "summary": "Scientists have developed an experimental injection that destroys fat cells and significantly reduces dangerous belly fat, potentially opening a new path to treating obesity. Early research also suggests it could help prevent the weight regain that often follows stopping popular weight loss drugs li",
+      "published": "Sun, 11 Oct 2026 11:08:28 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261008102713.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "The eye has a hidden cleanup system scientists never knew existed",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261008005254.htm",
+      "summary": "Scientists have discovered a hidden cleanup system at the back of the eye that drains fluid and waste through a previously unknown pathway. The surprising finding, demonstrated in mice, could open the door to new treatments for glaucoma, macular degeneration, and other causes of blindness.",
+      "published": "Sun, 11 Oct 2026 02:01:54 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261008005254.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Eating olive oil before carbs has a surprising effect on blood sugar",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261008102700.htm",
+      "summary": "A simple change in the order you eat your food could help prevent blood sugar spikes. Scientists discovered that giving mice olive oil before carbohydrates slowed digestion and activated a surprising combination of hormones and nerve signals that helped regulate blood sugar, even in mice with type 2",
+      "published": "Sun, 11 Oct 2026 00:32:03 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261008102700.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists tested 39 sweeteners and uncovered surprising gut effects",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261016081103.htm",
+      "summary": "Scientists have discovered that many common sweeteners can interfere with gut bacteria, with some combinations involving medications producing surprisingly strong effects. One sweetener mixed with a widely prescribed antidepressant reduced beneficial bacteria and microbial diversity in laboratory ex",
+      "published": "Sat, 17 Oct 2026 23:55:59 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261016081103.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists find a youth protein that helps aging brain cells act young again",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261016070646.htm",
+      "summary": "Scientists have discovered that a protein linked to youth helps protect the brain’s immune cells from age-related decline. Restoring the protein in older mice improved the cells’ ability to clear debris and reduced signs of inflammation, raising hopes for future treatments targeting brain aging and",
+      "published": "Sat, 17 Oct 2026 23:27:40 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261016070646.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "New drug reverses severe fatty liver disease by repairing the gut",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261016080912.htm",
+      "summary": "Scientists have discovered that a potential new drug can reverse severe fatty liver disease in animal models by restoring gut health and blocking harmful substances from reaching the liver. The breakthrough could pave the way for new treatments for liver disease and potentially other serious conditi",
+      "published": "Sat, 17 Oct 2026 09:45:06 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261016080912.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Brain cells meant to protect us may be fueling cognitive decline",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261015073222.htm",
+      "summary": "Scientists have uncovered a surprising cause of age-related cognitive decline involving brain cells previously thought to be entirely beneficial. As these cells become dysfunctional, they can produce abnormal amounts of myelin, disrupting nerve fibers and potentially contributing to worsening memory",
+      "published": "Sat, 17 Oct 2026 08:44:22 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261015073222.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists discover how deep sleep builds muscle, burns fat, and boosts the brain",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261016081140.htm",
+      "summary": "Scientists have discovered a surprising two-way relationship between sleep and growth hormone, revealing how the brain carefully balances physical recovery with wakefulness. The findings could help explain why poor sleep harms metabolism and brain health, potentially opening the door to new treatmen",
+      "published": "Sat, 17 Oct 2026 01:14:50 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261016081140.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "A plastic once thought harmless may be fueling fatty liver disease",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261008102718.htm",
+      "summary": "One of the world's most common plastics may pose a hidden threat to liver health. Texas A&M researchers discovered that polyethylene microplastics can contribute to fatty liver disease, with potentially worse effects when combined with an unhealthy diet. Even more surprising, this widely used plasti",
+      "published": "Sat, 10 Oct 2026 20:47:05 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261008102718.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Neanderthals may have used prehistoric glue as an ancient antibiotic",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261008005256.htm",
+      "summary": "Neanderthals may have used a sticky substance made from birch bark to treat wounds thousands of years before antibiotics existed. Researchers recreated ancient birch tar production techniques and discovered that every sample could inhibit the growth of bacteria responsible for dangerous wound infect",
+      "published": "Sat, 10 Oct 2026 20:45:37 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261008005256.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists created a tiny device that can control your nerves to treat chronic pain",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261008005253.htm",
+      "summary": "Scientists have developed a tiny, injectable device that can control nerve activity without surgery, batteries, or wires, potentially transforming treatment for chronic pain and movement disorders. Powered wirelessly from outside the body, the seed-sized technology has shown promising results in ear",
+      "published": "Sat, 10 Oct 2026 20:23:19 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261008005253.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "A surprisingly simple way to relieve knee arthritis pain without pills or surgery",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261009025434.htm",
+      "summary": "A surprisingly simple change in how you walk could help relieve knee arthritis pain and even slow joint damage. In a year-long clinical trial, researchers found that adjusting the angle of a person's foot while walking reduced osteoarthritis pain by an amount comparable to medication, without requir",
+      "published": "Sat, 10 Oct 2026 20:00:24 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261009025434.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Why painful arthritis can return stronger after cancer treatment",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261018205055.htm",
+      "summary": "Researchers discovered that recurring arthritis triggered by cancer immunotherapy may be driven by immune cells that remember previous attacks and return in a more aggressive state. The findings could pave the way for treatments that prevent painful flare-ups while preserving the immune system's abi",
+      "published": "Mon, 19 Oct 2026 20:49:11 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261018205055.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Why some people escape Alzheimer’s despite carrying a high-risk gene",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261018205044.htm",
+      "summary": "Scientists have discovered why some people with a high genetic risk of Alzheimer’s remain mentally sharp into their 80s, uncovering a rare mutation that protects the brain from harmful protein buildup. The findings reveal a potential new way to prevent early brain damage and could pave the way for t",
+      "published": "Mon, 19 Oct 2026 08:57:02 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261018205044.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists discover why some people still can’t taste food after COVID-19",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261018205033.htm",
+      "summary": "Scientists have uncovered a possible explanation for why some people struggle to taste food more than a year after recovering from COVID-19. By examining taste buds from patients with lingering symptoms, researchers discovered molecular abnormalities that weaken the signals responsible for detecting",
+      "published": "Mon, 19 Oct 2026 08:03:02 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261018205033.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Just 3,000 steps a day may help slow Alzheimer's, scientists find",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261018205058.htm",
+      "summary": "Walking just 3,000 steps a day could help slow Alzheimer’s-related brain changes, according to new research. Scientists discovered that physical activity was linked to less buildup of harmful tau proteins and nearly half the cognitive and functional decline, even in people already showing early sign",
+      "published": "Mon, 19 Oct 2026 07:23:26 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261018205058.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists win 2026 Nobel Prize for controlling brain cells with light",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261018205037.htm",
+      "summary": "A discovery in tiny algae led to a Nobel Prize-winning breakthrough that allows scientists to switch brain cells on and off using light. The revolutionary technique has already helped researchers activate memories and is opening new possibilities for restoring vision and treating brain disorders.",
+      "published": "Mon, 19 Oct 2026 06:02:32 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261018205037.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "\"Mind-blowing\" Alzheimer’s breakthrough: Two hours of sleep restored without clearing brain plaques",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261018084421.htm",
+      "summary": "Scientists have uncovered an unexpected culprit behind sleep loss in Alzheimer’s disease: overactive immune cells in the brain. By temporarily removing these cells, researchers restored more than two hours of sleep per day in mice, revealing a promising new target for treatment.",
+      "published": "Mon, 19 Oct 2026 05:19:45 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261018084421.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists just gave the powerhouses of our cells a high-tech upgrade",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261012185008.htm",
+      "summary": "Scientists have created a new coating for mitochondria that preserves their ability to produce energy, potentially opening the door to new treatments for diseases involving these tiny cellular powerhouses. The technology could one day help transfer healthy mitochondria into damaged cells, although i",
+      "published": "Mon, 12 Oct 2026 21:33:58 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261012185008.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists find a hidden problem with endless smartphone scrolling",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261011211611.htm",
+      "summary": "Excessive smartphone use may be taking a hidden toll on the brain and body, with heavy scrolling linked to poorer memory, reduced attention, disrupted sleep, and potential balance problems. Researchers found that weak self-control and fear of missing out, rather than personality alone, are key facto",
+      "published": "Mon, 12 Oct 2026 18:25:50 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261011211611.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Your gut bacteria could be changing how many calories you absorb",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261011211613.htm",
+      "summary": "Scientists have developed a model showing that gut bacteria play a surprisingly important role in how many calories we absorb, meaning food labels may not tell the full story. In a controlled study, people eating a high-fiber diet absorbed about 116 fewer calories per day than those eating a typical",
+      "published": "Mon, 12 Oct 2026 17:44:16 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261011211613.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Popular weight loss drugs linked to a surprising fingernail problem",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261011211604.htm",
+      "summary": "Popular GLP-1 weight loss drugs, such as Ozempic and Wegovy, have been linked to unexpectedly high rates of nail detachment, hair loss, and scalp inflammation, with some problems occurring several times more frequently among users. Researchers found that weight loss alone could not fully explain the",
+      "published": "Mon, 12 Oct 2026 05:34:48 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261011211604.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists find hidden driver of aging and a simple amino acid that fights memory loss in mice",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261009025708.htm",
+      "summary": "Scientists discovered that declining levels of a protein called Menin may help drive aging, and restoring it in older mice reversed several age-related changes in just 30 days. Even more surprisingly, supplementing with a simple amino acid called D-serine improved memory and learning, offering a pot",
+      "published": "Mon, 12 Oct 2026 05:23:55 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261009025708.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists discover vanilla’s hidden healing potential",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261011211550.htm",
+      "summary": "Scientists have discovered that vanillin, the compound that gives vanilla its distinctive flavor, has powerful properties that could help fight infections, reduce inflammation, and promote wound healing. The inexpensive, widely available ingredient could one day become an important component of adva",
+      "published": "Mon, 12 Oct 2026 00:34:24 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261011211550.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "USC scientists discover how to create a never-ending supply of cancer-fighting cells",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261015003803.htm",
+      "summary": "USC scientists have discovered a way to create a potentially renewable supply of genetically engineered immune cells that can attack cancer and strengthen the body's natural defenses. By growing and modifying immature immune cells rather than mature ones, researchers developed a system that can cont",
+      "published": "Fri, 16 Oct 2026 08:46:50 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261015003803.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Yale scientists discover how stress changes the brain to make memories stronger",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261014015517.htm",
+      "summary": "Yale scientists have uncovered how the stress hormone cortisol helps the brain turn emotional experiences into stronger, longer-lasting memories. The discovery reveals that stress can reshape communication between brain networks involved in emotion and memory, potentially explaining why certain mome",
+      "published": "Fri, 16 Oct 2026 07:55:35 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261014015517.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "A protein that fuels cancer could also be the key to fighting it",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261015073203.htm",
+      "summary": "Scientists have discovered how to turn a protein that normally fuels cancer growth into a weapon against it. By activating PPARD in immune cells, researchers made them better at burning fat and attacking tumors, slowing or stopping cancer growth in laboratory experiments. The approach showed promise",
+      "published": "Fri, 16 Oct 2026 00:51:38 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261015073203.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists discover 5 hidden brain patterns behind depression",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261008005251.htm",
+      "summary": "Depression may not be one biological condition, but several distinct patterns of brain activity hiding under the same diagnosis. Researchers studying 263 people with depression identified five brain profiles, each showing different patterns of communication between brain regions and associations wit",
+      "published": "Fri, 09 Oct 2026 14:34:02 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261008005251.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    }
+  ]
+}

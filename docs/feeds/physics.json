@@ -1,0 +1,487 @@
+{
+  "domain": "physics",
+  "generated_at": "2026-10-20T16:44:36.181754Z",
+  "total_entries": 48,
+  "entries": [
+    {
+      "title": "Caltech physicists finally measure a quantum energy ladder predicted 40 years ago",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260928100554.htm",
+      "summary": "Researchers have experimentally observed energy patterns that physicists have predicted for about 40 years. By arranging laser-trapped atoms into a quantum simulator, they recreated two different quantum tipping points and watched the atoms fall into the exact energy ratios predicted by theory. The",
+      "published": "Wed, 30 Sep 2026 23:06:56 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260928100554.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Scientists turn seawater into fresh water without harmful brine",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260915100137.htm",
+      "summary": "Scientists have developed a solar-powered desalination system that turns seawater into fresh water while removing nearly all of the leftover salt as a solid instead of producing harmful brine. The self-cleaning technology could also recover valuable minerals such as lithium, potentially turning desa",
+      "published": "Wed, 16 Sep 2026 10:44:50 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260915100137.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Chinese scientists find a hidden atomic structure that unlocks methane",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260909005148.htm",
+      "summary": "Scientists found that a tiny atomic structure that forms on nickel oxide during methane conversion is more effective than the metallic nickel long believed to drive the reaction. The discovery allowed a low-nickel catalyst to rival one containing 10 times more metal, potentially opening the door to",
+      "published": "Wed, 09 Sep 2026 01:33:42 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260909005148.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Interstellar solar sails hit a strange problem at 75% of light speed",
+      "link": "https://www.sciencedaily.com/releases/2026/08/260831015157.htm",
+      "summary": "Solar sails pushed by powerful lasers could reach incredible speeds, but relativity may eventually make the light itself work against them. At around 75% of the speed of light, scattered photons can begin creating drag, adding a surprising obstacle to interstellar travel.",
+      "published": "Wed, 02 Sep 2026 10:51:21 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/08/260831015157.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "A search for one exotic particle uncovered two strange new structures",
+      "link": "https://www.sciencedaily.com/releases/2026/08/260831015147.htm",
+      "summary": "A search for one mysterious particle unexpectedly revealed evidence for two different structures that may belong to the bizarre family of exotic subatomic particles known as XYZ states. The findings could help physicists uncover new ways that quarks and gluons combine to create matter.",
+      "published": "Wed, 02 Sep 2026 01:28:30 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/08/260831015147.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Quantum teleportation breakthrough: Scientists crack a 25-year entanglement challenge",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260929053550.htm",
+      "summary": "Scientists have developed and experimentally demonstrated a long-sought method for identifying W states, an important form of multi-photon quantum entanglement. The technique could make complex entangled systems much easier to measure, opening new possibilities for quantum teleportation, communicati",
+      "published": "Tue, 29 Sep 2026 08:02:30 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260929053550.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "For the first time, scientists watch sound jump between quantum states",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260921081054.htm",
+      "summary": "Stanford researchers have recorded the first real-time quantum jumps of sound, watching single phonons abruptly vanish from one energy state to another. The breakthrough could open new paths for quantum computing, error correction, highly sensitive biological sensors, and next-generation sound-based",
+      "published": "Tue, 22 Sep 2026 09:17:20 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260921081054.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "The LHC just ruled out another hiding place for quantum black holes",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260922005649.htm",
+      "summary": "Physicists searching through Large Hadron Collider data found no evidence that the machine has been producing microscopic quantum black holes, but the result sharply narrows where such exotic physics could still be hiding. These hypothetical black holes could form if extra spatial dimensions make gr",
+      "published": "Tue, 22 Sep 2026 00:56:49 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260922005649.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "The shape behind the Einstein problem just revealed strange new physics",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260914102432.htm",
+      "summary": "A mathematical shape famous for covering a surface without ever repeating has revealed an unexpected ability to twist light into unusual chiral patterns. The discovery could lead to new ways of controlling light, polarization, and advanced optical devices.",
+      "published": "Tue, 15 Sep 2026 09:14:55 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260914102432.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "James Webb reveals a massive cosmic structure that challenges our understanding of the Universe",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261012185021.htm",
+      "summary": "NASA’s James Webb Space Telescope has revealed an ancient galaxy cluster with an unexpectedly dense concentration of dark matter, challenging theories about how the universe developed. The discovery also uncovered a surprising connection between scattered starlight and invisible dark matter that cou",
+      "published": "Tue, 13 Oct 2026 07:27:24 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261012185021.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Scientists recreate a bizarre quantum effect that stops a particle cold",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261011211554.htm",
+      "summary": "Oxford physicists have recreated a bizarre quantum effect in which a particle responds to a magnetic field without ever traveling through it. Using a hybrid quantum computer, they demonstrated how introducing a simulated magnetic flux could completely halt a particle's movement through quantum inter",
+      "published": "Tue, 13 Oct 2026 05:47:22 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261011211554.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Scientists observe Einstein’s gravity in the quantum world for the first time",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260907201552.htm",
+      "summary": "Physicists have directly observed a long-predicted quantum effect of gravity, putting one of Einstein’s foundational ideas to a striking new test. Using ultracold atoms, researchers split an atom’s quantum wave so that one part was held in place while the other fell freely under gravity, then reunit",
+      "published": "Tue, 08 Sep 2026 08:09:21 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260907201552.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Physicists just saw quarks make waves in the Big Bang’s primordial soup",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261004002556.htm",
+      "summary": "Physicists at CERN’s Large Hadron Collider have captured the clearest evidence yet that quark-gluon plasma, the scorching-hot matter that filled the newborn universe, behaves like a true liquid. By tracking individual quarks as they blasted through the plasma, researchers saw them leave behind rippl",
+      "published": "Tue, 06 Oct 2026 08:04:50 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261004002556.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Distant time crystals can somehow fall into the same rhythm",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260923035934.htm",
+      "summary": "Researchers have shown that multiple time crystals inside a semiconductor can synchronize their oscillations, much like pendulum clocks gradually falling into the same rhythm. The coupling is carried by spin-polarized electrons, allowing time crystals separated by up to 40 micrometers to lock to a c",
+      "published": "Thu, 24 Sep 2026 09:16:41 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260923035934.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Scientists create brilliant white material without a drop of white pigment",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260909231712.htm",
+      "summary": "Researchers have created a foam-based material that produces intense whiteness and water repellency without titanium dioxide pigments or PFAS chemicals. Inspired by natural structures in snow, clouds, flowers, and lotus leaves, the material uses tiny pores to scatter light while its rough surface re",
+      "published": "Thu, 10 Sep 2026 08:22:11 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260909231712.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Einstein Probe reveals a hidden phase of neutron star collisions",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261006234511.htm",
+      "summary": "Einstein Probe revealed nearly 10 minutes of soft X-ray activity following a short gamma-ray burst, exposing a phase of neutron star mergers that previous missions may have missed. The prolonged emission could have been powered by a newly formed magnetar and may provide a valuable new counterpart to",
+      "published": "Thu, 08 Oct 2026 06:06:06 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261006234511.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Electrons slow to a crawl in a strange new quantum state",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260929053548.htm",
+      "summary": "Scientists at the University of Chicago have uncovered a surprising quantum state in the layered magnetic material Fe5GeTe2, where huge numbers of electrons move together unusually slowly while remaining quantum coherent. The behavior contradicts existing theoretical predictions about how the materi",
+      "published": "Thu, 01 Oct 2026 23:10:08 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260929053548.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "This strange “spacetime crystal” can suddenly become a black hole",
+      "link": "https://www.sciencedaily.com/releases/2026/08/260829035225.htm",
+      "summary": "Physicists have mathematically captured a bizarre “spacetime crystal” that can either dissolve or collapse into a microscopic black hole after only a tiny change in energy. Their breakthrough came from an unusual trick involving infinitely many dimensions, potentially giving researchers a new tool f",
+      "published": "Sun, 30 Aug 2026 11:05:09 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/08/260829035225.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Einstein’s “spooky action” just survived one of physics’ most extreme tests",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260919031023.htm",
+      "summary": "Physicists have detected strong evidence that heavy, fleeting Z bosons can become quantum entangled during Higgs boson decays at CERN’s Large Hadron Collider. The result shows that Einstein’s “spooky action at a distance” survives even under some of the most extreme conditions ever created in a labo",
+      "published": "Sun, 20 Sep 2026 01:16:00 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260919031023.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Physicists create a bizarre new quantum state called a fractional fermi sea",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261018084644.htm",
+      "summary": "Physicists have discovered a strange new state of quantum matter in which ultracold atoms defy familiar organizational rules, forming a highly excited yet surprisingly orderly configuration called a \"fractional Fermi sea.\" The discovery challenges established quantum theories and hints at exotic qua",
+      "published": "Sun, 18 Oct 2026 09:37:21 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261018084644.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Scientists who discovered a third form of magnetism win major physics prize",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261017230035.htm",
+      "summary": "Physicists have uncovered a hidden third form of magnetism that challenges more than 100 years of established physics. Called altermagnetism, the discovery could transform future computing and electronics while opening an entirely new frontier in quantum research.",
+      "published": "Sun, 18 Oct 2026 05:41:44 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261017230035.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Physicists can’t agree on how the Universe works",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260912220041.htm",
+      "summary": "A massive worldwide survey of physicists has revealed surprisingly little agreement about some of the universe’s biggest mysteries. No majority backed the standard cosmological model, a leading explanation for dark matter, or any single theory of quantum gravity. One area of stronger agreement stood",
+      "published": "Sun, 13 Sep 2026 09:15:56 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260912220041.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Scientists are building a microscope powered by a quantum computer",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260912220038.htm",
+      "summary": "Scientists are combining an electron microscope with a quantum computer to squeeze far more information from each electron. The approach could reveal faint details with fewer electrons, helping protect fragile samples that conventional microscopy can damage.",
+      "published": "Sun, 13 Sep 2026 08:03:59 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260912220038.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Physicists discover a hidden “curveball” in quantum light",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260912220025.htm",
+      "summary": "Researchers have experimentally demonstrated the optical Magnus effect for the first time, revealing that a tightly focused laser interacts most strongly with an atom slightly away from the beam’s center. The unexpected shift is similar to the physics that makes a spinning table tennis ball curve th",
+      "published": "Sun, 13 Sep 2026 07:22:01 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260912220025.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Scientists make stunning discovery that could help explain why life exists",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261009025602.htm",
+      "summary": "Scientists have discovered that the universe's fundamental physical constants may be finely balanced to make life possible. Even tiny changes to these constants could make liquids too thick or too thin for essential biological processes, potentially preventing life as we know it. Surprisingly, these",
+      "published": "Sun, 11 Oct 2026 12:35:58 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261009025602.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "AI can now control fusion plasma faster than humans can react",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260903064215.htm",
+      "summary": "Princeton researchers have tested an AI system that can monitor and control fusion plasma in milliseconds, reacting far faster than a human operator. In one experiment, it predicted a damaging instability about 200 milliseconds before it appeared and adjusted the plasma to stop it from forming.",
+      "published": "Sun, 06 Sep 2026 03:28:43 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260903064215.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Scientists find a surprising clue to why the universe’s expansion doesn’t add up",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261002080026.htm",
+      "summary": "Tiny magnetic fields created shortly after the Big Bang may help explain the long-running disagreement over how fast the universe is expanding. Detailed simulations show that these primordial fields could have changed the formation of hydrogen in the early universe, affecting the cosmic microwave ba",
+      "published": "Sun, 04 Oct 2026 08:05:54 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261002080026.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "The universe is still speeding up, but nobody knows why",
+      "link": "https://www.sciencedaily.com/releases/2026/08/260828082325.htm",
+      "summary": "A major new analysis challenges recent claims that the universe's expansion is slowing, finding that the evidence for cosmic acceleration remains strong. The findings preserve the leading role of dark energy, while leaving scientists with the enduring mystery of what this strange cosmic force actual",
+      "published": "Sat, 29 Aug 2026 07:41:30 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/08/260828082325.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Quantum computer simulates matter “popping into existence”",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260925005416.htm",
+      "summary": "Scientists recreated a particle-forming process linked to the extreme physics of the early universe using a 13-ion quantum simulator. The breakthrough suggests quantum computers could eventually help researchers investigate how matter formed and evolved after the Big Bang.",
+      "published": "Sat, 26 Sep 2026 09:47:38 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260925005416.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "CERN finds gluons behaving strangely deep inside atomic nuclei",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260911214303.htm",
+      "summary": "Physicists at CERN have found a new way to peer deep inside atomic nuclei and distinguish between two competing explanations for how gluons behave. Using the ALICE experiment at the Large Hadron Collider, researchers measured particle production at unprecedented spatial resolution, revealing structu",
+      "published": "Sat, 12 Sep 2026 11:04:06 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260911214303.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Tiny sound waves could help solve a major quantum computing problem",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260911214245.htm",
+      "summary": "Researchers at Harvard have demonstrated a way to protect quantum information using microscopic sound waves. By continuously surrounding a diamond-based qubit with mechanical vibrations, they extended its coherence time by roughly threefold. The same phonons could eventually both transmit and protec",
+      "published": "Sat, 12 Sep 2026 10:08:20 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260911214245.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Scientists build a nuclear clock that could make atomic clocks obsolete",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261008102701.htm",
+      "summary": "Scientists in Vienna have achieved a major breakthrough in timekeeping by creating the world’s first self-stabilizing nuclear clock, a technology that could eventually surpass even the most precise atomic clocks. Instead of relying on electrons in atoms, the clock uses the tiny nuclei of thorium ato",
+      "published": "Sat, 10 Oct 2026 23:06:35 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261008102701.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Quantum oscillations defy expectations in this exotic material",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260901010715.htm",
+      "summary": "Scientists have uncovered an unusual form of electron behavior in zirconium pentatelluride, a quantum material that can act as both an insulator and a conductor. Under temperatures near absolute zero and magnetic fields reaching 60 tesla, electrons produced quantum oscillations that continued even a",
+      "published": "Sat, 05 Sep 2026 00:18:12 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260901010715.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Scientists just made a superconductor stronger using “empty space”",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260930225456.htm",
+      "summary": "Researchers have demonstrated that quantum fluctuations in supposedly empty space can strengthen superconductivity, raising the transition temperature of an ultrathin material by as much as 5.4%. The discovery opens the possibility of using specially engineered vacuum environments to control quantum",
+      "published": "Sat, 03 Oct 2026 08:03:23 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260930225456.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "What kills Schrödinger’s cat? Gravity may not be the answer",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260920222350.htm",
+      "summary": "Physicists have put a decades-old idea about why the strange rules of quantum mechanics disappear in our everyday world to one of its toughest experimental tests yet. Deep beneath Italy’s Gran Sasso mountain, researchers searched for an extremely faint radiation signal predicted by a theory suggesti",
+      "published": "Mon, 21 Sep 2026 05:24:50 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260920222350.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Scientists reach the ultimate quantum limit on a surface",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261018205053.htm",
+      "summary": "Scientists have achieved a quantum breakthrough by creating an ultra-clean surface where individual molecules can maintain their delicate quantum properties at the fundamental limit. The discovery could unlock unprecedented control over molecules and help drive the next generation of quantum technol",
+      "published": "Mon, 19 Oct 2026 23:02:41 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261018205053.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "A new kind of magnetism could unlock faster, more efficient computers",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261002080015.htm",
+      "summary": "Scientists have discovered evidence of altermagnetism in a thin, highly tunable material that could help electronics use electron spin instead of relying only on electrical charge. The unusual magnetic state may enable faster, more energy-efficient devices without the unwanted magnetic interference",
+      "published": "Mon, 05 Oct 2026 07:35:24 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261002080015.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "CERN has begun disconnecting the Large Hadron Collider",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260925005430.htm",
+      "summary": "CERN has started replacing some of the Large Hadron Collider’s most important magnets as part of its High-Luminosity upgrade. The new superconducting magnets will produce fields about 40% stronger, allowing particle beams to be squeezed more tightly before they collide. That should create far more c",
+      "published": "Fri, 25 Sep 2026 09:01:20 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260925005430.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Quantum computing’s “dark horse” just proved it can go universal",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260924020403.htm",
+      "summary": "Researchers have shown that exotic quantum particles called non-Abelian anyons can perform the full range of operations needed for universal quantum computing. Using 54 qubits on Quantinuum’s H2 processor, they combined braiding and fusion to unlock capabilities that braiding alone could not provide",
+      "published": "Fri, 25 Sep 2026 08:45:04 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260924020403.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Caltech’s tiny new chip can steer light in 74 quadrillionths of a second",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260918024823.htm",
+      "summary": "A new Caltech device can redirect a beam of light in just 74 femtoseconds using another beam and a nanoscale silicon metasurface. The breakthrough could pave the way for dramatically faster photonic communications, computing, and sensing technologies.",
+      "published": "Fri, 18 Sep 2026 07:50:13 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260918024823.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Scientists are about to test Einstein’s gravity with exotic matter",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260918024808.htm",
+      "summary": "Scientists have found a new way to create a controlled beam of muonium, an exotic atom containing a heavier cousin of the electron. The advance could allow researchers to test for the first time whether gravity acts on second-generation particles exactly as Einstein’s theory predicts. Any unexpected",
+      "published": "Fri, 18 Sep 2026 07:07:25 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260918024808.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "The uranium cubes that exposed Nazi Germany’s nuclear failure",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261015073218.htm",
+      "summary": "Scientists investigating Nazi Germany's secret nuclear program have uncovered evidence that its final experimental reactor was nowhere near as close to working as previously claimed. Analysis of surviving uranium cubes and wartime documents reveals that Germany lacked the enormous quantities of uran",
+      "published": "Fri, 16 Oct 2026 08:32:52 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261015073218.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "A quantum highway just one atom high could transform superconductors",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261014072018.htm",
+      "summary": "Scientists discovered that atomic steps just one atom high can guide quantum vortices through superconductors, making them move more than 1,000 times more easily in one direction than another. This remarkable control over quantum motion could lead to a new generation of ultra-efficient superconducti",
+      "published": "Fri, 16 Oct 2026 00:22:01 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261014072018.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Physicists just found a tiny glitch in time itself",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260910225251.htm",
+      "summary": "Unconventional quantum theories may imply that time itself has a tiny fundamental uncertainty, placing an ultimate limit on how precisely any clock could measure it. The effect is far beyond current detection, but it could reveal a hidden connection between quantum mechanics, gravity, and spacetime.",
+      "published": "Fri, 11 Sep 2026 01:18:44 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260910225251.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "A famous quantum effect can finally be predicted in real materials",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261006234520.htm",
+      "summary": "Scientists have developed a powerful new way to calculate the Kondo effect, a strange quantum phenomenon that appears when magnetic atoms are embedded in metals. Instead of relying on simplified models, the method uses the real atomic and electronic structures of materials, allowing researchers to p",
+      "published": "Fri, 09 Oct 2026 21:59:39 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261006234520.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Scientists create a lightsaber-like laser antenna that transmits radio waves",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261008005239.htm",
+      "summary": "Scientists have demonstrated a remarkable new antenna that resembles a lightsaber, using a laser to create a tunable beam of plasma capable of transmitting radio waves. The technology could revolutionize wireless communications by allowing antennas to change their size and direction on demand, with",
+      "published": "Fri, 09 Oct 2026 13:55:59 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261008005239.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "A quantum prediction from 1931 just came to life",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261006234517.htm",
+      "summary": "Nearly a century after physicist Hans Bethe predicted them, scientists have created and directly observed unusual quantum states known as “Bethe strings” in an ultracold gas. By cooling cesium atoms to near absolute zero and trapping them in thousands of tiny one-dimensional tubes, researchers were",
+      "published": "Fri, 09 Oct 2026 04:25:24 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261006234517.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
+      "title": "Dark matter detector finds a strange signal scientists can’t yet explain",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260904000313.htm",
+      "summary": "The LUX-ZEPLIN experiment has detected a rare particle interaction that looks unusually difficult to explain as ordinary background noise and appeared where dark matter might be expected. Scientists are not claiming a discovery yet, but additional data could show whether this single mysterious event",
+      "published": "Fri, 04 Sep 2026 02:46:01 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260904000313.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    }
+  ]
+}

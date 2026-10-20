@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AIHPC Advanced — Live Journal Feeds. Continuous ingestion of 12 scientific journal RSS feeds (Science Daily, Nature, PLOS, arXiv). Auto-refreshed every 6 hours via GitHub Actions cron." />
+    <title>Live Journal Feeds — AIHPC Advanced</title>
+    <style>
+      :root {
+        --bg: #0b0f1a;
+        --bg-elevated: #121826;
+        --bg-elevated-2: #1a2133;
+        --border: #1f2937;
+        --border-strong: #2a3548;
+        --text: #f3f4f6;
+        --text-muted: #9ca3af;
+        --text-muted-2: #6b7280;
+        --accent: #8b5cf6;
+        --accent-2: #06b6d4;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.5; min-height: 100vh; }
+      body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(1200px 600px at 20% -10%, rgba(6,182,212,0.15), transparent 60%), radial-gradient(900px 500px at 90% 110%, rgba(139,92,246,0.12), transparent 60%); pointer-events: none; z-index: 0; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; position: relative; z-index: 1; }
+      h1 { font-size: 36px; margin: 0 0 8px; background: linear-gradient(90deg, #06b6d4, #8b5cf6, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 16px; color: var(--text-muted); margin: 0 0 24px; max-width: 700px; }
+      .back-link { display: inline-block; font-size: 13px; color: var(--accent-2); text-decoration: none; margin-bottom: 16px; }
+      .back-link:hover { text-decoration: underline; }
+
+      /* Stats strip */
+      .stats-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+      .stat-card { background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; }
+      .stat-card .num { font-size: 24px; font-weight: 800; font-family: ui-monospace, SF Mono, Menlo, monospace; }
+      .stat-card .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+      .stat-card.fresh .num { color: var(--success); }
+      .stat-card.fresh .label { color: var(--success); }
+
+      /* Filter row */
+      .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+      .filter-input { flex: 1; min-width: 240px; background: rgba(18,24,38,0.7); border: 1px solid var(--border-strong); border-radius: 8px; padding: 10px 14px; color: var(--text); font-size: 14px; font-family: inherit; }
+      .filter-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139,92,246,0.2); }
+      .filter-input::placeholder { color: var(--text-muted-2); }
+
+      /* Domain chips */
+      .chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+      .chip { background: rgba(18,24,38,0.7); border: 1px solid var(--border-strong); color: var(--text-muted); padding: 5px 12px; border-radius: 9999px; cursor: pointer; font-size: 11px; font-weight: 600; transition: all 0.2s; user-select: none; }
+      .chip:hover { border-color: var(--accent); color: var(--text); }
+      .chip.active { background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-color: transparent; color: white; }
+      .chip .count { opacity: 0.7; margin-left: 4px; }
+
+      /* Per-feed health */
+      .health-strip { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; font-size: 11px; font-family: ui-monospace, monospace; }
+      .health-chip { padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border); background: rgba(18,24,38,0.7); }
+      .health-chip.ok { color: var(--success); border-color: rgba(16,185,129,0.3); }
+      .health-chip.failed { color: var(--danger); border-color: rgba(239,68,68,0.3); }
+      .health-chip.skipped { color: var(--text-muted); }
+
+      /* Entry list */
+      .entry-list { display: flex; flex-direction: column; gap: 12px; }
+      .entry { background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; text-decoration: none; color: var(--text); transition: all 0.2s; display: block; }
+      .entry:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(139,92,246,0.12); }
+      .entry .entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+      .entry .entry-title { font-size: 14px; font-weight: 700; margin: 0; line-height: 1.4; color: var(--text); }
+      .entry .entry-title:hover { color: var(--accent-2); }
+      .entry .entry-meta { font-size: 10px; color: var(--text-muted-2); font-family: ui-monospace, monospace; white-space: nowrap; }
+      .entry .entry-summary { font-size: 12px; color: var(--text-muted); margin: 6px 0 8px; line-height: 1.5; }
+      .entry .entry-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+      .entry .entry-tag { font-size: 10px; padding: 2px 8px; border-radius: 4px; font-family: ui-monospace, monospace; }
+      .entry .tag-journal { background: rgba(139,92,246,0.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.3); }
+      .entry .tag-domain { background: rgba(6,182,212,0.15); color: #67e8f9; border: 1px solid rgba(6,182,212,0.3); }
+
+      .footer { font-size: 11px; color: var(--text-muted-2); margin-top: 32px; font-family: ui-monospace, monospace; text-align: center; }
+      .loading { text-align: center; padding: 48px; color: var(--text-muted); font-size: 14px; }
+      .no-results { text-align: center; padding: 32px; color: var(--text-muted); font-size: 14px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="index.html" class="back-link">← Home</a>
+      <h1>Live Journal Feeds</h1>
+      <p class="lead">Continuous ingestion of 12 scientific journal RSS feeds — Science Daily (chemistry / biology / physics / CS / medicine), Nature, arXiv (cs.LG / q-bio / physics), PLOS Biology + Computational Biology. Auto-refreshed every 6 hours via GitHub Actions cron. Pure client-side — your browser fetches the JSON snapshot and renders it locally.</p>
+
+      <div class="stats-strip" id="stats-strip">
+        <div class="stat-card"><div class="num" id="stat-entries">…</div><div class="label">Total entries</div></div>
+        <div class="stat-card"><div class="num" id="stat-feeds">…</div><div class="label">Feeds polled</div></div>
+        <div class="stat-card fresh"><div class="num" id="stat-fresh">…</div><div class="label">Last refresh</div></div>
+      </div>
+
+      <div class="health-strip" id="health-strip">
+        <!-- Per-feed health chips injected here -->
+      </div>
+
+      <div class="filter-row">
+        <input class="filter-input" id="filter-input" placeholder="🔍 Search feed entries by title, summary, journal, or keyword…" autocomplete="off" />
+      </div>
+      <div class="chip-row" id="chip-row">
+        <span class="chip active" data-domain="ALL">All <span class="count" id="count-all"></span></span>
+        <span class="chip" data-domain="chemistry">Chemistry <span class="count" id="count-chemistry"></span></span>
+        <span class="chip" data-domain="biology">Biology <span class="count" id="count-biology"></span></span>
+        <span class="chip" data-domain="physics">Physics <span class="count" id="count-physics"></span></span>
+        <span class="chip" data-domain="computer-science">Computer Science <span class="count" id="count-computer-science"></span></span>
+        <span class="chip" data-domain="medical">Medical <span class="count" id="count-medical"></span></span>
+        <span class="chip" data-domain="general">General <span class="count" id="count-general"></span></span>
+      </div>
+
+      <div class="entry-list" id="entry-list">
+        <div class="loading">Loading feeds from <code>docs/feeds/all.json</code>…</div>
+      </div>
+
+      <div class="footer">
+        AIHPC Advanced · Phase 51 continuous feed ingestion · GitHub Actions cron every 6h · 12 feeds · last refresh shown above
+      </div>
+    </div>
+
+    <script>
+      var ALL_DATA = null;
+      var activeDomain = 'ALL';
+      var searchTerm = '';
+
+      function timeAgo(isoString) {
+        if (!isoString) return '—';
+        try {
+          var then = new Date(isoString);
+          var now = new Date();
+          var diffMs = now - then;
+          var diffMin = Math.floor(diffMs / 60000);
+          var diffHr = Math.floor(diffMin / 60);
+          var diffDay = Math.floor(diffHr / 24);
+          if (diffMin < 1) return 'just now';
+          if (diffMin < 60) return diffMin + 'm ago';
+          if (diffHr < 24) return diffHr + 'h ago';
+          if (diffDay < 7) return diffDay + 'd ago';
+          return then.toISOString().slice(0, 10);
+        } catch (e) { return isoString; }
+      }
+
+      function escapeHtml(s) {
+        return String(s || '').replace(/[&<>"']/g, function (c) {
+          return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+        });
+      }
+
+      function renderStats() {
+        if (!ALL_DATA) return;
+        document.getElementById('stat-entries').textContent = ALL_DATA.total_entries || 0;
+        document.getElementById('stat-feeds').textContent = (ALL_DATA.feeds_succeeded || 0) + '/' + (ALL_DATA.feeds_polled || 0);
+        document.getElementById('stat-fresh').textContent = timeAgo(ALL_DATA.generated_at);
+        // Per-feed health chips
+        var health = document.getElementById('health-strip');
+        var chips = (ALL_DATA.per_feed_stats || []).map(function (s) {
+          var cls = s.status === 'ok' ? 'ok' : (s.status === 'skipped' ? 'skipped' : 'failed');
+          var label = s.name.split('—')[0].trim();
+          return '<span class="health-chip ' + cls + '" title="' + escapeHtml(s.name) + ' — ' + escapeHtml(s.status) + '">'
+               + label + ': ' + s.entries + '</span>';
+        }).join('');
+        health.innerHTML = chips;
+      }
+
+      function renderDomainCounts() {
+        if (!ALL_DATA) return;
+        var counts = { ALL: ALL_DATA.entries.length };
+        ALL_DATA.entries.forEach(function (e) {
+          var d = e.domain || 'general';
+          counts[d] = (counts[d] || 0) + 1;
+        });
+        ['all', 'chemistry', 'biology', 'physics', 'computer-science', 'medical', 'general'].forEach(function (d) {
+          var el = document.getElementById('count-' + d);
+          if (el) el.textContent = '(' + (counts[d.toUpperCase()] || counts[d] || 0) + ')';
+        });
+      }
+
+      function renderEntries() {
+        if (!ALL_DATA) return;
+        var list = document.getElementById('entry-list');
+        var filtered = ALL_DATA.entries.filter(function (e) {
+          if (activeDomain !== 'ALL' && e.domain !== activeDomain) return false;
+          if (searchTerm) {
+            var t = ((e.title || '') + ' ' + (e.summary || '') + ' ' + (e.journal || '') + ' ' + (e.domain || '')).toLowerCase();
+            if (t.indexOf(searchTerm.toLowerCase()) < 0) return false;
+          }
+          return true;
+        });
+        if (filtered.length === 0) {
+          list.innerHTML = '<div class="no-results">No feed entries match your filter.</div>';
+          return;
+        }
+        // Cap at 200 for performance
+        var shown = filtered.slice(0, 200);
+        list.innerHTML = shown.map(function (e) {
+          var title = escapeHtml(e.title || '(untitled)');
+          var summary = escapeHtml((e.summary || '').slice(0, 240));
+          if (e.summary && e.summary.length > 240) summary += '…';
+          var link = escapeHtml(e.link || '#');
+          var journal = escapeHtml(e.journal || '');
+          var domain = escapeHtml(e.domain || 'general');
+          var pub = escapeHtml(timeAgo(e.published));
+          return '<a class="entry" href="' + link + '" target="_blank" rel="noopener">'
+               + '<div class="entry-head">'
+               + '<h3 class="entry-title">' + title + '</h3>'
+               + '<span class="entry-meta">' + pub + '</span>'
+               + '</div>'
+               + (summary ? '<p class="entry-summary">' + summary + '</p>' : '')
+               + '<div class="entry-tags">'
+               + '<span class="entry-tag tag-journal">' + journal + '</span>'
+               + '<span class="entry-tag tag-domain">' + domain + '</span>'
+               + '</div>'
+               + '</a>';
+        }).join('');
+        if (filtered.length > 200) {
+          list.innerHTML += '<div class="no-results">' + (filtered.length - 200) + ' more entries not shown — refine your filter to see them.</div>';
+        }
+      }
+
+      document.getElementById('filter-input').addEventListener('input', function (e) {
+        searchTerm = e.target.value;
+        renderEntries();
+      });
+      document.querySelectorAll('.chip').forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          document.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+          chip.classList.add('active');
+          activeDomain = chip.dataset.domain;
+          renderEntries();
+        });
+      });
+      // Keyboard shortcut: / to focus search
+      document.addEventListener('keydown', function (e) {
+        if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+          e.preventDefault();
+          document.getElementById('filter-input').focus();
+        }
+      });
+
+      // Fetch the JSON snapshot
+      fetch('feeds/all.json?nocache=' + Date.now())
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function (data) {
+          ALL_DATA = data;
+          renderStats();
+          renderDomainCounts();
+          renderEntries();
+        })
+        .catch(function (err) {
+          document.getElementById('entry-list').innerHTML =
+            '<div class="no-results">Could not load feeds/all.json — ' + escapeHtml(err.message) + '. '
+            + 'The feed cron job runs every 6 hours; the first run produces the JSON snapshot.</div>';
+        });
+    </script>
+  </body>
+</html>

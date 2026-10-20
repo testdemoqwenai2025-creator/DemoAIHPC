@@ -26,6 +26,7 @@ Usage:
   python3 scripts/audit.py --json       # machine-readable output
 """
 import argparse
+import datetime
 import importlib.util
 import json
 import os
@@ -157,6 +158,9 @@ def check_ribbon(html_files):
         os.path.join(DOCS, "component-registry.html"),
         os.path.join(DOCS, "timeline.html"),
         os.path.join(DOCS, "retrospective.html"),
+        os.path.join(DOCS, "404.html"),  # 404 page — standalone, no ribbon
+        os.path.join(DOCS, "concepts.html"),  # Phase 51 auto-generated concepts index
+        os.path.join(DOCS, "feeds.html"),  # Phase 51 live feeds page
     }
     failures = []
     required = ["Platform", "AETHEL Suite", "Science", "Insights"]
@@ -2444,6 +2448,7 @@ def check_no_orphan_html_pages():
     # index pages.
     allowlist_files = {
         os.path.normpath(os.path.join(DOCS, "index.html")),
+        os.path.normpath(os.path.join(DOCS, "404.html")),  # GitHub Pages 404 — not linked from anywhere by design
         os.path.normpath(os.path.join(DOCS, "digest", "archive", "index.html")),
         os.path.normpath(os.path.join(DOCS, "concepts", "digest-index.html")),
     }
@@ -2564,6 +2569,55 @@ def shutil_which(cmd):
         return None
 
 
+def check_feeds_fresh():
+    """Check (Phase 51): docs/feeds/all.json exists and was refreshed
+    within the last 12 hours. Catches the case where the GitHub Actions
+    cron workflow is broken or paused — the audit would fail with
+    'feeds are stale: last refresh was X hours ago' instead of silently
+    serving yesterday's news.
+
+    Skips gracefully (PASSES) when:
+      * docs/feeds/all.json doesn't exist yet (first run, before the
+        cron job has executed)
+      * The generated_at timestamp can't be parsed
+
+    Fails when:
+      * The file is older than 12 hours (cron should run every 6h)
+    """
+    feeds_path = os.path.join(DOCS, "feeds", "all.json")
+    if not os.path.isfile(feeds_path):
+        return CheckResult("feeds_fresh", True,
+                           "docs/feeds/all.json not yet generated — first cron run pending (Phase 51)")
+    try:
+        with open(feeds_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception as e:
+        return CheckResult("feeds_fresh", False,
+                           f"could not parse docs/feeds/all.json: {e}")
+    gen_str = data.get("generated_at")
+    if not gen_str:
+        return CheckResult("feeds_fresh", False,
+                           "docs/feeds/all.json missing generated_at timestamp")
+    try:
+        # Parse ISO 8601 with Z suffix
+        ts = gen_str.replace("Z", "+00:00")
+        gen_dt = datetime.datetime.fromisoformat(ts)
+        now = datetime.datetime.now(gen_dt.tzinfo)
+        age_hours = (now - gen_dt).total_seconds() / 3600
+    except Exception as e:
+        return CheckResult("feeds_fresh", False,
+                           f"could not parse generated_at '{gen_str}': {e}")
+    total = data.get("total_entries", 0)
+    succeeded = data.get("feeds_succeeded", 0)
+    polled = data.get("feeds_polled", 0)
+    if age_hours > 12:
+        return CheckResult("feeds_fresh", False,
+                           f"feeds are stale: last refresh was {age_hours:.1f} hours ago "
+                           f"(should be < 12h — cron runs every 6h)")
+    return CheckResult("feeds_fresh", True,
+                       f"feeds fresh: {total} entries from {succeeded}/{polled} feeds, refreshed {age_hours:.1f}h ago")
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -2672,6 +2726,8 @@ def main():
         # Phase 50+ follow-up: discoverability + orphan pages
         check_index_links_to_platform_pages(),
         check_no_orphan_html_pages(),
+        # Phase 51: continuous journal RSS feeds freshness
+        check_feeds_fresh(),
     ]
     # Live check is appended last so that --skip-live-check can simply
     # drop it without disturbing the index numbering of the other checks.

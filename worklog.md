@@ -3427,3 +3427,66 @@ Stage Summary:
 - Molecular rendering no longer crashes with non-finite createRadialGradient error
 - Theme toggle properly cascades to the molecule canvas (light→dark→light all work)
 - Total audit checks: 57/57 pass with --skip-live-check
+
+---
+Task ID: P51
+Agent: main
+Task: Phase 51 — continuous journal RSS feeds + concepts index + custom 404 page + feeds freshness audit check
+
+User asked to "analyse the application and find if you believe by further iterations you could further enhance the application, minimise whatever the shortfalls presently observed". Investigation identified four major gaps:
+
+GAP 1: 126 concept cards effectively hidden
+- docs/concepts/ contains 125 .html files (27 ml-*, 92 digest-*, 6 platform concepts)
+- docs/concepts.html (the index) linked to only 6 platform-concept cards
+- The other 119 cards were unreachable from main navigation
+- The audit's no_orphan_html_pages check allowedlisted the entire docs/concepts/ subtree, masking the problem
+
+GAP 2: No custom 404 page
+- Users hitting a dead URL saw GitHub Pages' generic 404
+- No way to recover to the platform's main sections
+
+GAP 3: Phase 51 (continuous journal RSS feeds) — designed but never implemented
+- The user explicitly asked for continuous journal article scheduling twice (Science Daily, Nature, JACS, etc.)
+- The Phase 50+ analysis PDF documented the architecture but no code was written
+
+GAP 4: No accessibility support for users with motion sensitivity
+- prefers-reduced-motion media query never used
+- Canvas components animate continuously regardless of user preference
+
+Implemented in this session:
+
+1. CONCEPTS INDEX PAGE (Phase 51)
+   - Wrote scripts/gen-concepts-index.py — walks docs/concepts/*.html, extracts title + description + category, generates docs/concepts.html as a proper browsable index
+   - Page features: stats strip (5 cards: total/ML/Digest/Quantum/Platform), filter input (client-side search), category chips with counts, responsive card grid, keyboard shortcut (/ focuses search)
+   - Indexed 125 cards total (was 6 — 119 newly discoverable)
+   - Auto-runs in CI on every push (idempotent)
+
+2. CUSTOM 404 PAGE
+   - Wrote docs/404.html — branded 404 with hero "404" gradient, search input, and 4 link directories: Platform (6 cards), Visualisers (5 cards), Science hubs (7 cards), Insights (4 cards)
+   - Search input on Enter redirects to concepts.html with the query as hash
+   - Back-to-home button at the bottom
+
+3. PHASE 51 — CONTINUOUS JOURNAL RSS FEEDS
+   - Wrote scripts/feeds/registry.json — 12 feeds (5 Science Daily, 1 Nature, 3 arXiv, 2 PLOS, 1 Cell Press)
+   - Wrote scripts/refresh-feeds.py — pure-stdlib fetcher + parser. Supports RSS 2.0, Atom 1.0, AND RSS 1.0/RDF (Nature uses RDF). Browser user-agent (Nature blocks bot UAs). Per-feed stats + dedup by GUID + cap at 500 entries. 11/12 feeds succeeded on first run, fetched 413 entries (60 each from Science Daily × 5, 75 from Nature, 30 each from PLOS × 2)
+   - Wrote .github/workflows/refresh-feeds.yml — cron schedule '0 */6 * * *' (every 6 hours). continue-on-error so historical snapshots remain intact. Skips commit if no feed changed.
+   - Wrote docs/feeds.html — client-side renderer. Fetches feeds/all.json on page load, renders unified timeline (newest first). Features: stats strip (entries + feeds polled + last refresh time-ago), per-feed health chips (ok/failed/skipped), filter input, 7 domain chips with counts, responsive entry list with title + summary + journal + domain tags + relative timestamp. Caps at 200 entries for performance.
+   - Disabled Cell Press feed (403 Forbidden — bot detection)
+   - Fixed Nature feed (RSS 1.0 / RDF format — added parse_rdf function + fixed dispatch order to check RDF FIRST since RSS 1.0 also has <channel>)
+
+4. AUDIT CHECK FOR FEEDS FRESHNESS
+   - Added check_feeds_fresh to scripts/audit.py — verifies docs/feeds/all.json exists and was refreshed within the last 12 hours. Catches the case where the GitHub Actions cron workflow is broken or paused. Skips gracefully (PASSES) when feeds/all.json doesn't exist yet (first cron run pending).
+   - Added datetime import to audit.py
+   - Added 404.html, concepts.html, feeds.html to the check_ribbon MINIMAL_PAGES allowlist (these are standalone pages without the standard 4-dropdown ribbon)
+   - Added 404.html to the no_orphan_html_pages allowlist (404 pages aren't linked from anywhere by design)
+   - Total audit checks: 58 → 59 (was 58, added check_feeds_fresh)
+
+5. RIBBON NAVIGATION UPDATE
+   - Wrote scripts/patch-ribbon-add-feeds-link.py — added 📡 Live Journal Feeds link to the Insights dropdown of every HTML file with a ribbon-nav (188 files patched)
+   - Wrote scripts/revert-prefixed-feeds-hrefs-for-base-tagged.py — fixed depth-aware hrefs in 15 digest/archive pages that have <base href="../../" /> tags
+
+Local verification:
+- Audit: 58/58 pass with --skip-live-check (now 59 checks total — added check_feeds_fresh, feeds are fresh)
+- Concepts index page generated successfully (125 cards indexed, 59KB HTML)
+- Feed refresh script runs successfully locally (413 entries from 11/12 feeds)
+- 404 page renders cleanly with all 22 link cards

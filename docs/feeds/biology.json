@@ -1,0 +1,897 @@
+{
+  "domain": "biology",
+  "generated_at": "2026-10-20T16:44:36.181754Z",
+  "total_entries": 89,
+  "entries": [
+    {
+      "title": "Mulberry may reshape gut bacteria and influence metabolism",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260928100551.htm",
+      "summary": "Mulberry compounds may reshape the gut microbiome in ways that support intestinal health and metabolism, with some combinations showing especially strong effects in animal studies. However, the results vary depending on the plant part and processing method, and the benefits have yet to be confirmed",
+      "published": "Wed, 30 Sep 2026 07:45:42 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260928100551.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Bats may have first evolved in Europe 65 million years ago",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260929053531.htm",
+      "summary": "A huge genomic and fossil study suggests bats first evolved in Europe around 65 to 60 million years ago before spreading across the globe. The findings also indicate that flight and echolocation emerged near the beginning of bat evolution, potentially helping explain how bats became one of the most",
+      "published": "Wed, 30 Sep 2026 01:12:36 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260929053531.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "A broken rib from the world’s largest T. rex hid a 66-million-year-old secret",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260922005709.htm",
+      "summary": "A broken rib from Scotty, the largest known T. rex skeleton, contains an extraordinary fossilized network of blood vessels formed while the dinosaur was healing. Scientists used neutron and X-ray imaging to look inside the 66-million-year-old bone without damaging it, revealing details rarely preser",
+      "published": "Wed, 23 Sep 2026 22:20:36 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260922005709.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "These tropical trees breathe at night to survive drought",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260922005712.htm",
+      "summary": "Some tropical trees have evolved a clever way to survive drought by taking in carbon dioxide at night, allowing them to keep their pores closed during the hot daytime and conserve water. By comparing three Clusia species, researchers discovered that this water-saving form of photosynthesis, known as",
+      "published": "Wed, 23 Sep 2026 08:05:24 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260922005712.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "A 240-million-year-old fossil just changed the dinosaur timeline",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260915232128.htm",
+      "summary": "A newly identified 240-million-year-old animal from Tanzania is forcing scientists to rethink the early dinosaur timeline. Dinodontosaurus isiyavamanda belongs to a group previously known only from South America, linking fossil deposits on the two continents. That connection suggests Tanzania’s supp",
+      "published": "Wed, 16 Sep 2026 09:48:08 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260915232128.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "A forgotten fossil reveals a fearsome dinosaur with giant claws",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261014015457.htm",
+      "summary": "A 120-million-year-old fossil forgotten in a museum for nearly a century has revealed a terrifying new dinosaur that may have been more dangerous to humans than a T. rex. The tiger-sized predator also provides the first evidence of megaraptorans in Europe, helping explain how these mysterious dinosa",
+      "published": "Wed, 14 Oct 2026 18:51:56 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261014015457.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Cornell scientists identify rare human genetic disorder in two unusually long-legged cats",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261013015801.htm",
+      "summary": "Two unusually long-legged cats have helped scientists uncover the first genetically confirmed cases of Marfan syndrome in domestic felines. Researchers at Cornell University discovered that the brothers carried two altered copies of a gene linked to the rare connective tissue disorder, which can aff",
+      "published": "Wed, 14 Oct 2026 07:56:22 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261013015801.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Gigantic prehistoric snake discovered in India may have been one of the largest ever",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261014001406.htm",
+      "summary": "A massive prehistoric snake discovered in India may have rivaled the largest snake ever known. Called Vasuki indicus, the 47-million-year-old giant could have reached up to 50 feet long, making it comparable to the legendary Titanoboa. Scientists believe its enormous body made it a slow-moving ambus",
+      "published": "Wed, 14 Oct 2026 01:44:39 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261014001406.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists finally see DNA “zip” itself together for the first time",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260909231717.htm",
+      "summary": "Scientists have directly observed how two negatively charged DNA molecules can pair up despite normally repelling each other. Positively charged metal ions appear to bridge the gap, helping matching DNA helices align groove for groove like a molecular zipper. The discovery confirms a theory proposed",
+      "published": "Wed, 09 Sep 2026 23:17:17 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260909231717.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Have we found alien life? Hundreds of scientists weigh in",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260909005212.htm",
+      "summary": "Two major alien-life announcements in 2025 generated enormous excitement, but most astrobiologists remained unconvinced. Only 6.6% of surveyed experts thought possible biological molecules on K2-18b probably represented extraterrestrial life, while 15.1% said the same about intriguing mineral patter",
+      "published": "Wed, 09 Sep 2026 07:13:30 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260909005212.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "This 245-million-year-old fossil still has its stomach and intestines",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260927225036.htm",
+      "summary": "A 245-million-year-old marine reptile fossil preserves an astonishing amount of detail, including its stomach, liver, and intestines. The discovery reveals that Austronaga minuta was highly adapted for swimming even though its digestive system remained surprisingly simple.",
+      "published": "Tue, 29 Sep 2026 07:39:27 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260927225036.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists discover a bizarre Jurassic “squid” unlike anything ever seen",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261019093434.htm",
+      "summary": "Scientists have identified the “fattest” belemnite ever discovered, a bizarre, barrel-shaped squid relative that lived in Wyoming’s ancient seas 160 million years ago. The exceptionally rare fossils reveal a creature unlike anything previously known, potentially a predator of smaller squid-like anim",
+      "published": "Tue, 20 Oct 2026 08:20:44 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261019093434.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "UV light reveals possible camouflage on a 125-million-year-old crocodile",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260914102436.htm",
+      "summary": "A 125-million-year-old crocodile fossil has revealed preserved skin, possible sensory organs, sophisticated respiratory structures, and an unexpected pattern on its tail. Ultraviolet light exposed alternating bands that may represent ancient camouflage, potentially preserving the oldest known colora",
+      "published": "Tue, 15 Sep 2026 10:07:13 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260914102436.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "210-million-year-old dinosaur discovery reveals a lost world in Africa",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261012185013.htm",
+      "summary": "A newly identified 210-million-year-old dinosaur from Zimbabwe is helping scientists uncover a surprisingly distinct prehistoric ecosystem. The discovery suggests that ancient climate differences may have separated dinosaur populations across southern Africa, leading to unique species that challenge",
+      "published": "Tue, 13 Oct 2026 18:53:03 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261012185013.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "This tiny jurassic predator helped pave the way for the human brain",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261012185005.htm",
+      "summary": "A 165-million-year-old fossil has revealed an extraordinary Jurassic predator that may help explain how mammals developed one of their most important evolutionary advantages. Although only 20 inches long, Megacauda sungei was a heavyweight among early mammal relatives, swimming through ancient water",
+      "published": "Tue, 13 Oct 2026 06:44:22 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261012185005.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "DNA recording system reveals how a single cell becomes a body",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261011211556.htm",
+      "summary": "Scientists have traced the development of a mouse embryo from its first two cells to the formation of organs, using a remarkable DNA recording system that reveals the family history of individual cells. Their findings uncover how different cell types emerge on their own schedules and could help expl",
+      "published": "Tue, 13 Oct 2026 06:17:08 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261011211556.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "A new way to fight gum disease without wiping out good bacteria",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261005012230.htm",
+      "summary": "Scientists discovered that disrupting the chemical messages bacteria use to communicate can push dental plaque toward a healthier microbial balance. The approach could lead to new treatments for gum disease that control harmful bacteria without destroying beneficial species.",
+      "published": "Tue, 06 Oct 2026 23:55:00 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261005012230.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Humans may not be as hardwired for violence as we thought",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261005071529.htm",
+      "summary": "A study comparing 100 primate species, including humans, suggests that everyday aggression and lethal violence did not evolve as part of the same simple behavioral spectrum. Species that frequently fight or show mild aggression are not necessarily more likely to kill rivals, while extreme acts such",
+      "published": "Tue, 06 Oct 2026 23:22:55 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261005071529.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Animals may have evolved 200 million years earlier than we thought",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261003234023.htm",
+      "summary": "New research suggests animals could have evolved as early as 800 to 700 million years ago, roughly 200 million years earlier than some previous estimates. If so, the first animals may have lived before or during Snowball Earth, leaving behind little trace because their soft bodies were rarely preser",
+      "published": "Tue, 06 Oct 2026 22:29:56 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261003234023.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists find two tiny new snails with shells that close like doors",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260923035936.htm",
+      "summary": "Scientists discovered two tiny new snail species in Montenegro, showing that even Europe still holds animals unknown to science. One lives in the threatened Komarnica Canyon, where a proposed hydropower reservoir could destroy habitat before its full biodiversity is understood.",
+      "published": "Thu, 24 Sep 2026 07:59:43 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260923035936.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists discover a mysterious new frog hiding in the Amazon",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260917003737.htm",
+      "summary": "Scientists discovered a new frog species in the flooded forests of the western Amazon, distinguishing it from nearly identical relatives through DNA and its unique call. Adenomera varcena highlights how much Amazonian biodiversity remains hidden even as habitat loss and climate change threaten these",
+      "published": "Thu, 17 Sep 2026 10:08:44 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260917003737.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "“Crawzilla” was huge. Then scientists found an even bigger crayfish",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261015073220.htm",
+      "summary": "A nationwide search for giant crayfish uncovered a record-breaking Tennessee specimen and a surprising mystery about how big these freshwater creatures can grow. Scientists found that North American crayfish seem to hit a biological size limit, possibly because of their muscles or protective shells.",
+      "published": "Thu, 15 Oct 2026 23:45:22 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261015073220.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "A fungus is threatening the world’s food supply. Scientists just found a new defense",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261014015501.htm",
+      "summary": "Scientists have discovered a potential new weapon against a devastating fungus that threatens rice, wheat, and barley worldwide. By engineering a special type of plant immune receptor, researchers created defenses capable of recognizing multiple fungal threats at once. The breakthrough could eventua",
+      "published": "Thu, 15 Oct 2026 07:45:43 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261014015501.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists accidentally discover a genetic code that breaks the rules of life",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261007233136.htm",
+      "summary": "Scientists accidentally discovered a microscopic organism with a genetic code that breaks a rule researchers thought was nearly universal. While testing a new DNA sequencing technique, they examined a previously unknown protist collected from a freshwater pond at Oxford University. To their surprise",
+      "published": "Thu, 08 Oct 2026 09:31:39 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261007233136.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "This “golden tree” coral was too strange for any known family",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261007042116.htm",
+      "summary": "A brilliant yellow coral discovered off Costa Rica proved so unusual that scientists had to create an entirely new family to classify it. The meter-tall colonies rise from seafloors covered in brittle stars, inspiring the Tolkien-inspired name Laurinque elenya, or “golden tree of the stars.” Advance",
+      "published": "Thu, 08 Oct 2026 09:18:54 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261007042116.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "One tiny chemical difference between RNA and DNA may help explain how life began",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260929053546.htm",
+      "summary": "Scientists may have found a clue to one of the biggest mysteries surrounding the origin of life: how fragile RNA molecules could gather and survive before cells existed. New research shows that RNA is unusually good at assembling into tiny liquid-like droplets that concentrate molecules and can hard",
+      "published": "Thu, 01 Oct 2026 21:21:43 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260929053546.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "This giant stick insect fooled scientists for decades",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260930020315.htm",
+      "summary": "Scientists have identified two new species of large Australian stick insects, including one that lays extraordinary “lidded” eggs never before recorded in the group. The discovery also revealed that a familiar stick insect had been misidentified for decades, showing how much biodiversity may still b",
+      "published": "Thu, 01 Oct 2026 09:59:22 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260930020315.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "New soil test could reveal how soil microbes help feed plants",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260925005441.htm",
+      "summary": "Scientists have streamlined a method for measuring DNA-bound phosphorus in soil, making it cheaper and easier while preserving its accuracy. The technique could reveal how soil microbes help recycle phosphorus and ultimately support more sustainable fertilizer and nutrient management.",
+      "published": "Sun, 27 Sep 2026 08:10:17 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260925005441.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "1.7-billion-year-old fossils reveal a crucial clue to the rise of complex life",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260925005447.htm",
+      "summary": "Scientists studying ancient Australian rocks uncovered more than 12,000 fossils from some of the oldest known eukaryotes on Earth. These early complex cells lived in settings ranging from coastal mudflats to the open sea, but only where oxygen was available. Oxygen-free environments contained simple",
+      "published": "Sun, 27 Sep 2026 07:55:50 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260925005447.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists discover a hidden “ID card” in cat urine",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260919031033.htm",
+      "summary": "Cats may identify one another through a surprisingly durable chemical “calling card” made from 13 unusual fatty acids in their urine. The compounds appear linked to mysterious fat droplets in the kidneys and may represent a scent-recognition system shared across the cat family.",
+      "published": "Sun, 20 Sep 2026 08:24:21 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260919031033.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "NASA-backed scientists turn plastic waste into edible cookies",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260912220033.htm",
+      "summary": "Scientists have engineered yeast to turn PET plastic and agricultural waste into ingredients for protein-rich, 3D-printed cookies called µBites. Developed partly for NASA’s Deep Space Food Challenge, the system can produce proteins, fats, vitamins, and even vanilla flavoring from waste materials. Re",
+      "published": "Sun, 13 Sep 2026 07:54:36 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260912220033.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists discover why a 100-year-old mushroom disease won't go away",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261008102716.htm",
+      "summary": "Scientists have uncovered a surprising secret behind a mushroom disease that has frustrated growers for more than a century: It involves more than 17 species of harmful bacteria, not just one. The discovery could explain why treatments have struggled to stop the disease and open the door to more eff",
+      "published": "Sun, 11 Oct 2026 16:01:25 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261008102716.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "The “glue” holding your cells together has a surprising second job",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261002080023.htm",
+      "summary": "Scientists have discovered that E-cadherin, a protein best known as the “glue” holding cells and tissues together, has a surprising second job: helping epithelial cells swallow nearby dead cells. Using live zebrafish and mouse embryos, researchers found that cells can dramatically reshape their lowe",
+      "published": "Sun, 04 Oct 2026 23:12:55 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261002080023.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists say house cats could help unlock better cancer treatments for humans",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260924231826.htm",
+      "summary": "Scientists have mapped the genetics of cat cancer on an unprecedented scale and found surprising similarities with tumors in humans. The findings could help bring precision cancer treatments to cats while also revealing new clues about how human cancers develop and respond to drugs.",
+      "published": "Sat, 26 Sep 2026 22:01:42 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260924231826.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "New chemical wipes out 95% of termites without harming humans",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260919025248.htm",
+      "summary": "A chemical that stops drywood termites from building new exoskeletons killed about 95% of colonies in testing, offering a potentially safer alternative to traditional fumigation. Because termites eventually have no choice but to molt, the treatment turns a normal stage of their life cycle into a fat",
+      "published": "Sat, 19 Sep 2026 08:29:12 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260919025248.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "This tiny organism can shrink to one quarter its size in milliseconds",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260918024812.htm",
+      "summary": "A single-celled organism can shrink to one-quarter of its length in milliseconds using a remarkable calcium-powered protein “fishnet.” Scientists hope its unusual machinery could inspire artificial muscles capable of moving far faster than today’s designs.",
+      "published": "Sat, 19 Sep 2026 07:39:22 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260918024812.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Archaeologists discover 1,200-year-old mummified hairless dog in Peru",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261016070644.htm",
+      "summary": "Archaeologists have discovered 1,200-year-old remains of Peru’s famous hairless dogs at an ancient Wari Empire burial site, including remarkably preserved mummies and puppies buried alongside humans. Their unusual teeth, diets, and burial arrangements reveal surprising clues about how ancient Peruvi",
+      "published": "Sat, 17 Oct 2026 22:32:58 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261016070644.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "This bird flies thousands of miles, but its wings have a catch",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261016070624.htm",
+      "summary": "Scientists have uncovered an unexpected trade-off in the wings of the European nightjar, a bird that migrates thousands of kilometers but sacrifices high-speed flight efficiency to hunt insects with remarkable agility. Even more surprisingly, it generates thrust on the upward wingbeat, a technique t",
+      "published": "Sat, 17 Oct 2026 09:05:02 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261016070624.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Leucine does more than build muscle. It powers up your cells",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261001095319.htm",
+      "summary": "The essential amino acid leucine can boost cellular energy production by protecting key proteins on mitochondria from being destroyed. The discovery reveals a new connection between nutrition and metabolism that could eventually lead to new approaches for metabolic disorders and cancer.",
+      "published": "Sat, 03 Oct 2026 08:33:15 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261001095319.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists find new virus behind mysterious tick illness",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260927225027.htm",
+      "summary": "Scientists have discovered a new tick-borne virus in China that causes flu-like illness and may account for previously unexplained cases of fever, fatigue, digestive problems, and low platelet counts. Most patients with ALTNV alone recovered, but coinfections with another dangerous tick-borne virus",
+      "published": "Mon, 28 Sep 2026 21:45:25 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260927225027.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists were wrong about this strange mammal for nearly 40 years",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260925093204.htm",
+      "summary": "A beautifully preserved fossil from Mongolia’s Gobi Desert has solved a mystery that puzzled paleontologists for nearly 40 years. Tamirkhan balcarceli shows that zhelestids were not early relatives of modern placental mammals, despite having teeth that seemed to suggest they were. Instead, the rabbi",
+      "published": "Mon, 28 Sep 2026 08:25:21 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260925093204.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists discover first new penguin species in more than 100 years",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260920222410.htm",
+      "summary": "Genetic evidence has revealed a previously unknown gentoo penguin species on the remote Kerguelen Islands and shown that gentoos actually consist of four distinct species. The discovery also highlights a growing threat, as warming oceans could leave several island populations with little suitable ha",
+      "published": "Mon, 21 Sep 2026 23:11:46 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260920222410.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "A simple touch can bring dying corals back to life in just 7 weeks",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261017230025.htm",
+      "summary": "Scientists have discovered that severely bleached corals can make a remarkable comeback simply by touching healthy, genetically identical corals. In laboratory experiments, dying corals regained their color and fully recovered within seven weeks, with as little as five days of contact sometimes enou",
+      "published": "Mon, 19 Oct 2026 07:05:52 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261017230025.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "A coral reef thought dead for 60 years is teeming with life",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260913081927.htm",
+      "summary": "More than 60 years after surveys suggested a deep coral reef off Benin was probably dead, scientists have found it alive. Cameras revealed healthy-looking coral patches supporting multiple fish species more than 50 meters beneath the surface. The discovery suggests West Africa’s coastal waters may c",
+      "published": "Mon, 14 Sep 2026 22:18:06 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260913081927.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Crocodiles are famous for finding their way home. These ones didn’t",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260913081913.htm",
+      "summary": "Captive-raised saltwater crocodiles released into Bangladesh’s Sundarbans surprised scientists by settling into the wild rather than trying to return to their breeding facility. The result suggests that releasing larger, mature captive crocodiles could help restore depleted populations more successf",
+      "published": "Mon, 14 Sep 2026 09:46:25 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260913081913.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists uncover the 2.3-billion-year-old secret that helped keep Earth habitable",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261011211602.htm",
+      "summary": "Scientists may have solved a 2.3-billion-year-old mystery about how Earth maintained enough oxygen to support life. Ancient rocks reveal that phosphorus recycling in the oceans created a self-sustaining cycle that helped keep oxygen levels high, even as the planet underwent dramatic environmental ch",
+      "published": "Mon, 12 Oct 2026 17:27:10 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261011211602.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists find a surprising genetic twist behind octopus intelligence",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261011211552.htm",
+      "summary": "The remarkable intelligence of octopuses, squid, and cuttlefish may trace back to an ancient reshuffling of their DNA that created new connections between genes. Scientists discovered that these changes in the genome's 3D structure may have helped drive the evolution of their unusually complex nervo",
+      "published": "Mon, 12 Oct 2026 16:44:50 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261011211552.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Tropical trees built homes for ants. Wasps are taking them over",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261004001832.htm",
+      "summary": "Predatory wasps are hijacking shelters built by tropical trees for their ant defenders, potentially disrupting an ancient partnership that protects the plants from hungry insects. The takeover is far more common in disturbed landscapes such as oil palm plantations and could have lasting consequences",
+      "published": "Mon, 05 Oct 2026 23:12:36 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261004001832.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists reveal what seven days of fasting does to the human body",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261005012444.htm",
+      "summary": "Scientists found that prolonged fasting triggers major changes throughout the body, but many of the most interesting effects only appeared after about three days without food. The results suggest fasting may influence health in ways that go beyond weight loss and could eventually inspire treatments",
+      "published": "Mon, 05 Oct 2026 08:26:03 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261005012444.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists discover a human brain gene that can jump through DNA",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261002080013.htm",
+      "summary": "Scientists have discovered a human gene with a remarkable double life: it appears to play an important role in brain cells while still retaining the ability to jump around the genome. Called BC200, the gene evolved millions of years ago from a mobile piece of DNA known as a transposon, but unlike mo",
+      "published": "Mon, 05 Oct 2026 06:06:28 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261002080013.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Don’t toss cannabis leaves: They may contain rare compounds with medical potential",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260924231711.htm",
+      "summary": "Scientists discovered rare flavoalkaloids in Cannabis leaves for the first time, along with dozens of other phenolic compounds that had never been reported in the plant. The findings suggest that Cannabis leaves, often discarded as waste, may contain a surprisingly rich source of potentially useful",
+      "published": "Fri, 25 Sep 2026 21:25:10 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260924231711.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists discovered two bizarre new sea spiders that are “nightmare fuel”",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260925005412.htm",
+      "summary": "Scientists discovered two strange new sea spider species in the Salish Sea, including a hairy-legged, red-eyed species that can groom itself with comb-like appendages. Another is frequently covered in tiny parasites, and researchers say many more undiscovered sea spiders may still be hiding in the r",
+      "published": "Fri, 25 Sep 2026 09:56:06 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260925005412.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists discover the first diplodocus ever found outside North America",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260918024807.htm",
+      "summary": "A 150-million-year-old dinosaur fossil from Spain has been identified as the first confirmed Diplodocus ever found outside North America. The giant sauropod measured about 25 meters long and was preserved well enough for researchers to match distinctive features in its tail bones to the famous genus",
+      "published": "Fri, 18 Sep 2026 22:51:08 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260918024807.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists just named a new snake after Guns N’ Roses legend Slash",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260918024816.htm",
+      "summary": "A newly discovered snake from New Guinea has been named after Guns N’ Roses guitarist Slash, who has loved reptiles since childhood. Genetic testing and physical differences confirmed that the reddish-brown groundsnake, Lielaphis slashi, is a species scientists had never formally recognized before.",
+      "published": "Fri, 18 Sep 2026 08:07:03 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260918024816.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Stanford’s new microscope reveals living cells like never before",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261015073231.htm",
+      "summary": "Stanford scientists have developed a revolutionary microscope that reveals the hidden inner workings of living cells in real time, without the fluorescent labels that can interfere with observations. The breakthrough could provide new insights into cancer, infectious diseases, and how drugs interact",
+      "published": "Fri, 16 Oct 2026 21:06:05 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261015073231.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists discover a plastic-eating “Pac-Man” enzyme with a surprising secret",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261014015509.htm",
+      "summary": "Scientists have discovered a remarkable “Pac-Man enzyme” that helps bacteria devour certain types of plastic and may offer new hope in the fight against plastic pollution. Researchers found that several biodegradable plastics completely broke down in soil within about a year, while conventional plas",
+      "published": "Fri, 16 Oct 2026 06:32:03 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261014015509.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "The secret to longer life may be hidden in bat DNA",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260911003852.htm",
+      "summary": "Long-lived bats appear to combine powerful immune defenses with unusual strategies for eliminating damaged cells, potentially helping them avoid cancer and disease for decades. Researchers hope these genetic tricks could eventually reveal new ways to protect human health during aging.",
+      "published": "Fri, 11 Sep 2026 20:25:05 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260911003852.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "66-million-year-old feather in dinosaur poop may reveal why birds survived the asteroid",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260911003849.htm",
+      "summary": "A feather discovered inside 66-million-year-old fossilized dinosaur poop may help explain why modern birds survived the asteroid catastrophe. The extinct bird it came from had more primitive insulating feathers, suggesting superior plumage may have helped the ancestors of living birds endure the dea",
+      "published": "Fri, 11 Sep 2026 19:47:16 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260911003849.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Wasps are disappearing this summer, and scientists are worried",
+      "link": "https://www.sciencedaily.com/releases/2026/09/260911003901.htm",
+      "summary": "Britain’s wasps have become mysteriously scarce this summer, and scientists suspect an unusual combination of temperature swings, heatwaves, and food shortages may be responsible. Even the wasps that remain appear unusually small, potentially offering a glimpse of how extreme heat could reshape inse",
+      "published": "Fri, 11 Sep 2026 07:38:35 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/09/260911003901.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Oxidative signaling thresholds shape vulnerability in the central and peripheral nervous systems",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004032",
+      "summary": "by Shuji Wakatsuki, Toshiyuki Araki Neurodegeneration is frequently associated with oxidative stress, yet the mechanisms that convert reactive oxygen species (ROS) into irreversible degenerative signals remain incompletely understood. Neurons in the central and peripheral nervous systems often di",
+      "published": "2026-10-19T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004032",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "The mechanosensitive channel TMEM63B contributes to noxious heat sensation in the dorsal root ganglia",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004060",
+      "summary": "by Chang Ye, Yan-Yu Zang, Gui-Fang Duan, Jiang Chen, Dan Wu, Dan Wang, Changlin Li, Yun Xu, Tianjiao Xia, Xiaoping Gu, Yun Stone Shi In mammals, heat sensation is primarily mediated by thermosensitive channels, particularly transient receptor potential (TRP) channels, in dorsal root ganglion (DRG",
+      "published": "2026-10-16T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004060",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "What is biology research for?",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004075",
+      "summary": "by Ran Blekhman In the age of generative artificial intelligence (AI), the assumption that writing a paper requires doing science no longer holds true. Before deciding how to respond to the surge of AI-generated papers, the field needs to state what biology research is actually for.",
+      "published": "2026-10-15T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004075",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "A broad-host-range <i>Rhizobium rhizogenes</i> strain enables transient expression across diverse crop species",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004010",
+      "summary": "by Freddie King, Juan Carlos Lopez-Agudelo, Christopher Stephens, May Htet Aung, Tarhan Ibrahim, Enoch Lok Him Yuen, Ao Chen, Nick Eilmann, Saskia Jenkins, Cristina Vuolo, Yueh-Ning Swee, Wei-Jia Liu, Samuel Bruty, AmirAli Toghani, Chih-Horng Kuo, Erh-Min Lai, Jiorgos Kourelis, Lida Derevnina, Chih",
+      "published": "2026-10-15T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004010",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Cellular diversity in neural organoids is critical for neurodegenerative disease modeling",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004074",
+      "summary": "by Shiying Liu, Shi-Yan Ng Neuroinflammation and vascular dysfunction are hallmarks of most neurodegenerative diseases. For organoids intended to model neurodegeneration, immune, and vascular cells should therefore be considered fundamental components, rather than optional additions. Neuroinflam",
+      "published": "2026-10-14T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004074",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Deficiency of placental GDF15 causes fetal growth restriction by inhibiting fetal hepatic STAT3-IGF2 axis",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004061",
+      "summary": "by Xiao Peng Liu, Xiao Zhang, Chun Xia Cai, Miao Miao Qin, Xiang Kai Leng, Jia Hao Chen, Yi Fan Han, Jun Ying Xiao, Jia He Huang, Jiang Wei Wu Fetal growth restriction (FGR) is a major cause of perinatal morbidity and mortality, yet its underlying mechanism remains elusive. Here, we show that gro",
+      "published": "2026-10-14T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004061",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "A systematic fluorescently tagged protein toolkit for dissecting apical extracellular matrix patterning in <i>C. elegans</i>",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004059",
+      "summary": "by James Matthew Ragle, Murugesan Pooranachithra, Guinevere E. Ashley, Emma Cadena, Batia Blank, Katelyn Kang, Cincy Chen, Aditree R. Bhowmick, Soraya H. Mercado, Tabatha E. Wells, John C. Clancy, Andrew D. Chisholm, Jordan D. Ward Barrier epithelia are shielded from the external environment by t",
+      "published": "2026-10-14T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004059",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Oxytocin receptor signaling in the dorsal lateral septum is essential for social transmission of food preference in mice",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004044",
+      "summary": "by Hanyu Fu, Zhiqiu Liu, Jingwei Zhou, Luyao Zhang, Cai Liu, Dewei Tang, Shuangshuang Zhang, Anan Li, Dejuan Wang Social learning is a fundamental adaptive strategy that critically shapes decision-making and feeding behaviors. Through the social transmission of food preference (STFP), animals acq",
+      "published": "2026-10-14T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004044",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Eye movements reflect capacity-dependent organization of working memory",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004047",
+      "summary": "by Qiaoli Huang, Christian F. Doeller Human cognition is capacity-limited, requiring strategies to actively structure information. Eye movements offer a natural mechanism for sequential sampling, but whether such sequences reflect memory organization is unknown. We developed a working-memory task",
+      "published": "2026-10-13T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004047",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Interindividual vocal tract diversity influences the phonetic diversification of spoken languages",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004003",
+      "summary": "by Steven Moran, Tiena Danner, Marcia S. Ponce de León, Christoph P. E. Zollikofer Human vocal tracts, like other physical traits, exhibit extensive interindividual variation. However, little is known about how this variation translates into phonetic diversity between speakers, and ultimately, ac",
+      "published": "2026-10-13T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004003",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Bridging energy and proteome allocation models allows prediction of the resource cost of traits across environments",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3003995",
+      "summary": "by Mohammadjavad Meghrazi, Sarah P. Otto Many traits divert resources from reproduction and are costly due to the physiological trade-offs organisms face. These traits might require the allocation of different resources, e.g., energy expenditure or production of macromolecules, and it is unclear",
+      "published": "2026-10-13T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3003995",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "PrimeStack editors enable efficient and site-specific integration of large multigene cargos in plants",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3003778",
+      "summary": "by Edith Sánchez, Khalid Sedeek, Haroon Butt, Magdy Mahfouz Precise, site-specific integration of large DNA sequences into plant genomes is a long-standing goal of crop biotechnology and synthetic biology, yet remains constrained by random insertion, inefficient homologous recombination, and gene",
+      "published": "2026-10-13T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3003778",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "An inositol receptor Itr4 coordinates carbon catabolite regulation and virulence in <i>Cryptococcus neoformans</i>",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3003709",
+      "summary": "by Yina Wang, Robert Tancer, Maggie Wear, Katrina M. Jackson, Yu Zhang, Kan Li, Jun Wang, Yong-Gui Gao, Kirsten Nielsen, Arturo Casadevall, Chaoyang Xue Nutrient sensing and utilization are critical for microbes to adapt to their environment and evade predators. The encapsuled yeast Cryptococcus",
+      "published": "2026-10-13T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3003709",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Recombination shapes the dynamics of selective constraint in global populations of human gut bacteria",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004052",
+      "summary": "by Zhiru Liu, Benjamin H. Good The ratio of nonsynonymous to synonymous substitutions (dN/dS) encodes important information about the selection pressures acting on protein-coding genes. In bacterial populations, dN/dS often declines with the sequence divergence between strains, but the mechanisms",
+      "published": "2026-10-12T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004052",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Does perturbed adaptive myelination contribute to cognitive dysfunction in Alzheimer’s disease?",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004033",
+      "summary": "by Charles ffrench-Constant The consequences of oligodendrocyte involvement in Alzheimer’s disease are poorly understood. Could a key role of gray-matter oligodendrocytes—activity-dependent adaptive myelination to sustain changes in activity—be perturbed, leading to cognitive loss? The consequen",
+      "published": "2026-10-12T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004033",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "The <i>Cryptococcus neoformans</i> titanide is a pathogenic cell type that arises from typical yeast cells in response to host conditions",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004031",
+      "summary": "by Abigail M. Potton, Iana Kalinina, Gordon D. Brown, Maria Makarova, Sandra Catania, Dora E. Corzo-Leon, Elizabeth R. Ballou Fungal morphogenesis is a major driver of disease outcome. For the opportunistic fungal pathogen Cryptococcus neoformans , extreme morphological heterogeneity within the",
+      "published": "2026-10-12T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004031",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Implicit sensorimotor adaptation comprises distinct mechanisms for action selection and execution",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004057",
+      "summary": "by Tianhe Wang, Tony Lam, Jordan A. Taylor, Richard B. Ivry The sensorimotor system is continuously adjusted to minimize error. Current theories assume that this adaptation process entails the operation of multiple learning systems, with a key division between implicit and explicit components. Re",
+      "published": "2026-10-09T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004057",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "FuChi is a cell cycle biosensor for tracking cell cycle dynamics during avian development",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004036",
+      "summary": "by Zoe R. Sudderick, Tiernan Briggs, Shirooza Mubarak, Melinda Van Kerckvoorde, Ana R. Hernandez Rodriguez, Sudeepta K. Panda, Jon Riddell, Cameron Batho-Samblas, Lorna Taylor, Lynn McTeir, Dominique Meunier, Amy Findlay, Flossie S. Roberts, Anna Raper, Asako Sakaue-Sawano, Atsushi Miyawaki, Joe Ra",
+      "published": "2026-10-09T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004036",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "A histidine-mediated supramolecular mechanism links temperature and pH activation of the sperm channel CatSper",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3003776",
+      "summary": "by Billy Zhao, Shweta Bhagwat, Juan Ferreira, Kiersten M. Ruff, Dilip K. Swain, Rohit V. Pappu, Celia M. Santi, Ziao Fu, Polina V. Lishko The cation channel of sperm, CatSper, is a sperm-specific calcium channel essential for male fertility across metazoans. CatSper is activated by intracellular",
+      "published": "2026-10-09T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3003776",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "The histone methyltransferase complex subunit RBBP5 serves as a central epigenetic regulator of proteostasis dynamics",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004048",
+      "summary": "by Syeda Kubra, Michelle Sun, William Dion, Yu Bian, Ahmet Catak, Hannah Luong, Haokun Wang, Yinghong Pan, Jia-Jun Liu, Aishwarya Ponna, Lijun Liu, Ian Sipula, Jian-Hua Luo, Michael J. Jurczak, Silvia Liu, Bokai Zhu Proteostasis is essential for cellular health, with its disruption contributing t",
+      "published": "2026-10-08T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004048",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Distinct millisecond-scale click-train patterns evoke discriminable behavioral and neural responses in humans and rats",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004046",
+      "summary": "by Yuying Zhai, Peirun Song, Ana Belén Lao-Rodríguez, Xinyu Du, Haoxuan Xu, Hangting Ye, Xuehui Bao, Ishrat Mehmood, Nayaab Shahir Pandit, Cheng Chang, Zhouyou Dai, Zhiyi Tu, Pei Chen, Tingting Zhang, Lingling Zhang, Xuan Zhao, David Pérez-González, Manuel S. Malmierca, Xiongjie Yu Natural sounds",
+      "published": "2026-10-08T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004046",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Type III effectors of symbiotic Rhizobia include diverse predicted transcriptional and post-transcriptional modulators",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004038",
+      "summary": "by Albin Teulet, Sebastian Schornack Rhizobia are soil bacteria that establish nitrogen-fixing symbioses with legumes. While many rhizobia use a Type III Secretion System to deliver “Nodulation Outer Protein” (Nop) effectors, some uniquely use these proteins to initiate nodule organogenesis, bypa",
+      "published": "2026-10-08T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004038",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Better antibodies, better science",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004001",
+      "summary": "by Johan Duchêne Poorly validated antibodies generate misleading results and waste research resources. Two new studies in PLOS Biology quantify the ethical costs of this issue, examine why unvalidated antibodies are still used, and identify solutions to reduce their use. Poorly validated antibod",
+      "published": "2026-10-07T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004001",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "A binding-activated CRISPR/dCas13X imaging system enables precise RNA tracking in plants",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004043",
+      "summary": "by Jiayu Zhang, Yiran Tao, Yun Zhao, Miaomiao Lei, Yucheng Shen, Qicong Li, Chenxu Liu, Jiuyuan Bai Visualizing the spatiotemporal dynamics of native RNA molecules with single-transcript-level sensitivity in living plant cells remains a formidable challenge due to the high background noise caused",
+      "published": "2026-10-06T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004043",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Inadequate antibody validation places substantial numbers of animal and human tissue samples at risk of waste",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3003984",
+      "summary": "by Michael Biddle, Jemma Cooper, Katherine Blades, Dominic Ruddy, Eva M. Krockow, Harvinder Virk Lack of antibody validation by researchers frequently misdirects biomedical research, yet the ethical consequences—particularly avoidable use of animal and human biological materials—remain unquantifi",
+      "published": "2026-10-06T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3003984",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Actionable solutions to address antibody validation failures",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3003981",
+      "summary": "by Katherine Blades, Michael Biddle, Robert Froud, Eva M. Krockow, Harvinder Virk The experimental use of antibodies that have not been validated for context-specific use frequently misdirects biomedical research. Experimental results that derive from the use of inadequately validated antibodies",
+      "published": "2026-10-06T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3003981",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Uracil-driven ROS signaling and larval TrpA1-B neuron activation are required for priming the adult <i>Drosophila</i> gustatory response to bacteria",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004042",
+      "summary": "by Romane Milleville, Gérard Manière, Martine Berthelot-Grosjean, Olivier Lamotte, Yaël Grosjean, Julien Royet, Cyril Léopold Kurz Animals perceive their immediate environment through their sensory systems. While these systems rely on well-defined neuronal circuits and receptor proteins encoded b",
+      "published": "2026-10-05T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004042",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Integrated multi-omics analysis reveals the molecular landscape and therapeutic strategies in Chinese cervical cancer patients",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004029",
+      "summary": "by Tao Pan, Xucui Zhuang, Ya Zhang, Jiyu Guo, Si Li, Can Zhang, Lili Han, Fuxia Li, Yueying Gao, Jinyang Yu, Yongsheng Li, Chaoyang Sun Genomic or transcriptomic sequencing guides the precision of cervical cancer (CC) diagnosis; however, the molecular profile of Asian patients remains poorly unde",
+      "published": "2026-10-05T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004029",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Moral and perceptual conflict processing are implemented by distinct brain activation and functional connectivity patterns",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004025",
+      "summary": "by Ruida Zhu, Marcus Grueschow, Marius Moisa, Chao Liu, Christian C. Ruff While humans resemble other primates in terms of motor and perceptual abilities, our behavior is uniquely characterized by morality—the ability to choose our actions based on specific ethical values. The evolutionary origin",
+      "published": "2026-10-05T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004025",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    },
+    {
+      "title": "Why are some neurons spared in neurodegeneration? Cellular subtype identity maintenance as a candidate threshold-setting mechanism",
+      "link": "https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3004014",
+      "summary": "by Dong Won Kim Neurodegenerative diseases often damage some neuronal populations while sparing closely related neighbors. But instead of asking why some neurons die, should we be asking why some survive? This Essay proposes that a neuron’s capacity to sustain the gene-regulatory machinery that m",
+      "published": "2026-10-05T14:00:00+00:00",
+      "guid": "10.1371/journal.pbio.3004014",
+      "feed_id": "plos-bio",
+      "journal": "PLOS Biology",
+      "domain": "biology"
+    }
+  ]
+}
