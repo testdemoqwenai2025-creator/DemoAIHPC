@@ -1415,6 +1415,1310 @@
         </div>
       </div>
 
+      <div class="demo-card" id="demo-relu">
+        <div class="card-head" onclick="toggleDemo('demo-relu')">
+          <div>
+            <p class="card-title">ReLU (Rectified Linear Unit) <span style="font-size: 11px; color: var(--text-muted-2); margin-left: 8px;">[Activation Function]</span></p>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="demo-tabs">
+            <button class="active" data-tab="math">Math</button>
+            <button data-tab="code">Code</button>
+            <button data-tab="observe">Observe</button>
+            <button data-tab="data">Data</button>
+          </div>
+          <!-- Math tab -->
+          <div class="demo-tab-content active" data-tab="math">
+            <div class="math-panel">
+              <div class="math-eq">f(x) = max(0, x)</div>
+              <p class="math-plain">ReLU is the most widely used activation function in deep learning. It outputs 0 for negative inputs and the identity for positive inputs. ReLU is computationally cheap (a single max operation), sparse-activating (many neurons output 0), and non-saturating for positive gradients (no vanishing gradient for x &gt; 0).</p>
+            </div>
+            <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+            <div class="derivation-step">
+              <strong>Step 1: Define the function</strong>
+              <div class="step-math">f(x) = max(0, x)</div>
+              <div class="step-explain">For any input x, output 0 if x &lt; 0, else output x. This is a piecewise linear function with a kink at x = 0.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 2: Gradient</strong>
+              <div class="step-math">f&#x27;(x) = 1 if x &gt; 0, 0 if x &lt; 0, undefined at x = 0</div>
+              <div class="step-explain">The gradient is 1 for positive inputs (no vanishing gradient) and 0 for negative inputs (dead neurons). At x = 0, the sub-gradient is used (typically 0 or 1).</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 3: Sparsity</strong>
+              <div class="step-math">P(f(x) = 0) = P(x &lt; 0)</div>
+              <div class="step-explain">For normally-distributed inputs, ~50% of neurons output 0. This sparsity is computationally efficient and acts as implicit regularisation.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 4: Non-saturating</strong>
+              <div class="step-math">For x &gt; 0: f&#x27;(x) = 1 (constant gradient)</div>
+              <div class="step-explain">Unlike sigmoid/tanh whose gradients vanish as x grows, ReLU&#x27;s gradient is 1 for all positive x. This enables training very deep networks.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 5: Dead neuron problem</strong>
+              <div class="step-math">If x &lt; 0 for all training data: f&#x27;(x) = 0, neuron never recovers</div>
+              <div class="step-explain">A &#x27;dead ReLU&#x27; outputs 0 and has 0 gradient for all inputs — it never updates. Mitigated by Leaky ReLU (f(x) = max(αx, x) for small α) or careful initialisation.</div>
+            </div>
+
+            <div class="anim-container" style="margin-top: 16px; padding: 16px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2);">🎬 Animated clip</span>
+                <div style="display: flex; gap: 4px;">
+                  <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">▶</button>
+                  <button class="anim-replay" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">↺</button>
+                  <button class="anim-record" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">⬇</button>
+                  <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
+                </div>
+              </div>
+              <canvas class="anim-derivation" data-derivation-id="ml-relu" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+            </div>
+          </div>
+          <!-- Code tab -->
+          <div class="demo-tab-content" data-tab="code">
+            <div class="code-panel">
+              <div class="lang-toggle">
+                <button data-lang="python" class="active">Python</button>
+                <button data-lang="rust">Rust</button>
+                <button data-lang="go">Go</button>
+                <button data-lang="c">C</button>
+                <button data-lang="elixir">Elixir</button>
+                <button data-lang="scala">Scala</button>
+              </div>
+              <pre class="code-block" id="code-block-relu"></pre>
+            </div>
+          </div>
+          <!-- Observe tab -->
+          <div class="demo-tab-content" data-tab="observe">
+            <div class="observe-subtabs">
+              <button class="active" data-sub="stats">Stats</button>
+              <button data-sub="reports">Reports</button>
+              <button data-sub="graphs">Graphs</button>
+              <button data-sub="summary">Summary</button>
+            </div>
+            <div class="observe-content active" data-sub="stats">
+              <div class="stats-grid">
+                <div class="stat">
+                  <div class="l">Type</div>
+                  <div class="v">Activation</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Range</div>
+                  <div class="v">[0, +inf)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Gradient (x&gt;0)</div>
+                  <div class="v">1 (non-vanishing)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Gradient (x&lt;0)</div>
+                  <div class="v">0 (dead)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Sparsity</div>
+                  <div class="v">~50%</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Cost</div>
+                  <div class="v">1 max op</div>
+                </div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="reports">
+              <div class="report-block">ReLU is the default activation function for hidden layers in modern deep networks. It is non-saturating for positive inputs (gradient = 1), enabling training of very deep networks. ~50% of neurons are inactive (sparse), improving computational efficiency. The main drawback is the &#x27;dead neuron&#x27; problem: if a neuron&#x27;s input is always negative, its gradient is 0 and it never updates.</div>
+            </div>
+            <div class="observe-content" data-sub="graphs">
+              <div class="gts-container" data-gts-id="gts-relu" style="padding: 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;"></div>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2);">Press Play to animate the table values onto the graph. Math annotations appear at inflection points.</div>
+            </div>
+            <div class="observe-content" data-sub="summary">
+              <div class="summary-block"><ul>
+                <li>ReLU = max(0, x) — non-saturating for x &gt; 0, sparse activation.</li>
+                <li>Gradient = 1 for x &gt; 0 (no vanishing gradient); 0 for x &lt; 0 (dead neuron risk).</li>
+                <li>~50% sparsity for normally-distributed inputs — implicit regularisation.</li>
+                <li>Default for hidden layers; Leaky ReLU (f(x) = max(ax, x)) mitigates dead neurons.</li>
+              </ul></div>
+            </div>
+          </div>
+          <!-- Data tab -->
+          <div class="demo-tab-content" data-tab="data">
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">ReLU sample — note the kink at x=0 and the 0-gradient for x&lt;0</p>
+            <div class="data-table-container">
+              <table class="data-table" data-total-rows="7" data-visible-rows="5">
+                <thead><tr><th>x</th><th>f(x)=max(0,x)</th><th>gradient</th></tr></thead>
+                <tbody><tr class="data-table-row"><td>-3.0</td><td>0.0</td><td>0</td></tr>
+<tr class="data-table-row"><td>-1.0</td><td>0.0</td><td>0</td></tr>
+<tr class="data-table-row"><td>-0.5</td><td>0.0</td><td>0</td></tr>
+<tr class="data-table-row"><td>0.0</td><td>0.0</td><td>0/1</td></tr>
+<tr class="data-table-row"><td>0.5</td><td>0.5</td><td>1</td></tr>
+<tr class="data-table-row data-table-hidden"><td>1.0</td><td>1.0</td><td>1</td></tr>
+<tr class="data-table-row data-table-hidden"><td>3.0</td><td>3.0</td><td>1</td></tr></tbody>
+              </table>
+              <button class="data-table-show-more" style="margin-top: 12px; background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="dataTableShowMore(this)">▼ Show more (2 hidden)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card" id="demo-gelu">
+        <div class="card-head" onclick="toggleDemo('demo-gelu')">
+          <div>
+            <p class="card-title">GELU (Gaussian Error Linear Unit) <span style="font-size: 11px; color: var(--text-muted-2); margin-left: 8px;">[Activation Function]</span></p>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="demo-tabs">
+            <button class="active" data-tab="math">Math</button>
+            <button data-tab="code">Code</button>
+            <button data-tab="observe">Observe</button>
+            <button data-tab="data">Data</button>
+          </div>
+          <!-- Math tab -->
+          <div class="demo-tab-content active" data-tab="math">
+            <div class="math-panel">
+              <div class="math-eq">f(x) = x * Phi(x) approx 0.5x(1 + tanh(sqrt(2/pi)(x + 0.044715x^3)))</div>
+              <p class="math-plain">GELU is a smooth approximation of ReLU that multiplies the input by its own Gaussian CDF. For large positive x, f(x) approx x (like ReLU). For large negative x, f(x) approx 0 (like ReLU). Near x=0, GELU is smooth (no kink), giving it better gradient properties than ReLU.</p>
+            </div>
+            <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+            <div class="derivation-step">
+              <strong>Step 1: Gaussian CDF</strong>
+              <div class="step-math">Phi(x) = integral from -inf to x of (1/sqrt(2*pi)) * exp(-t^2/2) dt</div>
+              <div class="step-explain">Phi(x) is the cumulative distribution function of the standard normal. It is 0 for very negative x, 0.5 at x=0, and 1 for very positive x.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 2: GELU definition</strong>
+              <div class="step-math">f(x) = x * Phi(x)</div>
+              <div class="step-explain">Multiply the input by its own CDF. For x &gt;&gt; 0: Phi approx 1, so f(x) approx x. For x &lt;&lt; 0: Phi approx 0, so f(x) approx 0. Near x=0: smooth transition.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 3: Tanh approximation</strong>
+              <div class="step-math">Phi(x) approx 0.5 * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3)))</div>
+              <div class="step-explain">The exact Phi requires the error function (erf). The tanh approximation is accurate to within 0.0001 and is much faster to compute.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 4: Gradient</strong>
+              <div class="step-math">f&#x27;(x) = Phi(x) + x * phi(x)</div>
+              <div class="step-explain">where phi(x) is the Gaussian PDF. The gradient is smooth everywhere (no kink), and non-zero for x &lt; 0 (unlike ReLU).</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 5: Why it works</strong>
+              <div class="step-math">GELU is dropout-like (probabilistic) + ReLU-like (deterministic)</div>
+              <div class="step-explain">GELU can be interpreted as &#x27;ReLU with soft gating&#x27;: instead of a hard 0/1 gate, it uses a probabilistic gate Phi(x). This smoothness improves generalisation and is the default activation in BERT, GPT, and most transformer models.</div>
+            </div>
+
+            <div class="anim-container" style="margin-top: 16px; padding: 16px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2);">🎬 Animated clip</span>
+                <div style="display: flex; gap: 4px;">
+                  <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">▶</button>
+                  <button class="anim-replay" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">↺</button>
+                  <button class="anim-record" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">⬇</button>
+                  <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
+                </div>
+              </div>
+              <canvas class="anim-derivation" data-derivation-id="ml-gelu" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+            </div>
+          </div>
+          <!-- Code tab -->
+          <div class="demo-tab-content" data-tab="code">
+            <div class="code-panel">
+              <div class="lang-toggle">
+                <button data-lang="python" class="active">Python</button>
+                <button data-lang="rust">Rust</button>
+                <button data-lang="go">Go</button>
+                <button data-lang="c">C</button>
+                <button data-lang="elixir">Elixir</button>
+                <button data-lang="scala">Scala</button>
+              </div>
+              <pre class="code-block" id="code-block-gelu"></pre>
+            </div>
+          </div>
+          <!-- Observe tab -->
+          <div class="demo-tab-content" data-tab="observe">
+            <div class="observe-subtabs">
+              <button class="active" data-sub="stats">Stats</button>
+              <button data-sub="reports">Reports</button>
+              <button data-sub="graphs">Graphs</button>
+              <button data-sub="summary">Summary</button>
+            </div>
+            <div class="observe-content active" data-sub="stats">
+              <div class="stats-grid">
+                <div class="stat">
+                  <div class="l">Type</div>
+                  <div class="v">Activation</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Range</div>
+                  <div class="v">(-0.17, +inf)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Smooth</div>
+                  <div class="v">Yes (C-infinity)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Gradient (x&lt;0)</div>
+                  <div class="v">Non-zero</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Used in</div>
+                  <div class="v">BERT, GPT, transformers</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Approximation</div>
+                  <div class="v">tanh (err &lt; 1e-4)</div>
+                </div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="reports">
+              <div class="report-block">GELU is the default activation in transformer models (BERT, GPT, ViT). It is a smooth approximation of ReLU that multiplies x by its Gaussian CDF Phi(x). The tanh approximation is accurate to within 1e-4 and avoids the expensive erf function. GELU&#x27;s smoothness (no kink at 0) and non-zero gradient for x &lt; 0 improve generalisation compared to ReLU.</div>
+            </div>
+            <div class="observe-content" data-sub="graphs">
+              <div class="gts-container" data-gts-id="gts-gelu" style="padding: 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;"></div>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2);">Press Play to animate the table values onto the graph. Math annotations appear at inflection points.</div>
+            </div>
+            <div class="observe-content" data-sub="summary">
+              <div class="summary-block"><ul>
+                <li>GELU = x * Phi(x) approx 0.5x(1 + tanh(c(x + 0.044715x^3))) — smooth ReLU.</li>
+                <li>Smooth everywhere (no kink at 0) — better gradient flow than ReLU.</li>
+                <li>Non-zero gradient for x &lt; 0 — no dead neuron problem.</li>
+                <li>Default in BERT, GPT, ViT — the activation of choice for transformers.</li>
+              </ul></div>
+            </div>
+          </div>
+          <!-- Data tab -->
+          <div class="demo-tab-content" data-tab="data">
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">GELU vs ReLU — note GELU is slightly negative for x&lt;0 (smooth) vs ReLU&#x27;s hard zero</p>
+            <div class="data-table-container">
+              <table class="data-table" data-total-rows="7" data-visible-rows="5">
+                <thead><tr><th>x</th><th>GELU(x)</th><th>ReLU(x)</th><th>gradient</th></tr></thead>
+                <tbody><tr class="data-table-row"><td>-3.0</td><td>-0.0036</td><td>0.0</td><td>0.001</td></tr>
+<tr class="data-table-row"><td>-1.0</td><td>-0.1587</td><td>0.0</td><td>0.366</td></tr>
+<tr class="data-table-row"><td>-0.5</td><td>-0.1543</td><td>0.0</td><td>0.532</td></tr>
+<tr class="data-table-row"><td>0.0</td><td>0.0</td><td>0.0</td><td>0.5</td></tr>
+<tr class="data-table-row"><td>0.5</td><td>0.3457</td><td>0.5</td><td>0.532</td></tr>
+<tr class="data-table-row data-table-hidden"><td>1.0</td><td>0.8413</td><td>1.0</td><td>0.366</td></tr>
+<tr class="data-table-row data-table-hidden"><td>3.0</td><td>2.996</td><td>3.0</td><td>0.999</td></tr></tbody>
+              </table>
+              <button class="data-table-show-more" style="margin-top: 12px; background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="dataTableShowMore(this)">▼ Show more (2 hidden)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card" id="demo-swiglu">
+        <div class="card-head" onclick="toggleDemo('demo-swiglu')">
+          <div>
+            <p class="card-title">SwiGLU (Swish-Gated Linear Unit) <span style="font-size: 11px; color: var(--text-muted-2); margin-left: 8px;">[Activation Function]</span></p>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="demo-tabs">
+            <button class="active" data-tab="math">Math</button>
+            <button data-tab="code">Code</button>
+            <button data-tab="observe">Observe</button>
+            <button data-tab="data">Data</button>
+          </div>
+          <!-- Math tab -->
+          <div class="demo-tab-content active" data-tab="math">
+            <div class="math-panel">
+              <div class="math-eq">f(x, W) = Swish(x) * (xW + b),  where Swish(x) = x * sigmoid(x)</div>
+              <p class="math-plain">SwiGLU is a gated activation used in modern LLMs (LLaMA, PaLM 2). It combines the Swish activation (x * sigma(x)) with a learned linear projection (xW + b). The Swish part acts as a smooth gate that controls how much of the linear projection passes through. SwiGLU outperforms ReLU and GELU in large language models.</p>
+            </div>
+            <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+            <div class="derivation-step">
+              <strong>Step 1: Swish activation</strong>
+              <div class="step-math">Swish(x) = x * sigmoid(x) = x / (1 + exp(-x))</div>
+              <div class="step-explain">Swish is a smooth, non-monotonic activation. For x &gt;&gt; 0: Swish approx x (linear). For x &lt;&lt; 0: Swish approx 0. Near x = 0: Swish has a slight dip (non-monotonic), which helps with feature selection.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 2: Gated linear unit</strong>
+              <div class="step-math">GLU(x, W) = sigmoid(xW) * (xV)</div>
+              <div class="step-explain">GLU gates a linear projection xV by a sigmoid gate sigma(xW). SwiGLU replaces the sigmoid gate with Swish: SwiGLU = Swish(xW) * (xV).</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 3: SwiGLU definition</strong>
+              <div class="step-math">SwiGLU(x, W, V) = Swish(xW) * (xV)</div>
+              <div class="step-explain">Two learned projections: W (gate) and V (value). The Swish gate controls how much of xV passes through. The gate is smooth (unlike GLU&#x27;s hard sigmoid).</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 4: Gradient</strong>
+              <div class="step-math">d(SwGLU)/d(xV) = Swish(xW)</div>
+              <div class="step-explain">The gradient w.r.t. the value path is the Swish gate — smooth and non-zero for all x. The gradient w.r.t. the gate path involves Swish&#x27; = sigma(x) + x * sigma&#x27;(x).</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 5: Performance</strong>
+              <div class="step-math">SwiGLU &gt; GELU &gt; ReLU in LLM training (LLaMA, PaLM 2)</div>
+              <div class="step-explain">Empirically, SwiGLU gives better perplexity than GELU and ReLU in transformer LLMs. The non-monotonicity of Swish + the learned gate provides richer feature selection. Used in LLaMA-2/3, PaLM 2, and Mistral.</div>
+            </div>
+
+            <div class="anim-container" style="margin-top: 16px; padding: 16px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2);">🎬 Animated clip</span>
+                <div style="display: flex; gap: 4px;">
+                  <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">▶</button>
+                  <button class="anim-replay" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">↺</button>
+                  <button class="anim-record" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">⬇</button>
+                  <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
+                </div>
+              </div>
+              <canvas class="anim-derivation" data-derivation-id="ml-swiglu" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+            </div>
+          </div>
+          <!-- Code tab -->
+          <div class="demo-tab-content" data-tab="code">
+            <div class="code-panel">
+              <div class="lang-toggle">
+                <button data-lang="python" class="active">Python</button>
+                <button data-lang="rust">Rust</button>
+                <button data-lang="go">Go</button>
+                <button data-lang="c">C</button>
+                <button data-lang="elixir">Elixir</button>
+                <button data-lang="scala">Scala</button>
+              </div>
+              <pre class="code-block" id="code-block-swiglu"></pre>
+            </div>
+          </div>
+          <!-- Observe tab -->
+          <div class="demo-tab-content" data-tab="observe">
+            <div class="observe-subtabs">
+              <button class="active" data-sub="stats">Stats</button>
+              <button data-sub="reports">Reports</button>
+              <button data-sub="graphs">Graphs</button>
+              <button data-sub="summary">Summary</button>
+            </div>
+            <div class="observe-content active" data-sub="stats">
+              <div class="stats-grid">
+                <div class="stat">
+                  <div class="l">Type</div>
+                  <div class="v">Gated activation</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Gate</div>
+                  <div class="v">Swish (smooth)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Non-monotonic</div>
+                  <div class="v">Yes (slight dip)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Used in</div>
+                  <div class="v">LLaMA-2/3, PaLM 2</div>
+                </div>
+                <div class="stat">
+                  <div class="l">vs GELU</div>
+                  <div class="v">Better perplexity</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Params</div>
+                  <div class="v">2x (W + V)</div>
+                </div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="reports">
+              <div class="report-block">SwiGLU is the state-of-the-art activation for LLM feed-forward layers. It combines a Swish gate (x * sigma(x)) with a learned value projection (xV). The Swish gate is smooth and non-monotonic, providing richer feature selection. Empirically outperforms GELU and ReLU in LLaMA-2/3, PaLM 2, and Mistral.</div>
+            </div>
+            <div class="observe-content" data-sub="graphs">
+              <div class="gts-container" data-gts-id="gts-swiglu" style="padding: 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;"></div>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2);">Press Play to animate the table values onto the graph. Math annotations appear at inflection points.</div>
+            </div>
+            <div class="observe-content" data-sub="summary">
+              <div class="summary-block"><ul>
+                <li>SwiGLU = Swish(xW) * (xV) — smooth gated activation for LLMs.</li>
+                <li>Swish(x) = x * sigma(x) — non-monotonic, smooth, non-zero gradient for x &lt; 0.</li>
+                <li>Two learned projections (W = gate, V = value) — 2x params vs ReLU FFN.</li>
+                <li>Default in LLaMA-2/3, PaLM 2, Mistral — outperforms GELU + ReLU empirically.</li>
+              </ul></div>
+            </div>
+          </div>
+          <!-- Data tab -->
+          <div class="demo-tab-content" data-tab="data">
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">SwiGLU sample — Swish gate is slightly negative for x in [-3, 0] (non-monotonic dip)</p>
+            <div class="data-table-container">
+              <table class="data-table" data-total-rows="6" data-visible-rows="5">
+                <thead><tr><th>x</th><th>Swish(x)</th><th>sigmoid(x)</th><th>gate * value (if W=1, V=2)</th></tr></thead>
+                <tbody><tr class="data-table-row"><td>-3.0</td><td>-0.1427</td><td>0.0474</td><td>-0.2854</td></tr>
+<tr class="data-table-row"><td>-1.0</td><td>-0.2689</td><td>0.2689</td><td>-0.5378</td></tr>
+<tr class="data-table-row"><td>0.0</td><td>0.0</td><td>0.5</td><td>0.0</td></tr>
+<tr class="data-table-row"><td>0.5</td><td>0.3114</td><td>0.6225</td><td>0.3114</td></tr>
+<tr class="data-table-row"><td>1.0</td><td>0.7311</td><td>0.7311</td><td>1.4621</td></tr>
+<tr class="data-table-row data-table-hidden"><td>3.0</td><td>2.8577</td><td>0.9526</td><td>17.146</td></tr></tbody>
+              </table>
+              <button class="data-table-show-more" style="margin-top: 12px; background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="dataTableShowMore(this)">▼ Show more (1 hidden)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card" id="demo-sgd">
+        <div class="card-head" onclick="toggleDemo('demo-sgd')">
+          <div>
+            <p class="card-title">SGD (Stochastic Gradient Descent) <span style="font-size: 11px; color: var(--text-muted-2); margin-left: 8px;">[Optimiser]</span></p>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="demo-tabs">
+            <button class="active" data-tab="math">Math</button>
+            <button data-tab="code">Code</button>
+            <button data-tab="observe">Observe</button>
+            <button data-tab="data">Data</button>
+          </div>
+          <!-- Math tab -->
+          <div class="demo-tab-content active" data-tab="math">
+            <div class="math-panel">
+              <div class="math-eq">theta &lt;- theta - eta * grad_L(theta)</div>
+              <p class="math-plain">SGD is the simplest optimiser: update parameters by stepping against the gradient, scaled by the learning rate eta. The &#x27;stochastic&#x27; part comes from using mini-batches (not the full dataset) to estimate the gradient, introducing noise that helps escape local minima.</p>
+            </div>
+            <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+            <div class="derivation-step">
+              <strong>Step 1: Loss gradient</strong>
+              <div class="step-math">grad = dL/d(theta)</div>
+              <div class="step-explain">Compute the gradient of the loss w.r.t. parameters. In practice, this is done on a mini-batch of data (not the full dataset), introducing stochastic noise.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 2: Update rule</strong>
+              <div class="step-math">theta_new = theta - eta * grad</div>
+              <div class="step-explain">Step against the gradient by a distance proportional to eta (the learning rate). eta controls the step size; too large = unstable, too small = slow convergence.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 3: Learning rate schedule</strong>
+              <div class="step-math">eta_t = eta_0 / (1 + decay * t)</div>
+              <div class="step-explain">Decay the learning rate over time to allow large steps early (fast convergence) and small steps later (fine-tuning). Common schedules: step decay, cosine annealing, warmup + constant.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 4: Mini-batch noise</strong>
+              <div class="step-math">E[grad_batch] = grad_true, Var[grad_batch] ~ 1/batch_size</div>
+              <div class="step-explain">The mini-batch gradient is an unbiased estimator of the true gradient, with variance inversely proportional to batch size. The noise helps escape saddle points and shallow local minima.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 5: Convergence</strong>
+              <div class="step-math">For convex L: O(1/sqrt(t)) with eta = 1/sqrt(t)</div>
+              <div class="step-explain">SGD converges to the global minimum for convex losses. For non-convex (deep networks), convergence is not guaranteed, but SGD reliably finds good local minima in practice.</div>
+            </div>
+
+            <div class="anim-container" style="margin-top: 16px; padding: 16px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2);">🎬 Animated clip</span>
+                <div style="display: flex; gap: 4px;">
+                  <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">▶</button>
+                  <button class="anim-replay" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">↺</button>
+                  <button class="anim-record" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">⬇</button>
+                  <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
+                </div>
+              </div>
+              <canvas class="anim-derivation" data-derivation-id="ml-sgd" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+            </div>
+          </div>
+          <!-- Code tab -->
+          <div class="demo-tab-content" data-tab="code">
+            <div class="code-panel">
+              <div class="lang-toggle">
+                <button data-lang="python" class="active">Python</button>
+                <button data-lang="rust">Rust</button>
+                <button data-lang="go">Go</button>
+                <button data-lang="c">C</button>
+                <button data-lang="elixir">Elixir</button>
+                <button data-lang="scala">Scala</button>
+              </div>
+              <pre class="code-block" id="code-block-sgd"></pre>
+            </div>
+          </div>
+          <!-- Observe tab -->
+          <div class="demo-tab-content" data-tab="observe">
+            <div class="observe-subtabs">
+              <button class="active" data-sub="stats">Stats</button>
+              <button data-sub="reports">Reports</button>
+              <button data-sub="graphs">Graphs</button>
+              <button data-sub="summary">Summary</button>
+            </div>
+            <div class="observe-content active" data-sub="stats">
+              <div class="stats-grid">
+                <div class="stat">
+                  <div class="l">Type</div>
+                  <div class="v">First-order</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Momentum</div>
+                  <div class="v">None</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Adaptive</div>
+                  <div class="v">No</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Memory</div>
+                  <div class="v">O(1) per param</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Convergence</div>
+                  <div class="v">O(1/sqrt(t)) convex</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Default eta</div>
+                  <div class="v">0.01</div>
+                </div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="reports">
+              <div class="report-block">SGD is the simplest optimiser: theta &lt;- theta - eta * grad. The learning rate eta controls the step size. Mini-batch noise (variance ~1/batch_size) helps escape saddle points. For convex losses, SGD converges at rate O(1/sqrt(t)) with eta = c/sqrt(t). For deep networks, SGD reliably finds good local minima but converges slowly near flat regions — momentum (SGD+Momentum) or adaptive methods (Adam) are preferred.</div>
+            </div>
+            <div class="observe-content" data-sub="graphs">
+              <div class="gts-container" data-gts-id="gts-sgd" style="padding: 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;"></div>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2);">Press Play to animate the table values onto the graph. Math annotations appear at inflection points.</div>
+            </div>
+            <div class="observe-content" data-sub="summary">
+              <div class="summary-block"><ul>
+                <li>SGD = theta - eta * grad — the simplest optimiser.</li>
+                <li>Mini-batch noise (var ~1/B) helps escape saddle points.</li>
+                <li>O(1/sqrt(t)) convergence for convex losses with eta = c/sqrt(t).</li>
+                <li>For deep networks: reliable but slow near flat regions — use Momentum or Adam.</li>
+              </ul></div>
+            </div>
+          </div>
+          <!-- Data tab -->
+          <div class="demo-tab-content" data-tab="data">
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">SGD trajectory — theta converges to 1.15 as the gradient -&gt; 0</p>
+            <div class="data-table-container">
+              <table class="data-table" data-total-rows="6" data-visible-rows="5">
+                <thead><tr><th>t</th><th>theta</th><th>grad</th><th>eta</th><th>theta_new</th></tr></thead>
+                <tbody><tr class="data-table-row"><td>0</td><td>1.00</td><td>-0.50</td><td>0.10</td><td>1.05</td></tr>
+<tr class="data-table-row"><td>1</td><td>1.05</td><td>-0.40</td><td>0.10</td><td>1.09</td></tr>
+<tr class="data-table-row"><td>2</td><td>1.09</td><td>-0.30</td><td>0.10</td><td>1.12</td></tr>
+<tr class="data-table-row"><td>3</td><td>1.12</td><td>-0.20</td><td>0.10</td><td>1.14</td></tr>
+<tr class="data-table-row"><td>4</td><td>1.14</td><td>-0.10</td><td>0.10</td><td>1.15</td></tr>
+<tr class="data-table-row data-table-hidden"><td>5</td><td>1.15</td><td>0.00</td><td>0.10</td><td>1.15</td></tr></tbody>
+              </table>
+              <button class="data-table-show-more" style="margin-top: 12px; background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="dataTableShowMore(this)">▼ Show more (1 hidden)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card" id="demo-adam">
+        <div class="card-head" onclick="toggleDemo('demo-adam')">
+          <div>
+            <p class="card-title">Adam (Adaptive Moment Estimation) <span style="font-size: 11px; color: var(--text-muted-2); margin-left: 8px;">[Optimiser]</span></p>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="demo-tabs">
+            <button class="active" data-tab="math">Math</button>
+            <button data-tab="code">Code</button>
+            <button data-tab="observe">Observe</button>
+            <button data-tab="data">Data</button>
+          </div>
+          <!-- Math tab -->
+          <div class="demo-tab-content active" data-tab="math">
+            <div class="math-panel">
+              <div class="math-eq">m_t = beta1*m + (1-beta1)*g;  v_t = beta2*v + (1-beta2)*g^2;  theta &lt;- theta - eta * m_hat / (sqrt(v_hat) + eps)</div>
+              <p class="math-plain">Adam combines momentum (exponential moving average of gradients, like SGD+Momentum) with RMSProp (exponential moving average of squared gradients). The ratio m/sqrt(v) gives an adaptive per-parameter learning rate: parameters with large consistent gradients get smaller steps, parameters with small or rare gradients get larger steps.</p>
+            </div>
+            <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+            <div class="derivation-step">
+              <strong>Step 1: First moment (momentum)</strong>
+              <div class="step-math">m_t = beta1 * m_{t-1} + (1 - beta1) * g_t</div>
+              <div class="step-explain">Exponential moving average of gradients. beta1 = 0.9 (default). Smooths noisy gradients — acts as momentum.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 2: Second moment (RMSProp)</strong>
+              <div class="step-math">v_t = beta2 * v_{t-1} + (1 - beta2) * g_t^2</div>
+              <div class="step-explain">Exponential moving average of squared gradients. beta2 = 0.999 (default). Estimates the per-parameter gradient magnitude.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 3: Bias correction</strong>
+              <div class="step-math">m_hat = m_t / (1 - beta1^t);  v_hat = v_t / (1 - beta2^t)</div>
+              <div class="step-explain">The EMA is biased toward 0 in early iterations (since m_0 = v_0 = 0). Dividing by (1 - beta^t) corrects this — important for the first few hundred steps.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 4: Update</strong>
+              <div class="step-math">theta &lt;- theta - eta * m_hat / (sqrt(v_hat) + eps)</div>
+              <div class="step-explain">The step size is eta * (smoothed gradient) / (smoothed gradient magnitude). This gives large steps for rare-but-consistent gradients and small steps for frequent-but-noisy gradients. eps = 1e-8 prevents division by zero.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 5: Default hyperparameters</strong>
+              <div class="step-math">eta=1e-3, beta1=0.9, beta2=0.999, eps=1e-8</div>
+              <div class="step-explain">Adam&#x27;s defaults work well for most problems without tuning. This is a key practical advantage over SGD (which requires careful eta tuning + schedule).</div>
+            </div>
+
+            <div class="anim-container" style="margin-top: 16px; padding: 16px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2);">🎬 Animated clip</span>
+                <div style="display: flex; gap: 4px;">
+                  <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">▶</button>
+                  <button class="anim-replay" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">↺</button>
+                  <button class="anim-record" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">⬇</button>
+                  <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
+                </div>
+              </div>
+              <canvas class="anim-derivation" data-derivation-id="ml-adam" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+            </div>
+          </div>
+          <!-- Code tab -->
+          <div class="demo-tab-content" data-tab="code">
+            <div class="code-panel">
+              <div class="lang-toggle">
+                <button data-lang="python" class="active">Python</button>
+                <button data-lang="rust">Rust</button>
+                <button data-lang="go">Go</button>
+                <button data-lang="c">C</button>
+                <button data-lang="elixir">Elixir</button>
+                <button data-lang="scala">Scala</button>
+              </div>
+              <pre class="code-block" id="code-block-adam"></pre>
+            </div>
+          </div>
+          <!-- Observe tab -->
+          <div class="demo-tab-content" data-tab="observe">
+            <div class="observe-subtabs">
+              <button class="active" data-sub="stats">Stats</button>
+              <button data-sub="reports">Reports</button>
+              <button data-sub="graphs">Graphs</button>
+              <button data-sub="summary">Summary</button>
+            </div>
+            <div class="observe-content active" data-sub="stats">
+              <div class="stats-grid">
+                <div class="stat">
+                  <div class="l">Type</div>
+                  <div class="v">Adaptive + momentum</div>
+                </div>
+                <div class="stat">
+                  <div class="l">beta1 (momentum)</div>
+                  <div class="v">0.9</div>
+                </div>
+                <div class="stat">
+                  <div class="l">beta2 (RMSProp)</div>
+                  <div class="v">0.999</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Memory</div>
+                  <div class="v">O(2) per param (m+v)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Default eta</div>
+                  <div class="v">1e-3</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Bias correction</div>
+                  <div class="v">Yes (1-beta^t)</div>
+                </div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="reports">
+              <div class="report-block">Adam combines momentum (first moment, beta1=0.9) with RMSProp (second moment, beta2=0.999). The ratio m/sqrt(v) gives adaptive per-parameter learning rates. Bias correction (1-beta^t) is critical for early iterations. Adam&#x27;s defaults work well without tuning — a major practical advantage over SGD. The most popular optimiser for deep learning (2015-2024).</div>
+            </div>
+            <div class="observe-content" data-sub="graphs">
+              <div class="gts-container" data-gts-id="gts-adam" style="padding: 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;"></div>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2);">Press Play to animate the table values onto the graph. Math annotations appear at inflection points.</div>
+            </div>
+            <div class="observe-content" data-sub="summary">
+              <div class="summary-block"><ul>
+                <li>Adam = momentum (beta1=0.9) + RMSProp (beta2=0.999) + bias correction.</li>
+                <li>Adaptive per-parameter step size: eta * m_hat / sqrt(v_hat).</li>
+                <li>Defaults (eta=1e-3, beta1=0.9, beta2=0.999) work without tuning.</li>
+                <li>Most popular optimiser 2015-2024; AdamW (decoupled weight decay) is the successor.</li>
+              </ul></div>
+            </div>
+          </div>
+          <!-- Data tab -->
+          <div class="demo-tab-content" data-tab="data">
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Adam convergence — m and v stabilise after ~100 steps; step size -&gt; eta * 1.0</p>
+            <div class="data-table-container">
+              <table class="data-table" data-total-rows="5" data-visible-rows="5">
+                <thead><tr><th>t</th><th>g (grad)</th><th>m (1st)</th><th>v (2nd)</th><th>m_hat/sqrt(v_hat)</th><th>step</th></tr></thead>
+                <tbody><tr class="data-table-row"><td>1</td><td>0.5</td><td>0.050</td><td>0.001</td><td>1.000</td><td>0.001</td></tr>
+<tr class="data-table-row"><td>10</td><td>0.5</td><td>0.299</td><td>0.006</td><td>1.213</td><td>0.001</td></tr>
+<tr class="data-table-row"><td>50</td><td>0.5</td><td>0.500</td><td>0.024</td><td>1.020</td><td>0.001</td></tr>
+<tr class="data-table-row"><td>100</td><td>0.5</td><td>0.500</td><td>0.025</td><td>1.000</td><td>0.001</td></tr>
+<tr class="data-table-row"><td>200</td><td>0.5</td><td>0.500</td><td>0.025</td><td>1.000</td><td>0.001</td></tr></tbody>
+              </table>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card" id="demo-adamw">
+        <div class="card-head" onclick="toggleDemo('demo-adamw')">
+          <div>
+            <p class="card-title">AdamW (Adam with Decoupled Weight Decay) <span style="font-size: 11px; color: var(--text-muted-2); margin-left: 8px;">[Optimiser]</span></p>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="demo-tabs">
+            <button class="active" data-tab="math">Math</button>
+            <button data-tab="code">Code</button>
+            <button data-tab="observe">Observe</button>
+            <button data-tab="data">Data</button>
+          </div>
+          <!-- Math tab -->
+          <div class="demo-tab-content active" data-tab="math">
+            <div class="math-panel">
+              <div class="math-eq">Same as Adam + theta &lt;- theta - eta * wd * theta (decoupled from gradient)</div>
+              <p class="math-plain">AdamW fixes a subtle issue in Adam&#x27;s L2 regularisation: in standard Adam, weight decay is coupled with the gradient (wd * grad), which interacts with the adaptive learning rate in unintended ways. AdamW decouples weight decay from the gradient update, applying it directly to the parameters. This gives better generalisation, especially for transformers.</p>
+            </div>
+            <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+            <div class="derivation-step">
+              <strong>Step 1: Adam&#x27;s L2 issue</strong>
+              <div class="step-math">In Adam, L2 reg adds wd*theta to the gradient: g&#x27; = g + wd*theta</div>
+              <div class="step-explain">L2 regularisation is implemented by adding wd*theta to the gradient before computing the moments. But Adam&#x27;s adaptive denominator (sqrt(v)) interacts with this: the weight decay gets scaled differently for each parameter.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 2: Coupled vs decoupled</strong>
+              <div class="step-math">Coupled: g&#x27; = g + wd*theta (Adam).  Decoupled: theta -= eta*wd*theta (AdamW)</div>
+              <div class="step-explain">AdamW applies weight decay directly to theta, NOT through the gradient. This makes the weight decay equivalent across all parameters — independent of the adaptive learning rate.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 3: AdamW update</strong>
+              <div class="step-math">1. Compute Adam moments (m, v) from g (WITHOUT wd*theta)
+2. theta &lt;- theta - eta*wd*theta (decoupled weight decay)
+3. theta &lt;- theta - eta * m_hat / sqrt(v_hat + eps) (Adam step)</div>
+              <div class="step-explain">The weight decay is a simple multiplication (step 2), applied BEFORE the Adam gradient step (step 3). This is mathematically equivalent to L2 for SGD but different for Adam.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 4: Why it matters for transformers</strong>
+              <div class="step-math">Transformers need large weight decay (0.1) for generalisation</div>
+              <div class="step-explain">In standard Adam, the large weight decay gets distorted by the adaptive learning rate. AdamW&#x27;s decoupled decay applies uniformly, enabling the large wd=0.1 that transformers need.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 5: Default hyperparameters</strong>
+              <div class="step-math">eta=1e-3, beta1=0.9, beta2=0.999, wd=0.01 (vision) / 0.1 (NLP)</div>
+              <div class="step-explain">AdamW&#x27;s weight decay is typically 0.01 for CNNs (ResNet) and 0.1 for transformers (BERT, ViT). The higher wd for transformers prevents overfitting on large datasets.</div>
+            </div>
+
+            <div class="anim-container" style="margin-top: 16px; padding: 16px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2);">🎬 Animated clip</span>
+                <div style="display: flex; gap: 4px;">
+                  <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">▶</button>
+                  <button class="anim-replay" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">↺</button>
+                  <button class="anim-record" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">⬇</button>
+                  <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
+                </div>
+              </div>
+              <canvas class="anim-derivation" data-derivation-id="ml-adamw" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+            </div>
+          </div>
+          <!-- Code tab -->
+          <div class="demo-tab-content" data-tab="code">
+            <div class="code-panel">
+              <div class="lang-toggle">
+                <button data-lang="python" class="active">Python</button>
+                <button data-lang="rust">Rust</button>
+                <button data-lang="go">Go</button>
+                <button data-lang="c">C</button>
+                <button data-lang="elixir">Elixir</button>
+                <button data-lang="scala">Scala</button>
+              </div>
+              <pre class="code-block" id="code-block-adamw"></pre>
+            </div>
+          </div>
+          <!-- Observe tab -->
+          <div class="demo-tab-content" data-tab="observe">
+            <div class="observe-subtabs">
+              <button class="active" data-sub="stats">Stats</button>
+              <button data-sub="reports">Reports</button>
+              <button data-sub="graphs">Graphs</button>
+              <button data-sub="summary">Summary</button>
+            </div>
+            <div class="observe-content active" data-sub="stats">
+              <div class="stats-grid">
+                <div class="stat">
+                  <div class="l">Type</div>
+                  <div class="v">Adam + decoupled wd</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Weight decay</div>
+                  <div class="v">Decoupled (uniform)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">wd (vision)</div>
+                  <div class="v">0.01</div>
+                </div>
+                <div class="stat">
+                  <div class="l">wd (NLP/transformer)</div>
+                  <div class="v">0.1</div>
+                </div>
+                <div class="stat">
+                  <div class="l">vs Adam</div>
+                  <div class="v">Better generalisation</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Used in</div>
+                  <div class="v">ViT, BERT, GPT</div>
+                </div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="reports">
+              <div class="report-block">AdamW decouples weight decay from the gradient update, applying it directly to parameters (theta -= eta*wd*theta) BEFORE the Adam step. This fixes Adam&#x27;s L2 regularisation issue where the adaptive learning rate distorts the weight decay. AdamW is the default optimiser for transformers (ViT, BERT, GPT) where large weight decay (0.1) is needed for generalisation.</div>
+            </div>
+            <div class="observe-content" data-sub="graphs">
+              <div class="gts-container" data-gts-id="gts-adamw" style="padding: 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;"></div>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2);">Press Play to animate the table values onto the graph. Math annotations appear at inflection points.</div>
+            </div>
+            <div class="observe-content" data-sub="summary">
+              <div class="summary-block"><ul>
+                <li>AdamW = Adam + decoupled weight decay (theta -= eta*wd*theta, not g += wd*theta).</li>
+                <li>Decoupled wd is uniform across parameters — independent of adaptive learning rate.</li>
+                <li>Default wd: 0.01 (vision/CNN), 0.1 (NLP/transformers).</li>
+                <li>Successor to Adam; default for ViT, BERT, GPT, LLaMA.</li>
+              </ul></div>
+            </div>
+          </div>
+          <!-- Data tab -->
+          <div class="demo-tab-content" data-tab="data">
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">AdamW trajectory — weight decay shrinks theta by eta*wd each step; Adam step -&gt; 0 as gradient vanishes</p>
+            <div class="data-table-container">
+              <table class="data-table" data-total-rows="5" data-visible-rows="5">
+                <thead><tr><th>t</th><th>theta</th><th>theta after wd</th><th>Adam step</th><th>theta_new</th></tr></thead>
+                <tbody><tr class="data-table-row"><td>1</td><td>1.000</td><td>0.9999</td><td>-0.001</td><td>0.9989</td></tr>
+<tr class="data-table-row"><td>50</td><td>0.950</td><td>0.9490</td><td>-0.005</td><td>0.9440</td></tr>
+<tr class="data-table-row"><td>100</td><td>0.900</td><td>0.8990</td><td>-0.003</td><td>0.8960</td></tr>
+<tr class="data-table-row"><td>200</td><td>0.850</td><td>0.8491</td><td>-0.001</td><td>0.8481</td></tr>
+<tr class="data-table-row"><td>500</td><td>0.800</td><td>0.7992</td><td>0.000</td><td>0.7992</td></tr></tbody>
+              </table>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card" id="demo-dropout">
+        <div class="card-head" onclick="toggleDemo('demo-dropout')">
+          <div>
+            <p class="card-title">Dropout <span style="font-size: 11px; color: var(--text-muted-2); margin-left: 8px;">[Regularisation]</span></p>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="demo-tabs">
+            <button class="active" data-tab="math">Math</button>
+            <button data-tab="code">Code</button>
+            <button data-tab="observe">Observe</button>
+            <button data-tab="data">Data</button>
+          </div>
+          <!-- Math tab -->
+          <div class="demo-tab-content active" data-tab="math">
+            <div class="math-panel">
+              <div class="math-eq">y = x * mask,  where mask[i] ~ Bernoulli(1-p) / (1-p)</div>
+              <p class="math-plain">Dropout randomly sets a fraction p of activations to zero during training, forcing the network to learn redundant representations. At inference, all activations are used (scaled by 1/(1-p) during training to compensate). Dropout prevents co-adaptation: no single neuron can rely on any other specific neuron being active.</p>
+            </div>
+            <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+            <div class="derivation-step">
+              <strong>Step 1: Mask generation</strong>
+              <div class="step-math">mask[i] ~ Bernoulli(1 - p)</div>
+              <div class="step-explain">For each neuron, draw a random binary mask: 1 with probability (1-p), 0 with probability p. p is the dropout rate (typically 0.1-0.5).</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 2: Apply mask</strong>
+              <div class="step-math">y = x * mask</div>
+              <div class="step-explain">Element-wise multiply the activations by the mask. p fraction of neurons are &#x27;dropped&#x27; (output 0). The surviving neurons must learn to function without the dropped ones.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 3: Inverted dropout (scaling)</strong>
+              <div class="step-math">y = x * mask / (1 - p)</div>
+              <div class="step-explain">Divide by (1-p) during training so that the expected output E[y] = x. This &#x27;inverted dropout&#x27; means no scaling is needed at inference time — just use y = x (all neurons active).</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 4: Preventing co-adaptation</strong>
+              <div class="step-math">Each neuron must work with random subsets of others</div>
+              <div class="step-explain">Since any neuron can be dropped, no two neurons can co-adapt (rely on each other). The network learns redundant, robust features — like training an ensemble of sub-networks in one pass.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 5: Inference</strong>
+              <div class="step-math">At test time: y = x (no dropout, no scaling needed)</div>
+              <div class="step-explain">Thanks to inverted dropout (step 3), inference is just the identity — all neurons active, no scaling. The network behaves as an ensemble of the 2^N sub-networks sampled during training.</div>
+            </div>
+
+            <div class="anim-container" style="margin-top: 16px; padding: 16px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2);">🎬 Animated clip</span>
+                <div style="display: flex; gap: 4px;">
+                  <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">▶</button>
+                  <button class="anim-replay" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">↺</button>
+                  <button class="anim-record" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">⬇</button>
+                  <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
+                </div>
+              </div>
+              <canvas class="anim-derivation" data-derivation-id="ml-dropout" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+            </div>
+          </div>
+          <!-- Code tab -->
+          <div class="demo-tab-content" data-tab="code">
+            <div class="code-panel">
+              <div class="lang-toggle">
+                <button data-lang="python" class="active">Python</button>
+                <button data-lang="rust">Rust</button>
+                <button data-lang="go">Go</button>
+                <button data-lang="c">C</button>
+                <button data-lang="elixir">Elixir</button>
+                <button data-lang="scala">Scala</button>
+              </div>
+              <pre class="code-block" id="code-block-dropout"></pre>
+            </div>
+          </div>
+          <!-- Observe tab -->
+          <div class="demo-tab-content" data-tab="observe">
+            <div class="observe-subtabs">
+              <button class="active" data-sub="stats">Stats</button>
+              <button data-sub="reports">Reports</button>
+              <button data-sub="graphs">Graphs</button>
+              <button data-sub="summary">Summary</button>
+            </div>
+            <div class="observe-content active" data-sub="stats">
+              <div class="stats-grid">
+                <div class="stat">
+                  <div class="l">Type</div>
+                  <div class="v">Stochastic regulariser</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Default p</div>
+                  <div class="v">0.1 (transformers), 0.5 (CNNs)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Inference</div>
+                  <div class="v">Identity (no scaling)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Ensemble</div>
+                  <div class="v">2^N sub-networks</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Memory</div>
+                  <div class="v">O(1) (mask only)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Prevents</div>
+                  <div class="v">Co-adaptation</div>
+                </div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="reports">
+              <div class="report-block">Dropout randomly zeros p fraction of activations during training, preventing neuron co-adaptation. Inverted dropout (scaling by 1/(1-p)) means no scaling is needed at inference. The network behaves as an ensemble of 2^N sub-networks. Default p=0.1 for transformers, 0.5 for CNNs. Dropout is the most widely used regulariser in deep learning (2012-present).</div>
+            </div>
+            <div class="observe-content" data-sub="graphs">
+              <div class="gts-container" data-gts-id="gts-dropout" style="padding: 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;"></div>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2);">Press Play to animate the table values onto the graph. Math annotations appear at inflection points.</div>
+            </div>
+            <div class="observe-content" data-sub="summary">
+              <div class="summary-block"><ul>
+                <li>Dropout = x * mask / (1-p), mask ~ Bernoulli(1-p) — random zeroing during training.</li>
+                <li>Inverted dropout (1/(1-p) scaling) means no scaling at inference.</li>
+                <li>Prevents co-adaptation: neurons can&#x27;t rely on specific others being active.</li>
+                <li>Equivalent to training 2^N sub-networks — powerful ensemble effect.</li>
+              </ul></div>
+            </div>
+          </div>
+          <!-- Data tab -->
+          <div class="demo-tab-content" data-tab="data">
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Dropout sample (p=0.4) — 2 of 5 neurons dropped; survivors scaled by 1/(1-0.4)=1.67</p>
+            <div class="data-table-container">
+              <table class="data-table" data-total-rows="5" data-visible-rows="5">
+                <thead><tr><th>neuron</th><th>x (input)</th><th>mask (p=0.4)</th><th>y = x*mask/(1-p)</th></tr></thead>
+                <tbody><tr class="data-table-row"><td>1</td><td>0.8</td><td>1</td><td>1.33</td></tr>
+<tr class="data-table-row"><td>2</td><td>0.5</td><td>0 (dropped)</td><td>0.0</td></tr>
+<tr class="data-table-row"><td>3</td><td>-0.3</td><td>1</td><td>-0.50</td></tr>
+<tr class="data-table-row"><td>4</td><td>0.6</td><td>1</td><td>1.00</td></tr>
+<tr class="data-table-row"><td>5</td><td>0.2</td><td>0 (dropped)</td><td>0.0</td></tr></tbody>
+              </table>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card" id="demo-l1-l2-regularisation">
+        <div class="card-head" onclick="toggleDemo('demo-l1-l2-regularisation')">
+          <div>
+            <p class="card-title">L1/L2 Regularisation (Weight Decay) <span style="font-size: 11px; color: var(--text-muted-2); margin-left: 8px;">[Regularisation]</span></p>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="demo-tabs">
+            <button class="active" data-tab="math">Math</button>
+            <button data-tab="code">Code</button>
+            <button data-tab="observe">Observe</button>
+            <button data-tab="data">Data</button>
+          </div>
+          <!-- Math tab -->
+          <div class="demo-tab-content active" data-tab="math">
+            <div class="math-panel">
+              <div class="math-eq">L_reg = L_data + lambda1 * ||w||_1 + lambda2 * ||w||_2^2</div>
+              <p class="math-plain">L1 and L2 regularisation add a penalty term to the loss function: L1 (sum of |w|) encourages sparsity (many weights -&gt; 0), L2 (sum of w^2) encourages small weights. The regularisation parameter lambda controls the strength: larger lambda = more regularisation (simpler model).</p>
+            </div>
+            <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+            <div class="derivation-step">
+              <strong>Step 1: L2 (Ridge) penalty</strong>
+              <div class="step-math">L2 = lambda * sum(w^2) = lambda * ||w||_2^2</div>
+              <div class="step-explain">L2 adds lambda * ||w||^2 to the loss. The gradient is 2*lambda*w — proportional to the weight. This shrinks all weights toward 0 smoothly. No weight becomes exactly 0.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 2: L1 (Lasso) penalty</strong>
+              <div class="step-math">L1 = lambda * sum(|w|) = lambda * ||w||_1</div>
+              <div class="step-explain">L1 adds lambda * sum(|w|) to the loss. The gradient is lambda * sign(w) — constant magnitude. This can drive weights to exactly 0 (sparsity), enabling feature selection.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 3: L1 sparsity</strong>
+              <div class="step-math">L1 gradient = lambda * sign(w) — constant magnitude</div>
+              <div class="step-explain">Because the L1 gradient is constant (lambda * sign(w)), weights near 0 get pushed to exactly 0. This is unlike L2 whose gradient (2*lambda*w) -&gt; 0 as w -&gt; 0, leaving small but non-zero weights.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 4: Elastic net (L1 + L2)</strong>
+              <div class="step-math">L_reg = L + lambda1 * ||w||_1 + lambda2 * ||w||_2^2</div>
+              <div class="step-explain">Elastic net combines L1 (sparsity) + L2 (smoothness). Useful when features are correlated — L1 alone picks one, L2 keeps all small; elastic net keeps groups.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 5: Weight decay vs L2</strong>
+              <div class="step-math">Weight decay: theta &lt;- theta - eta * (grad + lambda * theta) = theta * (1 - eta*lambda) - eta*grad</div>
+              <div class="step-explain">Weight decay is the gradient-descent form of L2: the weight is shrunk by a factor (1 - eta*lambda) at each step. For SGD, this is equivalent to L2. For Adam, see AdamW (decoupled weight decay).</div>
+            </div>
+
+            <div class="anim-container" style="margin-top: 16px; padding: 16px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2);">🎬 Animated clip</span>
+                <div style="display: flex; gap: 4px;">
+                  <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">▶</button>
+                  <button class="anim-replay" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">↺</button>
+                  <button class="anim-record" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">⬇</button>
+                  <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
+                </div>
+              </div>
+              <canvas class="anim-derivation" data-derivation-id="ml-l1-l2-regularisation" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+            </div>
+          </div>
+          <!-- Code tab -->
+          <div class="demo-tab-content" data-tab="code">
+            <div class="code-panel">
+              <div class="lang-toggle">
+                <button data-lang="python" class="active">Python</button>
+                <button data-lang="rust">Rust</button>
+                <button data-lang="go">Go</button>
+                <button data-lang="c">C</button>
+                <button data-lang="elixir">Elixir</button>
+                <button data-lang="scala">Scala</button>
+              </div>
+              <pre class="code-block" id="code-block-l1-l2-regularisation"></pre>
+            </div>
+          </div>
+          <!-- Observe tab -->
+          <div class="demo-tab-content" data-tab="observe">
+            <div class="observe-subtabs">
+              <button class="active" data-sub="stats">Stats</button>
+              <button data-sub="reports">Reports</button>
+              <button data-sub="graphs">Graphs</button>
+              <button data-sub="summary">Summary</button>
+            </div>
+            <div class="observe-content active" data-sub="stats">
+              <div class="stats-grid">
+                <div class="stat">
+                  <div class="l">Type</div>
+                  <div class="v">Weight penalty</div>
+                </div>
+                <div class="stat">
+                  <div class="l">L1 (Lasso)</div>
+                  <div class="v">Sparse (w-&gt;0)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">L2 (Ridge)</div>
+                  <div class="v">Smooth (small w)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Elastic net</div>
+                  <div class="v">L1 + L2</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Default lambda</div>
+                  <div class="v">1e-4 to 1e-2</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Effect</div>
+                  <div class="v">Reduces overfitting</div>
+                </div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="reports">
+              <div class="report-block">L1 (Lasso) adds lambda*sum(|w|) to the loss, driving some weights to exactly 0 (feature selection). L2 (Ridge) adds lambda*sum(w^2), shrinking all weights smoothly. Elastic net combines both. Weight decay (theta -= eta*lambda*theta) is the gradient form of L2 for SGD. For Adam, use AdamW (decoupled weight decay). Default lambda: 1e-4 (CNNs) to 0.1 (transformers).</div>
+            </div>
+            <div class="observe-content" data-sub="graphs">
+              <div class="gts-container" data-gts-id="gts-l1-l2-regularisation" style="padding: 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;"></div>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2);">Press Play to animate the table values onto the graph. Math annotations appear at inflection points.</div>
+            </div>
+            <div class="observe-content" data-sub="summary">
+              <div class="summary-block"><ul>
+                <li>L1 = lambda*sum(|w|) — drives weights to exactly 0 (sparsity, feature selection).</li>
+                <li>L2 = lambda*sum(w^2) — shrinks all weights smoothly (no exact zeros).</li>
+                <li>Elastic net = L1 + L2 — combines sparsity + smoothness.</li>
+                <li>Weight decay (theta -= eta*lambda*theta) is the gradient form of L2 for SGD.</li>
+              </ul></div>
+            </div>
+          </div>
+          <!-- Data tab -->
+          <div class="demo-tab-content" data-tab="data">
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">L1 vs L2 (lambda=0.01) — L1 gradient is constant (drives w to 0); L2 gradient -&gt; 0 as w -&gt; 0</p>
+            <div class="data-table-container">
+              <table class="data-table" data-total-rows="5" data-visible-rows="5">
+                <thead><tr><th>w</th><th>L1 = lambda*|w|</th><th>L2 = lambda*w^2</th><th>L1 grad = lambda*sign(w)</th><th>L2 grad = 2*lambda*w</th></tr></thead>
+                <tbody><tr class="data-table-row"><td>-1.0</td><td>0.01</td><td>0.0001</td><td>-0.01</td><td>-0.02</td></tr>
+<tr class="data-table-row"><td>-0.1</td><td>0.001</td><td>0.0001</td><td>-0.01</td><td>-0.002</td></tr>
+<tr class="data-table-row"><td>0.0</td><td>0.0</td><td>0.0</td><td>0 (kink)</td><td>0.0</td></tr>
+<tr class="data-table-row"><td>0.1</td><td>0.001</td><td>0.0001</td><td>0.01</td><td>0.002</td></tr>
+<tr class="data-table-row"><td>1.0</td><td>0.01</td><td>0.0001</td><td>0.01</td><td>0.02</td></tr></tbody>
+              </table>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card" id="demo-batchnorm">
+        <div class="card-head" onclick="toggleDemo('demo-batchnorm')">
+          <div>
+            <p class="card-title">Batch Normalisation <span style="font-size: 11px; color: var(--text-muted-2); margin-left: 8px;">[Regularisation]</span></p>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="card-body">
+          <div class="demo-tabs">
+            <button class="active" data-tab="math">Math</button>
+            <button data-tab="code">Code</button>
+            <button data-tab="observe">Observe</button>
+            <button data-tab="data">Data</button>
+          </div>
+          <!-- Math tab -->
+          <div class="demo-tab-content active" data-tab="math">
+            <div class="math-panel">
+              <div class="math-eq">y = gamma * (x - mu_B) / sqrt(sigma_B^2 + eps) + beta</div>
+              <p class="math-plain">BatchNorm normalises each layer&#x27;s activations to have zero mean and unit variance (per mini-batch), then applies a learned scale (gamma) and shift (beta). This stabilises training, allows higher learning rates, and acts as mild regularisation (batch noise). BatchNorm was a key enabler of training very deep networks (ResNet).</p>
+            </div>
+            <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+            <div class="derivation-step">
+              <strong>Step 1: Batch statistics</strong>
+              <div class="step-math">mu_B = (1/m) * sum(x_i);  sigma_B^2 = (1/m) * sum((x_i - mu_B)^2)</div>
+              <div class="step-explain">Compute the mean and variance of the activations over the mini-batch of size m. These statistics are different for each batch — introducing stochastic noise.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 2: Normalise</strong>
+              <div class="step-math">x_hat = (x - mu_B) / sqrt(sigma_B^2 + eps)</div>
+              <div class="step-explain">Subtract the batch mean and divide by the batch std. eps = 1e-5 prevents division by zero. The result has zero mean and unit variance (per batch).</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 3: Learnable scale + shift</strong>
+              <div class="step-math">y = gamma * x_hat + beta</div>
+              <div class="step-explain">gamma and beta are learned parameters that allow the network to undo the normalisation if it&#x27;s not helpful. Without gamma/beta, BatchNorm would force every layer to have unit variance — too restrictive.</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 4: Running statistics (inference)</strong>
+              <div class="step-math">mu_running = alpha * mu_running + (1-alpha) * mu_B</div>
+              <div class="step-explain">During training, keep a running average of mu_B and sigma_B. At inference, use the running averages instead of batch statistics (since inference may have batch size 1).</div>
+            </div>
+            <div class="derivation-step">
+              <strong>Step 5: Why it works</strong>
+              <div class="step-math">Reduces internal covariate shift + enables higher lr + mild regularisation</div>
+              <div class="step-explain">BatchNorm stabilises the distribution of activations across layers, reducing &#x27;internal covariate shift&#x27;. This allows 10x higher learning rates and faster convergence. The batch-level noise also acts as mild regularisation (reducing the need for dropout).</div>
+            </div>
+
+            <div class="anim-container" style="margin-top: 16px; padding: 16px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2);">🎬 Animated clip</span>
+                <div style="display: flex; gap: 4px;">
+                  <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600;">▶</button>
+                  <button class="anim-replay" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">↺</button>
+                  <button class="anim-record" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">⬇</button>
+                  <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
+                </div>
+              </div>
+              <canvas class="anim-derivation" data-derivation-id="ml-batchnorm" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+            </div>
+          </div>
+          <!-- Code tab -->
+          <div class="demo-tab-content" data-tab="code">
+            <div class="code-panel">
+              <div class="lang-toggle">
+                <button data-lang="python" class="active">Python</button>
+                <button data-lang="rust">Rust</button>
+                <button data-lang="go">Go</button>
+                <button data-lang="c">C</button>
+                <button data-lang="elixir">Elixir</button>
+                <button data-lang="scala">Scala</button>
+              </div>
+              <pre class="code-block" id="code-block-batchnorm"></pre>
+            </div>
+          </div>
+          <!-- Observe tab -->
+          <div class="demo-tab-content" data-tab="observe">
+            <div class="observe-subtabs">
+              <button class="active" data-sub="stats">Stats</button>
+              <button data-sub="reports">Reports</button>
+              <button data-sub="graphs">Graphs</button>
+              <button data-sub="summary">Summary</button>
+            </div>
+            <div class="observe-content active" data-sub="stats">
+              <div class="stats-grid">
+                <div class="stat">
+                  <div class="l">Type</div>
+                  <div class="v">Normalisation</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Learned params</div>
+                  <div class="v">gamma + beta</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Inference</div>
+                  <div class="v">Running avg stats</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Effect</div>
+                  <div class="v">10x higher lr</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Regularisation</div>
+                  <div class="v">Mild (batch noise)</div>
+                </div>
+                <div class="stat">
+                  <div class="l">Used in</div>
+                  <div class="v">ResNet, CNNs</div>
+                </div>
+              </div>
+            </div>
+            <div class="observe-content" data-sub="reports">
+              <div class="report-block">BatchNorm normalises activations per mini-batch to zero mean + unit variance, then applies learned gamma (scale) + beta (shift). This stabilises training (reduces internal covariate shift), allows 10x higher learning rates, and provides mild regularisation via batch noise. At inference, running averages replace batch statistics. Key enabler of ResNet (2015) — enabled training 100+ layer networks.</div>
+            </div>
+            <div class="observe-content" data-sub="graphs">
+              <div class="gts-container" data-gts-id="gts-batchnorm" style="padding: 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;"></div>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2);">Press Play to animate the table values onto the graph. Math annotations appear at inflection points.</div>
+            </div>
+            <div class="observe-content" data-sub="summary">
+              <div class="summary-block"><ul>
+                <li>BatchNorm = gamma * (x - mu_B) / sqrt(sigma_B^2 + eps) + beta — normalise per batch.</li>
+                <li>Learned gamma (scale) + beta (shift) allow the network to undo normalisation if unhelpful.</li>
+                <li>Running averages for mu_B and sigma_B used at inference (batch size may be 1).</li>
+                <li>Key enabler of ResNet (2015) — allows 10x higher lr + 100+ layer networks.</li>
+              </ul></div>
+            </div>
+          </div>
+          <!-- Data tab -->
+          <div class="demo-tab-content" data-tab="data">
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">BatchNorm sample (mu=0.5, std=1.12, gamma=1.0, beta=1.0) — output has mean=1.0, std=1.0</p>
+            <div class="data-table-container">
+              <table class="data-table" data-total-rows="5" data-visible-rows="5">
+                <thead><tr><th>x</th><th>(x - mu)</th><th>x_hat = (x-mu)/std</th><th>y = gamma*x_hat + beta</th></tr></thead>
+                <tbody><tr class="data-table-row"><td>-1.0</td><td>-1.5</td><td>-1.34</td><td>-0.34</td></tr>
+<tr class="data-table-row"><td>0.0</td><td>-0.5</td><td>-0.45</td><td>0.55</td></tr>
+<tr class="data-table-row"><td>0.5</td><td>0.0</td><td>0.0</td><td>1.0</td></tr>
+<tr class="data-table-row"><td>1.0</td><td>0.5</td><td>0.45</td><td>1.45</td></tr>
+<tr class="data-table-row"><td>2.0</td><td>1.5</td><td>1.34</td><td>2.34</td></tr></tbody>
+              </table>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; Generated by <code>scripts/gen-ml-page.py</code>. All demos are pure client-side; no external services; data residency: downloadable only. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
@@ -1525,6 +2829,78 @@
           elixir: "defmodule Cosine do\n  def loss(a, b) do\n    dot = Enum.zip(a, b) |> Enum.map(fn {ai, bi} -> ai * bi end) |> Enum.sum()\n    na = :math.sqrt(Enum.map(a, &(&1 * &1)) |> Enum.sum())\n    nb = :math.sqrt(Enum.map(b, &(&1 * &1)) |> Enum.sum())\n    1.0 - dot / (na * nb + 1.0e-8)\n  end\nend",
           scala: "def cosineLoss(a: Array[Double], b: Array[Double]): Double = {\n  val dot = a.indices.map(i => a(i)*b(i)).sum\n  val na = math.sqrt(a.map(x => x*x).sum)\n  val nb = math.sqrt(b.map(x => x*x).sum)\n  1.0 - dot / (na * nb + 1e-8)\n}",
         },
+        'relu': {
+          python: "# f(x) = max(0, x)\n# x -> input array  max(0,.) -> np.maximum(0, .)\nimport numpy as np\ndef relu(x):\n    return np.maximum(0, x)\ndef relu_grad(x):\n    return (x > 0).astype(float)",
+          rust: "fn relu(x: f64) -> f64 { x.max(0.0) }\nfn relu_grad(x: f64) -> f64 { if x > 0.0 { 1.0 } else { 0.0 } }",
+          go: "func ReLU(x float64) float64 { return math.Max(0, x) }\nfunc ReLUGrad(x float64) float64 { if x > 0 { return 1 }; return 0 }",
+          c: "double relu(double x) { return x > 0 ? x : 0; }\ndouble relu_grad(double x) { return x > 0 ? 1.0 : 0.0; }",
+          elixir: "defmodule ReLU do\n  def f(x), do: max(0, x)\n  def grad(x), do: if x > 0, do: 1.0, else: 0.0\nend",
+          scala: "def relu(x: Double): Double = math.max(0, x)\ndef reluGrad(x: Double): Double = if (x > 0) 1.0 else 0.0",
+        },
+        'gelu': {
+          python: "# f(x) = x * Phi(x) approx 0.5x(1 + tanh(c*(x + a*x^3)))\n# x -> input  Phi -> Gaussian CDF  tanh -> np.tanh()\n# c = sqrt(2/pi) = 0.7978  a = 0.044715\nimport numpy as np\ndef gelu(x):\n    c = np.sqrt(2 / np.pi)\n    return 0.5 * x * (1 + np.tanh(c * (x + 0.044715 * x**3)))",
+          rust: "fn gelu(x: f64) -> f64 {\n    let c = (2.0 / std::f64::consts::PI).sqrt();\n    0.5 * x * (1.0 + (c * (x + 0.044715 * x.powi(3))).tanh())\n}",
+          go: "func GELU(x float64) float64 {\n\tc := math.Sqrt(2 / math.Pi)\n\treturn 0.5 * x * (1 + math.Tanh(c * (x + 0.044715*math.Pow(x, 3))))\n}",
+          c: "double gelu(double x) {\n    double c = sqrt(2.0 / M_PI);\n    return 0.5 * x * (1.0 + tanh(c * (x + 0.044715 * x*x*x)));\n}",
+          elixir: "defmodule GELU do\n  def f(x) do\n    c = :math.sqrt(2 / :math.pi)\n    0.5 * x * (1 + :math.tanh(c * (x + 0.044715 * :math.pow(x, 3))))\n  end\nend",
+          scala: "def gelu(x: Double): Double = {\n  val c = math.sqrt(2 / math.Pi)\n  0.5 * x * (1 + math.tanh(c * (x + 0.044715 * math.pow(x, 3))))\n}",
+        },
+        'swiglu': {
+          python: "# f = Swish(xW) * (xV),  Swish(x) = x * sigmoid(x)\n# x -> input  W -> gate weights  V -> value weights\n# sigmoid -> 1/(1+exp(-x))  Swish -> x * sigmoid(x)\nimport numpy as np\ndef swiglu(x, W, V):\n    gate = x @ W\n    value = x @ V\n    swish = gate * (1 / (1 + np.exp(-gate)))\n    return swish * value",
+          rust: "fn swiglu(x: &[f64], w: &[f64], v: &[f64]) -> f64 {\n    let gate = x[0] * w[0];\n    let value = x[0] * v[0];\n    let swish = gate * (1.0 / (1.0 + (-gate).exp()));\n    swish * value\n}",
+          go: "func SwiGLU(x, w, v float64) float64 {\n\tgate := x * w\n\tvalue := x * v\n\tswish := gate * (1 / (1 + math.Exp(-gate)))\n\treturn swish * value\n}",
+          c: "double swiglu(double x, double w, double v) {\n    double gate = x * w;\n    double value = x * v;\n    double swish = gate * (1.0 / (1.0 + exp(-gate)));\n    return swish * value;\n}",
+          elixir: "defmodule SwiGLU do\n  def f(x, w, v) do\n    gate = x * w\n    value = x * v\n    swish = gate * (1 / (1 + :math.exp(-gate)))\n    swish * value\n  end\nend",
+          scala: "def swiglu(x: Double, w: Double, v: Double): Double = {\n  val gate = x * w\n  val value = x * v\n  val swish = gate * (1.0 / (1.0 + math.exp(-gate)))\n  swish * value\n}",
+        },
+        'sgd': {
+          python: "# theta <- theta - eta * grad\n# theta -> params  eta -> learning rate  grad -> dL/dtheta\nimport numpy as np\ndef sgd_step(theta, grad, eta=0.01):\n    return theta - eta * grad",
+          rust: "fn sgd_step(theta: f64, grad: f64, eta: f64) -> f64 {\n    theta - eta * grad\n}",
+          go: "func SGDStep(theta, grad, eta float64) float64 {\n\treturn theta - eta * grad\n}",
+          c: "double sgd_step(double theta, double grad, double eta) {\n    return theta - eta * grad;\n}",
+          elixir: "defmodule SGD do\n  def step(theta, grad, eta), do: theta - eta * grad\nend",
+          scala: "def sgdStep(theta: Double, grad: Double, eta: Double): Double = theta - eta * grad",
+        },
+        'adam': {
+          python: "# m = beta1*m + (1-beta1)*g;  v = beta2*v + (1-beta2)*g^2\n# theta <- theta - eta * m_hat / (sqrt(v_hat) + eps)\n# m -> first moment  v -> second moment  g -> gradient\nimport numpy as np\ndef adam_step(theta, g, m, v, t, eta=1e-3, b1=0.9, b2=0.999, eps=1e-8):\n    m = b1 * m + (1 - b1) * g\n    v = b2 * v + (1 - b2) * g**2\n    m_hat = m / (1 - b1**t)\n    v_hat = v / (1 - b2**t)\n    theta = theta - eta * m_hat / (np.sqrt(v_hat) + eps)\n    return theta, m, v",
+          rust: "fn adam_step(theta: f64, g: f64, m: f64, v: f64, t: f64, eta: f64, b1: f64, b2: f64, eps: f64) -> (f64, f64, f64) {\n    let m = b1 * m + (1.0 - b1) * g;\n    let v = b2 * v + (1.0 - b2) * g * g;\n    let m_hat = m / (1.0 - b1.powf(t));\n    let v_hat = v / (1.0 - b2.powf(t));\n    (theta - eta * m_hat / (v_hat.sqrt() + eps), m, v)\n}",
+          go: "func AdamStep(theta, g, m, v, t, eta, b1, b2, eps float64) (float64, float64, float64) {\n\tm = b1*m + (1-b1)*g\n\tv = b2*v + (1-b2)*g*g\n\tmHat := m / (1 - math.Pow(b1, t))\n\tvHat := v / (1 - math.Pow(b2, t))\n\treturn theta - eta*mHat/(math.Sqrt(vHat)+eps), m, v\n}",
+          c: "void adam_step(double* theta, double g, double* m, double* v, double t, double eta, double b1, double b2, double eps) {\n    *m = b1 * *m + (1 - b1) * g;\n    *v = b2 * *v + (1 - b2) * g * g;\n    double m_hat = *m / (1 - pow(b1, t));\n    double v_hat = *v / (1 - pow(b2, t));\n    *theta -= eta * m_hat / (sqrt(v_hat) + eps);\n}",
+          elixir: "defmodule Adam do\n  def step(theta, g, m, v, t, eta, b1, b2, eps) do\n    m = b1*m + (1-b1)*g\n    v = b2*v + (1-b2)*g*g\n    m_hat = m / (1 - :math.pow(b1, t))\n    v_hat = v / (1 - :math.pow(b2, t))\n    {theta - eta * m_hat / (:math.sqrt(v_hat) + eps), m, v}\n  end\nend",
+          scala: "def adamStep(theta: Double, g: Double, m: Double, v: Double, t: Double, eta: Double = 1e-3, b1: Double = 0.9, b2: Double = 0.999, eps: Double = 1e-8): (Double, Double, Double) = {\n  val m1 = b1 * m + (1 - b1) * g\n  val v1 = b2 * v + (1 - b2) * g * g\n  val mHat = m1 / (1 - math.pow(b1, t))\n  val vHat = v1 / (1 - math.pow(b2, t))\n  (theta - eta * mHat / (math.sqrt(vHat) + eps), m1, v1)\n}",
+        },
+        'adamw': {
+          python: "# Same as Adam + theta <- theta - eta * wd * theta (decoupled)\n# wd -> weight decay (decoupled from gradient)\nimport numpy as np\ndef adamw_step(theta, g, m, v, t, eta=1e-3, b1=0.9, b2=0.999, eps=1e-8, wd=0.01):\n    m = b1 * m + (1 - b1) * g\n    v = b2 * v + (1 - b2) * g**2\n    m_hat = m / (1 - b1**t)\n    v_hat = v / (1 - b2**t)\n    theta = theta - eta * wd * theta  # decoupled weight decay\n    theta = theta - eta * m_hat / (np.sqrt(v_hat) + eps)  # Adam step\n    return theta, m, v",
+          rust: "fn adamw_step(theta: f64, g: f64, m: f64, v: f64, t: f64, eta: f64, b1: f64, b2: f64, eps: f64, wd: f64) -> (f64, f64, f64) {\n    let m = b1 * m + (1.0 - b1) * g;\n    let v = b2 * v + (1.0 - b2) * g * g;\n    let m_hat = m / (1.0 - b1.powf(t));\n    let v_hat = v / (1.0 - b2.powf(t));\n    let theta = theta - eta * wd * theta;  // decoupled weight decay\n    (theta - eta * m_hat / (v_hat.sqrt() + eps), m, v)\n}",
+          go: "func AdamWStep(theta, g, m, v, t, eta, b1, b2, eps, wd float64) (float64, float64, float64) {\n\tm = b1*m + (1-b1)*g\n\tv = b2*v + (1-b2)*g*g\n\tmHat := m / (1 - math.Pow(b1, t))\n\tvHat := v / (1 - math.Pow(b2, t))\n\ttheta -= eta * wd * theta\n\treturn theta - eta*mHat/(math.Sqrt(vHat)+eps), m, v\n}",
+          c: "void adamw_step(double* theta, double g, double* m, double* v, double t, double eta, double b1, double b2, double eps, double wd) {\n    *m = b1 * *m + (1 - b1) * g;\n    *v = b2 * *v + (1 - b2) * g * g;\n    double m_hat = *m / (1 - pow(b1, t));\n    double v_hat = *v / (1 - pow(b2, t));\n    *theta -= eta * wd * *theta;  /* decoupled weight decay */\n    *theta -= eta * m_hat / (sqrt(v_hat) + eps);\n}",
+          elixir: "defmodule AdamW do\n  def step(theta, g, m, v, t, eta, b1, b2, eps, wd) do\n    m = b1*m + (1-b1)*g\n    v = b2*v + (1-b2)*g*g\n    m_hat = m / (1 - :math.pow(b1, t))\n    v_hat = v / (1 - :math.pow(b2, t))\n    theta = theta - eta * wd * theta\n    {theta - eta * m_hat / (:math.sqrt(v_hat) + eps), m, v}\n  end\nend",
+          scala: "def adamwStep(theta: Double, g: Double, m: Double, v: Double, t: Double, eta: Double = 1e-3, b1: Double = 0.9, b2: Double = 0.999, eps: Double = 1e-8, wd: Double = 0.01): (Double, Double, Double) = {\n  val m1 = b1 * m + (1 - b1) * g\n  val v1 = b2 * v + (1 - b2) * g * g\n  val mHat = m1 / (1 - math.pow(b1, t))\n  val vHat = v1 / (1 - math.pow(b2, t))\n  val theta1 = theta - eta * wd * theta\n  (theta1 - eta * mHat / (math.sqrt(vHat) + eps), m1, v1)\n}",
+        },
+        'dropout': {
+          python: "# y = x * mask / (1-p),  mask ~ Bernoulli(1-p)\n# x -> activations  p -> dropout rate  mask -> random binary\nimport numpy as np\ndef dropout(x, p=0.5, training=True):\n    if not training: return x\n    mask = (np.random.rand(*x.shape) > p) / (1 - p)\n    return x * mask",
+          rust: "fn dropout(x: &[f64], p: f64) -> Vec<f64> {\n    let scale = 1.0 / (1.0 - p);\n    x.iter().map(|&v| if rand::random::<f64>() > p { v * scale } else { 0.0 }).collect()\n}",
+          go: "func Dropout(x []float64, p float64) []float64 {\n\tscale := 1 / (1 - p)\n\tfor i := range x { if rand.Float64() < p { x[i] = 0 } else { x[i] *= scale } }\n\treturn x\n}",
+          c: "void dropout(double* x, int n, double p) {\n    double scale = 1.0 / (1.0 - p);\n    for (int i = 0; i < n; i++)\n        x[i] = ((double)rand()/RAND_MAX > p) ? x[i] * scale : 0.0;\n}",
+          elixir: "defmodule Dropout do\n  def f(x, p) do\n    scale = 1 / (1 - p)\n    Enum.map(x, fn v -> if :rand.uniform() > p, do: v * scale, else: 0.0 end)\n  end\nend",
+          scala: "def dropout(x: Array[Double], p: Double): Array[Double] = {\n  val scale = 1.0 / (1 - p)\n  x.map(v => if (math.random > p) v * scale else 0.0)\n}",
+        },
+        'l1-l2-regularisation': {
+          python: "# L_reg = L + lambda1*||w||_1 + lambda2*||w||_2^2\n# w -> weights  lambda1 -> L1 strength  lambda2 -> L2 strength\nimport numpy as np\ndef l1_l2_reg(w, lambda1=0.0, lambda2=0.01):\n    l1 = lambda1 * np.sum(np.abs(w))\n    l2 = lambda2 * np.sum(w ** 2)\n    return l1 + l2\ndef l1_l2_grad(w, lambda1=0.0, lambda2=0.01):\n    return lambda1 * np.sign(w) + 2 * lambda2 * w",
+          rust: "fn l1_l2_reg(w: &[f64], l1: f64, l2: f64) -> f64 {\n    l1 * w.iter().map(|x| x.abs()).sum::<f64>() + l2 * w.iter().map(|x| x * x).sum::<f64>()\n}",
+          go: "func L1L2Reg(w []float64, l1, l2 float64) float64 {\n\tvar s1, s2 float64\n\tfor _, v := range w { s1 += math.Abs(v); s2 += v * v }\n\treturn l1*s1 + l2*s2\n}",
+          c: "double l1_l2_reg(const double* w, int n, double l1, double l2) {\n    double s1 = 0, s2 = 0;\n    for (int i = 0; i < n; i++) { s1 += fabs(w[i]); s2 += w[i]*w[i]; }\n    return l1 * s1 + l2 * s2;\n}",
+          elixir: "defmodule Reg do\n  def l1_l2(w, l1, l2) do\n    l1 * (Enum.map(w, &abs/1) |> Enum.sum) + l2 * (Enum.map(w, &(&1*&1)) |> Enum.sum)\n  end\nend",
+          scala: "def l1L2Reg(w: Array[Double], l1: Double, l2: Double): Double = {\n  l1 * w.map(math.abs).sum + l2 * w.map(x => x*x).sum\n}",
+        },
+        'batchnorm': {
+          python: "# y = gamma * (x - mu_B) / sqrt(sigma_B^2 + eps) + beta\n# x -> activations  mu_B -> batch mean  sigma_B -> batch std\n# gamma -> scale (learned)  beta -> shift (learned)\nimport numpy as np\ndef batchnorm(x, gamma=1.0, beta=0.0, eps=1e-5):\n    mu = np.mean(x, axis=0)\n    var = np.var(x, axis=0)\n    x_hat = (x - mu) / np.sqrt(var + eps)\n    return gamma * x_hat + beta",
+          rust: "fn batchnorm(x: &[f64], gamma: f64, beta: f64, eps: f64) -> Vec<f64> {\n    let n = x.len() as f64;\n    let mu: f64 = x.iter().sum::<f64>() / n;\n    let var: f64 = x.iter().map(|v| (v - mu).powi(2)).sum::<f64>() / n;\n    x.iter().map(|v| gamma * (v - mu) / (var + eps).sqrt() + beta).collect()\n}",
+          go: "func BatchNorm(x []float64, gamma, beta, eps float64) []float64 {\n\tn := float64(len(x))\n\tvar mu, v float64\n\tfor _, v := range x { mu += v }\n\tmu /= n\n\tfor _, v := range x { v += (v - mu) * (v - mu) }\n\tv /= n\n\tfor i := range x { x[i] = gamma*(x[i]-mu)/math.Sqrt(v+eps) + beta }\n\treturn x\n}",
+          c: "void batchnorm(double* x, int n, double gamma, double beta, double eps) {\n    double mu = 0; for (int i = 0; i < n; i++) mu += x[i]; mu /= n;\n    double var = 0; for (int i = 0; i < n; i++) var += (x[i]-mu)*(x[i]-mu); var /= n;\n    for (int i = 0; i < n; i++) x[i] = gamma * (x[i] - mu) / sqrt(var + eps) + beta;\n}",
+          elixir: "defmodule BatchNorm do\n  def f(x, gamma, beta, eps) do\n    n = length(x)\n    mu = Enum.sum(x) / n\n    var = Enum.map(x, fn v -> (v - mu) * (v - mu) end) |> Enum.sum() / n\n    Enum.map(x, fn v -> gamma * (v - mu) / :math.sqrt(var + eps) + beta end)\n  end\nend",
+          scala: "def batchnorm(x: Array[Double], gamma: Double = 1.0, beta: Double = 0.0, eps: Double = 1e-5): Array[Double] = {\n  val n = x.length.toDouble\n  val mu = x.sum / n\n  val v = x.map(xi => (xi - mu) * (xi - mu)).sum / n\n  x.map(xi => gamma * (xi - mu) / math.sqrt(v + eps) + beta)\n}",
+        },
       };
 
       document.querySelectorAll('.code-panel .lang-toggle button').forEach(btn => {
@@ -1625,6 +3001,60 @@
         duration: 12.0,
       });
 
+      AIHPC_ANIM.register('ml-relu', {
+        title: "ReLU (Rectified Linear Unit)",
+        steps: [{"title": "Step 1: Define the function", "math": "f(x) = max(0, x)", "explain": "For any input x, output 0 if x < 0, else output x. This is a piecewise linear function with a kink at x = 0."}, {"title": "Step 2: Gradient", "math": "f'(x) = 1 if x > 0, 0 if x < 0, undefined at x = 0", "explain": "The gradient is 1 for positive inputs (no vanishing gradient) and 0 for negative inputs (dead neurons). At x = 0, the sub-gradient is used (typically 0 or 1)."}, {"title": "Step 3: Sparsity", "math": "P(f(x) = 0) = P(x < 0)", "explain": "For normally-distributed inputs, ~50% of neurons output 0. This sparsity is computationally efficient and acts as implicit regularisation."}, {"title": "Step 4: Non-saturating", "math": "For x > 0: f'(x) = 1 (constant gradient)", "explain": "Unlike sigmoid/tanh whose gradients vanish as x grows, ReLU's gradient is 1 for all positive x. This enables training very deep networks."}, {"title": "Step 5: Dead neuron problem", "math": "If x < 0 for all training data: f'(x) = 0, neuron never recovers", "explain": "A 'dead ReLU' outputs 0 and has 0 gradient for all inputs \u2014 it never updates. Mitigated by Leaky ReLU (f(x) = max(\u03b1x, x) for small \u03b1) or careful initialisation."}],
+        duration: 12.0,
+      });
+
+      AIHPC_ANIM.register('ml-gelu', {
+        title: "GELU (Gaussian Error Linear Unit)",
+        steps: [{"title": "Step 1: Gaussian CDF", "math": "Phi(x) = integral from -inf to x of (1/sqrt(2*pi)) * exp(-t^2/2) dt", "explain": "Phi(x) is the cumulative distribution function of the standard normal. It is 0 for very negative x, 0.5 at x=0, and 1 for very positive x."}, {"title": "Step 2: GELU definition", "math": "f(x) = x * Phi(x)", "explain": "Multiply the input by its own CDF. For x >> 0: Phi approx 1, so f(x) approx x. For x << 0: Phi approx 0, so f(x) approx 0. Near x=0: smooth transition."}, {"title": "Step 3: Tanh approximation", "math": "Phi(x) approx 0.5 * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3)))", "explain": "The exact Phi requires the error function (erf). The tanh approximation is accurate to within 0.0001 and is much faster to compute."}, {"title": "Step 4: Gradient", "math": "f'(x) = Phi(x) + x * phi(x)", "explain": "where phi(x) is the Gaussian PDF. The gradient is smooth everywhere (no kink), and non-zero for x < 0 (unlike ReLU)."}, {"title": "Step 5: Why it works", "math": "GELU is dropout-like (probabilistic) + ReLU-like (deterministic)", "explain": "GELU can be interpreted as 'ReLU with soft gating': instead of a hard 0/1 gate, it uses a probabilistic gate Phi(x). This smoothness improves generalisation and is the default activation in BERT, GPT, and most transformer models."}],
+        duration: 12.0,
+      });
+
+      AIHPC_ANIM.register('ml-swiglu', {
+        title: "SwiGLU (Swish-Gated Linear Unit)",
+        steps: [{"title": "Step 1: Swish activation", "math": "Swish(x) = x * sigmoid(x) = x / (1 + exp(-x))", "explain": "Swish is a smooth, non-monotonic activation. For x >> 0: Swish approx x (linear). For x << 0: Swish approx 0. Near x = 0: Swish has a slight dip (non-monotonic), which helps with feature selection."}, {"title": "Step 2: Gated linear unit", "math": "GLU(x, W) = sigmoid(xW) * (xV)", "explain": "GLU gates a linear projection xV by a sigmoid gate sigma(xW). SwiGLU replaces the sigmoid gate with Swish: SwiGLU = Swish(xW) * (xV)."}, {"title": "Step 3: SwiGLU definition", "math": "SwiGLU(x, W, V) = Swish(xW) * (xV)", "explain": "Two learned projections: W (gate) and V (value). The Swish gate controls how much of xV passes through. The gate is smooth (unlike GLU's hard sigmoid)."}, {"title": "Step 4: Gradient", "math": "d(SwGLU)/d(xV) = Swish(xW)", "explain": "The gradient w.r.t. the value path is the Swish gate \u2014 smooth and non-zero for all x. The gradient w.r.t. the gate path involves Swish' = sigma(x) + x * sigma'(x)."}, {"title": "Step 5: Performance", "math": "SwiGLU > GELU > ReLU in LLM training (LLaMA, PaLM 2)", "explain": "Empirically, SwiGLU gives better perplexity than GELU and ReLU in transformer LLMs. The non-monotonicity of Swish + the learned gate provides richer feature selection. Used in LLaMA-2/3, PaLM 2, and Mistral."}],
+        duration: 12.0,
+      });
+
+      AIHPC_ANIM.register('ml-sgd', {
+        title: "SGD (Stochastic Gradient Descent)",
+        steps: [{"title": "Step 1: Loss gradient", "math": "grad = dL/d(theta)", "explain": "Compute the gradient of the loss w.r.t. parameters. In practice, this is done on a mini-batch of data (not the full dataset), introducing stochastic noise."}, {"title": "Step 2: Update rule", "math": "theta_new = theta - eta * grad", "explain": "Step against the gradient by a distance proportional to eta (the learning rate). eta controls the step size; too large = unstable, too small = slow convergence."}, {"title": "Step 3: Learning rate schedule", "math": "eta_t = eta_0 / (1 + decay * t)", "explain": "Decay the learning rate over time to allow large steps early (fast convergence) and small steps later (fine-tuning). Common schedules: step decay, cosine annealing, warmup + constant."}, {"title": "Step 4: Mini-batch noise", "math": "E[grad_batch] = grad_true, Var[grad_batch] ~ 1/batch_size", "explain": "The mini-batch gradient is an unbiased estimator of the true gradient, with variance inversely proportional to batch size. The noise helps escape saddle points and shallow local minima."}, {"title": "Step 5: Convergence", "math": "For convex L: O(1/sqrt(t)) with eta = 1/sqrt(t)", "explain": "SGD converges to the global minimum for convex losses. For non-convex (deep networks), convergence is not guaranteed, but SGD reliably finds good local minima in practice."}],
+        duration: 12.0,
+      });
+
+      AIHPC_ANIM.register('ml-adam', {
+        title: "Adam (Adaptive Moment Estimation)",
+        steps: [{"title": "Step 1: First moment (momentum)", "math": "m_t = beta1 * m_{t-1} + (1 - beta1) * g_t", "explain": "Exponential moving average of gradients. beta1 = 0.9 (default). Smooths noisy gradients \u2014 acts as momentum."}, {"title": "Step 2: Second moment (RMSProp)", "math": "v_t = beta2 * v_{t-1} + (1 - beta2) * g_t^2", "explain": "Exponential moving average of squared gradients. beta2 = 0.999 (default). Estimates the per-parameter gradient magnitude."}, {"title": "Step 3: Bias correction", "math": "m_hat = m_t / (1 - beta1^t);  v_hat = v_t / (1 - beta2^t)", "explain": "The EMA is biased toward 0 in early iterations (since m_0 = v_0 = 0). Dividing by (1 - beta^t) corrects this \u2014 important for the first few hundred steps."}, {"title": "Step 4: Update", "math": "theta <- theta - eta * m_hat / (sqrt(v_hat) + eps)", "explain": "The step size is eta * (smoothed gradient) / (smoothed gradient magnitude). This gives large steps for rare-but-consistent gradients and small steps for frequent-but-noisy gradients. eps = 1e-8 prevents division by zero."}, {"title": "Step 5: Default hyperparameters", "math": "eta=1e-3, beta1=0.9, beta2=0.999, eps=1e-8", "explain": "Adam's defaults work well for most problems without tuning. This is a key practical advantage over SGD (which requires careful eta tuning + schedule)."}],
+        duration: 12.0,
+      });
+
+      AIHPC_ANIM.register('ml-adamw', {
+        title: "AdamW (Adam with Decoupled Weight Decay)",
+        steps: [{"title": "Step 1: Adam's L2 issue", "math": "In Adam, L2 reg adds wd*theta to the gradient: g' = g + wd*theta", "explain": "L2 regularisation is implemented by adding wd*theta to the gradient before computing the moments. But Adam's adaptive denominator (sqrt(v)) interacts with this: the weight decay gets scaled differently for each parameter."}, {"title": "Step 2: Coupled vs decoupled", "math": "Coupled: g' = g + wd*theta (Adam).  Decoupled: theta -= eta*wd*theta (AdamW)", "explain": "AdamW applies weight decay directly to theta, NOT through the gradient. This makes the weight decay equivalent across all parameters \u2014 independent of the adaptive learning rate."}, {"title": "Step 3: AdamW update", "math": "1. Compute Adam moments (m, v) from g (WITHOUT wd*theta)\n2. theta <- theta - eta*wd*theta (decoupled weight decay)\n3. theta <- theta - eta * m_hat / sqrt(v_hat + eps) (Adam step)", "explain": "The weight decay is a simple multiplication (step 2), applied BEFORE the Adam gradient step (step 3). This is mathematically equivalent to L2 for SGD but different for Adam."}, {"title": "Step 4: Why it matters for transformers", "math": "Transformers need large weight decay (0.1) for generalisation", "explain": "In standard Adam, the large weight decay gets distorted by the adaptive learning rate. AdamW's decoupled decay applies uniformly, enabling the large wd=0.1 that transformers need."}, {"title": "Step 5: Default hyperparameters", "math": "eta=1e-3, beta1=0.9, beta2=0.999, wd=0.01 (vision) / 0.1 (NLP)", "explain": "AdamW's weight decay is typically 0.01 for CNNs (ResNet) and 0.1 for transformers (BERT, ViT). The higher wd for transformers prevents overfitting on large datasets."}],
+        duration: 12.0,
+      });
+
+      AIHPC_ANIM.register('ml-dropout', {
+        title: "Dropout",
+        steps: [{"title": "Step 1: Mask generation", "math": "mask[i] ~ Bernoulli(1 - p)", "explain": "For each neuron, draw a random binary mask: 1 with probability (1-p), 0 with probability p. p is the dropout rate (typically 0.1-0.5)."}, {"title": "Step 2: Apply mask", "math": "y = x * mask", "explain": "Element-wise multiply the activations by the mask. p fraction of neurons are 'dropped' (output 0). The surviving neurons must learn to function without the dropped ones."}, {"title": "Step 3: Inverted dropout (scaling)", "math": "y = x * mask / (1 - p)", "explain": "Divide by (1-p) during training so that the expected output E[y] = x. This 'inverted dropout' means no scaling is needed at inference time \u2014 just use y = x (all neurons active)."}, {"title": "Step 4: Preventing co-adaptation", "math": "Each neuron must work with random subsets of others", "explain": "Since any neuron can be dropped, no two neurons can co-adapt (rely on each other). The network learns redundant, robust features \u2014 like training an ensemble of sub-networks in one pass."}, {"title": "Step 5: Inference", "math": "At test time: y = x (no dropout, no scaling needed)", "explain": "Thanks to inverted dropout (step 3), inference is just the identity \u2014 all neurons active, no scaling. The network behaves as an ensemble of the 2^N sub-networks sampled during training."}],
+        duration: 12.0,
+      });
+
+      AIHPC_ANIM.register('ml-l1-l2-regularisation', {
+        title: "L1/L2 Regularisation (Weight Decay)",
+        steps: [{"title": "Step 1: L2 (Ridge) penalty", "math": "L2 = lambda * sum(w^2) = lambda * ||w||_2^2", "explain": "L2 adds lambda * ||w||^2 to the loss. The gradient is 2*lambda*w \u2014 proportional to the weight. This shrinks all weights toward 0 smoothly. No weight becomes exactly 0."}, {"title": "Step 2: L1 (Lasso) penalty", "math": "L1 = lambda * sum(|w|) = lambda * ||w||_1", "explain": "L1 adds lambda * sum(|w|) to the loss. The gradient is lambda * sign(w) \u2014 constant magnitude. This can drive weights to exactly 0 (sparsity), enabling feature selection."}, {"title": "Step 3: L1 sparsity", "math": "L1 gradient = lambda * sign(w) \u2014 constant magnitude", "explain": "Because the L1 gradient is constant (lambda * sign(w)), weights near 0 get pushed to exactly 0. This is unlike L2 whose gradient (2*lambda*w) -> 0 as w -> 0, leaving small but non-zero weights."}, {"title": "Step 4: Elastic net (L1 + L2)", "math": "L_reg = L + lambda1 * ||w||_1 + lambda2 * ||w||_2^2", "explain": "Elastic net combines L1 (sparsity) + L2 (smoothness). Useful when features are correlated \u2014 L1 alone picks one, L2 keeps all small; elastic net keeps groups."}, {"title": "Step 5: Weight decay vs L2", "math": "Weight decay: theta <- theta - eta * (grad + lambda * theta) = theta * (1 - eta*lambda) - eta*grad", "explain": "Weight decay is the gradient-descent form of L2: the weight is shrunk by a factor (1 - eta*lambda) at each step. For SGD, this is equivalent to L2. For Adam, see AdamW (decoupled weight decay)."}],
+        duration: 12.0,
+      });
+
+      AIHPC_ANIM.register('ml-batchnorm', {
+        title: "Batch Normalisation",
+        steps: [{"title": "Step 1: Batch statistics", "math": "mu_B = (1/m) * sum(x_i);  sigma_B^2 = (1/m) * sum((x_i - mu_B)^2)", "explain": "Compute the mean and variance of the activations over the mini-batch of size m. These statistics are different for each batch \u2014 introducing stochastic noise."}, {"title": "Step 2: Normalise", "math": "x_hat = (x - mu_B) / sqrt(sigma_B^2 + eps)", "explain": "Subtract the batch mean and divide by the batch std. eps = 1e-5 prevents division by zero. The result has zero mean and unit variance (per batch)."}, {"title": "Step 3: Learnable scale + shift", "math": "y = gamma * x_hat + beta", "explain": "gamma and beta are learned parameters that allow the network to undo the normalisation if it's not helpful. Without gamma/beta, BatchNorm would force every layer to have unit variance \u2014 too restrictive."}, {"title": "Step 4: Running statistics (inference)", "math": "mu_running = alpha * mu_running + (1-alpha) * mu_B", "explain": "During training, keep a running average of mu_B and sigma_B. At inference, use the running averages instead of batch statistics (since inference may have batch size 1)."}, {"title": "Step 5: Why it works", "math": "Reduces internal covariate shift + enables higher lr + mild regularisation", "explain": "BatchNorm stabilises the distribution of activations across layers, reducing 'internal covariate shift'. This allows 10x higher learning rates and faster convergence. The batch-level noise also acts as mild regularisation (reducing the need for dropout)."}],
+        duration: 12.0,
+      });
+
       
       // ---- Phase 32: Graph-table-sync ----
       var GTS_CONFIGS = {
@@ -1655,6 +3085,34 @@
         'cosine-similarity': { xCol: 3, yCol: 4, xLabel: 'cos(theta)', yLabel: 'loss=1-cos(theta)',
           curveFn: function(x) { return 1 - x; },
           inflectionFn: function(row, i, rows) { return parseFloat(row[4]) > 1.5 ? {annotation: 'L=' + row[4] + ' - anti-parallel'} : null; } },
+        // Phase 33: new GTS configs
+        'relu': { xCol: 0, yCol: 1, xLabel: 'x', yLabel: 'f(x)=max(0,x)',
+          curveFn: function(x) { return Math.max(0, x); },
+          inflectionFn: function(row, i, rows) { return parseFloat(row[0]) >= 0 && i > 0 && parseFloat(rows[i-1][0]) < 0 ? {annotation: 'kink at x=0: f transitions from 0 to x'} : null; } },
+        'gelu': { xCol: 0, yCol: 1, xLabel: 'x', yLabel: 'GELU(x)',
+          curveFn: function(x) { var c = Math.sqrt(2/Math.PI); return 0.5*x*(1+Math.tanh(c*(x+0.044715*x*x*x))); },
+          inflectionFn: function(row, i, rows) { return parseFloat(row[0]) < 0 && parseFloat(row[1]) < 0 ? {annotation: 'GELU is slightly negative here (smooth)'} : null; } },
+        'swiglu': { xCol: 0, yCol: 1, xLabel: 'x', yLabel: 'Swish(x)',
+          curveFn: function(x) { return x * (1 / (1 + Math.exp(-x))); },
+          inflectionFn: function(row, i, rows) { return parseFloat(row[1]) < 0 ? {annotation: 'Swish is non-monotonic (negative dip)'} : null; } },
+        'sgd': { xCol: 0, yCol: 1, xLabel: 't', yLabel: 'theta',
+          curveFn: null,
+          inflectionFn: function(row, i, rows) { return parseFloat(row[2]) === 0 ? {annotation: 'gradient=0: converged'} : null; } },
+        'adam': { xCol: 0, yCol: 3, xLabel: 't', yLabel: 'm (1st moment)',
+          curveFn: function(t) { return 0.5 * (1 - Math.pow(0.9, t)); },
+          inflectionFn: function(row, i, rows) { return parseFloat(row[0]) >= 50 ? {annotation: 'm converged to 0.5 (true gradient)'} : null; } },
+        'adamw': { xCol: 0, yCol: 1, xLabel: 't', yLabel: 'theta',
+          curveFn: null,
+          inflectionFn: function(row, i, rows) { return parseFloat(row[0]) >= 100 ? {annotation: 'theta stabilising (wd + Adam)'} : null; } },
+        'dropout': { xCol: 0, yCol: 3, xLabel: 'neuron', yLabel: 'y = x*mask/(1-p)',
+          curveFn: null,
+          inflectionFn: function(row, i, rows) { return parseFloat(row[3]) === 0 ? {annotation: 'dropped (mask=0)'} : null; } },
+        'l1-l2-regularisation': { xCol: 0, yCol: 1, xLabel: 'w', yLabel: 'L1 = lambda*|w|',
+          curveFn: function(x) { return 0.01 * Math.abs(x); },
+          inflectionFn: function(row, i, rows) { return parseFloat(row[0]) === 0 ? {annotation: 'L1 kink at w=0 (drives to exactly 0)'} : null; } },
+        'batchnorm': { xCol: 0, yCol: 3, xLabel: 'x', yLabel: 'y = gamma*x_hat + beta',
+          curveFn: null,
+          inflectionFn: function(row, i, rows) { return Math.abs(parseFloat(row[0]) - 0.5) < 0.01 ? {annotation: 'x = mu: y = beta (mean output)'} : null; } },
       };
       document.querySelectorAll('.demo-card').forEach(function (card) {
         var id = card.id.replace(/^demo-/, '');

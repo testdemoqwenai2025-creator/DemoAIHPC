@@ -103,8 +103,10 @@ jobs:
           # Phase 31: regenerate audit dashboard before mirror so it's
           # always up-to-date on the public site
           python3 scripts/gen-audit-dashboard.py || true
-          # Stage the updated dashboard + history for the mirror
-          git add docs/audit.html docs/audit-history/ 2>/dev/null || true
+          # Phase 33: regenerate concept cards from the latest digest manifest
+          python3 scripts/gen-concept-cards.py || true
+          # Stage the updated dashboard + history + concept cards for the mirror
+          git add docs/audit.html docs/audit-history/ docs/concepts/ 2>/dev/null || true
           git commit -m "CI: auto-update audit dashboard" 2>/dev/null || true
           git remote add public "https://x-access-token:${{ secrets.MIRROR_PAT }}@github.com/testdemoqwenai2025-creator/DemoAIHPC.git"
           git push --force-with-lease public "refs/tags/${GITHUB_REF##*/}:refs/tags/${GITHUB_REF##*/}"
