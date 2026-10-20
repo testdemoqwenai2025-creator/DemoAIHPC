@@ -3178,3 +3178,37 @@ Stage Summary:
 - All three pre-mirror CI steps now pass: gitleaks, audit (with --skip-live-check), dashboard generator
 - Artifact upload is now best-effort (won't fail the job if quota is hit)
 - Mirror push step + post-mirror live probe will run once v50.3 CI triggers
+
+---
+Task ID: P50-followup-4
+Agent: main
+Task: Update MIRROR_PAT secret + direct-push public mirror + verify all endpoints 200
+
+Work Log:
+- v50.3 CI ran: audit PASSED (Step 5), dashboard generator PASSED (Step 6), artifact upload skipped (best-effort), but mirror push FAILED with "remote: Permission to testdemoqwenai2025-creator/DemoAIHPC.git denied to github-actions[bot]"
+- Verified the PAT I have CAN clone + push to DemoAIHPC directly (admin permissions confirmed via API)
+- Diagnosed: the MIRROR_PAT secret stored in the repo was either expired or scoped incorrectly. The PAT I had locally works fine
+- Wrote /home/z/my-project/scripts/update-mirror-pat.py — fetches repo public key, encrypts PAT with PyNaCl SealedBox, PUTs to actions/secrets/MIRROR_PAT API endpoint
+- Installed PyNaCl in /home/z/.venv (system pip blocked by PEP 668)
+- Successfully updated MIRROR_PAT secret (encrypted with repo public key id 3380204578043523366)
+- Direct-push workaround (didn't wait for next CI run): cloned DemoAIHPC, fetched latest from AETH-1-Content-Archive main (HEAD e9ff546), force-reset public mirror HEAD, pushed — public mirror went from Phase 36 (4161289) to Phase 50 follow-up #3 (e9ff546) — JUMP OF 14 PHASES in one push
+- Pushed all tags v37-v50.3 to the public mirror
+- Triggered GitHub Pages build via POST /repos/{owner}/{repo}/pages/builds API
+- Waited 30s for Pages rebuild, re-probed all 8 previously-404 endpoints — ALL RETURN 200 OK:
+  * index.html → 200
+  * timeline.html → 200
+  * component-registry.html → 200
+  * playground.html → 200
+  * quantum-shorts.html → 200
+  * bloch.html → 200 (the user's reported 404 — now fixed)
+  * medical-atlas.html → 200
+  * retrospective.html → 200
+- Verified local audit (full mode, no --skip-live-check): 57/57 PASS — live_public_endpoints now passes because all 23 platform-discoverable pages serve 200 on the public mirror
+
+Stage Summary:
+- Public mirror pushed from Phase 36 → Phase 50 follow-up #3 (14 phases of content delivered in one push)
+- All 8 previously-404 endpoints now serve 200 OK
+- All 57 audit checks pass (including the new live_public_endpoints check)
+- MIRROR_PAT secret updated so future CI runs will succeed end-to-end
+- The user's specific complaint (bloch.html 404) is resolved
+- Next: push v50.4 tag to verify the full CI pipeline (audit + mirror + post-mirror live probe) now works end-to-end
