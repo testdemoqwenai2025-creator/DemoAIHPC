@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AIHPC Advanced — Scientific Computing Lab. A Jupyter-style notebook environment running pure client-side Python (Pyodide / WebAssembly). No login, no backend — your code runs in your browser. Pre-loaded with numpy, pandas, matplotlib, scipy." />
+    <title>🔬 Scientific Computing Lab — AIHPC Advanced</title>
+    <!-- Pyodide v0.24.1 — Python 3.11 compiled to WebAssembly -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <style>
+      :root {
+        --bg: #0b0f1a;
+        --bg-elevated: #121826;
+        --bg-elevated-2: #1a2133;
+        --bg-cell: #0f1422;
+        --border: #1f2937;
+        --border-strong: #2a3548;
+        --text: #f3f4f6;
+        --text-muted: #9ca3af;
+        --text-muted-2: #6b7280;
+        --accent: #8b5cf6;
+        --accent-2: #06b6d4;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --code-bg: #06080f;
+        --code-fg: #e5e7eb;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.5; min-height: 100vh; font-size: 14px; }
+      body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), radial-gradient(900px 500px at 90% 110%, rgba(6,182,212,0.12), transparent 60%); pointer-events: none; z-index: 0; }
+
+      /* Ribbon (consistent with platform) */
+      .ribbon { position: sticky; top: 0; z-index: 50; background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); border-bottom: 1px solid rgba(139,92,246,0.25); backdrop-filter: blur(12px); }
+      .ribbon-inner { max-width: 1400px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 700; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; background: linear-gradient(135deg, #06b6d4, #8b5cf6); color: white; font-size: 14px; }
+      .ribbon-nav { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+      .ribbon-dropdown > summary { padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text); list-style: none; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; margin-left: 4px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated-2); }
+      .ribbon-menu { position: absolute; margin-top: 4px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 8px; padding: 6px; min-width: 200px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); z-index: 100; }
+      .ribbon-menu a { display: block; padding: 6px 10px; color: var(--text); text-decoration: none; border-radius: 4px; font-size: 13px; }
+      .ribbon-menu a:hover { background: var(--bg-elevated-2); }
+
+      /* Layout */
+      .container { max-width: 1400px; margin: 0 auto; padding: 16px; position: relative; z-index: 1; }
+      .page-header { margin-bottom: 16px; }
+      .page-header h1 { font-size: 28px; margin: 0 0 4px; background: linear-gradient(90deg, #06b6d4, #8b5cf6, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .page-header .lead { font-size: 13px; color: var(--text-muted); margin: 0; max-width: 800px; }
+      .page-header .back-link { font-size: 12px; color: var(--accent-2); text-decoration: none; }
+      .page-header .back-link:hover { text-decoration: underline; }
+
+      /* Status strip */
+      .status-strip { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+      .status-pill { padding: 6px 12px; border-radius: 9999px; font-size: 11px; font-weight: 600; font-family: ui-monospace, monospace; }
+      .status-pill.loading { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); color: #fcd34d; }
+      .status-pill.ready { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); color: #6ee7b7; }
+      .status-pill.error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; }
+
+      /* Toolbar */
+      .toolbar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; align-items: center; }
+      .toolbar-btn { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg-elevated-2); color: var(--text); cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.15s; }
+      .toolbar-btn:hover { border-color: var(--accent); }
+      .toolbar-btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-color: transparent; color: white; }
+      .toolbar-btn.success { background: linear-gradient(90deg, #10b981, #06b6d4); border-color: transparent; color: white; }
+      .toolbar-btn.danger { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.4); color: #fca5a5; }
+      .toolbar-spacer { flex: 1; }
+      .toolbar-input { padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg-elevated-2); color: var(--text); font-size: 12px; font-family: inherit; min-width: 200px; }
+
+      /* Layout grid */
+      .lab-layout { display: grid; grid-template-columns: 280px 1fr; gap: 16px; }
+      @media (max-width: 900px) { .lab-layout { grid-template-columns: 1fr; } }
+
+      /* Sidebar */
+      .sidebar { display: flex; flex-direction: column; gap: 12px; }
+      .sidebar-section { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+      .sidebar-section h3 { font-size: 11px; font-weight: 700; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 8px; }
+      .sidebar-card { padding: 8px 10px; background: var(--bg-cell); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; margin-bottom: 6px; transition: all 0.15s; }
+      .sidebar-card:hover { border-color: var(--accent); }
+      .sidebar-card .card-title { font-size: 12px; font-weight: 700; color: var(--text); margin: 0 0 2px; }
+      .sidebar-card .card-desc { font-size: 10px; color: var(--text-muted); margin: 0; line-height: 1.4; }
+      .pkg-list { font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-muted); }
+      .pkg-list .pkg { color: var(--accent-2); }
+
+      /* Notebook */
+      .notebook { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 12px; min-height: 600px; }
+      .notebook-empty { padding: 48px; text-align: center; color: var(--text-muted); }
+      .cell { background: var(--bg-cell); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; overflow: hidden; }
+      .cell-header { display: flex; justify-content: space-between; align-items: center; padding: 4px 8px; background: rgba(11,15,26,0.5); border-bottom: 1px solid var(--border); font-size: 10px; color: var(--text-muted-2); font-family: ui-monospace, monospace; }
+      .cell-header .cell-type { padding: 2px 6px; border-radius: 3px; font-weight: 700; text-transform: uppercase; }
+      .cell-type.code { background: rgba(139,92,246,0.2); color: #c4b5fd; }
+      .cell-type.markdown { background: rgba(6,182,212,0.2); color: #67e8f9; }
+      .cell-controls { display: flex; gap: 4px; }
+      .cell-controls button { background: transparent; border: 1px solid var(--border-strong); color: var(--text-muted); padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 10px; font-family: inherit; }
+      .cell-controls button:hover { border-color: var(--accent); color: var(--text); }
+      .cell-controls button.run-btn { background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.4); color: #6ee7b7; }
+      .cell-controls button.del-btn:hover { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.4); color: #fca5a5; }
+      .cell-editor { width: 100%; border: none; background: var(--code-bg); color: var(--code-fg); padding: 10px 12px; font-family: ui-monospace, SF Mono, Menlo, monospace; font-size: 12.5px; line-height: 1.5; resize: vertical; min-height: 60px; outline: none; }
+      .cell-editor:focus { background: #080a13; }
+      .cell-output { padding: 10px 12px; background: #06080f; border-top: 1px solid var(--border); font-family: ui-monospace, monospace; font-size: 12px; line-height: 1.5; white-space: pre-wrap; word-break: break-word; color: var(--text); max-height: 400px; overflow-y: auto; }
+      .cell-output.stdout { color: #e5e7eb; }
+      .cell-output.stderr { color: #fca5a5; }
+      .cell-output.result { color: #67e8f9; }
+      .cell-output img { max-width: 100%; height: auto; display: block; margin: 4px 0; }
+      .cell-output.error { color: #fca5a5; background: rgba(239,68,68,0.05); }
+      .cell-output:empty { display: none; }
+
+      /* Footer */
+      .lab-footer { margin-top: 16px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 10px; color: var(--text-muted-2); font-family: ui-monospace, monospace; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    </style>
+  </head>
+  <body>
+    <!-- Ribbon (consistent with the rest of the platform) -->
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="index.html" class="ribbon-brand">
+          <span class="ribbon-logo">A</span>
+          <span>AIHPC Advanced</span>
+        </a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu">
+            <a href="index.html">Home</a>
+            <a href="lab.html">🔬 Scientific Computing Lab</a>
+            <a href="demos.html">Demos</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="graph.html">Knowledge Graph</a>
+            <a href="benchmark.html">Agentic Benchmark</a>
+            <a href="subscribe.html">Subscribe</a>
+            <a href="timeline.html">Platform Timeline</a>
+            <a href="retrospective.html">50-Phase Retrospective</a>
+            <a href="component-registry.html">Component Registry</a>
+          </div></details>
+          <details class="ribbon-dropdown"><summary>Visualisers</summary><div class="ribbon-menu">
+            <a href="playground.html">Cross-Domain Playground</a>
+            <a href="quantum-shorts.html">Quantum Shorts Channel</a>
+            <a href="bloch.html">Bloch Sphere Shorts</a>
+            <a href="medical-atlas.html">Medical Imaging Atlas</a>
+            <a href="science/physics/quantum.html">Quantum Mechanics Hub</a>
+          </div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu">
+            <a href="science-biology.html">Biology Hub</a>
+            <a href="science-chemistry.html">Chemistry Hub</a>
+            <a href="science-physics.html">Physics Hub</a>
+            <a href="science-maths.html">Mathematics Hub</a>
+            <a href="science-ml.html">🤖 Machine Learning</a>
+            <a href="science-bioinformatics.html">Bioinformatics</a>
+            <a href="science-cheminformatics.html">Cheminformatics</a>
+          </div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu">
+            <a href="feeds.html">📡 Live Journal Feeds</a>
+            <a href="digest.html">Weekly Science Digest</a>
+            <a href="audit.html">📊 Audit Dashboard</a>
+            <a href="404.html">🚧 404 page</a>
+            <a href="dashboard.html">Temporal Knowledge Graph Dashboard</a>
+            <a href="concepts.html">Concept Cards</a>
+          </div></details>
+        </nav>
+        <div style="display: flex; gap: 6px;">
+          <a href="index.html" style="padding: 6px 14px; border-radius: 6px; background: rgba(18,24,38,0.7); border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px;">← Home</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="page-header">
+        <a href="index.html" class="back-link">← Home</a>
+        <h1>🔬 Scientific Computing Lab</h1>
+        <p class="lead">A Jupyter-style notebook environment running pure client-side Python (Pyodide / WebAssembly). No login, no backend — your code runs entirely in your browser. Pre-loaded with numpy, pandas, matplotlib, scipy. Notebooks auto-save to your browser's local storage; export to <code>.ipynb</code> for portability.</p>
+      </div>
+
+      <div class="status-strip">
+        <span class="status-pill loading" id="py-status">⏳ Loading Pyodide (~10MB initial download)…</span>
+        <span class="status-pill" id="pkg-status" style="background: rgba(18,24,38,0.7); border: 1px solid var(--border-strong); color: var(--text-muted);">Packages: none yet</span>
+        <span class="status-pill" id="save-status" style="background: rgba(18,24,38,0.7); border: 1px solid var(--border-strong); color: var(--text-muted);">💾 Auto-save: idle</span>
+      </div>
+
+      <div class="toolbar">
+        <button class="toolbar-btn primary" id="btn-run-all">▶ Run all</button>
+        <button class="toolbar-btn success" id="btn-add-code">+ Code</button>
+        <button class="toolbar-btn" id="btn-add-md">+ Markdown</button>
+        <button class="toolbar-btn" id="btn-clear">⊘ Clear outputs</button>
+        <button class="toolbar-btn" id="btn-restart">↺ Restart kernel</button>
+        <input type="text" class="toolbar-input" id="notebook-name" placeholder="Notebook name…" value="my-notebook" />
+        <button class="toolbar-btn" id="btn-save">💾 Save</button>
+        <button class="toolbar-btn" id="btn-export">⬇ Export .ipynb</button>
+        <button class="toolbar-btn" id="btn-import">⬆ Import .ipynb</button>
+        <input type="file" id="file-input" accept=".ipynb,application/json" style="display: none;" />
+        <div class="toolbar-spacer"></div>
+        <button class="toolbar-btn danger" id="btn-clear-all">🗑 Delete notebook</button>
+      </div>
+
+      <div class="lab-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="sidebar-section">
+            <h3>📚 Starter notebooks</h3>
+            <div class="sidebar-card" data-starter="ols-regression">
+              <div class="card-title">📊 OLS Regression</div>
+              <div class="card-desc">Generate synthetic data + fit ordinary least squares by hand. Compute β coefficients + R².</div>
+            </div>
+            <div class="sidebar-card" data-starter="feeds-analysis">
+              <div class="card-title">📡 Journal Feeds Analysis</div>
+              <div class="card-desc">Load the live feeds/all.json snapshot + summarise by domain, journal, and time.</div>
+            </div>
+            <div class="sidebar-card" data-starter="bloch-sphere">
+              <div class="card-title">⚛ Bloch Sphere</div>
+              <div class="card-desc">Simulate single-qubit state evolution under Hadamard + Rabi + phase gates. Plot on Bloch sphere.</div>
+            </div>
+            <div class="sidebar-card" data-starter="loss-functions">
+              <div class="card-title">📉 ML Loss Functions</div>
+              <div class="card-desc">Compute MSE / MAE / Huber / Log-Cosh / KL / Cosine on synthetic y_true vs y_pred. Plot comparison.</div>
+            </div>
+            <div class="sidebar-card" data-starter="protein-stats">
+              <div class="card-title">🧬 Protein Stats</div>
+              <div class="card-desc">Parse a small PDB file, compute amino-acid composition + Ramachandran-like plot.</div>
+            </div>
+            <div class="sidebar-card" data-starter="fourier">
+              <div class="card-title">〰 Fourier Transform</div>
+              <div class="card-desc">Visualise FFT of a chirp signal + windowing effects. NumPy + Matplotlib.</div>
+            </div>
+          </div>
+
+          <div class="sidebar-section">
+            <h3>🔗 Platform integration</h3>
+            <div class="sidebar-card" data-cmd="%feeds">
+              <div class="card-title">%feeds</div>
+              <div class="card-desc">Load the 413-entry journal feed snapshot into a pandas DataFrame.</div>
+            </div>
+            <div class="sidebar-card" data-cmd="%packages">
+              <div class="card-title">%packages</div>
+              <div class="card-desc">List installed Python packages in the Pyodide kernel.</div>
+            </div>
+            <div class="sidebar-card" data-cmd="%help">
+              <div class="card-title">%help</div>
+              <div class="card-desc">Show all special commands + getting-started guide.</div>
+            </div>
+            <div class="sidebar-card" data-href="concepts.html">
+              <div class="card-title">🗂 Browse concept cards</div>
+              <div class="card-desc">125 cards with Math→Code derivations across ML / Digest / Quantum / Platform.</div>
+            </div>
+            <div class="sidebar-card" data-href="feeds.html">
+              <div class="card-title">📡 Live journal feeds</div>
+              <div class="card-desc">413 entries from 11 journals — Science Daily, Nature, arXiv, PLOS.</div>
+            </div>
+          </div>
+
+          <div class="sidebar-section">
+            <h3>ℹ About the lab</h3>
+            <p style="font-size: 11px; color: var(--text-muted); margin: 0; line-height: 1.6;">
+              Python runs in your browser via <strong style="color: var(--accent-2);">Pyodide</strong> — CPython 3.11 compiled to WebAssembly. No code is sent to any server. Notebooks persist in <code>localStorage</code> (per-browser, per-device). Export to <code>.ipynb</code> for portability to Jupyter / Colab / VS Code.
+            </p>
+          </div>
+        </aside>
+
+        <!-- Notebook -->
+        <main class="notebook" id="notebook">
+          <div class="notebook-empty" id="empty-state">
+            <div style="font-size: 14px; color: var(--text); margin-bottom: 8px;">📝 Your notebook is empty</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Click <strong>+ Code</strong> or <strong>+ Markdown</strong> in the toolbar above to add a cell, or pick a <strong>starter notebook</strong> from the sidebar.</div>
+            <button class="toolbar-btn primary" onclick="addCell('code')">+ Add first code cell</button>
+          </div>
+          <div id="cells"></div>
+        </main>
+      </div>
+
+      <div class="lab-footer">
+        <span>🔬 AIHPC Advanced · Scientific Computing Lab · Phase 52 · Pyodide v0.24.1 (Python 3.11 / WebAssembly)</span>
+        <span id="exec-status">Ready.</span>
+      </div>
+    </div>
+
+    <script>
+      // ===== State =====
+      var pyodide = null;
+      var notebook = {
+        name: 'my-notebook',
+        cells: [],
+      };
+      var STORAGE_KEY = 'aihpc-lab-notebook';
+
+      // ===== Starter notebooks =====
+      var STARTERS = {
+        'ols-regression': {
+          name: 'OLS Regression',
+          cells: [
+            { type: 'markdown', source: '# OLS Regression by hand\n\nGenerate synthetic data with a known linear relationship + recover the parameters via ordinary least squares. Compare our hand-computed β with numpy\'s `polyfit`.' },
+            { type: 'code', source: 'import numpy as np\nimport matplotlib.pyplot as plt\n\n# Generate synthetic data: y = 2.0 * x + 1.0 + noise\nnp.random.seed(42)\nn = 50\nx = np.linspace(0, 10, n)\ny_true = 2.0 * x + 1.0\nnoise = np.random.normal(0, 1.0, n)\ny_obs = y_true + noise\n\n# OLS by hand: beta = (X^T X)^-1 X^T y\nX = np.column_stack([np.ones(n), x])\nbeta = np.linalg.inv(X.T @ X) @ X.T @ y_obs\nprint(f"Hand-computed: intercept={beta[0]:.4f}, slope={beta[1]:.4f}")\nprint(f"Numpy polyfit: intercept={np.polyfit(x, y_obs, 1)[1]:.4f}, slope={np.polyfit(x, y_obs, 1)[0]:.4f}")\nprint(f"True:          intercept=1.0000, slope=2.0000")\n\n# Plot\nplt.figure(figsize=(8, 4))\nplt.scatter(x, y_obs, alpha=0.6, label="data")\nplt.plot(x, beta[0] + beta[1] * x, "r-", label=f"OLS fit: y={beta[1]:.2f}x + {beta[0]:.2f}")\nplt.xlabel("x"); plt.ylabel("y"); plt.legend(); plt.title("OLS regression by hand")\nplt.grid(alpha=0.3)\nplt.show()' },
+          ],
+        },
+        'feeds-analysis': {
+          name: 'Journal Feeds Analysis',
+          cells: [
+            { type: 'markdown', source: '# Analyzing the live journal feeds\n\nThe platform has a GitHub Actions cron that fetches 12 journal RSS feeds every 6 hours and stores them at `feeds/all.json`. We can load that snapshot here and analyze it with pandas.' },
+            { type: 'code', source: 'import pandas as pd\nimport matplotlib.pyplot as plt\nfrom pyodide.http import pyfetch\n\n# Fetch the live feeds snapshot\nresp = await pyfetch("feeds/all.json")\ndata = await resp.json()\n\ndf = pd.DataFrame(data["entries"])\nprint(f"Total entries: {len(df)}")\nprint(f"Generated at: {data[\'generated_at\']}")\nprint(f"Feeds succeeded: {data[\'feeds_succeeded\']} / {data[\'feeds_polled\']}")\nprint()\nprint("Entries by domain:")\nprint(df["domain"].value_counts())\nprint()\nprint("Entries by journal:")\nprint(df["journal"].value_counts())' },
+            { type: 'code', source: '# Plot entries per domain\nplt.figure(figsize=(8, 4))\ndf["domain"].value_counts().plot(kind="barh", color=["#06b6d4", "#8b5cf6", "#ec4899", "#f59e0b", "#10b981", "#22d3ee"])\nplt.title("Journal feed entries by domain")\nplt.xlabel("Number of entries")\nplt.tight_layout()\nplt.show()' },
+          ],
+        },
+        'bloch-sphere': {
+          name: 'Bloch Sphere Simulation',
+          cells: [
+            { type: 'markdown', source: '# Single-qubit state evolution\n\nSimulate a qubit under a sequence of gates (Hadamard → Rabi oscillation → S phase) and visualise the trajectory on the Bloch sphere.' },
+            { type: 'code', source: 'import numpy as np\nimport matplotlib.pyplot as plt\n\n# Initial state |0> = [1, 0]\npsi = np.array([1, 0], dtype=complex)\n\n# Hadamard gate\nH = (1/np.sqrt(2)) * np.array([[1, 1], [1, -1]], dtype=complex)\npsi = H @ psi\nprint(f"After H: |+> = {psi}")\n\n# Rabi oscillation: rotate around Y axis\ndef R_y(theta):\n    return np.array([[np.cos(theta/2), -np.sin(theta/2)],\n                     [np.sin(theta/2),  np.cos(theta/2)]], dtype=complex)\n\n# Sample 50 points along a full Rabi cycle\nthetas = np.linspace(0, 2*np.pi, 50)\nstates = []\nfor t in thetas:\n    s = R_y(t) @ psi\n    states.append(s)\nstates = np.array(states)\n\n# Convert to Bloch vector: (2*Re(a*b*), 2*Im(a*b*), |a|^2 - |b|^2)\nX = 2 * np.real(states[:, 0] * np.conj(states[:, 1]))\nY = 2 * np.imag(states[:, 0] * np.conj(states[:, 1]))\nZ = np.abs(states[:, 0])**2 - np.abs(states[:, 1])**2\n\nfig = plt.figure(figsize=(8, 6))\nax = fig.add_subplot(111, projection="3d")\nax.plot(X, Y, Z, color="#8b5cf6", lw=2)\nax.scatter([X[0]], [Y[0]], [Z[0]], color="#10b981", s=80, label="Start")\nax.scatter([X[-1]], [Y[-1]], [Z[-1]], color="#ef4444", s=80, label="End")\n# Bloch sphere wireframe\nu = np.linspace(0, 2*np.pi, 20)\nax.plot(np.cos(u), np.sin(u), 0, "k-", alpha=0.2)\nax.plot([0, 0], [0, 0], [-1.2, 1.2], "k-", alpha=0.2)\nax.plot([0, 0], [-1.2, 1.2], [0, 0], "k-", alpha=0.2)\nax.set_xlabel("X"); ax.set_ylabel("Y"); ax.set_zlabel("Z")\nax.set_title("Bloch sphere trajectory under H + Rabi oscillation")\nax.legend()\nplt.tight_layout()\nplt.show()' },
+          ],
+        },
+        'loss-functions': {
+          name: 'ML Loss Functions',
+          cells: [
+            { type: 'markdown', source: '# Comparing loss functions\n\nCompute 6 regression losses (MSE, MAE, Log-Cosh, Huber, KL, Cosine) on synthetic data + see how each penalises errors differently.' },
+            { type: 'code', source: 'import numpy as np\nimport matplotlib.pyplot as plt\n\n# Synthetic y_true / y_pred\nnp.random.seed(0)\nn = 100\ny_true = np.random.randn(n)\ny_pred = y_true + np.random.normal(0, 0.5, n)\n\ndef mse(yt, yp): return np.mean((yt - yp)**2)\ndef mae(yt, yp): return np.mean(np.abs(yt - yp))\ndef log_cosh(yt, yp): return np.mean(np.log(np.cosh(yp - yt)))\ndef huber(yt, yp, delta=1.0):\n    e = np.abs(yt - yp)\n    return np.mean(np.where(e <= delta, 0.5 * e**2, delta * (e - 0.5 * delta)))\ndef kl(yt, yp):\n    # Normalize to probability distributions\n    p = np.abs(yt) / np.sum(np.abs(yt))\n    q = np.abs(yp) / np.sum(np.abs(yp))\n    return np.sum(p * np.log(p / q + 1e-12))\ndef cosine(yt, yp): return 1 - np.dot(yt, yp) / (np.linalg.norm(yt) * np.linalg.norm(yp) + 1e-12)\n\nprint(f"MSE:       {mse(y_true, y_pred):.4f}")\nprint(f"MAE:       {mae(y_true, y_pred):.4f}")\nprint(f"Log-Cosh:  {log_cosh(y_true, y_pred):.4f}")\nprint(f"Huber:     {huber(y_true, y_pred):.4f}")\nprint(f"KL:        {kl(y_true, y_pred):.4f}")\nprint(f"Cosine:    {cosine(y_true, y_pred):.4f}")\n\n# Plot loss vs error magnitude\nerrors = np.linspace(-3, 3, 100)\nplt.figure(figsize=(10, 5))\nplt.plot(errors, errors**2, label="MSE (e²)", lw=2)\nplt.plot(errors, np.abs(errors), label="MAE (|e|)", lw=2)\nplt.plot(errors, np.log(np.cosh(errors)), label="Log-Cosh", lw=2)\nplt.plot(errors, np.where(np.abs(errors) <= 1, 0.5*errors**2, np.abs(errors) - 0.5), label="Huber (δ=1)", lw=2)\nplt.xlabel("error e = y_pred - y_true")\nplt.ylabel("loss")\nplt.title("Loss function comparison — how each penalises error magnitude")\nplt.legend()\nplt.grid(alpha=0.3)\nplt.tight_layout()\nplt.show()' },
+          ],
+        },
+        'protein-stats': {
+          name: 'Protein Stats',
+          cells: [
+            { type: 'markdown', source: '# Protein composition statistics\n\nA tiny synthetic "PDB-like" residue sequence + amino-acid composition + Ramachandran-style scatter.' },
+            { type: 'code', source: 'import numpy as np\nimport matplotlib.pyplot as plt\nfrom collections import Counter\n\n# Synthetic 50-residue sequence\nseq = "MKWVTFISLLFLFSSAYSLSVQARQFYGEHQVWQFLVLLFSAVNC\n"\nprint(f"Sequence: {seq.strip()}")\nprint(f"Length: {len(seq.strip())} residues")\nprint()\ncounts = Counter(seq.strip())\nprint("Amino acid composition:")\nfor aa, n in counts.most_common():\n    bar = "█" * n\n    print(f"  {aa}: {n:3d} {bar}")\n\n# Synthetic phi/psi angles (Ramachandran plot)\nnp.random.seed(42)\nn_res = len(seq.strip())\nphi = np.random.normal(-60, 30, n_res)\npsi = np.random.normal(-45, 30, n_res)\nplt.figure(figsize=(6, 6))\nplt.scatter(phi, psi, alpha=0.6, c="#8b5cf6")\nplt.xlabel("φ (phi)"); plt.ylabel("ψ (psi)")\nplt.title("Ramachandran-style plot (synthetic)")\nplt.axhline(0, color="gray", alpha=0.3); plt.axvline(0, color="gray", alpha=0.3)\nplt.grid(alpha=0.3)\nplt.tight_layout()\nplt.show()' },
+          ],
+        },
+        'fourier': {
+          name: 'Fourier Transform',
+          cells: [
+            { type: 'markdown', source: '# FFT of a chirp signal\n\nGenerate a chirp (frequency sweeps from f0 to f1) + visualise its spectrum.' },
+            { type: 'code', source: 'import numpy as np\nimport matplotlib.pyplot as plt\n\n# Chirp signal\nfs = 1000  # sample rate\nduration = 1.0\nt = np.linspace(0, duration, int(fs*duration), endpoint=False)\nf0, f1 = 50, 250\n# Linear chirp\nchirp = np.sin(2*np.pi * (f0*t + (f1-f0)*t**2 / (2*duration)))\n\n# FFT\nfft = np.fft.rfft(chirp)\nfreqs = np.fft.rfftfreq(len(t), 1/fs)\nmagnitude = np.abs(fft)\n\nfig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 6))\nax1.plot(t[:200], chirp[:200], color="#06b6d4")\nax1.set_xlabel("time (s)"); ax1.set_ylabel("amplitude"); ax1.set_title("Chirp signal (first 0.2s)")\nax1.grid(alpha=0.3)\n\nax2.plot(freqs, magnitude, color="#8b5cf6")\nax2.set_xlabel("frequency (Hz)"); ax2.set_ylabel("|FFT|"); ax2.set_title("Frequency spectrum")\nax2.set_xlim(0, 300)\nax2.grid(alpha=0.3)\nplt.tight_layout()\nplt.show()\n\nprint(f"Peak frequency: {freqs[np.argmax(magnitude)]:.1f} Hz")\nprint(f"Total energy: {np.sum(magnitude**2):.0f}")' },
+          ],
+        },
+      };
+
+      // ===== Pyodide init =====
+      async function initPyodide() {
+        try {
+          setStatus("loading", "⏳ Loading Pyodide (~10MB)…");
+          pyodide = await loadPyodide();
+          setStatus("loading", "⏳ Loading numpy + matplotlib + pandas…");
+          await pyodide.loadPackage(["numpy", "matplotlib", "pandas", "scipy"]);
+          // Configure matplotlib to render into the cell output
+          await pyodide.runPythonAsync(`
+import matplotlib
+matplotlib.use("AGG")
+import matplotlib.pyplot as plt
+import io, base64
+
+def _render_plot():
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png", dpi=80, bbox_inches="tight")
+    buf.seek(0)
+    b64 = base64.b64encode(buf.read()).decode()
+    plt.close("all")
+    return b64
+
+# Patch plt.show() to capture the figure and emit it as an <img>
+_orig_show = plt.show
+def _patched_show(*args, **kwargs):
+    b64 = _render_plot()
+    from js import document
+    out = document.getElementById("current-output")
+    if out:
+        img = document.createElement("img")
+        img.src = "data:image/png;base64," + b64
+        img.style.maxWidth = "100%"
+        out.appendChild(img)
+plt.show = _patched_show
+`);
+          setStatus("ready", "✓ Pyodide ready · Python 3.11 · numpy + pandas + matplotlib + scipy");
+          updatePkgStatus();
+          // Restore notebook from localStorage if present
+          loadFromStorage();
+          if (notebook.cells.length === 0) {
+            // Load the OLS starter as a default
+            loadStarter('ols-regression');
+          }
+          render();
+        } catch (e) {
+          setStatus("error", "✗ Pyodide failed to load: " + e.message);
+          console.error(e);
+        }
+      }
+
+      function setStatus(cls, text) {
+        var el = document.getElementById("py-status");
+        el.className = "status-pill " + cls;
+        el.textContent = text;
+      }
+
+      async function updatePkgStatus() {
+        if (!pyodide) return;
+        try {
+          var pkgs = await pyodide.runPythonAsync("help('modules')");
+        } catch (e) { pkgs = "(unable to list)"; }
+        document.getElementById("pkg-status").textContent = "Packages: numpy · pandas · matplotlib · scipy loaded";
+      }
+
+      // ===== Notebook model =====
+      function addCell(type) {
+        notebook.cells.push({ type: type, source: "", output: "" });
+        render();
+        saveToStorage();
+      }
+
+      function deleteCell(idx) {
+        notebook.cells.splice(idx, 1);
+        render();
+        saveToStorage();
+      }
+
+      function moveCell(idx, dir) {
+        var newIdx = idx + dir;
+        if (newIdx < 0 || newIdx >= notebook.cells.length) return;
+        var tmp = notebook.cells[idx];
+        notebook.cells[idx] = notebook.cells[newIdx];
+        notebook.cells[newIdx] = tmp;
+        render();
+        saveToStorage();
+      }
+
+      async function runCell(idx) {
+        if (!pyodide) { alert("Pyodide still loading — please wait."); return; }
+        var cell = notebook.cells[idx];
+        if (cell.type !== "code") { render(); return; }
+        cell.output = "";
+        render();
+        var cellEl = document.querySelector('[data-cell-idx="' + idx + '"]');
+        var outEl = cellEl.querySelector(".cell-output");
+        outEl.id = "current-output";
+        outEl.innerHTML = "<div class='stdout'>⏳ Running…</div>";
+        document.getElementById("exec-status").textContent = "Running cell " + (idx+1) + "…";
+
+        // Redirect stdout/stderr
+        pyodide.setStdout({ batched: function(s) {
+          var d = document.createElement("div"); d.className = "stdout"; d.textContent = s;
+          outEl.appendChild(d);
+        }});
+        pyodide.setStderr({ batched: function(s) {
+          var d = document.createElement("div"); d.className = "stderr"; d.textContent = s;
+          outEl.appendChild(d);
+        }});
+
+        try {
+          // Special commands
+          var src = cell.source.trim();
+          if (src === "%feeds") {
+            cell.source = 'from pyodide.http import pyfetch\nimport pandas as pd\n\nresp = await pyfetch("feeds/all.json")\ndata = await resp.json()\ndf = pd.DataFrame(data["entries"])\nprint(f"Loaded {len(df)} feed entries from {data[\'feeds_succeeded\']} journals")\nprint(df.head(10)[["title", "journal", "domain"]].to_string(index=False))';
+          } else if (src === "%packages") {
+            cell.source = 'import pyodide\nprint("Pyodide version:", pyodide.__version__)\nprint("Loaded packages: numpy, pandas, matplotlib, scipy")\nprint("Python version:", sys.version)\nimport sys';
+          } else if (src === "%help") {
+            cell.output = "Special commands:\n  %feeds      — Load feeds/all.json into a pandas DataFrame\n  %packages   — List installed Python packages\n  %help       — Show this help\n\nStandard Python works too. Plotting via matplotlib will render inline.\n\nKeyboard shortcuts:\n  Shift+Enter — Run cell + advance\n  Ctrl+Enter — Run cell (stay)";
+            outEl.innerHTML = '<div class="stdout">' + cell.output + '</div>';
+            document.getElementById("exec-status").textContent = "Ready.";
+            return;
+          }
+
+          // Run async (supports `await` at top level)
+          var result = await pyodide.runPythonAsync(cell.source);
+          if (result !== undefined && result !== null) {
+            var d = document.createElement("div"); d.className = "result"; d.textContent = "→ " + String(result);
+            outEl.appendChild(d);
+          }
+          // Remove "Running…" placeholder if still there
+          var placeholders = outEl.querySelectorAll('.stdout');
+          if (placeholders.length === 1 && placeholders[0].textContent === "⏳ Running…") {
+            outEl.innerHTML = "";
+          }
+          cell.output = outEl.innerHTML;
+        } catch (e) {
+          var d = document.createElement("div"); d.className = "error"; d.textContent = "Error: " + e.message;
+          outEl.appendChild(d);
+          cell.output = outEl.innerHTML;
+          console.error(e);
+        }
+        document.getElementById("exec-status").textContent = "Ready. (last cell ran at " + new Date().toLocaleTimeString() + ")";
+        saveToStorage();
+      }
+
+      async function runAll() {
+        for (var i = 0; i < notebook.cells.length; i++) {
+          if (notebook.cells[i].type === "code") {
+            await runCell(i);
+          }
+        }
+      }
+
+      function clearOutputs() {
+        notebook.cells.forEach(function (c) { c.output = ""; });
+        render();
+        saveToStorage();
+      }
+
+      async function restartKernel() {
+        if (!pyodide) return;
+        try {
+          // Re-import matplotlib + reset globals
+          await pyodide.runPythonAsync(`
+import matplotlib.pyplot as plt
+plt.close("all")
+for name in list(globals()):
+    if name.startswith("_") or name in ("__name__", "__doc__", "__package__", "__loader__", "__spec__", "__builtins__", "plt", "np", "pd", "matplotlib", "numpy", "pandas", "scipy"):
+        continue
+    del globals()[name]
+`);
+          clearOutputs();
+          document.getElementById("exec-status").textContent = "Kernel restarted.";
+        } catch (e) {
+          alert("Could not restart kernel: " + e.message);
+        }
+      }
+
+      // ===== Storage =====
+      function saveToStorage() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(notebook));
+          var el = document.getElementById("save-status");
+          el.textContent = "💾 Saved " + new Date().toLocaleTimeString();
+          setTimeout(function () { el.textContent = "💾 Auto-save: idle"; }, 2000);
+        } catch (e) { /* localStorage might be full */ }
+      }
+
+      function loadFromStorage() {
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          var n = JSON.parse(raw);
+          if (n && n.cells && Array.isArray(n.cells)) {
+            notebook = n;
+            document.getElementById("notebook-name").value = n.name || "my-notebook";
+          }
+        } catch (e) { /* ignore */ }
+      }
+
+      function clearNotebook() {
+        if (!confirm("Delete all cells? This cannot be undone (export first if you want to keep your work).")) return;
+        notebook = { name: document.getElementById("notebook-name").value, cells: [] };
+        render();
+        saveToStorage();
+      }
+
+      // ===== Export / Import =====
+      function exportIpynb() {
+        var ipynb = {
+          cells: notebook.cells.map(function (c) {
+            return {
+              cell_type: c.type,
+              source: c.source.split("\n"),
+              metadata: {},
+              outputs: c.type === "code" ? [{ output_type: "stream", name: "stdout", text: (c.output || "").split("\n") }] : [],
+              execution_count: null,
+            };
+          }),
+          metadata: {
+            kernelspec: { display_name: "Python 3 (Pyodide)", language: "python", name: "python3" },
+            language_info: { name: "python", version: "3.11" },
+          },
+          nbformat: 4,
+          nbformat_minor: 5,
+        };
+        var blob = new Blob([JSON.stringify(ipynb, null, 2)], { type: "application/json" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = (notebook.name || "notebook") + ".ipynb";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function importIpynb(file) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            var data = JSON.parse(e.target.result);
+            if (!data.cells) throw new Error("Not a valid .ipynb file");
+            notebook.cells = data.cells.map(function (c) {
+              return {
+                type: c.cell_type === "markdown" ? "markdown" : "code",
+                source: Array.isArray(c.source) ? c.source.join("\n") : (c.source || ""),
+                output: "",
+              };
+            });
+            render();
+            saveToStorage();
+          } catch (err) {
+            alert("Import failed: " + err.message);
+          }
+        };
+        reader.readAsText(file);
+      }
+
+      // ===== Load starter =====
+      function loadStarter(name) {
+        var s = STARTERS[name];
+        if (!s) return;
+        notebook.name = s.name;
+        document.getElementById("notebook-name").value = s.name;
+        notebook.cells = JSON.parse(JSON.stringify(s.cells));
+        render();
+        saveToStorage();
+      }
+
+      // ===== Render =====
+      function render() {
+        var cellsContainer = document.getElementById("cells");
+        var empty = document.getElementById("empty-state");
+        if (notebook.cells.length === 0) {
+          cellsContainer.innerHTML = "";
+          empty.style.display = "block";
+          return;
+        }
+        empty.style.display = "none";
+        cellsContainer.innerHTML = "";
+        notebook.cells.forEach(function (cell, idx) {
+          var div = document.createElement("div");
+          div.className = "cell";
+          div.dataset.cellIdx = idx;
+          div.innerHTML =
+              '<div class="cell-header">'
+            +   '<span class="cell-type ' + cell.type + '">' + (cell.type === "code" ? "In [" + (idx+1) + "]" : "Markdown") + '</span>'
+            +   '<div class="cell-controls">'
+            +     '<button onclick="moveCell(' + idx + ', -1)" title="Move up">↑</button>'
+            +     '<button onclick="moveCell(' + idx + ', 1)" title="Move down">↓</button>'
+            +     (cell.type === "code" ? '<button class="run-btn" onclick="runCell(' + idx + ')" title="Run cell (Ctrl+Enter)">▶ Run</button>' : '')
+            +     '<button class="del-btn" onclick="deleteCell(' + idx + ')" title="Delete cell">✕</button>'
+            +   '</div>'
+            + '</div>'
+            + '<textarea class="cell-editor" data-cell-idx="' + idx + '" placeholder="' + (cell.type === "code" ? "Type Python code here… (Shift+Enter to run + advance)" : "Type Markdown here…") + '">' + escapeHtml(cell.source) + '</textarea>'
+            + '<div class="cell-output">' + (cell.output || "") + '</div>';
+          cellsContainer.appendChild(div);
+        });
+        // Wire editors
+        cellsContainer.querySelectorAll(".cell-editor").forEach(function (ta) {
+          ta.addEventListener("input", function (e) {
+            var idx = parseInt(ta.dataset.cellIdx);
+            notebook.cells[idx].source = ta.value;
+            // Debounce save
+            clearTimeout(ta._saveTimer);
+            ta._saveTimer = setTimeout(saveToStorage, 500);
+          });
+          // Keyboard shortcuts
+          ta.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" && (e.shiftKey || e.ctrlKey)) {
+              e.preventDefault();
+              var idx = parseInt(ta.dataset.cellIdx);
+              if (notebook.cells[idx].type === "code") {
+                runCell(idx).then(function () {
+                  if (e.shiftKey) {
+                    // Advance to next cell or add a new one
+                    if (idx === notebook.cells.length - 1) addCell("code");
+                    var nextTa = document.querySelector('[data-cell-idx="' + (idx+1) + '"]');
+                    if (nextTa) nextTa.focus();
+                  }
+                });
+              }
+            }
+          });
+          // Auto-resize
+          ta.addEventListener("input", function () { autoresize(ta); });
+          autoresize(ta);
+        });
+      }
+
+      function autoresize(ta) {
+        ta.style.height = "auto";
+        ta.style.height = (ta.scrollHeight + 4) + "px";
+      }
+
+      function escapeHtml(s) {
+        return String(s || "").replace(/[&<>]/g, function (c) {
+          return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c];
+        });
+      }
+
+      // ===== Wire up controls =====
+      document.getElementById("btn-run-all").addEventListener("click", runAll);
+      document.getElementById("btn-add-code").addEventListener("click", function () { addCell("code"); });
+      document.getElementById("btn-add-md").addEventListener("click", function () { addCell("markdown"); });
+      document.getElementById("btn-clear").addEventListener("click", clearOutputs);
+      document.getElementById("btn-restart").addEventListener("click", restartKernel);
+      document.getElementById("btn-save").addEventListener("click", saveToStorage);
+      document.getElementById("btn-export").addEventListener("click", exportIpynb);
+      document.getElementById("btn-import").addEventListener("click", function () { document.getElementById("file-input").click(); });
+      document.getElementById("file-input").addEventListener("change", function (e) {
+        if (e.target.files[0]) importIpynb(e.target.files[0]);
+        e.target.value = "";
+      });
+      document.getElementById("btn-clear-all").addEventListener("click", clearNotebook);
+      document.getElementById("notebook-name").addEventListener("input", function (e) {
+        notebook.name = e.target.value;
+        clearTimeout(e.target._saveTimer);
+        e.target._saveTimer = setTimeout(saveToStorage, 500);
+      });
+
+      // Sidebar starters
+      document.querySelectorAll(".sidebar-card[data-starter]").forEach(function (card) {
+        card.addEventListener("click", function () { loadStarter(card.dataset.starter); });
+      });
+      // Sidebar commands
+      document.querySelectorAll(".sidebar-card[data-cmd]").forEach(function (card) {
+        card.addEventListener("click", function () {
+          addCell("code");
+          var idx = notebook.cells.length - 1;
+          notebook.cells[idx].source = card.dataset.cmd;
+          render();
+          runCell(idx);
+        });
+      });
+      // Sidebar links
+      document.querySelectorAll(".sidebar-card[data-href]").forEach(function (card) {
+        card.addEventListener("click", function () { window.location.href = card.dataset.href; });
+      });
+
+      // ===== Boot =====
+      initPyodide();
+    </script>
+  </body>
+</html>

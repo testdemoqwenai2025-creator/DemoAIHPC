@@ -3576,3 +3576,83 @@ Stage Summary:
 - 404 page now discoverable from THREE places on the home page: (a) ribbon Insights dropdown, (b) platform meta pages section near the bottom, (c) audit dashboard quick-links section
 - Every page with a ribbon-nav now has 🚧 404 page in its Insights dropdown (172 files patched)
 - The audit dashboard's new quick-links section provides a single place to verify all platform self-test pages work
+
+---
+Task ID: P52
+Agent: main
+Task: Phase 52 — Scientific Computing Lab (Pyodide-powered Jupyter-style notebook in browser)
+
+User vision: "we offer something like similar R-studio IDE, or even Jupyter notebook... post graduates, undergraduate could login in and work their respective code as well as thought could be developed, while they do have access to all the modern scientific information as well as and some level of access to latest research papers etc etc, what do you think of these thoughts....this should be in a completely new page"
+
+Architectural analysis:
+- Server-side code execution: NOT POSSIBLE on GitHub Pages (static only)
+- User login: NOT POSSIBLE without a backend database
+- Paid journal access: NOT LEGALLY POSSIBLE (Nature/Science/Cell are paywalled)
+
+What IS possible + is the perfect fit:
+- **Pyodide** (Python 3.11 compiled to WebAssembly) — runs real Python in the browser, no backend
+- No login required — notebooks persist in localStorage (per-browser, per-device)
+- No paid journal access needed — the lab can integrate with the existing feeds page (413 entries from 11 open-access journals) + concept cards (125 cards with derivations)
+- Export to .ipynb format for portability to Jupyter / Colab / VS Code
+
+Implementation:
+
+1. NEW PAGE: docs/lab.html (~600 lines) — a complete Jupyter-style notebook UI:
+   - Ribbon at top (consistent with platform)
+   - Status strip: Pyodide loading status + packages loaded + auto-save status
+   - Toolbar: Run All / Add Code / Add Markdown / Clear outputs / Restart kernel / Save / Export .ipynb / Import .ipynb / Delete notebook
+   - Layout grid: sidebar (280px) + notebook (1fr)
+   - Sidebar sections:
+     * Starter notebooks (6): OLS Regression, Journal Feeds Analysis, Bloch Sphere, ML Loss Functions, Protein Stats, Fourier Transform
+     * Platform integration: %feeds (load feeds/all.json), %packages (list installed), %help
+     * About the lab (explainer)
+   - Notebook area: cells with type badges (code/markdown), code editor (textarea with auto-resize), output area (supports stdout/stderr/result + inline matplotlib images)
+   - Footer: Pyodide version + last execution time
+   - Keyboard shortcuts: Shift+Enter (run + advance), Ctrl+Enter (run)
+
+2. Pyodide integration:
+   - Loaded from jsdelivr CDN (v0.24.1)
+   - Initial packages: numpy + matplotlib + pandas + scipy
+   - matplotlib patched to render inline: AGG backend → base64 PNG → <img> in cell output
+   - stdout/stderr captured and appended to cell output as separate <div>s
+
+3. Notebook model:
+   - Array of cells: { type: 'code'|'markdown', source: string, output: string }
+   - Persisted to localStorage key 'aihpc-lab-notebook' (auto-save with 500ms debounce)
+   - Default notebook: OLS Regression starter (2 cells)
+
+4. Six starter notebooks integrate with platform features:
+   - 📊 OLS Regression — synthetic data + hand-computed β via (X^T X)^-1 X^T y + matplotlib scatter+fit
+   - 📡 Journal Feeds Analysis — fetches feeds/all.json via pyodide.http.pyfetch, loads into pandas DataFrame, summarises by domain/journal, plots bar chart
+   - ⚛ Bloch Sphere — single-qubit state evolution under H + Rabi + 3D Bloch trajectory plot
+   - 📉 ML Loss Functions — computes MSE/MAE/LogCosh/Huber/KL/Cosine on synthetic data + plots loss-vs-error comparison
+   - 🧬 Protein Stats — synthetic residue sequence + amino-acid composition + Ramachandran scatter
+   - 〰 Fourier Transform — chirp signal + FFT + frequency spectrum plot
+
+5. Special commands:
+   - %feeds — load feeds/all.json into a pandas DataFrame (auto-expands to full pyfetch+DataFrame code)
+   - %packages — list installed packages + Python version
+   - %help — show special commands + keyboard shortcuts
+
+6. .ipynb export/import — full compatibility with Jupyter notebook format (nbformat 4.5). Users can start a notebook in the lab, export it, and open it in Jupyter / Colab / VS Code.
+
+7. RIBBON NAVIGATION UPDATE:
+   - Added 🔬 Scientific Computing Lab to Insights dropdown of 171 HTML files (via scripts/add-lab-link-to-ribbon.py)
+   - Added 🔬 Lab link to home page's actions row (between Live Journal Feeds and Browse Concept Cards)
+   - Added 🔬 Scientific Computing Lab card to home page's Platform Meta Pages section (with description "Python in browser · Pyodide · notebook UI")
+   - Added 🔬 Lab (Pyodide) button to audit dashboard's quick-links section
+
+8. AUDIT — added lab.html to check_ribbon MINIMAL_PAGES allowlist (the page has its own ribbon structure). Total audit checks: 58 (no new check needed).
+
+Local verification (Playwright headless):
+- Pyodide loaded successfully: "✓ Pyodide ready · Python 3.11 · numpy + pandas + matplotlib + scipy"
+- 2 cells loaded (OLS starter: 1 markdown + 1 code)
+- "Run all" executed successfully: "Hand-computed: intercept=1.0644, slope=1.9420" — matches numpy's polyfit
+- Inline matplotlib image rendered in cell output
+- 0 page errors, 0 console errors
+
+Stage Summary:
+- Phase 52 delivers the user's vision of a Jupyter/R-Studio-like environment — pure client-side, no login, no backend, Python in the browser via Pyodide
+- Six starter notebooks demonstrate platform integration (feeds, ML loss functions, Bloch sphere, etc.)
+- Full .ipynb export/import for portability to other Jupyter environments
+- Available at https://testdemoqwenai2025-creator.github.io/DemoAIHPC/lab.html

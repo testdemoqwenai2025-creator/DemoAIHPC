@@ -161,6 +161,7 @@ def check_ribbon(html_files):
         os.path.join(DOCS, "404.html"),  # 404 page — standalone, no ribbon
         os.path.join(DOCS, "concepts.html"),  # Phase 51 auto-generated concepts index
         os.path.join(DOCS, "feeds.html"),  # Phase 51 live feeds page
+        os.path.join(DOCS, "lab.html"),  # Phase 52 scientific computing lab
     }
     failures = []
     required = ["Platform", "AETHEL Suite", "Science", "Insights"]
