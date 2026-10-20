@@ -3108,3 +3108,30 @@ blocks, audit.html dashboard present.
 - 57 pages patched with ML link in Science dropdown.
 - 22 2-deep pages path-fixed (../ → ../../).
 - Push + tag v30 + Pages build verification pending.
+
+---
+Task ID: P50-followup
+Agent: main
+Task: Fix bloch.html 404 + add Visualisers dropdown + add 3 audit checks (index discoverability, orphan pages, live endpoint probe)
+
+Work Log:
+- Investigated user-reported 404 on https://testdemoqwenai2025-creator.github.io/DemoAIHPC/bloch.html
+- Audited all 14 documented preview endpoints via curl HEAD — 7 returned 404 (timeline, retrospective, component-registry, playground, quantum-shorts, bloch, medical-atlas)
+- Root cause 1: local Phase 25-50 commits were never pushed to private origin remote (origin/main was at Phase 23); CI never ran for those phases
+- Root cause 2: index.html did not link to any of the 7 missing pages (no Platform dropdown entries for timeline, retrospective, component-registry; no Visualisers dropdown at all)
+- Root cause 3: audit.py had no check for home-page discoverability or for live mirror status — only local link resolution
+- Fix 1: directly patched docs/index.html to add Visualisers dropdown (playground, quantum-shorts, bloch, medical-atlas, science/physics/quantum) + augmented Platform dropdown with timeline, retrospective, component-registry
+- Fix 2: wrote /home/z/my-project/scripts/patch-ribbon-add-visualisers.py — applied same ribbon update across 188 HTML files (ribbon-nav subtree, including science/* subpages and digest/archive/* issues)
+- Fix 3: wrote /home/z/my-project/scripts/fix-ribbon-depth-aware-hrefs.py — corrected bare hrefs to relative paths in subdirectory pages (e.g. concepts/foo.html → ../timeline.html); patched 166 files
+- Fix 4: wrote /home/z/my-project/scripts/revert-prefixed-hrefs-for-base-tagged-files.py — reverted prefixed hrefs back to bare filenames in 15 digest/archive pages that have <base href="../../" /> tags
+- Fix 5: extended scripts/audit.py with three new checks (now 57 total, was 54):
+  * check_index_links_to_platform_pages — verifies docs/index.html links to every page in PLATFORM_DISCOVERABLE_PAGES list
+  * check_no_orphan_html_pages — verifies every .html under docs/ is referenced from at least one other page (allowlists concept cards subtree)
+  * check_live_public_endpoints — curls each platform-discoverable page on the public GitHub Pages mirror; fails if home page returns 200 but any platform page 404s; skips gracefully if home is unreachable (offline dev / pre-deployment)
+- Local audit result: 56/57 pass; only live_public_endpoints fails (expected — public mirror still missing pages until next push)
+
+Stage Summary:
+- Files changed: 190 HTML files patched + scripts/audit.py extended with 3 checks (57 total now)
+- New scripts persisted under /home/z/my-project/scripts/: patch-ribbon-add-visualisers.py, fix-ribbon-depth-aware-hrefs.py, revert-prefixed-hrefs-for-base-tagged-files.py
+- All local audit checks pass except live mirror probe (which is the regression signal we want)
+- Next step: push Phase 25-50 commits + v50 tag to private origin to trigger CI mirror — that will fix the live 404s and let live_public_endpoints pass

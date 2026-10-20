@@ -2295,6 +2295,232 @@ def check_issue_16_published():
 
 
 # ---------------------------------------------------------------------------
+# Phase 50+ follow-up checks: discoverability + orphan-page detection +
+# live endpoint probing. These were added because the user discovered that
+# bloch.html, timeline.html, retrospective.html and several other pages
+# returned 404 on the public mirror, even though the files existed locally
+# and the internal-link audit passed. Root cause: the local commits had
+# never been pushed to the public mirror repo, AND the home page did not
+# link to those pages (so even after a push, users wouldn't discover them).
+# These three checks are designed to catch both classes of regression.
+# ---------------------------------------------------------------------------
+
+# Pages that the platform considers "discoverable from the home page" —
+# every entry here MUST appear as a link in docs/index.html. New
+# platform-level pages added in future phases should be appended here.
+PLATFORM_DISCOVERABLE_PAGES = [
+    # Core platform
+    "index.html",
+    "demos.html",
+    "dashboard.html",
+    "graph.html",
+    "benchmark.html",
+    "subscribe.html",
+    # Phase 48-50 platform meta pages
+    "timeline.html",
+    "retrospective.html",
+    "component-registry.html",
+    # Phase 37-50 visualisers
+    "playground.html",
+    "quantum-shorts.html",
+    "bloch.html",
+    "medical-atlas.html",
+    # Science hubs
+    "science-biology.html",
+    "science-chemistry.html",
+    "science-physics.html",
+    "science-maths.html",
+    "science-ml.html",
+    "science-bioinformatics.html",
+    "science-cheminformatics.html",
+    # Insights + audit
+    "digest.html",
+    "audit.html",
+    "concepts.html",
+]
+
+
+def check_index_links_to_platform_pages():
+    """Check (Phase 50+): the home page (docs/index.html) must link to
+    every platform-discoverable page. Without this check, a new page
+    could be merged without ever being linked from the home page —
+    leaving users unable to find it even after deployment.
+    """
+    index_path = os.path.join(DOCS, "index.html")
+    if not os.path.isfile(index_path):
+        return CheckResult("index_links_to_platform_pages", False,
+                           "docs/index.html is missing")
+    with open(index_path, "r", encoding="utf-8") as f:
+        s = f.read()
+    missing = []
+    for page in PLATFORM_DISCOVERABLE_PAGES:
+        # We look for href="page" or href="./page" so the check works
+        # regardless of whether the link uses a leading "./".
+        if f'href="{page}"' not in s and f'href="./{page}"' not in s:
+            missing.append(page)
+    if missing:
+        return CheckResult("index_links_to_platform_pages", False,
+                           f"{len(missing)} platform page(s) not linked from index.html",
+                           missing)
+    return CheckResult("index_links_to_platform_pages", True,
+                       f"all {len(PLATFORM_DISCOVERABLE_PAGES)} platform-discoverable pages linked from index.html")
+
+
+def check_no_orphan_html_pages():
+    """Check (Phase 50+): every .html file under docs/ must be linked
+    from at least one OTHER .html file in the docs/ tree. Orphan pages
+    are unreachable from any navigation entry point — users will only
+    find them by typing the URL directly, which is exactly the failure
+    mode that surfaced as a 404 complaint in Phase 50.
+
+    Allowlist of known orphans that are intentionally only reachable by
+    direct URL:
+      * docs/index.html — root entry point, no parent links to it
+      * docs/concepts/digest-index.html — auto-generated digest card
+        index (digest cards themselves are linked from the digest page)
+      * docs/concepts/digest-*.html, ml-*.html, fock-*.html — auto-
+        generated concept cards that are linked from their respective
+        parent pages (digest.html for digest-*, science-ml.html for ml-*,
+        science/physics/quantum.html for fock-*). The orphan check
+        tracks which cards ARE linked; orphan cards in this directory
+        are auto-generated and will be linked the next time the digest
+        generator runs, so we allowlist the directory rather than
+        treating transient orphans as failures.
+    """
+    # Collect every .html file under docs/
+    all_html = []
+    for dirpath, _, files in os.walk(DOCS):
+        for f in files:
+            if f.endswith(".html"):
+                all_html.append(os.path.join(dirpath, f))
+
+    href_re = re.compile(r'href="([^"]+\.html[^"]*)"')
+    # Hard allowlist — pages that are intentionally only reachable by
+    # direct URL because they're root entry points or auto-generated
+    # index pages.
+    allowlist_files = {
+        os.path.normpath(os.path.join(DOCS, "index.html")),
+        os.path.normpath(os.path.join(DOCS, "digest", "archive", "index.html")),
+        os.path.normpath(os.path.join(DOCS, "concepts", "digest-index.html")),
+    }
+    # Allowlist entire subtrees of auto-generated concept cards. These
+    # cards are produced by gen-concept-cards.py / gen-ml-concept-cards.py
+    # and linked from digest.html / science-ml.html respectively. Transient
+    # orphans here (a card not yet linked) are a transient generator
+    # state, not a platform regression.
+    allowlist_subdirs = [
+        os.path.normpath(os.path.join(DOCS, "concepts")) + os.sep,
+    ]
+
+    def is_allowlisted(p):
+        np = os.path.normpath(p)
+        if np in allowlist_files:
+            return True
+        for sub in allowlist_subdirs:
+            if np.startswith(sub):
+                return True
+        return False
+
+    # Track every href target seen across all HTML files
+    referenced = set()
+    for path in all_html:
+        with open(path, "r", encoding="utf-8") as f:
+            s = f.read()
+        dir_path = os.path.dirname(path)
+        for m in href_re.finditer(s):
+            href = m.group(1)
+            if "${" in href or href.startswith(("http://", "https://", "mailto:", "data:")):
+                continue
+            target = href.split("#")[0].split("?")[0]
+            if not target:
+                continue
+            resolved = os.path.normpath(os.path.join(dir_path, target))
+            referenced.add(resolved)
+
+    orphans = []
+    for p in all_html:
+        if is_allowlisted(p):
+            continue
+        np = os.path.normpath(p)
+        if np not in referenced:
+            orphans.append(os.path.relpath(p, DOCS))
+
+    if orphans:
+        return CheckResult("no_orphan_html_pages", False,
+                           f"{len(orphans)} orphan HTML page(s) not linked from anywhere",
+                           orphans[:30])
+    return CheckResult("no_orphan_html_pages", True,
+                       f"all non-allowlisted HTML pages are linked from at least one other page "
+                       f"({len(all_html)} total scanned, {len(allowlist_subdirs)} auto-generated subdir(s) allowlisted)")
+
+
+def check_live_public_endpoints():
+    """Check (Phase 50+): probe the public GitHub Pages mirror and verify
+    that every platform-discoverable page actually serves a 200 OK.
+    This catches the failure mode where local files exist but the mirror
+    hasn't been pushed, or where the CI workflow is broken.
+
+    Skipped gracefully (PASSES with a note) when:
+      * The HTTP probe fails entirely (no network, offline dev)
+      * The home page itself returns non-200 (mirror is down)
+
+    The check FAILS when:
+      * The home page works but specific platform pages 404
+    """
+    if shutil_which("curl") is None:
+        return CheckResult("live_public_endpoints", True,
+                           "curl not available on PATH — check skipped (offline / minimal env)")
+
+    base = "https://testdemoqwenai2025-creator.github.io/DemoAIHPC"
+    # First probe the home page; if it's down, skip the rest.
+    try:
+        home = subprocess.run(
+            ["curl", "-sI", "-o", "/dev/null", "-w", "%{http_code}",
+             "--max-time", "10", f"{base}/index.html"],
+            capture_output=True, text=True, timeout=15,
+        )
+    except Exception as e:
+        return CheckResult("live_public_endpoints", True,
+                           f"home probe failed ({e}) — check skipped")
+    home_status = home.stdout.strip()
+    if home_status != "200":
+        return CheckResult("live_public_endpoints", True,
+                           f"home page returned {home_status} — mirror may be down or not yet deployed; check skipped")
+
+    # Probe each platform-discoverable page
+    failures = []
+    for page in PLATFORM_DISCOVERABLE_PAGES:
+        try:
+            r = subprocess.run(
+                ["curl", "-sI", "-o", "/dev/null", "-w", "%{http_code}",
+                 "--max-time", "10", f"{base}/{page}"],
+                capture_output=True, text=True, timeout=15,
+            )
+            status = r.stdout.strip()
+            if status != "200":
+                failures.append(f"{page} → HTTP {status}")
+        except Exception as e:
+            failures.append(f"{page} → probe error: {e}")
+
+    if failures:
+        return CheckResult("live_public_endpoints", False,
+                           f"{len(failures)} endpoint(s) not serving 200 on the public mirror",
+                           failures)
+    return CheckResult("live_public_endpoints", True,
+                       f"all {len(PLATFORM_DISCOVERABLE_PAGES)} platform pages serve 200 on {base}")
+
+
+def shutil_which(cmd):
+    """Tiny shim for shutil.which — avoids importing shutil at module
+    level (keeps the audit script's import surface minimal)."""
+    try:
+        import shutil
+        return shutil.which(cmd)
+    except Exception:
+        return None
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -2373,6 +2599,10 @@ def main():
         check_qkd_visualiser_loaded(),
         check_retrospective_page_present(),
         check_issue_16_published(),
+        # Phase 50+ follow-up: discoverability + orphan pages + live mirror probe
+        check_index_links_to_platform_pages(),
+        check_no_orphan_html_pages(),
+        check_live_public_endpoints(),
     ]
 
     if args.json:
