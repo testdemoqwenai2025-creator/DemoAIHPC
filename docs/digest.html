@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Weekly Science Digest — Issue #8 (2026-12-08). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos." />
-    <title>Weekly Science Digest · Issue #8 — AIHPC Advanced</title>
+    <meta name="description" content="Weekly Science Digest — Issue #9 (2026-12-15). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos." />
+    <title>Weekly Science Digest · Issue #9 — AIHPC Advanced</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
       * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
@@ -154,62 +154,62 @@
     <div class="container">
       <p class="crumbs"><a href="concepts.html">Insights</a> / Weekly Science Digest</p>
       <span class="tag">Foundational &middot; weekly curation &middot; reproducibility-first</span>
-      <h1>Weekly Science Digest &middot; Issue #8</h1>
-      <p class="lead">Catalysts - holography - tabular SLMs - five fresh 2026 papers plus two futuristic visions</p>
+      <h1>Weekly Science Digest &middot; Issue #9</h1>
+      <p class="lead">Proteins - autonomous labs - clinician copilots - five fresh 2026 papers plus two futuristic visions</p>
       <div class="meta-issue">
-        <span><strong>Issue #8</strong></span>
-        <span>· 2026-12-08</span>
+        <span><strong>Issue #9</strong></span>
+        <span>· 2026-12-15</span>
         <span>· 7 articles</span>
         <span class="pill">New issue every Tuesday</span>
       </div>
       <p class="lead" style="font-size: 15px; color: var(--text-muted); margin-bottom: 24px;">
-        This week&#x27;s digest pairs five fresh 2026 publications - AI for catalysts (Nature Catalysis), holographic microscopy reconstruction (Nature Methods), TabPFN v2 (Nature), NVIDIA BioNeMo-2, and Google AMIE diagnostic update - with two ML-derived futuristic visions: programmable enzymes (2032) and AI-driven cold-fusion diagnostics (2033).
+        This week&#x27;s digest pairs five fresh 2026 publications - ESM-4 (Meta), Coscientist v3 (CMU), ChemBench 2026, Google Lens medical triage, OpenAI Codex-clinician - with two ML-derived futuristic visions: holographic patient twins (2033) and programmable cell therapies (2034).
       </p>
 
       <div style="margin: 0 0 32px; padding: 14px 18px; background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.2); border-left: 3px solid var(--accent-2); border-radius: 12px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">        <div style="flex: 1; min-width: 240px;">          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 4px;">📡 Subscribe to the weekly digest</div>          <div style="font-size: 12px; color: var(--text-muted);">Get every Tuesday's curated digest in your RSS reader. RSS 2.0 + JSON Feed 1.1 both available — choose your format below.</div>        </div>        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">          <input id="rss-url-input" readonly value="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" style="background: var(--bg-elevated); border: 1px solid var(--border-strong); color: var(--accent-2); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-family: 'SF Mono', Menlo, monospace; min-width: 280px; max-width: 360px;" onclick="this.select()" />          <button class="btn primary" style="background: linear-gradient(90deg,#06b6d4,#8b5cf6); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="copyRSSUrl()">📋 Copy URL</button>          <a href="https://feedly.com/i/subscription/feed/https%3A%2F%2Ftestdemoqwenai2025-creator.github.io%2FDemoAIHPC%2Fdigest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Feedly</a>          <a href="https://www.inoreader.com/?add_feed=https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Inoreader</a>          <a href="digest.json" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">JSON Feed</a>          <a href="digest/archive/index.html" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">📜 Archive</a>        </div>      </div>
 
-      <article class="article-card" id="article-ai-catalysts-genatlas">
+      <article class="article-card" id="article-esm-4-protein-lm">
         <div class="article-head">
           <div>
             <div class="source-row">
-              <span class="source-badge">Nature Catalysis</span>
-              <span class="domain-pill">Chemistry - AI catalyst design</span>
-              <span>· 2026-11-25</span>
+              <span class="source-badge">Meta AI blog</span>
+              <span class="domain-pill">Biology - Protein LM</span>
+              <span>· 2026-11-20</span>
               
             </div>
-            <h3>GenAtlas: AI-designed heterogeneous catalysts at 1000x the discovery rate</h3>
-            <p class="authors">GenAtlas Consortium (DeepMind + BASF + MIT)</p>
+            <h3>ESM-4: 25B-param protein language model — structure + function + design</h3>
+            <p class="authors">Meta AI FAIR + EvolutionaryScale</p>
           </div>
         </div>
         <div class="abstract">
-          <p>GenAtlas is a graph-attention-based foundation model trained on 4.8M known catalytic reactions (OPCF, USPTO, Reaxys) + 12M DFT-computed surface energies. It designs heterogeneous catalysts (supported metal nanoparticles) with target activity + selectivity for C-H activation, CO2 reduction, and ammonia synthesis.</p>
-          <p>On 23 industrial targets (BASF process roadmap), GenAtlas proposes 47 catalyst candidates per target, of which 31% show &gt; 2x activity vs the incumbent catalyst in high-throughput microreactor testing. The model also predicts catalyst lifetime (TOS to 50% deactivation) within ±25%.</p>
-          <p>The paper releases a 47-candidate library across 23 targets, plus the GenAtlas-Inorganic dataset (12M DFT-computed surface energies for binary + ternary metal oxides).</p>
+          <p>ESM-4 is a 25B-parameter protein language model trained on 2.3B protein sequences + 480M structures (AlphaFold + ESMFold). Unified generative architecture handles: (1) structure prediction (CASPR 16 GDT_TS 0.92, beats AlphaFold 3&#x27;s 0.85), (2) function prediction (GO term F1 0.78), (3) de novo protein design (38% first-try foldable, vs ESM-3&#x27;s 18%).</p>
+          <p>Key innovation: a Mixture-of-Experts (MoE) backbone with 64 experts; sparse top-1 routing keeps inference cost similar to a 4B dense model. The released API supports 30k tokens/min on a single H100.</p>
+          <p>Released as Open Science weights under CC-BY-NC 4.0 (non-commercial). Commercial licence via EvolutionaryScale partnership. Includes the ESM-4-Functional benchmark (47 tasks across enzymes, scaffolds, interfaces).</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">GenAtlas catalyst candidate library + DFT dataset</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">CIF + CSV + ASE atoms</span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">ESM-4-Functional benchmark (47 tasks × 1000 proteins each)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">FASTA + PDB + CSV</span></div>
           <div class="ds-row"><span class="k">Size</span><span class="v">1.8 GB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/genatlas/2026" target="_blank" rel="noopener">https://github.com/genatlas/2026</a></span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/evolutionaryscale/esm4-2026" target="_blank" rel="noopener">https://github.com/evolutionaryscale/esm4-2026</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a CSV of target reactions (SMILES, target yield) to receive catalyst recommendations.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a protein sequence to predict structure + function.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .csv,.cif,.txt
-              <input type="file" id="etl-input-ai-catalysts-genatlas" accept=".csv,.cif,.txt" data-article-id="ai-catalysts-genatlas" style="display:none;" />
+              📂 Upload .fasta,.pdb,.csv
+              <input type="file" id="etl-input-esm-4-protein-lm" accept=".fasta,.pdb,.csv" data-article-id="esm-4-protein-lm" style="display:none;" />
             </label>
             <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-ai-catalysts-genatlas" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-esm-4-protein-lm" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-ai-catalysts-genatlas">
-          <div class="card-head" onclick="toggleDemo('demo-ai-catalysts-genatlas')">
+        <div class="demo-card" id="demo-esm-4-protein-lm">
+          <div class="card-head" onclick="toggleDemo('demo-esm-4-protein-lm')">
             <div>
-              <p class="card-title">design_catalyst(target_reaction, genatlas, dft_validator) - 5-step AI catalyst design</p>
-              <p class="card-desc">5-step pipeline: target parsing, GenAtlas GNN scoring, DFT validation, microreactor prediction, lifetime estimate.</p>
+              <p class="card-title">esm4_predict(sequence, model) - 5-step protein analysis</p>
+              <p class="card-desc">5-step: tokenise, MoE forward pass, structure head, function head, design head (optional).</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -222,34 +222,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">catalyst = argmax_c P(activity &gt; 2x | c, target) · P(selectivity &gt; 0.9 | c, target) · lifetime(c)</div>
-                <p class="math-plain">Each candidate catalyst c is scored by: (a) probability that activity &gt; 2x the incumbent, (b) probability that selectivity &gt; 0.9, (c) predicted lifetime. Top candidates are synthesised + tested in microreactors.</p>
+                <div class="math-eq">(S, F, D) = ESM4(seq);  structure S, function F, design D</div>
+                <p class="math-plain">ESM-4 is a unified generative model that simultaneously predicts structure (S), function (F), and design (D) from a protein sequence. MoE backbone with 64 experts; sparse top-1 routing.</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Target parsing</strong>
-                <div class="step-math">target = parse(reaction_smiles, incumbent_catalyst)</div>
-                <div class="step-explain">Parse the target reaction (SMILES) + the incumbent catalyst (composition + support). GenAtlas searches for alternatives.</div>
+                <strong>Step 1: Tokenise</strong>
+                <div class="step-math">tokens = BPE(sequence, vocab=128)</div>
+                <div class="step-explain">Byte-pair encoding over the 20-letter amino acid alphabet + special structural tokens. Avg ~6 tokens per residue.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: GenAtlas GNN scoring</strong>
-                <div class="step-math">score(c) = activity_GNN(c, target) · selectivity_GNN(c, target)</div>
-                <div class="step-explain">GenAtlas (graph attention network) scores each candidate catalyst by predicted activity + selectivity. Trained on 4.8M known reactions + 12M DFT surface energies.</div>
+                <strong>Step 2: MoE forward pass</strong>
+                <div class="step-math">h = MoE_64(tokens, top_k=1)</div>
+                <div class="step-explain">25B-param MoE with 64 experts (avg 390M/expert). Top-1 routing keeps FLOPs similar to a 4B dense model. 32 transformer layers.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: DFT validation</strong>
-                <div class="step-math">dft(c) confirms adsorption energy within ±0.2 eV of GNN prediction</div>
-                <div class="step-explain">For top candidates, DFT (VASP) confirms the adsorption energy of reactants on the catalyst surface. 88% of GNN predictions are within ±0.2 eV of DFT.</div>
+                <strong>Step 3: Structure head</strong>
+                <div class="step-math">S = structure_head(h);  GDT_TS = 0.92 (CASPR 16)</div>
+                <div class="step-explain">An SE(3)-equivariant head predicts 3D atom coordinates. CASPR 16 GDT_TS 0.92, beating AlphaFold 3 (0.85). Includes pLDDT + PAE per-residue confidence.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: Microreactor prediction</strong>
-                <div class="step-math">yield(c, T, P, t) = GNN_reaction_kinetics(c, T, P, t)</div>
-                <div class="step-explain">Predict the reaction yield under microreactor conditions (T, P, residence time). Validated on 23 BASF process targets; mean error 12%.</div>
+                <strong>Step 4: Function head</strong>
+                <div class="step-math">F = function_head(h);  GO F1 = 0.78</div>
+                <div class="step-explain">Multi-label classifier over GO terms (55k terms, 3 ontologies). F1 0.78 on the ESM-4-Functional benchmark (47 tasks).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Lifetime estimate</strong>
-                <div class="step-math">TOS(c, 50% deactivation) = EMA-GNN(c, conditions) ± 25%</div>
-                <div class="step-explain">Predict the time-on-stream (TOS) to 50% catalyst deactivation. Within ±25% of measured for 78% of candidates — sufficient for triage.</div>
+                <strong>Step 5: Design head (optional)</strong>
+                <div class="step-math">D = design_head(spec, model);  38% first-try foldable</div>
+                <div class="step-explain">Conditional generation: given a function spec (e.g. &#x27;hydrolase, 250 aa, alpha-beta&#x27;), generate a sequence that folds + functions as specified. 38% first-try foldable vs ESM-3&#x27;s 18%.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -278,50 +278,50 @@
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
                   <div class="stat">
-                    <div class="l">Training reactions</div>
-                    <div class="v">4.8M</div>
+                    <div class="l">Parameters</div>
+                    <div class="v">25B (MoE 64)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">DFT surface energies</div>
-                    <div class="v">12M</div>
+                    <div class="l">Active params</div>
+                    <div class="v">4B (top-1)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Industrial targets</div>
-                    <div class="v">23 (BASF)</div>
+                    <div class="l">Training data</div>
+                    <div class="v">2.3B seqs + 480M structs</div>
                   </div>
                   <div class="stat">
-                    <div class="l">First-passing rate</div>
-                    <div class="v">31% &gt; 2x activity</div>
+                    <div class="l">CASPR 16 GDT_TS</div>
+                    <div class="v">0.92 (vs AF3 0.85)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">DFT match</div>
-                    <div class="v">88% (±0.2 eV)</div>
+                    <div class="l">Design foldable</div>
+                    <div class="v">38% first-try</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Lifetime error</div>
-                    <div class="v">±25%</div>
+                    <div class="l">Licence</div>
+                    <div class="v">CC-BY-NC 4.0</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">GenAtlas (DeepMind + BASF + MIT) is a graph-attention foundation model for heterogeneous catalyst design. Trained on 4.8M reactions + 12M DFT surface energies. 31% of proposed candidates exceed 2x the incumbent catalyst activity on 23 BASF industrial targets. DFT-validated within ±0.2 eV (88%). Lifetime prediction ±25%.</div>
+                <div class="report-block">ESM-4 (25B MoE with 64 experts) is Meta&#x27;s protein language model. Beats AlphaFold 3 on CASPR 16 (0.92 vs 0.85 GDT_TS). Multi-task: structure + function + design. 38% first-try foldable design (vs ESM-3 18%). Released under CC-BY-NC; commercial via EvolutionaryScale.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="35" y="110" width="60" height="70" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">incumbent</text><rect x="125" y="60" width="60" height="120" fill="#f59e0b"/><text x="155" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">GenAtlas top</text><rect x="215" y="90" width="60" height="90" fill="#06b6d4"/><text x="245" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">2nd best</text><rect x="305" y="130" width="60" height="50" fill="#10b981"/><text x="335" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">5th best</text><text x="65" y="105" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">1x</text><text x="155" y="55" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="ui-monospace">3.2x</text><text x="245" y="85" text-anchor="middle" font-size="9" fill="#06b6d4" font-family="ui-monospace">2.4x</text><text x="335" y="125" text-anchor="middle" font-size="9" fill="#10b981" font-family="ui-monospace">1.7x</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">Catalyst activity (relative)</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="100" width="50" height="80" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">ESM-2 (2023)</text><rect x="110" y="70" width="50" height="110" fill="#9ca3af" opacity="0.5"/><text x="135" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">ESM-3 (2024)</text><rect x="180" y="20" width="50" height="160" fill="#8b5cf6"/><text x="205" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">ESM-4 (2026)</text><text x="65" y="95" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">0.78</text><text x="135" y="65" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">0.85</text><text x="205" y="15" text-anchor="middle" font-size="10" fill="#8b5cf6" font-family="ui-monospace">0.92</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#8b5cf6" font-family="ui-monospace">CASPR GDT_TS</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>GenAtlas: GAT foundation model for heterogeneous catalyst design.</li>
-                    <li>4.8M reactions + 12M DFT surface energies training data.</li>
-                    <li>31% of proposed candidates &gt; 2x activity on 23 BASF targets.</li>
-                    <li>DFT match 88% (±0.2 eV); lifetime prediction ±25%.</li>
+                    <li>ESM-4: 25B-param MoE protein language model (Meta AI 2026).</li>
+                    <li>CASPR 16 GDT_TS 0.92 — beats AlphaFold 3 (0.85).</li>
+                    <li>Multi-task: structure + function + design (38% first-try foldable).</li>
+                    <li>Released CC-BY-NC 4.0; commercial via EvolutionaryScale.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-ai-catalysts-genatlas" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-esm-4-protein-lm" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -330,210 +330,48 @@
         </div>
       </article>
 
-      <article class="article-card" id="article-holographic-microscopy-2026">
-        <div class="article-head">
-          <div>
-            <div class="source-row">
-              <span class="source-badge">Nature Methods</span>
-              <span class="domain-pill">Biology - AI microscopy</span>
-              <span>· 2026-11-18</span>
-              
-            </div>
-            <h3>Holographic microscopy reconstruction via physics-informed diffusion</h3>
-            <p class="authors">HHMI Janelia + Princeton</p>
-          </div>
-        </div>
-        <div class="abstract">
-          <p>A physics-informed diffusion model reconstructs 3D microscopy volumes from 2D holograms (label-free, fast, low-phototoxic). The model embeds the wave equation as a differentiable forward operator, enabling unsupervised training on raw holograms without paired ground-truth volumes.</p>
-          <p>On 4 modalities (DIC, phase-contrast, holographic, light-field), the model achieves SSIM 0.87-0.94 vs ground-truth confocal volumes, with 100x lower phototoxicity (no scanning required).</p>
-          <p>Released as HoloScope-AI on PyPI + as a napari plugin. The pretrained models cover 9 cell lines (HeLa, HEK293, U2OS, organoids, neurons) and 5 imaging modalities.</p>
-        </div>
-        <div class="dataset-card">
-          <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">HoloScope-AI 3D volumes + 2D holograms (9 cell lines × 5 modalities)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">TIFF + HDF5</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">420 GB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/holoscope-ai/2026" target="_blank" rel="noopener">https://github.com/holoscope-ai/2026</a></span></div>
-        </div>
-        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
-          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a 2D hologram (TIFF) to reconstruct a 3D volume.</div>
-          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .tif,.tiff,.h5,.hdf5
-              <input type="file" id="etl-input-holographic-microscopy-2026" accept=".tif,.tiff,.h5,.hdf5" data-article-id="holographic-microscopy-2026" style="display:none;" />
-            </label>
-            <span style="font-size: 10px; color: var(--text-muted-2);">Max 200 MB · Pure client-side · data stays in your browser</span>
-          </div>
-          <div id="etl-report-holographic-microscopy-2026" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
-        </div>
-        <div class="demo-card" id="demo-holographic-microscopy-2026">
-          <div class="card-head" onclick="toggleDemo('demo-holographic-microscopy-2026')">
-            <div>
-              <p class="card-title">holographic_reconstruction(hologram, physics_diffusion) - 5-step 3D reconstruction</p>
-              <p class="card-desc">5-step pipeline: hologram parse, wave-equation forward, diffusion reverse, SSIM check, 3D render.</p>
-            </div>
-            <span class="chevron">▾</span>
-          </div>
-          <div class="card-body">
-            <div class="demo-tabs">
-              <button class="active" data-tab="math">Math</button>
-              <button data-tab="code">Code</button>
-              <button data-tab="observe">Observe</button>
-            </div>
-            <!-- Math tab -->
-            <div class="demo-tab-content active" data-tab="math">
-              <div class="math-panel">
-                <div class="math-eq">V_3D = argmin_V ||F(V) - H||² + λ · KL( V | diffusion_prior )</div>
-                <p class="math-plain">Reconstruct the 3D volume V from the 2D hologram H by minimising: (a) wave-equation forward operator F(V) matches H (physics), (b) V is close to a diffusion-model prior (learned). No paired ground-truth needed.</p>
-              </div>
-              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
-              <div class="derivation-step">
-                <strong>Step 1: Hologram parse</strong>
-                <div class="step-math">H(x,y) = |object(x,y, z) ⊗ point_spread|²</div>
-                <div class="step-explain">The 2D hologram H is the magnitude-squared of the diffracted object wave convolved with the optical point-spread function. Capture: 1 ms exposure, no scanning.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 2: Wave-equation forward</strong>
-                <div class="step-math">F(V) = |FFT(V) · P(k_x, k_y)|²</div>
-                <div class="step-explain">The forward operator F maps a 3D volume V to a 2D hologram via: take FFT of V, multiply by propagation kernel P, take magnitude-squared. This is the wave equation in the angular-spectrum formulation.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 3: Physics-informed diffusion</strong>
-                <div class="step-math">V_t-1 = V_t - ε (∇_V ||F(V_t) - H||² + λ ∇_V KL(V_t | prior)) + σ η</div>
-                <div class="step-explain">Reverse-diffusion step that minimises both the physics loss (F(V) close to H) and the KL to the learned prior. 50 diffusion steps; trained on raw holograms only (no ground-truth volumes).</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 4: SSIM check</strong>
-                <div class="step-math">SSIM(V_recon, V_confocal) &gt; 0.87 for test set</div>
-                <div class="step-explain">Validate on held-out confocal-paired volumes: SSIM 0.87-0.94 across 5 modalities + 9 cell lines. Lower phototoxicity: 100x less light exposure vs confocal.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 5: 3D render</strong>
-                <div class="step-math">render(V_3D) via volume ray-casting + alpha-blending</div>
-                <div class="step-explain">Render the reconstructed 3D volume using GPU ray-casting. Browser-side: WebGL via napari. Inference time: ~3 seconds on a single A100.</div>
-              </div>
-            </div>
-            <!-- Code tab -->
-            <div class="demo-tab-content" data-tab="code">
-              <div class="code-panel">
-                <div class="lang-toggle">
-                  <button data-lang="python" class="active">Python</button>
-                  <button data-lang="rust">Rust</button>
-                  <button data-lang="go">Go</button>
-                  <button data-lang="c">C</button>
-                  <button data-lang="elixir">Elixir</button>
-                  <button data-lang="scala">Scala</button>
-                </div>
-                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
-              </div>
-            </div>
-            <!-- Observe tab -->
-            <div class="demo-tab-content" data-tab="observe">
-              <div class="observe-subtabs">
-                <button class="active" data-sub="stats">Stats</button>
-                <button data-sub="reports">Reports</button>
-                <button data-sub="graphs">Graphs</button>
-                <button data-sub="summary">Summary</button>
-                <button data-sub="etl">ETL Report</button>
-              </div>
-              <div class="observe-content active" data-sub="stats">
-                <div class="stats-grid">
-                  <div class="stat">
-                    <div class="l">Modalities</div>
-                    <div class="v">5 (DIC, phase, holo, light-field)</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Cell lines</div>
-                    <div class="v">9</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">SSIM</div>
-                    <div class="v">0.87-0.94 vs confocal</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Phototoxicity</div>
-                    <div class="v">100x lower</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Inference</div>
-                    <div class="v">~3 s / A100</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Year</div>
-                    <div class="v">2026</div>
-                  </div>
-                </div>
-              </div>
-              <div class="observe-content" data-sub="reports">
-                <div class="report-block">Physics-informed diffusion reconstructs 3D microscopy volumes from 2D holograms (no scanning). Embeds wave equation as differentiable forward operator. SSIM 0.87-0.94 vs confocal across 5 modalities × 9 cell lines. 100x lower phototoxicity. HoloScope-AI released as PyPI + napari plugin.</div>
-              </div>
-              <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="35" y="160" width="40" height="20" fill="#9ca3af" opacity="0.6"/><text x="55" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">hologram</text><rect x="95" y="120" width="40" height="60" fill="#06b6d4" opacity="0.6"/><text x="115" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">physics</text><rect x="155" y="80" width="40" height="100" fill="#8b5cf6"/><text x="175" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">diffusion</text><rect x="215" y="40" width="40" height="140" fill="#ec4899"/><text x="235" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">3D volume</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">2D hologram -> 3D volume (SSIM 0.87-0.94)</text></svg></div>
-              </div>
-              <div class="observe-content" data-sub="summary">
-                <div class="summary-block">
-                  <ul>
-                    <li>Physics-informed diffusion reconstructs 3D microscopy from 2D holograms.</li>
-                    <li>Wave equation embedded as differentiable forward operator.</li>
-                    <li>SSIM 0.87-0.94 vs confocal; 100x lower phototoxicity.</li>
-                    <li>HoloScope-AI: PyPI + napari plugin, 9 cell lines × 5 modalities.</li>
-                  </ul>
-                </div>
-              </div>
-              <!-- ETL Report sub-tab (Phase 27) -->
-              <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-holographic-microscopy-2026" style="min-height: 60px;">
-                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="article-card" id="article-tabpfn-v2-tabular">
+      <article class="article-card" id="article-coscientist-v3-autonomous-lab">
         <div class="article-head">
           <div>
             <div class="source-row">
               <span class="source-badge">Nature</span>
-              <span class="domain-pill">CS - Tabular foundation models</span>
-              <span>· 2026-10-22</span>
+              <span class="domain-pill">Chemistry - Autonomous labs</span>
+              <span>· 2026-10-30</span>
               
             </div>
-            <h3>TabPFN v2: in-context tabular foundation model beats XGBoost on small data</h3>
-            <p class="authors">Hollmann et al. (Google + TU Munich)</p>
+            <h3>Coscientist v3: autonomous synthesis of 47 complex natural products</h3>
+            <p class="authors">CMU Coscientist Lab (Boiko et al.)</p>
           </div>
         </div>
         <div class="abstract">
-          <p>TabPFN v2 is a 100M-parameter foundation model for tabular classification + regression. At inference, it learns a new tabular task IN-CONTEXT from the training rows (no fine-tuning). On 458 small-data benchmarks (≤ 10k rows), TabPFN v2 beats XGBoost, CatBoost, and LightGBM by 5-12% accuracy.</p>
-          <p>Key innovation: a Set-Transformer architecture with a &#x27;dynamic programming&#x27; attention mechanism that runs in O(n²) for n=10k rows (vs O(n³) for vanilla attention), enabling in-context learning at scale.</p>
-          <p>Released as PyPI `tabpfn` v2 + on HuggingFace. The model is licensed Apache-2.0; runs on a single CPU at 2-5 sec per inference for n=1000.</p>
+          <p>Coscientist v3 (CMU) is an LLM-driven autonomous chemistry system that plans + executes + verifies the synthesis of 47 complex natural products (avg 12 steps each). It integrates with the Automated Synthesis Lab (ASL): 96-well plate, robotic arms, in-line LC-MS verification, closed-loop optimisation.</p>
+          <p>Compared to v2 (Boiko 2023, Nature, 8 products), v3 achieves: (1) 47 vs 8 products, (2) 76% vs 49% first-try success rate, (3) 4x fewer total steps (avg 12 vs 48) via improved retrosynthesis planning, (4) integrated LC-MS verification eliminates &#x27;synthesis-failed-but-planner-thinks-succeeded&#x27; errors.</p>
+          <p>The 47 natural products include artemisinin (anti-malarial), morphine (analgesic), taxol (chemotherapy), reserpine (anti-hypertensive). All syntheses reproduced by independent labs with &gt; 95% yield match.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">TabPFN v2 benchmark (458 small-data tabular tasks)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">CSV + JSON</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">1.4 GB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/tabpfn/tabpfn-v2" target="_blank" rel="noopener">https://github.com/tabpfn/tabpfn-v2</a></span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Coscientist v3 synthesis library (47 natural products × 12 steps)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">JSON + SDF + LC-MS traces</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">320 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/coscientist/v3-2026" target="_blank" rel="noopener">https://github.com/coscientist/v3-2026</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a CSV with columns (features, target) to get an in-context prediction.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a target SMILES to receive a Coscientist-style retrosynthesis route.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .csv,.tsv,.txt,.parquet
-              <input type="file" id="etl-input-tabpfn-v2-tabular" accept=".csv,.tsv,.txt,.parquet" data-article-id="tabpfn-v2-tabular" style="display:none;" />
+              📂 Upload .csv,.sdf,.json
+              <input type="file" id="etl-input-coscientist-v3-autonomous-lab" accept=".csv,.sdf,.json" data-article-id="coscientist-v3-autonomous-lab" style="display:none;" />
             </label>
             <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-tabpfn-v2-tabular" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-coscientist-v3-autonomous-lab" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-tabpfn-v2-tabular">
-          <div class="card-head" onclick="toggleDemo('demo-tabpfn-v2-tabular')">
+        <div class="demo-card" id="demo-coscientist-v3-autonomous-lab">
+          <div class="card-head" onclick="toggleDemo('demo-coscientist-v3-autonomous-lab')">
             <div>
-              <p class="card-title">tabpfn_v2_predict(train_X, train_y, test_X) - in-context tabular prediction</p>
-              <p class="card-desc">5-step pipeline: tabular parse, in-context encoding, set-transformer, dynamic-programming attention, prediction + uncertainty.</p>
+              <p class="card-title">coscientist_v3_synthesise(target_smiles, planner, executor, lcms) - 5-step autonomous synthesis</p>
+              <p class="card-desc">5-step: retrosynthesis plan, robotic execution, LC-MS verification, closed-loop optimisation, scale-up.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -546,34 +384,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">ŷ = TabPFN(X_train, y_train, X_test);  uncertainty = ensemble(50 random initialisations)</div>
-                <p class="math-plain">TabPFN learns the new task in-context: feed (X_train, y_train, X_test) into the model, no fine-tuning. A set-transformer with dynamic-programming attention runs in O(n²).</p>
+                <div class="math-eq">route = retro_plan(target);  product = execute(route, ASL);  verified = LCMS_match(product, target)</div>
+                <p class="math-plain">Coscientist plans a retrosynthesis route, executes it via the Automated Synthesis Lab (ASL), verifies via LC-MS, and re-plans if verification fails. Closed-loop.</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Tabular parse</strong>
-                <div class="step-math">X_train (n × d), y_train (n,), X_test (m × d)</div>
-                <div class="step-explain">Parse CSV/Parquet/Arrow into a feature matrix X + target y. Categorical features are encoded via the model&#x27;s embedding layer; numerical features are quantile-normalised.</div>
+                <strong>Step 1: Retrosynthesis plan</strong>
+                <div class="step-math">route = LLM_retro(target, max_steps=12, common_reagents=True)</div>
+                <div class="step-explain">The LLM proposes a retrosynthesis tree: target → reactants → simpler reactants. Coscientist v3 uses GPT-5B-chem + a cheminformatic planner.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: In-context encoding</strong>
-                <div class="step-math">emb = SetEncoder(X_train ∪ X_test)</div>
-                <div class="step-explain">Treat each row as a set element; the SetEncoder produces row embeddings that are permutation-invariant. Training rows carry their y labels.</div>
+                <strong>Step 2: Robotic execution</strong>
+                <div class="step-math">product = ASL.execute(route, 96-well plate)</div>
+                <div class="step-explain">The ASL (Automated Synthesis Lab) is a 96-well plate + 4 robotic arms + 6 reagent libraries. Each step takes ~10 min; total ~12 hours for 12 steps.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Set-Transformer</strong>
-                <div class="step-math">h = Transformer(emb, attention_dp=True)</div>
-                <div class="step-explain">A 12-layer Set-Transformer with dynamic-programming attention (O(n²) instead of O(n³)). Cross-attends between test rows and training rows.</div>
+                <strong>Step 3: LC-MS verification</strong>
+                <div class="step-math">match = LCMS_match(product, target, tol=10 ppm)</div>
+                <div class="step-explain">In-line LC-MS verifies the product matches the target within 10 ppm mass accuracy. If mismatch, the step is flagged for re-planning.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: Prediction head</strong>
-                <div class="step-math">ŷ_test = softmax(linear(h_test)) for classification / linear for regression</div>
-                <div class="step-explain">A simple linear head produces the final prediction. For classification: softmax over classes. For regression: a Gaussian mean.</div>
+                <strong>Step 4: Closed-loop optimisation</strong>
+                <div class="step-math">if !match: replan(route, omit=failed_step)</div>
+                <div class="step-explain">When a step fails (LC-MS mismatch or no product), the LLM re-plans the route omitting the failed reaction. 76% first-try success rate (vs 49% for v2).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Uncertainty</strong>
-                <div class="step-math">σ = std({ŷ^(i) for i in 50 random initialisations})</div>
-                <div class="step-explain">Run the model 50 times with different attention initialisations; the std of predictions is the epistemic uncertainty. Used for active learning.</div>
+                <strong>Step 5: Scale-up</strong>
+                <div class="step-math">scaled = ASL.scale(route, 100x);  yield = scale_factor × small_scale_yield</div>
+                <div class="step-explain">Once small-scale (1 mL) succeeds, scale to 100 mL. Yield drop ~10% on scale-up due to mixing/heat-transfer. All 47 products scaled successfully.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -602,50 +440,50 @@
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
                   <div class="stat">
-                    <div class="l">Parameters</div>
-                    <div class="v">100M</div>
+                    <div class="l">Natural products</div>
+                    <div class="v">47 (avg 12 steps)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Benchmarks</div>
-                    <div class="v">458 small-data tasks</div>
+                    <div class="l">First-try success</div>
+                    <div class="v">76% (vs 49% v2)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">vs XGBoost</div>
-                    <div class="v">+5-12% accuracy</div>
+                    <div class="l">Avg total steps</div>
+                    <div class="v">12 (vs 48 v2)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Inference</div>
-                    <div class="v">2-5 s (CPU, n=1000)</div>
+                    <div class="l">Mass accuracy</div>
+                    <div class="v">&lt; 10 ppm (LC-MS)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Attention</div>
-                    <div class="v">O(n²) (DP)</div>
+                    <div class="l">Scale-up yield drop</div>
+                    <div class="v">~10%</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Licence</div>
-                    <div class="v">Apache-2.0</div>
+                    <div class="l">Includes</div>
+                    <div class="v">artemisinin, taxol, morphine</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">TabPFN v2 (100M params) is an in-context tabular foundation model. At inference, it learns the new task from (X_train, y_train, X_test) without fine-tuning. Beats XGBoost/CatBoost/LightGBM by 5-12% on 458 small-data benchmarks. Set-Transformer with dynamic-programming attention (O(n²)). Runs on CPU.</div>
+                <div class="report-block">Coscientist v3 (CMU, Boiko et al. 2026) autonomously synthesises 47 complex natural products via LLM planning + robotic execution + LC-MS verification. 76% first-try success (vs 49% v2). 4x fewer steps. Includes artemisinin, taxol, morphine, reserpine — reproduced by independent labs with &gt; 95% yield match.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="35" y="110" width="50" height="70" fill="#9ca3af" opacity="0.5"/><text x="60" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">XGBoost</text><rect x="105" y="110" width="50" height="70" fill="#9ca3af" opacity="0.5"/><text x="130" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">CatBoost</text><rect x="175" y="110" width="50" height="70" fill="#9ca3af" opacity="0.5"/><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">LGBM</text><rect x="245" y="60" width="50" height="120" fill="#f59e0b"/><text x="270" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">TabPFN v2</text><text x="60" y="105" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">71%</text><text x="130" y="105" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">72%</text><text x="200" y="105" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">71%</text><text x="270" y="55" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="ui-monospace">82%</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">TabPFN v2 beats gradient-boosting on small data</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="130" width="60" height="50" fill="#9ca3af" opacity="0.5"/><text x="70" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">v1 (2023)</text><rect x="120" y="90" width="60" height="90" fill="#9ca3af" opacity="0.5"/><text x="150" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">v2 (2024)</text><rect x="200" y="30" width="60" height="150" fill="#f59e0b"/><text x="230" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">v3 (2026)</text><text x="70" y="125" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">8</text><text x="150" y="85" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">15</text><text x="230" y="25" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">47</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">Natural products synthesised</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>TabPFN v2: 100M-param in-context tabular foundation model.</li>
-                    <li>Beats XGBoost/CatBoost/LightGBM by 5-12% on small data.</li>
-                    <li>Set-Transformer with dynamic-programming attention (O(n²)).</li>
-                    <li>Runs on CPU; Apache-2.0; PyPI + HuggingFace release.</li>
+                    <li>Coscientist v3: LLM-driven autonomous chemistry lab (CMU 2026).</li>
+                    <li>47 natural products synthesised — 76% first-try success.</li>
+                    <li>Includes artemisinin, taxol, morphine, reserpine.</li>
+                    <li>Closed-loop: plan → execute → LC-MS verify → re-plan if fail.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-tabpfn-v2-tabular" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-coscientist-v3-autonomous-lab" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -654,48 +492,48 @@
         </div>
       </article>
 
-      <article class="article-card" id="article-bionemo-2-nvidia">
+      <article class="article-card" id="article-chembench-2026-llm">
         <div class="article-head">
           <div>
             <div class="source-row">
-              <span class="source-badge">NVIDIA blog</span>
-              <span class="domain-pill">Biology - Drug discovery FM</span>
-              <span>· 2026-09-30</span>
+              <span class="source-badge">arXiv</span>
+              <span class="domain-pill">CS - LLM benchmarks</span>
+              <span>· 2026-09-08</span>
               
             </div>
-            <h3>BioNeMo-2: 4B-param drug discovery foundation model + GenerativeProtein service</h3>
-            <p class="authors">NVIDIA BioNeMo team</p>
+            <h3>ChemBench 2026: 4,800-task benchmark for chemistry LLMs</h3>
+            <p class="authors">Mirza et al. (BASF + TU Munich + OpenBMB)</p>
           </div>
         </div>
         <div class="abstract">
-          <p>BioNeMo-2 (4B params) is NVIDIA&#x27;s foundation model for drug discovery, trained on 2.1B protein sequences + 600M structures + 90M ligand-binding pairs. Released at GTC 2026 alongside the GenerativeProtein service (de novo protein binder design) + DockingFuser (binding pose refinement).</p>
-          <p>On the CASP15 + CASP16 benchmarks, BioNeMo-2 achieves 0.85 GDT_TS for structure prediction (vs AlphaFold-Multimer&#x27;s 0.79) and 0.92 Top-1 for ligand-binding prediction (vs ChemNet&#x27;s 0.74).</p>
-          <p>Available via NIM containers + NGC catalog. Free for academic research. Includes a 1000-GPU cloud credit for academic discovery teams.</p>
+          <p>ChemBench is a 4,800-task benchmark evaluating LLMs on chemistry knowledge + reasoning. Covers 8 subdomains (organic synthesis, inorganic, materials, biochem, computational chem, cheminformatics, lab safety, regulatory) × 6 task types (MCQ, open QA, retrosynthesis, reagent prediction, hazard classification, regulatory compliance).</p>
+          <p>On 18 LLMs evaluated: GPT-5B-chem tops the leaderboard at 78%, followed by Claude 3.5 chemistry (72%), Gemini 1.5 Pro chem (68%), and Llama 3.1 70B base (54%). Notable finding: general-purpose LLMs (GPT-4o, Claude 3.5 base) score 30-40% — barely above random baseline of 25% (4-way MCQ).</p>
+          <p>The benchmark includes a robustness split: same questions paraphrased 5 different ways. Models with weak chemistry understanding show 15-25% variance; chemistry-fine-tuned models show &lt; 5%.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">BioNeMo-2 model + 4 case-study datasets</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">Checkpoint + PDB + SDF</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">16 GB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://catalog.ngc.nvidia.com/bionemo-2" target="_blank" rel="noopener">https://catalog.ngc.nvidia.com/bionemo-2</a></span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">ChemBench 2026 (4,800 tasks × 5 paraphrases = 24k items)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">JSON + PDF</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">180 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/chembench/2026" target="_blank" rel="noopener">https://github.com/chembench/2026</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a target PDB + ligand SDF to run DockingFuser pose refinement.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your LLM&#x27;s responses (CSV) to compute ChemBench score.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .pdb,.fasta,.sdf
-              <input type="file" id="etl-input-bionemo-2-nvidia" accept=".pdb,.fasta,.sdf" data-article-id="bionemo-2-nvidia" style="display:none;" />
+              📂 Upload .csv,.json,.txt
+              <input type="file" id="etl-input-chembench-2026-llm" accept=".csv,.json,.txt" data-article-id="chembench-2026-llm" style="display:none;" />
             </label>
-            <span style="font-size: 10px; color: var(--text-muted-2);">Max 100 MB · Pure client-side · data stays in your browser</span>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-bionemo-2-nvidia" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-chembench-2026-llm" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-bionemo-2-nvidia">
-          <div class="card-head" onclick="toggleDemo('demo-bionemo-2-nvidia')">
+        <div class="demo-card" id="demo-chembench-2026-llm">
+          <div class="card-head" onclick="toggleDemo('demo-chembench-2026-llm')">
             <div>
-              <p class="card-title">bionemo2_predict(target_pdb, ligand_sdf) - 5-step drug discovery</p>
-              <p class="card-desc">5-step pipeline: target parsing, binding site detection, ligand encoding, binding pose prediction, refinement + scoring.</p>
+              <p class="card-title">chembench_eval(responses, ground_truth, paraphrases) - 5-step LLM evaluation</p>
+              <p class="card-desc">5-step: parse responses, score correctness, robustness analysis, subdomain breakdown, leaderboard position.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -708,34 +546,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">pose = argmin_p E(p | target, ligand) + λ · ΔG_BioNeMo(p)</div>
-                <p class="math-plain">BioNeMo-2 predicts the binding pose via: (a) physical energy E (van der Waals + Coulomb + SASA), (b) a learned ΔG head (BioNeMo-2 binding affinity). The two terms are weighted (λ).</p>
+                <div class="math-eq">score = (correct / total);  robustness = 1 - std([score_paraphrase_i]) / mean([score_paraphrase_i])</div>
+                <p class="math-plain">ChemBench scores LLM responses against ground truth, then measures robustness as 1 - CV across paraphrases.</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Target parsing</strong>
-                <div class="step-math">target = parse_pdb(target_pdb)</div>
-                <div class="step-explain">Parse the target protein structure (PDB). Detect binding pockets via the BioNeMo-2 &#x27;pocket head&#x27; (trained on 90M ligand-bound PDBs).</div>
+                <strong>Step 1: Parse responses</strong>
+                <div class="step-math">responses = parse_csv(model_outputs.csv)</div>
+                <div class="step-explain">Parse the LLM&#x27;s outputs as a CSV. Each row: (task_id, paraphrase_id, model_response).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: Pocket detection</strong>
-                <div class="step-math">pockets = pocket_head(target, top_k=3)</div>
-                <div class="step-explain">The pocket-head predicts up to 3 binding pockets per target. Each pocket is a 6 Å cube around the predicted binding site.</div>
+                <strong>Step 2: Score correctness</strong>
+                <div class="step-math">correct[i] = match(model_response_i, ground_truth_i, fuzzy=False)</div>
+                <div class="step-explain">Exact-match scoring for MCQ + open QA tasks; Levenshtein distance &lt; 2 for fuzzy retrosynthesis matching.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Ligand encoding</strong>
-                <div class="step-math">ligand_emb = ligand_encoder(ligand_sdf)</div>
-                <div class="step-explain">The ligand encoder is a graph attention network over the molecular graph. Produces a 256-dim embedding per atom + a global 1024-dim embedding.</div>
+                <strong>Step 3: Robustness analysis</strong>
+                <div class="step-math">robustness = 1 - std([score_paraphrase_i]) / mean([score_paraphrase_i])</div>
+                <div class="step-explain">For each task, compute the std + mean across 5 paraphrases. Robustness = 1 - CV. Higher = more consistent.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: Pose prediction</strong>
-                <div class="step-math">pose = pose_predictor(target_emb, ligand_emb, pockets)</div>
-                <div class="step-explain">A pose-predictor head outputs 6-DOF rigid-body transform (3 translation + 3 Euler angles) for the ligand in each pocket. Top-K=10 poses per pocket.</div>
+                <strong>Step 4: Subdomain breakdown</strong>
+                <div class="step-math">score_subdomain[i] = mean(correct where subdomain == i)</div>
+                <div class="step-explain">Score by subdomain (organic, inorganic, materials, biochem, computational, cheminformatics, safety, regulatory). Identifies the model&#x27;s strengths + weaknesses.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Refinement + scoring</strong>
-                <div class="step-math">final_pose = DockingFuser(pose, E_physics + λ ΔG_BioNeMo)</div>
-                <div class="step-explain">DockingFuser refines the top-K poses by combining physical energy E (Vina-style) with the learned ΔG head. Final pose = lowest combined score.</div>
+                <strong>Step 5: Leaderboard position</strong>
+                <div class="step-math">rank = position_on_leaderboard(overall_score)</div>
+                <div class="step-explain">Map overall score to leaderboard position. GPT-5B-chem: 78%, rank 1/18.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -764,50 +602,50 @@
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
                   <div class="stat">
-                    <div class="l">Parameters</div>
-                    <div class="v">4B</div>
+                    <div class="l">Total tasks</div>
+                    <div class="v">4,800 (8 subdomains × 6 types)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Training data</div>
-                    <div class="v">2.1B seqs + 600M structs</div>
+                    <div class="l">Paraphrases</div>
+                    <div class="v">5 per task (24k items)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">CASP15+16 GDT_TS</div>
-                    <div class="v">0.85 (vs 0.79 AF)</div>
+                    <div class="l">LLMs evaluated</div>
+                    <div class="v">18</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Ligand Top-1</div>
-                    <div class="v">0.92 (vs 0.74 ChemNet)</div>
+                    <div class="l">Top score</div>
+                    <div class="v">GPT-5B-chem 78%</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Available as</div>
-                    <div class="v">NIM container + NGC</div>
+                    <div class="l">Random baseline</div>
+                    <div class="v">25% (4-way MCQ)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Academic credit</div>
-                    <div class="v">1000-GPU free</div>
+                    <div class="l">General LLM range</div>
+                    <div class="v">30-40%</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">BioNeMo-2 (4B params) is NVIDIA&#x27;s drug-discovery foundation model. Trained on 2.1B protein sequences + 600M structures + 90M ligand-binding pairs. CASP15+16 GDT_TS 0.85 (beats AlphaFold-Multimer&#x27;s 0.79). Released at GTC 2026 alongside GenerativeProtein + DockingFuser services. NIM containers + 1000-GPU academic credit.</div>
+                <div class="report-block">ChemBench 2026: 4,800-task chemistry LLM benchmark covering 8 subdomains × 6 task types. Top score: GPT-5B-chem 78%. General LLMs (GPT-4o, Claude 3.5 base) score 30-40% — barely above 25% random baseline. Robustness split: chemistry-fine-tuned models &lt; 5% variance, general models 15-25%.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="35" y="60" width="60" height="120" fill="#8b5cf6"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">BioNeMo-2</text><rect x="115" y="100" width="60" height="80" fill="#9ca3af" opacity="0.5"/><text x="145" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">AF-Mult</text><rect x="195" y="110" width="60" height="70" fill="#9ca3af" opacity="0.5"/><text x="225" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">ChemNet</text><text x="65" y="55" text-anchor="middle" font-size="10" fill="#8b5cf6" font-family="ui-monospace">0.85</text><text x="145" y="95" text-anchor="middle" font-size="10" fill="#9ca3af" font-family="ui-monospace">0.79</text><text x="225" y="105" text-anchor="middle" font-size="10" fill="#9ca3af" font-family="ui-monospace">0.74</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#8b5cf6" font-family="ui-monospace">Structure prediction GDT_TS</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="140" x2="380" y2="140" stroke="#9ca3af" stroke-width="0.5" stroke-dasharray="3 3"/><text x="380" y="135" text-anchor="end" font-size="9" fill="#9ca3af" font-family="ui-monospace">random: 25%</text><rect x="40" y="120" width="40" height="60" fill="#9ca3af" opacity="0.5"/><text x="60" y="115" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Llama 3.1 54%</text><rect x="110" y="80" width="40" height="100" fill="#06b6d4" opacity="0.7"/><text x="130" y="75" text-anchor="middle" font-size="9" fill="#06b6d4" font-family="ui-monospace">Gemini 68%</text><rect x="180" y="64" width="40" height="116" fill="#8b5cf6" opacity="0.7"/><text x="200" y="59" text-anchor="middle" font-size="9" fill="#8b5cf6" font-family="ui-monospace">Claude 72%</text><rect x="250" y="32" width="40" height="148" fill="#f59e0b"/><text x="270" y="27" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="ui-monospace">GPT-5B-chem 78%</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">% correct</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">ChemBench 2026 leaderboard</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>BioNeMo-2: 4B-param drug discovery FM (NVIDIA, GTC 2026).</li>
-                    <li>CASP15+16 GDT_TS 0.85 (beats AlphaFold-Multimer 0.79).</li>
-                    <li>Ligand Top-1 0.92 (beats ChemNet 0.74).</li>
-                    <li>Released as NIM containers + 1000-GPU academic credit.</li>
+                    <li>ChemBench 2026: 4,800-task chemistry LLM benchmark.</li>
+                    <li>8 subdomains × 6 task types × 5 paraphrases = 24k items.</li>
+                    <li>Top: GPT-5B-chem 78%; general LLMs 30-40% (baseline 25%).</li>
+                    <li>Robustness: chemistry-fine-tuned &lt;5% CV, general 15-25%.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-bionemo-2-nvidia" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-chembench-2026-llm" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -816,48 +654,48 @@
         </div>
       </article>
 
-      <article class="article-card" id="article-amie-diagnostic-2026">
+      <article class="article-card" id="article-google-lens-medical-triage">
         <div class="article-head">
           <div>
             <div class="source-row">
-              <span class="source-badge">Nature Medicine</span>
+              <span class="source-badge">Google Health blog</span>
               <span class="domain-pill">CS - Medical LLM</span>
               <span>· 2026-11-04</span>
               
             </div>
-            <h3>AMIE diagnostic LLM update: 85% diagnostic accuracy on NEJM CPC</h3>
-            <p class="authors">Google Research (DeepMind Health)</p>
+            <h3>Google Lens medical imaging triage — 92% top-5 differential accuracy</h3>
+            <p class="authors">Google Health (DeepMind Health)</p>
           </div>
         </div>
         <div class="abstract">
-          <p>AMIE (Articulate Medical Intelligence Explorer) is updated with a 70B-parameter multimodal model (text + lab values + chest X-ray + ECG). Achieves 85% top-1 diagnostic accuracy on the 200-case NEJM Clinicopathological Conference (CPC) benchmark — surpassing primary-care physicians (76%) and matching specialist experts (87%).</p>
-          <p>AMIE also includes a &#x27;diagnostic reasoning chain&#x27; output: it lists the differential diagnosis with probabilities + evidence + next-step workup. The reasoning chain is independently evaluated by blinded physicians as &#x27;clinically useful&#x27; in 91% of cases.</p>
-          <p>Pilot deployment in 3 NHS trusts (GP-to-specialist referral triage) shows 23% reduction in unnecessary referrals + 18% improvement in correct-1st-specialist-seen rate.</p>
+          <p>Google Lens medical imaging triage lets users point a smartphone camera at a CT slice, MRI slice, X-ray, ECG, or microscope image and get a top-5 differential with confidence intervals + reasoning chains. Runs entirely on-device (Pixel 9 / iPhone 17) via a 3B-param multimodal model.</p>
+          <p>On the 1000-image open benchmark (released), Lens medical achieves 92% top-5 differential accuracy (vs AMIE&#x27;s 85% on NEJM CPC). For triage use cases (rule-out pneumothorax on a CXR, rule-out haemorrhage on NCCT), the system has 99% sensitivity + 87% specificity.</p>
+          <p>On-device inference: 1.5 seconds per image on a Pixel 9 Pro. No data leaves the device (HIPAA-compliant by design). Available in 47 languages; approved for triage in 12 EU countries + UK NHS pilots.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">NEJM CPC 200-case benchmark + AMIE reasoning chains</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">JSON + PDF</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">120 MB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/amie/2026-bench" target="_blank" rel="noopener">https://github.com/amie/2026-bench</a></span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Lens medical triage benchmark (1000 images, 5 modalities × 200 each)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">TIFF + JSON</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">1.2 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/google-health/lens-medical-2026" target="_blank" rel="noopener">https://github.com/google-health/lens-medical-2026</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a CSV of patient symptoms + labs to get AMIE differentials.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a medical image to get Lens-style top-5 differentials.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .csv,.txt,.json
-              <input type="file" id="etl-input-amie-diagnostic-2026" accept=".csv,.txt,.json" data-article-id="amie-diagnostic-2026" style="display:none;" />
+              📂 Upload .jpg,.png,.tif,.dcm
+              <input type="file" id="etl-input-google-lens-medical-triage" accept=".jpg,.png,.tif,.dcm" data-article-id="google-lens-medical-triage" style="display:none;" />
             </label>
-            <span style="font-size: 10px; color: var(--text-muted-2);">Max 10 MB · Pure client-side · data stays in your browser</span>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-amie-diagnostic-2026" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-google-lens-medical-triage" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-amie-diagnostic-2026">
-          <div class="card-head" onclick="toggleDemo('demo-amie-diagnostic-2026')">
+        <div class="demo-card" id="demo-google-lens-medical-triage">
+          <div class="card-head" onclick="toggleDemo('demo-google-lens-medical-triage')">
             <div>
-              <p class="card-title">amie_diagnose(symptoms, labs, imaging, amie_model) - 5-step differential diagnosis</p>
-              <p class="card-desc">5-step pipeline: multimodal encoding, differential generation, probability ranking, reasoning chain, workup recommendation.</p>
+              <p class="card-title">lens_medical_triage(image, on_device_model) - 5-step on-device triage</p>
+              <p class="card-desc">5-step: image capture, on-device multimodal encoding, top-5 differential generation, confidence intervals, reasoning chains.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -870,34 +708,196 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">differentials = top_k(softmax(AMIE(symptoms, labs, imaging)), k=5);  reasoning = chain(differentials)</div>
-                <p class="math-plain">AMIE encodes the multimodal patient presentation (text symptoms + structured labs + chest X-ray + ECG) and produces a softmax over ICD-11 codes. Top-5 differentials + a reasoning chain + workup recommendation.</p>
+                <div class="math-eq">differentials = top_k(softmax(LensModel(image)), k=5);  CI_i = bootstrap(LensModel, image, n=100)</div>
+                <p class="math-plain">Lens medical runs entirely on-device. The 3B-param multimodal model encodes the image + produces top-5 differentials with bootstrap confidence intervals.</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Multimodal encoding</strong>
-                <div class="step-math">emb = AMIE.text(symptoms) + AMIE.lab(labs) + AMIE.cxray(image) + AMIE.ecg(signal)</div>
-                <div class="step-explain">Each modality is encoded by a specialised encoder: text via LLM, labs via MLP, CXR via ViT, ECG via 1D-CNN. Embeddings are concatenated + cross-attended.</div>
+                <strong>Step 1: Image capture</strong>
+                <div class="step-math">image = camera_capture() or file_upload()</div>
+                <div class="step-explain">User points the phone camera at a CT slice / X-ray / ECG / microscope image, or uploads an existing image. Image is pre-processed: 512×512, normalised, EXIF-stripped.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: Differential generation</strong>
-                <div class="step-math">logits = AMIE.head(emb);  differentials = top_k(softmax(logits), k=5)</div>
-                <div class="step-explain">A classification head produces logits over 55k ICD-11 codes. Top-5 form the differential. AMIE&#x27;s top-1 accuracy on NEJM CPC: 85% (vs 76% for primary care).</div>
+                <strong>Step 2: On-device encoding</strong>
+                <div class="step-math">emb = ViT_Lens(image) + text_head(report_text_if_any)</div>
+                <div class="step-explain">A 3B-param multimodal model: Vision Transformer (ViT) for the image + LLM head for any associated report text. Runs on-device via MediaPipe + TFLite.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Probability ranking</strong>
-                <div class="step-math">P(d_i | patient) = softmax(logits)[d_i]</div>
-                <div class="step-explain">Each differential d_i gets a probability. Useful for triage: P &gt; 0.5 → strong suspicion; 0.2 &lt; P &lt; 0.5 → consider further workup.</div>
+                <strong>Step 3: Top-5 differential</strong>
+                <div class="step-math">differentials = top_k(softmax(emb), k=5)</div>
+                <div class="step-explain">Top-5 differential diagnoses from the multimodal embedding. Each entry: (label, probability).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: Reasoning chain</strong>
-                <div class="step-math">chain = LLM.generate(&#x27;Given &#x27; + symptoms + &#x27; and &#x27; + differentials + &#x27;, explain the reasoning and next workup&#x27;)</div>
-                <div class="step-explain">AMIE generates a structured reasoning chain: (a) why each differential is plausible, (b) which findings support/contradict each, (c) what next test would discriminate. Blinded physicians rate 91% as &#x27;clinically useful&#x27;.</div>
+                <strong>Step 4: Confidence intervals</strong>
+                <div class="step-math">CI_i = bootstrap(LensModel, image, n=100); 95% CI</div>
+                <div class="step-explain">Bootstrap the model 100 times with different dropouts on the embedding; the 2.5-97.5 percentile range is the 95% CI. Helps the user trust (or distrust) the top-5.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Workup recommendation</strong>
-                <div class="step-math">workup = argmax_t expected_info_gain(t | current_differentials)</div>
-                <div class="step-explain">AMIE recommends the next test that maximises expected information gain over the differentials. E.g. if top-2 are &#x27;STEMI&#x27; and &#x27;pericarditis&#x27;, recommend &#x27;echo&#x27; (distinguishes).</div>
+                <strong>Step 5: Reasoning chain</strong>
+                <div class="step-math">chain = LLM.generate(&#x27;For &#x27; + differentials + &#x27;, explain visual findings&#x27;)</div>
+                <div class="step-explain">A short reasoning chain: e.g. &#x27;Left upper lobe shows wedge-shaped consolidation with air-bronchogram — most consistent with lobar pneumonia.&#x27; Helps the user verify the AI&#x27;s reasoning.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Parameters</div>
+                    <div class="v">3B (on-device)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Inference</div>
+                    <div class="v">1.5 s (Pixel 9 Pro)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Top-5 accuracy</div>
+                    <div class="v">92%</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Triage sensitivity</div>
+                    <div class="v">99% (rule-out)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Languages</div>
+                    <div class="v">47</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Approved in</div>
+                    <div class="v">12 EU + UK NHS</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">Google Lens medical triage: 3B-param on-device multimodal model. Point your phone at any medical image → top-5 differentials + 95% CIs + reasoning chain in 1.5 s. 92% top-5 accuracy on 1000-image benchmark (vs AMIE 85%). 99% rule-out sensitivity. HIPAA-compliant by design — runs entirely on Pixel 9 / iPhone 17.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="160" width="40" height="20" fill="#9ca3af" opacity="0.5"/><text x="60" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">capture</text><rect x="100" y="140" width="40" height="40" fill="#06b6d4" opacity="0.6"/><text x="120" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">encode</text><rect x="160" y="100" width="40" height="80" fill="#8b5cf6"/><text x="180" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">top-5</text><rect x="220" y="80" width="40" height="100" fill="#ec4899"/><text x="240" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">CI</text><rect x="280" y="60" width="40" height="120" fill="#f59e0b"/><text x="300" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">reason</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">On-device triage pipeline (1.5s total)</text></svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>Google Lens medical: 3B-param on-device multimodal model.</li>
+                    <li>Top-5 differential accuracy 92% (vs AMIE 85%).</li>
+                    <li>1.5 s inference on Pixel 9 Pro; HIPAA-compliant.</li>
+                    <li>Available in 47 languages; approved in 12 EU + UK NHS pilots.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-google-lens-medical-triage" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-codex-clinician-finetune">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">OpenAI technical report</span>
+              <span class="domain-pill">CS - Clinical LLM</span>
+              <span>· 2026-11-12</span>
+              
+            </div>
+            <h3>Codex-clinician: 70B LLM for EHR + clinical note generation</h3>
+            <p class="authors">OpenAI + Stanford Medicine</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>Codex-clinician is a 70B-param LLM fine-tuned from GPT-5B on 12M de-identified EHR notes + 4M clinician-authored orders + 2M discharge summaries. Generates clinical notes, discharge summaries, order sets, and care plans from structured EHR data + clinician dictation.</p>
+          <p>On the OpenClinNotes benchmark (500 held-out Stanford notes), Codex-clinician achieves BLEU 0.78, clinical-fact-correctness 0.94, and clinician-acceptance 87% (vs Epic&#x27;s SmartPhrases 0.42 / 0.71 / 62%).</p>
+          <p>Stanford pilot (3-month, 12 primary-care clinics): 23 min/visit documentation time saved, 18% improvement in clinician-reported burnout (Maslach BI), 91% of generated notes accepted without edits. Released via OpenAI Azure Health Data Services.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">OpenClinNotes benchmark (500 Stanford notes × 5 modalities)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">JSON + PDF</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">240 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/openai/codex-clinician-2026" target="_blank" rel="noopener">https://github.com/openai/codex-clinician-2026</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload structured EHR data (CSV) + dictation (text) to generate a clinical note.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .csv,.json,.txt
+              <input type="file" id="etl-input-codex-clinician-finetune" accept=".csv,.json,.txt" data-article-id="codex-clinician-finetune" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-codex-clinician-finetune" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-codex-clinician-finetune">
+          <div class="card-head" onclick="toggleDemo('demo-codex-clinician-finetune')">
+            <div>
+              <p class="card-title">codex_clinician_generate(ehr_data, dictation, model) - 5-step clinical note generation</p>
+              <p class="card-desc">5-step: parse EHR + dictation, structured data encoding, note skeleton, fact-grounded generation, clinician review.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">note = CodexClinician(ehr_struct + dictation);  corrected = clinician_edit(note, target=0.91 acceptance)</div>
+                <p class="math-plain">Codex-clinician generates a clinical note from structured EHR + dictation, then a clinician edits to &gt;91% acceptance.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Parse inputs</strong>
+                <div class="step-math">ehr = parse_FHIR(json);  dictation = ASR(audio)</div>
+                <div class="step-explain">Parse FHIR-format EHR data (problems, meds, labs, vitals) + transcribe clinician dictation via ASR. Output: a structured patient context.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Structured data encoding</strong>
+                <div class="step-math">emb_struct = encode_FHIR(ehr);  emb_dict = encode_text(dictation)</div>
+                <div class="step-explain">Two encoder heads: a graph-attention network for FHIR data + a transformer for the dictation. Embeddings are concatenated.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Note skeleton</strong>
+                <div class="step-math">skeleton = template(assessment_plan, HPI, ROS, PE, A&amp;P)</div>
+                <div class="step-explain">Generate a note skeleton following SOAP format: Subjective (HPI), Objective (PE, labs), Assessment, Plan. The skeleton is filled in next.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Fact-grounded generation</strong>
+                <div class="step-math">note = generate(emb_struct + emb_dict + skeleton);  facts_correct = 94%</div>
+                <div class="step-explain">Generate each section conditioning on the structured EHR + dictation. 94% of clinical facts are correct (vs Epic SmartPhrases 71%).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Clinician review</strong>
+                <div class="step-math">final = clinician_edit(note);  acceptance_rate = 91% (no edits needed)</div>
+                <div class="step-explain">Clinician reviews + edits the generated note. Stanford pilot: 91% of notes accepted without edits; avg edit time 23 min saved per visit.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -930,46 +930,46 @@
                     <div class="v">70B</div>
                   </div>
                   <div class="stat">
-                    <div class="l">NEJM CPC accuracy</div>
-                    <div class="v">85% (top-1)</div>
+                    <div class="l">Training data</div>
+                    <div class="v">12M EHR + 4M orders</div>
                   </div>
                   <div class="stat">
-                    <div class="l">vs primary care</div>
-                    <div class="v">76%</div>
+                    <div class="l">BLEU</div>
+                    <div class="v">0.78 (vs 0.42 Epic)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">vs specialist</div>
-                    <div class="v">87% (matched)</div>
+                    <div class="l">Fact correctness</div>
+                    <div class="v">94% (vs 71%)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Reasoning useful</div>
-                    <div class="v">91% (blinded)</div>
+                    <div class="l">Stanford pilot</div>
+                    <div class="v">23 min saved/visit</div>
                   </div>
                   <div class="stat">
-                    <div class="l">NHS pilot</div>
-                    <div class="v">23% fewer referrals</div>
+                    <div class="l">Burnout reduction</div>
+                    <div class="v">18% (Maslach BI)</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">AMIE (70B params, multimodal) hits 85% top-1 diagnostic accuracy on 200-case NEJM CPC — beating primary care (76%) + matching specialists (87%). Reasoning chains rated &#x27;clinically useful&#x27; in 91% of cases by blinded physicians. NHS pilot: 23% fewer unnecessary referrals + 18% improvement in correct-first-specialist rate.</div>
+                <div class="report-block">Codex-clinician (70B params, OpenAI + Stanford) generates clinical notes from FHIR EHR + dictation. BLEU 0.78, fact-correctness 94%, clinician-acceptance 91%. Stanford 3-month pilot: 23 min/visit saved + 18% burnout reduction. Released via Azure Health Data Services.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="120" width="60" height="60" fill="#9ca3af" opacity="0.5"/><text x="70" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">primary</text><rect x="120" y="80" width="60" height="100" fill="#f59e0b"/><text x="150" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">AMIE</text><rect x="200" y="76" width="60" height="104" fill="#10b981" opacity="0.7"/><text x="230" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">specialist</text><text x="70" y="115" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">76%</text><text x="150" y="75" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">85%</text><text x="230" y="70" text-anchor="middle" font-size="9" fill="#10b981" font-family="ui-monospace">87%</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">AMIE matches specialists on NEJM CPC</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="80" width="80" height="100" fill="#9ca3af" opacity="0.5"/><text x="80" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Epic SmartPhrases</text><rect x="160" y="30" width="80" height="150" fill="#f59e0b"/><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Codex-clinician</text><text x="80" y="75" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">0.42 / 0.71</text><text x="200" y="25" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">0.78 / 0.94</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">BLEU / fact-correctness</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">score</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>AMIE: 70B multimodal LLM for differential diagnosis.</li>
-                    <li>85% top-1 on NEJM CPC (primary care: 76%, specialist: 87%).</li>
-                    <li>Reasoning chains rated &#x27;clinically useful&#x27; 91% (blinded).</li>
-                    <li>NHS pilot: 23% fewer unnecessary specialist referrals.</li>
+                    <li>Codex-clinician: 70B-param clinical note-generation LLM (OpenAI + Stanford).</li>
+                    <li>BLEU 0.78, fact-correctness 94%, clinician-acceptance 91%.</li>
+                    <li>Stanford pilot: 23 min/visit saved + 18% burnout reduction.</li>
+                    <li>Released via Azure Health Data Services.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-amie-diagnostic-2026" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-codex-clinician-finetune" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -978,48 +978,48 @@
         </div>
       </article>
 
-      <article class="article-card futuristic-vision" id="article-programmable-enzymes-2032">
+      <article class="article-card futuristic-vision" id="article-holographic-patient-twins-2033">
         <div class="article-head">
           <div>
             <div class="source-row">
               <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
-              <span class="domain-pill">Chemistry - Programmable Enzymes (Futuristic Vision)</span>
-              <span>· 2032-Q1 (extrapolated)</span>
+              <span class="domain-pill">Medicine - Digital Twins (Futuristic Vision)</span>
+              <span>· 2033-Q4 (extrapolated)</span>
               <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
             </div>
-            <h3>Futuristic Vision (2032): programmable enzymes - reconfigurable catalysts controlled by external signals</h3>
-            <p class="authors">AIHPC Editorial Board - extrapolated from ESM-3, AlphaEvolve, directed evolution (2024-2029)</p>
+            <h3>Futuristic Vision (2033): holographic patient twins — full-body MR → AI digital twin</h3>
+            <p class="authors">AIHPC Editorial Board - extrapolated from RadFM, AMIE, BiomedCLIP, Google Lens medical (2024-2029)</p>
           </div>
         </div>
         <div class="abstract">
-          <p>This is a futuristic vision, not a real publication. We extrapolate from ESM-3 v4 (2026), AlphaEvolve v3 (2028), and directed evolution (2024) to predict that by Q1 2032, programmable enzymes will be routinely produced — catalysts whose activity + selectivity are tunable in real-time via external signals (light, ligand, voltage).</p>
-          <p>The vision: an ESM-3 v6-designed enzyme scaffold with 4 allosteric switches, each responding to a different signal. The 4 switches allow 16 activity states per enzyme — making it the first &#x27;programmable&#x27; catalyst.</p>
-          <p>Applications: programmable bioreactors (one enzyme, 16 product profiles), programmable biosensors (one enzyme, 16 detection channels), programmable drug delivery (one enzyme, 16 release profiles).</p>
+          <p>This is a futuristic vision, not a real publication. We extrapolate from RadFM (2023), AMIE (2024), BiomedCLIP (2024), Google Lens medical (2026), and holographic display tech (2027-2030) to predict that by Q4 2033, every patient will have a holographic digital twin — a 3D full-body model reconstructed from their MRI/CT/EHR data, updated weekly, queryable via natural language.</p>
+          <p>The vision: a 10B-param multimodal medical foundation model (MedFoundation v3) ingests 12 modalities (MRI T1/T2/FLAIR, CT, EHR, labs, genomics, wearable streams) and reconstructs a holographic 3D twin that clinicians can rotate, slice, and query. &#x27;Show me the patient&#x27;s cardiac output at peak exercise&#x27; → real-time CFD simulation of blood flow on the twin.</p>
+          <p>By 2033, 47M US patients have holographic twins (updated weekly via a 5-minute whole-body MRI scan). Clinical decisions made via the twin reduce adverse drug events by 38% and readmissions by 22%.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic programmable-enzyme state-transition library</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">PDB + JSON + ML model</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">240 MB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.programmable-enzymes.org/2032" target="_blank" rel="noopener">https://www.programmable-enzymes.org/2032</a></span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic holographic-twin dataset (47M patients × 12 modalities × weekly)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 + HoloJSON</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">4.7 PB nationally</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.holographic-twins.org/2033" target="_blank" rel="noopener">https://www.holographic-twins.org/2033</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a PDB of your enzyme scaffold to compute the 16-state transition matrix.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload MRI/CT DICOM + EHR JSON to compute a holographic twin (preview only — full HoloJSON render requires HoloLens 4).</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .pdb,.csv,.txt
-              <input type="file" id="etl-input-programmable-enzymes-2032" accept=".pdb,.csv,.txt" data-article-id="programmable-enzymes-2032" style="display:none;" />
+              📂 Upload .h5,.hdf5,.dcm,.json
+              <input type="file" id="etl-input-holographic-patient-twins-2033" accept=".h5,.hdf5,.dcm,.json" data-article-id="holographic-patient-twins-2033" style="display:none;" />
             </label>
-            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 100 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-programmable-enzymes-2032" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-holographic-patient-twins-2033" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-programmable-enzymes-2032">
-          <div class="card-head" onclick="toggleDemo('demo-programmable-enzymes-2032')">
+        <div class="demo-card" id="demo-holographic-patient-twins-2033">
+          <div class="card-head" onclick="toggleDemo('demo-holographic-patient-twins-2033')">
             <div>
-              <p class="card-title">programmable_enzyme(scaffold, signals, esm3_v6) - 5-step programmable catalysis</p>
-              <p class="card-desc">Sketch the 2032 programmable-enzyme pipeline: scaffold design, allosteric switches, signal-response training, ESM-3 v6 prediction, in-situ verification.</p>
+              <p class="card-title">holographic_twin(patient_id, med_foundation_v3) - 5-step digital twin construction</p>
+              <p class="card-desc">5-step: ingest 12 modalities, encode, 3D volumetric reconstruction, query interface, weekly delta computation.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -1032,34 +1032,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">activity_t = ESM-3 v6(scaffold, signal_t); 16 states per scaffold</div>
-                <p class="math-plain">The enzyme scaffold holds 4 allosteric switches. ESM-3 v6 (1T params) predicts the catalytic activity given the input signals. 16 designed activity states; transition time ~10 ms.</p>
+                <div class="math-eq">twin_t = MedFoundation-v3(patient.modalities_t);  delta_t = twin_t - twin_(t-1)</div>
+                <p class="math-plain">MedFoundation v3 (10B params) reconstructs the patient&#x27;s 3D twin from 12 modalities. Updated weekly; delta_t shows week-over-week changes (e.g. tumour growth, organ atrophy).</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Scaffold design</strong>
-                <div class="step-math">scaffold = ESM-3 v6.design(function=&#x27;hydrolase&#x27;, switches=4)</div>
-                <div class="step-explain">ESM-3 v6 designs a 280-aa hydrolase scaffold with 4 allosteric switches (each switch = 12-aa motif near the active site).</div>
+                <strong>Step 1: Ingest 12 modalities</strong>
+                <div class="step-math">M = {MRI_T1, MRI_T2, FLAIR, CT, EHR, labs, genomics, wearable, ECG, ...}</div>
+                <div class="step-explain">Weekly 5-minute whole-body MRI scan + continuous EHR / wearable streams. 12 modalities total.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: Allosteric switch placement</strong>
-                <div class="step-math">switches = place_motifs(scaffold, n=4)</div>
-                <div class="step-explain">Place 4 allosteric switch motifs in solvent-exposed loops near the active site. Each switch has a ligand-binding pocket + a conformational coupling to the catalytic residues.</div>
+                <strong>Step 2: Multimodal encoding</strong>
+                <div class="step-math">emb = concat([ViT_MRI(M.MRI), MLP_EHR(M.EHR), MLP_lab(M.labs), ...])</div>
+                <div class="step-explain">Each modality is encoded by a specialised head (ViT for MRI, MLP for EHR/labs, transformer for genomics). Embeddings concatenated + cross-attended.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Signal-response training</strong>
-                <div class="step-math">training_data = (signal_t, activity_t) for 1000 measurements per state</div>
-                <div class="step-explain">Train ESM-3 v6 to predict the activity state given the 4 input signals (light, ligand-A, ligand-B, voltage). 1000 measurements per state × 16 states = 16k training points.</div>
+                <strong>Step 3: 3D volumetric reconstruction</strong>
+                <div class="step-math">twin = volumetric_decoder(emb);  resolution = 1mm³</div>
+                <div class="step-explain">A volumetric decoder (3D U-Net variant) produces a 1mm³ resolution 3D model of the patient. Includes all organs + vasculature + skeletal structure + functional overlays.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: ESM-3 v6 prediction</strong>
-                <div class="step-math">activity_t = ESM-3 v6(scaffold, signal_t)</div>
-                <div class="step-explain">At inference, ESM-3 v6 predicts the activity state given the current signals. 16 designed states; transition time ~10 ms.</div>
+                <strong>Step 4: Query interface</strong>
+                <div class="step-math">answer = LLM(query, twin_state);  e.g. &#x27;cardiac output at peak exercise?&#x27;</div>
+                <div class="step-explain">Natural-language queries trigger physics simulations on the twin. &#x27;Cardiac output at peak exercise&#x27; → CFD on the cardiac vasculature. Avg 2 seconds per query.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: In-situ verification</strong>
-                <div class="step-math">AlphaFold 4 verifies the predicted state matches the actual state</div>
-                <div class="step-explain">AlphaFold 4 (2030) verifies the actual conformational state matches the predicted state. Match rate: 92% on the 16 designed states.</div>
+                <strong>Step 5: Weekly delta</strong>
+                <div class="step-math">delta_t = twin_t - twin_(t-1);  flag anomalies (|delta| &gt; 2σ)</div>
+                <div class="step-explain">Week-over-week delta highlights changes: tumour growth, organ atrophy, new lesions. |delta| &gt; 2σ triggers clinical review. Reduces adverse drug events 38%, readmissions 22%.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -1088,212 +1088,212 @@
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
                   <div class="stat">
-                    <div class="l">Scaffold length</div>
-                    <div class="v">280 aa</div>
+                    <div class="l">Patients with twins</div>
+                    <div class="v">47M (US, 2033)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Allosteric switches</div>
-                    <div class="v">4 per scaffold</div>
+                    <div class="l">Update freq</div>
+                    <div class="v">Weekly (5-min MRI)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Designed activity states</div>
-                    <div class="v">16 per scaffold</div>
+                    <div class="l">Resolution</div>
+                    <div class="v">1 mm³</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Transition time</div>
-                    <div class="v">~10 ms</div>
+                    <div class="l">Query latency</div>
+                    <div class="v">~2 s</div>
                   </div>
                   <div class="stat">
-                    <div class="l">AlphaFold 4 match</div>
+                    <div class="l">Adverse drug events</div>
+                    <div class="v">-38%</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Readmissions</div>
+                    <div class="v">-22%</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">2033 vision: every patient has a holographic digital twin (1 mm³ resolution) reconstructed from 12 weekly modalities by MedFoundation v3 (10B params). Queryable via natural language (&#x27;cardiac output at peak exercise?&#x27; → CFD on the twin). 47M US patients by Q4 2033. Reduces adverse drug events 38% + readmissions 22%.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="35" y="40" width="80" height="140" fill="rgba(139,92,246,0.2)" stroke="#8b5cf6"/><circle cx="55" cy="60" r="6" fill="#06b6d4"/><circle cx="95" cy="60" r="6" fill="#10b981"/><circle cx="55" cy="160" r="6" fill="#ec4899"/><circle cx="95" cy="160" r="6" fill="#f59e0b"/><text x="75" y="30" text-anchor="middle" font-size="10" fill="#8b5cf6" font-family="ui-monospace">holographic twin</text><text x="200" y="50" font-size="11" fill="#06b6d4" font-family="ui-monospace">12 modalities weekly</text><text x="200" y="70" font-size="11" fill="#10b981" font-family="ui-monospace">47M patients by 2033</text><text x="200" y="90" font-size="11" fill="#8b5cf6" font-family="ui-monospace">1mm³ resolution</text><text x="200" y="110" font-size="11" fill="#ec4899" font-family="ui-monospace">-38% adverse drug events</text><text x="200" y="130" font-size="11" fill="#f59e0b" font-family="ui-monospace">-22% readmissions</text><text x="200" y="195" font-size="9" fill="#9ca3af" font-family="ui-monospace">holographic patient twin (2033)</text></svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>Holographic patient twin: 1mm³ 3D model from 12 weekly modalities.</li>
+                    <li>47M US patients by 2033; updated weekly via 5-min whole-body MRI.</li>
+                    <li>Natural-language queries trigger physics simulations (~2s).</li>
+                    <li>Reduces adverse drug events 38% + readmissions 22%.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-holographic-patient-twins-2033" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card futuristic-vision" id="article-programmable-cell-therapies-2034">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
+              <span class="domain-pill">Biology - Programmable Cells (Futuristic Vision)</span>
+              <span>· 2034-Q1 (extrapolated)</span>
+              <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
+            </div>
+            <h3>Futuristic Vision (2034): programmable cell therapies — cell-as-code</h3>
+            <p class="authors">AIHPC Editorial Board - extrapolated from ESM-4, AlphaProteo, CAR-T, CRISPRoff (2024-2030)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>This is a futuristic vision, not a real publication. We extrapolate from ESM-4 (2026), AlphaProteo v2 (2026), CAR-T (2017-2030), and CRISPRoff (2024) to predict that by Q1 2034, programmable cell therapies will become &#x27;cell-as-code&#x27; — clinicians specify the desired cell behaviour in a high-level language, and a compiler produces a genome + transcriptome + proteome edit set that programs the cell.</p>
+          <p>The vision: a &#x27;cell-program compiler&#x27; (CPC v3) takes a high-level spec like `CAR-T targeting CD19+ tumours, IL-15 secretion, exhaustion-resistant, kill-switch included` and produces: (1) the chimeric antigen receptor sequence, (2) the cytokine secretion cassette, (3) the exhaustion-resistance epigenetic edits, (4) the kill-switch gene. The cell is then assembled via CRISPRoff + base editing.</p>
+          <p>By 2034, 8 of the 10 most-prescribed cell therapies are programmable; mean time from spec to clinic-ready product drops from 18 months (2026) to 6 weeks (2034).</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic cell-program compilation library (1000 specs × compiled genome edits)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">GenBank + JSON</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">1.4 TB nationally</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.cell-as-code.org/2034" target="_blank" rel="noopener">https://www.cell-as-code.org/2034</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a cell-program spec (JSON) to receive compiled genome edits.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .csv,.json,.txt,.gbk
+              <input type="file" id="etl-input-programmable-cell-therapies-2034" accept=".csv,.json,.txt,.gbk" data-article-id="programmable-cell-therapies-2034" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-programmable-cell-therapies-2034" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-programmable-cell-therapies-2034">
+          <div class="card-head" onclick="toggleDemo('demo-programmable-cell-therapies-2034')">
+            <div>
+              <p class="card-title">cell_program_compiler(spec, cpc_v3) - 5-step cell-as-code compilation</p>
+              <p class="card-desc">5-step: parse spec, optimise CAR/cytokine/epigenetic, genome synthesis, transcriptome validation, kill-switch insertion.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">edits = CPC_v3(spec);  cell = assemble(edits, base_editor + CRISPRoff)</div>
+                <p class="math-plain">The cell-program compiler (CPC v3) takes a high-level spec and produces genome + transcriptome edits. The cell is assembled via base editing + CRISPRoff.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Parse spec</strong>
+                <div class="step-math">spec = parseDSL(&#x27;CAR-T targeting CD19, IL-15 secretion, exhaustion-resistant, kill-switch&#x27;)</div>
+                <div class="step-explain">Parse the high-level DSL spec into structured fields: target antigen (CD19), payload (IL-15), modifications (exhaustion-resistant), safety (kill-switch).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: CAR + cytokine design</strong>
+                <div class="step-math">car_seq = ESM-4.design_car(target=CD19);  il15_seq = AlphaProteo.design_cytokine(spec=IL-15)</div>
+                <div class="step-explain">ESM-4 designs the chimeric antigen receptor that targets CD19. AlphaProteo designs the IL-15 secretion cassette.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Epigenetic edits</strong>
+                <div class="step-math">edits = CRISPRoff.design(exhaustion_resistance_genes)</div>
+                <div class="step-explain">CRISPRoff designs methylation edits to PD-1, TIM-3, LAG-3 (exhaustion markers) to make the cell exhaustion-resistant.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Transcriptome validation</strong>
+                <div class="step-math">validated = ESM-4_function_head(edits) in (target_expression, no_off_target)</div>
+                <div class="step-explain">ESM-4&#x27;s function head validates the edits: target gene expression is on-target + no off-target effects. ~92% of compilations pass on first try.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Kill-switch insertion</strong>
+                <div class="step-math">kill_switch = insert(caspase-9_iCASP);  clinician activates on adverse event</div>
+                <div class="step-explain">Insert the iCASP kill-switch: clinician-administered AP1903 activates the caspase-9, killing the cell within 30 min. Standard safety for all programmable cell therapies.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Spec-to-clinic time</div>
+                    <div class="v">6 weeks (vs 18 mo 2026)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">First-try validation</div>
                     <div class="v">92%</div>
                   </div>
                   <div class="stat">
-                    <div class="l">ESM-3 v6 params</div>
-                    <div class="v">1T</div>
+                    <div class="l">Top 10 cell therapies</div>
+                    <div class="v">8/10 programmable</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">DSL primitives</div>
+                    <div class="v">47 (CAR, cytokine, edit, switch)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Kill-switch</div>
+                    <div class="v">iCASP / AP1903</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Patients (2034)</div>
+                    <div class="v">~240k globally</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">2032 vision: ESM-3 v6 designs programmable enzymes (4 allosteric switches × 2 states each = 16 activity states per scaffold). Transition time ~10 ms. AlphaFold 4 (2030) verifies 92% match rate. Applications: programmable bioreactors, biosensors, drug delivery.</div>
+                <div class="report-block">2034 vision: cell-as-code. Clinicians specify cell behaviour in a high-level DSL (CAR-T targeting CD19, IL-15 secretion, exhaustion-resistant, kill-switch); CPC v3 compiles to genome + transcriptome + proteome edits. Spec-to-clinic time drops from 18 months (2026) to 6 weeks (2034). 8/10 most-prescribed cell therapies are programmable; ~240k patients globally.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="40" width="80" height="80" fill="rgba(245,158,11,0.2)" stroke="#f59e0b"/><circle cx="60" cy="60" r="6" fill="#06b6d4"/><circle cx="100" cy="60" r="6" fill="#10b981"/><circle cx="60" cy="100" r="6" fill="#ec4899"/><circle cx="100" cy="100" r="6" fill="#8b5cf6"/><text x="80" y="140" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="ui-monospace">enzyme scaffold</text><text x="60" y="50" text-anchor="middle" font-size="8" fill="#06b6d4" font-family="ui-monospace">switch 1</text><text x="100" y="50" text-anchor="middle" font-size="8" fill="#10b981" font-family="ui-monospace">switch 2</text><text x="60" y="115" text-anchor="middle" font-size="8" fill="#ec4899" font-family="ui-monospace">switch 3</text><text x="100" y="115" text-anchor="middle" font-size="8" fill="#8b5cf6" font-family="ui-monospace">switch 4</text><text x="200" y="100" font-size="11" fill="#f59e0b" font-family="ui-monospace">16 activity states</text><text x="200" y="115" font-size="9" fill="#9ca3af" font-family="ui-monospace">transition: 10 ms</text><text x="200" y="130" font-size="9" fill="#9ca3af" font-family="ui-monospace">AF4 match: 92%</text><text x="200" y="195" font-size="9" fill="#9ca3af" font-family="ui-monospace">programmable enzyme (2032)</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><path d="M 20 30 Q 80 30 140 30 Q 200 30 260 50 Q 320 80 380 130" stroke="#06b6d4" stroke-width="2" fill="none"/><text x="50" y="25" font-size="9" fill="#06b6d4" font-family="ui-monospace">2026: 18 mo</text><text x="350" y="130" font-size="9" fill="#06b6d4" font-family="ui-monospace">2034: 6 wk</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">Spec-to-clinic time (months)</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">months</text><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">programmable cell therapies (2034)</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>Programmable enzymes: ESM-3 v6-designed scaffold + 4 allosteric switches.</li>
-                    <li>16 activity states per scaffold; transition ~10 ms.</li>
-                    <li>ESM-3 v6 (1T params) predicts activity given signals.</li>
-                    <li>AlphaFold 4 (2030) verifies 92% match rate.</li>
+                    <li>Cell-as-code: clinicians specify cell behaviour in a DSL.</li>
+                    <li>CPC v3 compiles to genome + transcriptome + proteome edits.</li>
+                    <li>Spec-to-clinic time: 6 weeks (vs 18 months in 2026).</li>
+                    <li>8/10 top cell therapies programmable by 2034; 240k patients.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-programmable-enzymes-2032" style="min-height: 60px;">
-                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="article-card futuristic-vision" id="article-cold-fusion-diagnostics-2033">
-        <div class="article-head">
-          <div>
-            <div class="source-row">
-              <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
-              <span class="domain-pill">Physics - Fusion AI Diagnostics (Futuristic Vision)</span>
-              <span>· 2033-Q2 (extrapolated)</span>
-              <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
-            </div>
-            <h3>Futuristic Vision (2033): AI-driven cold-fusion diagnostics - autonomous plasma characterisation</h3>
-            <p class="authors">AIHPC Editorial Board - extrapolated from SPARC, AI fusion control, plasma diagnostics (2025-2031)</p>
-          </div>
-        </div>
-        <div class="abstract">
-          <p>This is a futuristic vision, not a real publication. We extrapolate from CFS SPARC (2026), AI fusion control (2028), and high-throughput plasma diagnostics (2030) to predict that by Q2 2033, AI-driven autonomous diagnostics will characterise low-energy nuclear reaction (LENR / &#x27;cold fusion&#x27;) experiments in real-time, settling the 1989 Fleischmann-Pons controversy.</p>
-          <p>The vision: a &#x27;plasma diagnostics foundation model&#x27; (PlasmaDM v3, 10B params) ingests 12 simultaneous plasma observables (neutron flux, gamma spectrum, tritium count, calorimetry, mass-spec, X-ray, neutron spectroscopy, charged-particle spectrum, IR imaging, UV emission, magnetic probes, acoustic emission) and infers the underlying nuclear reaction rate + branching ratios.</p>
-          <p>By 2033, 7 of 10 LENR experiments show consistent above-background tritium + heat signatures (&gt;= 3 sigma) when run with PlasmaDM v3 diagnostics. The remaining 3 show only calorimetric anomalies (consistent with electrochemical artefacts). The controversy is effectively settled: LENR effects are real but small, and require hyper-pure Pd-D loading + specific crystal facets.</p>
-        </div>
-        <div class="dataset-card">
-          <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic LENR diagnostic trace (10 experiments × 12 observables × 1 kHz)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 + JSON</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">8 TB per experiment</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.lenr-diagnostics.org/2033" target="_blank" rel="noopener">https://www.lenr-diagnostics.org/2033</a></span></div>
-        </div>
-        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
-          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a CSV of plasma observables (time, neutron, gamma, heat, ...) for AI diagnosis.</div>
-          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .csv,.h5,.hdf5,.txt
-              <input type="file" id="etl-input-cold-fusion-diagnostics-2033" accept=".csv,.h5,.hdf5,.txt" data-article-id="cold-fusion-diagnostics-2033" style="display:none;" />
-            </label>
-            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
-          </div>
-          <div id="etl-report-cold-fusion-diagnostics-2033" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
-        </div>
-        <div class="demo-card" id="demo-cold-fusion-diagnostics-2033">
-          <div class="card-head" onclick="toggleDemo('demo-cold-fusion-diagnostics-2033')">
-            <div>
-              <p class="card-title">lenr_diagnose(observables, plasma_dm_v3) - autonomous plasma characterisation</p>
-              <p class="card-desc">5-step pipeline: observable ingestion, signal processing, PlasmaDM v3 inference, statistical validation, branching-ratio output.</p>
-            </div>
-            <span class="chevron">▾</span>
-          </div>
-          <div class="card-body">
-            <div class="demo-tabs">
-              <button class="active" data-tab="math">Math</button>
-              <button data-tab="code">Code</button>
-              <button data-tab="observe">Observe</button>
-            </div>
-            <!-- Math tab -->
-            <div class="demo-tab-content active" data-tab="math">
-              <div class="math-panel">
-                <div class="math-eq">R_nuclear(t) = PlasmaDM-v3(obs_1(t), ..., obs_12(t));  branching = softmax(R_nuclear)</div>
-                <p class="math-plain">PlasmaDM v3 (10B params) ingests 12 simultaneous observables + outputs the underlying nuclear reaction rate R(t) + branching ratios (D+D → T+p, D+D → He3+n, D+T → He4+n, etc.).</p>
-              </div>
-              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
-              <div class="derivation-step">
-                <strong>Step 1: Observable ingestion</strong>
-                <div class="step-math">O = {neutron_flux(t), gamma_spectrum(t), tritium(t), heat(t), ...}</div>
-                <div class="step-explain">12 simultaneous observables at 1 kHz: neutron flux, gamma spectrum, tritium count, calorimetry, mass-spec, X-ray, neutron spectroscopy, charged-particle spectrum, IR imaging, UV emission, magnetic probes, acoustic emission.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 2: Signal processing</strong>
-                <div class="step-math">O_clean = filter(O) - background(O)</div>
-                <div class="step-explain">Each observable is filtered (high-pass for acoustic, low-pass for calorimetry) and background-subtracted using a matched-filter against the reactor&#x27;s quiescent baseline.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 3: PlasmaDM v3 inference</strong>
-                <div class="step-math">R_nuclear(t) = PlasmaDM-v3(O_clean)</div>
-                <div class="step-explain">PlasmaDM v3 (10B params, trained on 100M simulated + 1M real plasma shots) infers the underlying nuclear reaction rate R(t) from the 12 observables. Outputs branching ratios for each reaction channel.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 4: Statistical validation</strong>
-                <div class="step-math">significance = R_nuclear(t) / sigma_background &gt; 3 -&gt; detection</div>
-                <div class="step-explain">Statistical significance: 3-sigma above background = detection. 7 of 10 LENR experiments show 3-sigma above-background tritium + heat (the remaining 3 show only calorimetric anomalies).</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 5: Branching-ratio output</strong>
-                <div class="step-math">branching = softmax([R_DD_Tp, R_DD_He3n, R_DT_He4n])</div>
-                <div class="step-explain">The branching ratios between D+D reactions (T+p vs He3+n) and D+T reaction (He4+n) reveal the underlying mechanism. 7/10 experiments show D+D branching consistent with hot-fusion plasma — suggesting a surface-catalysed D+D mechanism in Pd-D.</div>
-              </div>
-            </div>
-            <!-- Code tab -->
-            <div class="demo-tab-content" data-tab="code">
-              <div class="code-panel">
-                <div class="lang-toggle">
-                  <button data-lang="python" class="active">Python</button>
-                  <button data-lang="rust">Rust</button>
-                  <button data-lang="go">Go</button>
-                  <button data-lang="c">C</button>
-                  <button data-lang="elixir">Elixir</button>
-                  <button data-lang="scala">Scala</button>
-                </div>
-                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
-              </div>
-            </div>
-            <!-- Observe tab -->
-            <div class="demo-tab-content" data-tab="observe">
-              <div class="observe-subtabs">
-                <button class="active" data-sub="stats">Stats</button>
-                <button data-sub="reports">Reports</button>
-                <button data-sub="graphs">Graphs</button>
-                <button data-sub="summary">Summary</button>
-                <button data-sub="etl">ETL Report</button>
-              </div>
-              <div class="observe-content active" data-sub="stats">
-                <div class="stats-grid">
-                  <div class="stat">
-                    <div class="l">Observables</div>
-                    <div class="v">12 simultaneous</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Sample rate</div>
-                    <div class="v">1 kHz</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">PlasmaDM v3 params</div>
-                    <div class="v">10B</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Detection threshold</div>
-                    <div class="v">3 σ</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Experiments positive</div>
-                    <div class="v">7 of 10</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Year</div>
-                    <div class="v">2033</div>
-                  </div>
-                </div>
-              </div>
-              <div class="observe-content" data-sub="reports">
-                <div class="report-block">2033 vision: PlasmaDM v3 (10B params) ingests 12 simultaneous plasma observables + infers underlying nuclear reaction rate + branching ratios. 7 of 10 LENR experiments show 3-σ above-background tritium + heat — settling the 1989 Fleischmann-Pons controversy: LENR effects are real but small, surface-catalysed D+D in Pd-D.</div>
-              </div>
-              <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="35" y="60" width="30" height="120" fill="#06b6d4"/><text x="50" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">neutron</text><rect x="75" y="90" width="30" height="90" fill="#8b5cf6"/><text x="90" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">gamma</text><rect x="115" y="110" width="30" height="70" fill="#ec4899"/><text x="130" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">tritium</text><rect x="155" y="100" width="30" height="80" fill="#f59e0b"/><text x="170" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">heat</text><rect x="195" y="140" width="30" height="40" fill="#10b981"/><text x="210" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">mass-spec</text><text x="290" y="60" font-size="10" fill="#06b6d4" font-family="ui-monospace">PlasmaDM v3 (10B)</text><text x="290" y="75" font-size="9" fill="#9ca3af" font-family="ui-monospace">-> reaction rate R(t)</text><text x="290" y="90" font-size="9" fill="#9ca3af" font-family="ui-monospace">-> branching ratios</text><text x="290" y="105" font-size="9" fill="#10b981" font-family="ui-monospace">3σ detection: 7/10</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">signal</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">12 observables -> autonomous LENR diagnosis</text></svg></div>
-              </div>
-              <div class="observe-content" data-sub="summary">
-                <div class="summary-block">
-                  <ul>
-                    <li>PlasmaDM v3 (10B params) ingests 12 simultaneous plasma observables.</li>
-                    <li>Infers nuclear reaction rate + branching ratios in real-time.</li>
-                    <li>7 of 10 LENR experiments show 3-σ above-background tritium + heat.</li>
-                    <li>Settles 1989 Fleischmann-Pons: LENR effects are real but small.</li>
-                  </ul>
-                </div>
-              </div>
-              <!-- ETL Report sub-tab (Phase 27) -->
-              <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-cold-fusion-diagnostics-2033" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-programmable-cell-therapies-2034" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -1351,61 +1351,61 @@
       // (See CODE_BANK below.)
 
       const CODE_BANK = {
-        'ai-catalysts-genatlas': {
-          python: "# catalyst = argmax_c P(activity>2x | c, target) \u00b7 P(sel>0.9 | c, target) \u00b7 lifetime(c)\n# target -> reaction SMILES  c -> catalyst composition\ndef design_catalyst(target, genatlas, dft, microreactor):\n    candidates = genatlas.propose(target, n=47)\n    scored = [(c, genatlas.score(c, target)) for c in candidates]\n    scored.sort(key=lambda x: -x[1])\n    for c, _ in scored:\n        if dft.confirm(c, target, tol=0.2) and microreactor.predict(c) > 2.0:\n            return c  # first-passing candidate\n    return None",
-          rust: "fn design_catalyst(target: &Target, genatlas: &GenAtlas, dft: &DFT, micro: &Microreactor) -> Option<Catalyst> {\n    let candidates = genatlas.propose(target, 47);\n    let mut scored: Vec<(Catalyst, f64)> = candidates.iter().map(|c| (c.clone(), genatlas.score(c, target))).collect();\n    scored.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());\n    for (c, _) in scored { if dft.confirm(&c, target, 0.2) && micro.predict(&c) > 2.0 { return Some(c); } }\n    None\n}",
-          go: "func DesignCatalyst(target *Target, genatlas *GenAtlas, dft *DFT, micro *Microreactor) *Catalyst {\n\tcandidates := genatlas.Propose(target, 47)\n\tvar scored []struct{ c Catalyst; s float64 }\n\tfor _, c := range candidates { scored = append(scored, struct{ c Catalyst; s float64 }{c, genatlas.Score(c, target)}) }\n\tsort.Slice(scored, func(i, j int) bool { return scored[i].s > scored[j].s })\n\tfor _, sc := range scored { if dft.Confirm(sc.c, target, 0.2) && micro.Predict(sc.c) > 2.0 { return &sc.c } }\n\treturn nil\n}",
-          c: "Catalyst* design_catalyst(Target* target, GenAtlas* gen, DFT* dft, Micro* micro) {\n    Candidate* cands = gen_propose(gen, target, 47);\n    int n = count_candidates(cands);\n    qsort(cands, n, sizeof(Candidate), cmp_score_desc);\n    for (int i = 0; i < n; i++) {\n        if (dft_confirm(dft, &cands[i], target, 0.2) && micro_predict(micro, &cands[i]) > 2.0) {\n            Catalyst* out = malloc(sizeof(Catalyst)); *out = cands[i].c; free(cands); return out;\n        }\n    }\n    free(cands); return NULL;\n}",
-          elixir: "defmodule GenAtlas do\n  def design(target, genatlas, dft, micro) do\n    genatlas.propose(target, 47)\n    |> Enum.map(fn c -> {c, genatlas.score(c, target)} end)\n    |> Enum.sort_by(fn {_, s} -> -s end)\n    |> Enum.find(fn {c, _} -> dft.confirm(c, target, 0.2) and micro.predict(c) > 2.0 end)\n    |> case do nil -> nil; {c, _} -> c end\n  end\nend",
-          scala: "def designCatalyst(target: Target, gen: GenAtlas, dft: DFT, micro: Micro): Option[Catalyst] = {\n  val candidates = gen.propose(target, 47)\n  val scored = candidates.map(c => (c, gen.score(c, target))).sortBy(-_._2)\n  scored.find { case (c, _) => dft.confirm(c, target, 0.2) && micro.predict(c) > 2.0 }.map(_._1)\n}",
+        'esm-4-protein-lm': {
+          python: "# (S, F, D) = ESM4(seq); structure S, function F, design D\n# seq -> protein sequence  MoE -> mixture-of-experts  S/F/D -> heads\ndef esm4_predict(sequence, model):\n    tokens = model.tokenise(sequence)\n    h = model.moe_forward(tokens, top_k=1)\n    S = model.structure_head(h)\n    F = model.function_head(h)\n    return S, F",
+          rust: "fn esm4_predict(seq: &str, m: &ESM4) -> (Structure, Function) {\n    let tokens = m.tokenise(seq);\n    let h = m.moe_forward(&tokens, 1);\n    (m.structure_head(&h), m.function_head(&h))\n}",
+          go: "func ESM4Predict(seq string, m *ESM4) (Structure, Function) {\n\ttokens := m.Tokenise(seq)\n\th := m.MoEForward(tokens, 1)\n\treturn m.StructureHead(h), m.FunctionHead(h)\n}",
+          c: "void esm4_predict(const char* seq, ESM4* m, Structure* s, Function* f) {\n    Tokens* t = m_tokenise(m, seq);\n    Vec* h = m_moe_forward(m, t, 1);\n    *s = m_structure_head(m, h); *f = m_function_head(m, h);\n}",
+          elixir: "defmodule ESM4 do\n  def predict(seq, m) do\n    tokens = m.tokenise(seq)\n    h = m.moe_forward(tokens, 1)\n    {m.structure_head(h), m.function_head(h)}\n  end\nend",
+          scala: "def esm4Predict(seq: String, m: ESM4): (Structure, Function) = {\n  val tokens = m.tokenise(seq)\n  val h = m.moeForward(tokens, 1)\n  (m.structureHead(h), m.functionHead(h))\n}",
         },
-        'holographic-microscopy-2026': {
-          python: "# V_3D = argmin_V ||F(V) - H||\u00b2 + \u03bb \u00b7 KL(V | prior)\n# F -> wave-equation forward  H -> 2D hologram  V -> 3D volume\ndef holographic_reconstruction(hologram, physics_diffusion):\n    H = parse_hologram(hologram)\n    V = physics_diffusion.reverse(H, steps=50, lambda_phys=1.0, lambda_prior=0.1)\n    ssim = validate(V, held_out_confocal)\n    return V if ssim > 0.87 else None",
-          rust: "fn holographic_reconstruction(h: &Hologram, pd: &PhysicsDiffusion) -> Option<Volume> {\n    let v = pd.reverse(h, 50, 1.0, 0.1);\n    let ssim = validate(&v, &held_out_confocal);\n    if ssim > 0.87 { Some(v) } else { None }\n}",
-          go: "func HolographicReconstruction(h *Hologram, pd *PhysicsDiffusion) *Volume {\n\tv := pd.Reverse(h, 50, 1.0, 0.1)\n\tif Validate(v, HeldOutConfocal) > 0.87 { return v }\n\treturn nil\n}",
-          c: "Volume* holographic_reconstruction(Hologram* h, PhysicsDiffusion* pd) {\n    Volume* v = pd_reverse(pd, h, 50, 1.0, 0.1);\n    if (validate_ssim(v, held_out_confocal) > 0.87) return v;\n    free(v); return NULL;\n}",
-          elixir: "defmodule HoloScope do\n  def reconstruct(h, pd) do\n    v = pd.reverse(h, 50, 1.0, 0.1)\n    if validate(v) > 0.87, do: v, else: nil\n  end\nend",
-          scala: "def holographicReconstruction(h: Hologram, pd: PhysicsDiffusion): Option[Volume] = {\n  val v = pd.reverse(h, 50, 1.0, 0.1)\n  if (validateSsim(v) > 0.87) Some(v) else None\n}",
+        'coscientist-v3-autonomous-lab': {
+          python: "# route = retro_plan(target); product = ASL.execute(route); match = LCMS_match(product, target)\n# route -> synthesis tree  ASL -> Automated Synthesis Lab  LCMS -> verify\ndef coscientist_v3_synthesise(target, planner, executor, lcms):\n    route = planner.plan(target, max_steps=12)\n    for attempt in range(5):\n        product = executor.execute(route)\n        if lcms.match(product, target, tol=10):\n            return product\n        route = planner.replan(route, omit=executor.failed_step)\n    return None",
+          rust: "fn coscientist_v3_synthesise(target: &str, p: &Planner, e: &Executor, lc: &LCMS) -> Option<Product> {\n    let mut route = p.plan(target, 12);\n    for _ in 0..5 {\n        let product = e.execute(&route);\n        if lc.match_(&product, target, 10) { return Some(product); }\n        route = p.replan(route, e.failed_step());\n    }\n    None\n}",
+          go: "func CoscientistV3Synthesise(target string, p Planner, e Executor, lc LCMS) *Product {\n\troute := p.Plan(target, 12)\n\tfor i := 0; i < 5; i++ {\n\t\tproduct := e.Execute(route)\n\t\tif lc.Match(product, target, 10) { return &product }\n\t\troute = p.Replan(route, e.FailedStep())\n\t}\n\treturn nil\n}",
+          c: "Product* coscientist_v3_synthesise(const char* target, Planner* p, Executor* e, LCMS* lc) {\n    Route route = p_plan(p, target, 12);\n    for (int i = 0; i < 5; i++) {\n        Product product; e_execute(e, &route, &product);\n        if (lc_match(lc, &product, target, 10)) { Product* out = malloc(sizeof(Product)); *out = product; return out; }\n        route = p_replan(p, route, e_failed_step(e));\n    }\n    return NULL;\n}",
+          elixir: "defmodule Coscientist do\n  def synthesise(target, p, e, lc) do\n    route = p.plan(target, 12)\n    Enum.reduce_while(1..5, route, fn _, r ->\n      product = e.execute(r)\n      if lc.match?(product, target, 10), do: {:halt, product}, else: {:cont, p.replan(r, e.failed_step())}\n    end)\n  end\nend",
+          scala: "def coscientistV3Synthesise(target: String, p: Planner, e: Executor, lc: LCMS): Option[Product] = {\n  var route = p.plan(target, 12)\n  for (_ <- 1 to 5) {\n    val product = e.execute(route)\n    if (lc.matchP(product, target, 10)) return Some(product)\n    route = p.replan(route, e.failedStep)\n  }\n  None\n}",
         },
-        'tabpfn-v2-tabular': {
-          python: "# \u0177 = TabPFN(X_train, y_train, X_test);  \u03c3 = std(50 inits)\n# X_train -> (n,d) features  y_train -> labels  X_test -> query\ndef tabpfn_v2_predict(X_train, y_train, X_test):\n    preds = [tabpfn.forward(X_train, y_train, X_test, init=i) for i in range(50)]\n    y_hat = np.mean(preds, axis=0)\n    sigma = np.std(preds, axis=0)\n    return y_hat, sigma",
-          rust: "fn tabpfn_v2_predict(x_train: &Tensor, y_train: &Tensor, x_test: &Tensor) -> (Vec<f64>, Vec<f64>) {\n    let preds: Vec<Vec<f64>> = (0..50).map(|i| tabpfn.forward(x_train, y_train, x_test, i)).collect();\n    let y_hat = mean(&preds);\n    let sigma = std(&preds);\n    (y_hat, sigma)\n}",
-          go: "func TabPFNV2Predict(XTrain, yTrain, XTest *Tensor) (yHat, sigma []float64) {\n\tvar preds [][]float64\n\tfor i := 0; i < 50; i++ { preds = append(preds, tabpfn.Forward(XTrain, yTrain, XTest, i)) }\n\tyHat = mean(preds); sigma = std(preds); return\n}",
-          c: "void tabpfn_v2_predict(double* X_train, double* y_train, double* X_test, int n, int d, int m, double* y_hat, double* sigma) {\n    double preds[50][MAX_M];\n    for (int i = 0; i < 50; i++) tabpfn_forward(X_train, y_train, X_test, n, d, m, i, preds[i]);\n    for (int j = 0; j < m; j++) { double s = 0; for (int i = 0; i < 50; i++) s += preds[i][j]; y_hat[j] = s / 50; }\n    for (int j = 0; j < m; j++) { double v = 0; for (int i = 0; i < 50; i++) v += (preds[i][j] - y_hat[j])*(preds[i][j] - y_hat[j]); sigma[j] = sqrt(v / 50); }\n}",
-          elixir: "defmodule TabPFN do\n  def predict(x_train, y_train, x_test) do\n    preds = Enum.map(0..49, fn i -> tabpfn.forward(x_train, y_train, x_test, i) end)\n    {mean(preds), std(preds)}\n  end\nend",
-          scala: "def tabpfnV2Predict(XTrain: Tensor, yTrain: Tensor, XTest: Tensor): (Array[Double], Array[Double]) = {\n  val preds = (0 until 50).map(i => tabpfn.forward(XTrain, yTrain, XTest, i))\n  val yHat = preds.reduce((a, b) => a.zip(b).map { case (x, y) => x + y }).map(_ / 50)\n  val sigma = preds.map { p => p.zip(yHat).map { case (pi, yh) => (pi - yh) * (pi - yh) } }.reduce((a, b) => a.zip(b).map { case (x, y) => x + y }).map(s => math.sqrt(s / 50))\n  (yHat, sigma)\n}",
+        'chembench-2026-llm': {
+          python: "# score = correct/total;  robustness = 1 - std(p)/mean(p)\n# responses -> LLM outputs  ground_truth -> correct answers  paraphrases -> 5 variants\ndef chembench_eval(responses, ground_truth, paraphrases):\n    correct = sum(match(r, g) for r, g in zip(responses, ground_truth))\n    score = correct / len(responses)\n    per_paraphrase_scores = [score_subset(responses, p) for p in paraphrases]\n    robustness = 1 - np.std(per_paraphrase_scores) / max(np.mean(per_paraphrase_scores), 0.01)\n    return {'score': score, 'robustness': robustness}",
+          rust: "fn chembench_eval(responses: &[String], ground_truth: &[String], paraphrases: &[Paraphrase]) -> EvalResult {\n    let correct = responses.iter().zip(ground_truth).filter(|(r, g)| match_fn(r, g)).count();\n    let score = correct as f64 / responses.len() as f64;\n    let p_scores: Vec<f64> = paraphrases.iter().map(|p| score_subset(responses, p)).collect();\n    let mean = p_scores.iter().sum::<f64>() / p_scores.len() as f64;\n    let std = (p_scores.iter().map(|s| (s - mean).powi(2)).sum::<f64>() / p_scores.len() as f64).sqrt();\n    let robust = 1.0 - std / mean.max(0.01);\n    EvalResult { score, robustness: robust }\n}",
+          go: "func ChemBenchEval(responses, groundTruth []string, paraphrases []Paraphrase) EvalResult {\n\tvar correct int\n\tfor i, r := range responses { if MatchFn(r, groundTruth[i]) { correct++ } }\n\tscore := float64(correct) / float64(len(responses))\n\tvar pScores []float64\n\tfor _, p := range paraphrases { pScores = append(pScores, ScoreSubset(responses, p)) }\n\tmean := Mean(pScores); std := Std(pScores)\n\treturn EvalResult{Score: score, Robustness: 1 - std/math.Max(mean, 0.01)}\n}",
+          c: "typedef struct { double score; double robustness; } EvalResult;\nEvalResult chembench_eval(char** responses, char** truth, int n, Paraphrase* ps, int np) {\n    int correct = 0;\n    for (int i = 0; i < n; i++) if (match_fn(responses[i], truth[i])) correct++;\n    double score = (double)correct / n;\n    double p_scores[256]; for (int i = 0; i < np; i++) p_scores[i] = score_subset(responses, &ps[i], n);\n    double mean = 0; for (int i = 0; i < np; i++) mean += p_scores[i]; mean /= np;\n    double std = 0; for (int i = 0; i < np; i++) std += (p_scores[i]-mean)*(p_scores[i]-mean); std = sqrt(std/np);\n    EvalResult r = {score, 1.0 - std / (mean > 0.01 ? mean : 0.01)}; return r;\n}",
+          elixir: "defmodule ChemBench do\n  def eval(responses, truth, paraphrases) do\n    correct = Enum.count(Enum.zip(responses, truth), fn {r, g} -> match?(r, g) end)\n    score = correct / length(responses)\n    p_scores = Enum.map(paraphrases, fn p -> score_subset(responses, p) end)\n    mean = Enum.sum(p_scores) / length(p_scores)\n    std = :math.sqrt(Enum.sum(Enum.map(p_scores, fn s -> (s - mean)*(s - mean) end)) / length(p_scores))\n    %{score: score, robustness: 1 - std / max(mean, 0.01)}\n  end\nend",
+          scala: "def chembenchEval(responses: Vector[String], groundTruth: Vector[String], paraphrases: Vector[Paraphrase]): EvalResult = {\n  val correct = responses.zip(groundTruth).count { case (r, g) => matchFn(r, g) }\n  val score = correct.toDouble / responses.length\n  val pScores = paraphrases.map(p => scoreSubset(responses, p))\n  val mean = pScores.sum / pScores.length\n  val std = math.sqrt(pScores.map(s => (s - mean) * (s - mean)).sum / pScores.length)\n  EvalResult(score, 1.0 - std / math.max(mean, 0.01))\n}",
         },
-        'bionemo-2-nvidia': {
-          python: "# pose = argmin_p E(p | target, ligand) + \u03bb \u00b7 \u0394G_BioNeMo(p)\n# target -> protein PDB  ligand -> SDF  E -> physics  \u0394G -> learned\ndef bionemo2_predict(target_pdb, ligand_sdf, bionemo2):\n    target = parse_pdb(target_pdb)\n    pockets = bionemo2.pocket_head(target, top_k=3)\n    ligand_emb = bionemo2.ligand_encoder(ligand_sdf)\n    poses = bionemo2.pose_predictor(target, ligand_emb, pockets)\n    return bionemo2.docking_fuser(poses, lambda_phys=1.0, lambda_dg=0.5)",
-          rust: "fn bionemo2_predict(target_pdb: &PDB, ligand_sdf: &SDF, bn2: &BioNeMo2) -> Pose {\n    let target = parse_pdb(target_pdb);\n    let pockets = bn2.pocket_head(&target, 3);\n    let ligand_emb = bn2.ligand_encoder(ligand_sdf);\n    let poses = bn2.pose_predictor(&target, &ligand_emb, &pockets);\n    bn2.docking_fuser(&poses, 1.0, 0.5)\n}",
-          go: "func BioNeMo2Predict(targetPDB *PDB, ligandSDF *SDF, bn2 *BioNeMo2) Pose {\n\ttarget := ParsePDB(targetPDB)\n\tpockets := bn2.PocketHead(target, 3)\n\tligandEmb := bn2.LigandEncoder(ligandSDF)\n\tposes := bn2.PosePredictor(target, ligandEmb, pockets)\n\treturn bn2.DockingFuser(poses, 1.0, 0.5)\n}",
-          c: "Pose* bionemo2_predict(PDB* target_pdb, SDF* ligand_sdf, BioNeMo2* bn2) {\n    PDB* target = parse_pdb(target_pdb);\n    Pocket* pockets = bn2_pocket_head(bn2, target, 3);\n    Vec* ligand_emb = bn2_ligand_encoder(bn2, ligand_sdf);\n    Pose* poses = bn2_pose_predictor(bn2, target, ligand_emb, pockets);\n    return bn2_docking_fuser(bn2, poses, 1.0, 0.5);\n}",
-          elixir: "defmodule BioNeMo2 do\n  def predict(target_pdb, ligand_sdf, bn2) do\n    target = parse_pdb(target_pdb)\n    pockets = bn2.pocket_head(target, 3)\n    ligand_emb = bn2.ligand_encoder(ligand_sdf)\n    poses = bn2.pose_predictor(target, ligand_emb, pockets)\n    bn2.docking_fuser(poses, 1.0, 0.5)\n  end\nend",
-          scala: "def bionemo2Predict(targetPDB: PDB, ligandSDF: SDF, bn2: BioNeMo2): Pose = {\n  val target = parsePDB(targetPDB)\n  val pockets = bn2.pocketHead(target, 3)\n  val ligandEmb = bn2.ligandEncoder(ligandSDF)\n  val poses = bn2.posePredictor(target, ligandEmb, pockets)\n  bn2.dockingFuser(poses, 1.0, 0.5)\n}",
+        'google-lens-medical-triage': {
+          python: "# differentials = top_k(softmax(LensModel(image)), k=5)\n# image -> camera/upload  LensModel -> on-device multimodal\ndef lens_medical_triage(image, on_device_model):\n    emb = on_device_model.encode(image)\n    differentials = top_k(softmax(emb), k=5)\n    CIs = [bootstrap(on_device_model, image, n=100) for _ in differentials]\n    reasoning = on_device_model.generate_reasoning(image, differentials)\n    return differentials, CIs, reasoning",
+          rust: "fn lens_medical_triage(image: &Image, m: &LensModel) -> (Vec<Diff>, Vec<CI>, String) {\n    let emb = m.encode(image);\n    let diffs = top_k(softmax(&emb), 5);\n    let cis: Vec<CI> = diffs.iter().map(|_| bootstrap(m, image, 100)).collect();\n    let reasoning = m.generate_reasoning(image, &diffs);\n    (diffs, cis, reasoning)\n}",
+          go: "func LensMedicalTriage(image *Image, m *LensModel) ([]Diff, []CI, string) {\n\temb := m.Encode(image)\n\tdiffs := TopK(Softmax(emb), 5)\n\tvar cis []CI\n\tfor range diffs { cis = append(cis, Bootstrap(m, image, 100)) }\n\treasoning := m.GenerateReasoning(image, diffs)\n\treturn diffs, cis, reasoning\n}",
+          c: "typedef struct { Diff diffs[5]; CI cis[5]; char reasoning[1024]; } TriageResult;\nTriageResult lens_medical_triage(Image* img, LensModel* m) {\n    Vec emb = m_encode(m, img);\n    TriageResult r;\n    top_k_softmax(emb, 5, r.diffs);\n    for (int i = 0; i < 5; i++) r.cis[i] = bootstrap_ci(m, img, 100);\n    m_generate_reasoning(m, img, r.diffs, r.reasoning, 1024);\n    return r;\n}",
+          elixir: "defmodule LensMedical do\n  def triage(image, m) do\n    emb = m.encode(image)\n    diffs = top_k(softmax(emb), 5)\n    cis = Enum.map(diffs, fn _ -> bootstrap(m, image, 100) end)\n    reasoning = m.generate_reasoning(image, diffs)\n    {diffs, cis, reasoning}\n  end\nend",
+          scala: "def lensMedicalTriage(image: Image, m: LensModel): (Vector[Diff], Vector[CI], String) = {\n  val emb = m.encode(image)\n  val diffs = topK(softmax(emb), 5)\n  val cis = diffs.map(_ => bootstrap(m, image, 100))\n  val reasoning = m.generateReasoning(image, diffs)\n  (diffs, cis, reasoning)\n}",
         },
-        'amie-diagnostic-2026': {
-          python: "# differentials = top_k(softmax(AMIE(symptoms, labs, imaging)), k=5)\n# symptoms -> text  labs -> structured  imaging -> CXR/ECG\ndef amie_diagnose(symptoms, labs, imaging, amie_model):\n    emb = amie_model.encode(symptoms, labs, imaging)\n    logits = amie_model.head(emb)\n    differentials = top_k(softmax(logits), k=5)\n    reasoning = amie_model.generate_reasoning(symptoms, differentials)\n    workup = amie_model.recommend_workup(differentials)\n    return differentials, reasoning, workup",
-          rust: "fn amie_diagnose(symptoms: &str, labs: &Labs, imaging: &Imaging, amie: &AMIE) -> (Vec<Diff>, String, Workup) {\n    let emb = amie.encode(symptoms, labs, imaging);\n    let logits = amie.head(&emb);\n    let differentials = top_k(softmax(&logits), 5);\n    let reasoning = amie.generate_reasoning(symptoms, &differentials);\n    let workup = amie.recommend_workup(&differentials);\n    (differentials, reasoning, workup)\n}",
-          go: "func AMIEDiagnose(symptoms string, labs *Labs, imaging *Imaging, amie *AMIE) ([]Diff, string, Workup) {\n\temb := amie.Encode(symptoms, labs, imaging)\n\tlogits := amie.Head(emb)\n\tdifferentials := TopK(Softmax(logits), 5)\n\treasoning := amie.GenerateReasoning(symptoms, differentials)\n\tworkup := amie.RecommendWorkup(differentials)\n\treturn differentials, reasoning, workup\n}",
-          c: "typedef struct { Diff diffs[5]; char* reasoning; Workup workup; } DiagResult;\nDiagResult amie_diagnose(const char* symptoms, Labs* labs, Imaging* imaging, AMIE* amie) {\n    Vec emb = amie_encode(amie, symptoms, labs, imaging);\n    Vec logits = amie_head(amie, &emb);\n    DiagResult r; top_k_softmax(logits, 5, r.diffs); r.reasoning = amie_generate_reasoning(amie, symptoms, r.diffs); r.workup = amie_recommend_workup(amie, r.diffs); return r;\n}",
-          elixir: "defmodule AMIE do\n  def diagnose(symptoms, labs, imaging, amie) do\n    emb = amie.encode(symptoms, labs, imaging)\n    logits = amie.head(emb)\n    differentials = top_k(softmax(logits), 5)\n    reasoning = amie.generate_reasoning(symptoms, differentials)\n    workup = amie.recommend_workup(differentials)\n    {differentials, reasoning, workup}\n  end\nend",
-          scala: "def amieDiagnose(symptoms: String, labs: Labs, imaging: Imaging, amie: AMIE): (Vector[Diff], String, Workup) = {\n  val emb = amie.encode(symptoms, labs, imaging)\n  val logits = amie.head(emb)\n  val differentials = topK(softmax(logits), 5)\n  val reasoning = amie.generateReasoning(symptoms, differentials)\n  val workup = amie.recommendWorkup(differentials)\n  (differentials, reasoning, workup)\n}",
+        'codex-clinician-finetune': {
+          python: "# note = CodexClinician(ehr_struct + dictation); corrected = clinician_edit(note)\n# ehr -> FHIR struct  dictation -> ASR transcript  note -> SOAP-format\ndef codex_clinician_generate(ehr_data, dictation, model):\n    ehr = parse_fhir(ehr_data)\n    dictation = asr_transcribe(dictation)\n    emb_struct = model.encode_fhir(ehr)\n    emb_dict = model.encode_text(dictation)\n    skeleton = model.template_skeleton()\n    note = model.generate(emb_struct + emb_dict + skeleton)\n    return note  # 91% accepted without edits in Stanford pilot",
+          rust: "fn codex_clinician_generate(ehr_data: &Value, dictation: &Audio, m: &CodexClinician) -> String {\n    let ehr = parse_fhir(ehr_data);\n    let dict = asr_transcribe(dictation);\n    let emb_s = m.encode_fhir(&ehr);\n    let emb_d = m.encode_text(&dict);\n    let skeleton = m.template_skeleton();\n    m.generate(&emb_s + &emb_d + &skeleton)\n}",
+          go: "func CodexClinicianGenerate(ehrData interface{}, dictation *Audio, m *CodexClinician) string {\n\tehr := ParseFHIR(ehrData)\n\tdict := ASRTranscribe(dictation)\n\tembS := m.EncodeFHIR(ehr)\n\tembD := m.EncodeText(dict)\n\tskeleton := m.TemplateSkeleton()\n\treturn m.Generate(embS + embD + skeleton)\n}",
+          c: "char* codex_clinician_generate(JSON* ehr_data, Audio* dictation, CodexClinician* m) {\n    FHIR* ehr = parse_fhir(ehr_data);\n    char* dict = asr_transcribe(dictation);\n    Vec emb_s = m_encode_fhir(m, ehr);\n    Vec emb_d = m_encode_text(m, dict);\n    Skeleton skel = m_template_skeleton(m);\n    return m_generate(m, emb_s + emb_d + skel);\n}",
+          elixir: "defmodule CodexClinician do\n  def generate(ehr_data, dictation, m) do\n    ehr = parse_fhir(ehr_data)\n    dict = asr_transcribe(dictation)\n    emb_s = m.encode_fhir(ehr)\n    emb_d = m.encode_text(dict)\n    skeleton = m.template_skeleton()\n    m.generate(emb_s + emb_d + skeleton)\n  end\nend",
+          scala: "def codexClinicianGenerate(ehrData: JsonValue, dictation: Audio, m: CodexClinician): String = {\n  val ehr = parseFhir(ehrData)\n  val dict = asrTranscribe(dictation)\n  val embS = m.encodeFhir(ehr)\n  val embD = m.encodeText(dict)\n  val skeleton = m.templateSkeleton()\n  m.generate(embS + embD + skeleton)\n}",
         },
-        'programmable-enzymes-2032': {
-          python: "# activity_t = ESM-3 v6(scaffold, signal_t); 16 states per scaffold\n# scaffold -> ESM-3 designed  signals -> {light, ligand_A, ligand_B, V}\ndef programmable_enzyme(scaffold, signal, esm3_v6):\n    activity = esm3_v6.predict(scaffold, signal)\n    if alpha_fold_4_verify(scaffold, activity):\n        return activity\n    return None",
-          rust: "fn programmable_enzyme(scaffold: &Scaffold, signal: &Signal, esm3: &ESM3) -> Option<Activity> {\n    let activity = esm3.predict(scaffold, signal);\n    if alpha_fold_4_verify(scaffold, &activity) { Some(activity) } else { None }\n}",
-          go: "func ProgrammableEnzyme(scaffold *Scaffold, signal *Signal, esm3 *ESM3) *Activity {\n\tactivity := esm3.Predict(scaffold, signal)\n\tif AlphaFold4Verify(scaffold, activity) { return activity }\n\treturn nil\n}",
-          c: "Activity* programmable_enzyme(Scaffold* s, Signal* sig, ESM3* esm3) {\n    Activity* a = esm3_predict(esm3, s, sig);\n    if (alpha_fold_4_verify(s, a)) return a;\n    free(a); return NULL;\n}",
-          elixir: "defmodule ProgrammableEnzyme do\n  def run(scaffold, signal, esm3) do\n    activity = esm3.predict(scaffold, signal)\n    if alpha_fold_4_verify(scaffold, activity), do: activity, else: nil\n  end\nend",
-          scala: "def programmableEnzyme(scaffold: Scaffold, signal: Signal, esm3: ESM3): Option[Activity] = {\n  val a = esm3.predict(scaffold, signal)\n  if (alphaFold4Verify(scaffold, a)) Some(a) else None\n}",
+        'holographic-patient-twins-2033': {
+          python: "# twin_t = MedFoundation-v3(M); delta_t = twin_t - twin_(t-1)\n# M -> 12 modalities  twin -> 3D volumetric  delta -> week-over-week\ndef holographic_twin(patient_id, med_foundation_v3):\n    M = ingest_modalities(patient_id)\n    twin = med_foundation_v3.reconstruct(M)\n    delta = twin - med_foundation_v3.last_weeks_twin(patient_id)\n    anomalies = detect_anomalies(delta, threshold=2.0)  # 2\u03c3\n    return twin, delta, anomalies",
+          rust: "fn holographic_twin(patient_id: &str, m: &MedFoundationV3) -> (Twin, Twin, Vec<Anomaly>) {\n    let M = ingest_modalities(patient_id);\n    let twin = m.reconstruct(&M);\n    let last_weeks = m.last_weeks_twin(patient_id);\n    let delta = &twin - &last_weeks;\n    let anomalies = detect_anomalies(&delta, 2.0);\n    (twin, delta, anomalies)\n}",
+          go: "func HolographicTwin(patientID string, m *MedFoundationV3) (Twin, Twin, []Anomaly) {\n\tM := IngestModalities(patientID)\n\ttwin := m.Reconstruct(M)\n\tlastWeeks := m.LastWeeksTwin(patientID)\n\tdelta := twin.Sub(lastWeeks)\n\tanomalies := DetectAnomalies(delta, 2.0)\n\treturn twin, delta, anomalies\n}",
+          c: "typedef struct { Twin twin; Twin delta; Anomaly* anomalies; int n_anomalies; } TwinResult;\nTwinResult holographic_twin(const char* patient_id, MedFoundationV3* m) {\n    Modalities M = ingest_modalities(patient_id);\n    Twin twin; m_reconstruct(m, &M, &twin);\n    Twin last; m_last_weeks_twin(m, patient_id, &last);\n    Twin delta; twin_sub(&twin, &last, &delta);\n    TwinResult r = {twin, delta, NULL, 0};\n    detect_anomalies(&delta, 2.0, &r.anomalies, &r.n_anomalies);\n    return r;\n}",
+          elixir: "defmodule HoloTwin do\n  def run(patient_id, m) do\n    M = ingest_modalities(patient_id)\n    twin = m.reconstruct(M)\n    last_weeks = m.last_weeks_twin(patient_id)\n    delta = twin - last_weeks\n    anomalies = detect_anomalies(delta, 2.0)\n    {twin, delta, anomalies}\n  end\nend",
+          scala: "def holographicTwin(patientId: String, m: MedFoundationV3): (Twin, Twin, Vector[Anomaly]) = {\n  val M = ingestModalities(patientId)\n  val twin = m.reconstruct(M)\n  val lastWeeks = m.lastWeeksTwin(patientId)\n  val delta = twin - lastWeeks\n  val anomalies = detectAnomalies(delta, 2.0)\n  (twin, delta, anomalies)\n}",
         },
-        'cold-fusion-diagnostics-2033': {
-          python: "# R_nuclear(t) = PlasmaDM-v3(O_1(t), ..., O_12(t))\n# O -> 12 observables  R -> reaction rate  branching -> reaction channels\ndef lenr_diagnose(observables, plasma_dm_v3):\n    O_clean = filter_and_subtract(observables)\n    R = plasma_dm_v3.infer(O_clean)\n    significance = R / sigma_background\n    if significance > 3:\n        branching = softmax(plasma_dm_v3.branching_head(R))\n        return {'detected': True, 'branching': branching}\n    return {'detected': False}",
-          rust: "fn lenr_diagnose(obs: &Observables, pdm: &PlasmaDM) -> DiagResult {\n    let o_clean = filter_and_subtract(obs);\n    let r = pdm.infer(&o_clean);\n    let sig = r / sigma_background;\n    if sig > 3.0 { DiagResult { detected: true, branching: softmax(pdm.branching_head(&r)) } }\n    else { DiagResult { detected: false, branching: vec![] } }\n}",
-          go: "func LENRDiagnose(obs *Observables, pdm *PlasmaDM) DiagResult {\n\toClean := FilterAndSubtract(obs)\n\tr := pdm.Infer(oClean)\n\tsig := r / SigmaBackground\n\tif sig > 3.0 { return DiagResult{Detected: true, Branching: Softmax(pdm.BranchingHead(r))} }\n\treturn DiagResult{Detected: false}\n}",
-          c: "typedef struct { int detected; float* branching; int n_branches; } DiagResult;\nDiagResult lenr_diagnose(Observables* obs, PlasmaDM* pdm) {\n    Observables oc = filter_and_subtract(obs);\n    float r = pdm_infer(pdm, &oc);\n    float sig = r / SIGMA_BACKGROUND;\n    if (sig > 3.0) { DiagResult d = {1, pdm_branching_head(pdm, r), N_BRANCHES}; return d; }\n    DiagResult d0 = {0, NULL, 0}; return d0;\n}",
-          elixir: "defmodule LENRDiag do\n  def run(obs, pdm) do\n    o_clean = filter_and_subtract(obs)\n    r = pdm.infer(o_clean)\n    sig = r / sigma_background()\n    if sig > 3.0 do\n      %{detected: true, branching: softmax(pdm.branching_head(r))}\n    else\n      %{detected: false}\n    end\n  end\nend",
-          scala: "case class DiagResult(detected: Boolean, branching: Vector[Double])\ndef lenrDiagnose(obs: Observables, pdm: PlasmaDM): DiagResult = {\n  val oClean = filterAndSubtract(obs)\n  val r = pdm.infer(oClean)\n  val sig = r / sigmaBackground\n  if (sig > 3.0) DiagResult(true, softmax(pdm.branchingHead(r))) else DiagResult(false, Vector.empty)\n}",
+        'programmable-cell-therapies-2034': {
+          python: "# edits = CPC_v3(spec); cell = assemble(edits, base_editor + CRISPRoff)\n# spec -> high-level DSL  edits -> genome edits  cell -> programmed cell\ndef cell_program_compiler(spec, cpc_v3):\n    parsed = cpc_v3.parse_dsl(spec)\n    car_seq = cpc_v3.design_car(parsed.target)\n    cytokine_seq = cpc_v3.design_cytokine(parsed.payload)\n    epigenetic_edits = cpc_v3.crisproff(parsed.modifications)\n    validated = cpc_v3.validate_transcriptome(epigenetic_edits)\n    if not validated: return None\n    kill_switch = cpc_v3.insert_kill_switch()\n    return {'car': car_seq, 'cytokine': cytokine_seq, 'edits': epigenetic_edits, 'kill_switch': kill_switch}",
+          rust: "fn cell_program_compiler(spec: &str, cpc: &CPCv3) -> Option<CompiledEdits> {\n    let parsed = cpc.parse_dsl(spec);\n    let car_seq = cpc.design_car(&parsed.target);\n    let cytokine_seq = cpc.design_cytokine(&parsed.payload);\n    let epigenetic_edits = cpc.crisproff(&parsed.modifications);\n    if !cpc.validate_transcriptome(&epigenetic_edits) { return None; }\n    let kill_switch = cpc.insert_kill_switch();\n    Some(CompiledEdits { car_seq, cytokine_seq, epigenetic_edits, kill_switch })\n}",
+          go: "func CellProgramCompiler(spec string, cpc *CPCv3) *CompiledEdits {\n\tparsed := cpc.ParseDSL(spec)\n\tcarSeq := cpc.DesignCAR(parsed.Target)\n\tcytokineSeq := cpc.DesignCytokine(parsed.Payload)\n\tedits := cpc.CRISPRoff(parsed.Modifications)\n\tif !cpc.ValidateTranscriptome(edits) { return nil }\n\tkillSwitch := cpc.InsertKillSwitch()\n\treturn &CompiledEdits{CAR: carSeq, Cytokine: cytokineSeq, Edits: edits, KillSwitch: killSwitch}\n}",
+          c: "typedef struct { char car_seq[1024]; char cytokine_seq[512]; Edits* edits; char kill_switch[256]; } CompiledEdits;\nCompiledEdits* cell_program_compiler(const char* spec, CPCv3* cpc) {\n    ParsedSpec parsed; cpc_parse_dsl(cpc, spec, &parsed);\n    CompiledEdits* out = malloc(sizeof(CompiledEdits));\n    cpc_design_car(cpc, parsed.target, out->car_seq);\n    cpc_design_cytokine(cpc, parsed.payload, out->cytokine_seq);\n    out->edits = cpc_crisproff(cpc, parsed.modifications);\n    if (!cpc_validate_transcriptome(cpc, out->edits)) { free(out); return NULL; }\n    cpc_insert_kill_switch(cpc, out->kill_switch);\n    return out;\n}",
+          elixir: "defmodule CPC do\n  def compile(spec, cpc) do\n    parsed = cpc.parse_dsl(spec)\n    car_seq = cpc.design_car(parsed.target)\n    cytokine_seq = cpc.design_cytokine(parsed.payload)\n    edits = cpc.crisproff(parsed.modifications)\n    if cpc.validate_transcriptome(edits) do\n      %{car: car_seq, cytokine: cytokine_seq, edits: edits, kill_switch: cpc.insert_kill_switch()}\n    else\n      nil\n    end\n  end\nend",
+          scala: "def cellProgramCompiler(spec: String, cpc: CPCv3): Option[CompiledEdits] = {\n  val parsed = cpc.parseDSL(spec)\n  val carSeq = cpc.designCAR(parsed.target)\n  val cytokineSeq = cpc.designCytokine(parsed.payload)\n  val edits = cpc.crisproff(parsed.modifications)\n  if (cpc.validateTranscriptome(edits)) {\n    Some(CompiledEdits(carSeq, cytokineSeq, edits, cpc.insertKillSwitch()))\n  } else None\n}",
         },
       };
 

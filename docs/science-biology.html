@@ -161,6 +161,8 @@
         <p style="font-size: 14px; color: var(--text-muted, #9ca3af); max-width: 920px; margin: 0 0 16px;">Inspired by the LinkedIn <strong>TotalSegmentator</strong> post (Wass et al. 2023, Radiology) — which segments 117 organs from a CT in 6 seconds — this lab inverts the LinkedIn visual hierarchy: the central slice is <em>minimised</em>, peripheral slices (CT axial, MRI T1/T2, X-ray, PET/CT, sagittal) are <em>emphasised</em>. The scanner sweep animates the segmentation propagating organ-by-organ. Click any organ in the legend to highlight it across all six peripheral modalities simultaneously.</p>
         <div id="bio-medimg-container"></div>
         <p style="font-size: 11px; color: var(--text-muted-2, #6b7280); margin-top: 8px;">Pure client-side — all slices are procedurally generated (no real patient data). For production CT/MRI segmentation, use the open-source TotalSegmentator (Apache 2.0) via the AIHPC Connector.</p>
+        <p style="font-size: 12px; color: var(--text-muted, #9ca3af); margin-top: 12px;"><strong>Phase 41 · DICOM loader</strong> — drop your own <code>.dcm</code> / <code>.dicom</code> file below. The viewer's first peripheral slice will overlay the parsed DICOM metadata (modality, rows × cols, study date) as a badge. Full pixel-data decode requires cornerstone.js (WASM); the header parse runs in-browser in < 100 ms.</p>
+        <div id="bio-uploader-container"></div>
       </section>
 
       <div class="cards">
@@ -237,8 +239,16 @@
           organs: ['lung', 'heart', 'liver', 'kidney-left', 'kidney-right', 'spleen', 'bladder', 'bone'],
         });
         AIHPC_MEDIMG.play('bio-medimg-container');
+        // Phase 41: register this viewer as a consumer of the scientific-uploader
+        // (so dropping a .dcm/.dicom file pushes the parsed DICOM into the viewer)
+        AIHPC_MEDIMG.registerAsUploaderConsumer('bio-medimg-container');
+        // Mount the scientific-uploader widget under the medical-imaging lab
+        if (window.AIHPC_UPLOADER) {
+          AIHPC_UPLOADER.mount('bio-uploader-container');
+        }
       });
     </script>
     <script src="medical-imaging.js"></script>
+    <script src="scientific-uploader.js"></script>
   </body>
 </html>

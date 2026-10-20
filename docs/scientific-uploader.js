@@ -51,6 +51,7 @@
     '.pdb': 'pdb', '.sdf': 'sdf', '.mol': 'sdf', '.cif': 'cif',
     '.fasta': 'fasta', '.fa': 'fasta', '.vcf': 'vcf',
     '.fits': 'fits', '.vtk': 'vtk',
+    '.dcm': 'dicom', '.dicom': 'dicom',  // Phase 41 — DICOM
     '.csv': 'csv', '.tsv': 'tsv', '.txt': 'csv',
     '.parquet': 'parquet', '.arrow': 'arrow', '.feather': 'arrow',
     '.json': 'json',
@@ -70,6 +71,8 @@
     fits: ['SIMPLE  ='],
     vtk: ['# vtk DataFile'],
     mat: ['MATLAB'],
+    // DICOM: 128 bytes preamble (zeros / arbitrary) then 'DICM' magic at offset 128
+    dicom: ['DICM'],
   };
 
   function detectFormat(fileName, fileBytes) {
@@ -93,6 +96,11 @@
             if (match) return fmt;
           }
         }
+      }
+      // Phase 41: DICOM has 'DICM' at offset 128 (after 128-byte preamble)
+      if (fileBytes.byteLength > 132) {
+        var ab2 = new Uint8Array(fileBytes.slice(128, 132));
+        if (String.fromCharCode.apply(null, ab2) === 'DICM') return 'dicom';
       }
     }
     return null;
@@ -363,6 +371,112 @@
     }
   }
 
+  // Phase 41: DICOM parser — minimal Part-10 header + pixel data extraction.
+  // Parses the most common DICOM tags via the explicit-VR little-endian
+  // format (the most common modern DICOM). For binary VRs we just probe
+  // the headers; full pixel-data decode requires cornerstone.js (WASM).
+  function parseDICOM(bytes) {
+    var ab = new Uint8Array(bytes);
+    if (ab.length < 132) return { ok: false, error: 'File too small for DICOM.' };
+    // Check 'DICM' at offset 128
+    var magic = String.fromCharCode.apply(null, ab.subarray(128, 132));
+    if (magic !== 'DICM') {
+      return { ok: false, error: 'Not a valid DICOM file (no DICM magic at offset 128).' };
+    }
+    // Parse the meta header + main dataset.
+    // This is a MINIMAL parser — it walks the explicit-VR LE tag stream
+    // and extracts the most clinically-useful fields.
+    var view = new DataView(bytes);
+    var offset = 132;  // after preamble + DICM
+    var tags = {};
+    var pixelDataOffset = -1, pixelDataLength = 0, pixelDataVR = '';
+    function readVR(off) {
+      return String.fromCharCode(ab[off], ab[off + 1]);
+    }
+    function readTag(off) {
+      var g = view.getUint16(off, true);
+      var e = view.getUint16(off + 2, true);
+      return '(' + g.toString(16).padStart(4, '0') + ',' + e.toString(16).padStart(4, '0') + ')';
+    }
+    // Group 0002 (meta) is always explicit VR LE; rest depends on transfer syntax.
+    // For demo, we assume explicit VR LE (the most common). If transfer syntax
+    // is implicit VR LE, this parser will still extract some tags by luck.
+    while (offset < ab.length - 8) {
+      // Stop after a sensible cap to avoid runaway on huge files
+      if (offset > 2_000_000) break;
+      // Detect sequence delimiters (FF FE E0 DD)
+      if (ab[offset] === 0xFE && ab[offset + 1] === 0xFF && ab[offset + 2] === 0xE0 && ab[offset + 3] === 0xDD) {
+        offset += 8;
+        continue;
+      }
+      var tagStr = readTag(offset);
+      var vr = readVR(offset + 4);
+      var len = 0, valueOffset = 0;
+      // Special VRs: OB, OW, OF, SQ, UC, UN, UR, UT — 4-byte length with 2 reserved bytes
+      var longVRs = ['OB', 'OW', 'OF', 'SQ', 'UC', 'UN', 'UR', 'UT'];
+      if (longVRs.indexOf(vr) >= 0) {
+        len = view.getUint32(offset + 8, true);
+        valueOffset = offset + 12;
+      } else {
+        len = view.getUint16(offset + 6, true);
+        valueOffset = offset + 8;
+      }
+      // Pixel Data (7FE0,0010)
+      if (tagStr === '(7fe0,0010)') {
+        pixelDataOffset = valueOffset;
+        pixelDataLength = len;
+        pixelDataVR = vr;
+      }
+      // Save tags of interest
+      var tagValue = '';
+      if (len > 0 && len < 256 && valueOffset + len <= ab.length) {
+        var str = '';
+        for (var i = 0; i < len; i++) {
+          var b = ab[valueOffset + i];
+          if (b === 0) break;  // null-terminated
+          str += String.fromCharCode(b);
+        }
+        tagValue = str.trim();
+      }
+      if (tagValue) tags[tagStr] = tagValue;
+      // Advance
+      offset = valueOffset + len;
+      // Handle odd-length padding
+      if (len % 2 === 1) offset += 1;
+    }
+    var patientID = tags['(0010,0020)'] || '—';
+    var studyDate = tags['(0008,0020)'] || '—';
+    var modality = tags['(0008,0060)'] || '—';
+    var rows = parseInt(tags['(0028,0010)'] || '0', 10);
+    var cols = parseInt(tags['(0028,0011)'] || '0', 10);
+    var windowCenter = tags['(0028,1050)'] || '—';
+    var windowWidth = tags['(0028,1051)'] || '—';
+    var seriesDescription = tags['(0008,103e)'] || tags['(0008,1030)'] || '—';
+    return {
+      ok: true,
+      format: 'dicom',
+      kind: 'image',
+      tags: tags,
+      pixelDataOffset: pixelDataOffset,
+      pixelDataLength: pixelDataLength,
+      pixelDataVR: pixelDataVR,
+      rows: rows,
+      cols: cols,
+      modality: modality,
+      stats: [
+        { label: 'Format', value: 'DICOM (Part 10)' },
+        { label: 'Patient ID', value: patientID },
+        { label: 'Study Date', value: studyDate },
+        { label: 'Modality', value: modality },
+        { label: 'Series', value: seriesDescription.substring(0, 50) },
+        { label: 'Rows × Cols', value: rows + ' × ' + cols },
+        { label: 'Window C/W', value: windowCenter + ' / ' + windowWidth },
+        { label: 'Pixel data', value: pixelDataLength > 0 ? (pixelDataLength.toLocaleString() + ' bytes (' + pixelDataVR + ')' ) : 'none' },
+      ],
+      preview: 'DICOM ' + modality + ' parsed: ' + rows + '×' + cols + ' pixels, study ' + studyDate + '. Pixel data ' + (pixelDataLength > 0 ? 'available' : 'absent') + '. Use the medical-imaging viewer to render.',
+    };
+  }
+
   function parseFITS(text) {
     var lines = text.split('').reduce(function (acc, c, i) {
       var chunk = Math.floor(i / 80);
@@ -475,6 +589,9 @@
             result = parseFITS(new TextDecoder().decode(ab));
           } else if (format === 'vtk') {
             result = parseVTK(new TextDecoder().decode(ab));
+          } else if (format === 'dicom') {
+            // Phase 41 — DICOM Part-10 parser; needs raw bytes
+            result = parseDICOM(ab);
           } else if (format === 'hdfs-seq') {
             result = parseHDFSMarker(ab);
           } else {
@@ -515,13 +632,13 @@
       + '  </div>'
       + '  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">'
       + '    <div>'
-      + '      <label style="font-size: 11px; color: #9ca3af; display: block; margin-bottom: 6px;">Drop file here (.pdb .sdf .cif .csv .tsv .parquet .arrow .h5 .hdf5 .nc .npy .npz .mat .fits .vtk .json .hdfs ...)</label>'
+      + '      <label style="font-size: 11px; color: #9ca3af; display: block; margin-bottom: 6px;">Drop file here (.pdb .sdf .cif .dcm .dicom .csv .tsv .parquet .arrow .h5 .hdf5 .nc .npy .npz .mat .fits .vtk .json .hdfs ...)</label>'
       + '      <div id="sci-uploader-dropzone-' + containerId + '" style="border: 2px dashed rgba(139,92,246,0.4); border-radius: 10px; padding: 24px; text-align: center; cursor: pointer; background: #0a0e1a; transition: all 0.2s; min-height: 80px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px;">'
       + '        <div style="font-size: 32px; opacity: 0.6;">📁</div>'
       + '        <div style="font-size: 12px; color: #9ca3af;">Click to browse or drop a file here</div>'
       + '        <div style="font-size: 10px; color: #6b7280;">Up to 100 MB · data residency respected</div>'
       + '      </div>'
-      + '      <input type="file" id="sci-uploader-input-' + containerId + '" style="display: none;" accept=".pdb,.sdf,.mol,.cif,.fasta,.fa,.vcf,.fits,.vtk,.csv,.tsv,.txt,.parquet,.arrow,.feather,.json,.h5,.hdf5,.nc,.netcdf,.npy,.npz,.mat,.hdfs" />'
+      + '      <input type="file" id="sci-uploader-input-' + containerId + '" style="display: none;" accept=".pdb,.sdf,.mol,.cif,.fasta,.fa,.vcf,.fits,.vtk,.dcm,.dicom,.csv,.tsv,.txt,.parquet,.arrow,.feather,.json,.h5,.hdf5,.nc,.netcdf,.npy,.npz,.mat,.hdfs" />'
       + '    </div>'
       + '    <div id="sci-uploader-result-' + containerId + '" style="background: #0a0e1a; border: 1px solid #1f2937; border-radius: 8px; padding: 12px; font-family: SF Mono, Menlo, monospace; font-size: 11px; color: #9ca3af; min-height: 120px;">'
       + '      Waiting for file input...'

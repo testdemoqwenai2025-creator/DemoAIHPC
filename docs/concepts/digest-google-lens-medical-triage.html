@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Google Lens medical imaging triage — 92% top-5 differential accuracy — AIHPC Advanced auto-generated concept card (digest Issue #9)." />
+    <title>Google Lens medical imaging triage — 92% top-5 differential accuracy — AIHPC Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.1), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(196,181,253,0.2); }
+      .lead { font-size: 17px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .abstract p { font-size: 14px; color: var(--text-muted); margin: 0 0 10px; }
+      .dataset-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin: 16px 0 32px; }
+      .dataset-card .ds-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-3); margin-bottom: 8px; }
+      .dataset-card .ds-row { display: grid; grid-template-columns: 80px 1fr; gap: 8px; font-size: 12px; color: var(--text-muted); padding: 2px 0; }
+      .dataset-card .ds-row .k { color: var(--text-muted-2); font-weight: 600; }
+      .dataset-card .ds-row .v { color: var(--text); }
+      .dataset-card .ds-row .v a { color: var(--accent-2); text-decoration: none; word-break: break-all; }
+      .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); margin-bottom: 16px; }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px 0; }
+      .demo-tab-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, Consolas, monospace; }
+      .meta a { color: var(--text); text-decoration: none; }
+      body.light { background: #fafafa; color: #18181b; }
+      body.light .dataset-card, body.light .derivation-step, body.light .stats-grid .stat, body.light .report-block, body.light pre.code-block { background: white; border-color: #e5e7eb; }
+      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .abstract p, body.light .summary-block ul, body.light .meta, body.light .crumbs { color: #4b5563; }
+      body.light .ribbon-btn-primary { color: white; }
+
+    </style>
+    <script src="../subscribe-gate.js"></script>
+    <script src="../digest-parsers.js"></script>
+    <script src="../animated-derivation.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">📊 Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="lazy-evaluation.html">Lazy Evaluation as UX</a><a href="provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../concepts.html">Concept Cards</a> / <a href="../digest.html">Weekly Digest Issue #9</a> / CS - Medical LLM</p>
+      <span class="tag">Auto-generated · Issue #9</span>
+      <h1>Google Lens medical imaging triage — 92% top-5 differential accuracy</h1>
+      <p class="lead">Google Health (DeepMind Health) · Google Health blog · 2026-11-04</p>
+
+      <h2>Abstract</h2>
+      <div class="abstract">
+        <p>Google Lens medical imaging triage lets users point a smartphone camera at a CT slice, MRI slice, X-ray, ECG, or microscope image and get a top-5 differential with confidence intervals + reasoning chains. Runs entirely on-device (Pixel 9 / iPhone 17) via a 3B-param multimodal model.</p>
+        <p>On the 1000-image open benchmark (released), Lens medical achieves 92% top-5 differential accuracy (vs AMIE&#x27;s 85% on NEJM CPC). For triage use cases (rule-out pneumothorax on a CXR, rule-out haemorrhage on NCCT), the system has 99% sensitivity + 87% specificity.</p>
+        <p>On-device inference: 1.5 seconds per image on a Pixel 9 Pro. No data leaves the device (HIPAA-compliant by design). Available in 47 languages; approved for triage in 12 EU countries + UK NHS pilots.</p>
+      </div>
+      <div class="dataset-card">
+        <div class="ds-title">📁 Dataset — accompanying open data</div>
+        <div class="ds-row"><span class="k">Name</span><span class="v">Lens medical triage benchmark (1000 images, 5 modalities × 200 each)</span></div>
+        <div class="ds-row"><span class="k">Format</span><span class="v">TIFF + JSON</span></div>
+        <div class="ds-row"><span class="k">Size</span><span class="v">1.2 GB</span></div>
+        <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/google-health/lens-medical-2026" target="_blank" rel="noopener">https://github.com/google-health/lens-medical-2026</a></span></div>
+      </div>
+      <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 31</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a medical image to get Lens-style top-5 differentials.</div>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+            📂 Upload .jpg,.png,.tif,.dcm
+            <input type="file" id="etl-input-google-lens-medical-triage" accept=".jpg,.png,.tif,.dcm" data-article-id="google-lens-medical-triage" style="display:none;" />
+          </label>
+          <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+        </div>
+        <div id="etl-report-google-lens-medical-triage" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+      </div>
+      <section style="margin: 24px 0; padding: 14px 16px; background: rgba(11,15,26,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; backdrop-filter: blur(12px);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#06b6d4;">📊 N-D properties strip</span>
+          <span style="font-size:10px;color:var(--text-muted-2, #6b7280);">Phase 40 · auto-generated · 13 properties</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;overflow-x:auto;"><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Issue</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">9</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Source</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Google Health blog</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Published</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">2026-11-04</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Authors</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Google Health (DeepMind Health</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Dataset</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Lens medical triage benchmark </div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Format</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">TIFF + JSON</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Size</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">1.2 GB</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Parameters</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">3B (on-device)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Inference</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">1.5 s (Pixel 9 Pro)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Top-5 accuracy</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">92%</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Triage sensitivity</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">99% (rule-out)</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Languages</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">47</div></div><div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);"><div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Approved in</div><div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">12 EU + UK NHS</div></div></div>
+        <p style="font-size:10px;color:var(--text-muted-2, #6b7280);margin:8px 0 0;">Parallel-coordinates strip — read left-to-right across the article's metadata. Use for cross-article comparison (e.g. for two concept cards, the strip shows dataset sizes / publication dates at a glance).</p>
+      </section>
+      <h2>Demo — lens_medical_triage(image, on_device_model) - 5-step on-device triage</h2>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">5-step: image capture, on-device multimodal encoding, top-5 differential generation, confidence intervals, reasoning chains.</p>
+      <h2>Math &rarr; Code derivation</h2>
+      <div class="math-panel" style="padding: 14px; background: rgba(6,182,212,0.05); border-left: 3px solid var(--accent-2); border-radius: 8px; margin-bottom: 16px;">
+        <div class="math-eq" style="font-family: 'Cambria Math', Georgia, serif; font-size: 16px; color: var(--accent-2); margin-bottom: 6px;">differentials = top_k(softmax(LensModel(image)), k=5);  CI_i = bootstrap(LensModel, image, n=100)</div>
+        <div class="math-plain" style="font-size: 13px; color: var(--text-muted);">Lens medical runs entirely on-device. The 3B-param multimodal model encodes the image + produces top-5 differentials with bootstrap confidence intervals.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 1: Image capture</strong>
+        <div class="step-math">image = camera_capture() or file_upload()</div>
+        <div class="step-explain">User points the phone camera at a CT slice / X-ray / ECG / microscope image, or uploads an existing image. Image is pre-processed: 512×512, normalised, EXIF-stripped.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: On-device encoding</strong>
+        <div class="step-math">emb = ViT_Lens(image) + text_head(report_text_if_any)</div>
+        <div class="step-explain">A 3B-param multimodal model: Vision Transformer (ViT) for the image + LLM head for any associated report text. Runs on-device via MediaPipe + TFLite.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Top-5 differential</strong>
+        <div class="step-math">differentials = top_k(softmax(emb), k=5)</div>
+        <div class="step-explain">Top-5 differential diagnoses from the multimodal embedding. Each entry: (label, probability).</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: Confidence intervals</strong>
+        <div class="step-math">CI_i = bootstrap(LensModel, image, n=100); 95% CI</div>
+        <div class="step-explain">Bootstrap the model 100 times with different dropouts on the embedding; the 2.5-97.5 percentile range is the 95% CI. Helps the user trust (or distrust) the top-5.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Reasoning chain</strong>
+        <div class="step-math">chain = LLM.generate(&#x27;For &#x27; + differentials + &#x27;, explain visual findings&#x27;)</div>
+        <div class="step-explain">A short reasoning chain: e.g. &#x27;Left upper lobe shows wedge-shaped consolidation with air-bronchogram — most consistent with lobar pneumonia.&#x27; Helps the user verify the AI&#x27;s reasoning.</div>
+      </div>
+      <h2>Polyglot code (6 languages)</h2>
+      <div class="code-panel">
+        <div class="lang-toggle">
+          <button data-lang="python" class="active">Python</button>
+          <button data-lang="rust">Rust</button>
+          <button data-lang="go">Go</button>
+          <button data-lang="c">C</button>
+          <button data-lang="elixir">Elixir</button>
+          <button data-lang="scala">Scala</button>
+        </div>
+        <pre class="code-block" id="code-block-google-lens-medical-triage"></pre>
+      </div>
+      <h2>Observe</h2>
+      <div class="demo-tabs">
+        <button class="active" data-tab="stats">Stats</button>
+        <button data-tab="reports">Reports</button>
+        <button data-tab="graphs">Graphs</button>
+        <button data-tab="summary">Summary</button>
+        <button data-tab="etl">ETL Report</button>
+      </div>
+      <div class="demo-tab-content active" data-tab="stats">
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="l">Parameters</div>
+            <div class="v">3B (on-device)</div>
+          </div>
+          <div class="stat">
+            <div class="l">Inference</div>
+            <div class="v">1.5 s (Pixel 9 Pro)</div>
+          </div>
+          <div class="stat">
+            <div class="l">Top-5 accuracy</div>
+            <div class="v">92%</div>
+          </div>
+          <div class="stat">
+            <div class="l">Triage sensitivity</div>
+            <div class="v">99% (rule-out)</div>
+          </div>
+          <div class="stat">
+            <div class="l">Languages</div>
+            <div class="v">47</div>
+          </div>
+          <div class="stat">
+            <div class="l">Approved in</div>
+            <div class="v">12 EU + UK NHS</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-tab-content" data-tab="reports">
+        <div class="report-block">Google Lens medical triage: 3B-param on-device multimodal model. Point your phone at any medical image → top-5 differentials + 95% CIs + reasoning chain in 1.5 s. 92% top-5 accuracy on 1000-image benchmark (vs AMIE 85%). 99% rule-out sensitivity. HIPAA-compliant by design — runs entirely on Pixel 9 / iPhone 17.</div>
+      </div>
+      <div class="demo-tab-content" data-tab="graphs">
+        <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="160" width="40" height="20" fill="#9ca3af" opacity="0.5"/><text x="60" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">capture</text><rect x="100" y="140" width="40" height="40" fill="#06b6d4" opacity="0.6"/><text x="120" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">encode</text><rect x="160" y="100" width="40" height="80" fill="#8b5cf6"/><text x="180" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">top-5</text><rect x="220" y="80" width="40" height="100" fill="#ec4899"/><text x="240" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">CI</text><rect x="280" y="60" width="40" height="120" fill="#f59e0b"/><text x="300" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">reason</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">On-device triage pipeline (1.5s total)</text></svg></div>
+      </div>
+      <div class="demo-tab-content" data-tab="summary">
+        <div class="summary-block"><ul>
+          <li>Google Lens medical: 3B-param on-device multimodal model.</li>
+          <li>Top-5 differential accuracy 92% (vs AMIE 85%).</li>
+          <li>1.5 s inference on Pixel 9 Pro; HIPAA-compliant.</li>
+          <li>Available in 47 languages; approved in 12 EU + UK NHS pilots.</li>
+        </ul></div>
+      </div>
+      <div class="demo-tab-content" data-tab="etl">
+        <div class="report-block" id="etl-result-google-lens-medical-triage" style="min-height: 60px;">
+          <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+        </div>
+      </div>
+      <h2>🎬 Animated derivation clip</h2>
+      <div class="anim-container" style="padding: 20px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px); margin: 24px 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2, #06b6d4);">Phase 28 — animated Math→Code derivation</div>
+          <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">▶ Play</button>
+            <button class="anim-pause" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⏸ Pause</button>
+            <button class="anim-replay" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">↺ Replay</button>
+            <button class="anim-record" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⬇ Record WebM</button>
+            <button class="anim-share" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">🔗 Share</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="concept-google-lens-medical-triage" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;"></canvas>
+      </div>
+      <script>
+        // Register the derivation for this concept card
+        AIHPC_ANIM.register('concept-google-lens-medical-triage', {
+          title: "Google Lens medical imaging triage \u2014 92% top-5 differential accuracy",
+          steps: [{"title": "Step 1: Image capture", "math": "image = camera_capture() or file_upload()", "explain": "User points the phone camera at a CT slice / X-ray / ECG / microscope image, or uploads an existing image. Image is pre-processed: 512\u00d7512, normalised, EXIF-stripped."}, {"title": "Step 2: On-device encoding", "math": "emb = ViT_Lens(image) + text_head(report_text_if_any)", "explain": "A 3B-param multimodal model: Vision Transformer (ViT) for the image + LLM head for any associated report text. Runs on-device via MediaPipe + TFLite."}, {"title": "Step 3: Top-5 differential", "math": "differentials = top_k(softmax(emb), k=5)", "explain": "Top-5 differential diagnoses from the multimodal embedding. Each entry: (label, probability)."}, {"title": "Step 4: Confidence intervals", "math": "CI_i = bootstrap(LensModel, image, n=100); 95% CI", "explain": "Bootstrap the model 100 times with different dropouts on the embedding; the 2.5-97.5 percentile range is the 95% CI. Helps the user trust (or distrust) the top-5."}, {"title": "Step 5: Reasoning chain", "math": "chain = LLM.generate('For ' + differentials + ', explain visual findings')", "explain": "A short reasoning chain: e.g. 'Left upper lobe shows wedge-shaped consolidation with air-bronchogram \u2014 most consistent with lobar pneumonia.' Helps the user verify the AI's reasoning."}],
+          duration: 12.0,
+        });
+        // CODE_BANK for the polyglot code panel
+        const CODE_BANK = {"python": "# differentials = top_k(softmax(LensModel(image)), k=5)\n# image -> camera/upload  LensModel -> on-device multimodal\ndef lens_medical_triage(image, on_device_model):\n    emb = on_device_model.encode(image)\n    differentials = top_k(softmax(emb), k=5)\n    CIs = [bootstrap(on_device_model, image, n=100) for _ in differentials]\n    reasoning = on_device_model.generate_reasoning(image, differentials)\n    return differentials, CIs, reasoning", "rust": "fn lens_medical_triage(image: &Image, m: &LensModel) -> (Vec<Diff>, Vec<CI>, String) {\n    let emb = m.encode(image);\n    let diffs = top_k(softmax(&emb), 5);\n    let cis: Vec<CI> = diffs.iter().map(|_| bootstrap(m, image, 100)).collect();\n    let reasoning = m.generate_reasoning(image, &diffs);\n    (diffs, cis, reasoning)\n}", "go": "func LensMedicalTriage(image *Image, m *LensModel) ([]Diff, []CI, string) {\n\temb := m.Encode(image)\n\tdiffs := TopK(Softmax(emb), 5)\n\tvar cis []CI\n\tfor range diffs { cis = append(cis, Bootstrap(m, image, 100)) }\n\treasoning := m.GenerateReasoning(image, diffs)\n\treturn diffs, cis, reasoning\n}", "c": "typedef struct { Diff diffs[5]; CI cis[5]; char reasoning[1024]; } TriageResult;\nTriageResult lens_medical_triage(Image* img, LensModel* m) {\n    Vec emb = m_encode(m, img);\n    TriageResult r;\n    top_k_softmax(emb, 5, r.diffs);\n    for (int i = 0; i < 5; i++) r.cis[i] = bootstrap_ci(m, img, 100);\n    m_generate_reasoning(m, img, r.diffs, r.reasoning, 1024);\n    return r;\n}", "elixir": "defmodule LensMedical do\n  def triage(image, m) do\n    emb = m.encode(image)\n    diffs = top_k(softmax(emb), 5)\n    cis = Enum.map(diffs, fn _ -> bootstrap(m, image, 100) end)\n    reasoning = m.generate_reasoning(image, diffs)\n    {diffs, cis, reasoning}\n  end\nend", "scala": "def lensMedicalTriage(image: Image, m: LensModel): (Vector[Diff], Vector[CI], String) = {\n  val emb = m.encode(image)\n  val diffs = topK(softmax(emb), 5)\n  val cis = diffs.map(_ => bootstrap(m, image, 100))\n  val reasoning = m.generateReasoning(image, diffs)\n  (diffs, cis, reasoning)\n}"};
+        // Initial render: set Python code on page load
+        document.addEventListener('DOMContentLoaded', function () {
+          var block = document.getElementById('code-block-google-lens-medical-triage');
+          if (block) block.textContent = CODE_BANK.python || '';
+          // Wire up language toggles
+          document.querySelectorAll('.code-panel .lang-toggle button').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var panel = btn.closest('.code-panel');
+              panel.querySelectorAll('.lang-toggle button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+              var lang = btn.dataset.lang;
+              var block = panel.querySelector('pre.code-block');
+              if (block) block.textContent = CODE_BANK[lang] || '// code not available for ' + lang;
+            });
+          });
+          // Wire up observe tabs
+          document.querySelectorAll('.demo-tabs button').forEach(function (tab) {
+            tab.addEventListener('click', function () {
+              var target = tab.dataset.tab;
+              document.querySelectorAll('.demo-tabs button').forEach(function (t) { t.classList.toggle('active', t === tab); });
+              document.querySelectorAll('.demo-tab-content').forEach(function (c) { c.classList.toggle('active', c.dataset.tab === target); });
+            });
+          });
+          // Init the animated-derivation canvas
+          AIHPC_ANIM.init();
+          // Phase 31: wire ETL file inputs to handleETLUpload
+          document.querySelectorAll('input[type="file"][data-article-id]').forEach(function (inp) {
+            inp.addEventListener('change', function (e) {
+              var articleId = inp.dataset.articleId;
+              var file = e.target.files[0];
+              if (!file) return;
+              if (window.handleETLUpload) {
+                var maxMb = parseInt(inp.dataset.maxMb || '50', 10);
+                window.handleETLUpload(articleId, file, { max_mb: maxMb });
+              }
+            });
+          });
+        });
+      </script>
+      <div class="meta" style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Auto-generated concept card from <a href="../digest.html">Weekly Digest Issue #9</a> (article id: <code>google-lens-medical-triage</code>). Generated by <code>scripts/gen-concept-cards.py</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      // Particle background
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d');
+        var W, H, P = [];
+        var N = 50, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; }
+        r();
+        addEventListener('resize', r);
+        for (var i = 0; i < N; i++) {
+          P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        }
+        function s() {
+          x.clearRect(0, 0, W, H);
+          for (var i = 0; i < N; i++) {
+            for (var j = i+1; j < N; j++) {
+              var d = Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y);
+              if (d < 100) {
+                x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')';
+                x.lineWidth = .5;
+                x.beginPath();
+                x.moveTo(P[i].x, P[i].y);
+                x.lineTo(P[j].x, P[j].y);
+                x.stroke();
+              }
+            }
+          }
+          for (var p of P) {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+            x.fillStyle = p.c; x.globalAlpha = .4;
+            x.beginPath();
+            x.arc(p.x, p.y, p.r, 0, 6.28);
+            x.fill();
+          }
+          x.globalAlpha = 1;
+          requestAnimationFrame(s);
+        }
+        s();
+      })();
+
+      // ---- Ribbon theme toggle ----
+      (function () {
+        var KEY = 'aihpc-theme';
+        var b = document.body, r = document.querySelector('.ribbon'), i = document.getElementById('ribbon-theme-icon');
+        function a(t) {
+          if (t === 'light') { b.classList.add('light'); r && r.classList.add('light'); if (i) i.textContent = '☀'; }
+          else { b.classList.remove('light'); r && r.classList.remove('light'); if (i) i.textContent = '🌙'; }
+        }
+        var d = 'dark';
+        try { var s = localStorage.getItem(KEY); if (s === 'light' || s === 'dark') d = s; else if (matchMedia('(prefers-color-scheme:light)').matches) d = 'light'; } catch (e) {}
+        a(d);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () { var n = b.classList.contains('light') ? 'dark' : 'light'; a(n); try { localStorage.setItem(KEY, n); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

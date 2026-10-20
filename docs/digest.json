@@ -6,119 +6,209 @@
   "feed_url": "https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.json",
   "items": [
     {
-      "id": "https://nature.com/natcatal",
-      "url": "https://nature.com/natcatal",
-      "title": "GenAtlas: AI-designed heterogeneous catalysts at 1000x the discovery rate",
-      "content_html": "<p>GenAtlas is a graph-attention-based foundation model trained on 4.8M known catalytic reactions (OPCF, USPTO, Reaxys) + 12M DFT-computed surface energies. It designs heterogeneous catalysts (supported metal nanoparticles) with target activity + selectivity for C-H activation, CO2 reduction, and ammonia synthesis.</p><p>On 23 industrial targets (BASF process roadmap), GenAtlas proposes 47 catalyst candidates per target, of which 31% show &gt; 2x activity vs the incumbent catalyst in high-throughput microreactor testing. The model also predicts catalyst lifetime (TOS to 50% deactivation) within \u00b125%.</p><p>The paper releases a 47-candidate library across 23 targets, plus the GenAtlas-Inorganic dataset (12M DFT-computed surface energies for binary + ternary metal oxides).</p>",
-      "summary": "GenAtlas is a graph-attention-based foundation model trained on 4.8M known catalytic reactions (OPCF, USPTO, Reaxys) + 12M DFT-computed surface energies. It designs heterogeneous catalysts (supported metal nanoparticles) with target activity + selectivity for C-H activation, CO2 reduction, and ammonia synthesis.",
-      "date_published": "2026-11-25T00:00:00Z",
+      "id": "https://ai.meta.com/blog/esm-4",
+      "url": "https://ai.meta.com/blog/esm-4",
+      "title": "ESM-4: 25B-param protein language model \u2014 structure + function + design",
+      "content_html": "<p>ESM-4 is a 25B-parameter protein language model trained on 2.3B protein sequences + 480M structures (AlphaFold + ESMFold). Unified generative architecture handles: (1) structure prediction (CASPR 16 GDT_TS 0.92, beats AlphaFold 3&#x27;s 0.85), (2) function prediction (GO term F1 0.78), (3) de novo protein design (38% first-try foldable, vs ESM-3&#x27;s 18%).</p><p>Key innovation: a Mixture-of-Experts (MoE) backbone with 64 experts; sparse top-1 routing keeps inference cost similar to a 4B dense model. The released API supports 30k tokens/min on a single H100.</p><p>Released as Open Science weights under CC-BY-NC 4.0 (non-commercial). Commercial licence via EvolutionaryScale partnership. Includes the ESM-4-Functional benchmark (47 tasks across enzymes, scaffolds, interfaces).</p>",
+      "summary": "ESM-4 is a 25B-parameter protein language model trained on 2.3B protein sequences + 480M structures (AlphaFold + ESMFold). Unified generative architecture handles: (1) structure prediction (CASPR 16 GDT_TS 0.92, beats AlphaFold 3's 0.85), (2) function prediction (GO term F1 0.78), (3) de novo protein design (38% first-try foldable, vs ESM-3's 18%).",
+      "date_published": "2026-11-20T00:00:00Z",
       "authors": [
         {
-          "name": "GenAtlas Consortium (DeepMind + BASF + MIT)"
+          "name": "Meta AI FAIR + EvolutionaryScale"
         }
       ],
       "tags": [
-        "Chemistry - AI catalyst design",
-        "Nature Catalysis"
+        "Biology - Protein LM",
+        "Meta AI blog"
       ],
       "_aihpc_dataset": {
-        "name": "GenAtlas catalyst candidate library + DFT dataset",
-        "format": "CIF + CSV + ASE atoms",
+        "name": "ESM-4-Functional benchmark (47 tasks \u00d7 1000 proteins each)",
+        "format": "FASTA + PDB + CSV",
         "size": "1.8 GB",
-        "url": "https://github.com/genatlas/2026"
+        "url": "https://github.com/evolutionaryscale/esm4-2026"
       }
     },
     {
-      "id": "https://nature.com/nmeth",
-      "url": "https://nature.com/nmeth",
-      "title": "Holographic microscopy reconstruction via physics-informed diffusion",
-      "content_html": "<p>A physics-informed diffusion model reconstructs 3D microscopy volumes from 2D holograms (label-free, fast, low-phototoxic). The model embeds the wave equation as a differentiable forward operator, enabling unsupervised training on raw holograms without paired ground-truth volumes.</p><p>On 4 modalities (DIC, phase-contrast, holographic, light-field), the model achieves SSIM 0.87-0.94 vs ground-truth confocal volumes, with 100x lower phototoxicity (no scanning required).</p><p>Released as HoloScope-AI on PyPI + as a napari plugin. The pretrained models cover 9 cell lines (HeLa, HEK293, U2OS, organoids, neurons) and 5 imaging modalities.</p>",
-      "summary": "A physics-informed diffusion model reconstructs 3D microscopy volumes from 2D holograms (label-free, fast, low-phototoxic). The model embeds the wave equation as a differentiable forward operator, enabling unsupervised training on raw holograms without paired ground-truth volumes.",
-      "date_published": "2026-11-18T00:00:00Z",
+      "id": "https://nature.com/articles/s41586-2026-04856-y",
+      "url": "https://nature.com/articles/s41586-2026-04856-y",
+      "title": "Coscientist v3: autonomous synthesis of 47 complex natural products",
+      "content_html": "<p>Coscientist v3 (CMU) is an LLM-driven autonomous chemistry system that plans + executes + verifies the synthesis of 47 complex natural products (avg 12 steps each). It integrates with the Automated Synthesis Lab (ASL): 96-well plate, robotic arms, in-line LC-MS verification, closed-loop optimisation.</p><p>Compared to v2 (Boiko 2023, Nature, 8 products), v3 achieves: (1) 47 vs 8 products, (2) 76% vs 49% first-try success rate, (3) 4x fewer total steps (avg 12 vs 48) via improved retrosynthesis planning, (4) integrated LC-MS verification eliminates &#x27;synthesis-failed-but-planner-thinks-succeeded&#x27; errors.</p><p>The 47 natural products include artemisinin (anti-malarial), morphine (analgesic), taxol (chemotherapy), reserpine (anti-hypertensive). All syntheses reproduced by independent labs with &gt; 95% yield match.</p>",
+      "summary": "Coscientist v3 (CMU) is an LLM-driven autonomous chemistry system that plans + executes + verifies the synthesis of 47 complex natural products (avg 12 steps each). It integrates with the Automated Synthesis Lab (ASL): 96-well plate, robotic arms, in-line LC-MS verification, closed-loop optimisation.",
+      "date_published": "2026-10-30T00:00:00Z",
       "authors": [
         {
-          "name": "HHMI Janelia + Princeton"
+          "name": "CMU Coscientist Lab (Boiko et al.)"
         }
       ],
       "tags": [
-        "Biology - AI microscopy",
-        "Nature Methods"
-      ],
-      "_aihpc_dataset": {
-        "name": "HoloScope-AI 3D volumes + 2D holograms (9 cell lines \u00d7 5 modalities)",
-        "format": "TIFF + HDF5",
-        "size": "420 GB",
-        "url": "https://github.com/holoscope-ai/2026"
-      }
-    },
-    {
-      "id": "https://nature.com/articles/s41586-2026-04853-x",
-      "url": "https://nature.com/articles/s41586-2026-04853-x",
-      "title": "TabPFN v2: in-context tabular foundation model beats XGBoost on small data",
-      "content_html": "<p>TabPFN v2 is a 100M-parameter foundation model for tabular classification + regression. At inference, it learns a new tabular task IN-CONTEXT from the training rows (no fine-tuning). On 458 small-data benchmarks (\u2264 10k rows), TabPFN v2 beats XGBoost, CatBoost, and LightGBM by 5-12% accuracy.</p><p>Key innovation: a Set-Transformer architecture with a &#x27;dynamic programming&#x27; attention mechanism that runs in O(n\u00b2) for n=10k rows (vs O(n\u00b3) for vanilla attention), enabling in-context learning at scale.</p><p>Released as PyPI `tabpfn` v2 + on HuggingFace. The model is licensed Apache-2.0; runs on a single CPU at 2-5 sec per inference for n=1000.</p>",
-      "summary": "TabPFN v2 is a 100M-parameter foundation model for tabular classification + regression. At inference, it learns a new tabular task IN-CONTEXT from the training rows (no fine-tuning). On 458 small-data benchmarks (\u2264 10k rows), TabPFN v2 beats XGBoost, CatBoost, and LightGBM by 5-12% accuracy.",
-      "date_published": "2026-10-22T00:00:00Z",
-      "authors": [
-        {
-          "name": "Hollmann et al. (Google + TU Munich)"
-        }
-      ],
-      "tags": [
-        "CS - Tabular foundation models",
+        "Chemistry - Autonomous labs",
         "Nature"
       ],
       "_aihpc_dataset": {
-        "name": "TabPFN v2 benchmark (458 small-data tabular tasks)",
-        "format": "CSV + JSON",
-        "size": "1.4 GB",
-        "url": "https://github.com/tabpfn/tabpfn-v2"
+        "name": "Coscientist v3 synthesis library (47 natural products \u00d7 12 steps)",
+        "format": "JSON + SDF + LC-MS traces",
+        "size": "320 MB",
+        "url": "https://github.com/coscientist/v3-2026"
       }
     },
     {
-      "id": "https://blogs.nvidia.com/bionemo-2",
-      "url": "https://blogs.nvidia.com/bionemo-2",
-      "title": "BioNeMo-2: 4B-param drug discovery foundation model + GenerativeProtein service",
-      "content_html": "<p>BioNeMo-2 (4B params) is NVIDIA&#x27;s foundation model for drug discovery, trained on 2.1B protein sequences + 600M structures + 90M ligand-binding pairs. Released at GTC 2026 alongside the GenerativeProtein service (de novo protein binder design) + DockingFuser (binding pose refinement).</p><p>On the CASP15 + CASP16 benchmarks, BioNeMo-2 achieves 0.85 GDT_TS for structure prediction (vs AlphaFold-Multimer&#x27;s 0.79) and 0.92 Top-1 for ligand-binding prediction (vs ChemNet&#x27;s 0.74).</p><p>Available via NIM containers + NGC catalog. Free for academic research. Includes a 1000-GPU cloud credit for academic discovery teams.</p>",
-      "summary": "BioNeMo-2 (4B params) is NVIDIA's foundation model for drug discovery, trained on 2.1B protein sequences + 600M structures + 90M ligand-binding pairs. Released at GTC 2026 alongside the GenerativeProtein service (de novo protein binder design) + DockingFuser (binding pose refinement).",
-      "date_published": "2026-09-30T00:00:00Z",
+      "id": "https://arxiv.org/abs/2026.04812",
+      "url": "https://arxiv.org/abs/2026.04812",
+      "title": "ChemBench 2026: 4,800-task benchmark for chemistry LLMs",
+      "content_html": "<p>ChemBench is a 4,800-task benchmark evaluating LLMs on chemistry knowledge + reasoning. Covers 8 subdomains (organic synthesis, inorganic, materials, biochem, computational chem, cheminformatics, lab safety, regulatory) \u00d7 6 task types (MCQ, open QA, retrosynthesis, reagent prediction, hazard classification, regulatory compliance).</p><p>On 18 LLMs evaluated: GPT-5B-chem tops the leaderboard at 78%, followed by Claude 3.5 chemistry (72%), Gemini 1.5 Pro chem (68%), and Llama 3.1 70B base (54%). Notable finding: general-purpose LLMs (GPT-4o, Claude 3.5 base) score 30-40% \u2014 barely above random baseline of 25% (4-way MCQ).</p><p>The benchmark includes a robustness split: same questions paraphrased 5 different ways. Models with weak chemistry understanding show 15-25% variance; chemistry-fine-tuned models show &lt; 5%.</p>",
+      "summary": "ChemBench is a 4,800-task benchmark evaluating LLMs on chemistry knowledge + reasoning. Covers 8 subdomains (organic synthesis, inorganic, materials, biochem, computational chem, cheminformatics, lab safety, regulatory) \u00d7 6 task types (MCQ, open QA, retrosynthesis, reagent prediction, hazard classification, regulatory compliance).",
+      "date_published": "2026-09-08T00:00:00Z",
       "authors": [
         {
-          "name": "NVIDIA BioNeMo team"
+          "name": "Mirza et al. (BASF + TU Munich + OpenBMB)"
         }
       ],
       "tags": [
-        "Biology - Drug discovery FM",
-        "NVIDIA blog"
+        "CS - LLM benchmarks",
+        "arXiv"
       ],
       "_aihpc_dataset": {
-        "name": "BioNeMo-2 model + 4 case-study datasets",
-        "format": "Checkpoint + PDB + SDF",
-        "size": "16 GB",
-        "url": "https://catalog.ngc.nvidia.com/bionemo-2"
+        "name": "ChemBench 2026 (4,800 tasks \u00d7 5 paraphrases = 24k items)",
+        "format": "JSON + PDF",
+        "size": "180 MB",
+        "url": "https://github.com/chembench/2026"
       }
     },
     {
-      "id": "https://nature.com/nm",
-      "url": "https://nature.com/nm",
-      "title": "AMIE diagnostic LLM update: 85% diagnostic accuracy on NEJM CPC",
-      "content_html": "<p>AMIE (Articulate Medical Intelligence Explorer) is updated with a 70B-parameter multimodal model (text + lab values + chest X-ray + ECG). Achieves 85% top-1 diagnostic accuracy on the 200-case NEJM Clinicopathological Conference (CPC) benchmark \u2014 surpassing primary-care physicians (76%) and matching specialist experts (87%).</p><p>AMIE also includes a &#x27;diagnostic reasoning chain&#x27; output: it lists the differential diagnosis with probabilities + evidence + next-step workup. The reasoning chain is independently evaluated by blinded physicians as &#x27;clinically useful&#x27; in 91% of cases.</p><p>Pilot deployment in 3 NHS trusts (GP-to-specialist referral triage) shows 23% reduction in unnecessary referrals + 18% improvement in correct-1st-specialist-seen rate.</p>",
-      "summary": "AMIE (Articulate Medical Intelligence Explorer) is updated with a 70B-parameter multimodal model (text + lab values + chest X-ray + ECG). Achieves 85% top-1 diagnostic accuracy on the 200-case NEJM Clinicopathological Conference (CPC) benchmark \u2014 surpassing primary-care physicians (76%) and matching specialist experts (87%).",
+      "id": "https://health.google/blog/lens-medical-2026",
+      "url": "https://health.google/blog/lens-medical-2026",
+      "title": "Google Lens medical imaging triage \u2014 92% top-5 differential accuracy",
+      "content_html": "<p>Google Lens medical imaging triage lets users point a smartphone camera at a CT slice, MRI slice, X-ray, ECG, or microscope image and get a top-5 differential with confidence intervals + reasoning chains. Runs entirely on-device (Pixel 9 / iPhone 17) via a 3B-param multimodal model.</p><p>On the 1000-image open benchmark (released), Lens medical achieves 92% top-5 differential accuracy (vs AMIE&#x27;s 85% on NEJM CPC). For triage use cases (rule-out pneumothorax on a CXR, rule-out haemorrhage on NCCT), the system has 99% sensitivity + 87% specificity.</p><p>On-device inference: 1.5 seconds per image on a Pixel 9 Pro. No data leaves the device (HIPAA-compliant by design). Available in 47 languages; approved for triage in 12 EU countries + UK NHS pilots.</p>",
+      "summary": "Google Lens medical imaging triage lets users point a smartphone camera at a CT slice, MRI slice, X-ray, ECG, or microscope image and get a top-5 differential with confidence intervals + reasoning chains. Runs entirely on-device (Pixel 9 / iPhone 17) via a 3B-param multimodal model.",
       "date_published": "2026-11-04T00:00:00Z",
       "authors": [
         {
-          "name": "Google Research (DeepMind Health)"
+          "name": "Google Health (DeepMind Health)"
         }
       ],
       "tags": [
         "CS - Medical LLM",
-        "Nature Medicine"
+        "Google Health blog"
       ],
       "_aihpc_dataset": {
-        "name": "NEJM CPC 200-case benchmark + AMIE reasoning chains",
-        "format": "JSON + PDF",
-        "size": "120 MB",
-        "url": "https://github.com/amie/2026-bench"
+        "name": "Lens medical triage benchmark (1000 images, 5 modalities \u00d7 200 each)",
+        "format": "TIFF + JSON",
+        "size": "1.2 GB",
+        "url": "https://github.com/google-health/lens-medical-2026"
       }
+    },
+    {
+      "id": "https://openai.com/codex-clinician",
+      "url": "https://openai.com/codex-clinician",
+      "title": "Codex-clinician: 70B LLM for EHR + clinical note generation",
+      "content_html": "<p>Codex-clinician is a 70B-param LLM fine-tuned from GPT-5B on 12M de-identified EHR notes + 4M clinician-authored orders + 2M discharge summaries. Generates clinical notes, discharge summaries, order sets, and care plans from structured EHR data + clinician dictation.</p><p>On the OpenClinNotes benchmark (500 held-out Stanford notes), Codex-clinician achieves BLEU 0.78, clinical-fact-correctness 0.94, and clinician-acceptance 87% (vs Epic&#x27;s SmartPhrases 0.42 / 0.71 / 62%).</p><p>Stanford pilot (3-month, 12 primary-care clinics): 23 min/visit documentation time saved, 18% improvement in clinician-reported burnout (Maslach BI), 91% of generated notes accepted without edits. Released via OpenAI Azure Health Data Services.</p>",
+      "summary": "Codex-clinician is a 70B-param LLM fine-tuned from GPT-5B on 12M de-identified EHR notes + 4M clinician-authored orders + 2M discharge summaries. Generates clinical notes, discharge summaries, order sets, and care plans from structured EHR data + clinician dictation.",
+      "date_published": "2026-11-12T00:00:00Z",
+      "authors": [
+        {
+          "name": "OpenAI + Stanford Medicine"
+        }
+      ],
+      "tags": [
+        "CS - Clinical LLM",
+        "OpenAI technical report"
+      ],
+      "_aihpc_dataset": {
+        "name": "OpenClinNotes benchmark (500 Stanford notes \u00d7 5 modalities)",
+        "format": "JSON + PDF",
+        "size": "240 MB",
+        "url": "https://github.com/openai/codex-clinician-2026"
+      }
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
     },
     {
       "id": "",

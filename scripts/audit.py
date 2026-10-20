@@ -1311,6 +1311,131 @@ def check_concept_card_nd_strip():
 
 
 # ---------------------------------------------------------------------------
+# Phase 41 checks
+# ---------------------------------------------------------------------------
+
+def check_dicom_loader_wired():
+    """Check (Phase 41): scientific-uploader supports DICOM + medical-imaging
+    registers as a consumer of the uploader on science-biology.html."""
+    bio_path = os.path.join(DOCS, "science-biology.html")
+    up_js = os.path.join(DOCS, "scientific-uploader.js")
+    med_js = os.path.join(DOCS, "medical-imaging.js")
+    if not (os.path.isfile(bio_path) and os.path.isfile(up_js) and os.path.isfile(med_js)):
+        return CheckResult("dicom_loader_wired", False,
+                           "science-biology.html or scientific-uploader.js or medical-imaging.js missing")
+    bio = open(bio_path, encoding="utf-8").read()
+    up = open(up_js, encoding="utf-8").read()
+    med = open(med_js, encoding="utf-8").read()
+    failures = []
+    if ".dcm" not in up or "dicom" not in up:
+        failures.append("scientific-uploader.js does not support DICOM format")
+    if "parseDICOM" not in up:
+        failures.append("missing parseDICOM function")
+    if "DICM" not in up:
+        failures.append("missing DICM magic-bytes detection")
+    if "registerAsUploaderConsumer" not in med:
+        failures.append("medical-imaging.js missing registerAsUploaderConsumer API")
+    if "loadParsed" not in med:
+        failures.append("medical-imaging.js missing loadParsed API")
+    if "registerAsUploaderConsumer('bio-medimg-container')" not in bio:
+        failures.append("science-biology.html does not register medical-imaging as consumer")
+    if 'id="bio-uploader-container"' not in bio:
+        failures.append("science-biology.html missing #bio-uploader-container element")
+    if failures:
+        return CheckResult("dicom_loader_wired", False,
+                           f"{len(failures)} issues with DICOM loader wiring", failures)
+    return CheckResult("dicom_loader_wired", True,
+                       "scientific-uploader.js parses DICOM (.dcm, DICM magic at offset 128) + medical-imaging viewer registered as consumer on biology hub")
+
+
+def check_medical_atlas_present():
+    """Check (Phase 41): docs/medical-atlas.html exists with 6 case studies + viewer mounting."""
+    atlas_path = os.path.join(DOCS, "medical-atlas.html")
+    if not os.path.isfile(atlas_path):
+        return CheckResult("medical_atlas_present", False,
+                           "docs/medical-atlas.html missing")
+    src = open(atlas_path, encoding="utf-8").read()
+    failures = []
+    if "medical-imaging.js" not in src:
+        failures.append("atlas does not load medical-imaging.js")
+    if "scientific-uploader.js" not in src:
+        failures.append("atlas does not load scientific-uploader.js")
+    if 'AIHPC_MEDIMG' not in src:
+        failures.append("atlas does not use AIHPC_MEDIMG")
+    if 'AIHPC_UPLOADER' not in src:
+        failures.append("atlas does not use AIHPC_UPLOADER")
+    # Check 6 cases (stroke, tumor, pneumonia, fracture, covid, abdominal)
+    expected_cases = ['stroke', 'tumor', 'pneumonia', 'fracture', 'covid', 'abdominal']
+    for c in expected_cases:
+        if c not in src:
+            failures.append(f"missing case study: {c}")
+    # Modal for case detail
+    if 'case-detail-modal' not in src:
+        failures.append("missing case-detail-modal")
+    if 'AI tools' not in src and 'ai_tools' not in src:
+        failures.append("missing AI tools listing per case")
+    if "TotalSegmentator" not in src:
+        failures.append("missing TotalSegmentator reference")
+    if "MedSAM" not in src:
+        failures.append("missing MedSAM reference")
+    if "RadFM" not in src:
+        failures.append("missing RadFM reference")
+    if failures:
+        return CheckResult("medical_atlas_present", False,
+                           f"{len(failures)} issues with medical atlas page", failures)
+    return CheckResult("medical_atlas_present", True,
+                       "docs/medical-atlas.html: 6 case studies (stroke, tumor, pneumonia, fracture, COVID-19, abdominal) + medical-imaging viewer + DICOM uploader + clinical context + AI tooling references")
+
+
+def check_issue_9_published():
+    """Check (Phase 41): Issue #9 published (Tuesday 2026-12-15) with 5 real + 2 futuristic."""
+    spec = importlib.util.spec_from_file_location(
+        "gen_digest", os.path.join(ROOT, "scripts", "gen-digest.py"),
+    )
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception as e:
+        return CheckResult("digest_issue_9", False, f"could not load gen-digest.py: {e}")
+    manifest = mod.MANIFEST
+    if manifest.get("issue") != 9:
+        return CheckResult("digest_issue_9", False,
+                           f"MANIFEST issue is {manifest.get('issue')}, expected 9")
+    if manifest.get("date") != "2026-12-15":
+        return CheckResult("digest_issue_9", False,
+                           f"MANIFEST date is {manifest.get('date')}, expected 2026-12-15")
+    articles = manifest.get("articles", [])
+    if len(articles) != 7:
+        return CheckResult("digest_issue_9", False,
+                           f"{len(articles)} articles, expected 7")
+    real_count = sum(1 for a in articles if not a.get("futuristic_vision"))
+    futuristic_count = sum(1 for a in articles if a.get("futuristic_vision"))
+    if real_count != 5 or futuristic_count != 2:
+        return CheckResult("digest_issue_9", False,
+                           f"{real_count} real + {futuristic_count} futuristic, expected 5 + 2")
+    ids = [a["id"] for a in articles]
+    for expected in ["esm-4-protein-lm", "coscientist-v3-autonomous-lab", "chembench-2026-llm", "google-lens-medical-triage", "codex-clinician-finetune"]:
+        if expected not in ids:
+            return CheckResult("digest_issue_9", False,
+                               f"missing anchor article: {expected}")
+    archive_8 = os.path.join(DOCS, "digest", "archive", "issue-008.html")
+    if not os.path.isfile(archive_8):
+        return CheckResult("digest_issue_9", False,
+                           "Issue #8 archive (docs/digest/archive/issue-008.html) missing")
+    missing_cards = []
+    for a in articles:
+        card = os.path.join(DOCS, "concepts", f"digest-{a['id']}.html")
+        if not os.path.isfile(card):
+            missing_cards.append(a["id"])
+    if missing_cards:
+        return CheckResult("digest_issue_9", False,
+                           f"missing concept cards: {', '.join(missing_cards)}")
+    return CheckResult("digest_issue_9", True,
+                       f"Issue #9 (2026-12-15) published: {real_count} real + {futuristic_count} futuristic; "
+                       f"Issue #8 archived; 7 concept cards; anchors: ESM-4+Coscientist+ChemBench+Lens medical+Codex-clinician")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -1360,8 +1485,11 @@ def main():
         check_attention_heatmap_loaded(),
         check_kg_search_present(),
         check_bloch_2qubit_supported(),
-        check_issue_8_published(),
         check_concept_card_nd_strip(),
+        # Phase 41 (issue_8 superseded by issue_9)
+        check_dicom_loader_wired(),
+        check_medical_atlas_present(),
+        check_issue_9_published(),
     ]
 
     if args.json:

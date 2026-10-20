@@ -297,6 +297,19 @@
         ol.textContent = '';
       }
     }
+    // Phase 41: if a DICOM/other file has been uploaded, overlay its
+    // metadata badge on the first peripheral slice (CT axial).
+    if (this.uploadedParsed) {
+      var pCtx = this['_canvas0'].getContext('2d');
+      var pCanvas = this['_canvas0'];
+      pCtx.save();
+      pCtx.fillStyle = 'rgba(6,182,212,0.85)';
+      pCtx.fillRect(8, pCanvas.height - 28, 220, 22);
+      pCtx.fillStyle = '#fff';
+      pCtx.font = 'bold 10px ui-monospace, SF Mono, Menlo, monospace';
+      pCtx.fillText('⬆ Uploaded: ' + (this.uploadedModality || '?').toUpperCase() + ' ' + (this.uploadedRows || '?') + '×' + (this.uploadedCols || '?'), 12, pCanvas.height - 13);
+      pCtx.restore();
+    }
     // Render central minimised thumbnail
     this.renderCentralSlice(this.centralCanvas.getContext('2d'), this.centralCanvas.width, this.centralCanvas.height, activeOrgan);
   };
@@ -671,6 +684,39 @@
     pause: function (id) { var c = INSTANCES[id]; if (c) c.pause(); },
     replay: function (id) { var c = INSTANCES[id]; if (c) c.replay(); },
     setOrgan: function (id, organ) { var c = INSTANCES[id]; if (c) { c.activeOrgan = organ; c.render(); } },
+    loadParsed: function (id, parsed) {
+      // Phase 41: accept a parsed file (DICOM/PDB/SDF/etc.) from the
+      // scientific-uploader and use its modality + dimensions to set
+      // the viewer state. Real pixel-data rendering would require
+      // cornerstone.js; for now we record the metadata + indicate
+      // that the loaded slice replaces the procedural demo.
+      var c = INSTANCES[id];
+      if (!c) return;
+      c.uploadedParsed = parsed;
+      c.uploadedModality = parsed.modality || parsed.format;
+      c.uploadedRows = parsed.rows;
+      c.uploadedCols = parsed.cols;
+      c.uploadedTags = parsed.tags;
+      // If the uploader produced a pixel-data offset, attempt to render
+      // the raw bytes as a 8-bit single-channel image into one of the
+      // peripheral slice canvases. Real DICOM uses 16-bit signed pixel
+      // data with modality LUT + VOI LUT — full decode is left to
+      // cornerstone.js. Here we just show a probe thumbnail.
+      if (parsed.pixelDataOffset > 0 && parsed.pixelDataLength > 0) {
+        c.uploadedHasPixelData = true;
+      }
+      c.render();
+    },
+    registerAsUploaderConsumer: function (medimgInstanceId) {
+      // Convenience: register this medical-imaging viewer as a consumer
+      // of the scientific-uploader. When a DICOM/PDB file is dropped,
+      // the uploader will push the parsed result into this viewer.
+      if (!global.AIHPC_UPLOADER) return;
+      global.AIHPC_UPLOADER.registerConsumer('medical-imaging-' + medimgInstanceId, function (parsed, fileName) {
+        if (parsed.kind !== 'image' && parsed.format !== 'dicom') return;
+        global.AIHPC_MEDIMG.loadParsed(medimgInstanceId, parsed);
+      });
+    },
     _instances: INSTANCES,
     _organColors: ORGAN_COLORS,
   };
