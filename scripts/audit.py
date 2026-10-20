@@ -706,6 +706,48 @@ def check_data_tables_present():
                        f"data-table component with Show-more present on all {n_with_tables} concept cards")
 
 
+def check_concept_card_etl():
+    """Check (Phase 31): concept cards have ETL panels when the article
+    has an etl block in the manifest."""
+    # Import the manifest to check which articles have etl blocks
+    spec = importlib.util.spec_from_file_location(
+        "gen_digest",
+        os.path.join(ROOT, "scripts", "gen-digest.py"),
+    )
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception as e:
+        return CheckResult("concept_card_etl", False,
+                           f"could not load gen-digest.py: {e}")
+    manifest = mod.MANIFEST
+    failures = []
+    n_with_etl = 0
+    for article in manifest["articles"]:
+        aid = article["id"]
+        if not article.get("etl"):
+            continue  # no etl block — skip
+        path = os.path.join(DOCS, "concepts", f"digest-{aid}.html")
+        if not os.path.isfile(path):
+            failures.append(f"concepts/digest-{aid}.html missing")
+            continue
+        with open(path, "r", encoding="utf-8") as f:
+            s = f.read()
+        has_etl_panel = 'class="etl-panel"' in s
+        has_etl_input = 'etl-input-' + aid in s
+        has_etl_result = 'etl-result-' + aid in s
+        if not (has_etl_panel and has_etl_input and has_etl_result):
+            failures.append(f"concepts/digest-{aid}.html: missing ETL panel/input/result")
+        else:
+            n_with_etl += 1
+    if failures:
+        return CheckResult("concept_card_etl", False,
+                           f"{len(failures)} concept cards missing ETL panels",
+                           failures)
+    return CheckResult("concept_card_etl", True,
+                       f"ETL panels present on all {n_with_etl} concept cards with etl blocks")
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -739,6 +781,7 @@ def main():
         check_audit_dashboard(),
         check_concept_cards_generated(),
         check_data_tables_present(),
+        check_concept_card_etl(),
     ]
 
     if args.json:

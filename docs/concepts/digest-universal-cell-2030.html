@@ -84,7 +84,7 @@
         <nav class="ribbon-nav">
           <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
           <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
-          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-ml.html">🤖 Machine Learning</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
           <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">📊 Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="lazy-evaluation.html">Lazy Evaluation as UX</a><a href="provenance-chain.html">Provenance Chain</a></div></details>
         </nav>
         <div class="ribbon-actions">
@@ -111,6 +111,18 @@
         <div class="ds-row"><span class="k">Format</span><span class="v">GenBank + FASTA + SBOL</span></div>
         <div class="ds-row"><span class="k">Size</span><span class="v">240 MB</span></div>
         <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.addgene.org/browse/article/101145/" target="_blank" rel="noopener">https://www.addgene.org/browse/article/101145/</a></span></div>
+      </div>
+      <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 31</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload your own FASTA genome to compute essential-gene density and minimal-genome feasibility.</div>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+            📂 Upload .fasta,.fa,.fna,.gb,.genbank,.txt
+            <input type="file" id="etl-input-universal-cell-2030" accept=".fasta,.fa,.fna,.gb,.genbank,.txt" data-article-id="universal-cell-2030" style="display:none;" />
+          </label>
+          <span style="font-size: 10px; color: var(--text-muted-2);">Max 100 MB · Pure client-side · data stays in your browser</span>
+        </div>
+        <div id="etl-report-universal-cell-2030" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
       </div>
       <h2>Data sample</h2>
       <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Universal programmable cell — 7 of 47 pre-validated functional states (Issue #4 article 7 — futuristic vision) · click "Show more" to reveal additional rows (10 at a time).</p>
@@ -207,6 +219,7 @@
         <button data-tab="reports">Reports</button>
         <button data-tab="graphs">Graphs</button>
         <button data-tab="summary">Summary</button>
+        <button data-tab="etl">ETL Report</button>
       </div>
       <div class="demo-tab-content active" data-tab="stats">
         <div class="stats-grid">
@@ -263,6 +276,11 @@
           <li>47 functional states pre-validated: insulin-producer, hydrogenase-expressor, plastic-eater, bioremediator, etc.</li>
         </ul></div>
       </div>
+      <div class="demo-tab-content" data-tab="etl">
+        <div class="report-block" id="etl-result-universal-cell-2030" style="min-height: 60px;">
+          <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+        </div>
+      </div>
       <h2>🎬 Animated derivation clip</h2>
       <div class="anim-container" style="padding: 20px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px); margin: 24px 0;">
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
@@ -310,6 +328,18 @@
           });
           // Init the animated-derivation canvas
           AIHPC_ANIM.init();
+          // Phase 31: wire ETL file inputs to handleETLUpload
+          document.querySelectorAll('input[type="file"][data-article-id]').forEach(function (inp) {
+            inp.addEventListener('change', function (e) {
+              var articleId = inp.dataset.articleId;
+              var file = e.target.files[0];
+              if (!file) return;
+              if (window.handleETLUpload) {
+                var maxMb = parseInt(inp.dataset.maxMb || '50', 10);
+                window.handleETLUpload(articleId, file, { max_mb: maxMb });
+              }
+            });
+          });
         });
       </script>
       <div class="meta" style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">

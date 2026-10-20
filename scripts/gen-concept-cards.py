@@ -96,6 +96,25 @@ def emit_concept_card(article, manifest):
         <div class="ds-row"><span class="k">URL</span><span class="v"><a href="{ds['url']}" target="_blank" rel="noopener">{html_mod.escape(ds['url'])}</a></span></div>
       </div>''')
 
+    # ---- ETL panel (Phase 31 — concept card ETL) ----
+    etl = article.get('etl')
+    if etl:
+        accepted = etl.get('accepted_formats', '')
+        hint = etl.get('hint', 'Upload your own dataset to run the demo against your data.')
+        max_mb = etl.get('max_size_mb', 50)
+        parts.append(f'''      <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 31</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">{html_mod.escape(hint)}</div>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+            📂 Upload {html_mod.escape(accepted) or 'file'}
+            <input type="file" id="etl-input-{aid}" accept="{html_mod.escape(accepted)}" data-article-id="{aid}" style="display:none;" />
+          </label>
+          <span style="font-size: 10px; color: var(--text-muted-2);">Max {max_mb} MB · Pure client-side · data stays in your browser</span>
+        </div>
+        <div id="etl-report-{aid}" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+      </div>''')
+
     # ---- Data table component (Phase 29 — the user's suggestion) ----
     sample_data = article.get('sample_data')
     if sample_data:
@@ -189,6 +208,7 @@ def emit_concept_card(article, manifest):
     parts.append('        <button data-tab="reports">Reports</button>')
     parts.append('        <button data-tab="graphs">Graphs</button>')
     parts.append('        <button data-tab="summary">Summary</button>')
+    parts.append('        <button data-tab="etl">ETL Report</button>')
     parts.append('      </div>')
     parts.append('      <div class="demo-tab-content active" data-tab="stats">')
     parts.append('        <div class="stats-grid">')
@@ -211,6 +231,12 @@ def emit_concept_card(article, manifest):
         parts.append(f'          <li>{html_mod.escape(s)}</li>')
     parts.append('        </ul></div>')
     parts.append('      </div>')
+    # ETL Report content (Phase 31)
+    parts.append(f'      <div class="demo-tab-content" data-tab="etl">')
+    parts.append(f'        <div class="report-block" id="etl-result-{aid}" style="min-height: 60px;">')
+    parts.append(f'          <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>')
+    parts.append(f'        </div>')
+    parts.append(f'      </div>')
 
     # ---- Animated-derivation canvas (Phase 28) ----
     parts.append(f'''      <h2>🎬 Animated derivation clip</h2>
@@ -268,6 +294,18 @@ def emit_concept_card(article, manifest):
           }});
           // Init the animated-derivation canvas
           AIHPC_ANIM.init();
+          // Phase 31: wire ETL file inputs to handleETLUpload
+          document.querySelectorAll('input[type="file"][data-article-id]').forEach(function (inp) {{
+            inp.addEventListener('change', function (e) {{
+              var articleId = inp.dataset.articleId;
+              var file = e.target.files[0];
+              if (!file) return;
+              if (window.handleETLUpload) {{
+                var maxMb = parseInt(inp.dataset.maxMb || '50', 10);
+                window.handleETLUpload(articleId, file, {{ max_mb: maxMb }});
+              }}
+            }});
+          }});
         }});
       </script>''')
 
