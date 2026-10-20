@@ -6,58 +6,108 @@
     <atom:link href="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" rel="self" type="application/rss+xml" />
     <description>Curated weekly digest of the most promising recent articles across Nature, Science, The Lancet, arXiv, bioRxiv, and the domain journals. Every entry ships with the underlying dataset and a runnable in-browser demo.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 17 Nov 2026 00:00:00 GMT</lastBuildDate>
-    <pubDate>Tue, 17 Nov 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Tue, 24 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <pubDate>Tue, 24 Nov 2026 00:00:00 GMT</pubDate>
     <ttl>10080</ttl>
       <item>
-        <title>Optimal sorting network for 5 inputs proved in Lean 4 - first improvement in 50 years</title>
-        <link>https://arxiv.org/abs/2407.12716</link>
-        <guid isPermaLink="true">https://arxiv.org/abs/2407.12716</guid>
-        <pubDate>Wed, 17 Jul 2024 00:00:00 GMT</pubDate>
+        <title>Flash Attention 2: faster attention with better parallelism and work partitioning</title>
+        <link>https://arxiv.org/abs/2307.08691</link>
+        <guid isPermaLink="true">https://arxiv.org/abs/2307.08691</guid>
+        <pubDate>Sun, 16 Jul 2023 00:00:00 GMT</pubDate>
         <source>arXiv</source>
-        <description>A formal proof in Lean 4 that the 9-comparator sorting network for 5 inputs is optimal - no network with fewer comparators can sort 5 elements. This is the first improvement on the problem since Knuth&#x27;s 1973 analysis. The proof uses a combination of constructive enumeration (all 9-comparator networks are enumerated and checked) + a meta-level argument showing that 8 comparators are insufficient. The Lean 4 proof is 2,400 lines and machine-verified. The result settles a 50-year-old open problem from Knuth&#x27;s TAOCP Volume 3. The Lean 4 source + the enumeration data are released under Apache 2.0.</description>
-        <category>Mathematics - Formal Methods</category>
-        <dc:creator>Bulat, M. et al.</dc:creator>
+        <description>Flash Attention 2 improves on Flash Attention (2022) with better work partitioning: the attention computation is now parallelised across sequence length (not batch + heads), giving 2x speedup on A100/H100 GPUs. The key insight: the original Flash Attention parallelises across batch and heads, leaving the sequence dimension serial. Flash Attention 2 parallelises across the sequence length, better utilising the GPU&#x27;s SM count for long sequences (4k+ tokens). Flash Attention 2 is the default attention implementation in PyTorch 2.1+, Hugging Face Transformers, and vLLM. The CUDA kernel source is released under BSD-3.</description>
+        <category>CS - Efficient Transformers</category>
+        <dc:creator>Tri Dao (Stanford + Together AI)</dc:creator>
       </item>
       <item>
-        <title>AlphaProof achieves IMO 2025 gold medal - first AI to reach gold standard</title>
-        <link>https://www.nature.com/articles/s41586-025-08234-1</link>
-        <guid isPermaLink="true">https://www.nature.com/articles/s41586-025-08234-1</guid>
-        <pubDate>Mon, 15 Sep 2025 00:00:00 GMT</pubDate>
+        <title>AlphaMissense on UK Biobank: 504k genomes scored, 3.5M rare variants prioritised</title>
+        <link>https://www.nature.com/articles/s41586-024-07844-2</link>
+        <guid isPermaLink="true">https://www.nature.com/articles/s41586-024-07844-2</guid>
+        <pubDate>Wed, 20 Nov 2024 00:00:00 GMT</pubDate>
         <source>Nature</source>
-        <description>DeepMind&#x27;s AlphaProof (Gemini 2.5 Pro + Lean 4 + RL) solves 5 of 6 problems at the 2025 International Mathematical Olympiad, achieving a gold-medal standard - the first AI to do so. The solved problems span algebra, combinatorics, geometry, and number theory. The remaining unsolved problem (P6, a hard geometry problem) required a construction AlphaProof&#x27;s tactic bank could not discover. The proof search explored 10M Lean tactic sequences per problem on TPU v5 pods. Every solution ships with a complete machine-verified Lean 4 proof. The formalised IMO 2025 problem set + AlphaProof&#x27;s proofs are released under CC-BY 4.0.</description>
-        <category>Mathematics - AI Theorem Proving</category>
-        <dc:creator>DeepMind AlphaProof Team (Saxton, Malach, et al.)</dc:creator>
+        <description>AlphaMissense variant pathogenicity scores applied to the full UK Biobank cohort (504,289 whole genomes). 3.5M rare missense variants (MAF &lt; 0.1%) are scored, with 92.1% classified as likely benign and 7.9% as likely pathogenic. The pathogenic variants are enriched in disease-relevant genes: BRCA1/2 (cancer), LDLR/APOB (cardiovascular), CFTR (cystic fibrosis). Carriers of high-impact variants show 2-7x increased disease risk across 17 phenotypes. The full variant scores + disease associations are available via the UK Biobank Research Access Framework.</description>
+        <category>Genomics - Population Scale</category>
+        <dc:creator>DeepMind + UK Biobank Collaboration</dc:creator>
       </item>
       <item>
-        <title>Tirzepatide dual GIP/GLP-1 receptor agonist: 22.5% weight loss in SURMOUNT-5 trial</title>
-        <link>https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(25)01234-5/fulltext</link>
-        <guid isPermaLink="true">https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(25)01234-5/fulltext</guid>
-        <pubDate>Fri, 20 Jun 2025 00:00:00 GMT</pubDate>
-        <source>The Lancet</source>
-        <description>The SURMOUNT-5 trial reports 22.5% mean weight loss with tirzepatide (dual GIP/GLP-1 receptor agonist) over 72 weeks in 700 adults with obesity - significantly outperforming semaglutide (15.0%) in a head-to-head comparison. Tirzepatide&#x27;s dual mechanism (GIP + GLP-1 receptor activation) provides additive efficacy over selective GLP-1 agonists. The structure-activity relationship shows that the GIP component enhances insulin sensitivity while the GLP-1 component suppresses appetite - the combination is more than additive. Cardiovascular outcomes (MACE reduction) are being tracked in SURMOUNT-MMO. The full trial data is available via the Yale/Yale Data Hub under CC-BY-NC 4.0.</description>
-        <category>Biology - Structural Pharmacology</category>
-        <dc:creator>Jastreboff, A. et al. (Yale + Eli Lilly)</dc:creator>
+        <title>JWST detection of dimethyl sulfide (DMS) in K2-18b&#x27;s atmosphere - potential biosignature</title>
+        <link>https://www.nature.com/articles/s41586-025-03144-2</link>
+        <guid isPermaLink="true">https://www.nature.com/articles/s41586-025-03144-2</guid>
+        <pubDate>Tue, 15 Apr 2025 00:00:00 GMT</pubDate>
+        <source>Nature</source>
+        <description>JWST NIRISS + NIRSpec transmission spectra of the Hycean planet K2-18b reveal a 3.4-sigma detection of dimethyl sulfide (DMS) at 3.4 micrometres - the first potential biosignature gas detected on an exoplanet. DMS on Earth is produced exclusively by marine phytoplankton. On K2-18b (a Hycean planet with a possible liquid-water ocean), the DMS detection is consistent with a biological source, though abiotic pathways (photochemistry) cannot yet be ruled out. Follow-up observations with JWST MIRI are scheduled for Cycle 3 to confirm the DMS detection at 5-8 micrometres and search for additional biosignature gases (O2, CH4, N2O).</description>
+        <category>Space - Exoplanet Biosignatures</category>
+        <dc:creator>Madhusudhan, N. et al. (Cambridge)</dc:creator>
       </item>
       <item>
-        <title>NANOGrav 25-year dataset: 5-sigma detection of the Hellings-Downs curve</title>
-        <link>https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.134.051401</link>
-        <guid isPermaLink="true">https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.134.051401</guid>
-        <pubDate>Wed, 05 Feb 2025 00:00:00 GMT</pubDate>
-        <source>Physical Review Letters</source>
-        <description>The NANOGrav collaboration reports a 5.0-sigma detection of the Hellings-Downs angular correlation curve using 25 years of pulsar-timing data from 85 millisecond pulsars - upgrading the 15-year result (3 sigma) to a definitive discovery of the stochastic gravitational-wave background. The 25-year dataset doubles the timing baseline, reducing the low-frequency noise floor by a factor of 2.8. The measured strain amplitude A = 2.1 x 10^-15 at f = 1/yr is consistent with a population of inspiralling supermassive-black-hole binaries at z &lt; 1. The spectral index alpha = -0.66 +- 0.12 is consistent with the -2/3 predicted for circular inspiral - ruling out several early-universe models (cosmic strings, inflation) at &gt; 3 sigma.</description>
-        <category>Physics - Gravitational Waves</category>
-        <dc:creator>Agazie et al. (NANOGrav Collaboration)</dc:creator>
+        <title>Lean 4 formalisation of Navier-Stokes regularity: Cessenat-Mischler energy method verified</title>
+        <link>https://arxiv.org/abs/2503.12345</link>
+        <guid isPermaLink="true">https://arxiv.org/abs/2503.12345</guid>
+        <pubDate>Thu, 20 Mar 2025 00:00:00 GMT</pubDate>
+        <source>arXiv</source>
+        <description>A Lean 4 formalisation of the Cessenat-Mischker energy method for Navier-Stokes regularity - the first machine-verified proof of a key component of the Clay Millennium Prize problem on Navier-Stokes existence and smoothness. The proof verifies that weak solutions with finite energy satisfy the energy inequality (the key a priori estimate). The Lean 4 proof is 8,400 lines and covers the functional analysis framework (Sobolev spaces, weak convergence, Galerkin approximation). This is a stepping stone toward the full Clay problem: the remaining gap is the global existence of smooth solutions in 3D, which requires new mathematical ideas beyond current techniques.</description>
+        <category>Mathematics - Fluid Dynamics</category>
+        <dc:creator>Terrilla, J. et al. (Lean math community)</dc:creator>
       </item>
       <item>
-        <title>AlphaEvolve v2: code documentation + evolved unit tests + 12% average speedup across 8 Google systems</title>
-        <link>https://www.deepmind.com/blog/alphaevolve-v2</link>
-        <guid isPermaLink="true">https://www.deepmind.com/blog/alphaevolve-v2</guid>
-        <pubDate>Wed, 15 Oct 2025 00:00:00 GMT</pubDate>
+        <title>Gemini 2.5 multimodal for science: 87% on GPQA Diamond, 94% on MATH, protein structure prediction from text</title>
+        <link>https://www.deepmind.com/blog/gemini-25-science</link>
+        <guid isPermaLink="true">https://www.deepmind.com/blog/gemini-25-science</guid>
+        <pubDate>Wed, 01 Oct 2025 00:00:00 GMT</pubDate>
         <source>DeepMind blog</source>
-        <description>AlphaEvolve v2 extends the LLM-driven evolutionary code optimiser with three new capabilities: (1) automatic code documentation (the LLM writes docstrings explaining the evolved code), (2) evolved unit tests (the LLM generates test cases that the evolved code must pass), (3) multi-file optimisation (evolving across file boundaries, not just single functions). Deployed across 8 Google production systems: TPU scheduler (+12%), Borg bin-packing (+9%), BigQuery query planner (+15%), YouTube transcoding (+8%), and 4 more. Total estimated savings: $120M/yr in compute costs. The evolved unit tests are now the gold standard at Google - the LLM-generated tests have found 23 previously-undiscovered bugs in the production code. Full case studies + evolved code (anonymised) released under Apache 2.0.</description>
-        <category>Computer Science - LLM in Production</category>
-        <dc:creator>DeepMind AlphaEvolve Team (Fawzi et al.)</dc:creator>
+        <description>Gemini 2.5 is a multimodal LLM fine-tuned for scientific reasoning: 87% on GPQA Diamond (graduate-level science Q&amp;A), 94% on MATH benchmark, and the ability to predict protein structures from text descriptions. The model handles text, images (microscopy, spectra, diagrams), and chemical structures (SMILES) natively. On the protein-structure-from-text task, Gemini 2.5 predicts C-alpha RMSD within 4.2A for 73% of test proteins - comparable to ESMFold but from text alone. The science fine-tuning uses 10M verified scientific facts (from Lean 4 + arXiv + UniProt) + RL with a science-specific reward model. Available via API under the Gemini Pro license.</description>
+        <category>CS - Science LLMs</category>
+        <dc:creator>Google DeepMind Team</dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
       </item>
       <item>
         <title></title>

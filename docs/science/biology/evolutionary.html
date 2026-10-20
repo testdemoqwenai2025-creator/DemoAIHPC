@@ -88,6 +88,7 @@
       .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
       .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
 </style>
+      <script src="../graph-table-sync.js"></script>
   </head>
   <body>
     <canvas id="particle-canvas"></canvas>
@@ -223,7 +224,24 @@
         <div class="step-explain">Replace i and j with the new node u, halving the matrix. Recurse until n = 2 — the result is an unrooted tree whose branch lengths are the δ values accumulated above.</div>
       </div>
 
-<div class="meta">
+      <h2>Data sample</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Neighbor-joining: Q-matrix for 4 taxa (3 pairs shown) · click "Show more" for additional rows.</p>
+      <div class="data-table-container" style="overflow-x: auto; background: var(--bg-elevated, #121826); border: 1px solid var(--border, #1f2937); border-radius: 12px; padding: 16px; margin-bottom: 24px;">
+        <table class="data-table" data-total-rows="6" data-visible-rows="5" style="width: 100%; border-collapse: collapse;">
+          <thead><tr><th>Pair</th><th>Distance D[i,j]</th><th>Q[i,j]</th><th>Min Q</th><th>Join?</th></tr></thead>
+          <tbody><tr class="data-table-row"><td>1-2</td><td>0.05</td><td>-0.12</td><td>-0.12</td><td>Yes</td></tr>
+<tr class="data-table-row"><td>1-3</td><td>0.08</td><td>-0.08</td><td>-0.12</td><td>No</td></tr>
+<tr class="data-table-row"><td>2-3</td><td>0.03</td><td>-0.15</td><td>-0.15</td><td>Yes</td></tr>
+<tr class="data-table-row"><td>1-4</td><td>0.12</td><td>0.05</td><td>-0.15</td><td>No</td></tr>
+<tr class="data-table-row"><td>2-4</td><td>0.07</td><td>-0.10</td><td>-0.15</td><td>No</td></tr>
+<tr class="data-table-row data-table-hidden"><td>3-4</td><td>0.09</td><td>0.02</td><td>-0.15</td><td>No</td></tr></tbody>
+        </table>
+        <button class="data-table-show-more" style="margin-top: 12px; background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="dataTableShowMore(this)">Show more (1 hidden)</button>
+      </div>
+      <div class="gts-container" data-gts-id="gts-biology-evolutionary" style="padding: 16px; background: var(--bg-elevated, #121826); border: 1px solid var(--border, #1f2937); border-radius: 8px; margin-bottom: 24px;"></div>
+      <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2);">Press Play to animate the table values onto the graph. Math annotations appear at inflection points.</div>
+
+      <div class="meta">
         <p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science/biology/evolutionary.html</code>. Next.js: <code>/science/biology/evolutionary</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>
@@ -238,6 +256,46 @@
       document.querySelectorAll('#lang-toggle button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#lang-toggle button').forEach(x=>x.classList.toggle('active',x===b));document.getElementById('code-block').innerHTML=CODE[b.dataset.lang]}));
       // Theme
       (function(){const K='aihpc-theme';const b=document.body,r=document.querySelector('.ribbon'),i=document.getElementById('ribbon-theme-icon');function a(t){if(t==='light'){b.classList.add('light');r&&r.classList.add('light');i.textContent='☀'}else{b.classList.remove('light');r&&r.classList.remove('light');i.textContent='🌙'}}let d='dark';try{const s=localStorage.getItem(K);if(s==='light'||s==='dark')d=s;else if(matchMedia('(prefers-color-scheme:light)').matches)d='light'}catch(e){}a(d);document.getElementById('ribbon-theme-toggle').addEventListener('click',()=>{const n=b.classList.contains('light')?'dark':'light';a(n);try{localStorage.setItem(K,n)}catch(e){}})})();
+    
+      // Phase 36: Graph-table-sync + data table show-more
+      function dataTableShowMore(btn) {
+        var table = btn.closest('.data-table-container').querySelector('.data-table');
+        var visible = parseInt(table.dataset.visibleRows || '5', 10);
+        var total = parseInt(table.dataset.totalRows || '0', 10);
+        var newVisible = Math.min(total, visible + 10);
+        table.querySelectorAll('.data-table-row').forEach(function(r, i) { if (i < newVisible) r.classList.remove('data-table-hidden'); });
+        table.dataset.visibleRows = newVisible;
+        var remaining = total - newVisible;
+        if (remaining > 0) btn.textContent = 'Show more (' + remaining + ' hidden)';
+        else { btn.textContent = 'All ' + total + ' rows shown'; btn.disabled = true; btn.style.opacity = '0.5'; }
+      }
+      (function () {
+        var card = document.querySelector('.gts-container');
+        if (!card || !window.AIHPC_GTS) return;
+        var table = document.querySelector('.data-table');
+        if (!table) return;
+        var headers = [];
+        table.querySelectorAll('thead th').forEach(function (th) { headers.push(th.textContent.trim()); });
+        var rows = [];
+        table.querySelectorAll('tbody tr').forEach(function (tr) {
+          var row = [];
+          tr.querySelectorAll('td').forEach(function (td) { row.push(td.textContent.trim()); });
+          rows.push(row);
+        });
+        AIHPC_GTS.register('gts-biology-evolutionary', {
+          title: 'Neighbor-joining: Q-matrix for 4 taxa (3 pairs shown)',
+          headers: headers,
+          rows: rows,
+          xCol: 2,
+          yCol: 2,
+          xLabel: 'Q[i,j]',
+          yLabel: 'Q value',
+          curveFn: function(x) { return x; },
+          inflectionFn: function(row) { return parseFloat(row[2]) < -0.13 ? {annotation: 'Q < -0.13: join this pair'} : null; },
+          duration: 6,
+        });
+        AIHPC_GTS.init();
+      })();
     </script>
   </body>
 </html>
