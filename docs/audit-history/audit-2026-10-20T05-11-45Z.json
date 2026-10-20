@@ -1,0 +1,85 @@
+{
+  "timestamp": "2026-10-20T05:11:45.288881+00:00",
+  "commit": "85620c0",
+  "total": 19,
+  "passed": 19,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "div_balance",
+      "passed": true
+    },
+    {
+      "name": "script_style_balance",
+      "passed": true
+    },
+    {
+      "name": "ribbon",
+      "passed": true
+    },
+    {
+      "name": "subscribe_gate",
+      "passed": true
+    },
+    {
+      "name": "math_derivations",
+      "passed": true
+    },
+    {
+      "name": "particle_bg_js",
+      "passed": true
+    },
+    {
+      "name": "git_config_clean",
+      "passed": true
+    },
+    {
+      "name": "internal_links",
+      "passed": true
+    },
+    {
+      "name": "seed_demos",
+      "passed": true
+    },
+    {
+      "name": "digest_pattern",
+      "passed": true
+    },
+    {
+      "name": "weekly_digest_in_ribbon",
+      "passed": true
+    },
+    {
+      "name": "generator_scripts",
+      "passed": true
+    },
+    {
+      "name": "dag_provenance",
+      "passed": true
+    },
+    {
+      "name": "temporal_graph_route",
+      "passed": true
+    },
+    {
+      "name": "digest_parsers_loaded",
+      "passed": true
+    },
+    {
+      "name": "etl_panels_present",
+      "passed": true
+    },
+    {
+      "name": "rss_subscribe_panel",
+      "passed": true
+    },
+    {
+      "name": "animated_derivations_loaded",
+      "passed": true
+    },
+    {
+      "name": "audit_dashboard",
+      "passed": true
+    }
+  ]
+}

@@ -616,6 +616,11 @@
           r_parts.push('<p style="font-size: 11px; color: var(--text-muted-2);">The parsed data has been validated client-side. Data residency: downloadable only, nothing was uploaded to any server.</p>');
           r_parts.push('</div>');
           resultEl.innerHTML = r_parts.join('');
+          // Phase 29: store the result + render the gated download button
+          if (global.AIHPC_ETL_GATE) {
+            global.AIHPC_ETL_GATE.storeResult(articleId, file.name, file.size, result);
+            global.AIHPC_ETL_GATE.renderDownloadButton(articleId);
+          }
         } else {
           resultEl.innerHTML = '<span style="color: var(--danger);">✗ ' + escapeHTML(result.error || 'Parse failed') + '</span>';
         }
@@ -636,4 +641,111 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
+
+  // ---- Live subscription gating (Phase 29) ----
+  // Wire the ETL Report download through the Phase 24 subscription gate.
+  // Free tier: banner; Pro tier: JSON without trace; Team tier: JSON with
+  // the full per-row parsed data + parse metadata (audit trail).
+  //
+  // The parsed results are stored per-article-id in LAST_RESULTS so the
+  // download function can serialise them after the user has uploaded.
+  var LAST_RESULTS = {};
+
+  // Store the latest parsed result for an article (called from
+  // handleETLUpload after the parser runs).
+  function storeResult(articleId, fileName, fileSize, result) {
+    LAST_RESULTS[articleId] = {
+      articleId: articleId,
+      fileName: fileName,
+      fileSize: fileSize,
+      parsedAt: new Date().toISOString(),
+      result: result,
+    };
+  }
+
+  // Render the download button in the ETL Report sub-tab AFTER a successful
+  // upload. Reads the session via the shared subscribe-gate.js library
+  // (AIHPC.requireTier).
+  function renderDownloadButton(articleId) {
+    var el = document.getElementById('etl-result-' + articleId);
+    if (!el) return;
+    // Append the download button if not already there
+    if (el.querySelector('.etl-download-btn')) return;
+    var btn = document.createElement('button');
+    btn.className = 'etl-download-btn';
+    btn.style.cssText = 'margin-top: 10px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;';
+    btn.textContent = '⬇ Download parsed JSON';
+    btn.onclick = function () { downloadParsedJSON(articleId); };
+    // Insert at the end of the result block
+    el.appendChild(btn);
+    // Also insert a tier badge if the gate library is available
+    if (global.AIHPC && global.AIHPC.mountTierBadge && !el.querySelector('[data-aihpc-tier-badge]')) {
+      var badgeContainer = document.createElement('div');
+      badgeContainer.setAttribute('data-aihpc-tier-badge', '1');
+      badgeContainer.style.cssText = 'margin-top: 8px; display: inline-block;';
+      el.appendChild(badgeContainer);
+      global.AIHPC.mountTierBadge(badgeContainer);
+    }
+  }
+
+  // Download the parsed JSON for an article, gated by subscription tier.
+  function downloadParsedJSON(articleId) {
+    var stored = LAST_RESULTS[articleId];
+    if (!stored) {
+      alert('No parsed data available. Upload a dataset first.');
+      return;
+    }
+    // Phase 24 gate: require Pro+ tier
+    if (!global.AIHPC || !global.AIHPC.requireTier) {
+      // Gate library not loaded — fall through to basic download
+    } else if (!global.AIHPC.requireTier('pro', { feature: 'Parsed JSON download (ETL Report)' })) {
+      return;  // banner auto-shown by requireTier
+    }
+    var tier = (global.AIHPC && global.AIHPC.getTier) ? global.AIHPC.getTier() : 'unknown';
+    var session = (global.AIHPC && global.AIHPC.getSession) ? global.AIHPC.getSession() : {};
+    var receipt = {
+      '@context': 'https://aihpc.advanced/prov/v1',
+      '@type': 'aihpc:ETLParseReceipt',
+      articleId: stored.articleId,
+      parsedAt: stored.parsedAt,
+      tier: tier,
+      signedInAs: session.email || 'anonymous',
+      input: {
+        fileName: stored.fileName,
+        fileSizeBytes: stored.fileSize,
+      },
+      ok: stored.result.ok,
+      stats: stored.result.stats,
+      preview: stored.result.preview,
+    };
+    // Team tier: include the full per-row parsed data (audit trail).
+    // Pro tier: omit the per-row data (audit trail is the Team-tier
+    // upgrade).
+    if (tier === 'team' && stored.result.rows) {
+      receipt.trace = {
+        rows: stored.result.rows.length,
+        format: 'json-ld',
+        entries: stored.result.rows,
+      };
+    } else {
+      receipt.traceAvailable = 'team-tier';
+    }
+    var blob = new Blob([JSON.stringify(receipt, null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'aihpc-etl-' + articleId + '-' + Date.now() + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+
+  // Public API for the ETL gating layer
+  global.AIHPC_ETL_GATE = {
+    storeResult: storeResult,
+    renderDownloadButton: renderDownloadButton,
+    downloadParsedJSON: downloadParsedJSON,
+    _lastResults: LAST_RESULTS,
+  };
 })(typeof window !== 'undefined' ? window : this);

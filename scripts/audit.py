@@ -26,6 +26,7 @@ Usage:
   python3 scripts/audit.py --json       # machine-readable output
 """
 import argparse
+import importlib.util
 import json
 import os
 import re
@@ -152,6 +153,7 @@ def check_ribbon(html_files):
     MINIMAL_PAGES = {
         os.path.join(DOCS, "digest", "archive", "index.html"),
         os.path.join(DOCS, "audit.html"),
+        os.path.join(DOCS, "concepts", "digest-index.html"),
     }
     failures = []
     required = ["Platform", "AETHEL Suite", "Science", "Insights"]
@@ -640,6 +642,70 @@ def check_audit_dashboard():
                        "docs/audit.html present with summary cards + per-check rows + last-run timestamp")
 
 
+def check_concept_cards_generated():
+    """Check (Phase 29): concept cards generated for every article in the
+    latest digest manifest."""
+    # Import the manifest
+    spec = importlib.util.spec_from_file_location(
+        "gen_digest",
+        os.path.join(ROOT, "scripts", "gen-digest.py"),
+    )
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception as e:
+        return CheckResult("concept_cards_generated", False,
+                           f"could not load gen-digest.py: {e}")
+    manifest = mod.MANIFEST
+    failures = []
+    n_generated = 0
+    for article in manifest["articles"]:
+        aid = article["id"]
+        path = os.path.join(DOCS, "concepts", f"digest-{aid}.html")
+        if not os.path.isfile(path):
+            failures.append(f"concepts/digest-{aid}.html missing")
+            continue
+        n_generated += 1
+    if failures:
+        return CheckResult("concept_cards_generated", False,
+                           f"{len(failures)} missing concept cards",
+                           failures)
+    return CheckResult("concept_cards_generated", True,
+                       f"all {n_generated} concept cards generated at docs/concepts/digest-<id>.html")
+
+
+def check_data_tables_present():
+    """Check (Phase 29): concept cards have data tables with the
+    Show-more functionality."""
+    failures = []
+    n_with_tables = 0
+    concept_dir = os.path.join(DOCS, "concepts")
+    if not os.path.isdir(concept_dir):
+        return CheckResult("data_tables_present", False,
+                           "docs/concepts/ directory missing")
+    for fname in sorted(os.listdir(concept_dir)):
+        if not fname.startswith("digest-") or not fname.endswith(".html"):
+            continue
+        if fname == "digest-index.html":
+            continue
+        path = os.path.join(concept_dir, fname)
+        with open(path, "r", encoding="utf-8") as f:
+            s = f.read()
+        has_table = 'class="data-table"' in s
+        has_show_more = 'dataTableShowMore' in s
+        has_hidden_rows = 'data-table-hidden' in s or 'data-table-row' in s
+        if not (has_table and has_show_more):
+            failures.append(f"{fname}: missing data-table or Show-more")
+        else:
+            n_with_tables += 1
+    if failures:
+        return CheckResult("data_tables_present", False,
+                           f"{len(failures)} concept cards missing data tables",
+                           failures)
+    return CheckResult("data_tables_present", True,
+                       f"data-table component with Show-more present on all {n_with_tables} concept cards")
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -671,6 +737,8 @@ def main():
         check_rss_subscribe_panel(),
         check_animated_derivations_loaded(),
         check_audit_dashboard(),
+        check_concept_cards_generated(),
+        check_data_tables_present(),
     ]
 
     if args.json:

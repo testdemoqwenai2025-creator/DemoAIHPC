@@ -133,6 +133,35 @@
     ctx.fillStyle = '#06b6d4';
     ctx.fillRect(24, barY, progressWidth, 4);
 
+    // Phase 29: click-to-jump timeline markers — one per step
+    // Clickable dots below the progress bar; clicking jumps to that step's start time
+    var steps = cfg.steps || [];
+    var stepDuration = this.duration / Math.max(steps.length, 1);
+    var markerY = barY + 8;
+    for (var mi = 0; mi < steps.length; mi++) {
+      var markerX = 24 + (W - 48) * (mi * stepDuration / this.duration);
+      var reached = (t >= mi * stepDuration);
+      ctx.fillStyle = reached ? '#06b6d4' : 'rgba(148,163,184,0.4)';
+      ctx.beginPath();
+      ctx.arc(markerX, markerY, 4, 0, 2 * Math.PI);
+      ctx.fill();
+      // Highlight the active step's marker with a ring
+      var currentStep = Math.floor(t / stepDuration);
+      if (mi === currentStep && t < this.duration) {
+        ctx.strokeStyle = '#06b6d4';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(markerX, markerY, 7, 0, 2 * Math.PI);
+        ctx.stroke();
+      }
+      // Step number label
+      ctx.fillStyle = reached ? '#06b6d4' : 'rgba(148,163,184,0.4)';
+      ctx.font = '9px ui-monospace, Menlo, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(String(mi + 1), markerX, markerY + 16);
+      ctx.textAlign = 'left';
+    }
+
     // Time text
     ctx.fillStyle = '#9ca3af';
     ctx.font = '11px ui-monospace, Menlo, monospace';
@@ -324,6 +353,27 @@
       var inst = new AnimatedDerivation(c, id);
       INSTANCES[id] = inst;
 
+      // Phase 29: click-to-jump on the canvas itself — clicking the
+      // progress bar region jumps to that time
+      c.addEventListener('click', function (e) {
+        var rect = c.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        // Normalise to canvas CSS dimensions
+        var nx = x / rect.width;
+        var ny = y / rect.height;
+        // Click on the bottom 20% of the canvas = progress bar region
+        if (ny > 0.85) {
+          var t = nx * inst.duration;
+          // Jump to t (and pause)
+          inst.pause();
+          inst.pauseTime = t;
+          inst.draw(t);
+        }
+      });
+      // Cursor pointer hint on the bottom region
+      c.style.cursor = 'pointer';
+
       // Find sibling controls (if any)
       var container = c.closest('.anim-container');
       if (container) {
@@ -331,6 +381,7 @@
         var pauseBtn = container.querySelector('.anim-pause');
         var replayBtn = container.querySelector('.anim-replay');
         var recordBtn = container.querySelector('.anim-record');
+        var shareBtn = container.querySelector('.anim-share');
         if (playBtn) playBtn.addEventListener('click', function () { inst.play(); });
         if (pauseBtn) pauseBtn.addEventListener('click', function () { inst.pause(); });
         if (replayBtn) replayBtn.addEventListener('click', function () { inst.replay(); });
@@ -356,8 +407,57 @@
             });
           }
         }
+        // Phase 29: Share clip button — captures the current frame as a
+        // PNG snapshot + creates a shareable URL with ?t=<timestamp>&id=<id>
+        // that auto-plays from that timestamp when visited.
+        if (shareBtn) {
+          shareBtn.addEventListener('click', function () {
+            // Capture the current canvas as a PNG data URL
+            var pngDataUrl = c.toDataURL('image/png');
+            // Get current time
+            var t = inst.pauseTime || 0;
+            // Build shareable URL with query params
+            var shareUrl = location.origin + location.pathname +
+              '?anim_id=' + encodeURIComponent(id) +
+              '&anim_t=' + t.toFixed(2);
+            // Copy to clipboard
+            try {
+              navigator.clipboard.writeText(shareUrl).then(function () {
+                shareBtn.textContent = '✓ Copied URL';
+                setTimeout(function () { shareBtn.textContent = '🔗 Share'; }, 1800);
+              }).catch(function () {
+                prompt('Copy this URL to share the clip at the current timestamp:', shareUrl);
+              });
+            } catch (e) {
+              prompt('Copy this URL to share the clip at the current timestamp:', shareUrl);
+            }
+            // Also offer the PNG snapshot download
+            var a = document.createElement('a');
+            a.href = pngDataUrl;
+            a.download = 'aihpc-anim-' + id + '-t' + t.toFixed(2) + '.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          });
+        }
       }
     });
+    // Phase 29: auto-resume from ?anim_id=...&anim_t=... in URL
+    var params = new URLSearchParams(location.search);
+    var resumeId = params.get('anim_id');
+    var resumeT = parseFloat(params.get('anim_t') || '0');
+    if (resumeId && INSTANCES[resumeId] && !isNaN(resumeT)) {
+      var inst = INSTANCES[resumeId];
+      inst.pauseTime = resumeT;
+      inst.draw(resumeT);
+      // Scroll the canvas into view
+      var canvas = document.querySelector('canvas[data-derivation-id="' + resumeId + '"]');
+      if (canvas && canvas.scrollIntoView) {
+        canvas.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      // Auto-play after 800ms (give the user time to see the resume state)
+      setTimeout(function () { inst.play(); }, 800);
+    }
   }
 
   // Auto-init on DOMContentLoaded

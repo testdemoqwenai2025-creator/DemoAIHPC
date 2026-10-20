@@ -1,0 +1,482 @@
+#!/usr/bin/env python3
+"""
+gen-concept-cards.py — Phase 29 auto-generated concept cards.
+
+Imports the MANIFEST from scripts/gen-digest.py (which exposes the
+latest issue's 7 articles) and emits a standalone concept card for
+each article at:
+
+  docs/concepts/digest-<article-id>.html
+
+Each concept card is a self-contained page with:
+  - Standard AIHPC ribbon
+  - Article metadata (title, source, DOI, authors, abstract)
+  - Dataset card (name, format, size, download URL)
+  - **Data table component** (Phase 29 — the user's suggestion): a
+    collapsible table with headers + first 5 rows visible, plus a
+    "Show more" button that reveals 10 more rows at a time. The
+    table is populated from each article's `sample_data` block
+    in the MANIFEST (declared per article: { headers, rows }).
+  - ClickForDemo (Math + 5-step derivation + 6-language polyglot
+    + Observe with Stats/Reports/Graphs/Summary)
+  - Animated-derivation canvas (Phase 28 component)
+  - Subscribe-gate + digest-parsers integration (Phase 24 + 27)
+
+The result: every digest article also exists as a standalone
+concept card — the content pipeline becomes fully automated.
+
+Run:
+    python3 scripts/gen-concept-cards.py
+"""
+import importlib.util
+import json
+import os
+import sys
+import html as html_mod
+
+ROOT = "/home/z/my-project/AETH-1-Content-Archive"
+GEN_DIGEST_PATH = os.path.join(ROOT, "scripts", "gen-digest.py")
+OUT_DIR = os.path.join(ROOT, "docs", "concepts")
+
+
+def load_manifest():
+    """Import the MANIFEST from scripts/gen-digest.py."""
+    spec = importlib.util.spec_from_file_location("gen_digest", GEN_DIGEST_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.MANIFEST
+
+
+def emit_concept_card(article, manifest):
+    """Emit one standalone concept card HTML for the given article."""
+    aid = article["id"]
+    is_futuristic = article.get("futuristic_vision", False)
+
+    # ---- Page metadata + style ----
+    parts = ['<!doctype html>',
+             '<html lang="en">',
+             '  <head>',
+             '    <meta charset="utf-8" />',
+             '    <meta name="viewport" content="width=device-width, initial-scale=1" />',
+             f'    <meta name="description" content="{html_mod.escape(article["title"])} — AIHPC Advanced auto-generated concept card (digest Issue #{manifest["issue"]})." />',
+             f'    <title>{html_mod.escape(article["title"])} — AIHPC Concept Card</title>',
+             '    <style>',
+             CSS,
+             '    </style>',
+             '    <script src="../subscribe-gate.js"></script>',
+             '    <script src="../digest-parsers.js"></script>',
+             '    <script src="../animated-derivation.js"></script>',
+             '  </head>',
+             '  <body>',
+             '    <canvas id="particle-canvas"></canvas>',
+             RIBBON_HTML,
+             '    <div class="container">',
+             '      <p class="crumbs"><a href="../concepts.html">Concept Cards</a> / '
+             f'<a href="../digest.html">Weekly Digest Issue #{manifest["issue"]}</a> / '
+             f'{html_mod.escape(article["domain_label"])}</p>',
+             f'      <span class="tag">{"🚀 Futuristic Vision · " if is_futuristic else ""}Auto-generated · Issue #{manifest["issue"]}</span>',
+             f'      <h1>{html_mod.escape(article["title"])}</h1>',
+             f'      <p class="lead">{html_mod.escape(article["authors"])} · {html_mod.escape(article["source"])} · {article["published"]}</p>',
+             '']
+
+    # ---- Abstract ----
+    parts.append('      <h2>Abstract</h2>')
+    parts.append('      <div class="abstract">')
+    for p in article['abstract']:
+        parts.append(f'        <p>{html_mod.escape(p)}</p>')
+    parts.append('      </div>')
+
+    # ---- Dataset card ----
+    ds = article['dataset']
+    parts.append(f'''      <div class="dataset-card">
+        <div class="ds-title">📁 Dataset — accompanying open data</div>
+        <div class="ds-row"><span class="k">Name</span><span class="v">{html_mod.escape(ds['name'])}</span></div>
+        <div class="ds-row"><span class="k">Format</span><span class="v">{html_mod.escape(ds['format'])}</span></div>
+        <div class="ds-row"><span class="k">Size</span><span class="v">{html_mod.escape(ds['size'])}</span></div>
+        <div class="ds-row"><span class="k">URL</span><span class="v"><a href="{ds['url']}" target="_blank" rel="noopener">{html_mod.escape(ds['url'])}</a></span></div>
+      </div>''')
+
+    # ---- Data table component (Phase 29 — the user's suggestion) ----
+    sample_data = article.get('sample_data')
+    if sample_data:
+        headers = sample_data.get('headers', [])
+        rows = sample_data.get('rows', [])
+        caption = sample_data.get('caption', f'Sample data — {len(rows)} rows (showing first 5)')
+        if headers and rows:
+            # Build the table — first 5 rows visible, rest hidden via CSS class
+            # "Show more" button reveals 10 more rows at a time
+            thead = ''.join(f'<th style="padding: 6px 10px; text-align: left; font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border);">{html_mod.escape(str(h))}</th>' for h in headers)
+            tbody_rows = []
+            for i, row in enumerate(rows):
+                tds = ''.join(f'<td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: \'SF Mono\', Menlo, monospace;">{html_mod.escape(str(c))}</td>' for c in row)
+                hidden_class = ' data-table-hidden' if i >= 5 else ''
+                tbody_rows.append(f'<tr class="data-table-row{hidden_class}" data-row-index="{i}">{tds}</tr>')
+            tbody = '\n'.join(tbody_rows)
+            n_hidden = max(0, len(rows) - 5)
+            parts.append(f'''      <h2>Data sample</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">{html_mod.escape(caption)} · click "Show more" to reveal additional rows (10 at a time).</p>
+      <div class="data-table-container" style="overflow-x: auto; background: var(--bg-elevated, #121826); border: 1px solid var(--border, #1f2937); border-radius: 12px; padding: 16px; margin-bottom: 32px;">
+        <table class="data-table" data-total-rows="{len(rows)}" data-visible-rows="5" style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>{thead}</tr>
+          </thead>
+          <tbody>
+            {tbody}
+          </tbody>
+        </table>
+        {f'<button class="data-table-show-more" style="margin-top: 12px; background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="dataTableShowMore(this)">▼ Show more ({n_hidden} hidden)</button>' if n_hidden > 0 else ''}
+      </div>
+      <script>
+        function dataTableShowMore(btn) {{
+          var table = btn.closest('.data-table-container').querySelector('.data-table');
+          var visible = parseInt(table.dataset.visibleRows || '5', 10);
+          var total = parseInt(table.dataset.totalRows || '0', 10);
+          var newVisible = Math.min(total, visible + 10);
+          // Show rows up to newVisible
+          var rows = table.querySelectorAll('.data-table-row');
+          rows.forEach(function(r, i) {{
+            if (i < newVisible) r.classList.remove('data-table-hidden');
+          }});
+          table.dataset.visibleRows = newVisible;
+          // Update button text or hide
+          var remaining = total - newVisible;
+          if (remaining > 0) {{
+            btn.textContent = '▼ Show more (' + remaining + ' hidden)';
+          }} else {{
+            btn.textContent = '✓ All ' + total + ' rows shown';
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+          }}
+        }}
+      </script>
+      <style>
+        .data-table-hidden {{ display: none; }}
+      </style>''')
+
+    # ---- ClickForDemo (Math + Code + Observe + ETL Report) ----
+    demo = article['demo']
+    parts.append(f'''      <h2>Demo — {html_mod.escape(demo["title"])}</h2>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">{html_mod.escape(demo["description"])}</p>''')
+
+    # ---- Math + 5-step derivation ----
+    parts.append(f'''      <h2>Math &rarr; Code derivation</h2>
+      <div class="math-panel" style="padding: 14px; background: rgba(6,182,212,0.05); border-left: 3px solid var(--accent-2); border-radius: 8px; margin-bottom: 16px;">
+        <div class="math-eq" style="font-family: 'Cambria Math', Georgia, serif; font-size: 16px; color: var(--accent-2); margin-bottom: 6px;">{html_mod.escape(demo["math"]["equation"])}</div>
+        <div class="math-plain" style="font-size: 13px; color: var(--text-muted);">{html_mod.escape(demo["math"]["explanation"])}</div>
+      </div>''')
+    for step in demo['derivation']:
+        parts.append(f'''      <div class="derivation-step">
+        <strong>{html_mod.escape(step["title"])}</strong>
+        <div class="step-math">{html_mod.escape(step["math"])}</div>
+        <div class="step-explain">{html_mod.escape(step["explain"])}</div>
+      </div>''')
+
+    # ---- 6-language polyglot code ----
+    parts.append('      <h2>Polyglot code (6 languages)</h2>')
+    parts.append('      <div class="code-panel">')
+    parts.append('        <div class="lang-toggle">')
+    for lang in ['python', 'rust', 'go', 'c', 'elixir', 'scala']:
+        active = ' class="active"' if lang == 'python' else ''
+        parts.append(f'          <button data-lang="{lang}"{active}>{lang.capitalize()}</button>')
+    parts.append('        </div>')
+    parts.append(f'        <pre class="code-block" id="code-block-{aid}"></pre>')
+    parts.append('      </div>')
+
+    # ---- Observe (Stats / Reports / Graphs / Summary) ----
+    parts.append('      <h2>Observe</h2>')
+    parts.append('      <div class="demo-tabs">')
+    parts.append('        <button class="active" data-tab="stats">Stats</button>')
+    parts.append('        <button data-tab="reports">Reports</button>')
+    parts.append('        <button data-tab="graphs">Graphs</button>')
+    parts.append('        <button data-tab="summary">Summary</button>')
+    parts.append('      </div>')
+    parts.append('      <div class="demo-tab-content active" data-tab="stats">')
+    parts.append('        <div class="stats-grid">')
+    for stat in demo['observe']['stats']:
+        parts.append(f'''          <div class="stat">
+            <div class="l">{html_mod.escape(stat["label"])}</div>
+            <div class="v">{html_mod.escape(stat["value"])}</div>
+          </div>''')
+    parts.append('        </div>')
+    parts.append('      </div>')
+    parts.append('      <div class="demo-tab-content" data-tab="reports">')
+    parts.append(f'        <div class="report-block">{html_mod.escape(demo["observe"]["report"])}</div>')
+    parts.append('      </div>')
+    parts.append('      <div class="demo-tab-content" data-tab="graphs">')
+    parts.append(f'        <div class="graph-block">{demo["observe"]["graph_svg"]}</div>')
+    parts.append('      </div>')
+    parts.append('      <div class="demo-tab-content" data-tab="summary">')
+    parts.append('        <div class="summary-block"><ul>')
+    for s in demo['observe']['summary']:
+        parts.append(f'          <li>{html_mod.escape(s)}</li>')
+    parts.append('        </ul></div>')
+    parts.append('      </div>')
+
+    # ---- Animated-derivation canvas (Phase 28) ----
+    parts.append(f'''      <h2>🎬 Animated derivation clip</h2>
+      <div class="anim-container" style="padding: 20px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px); margin: 24px 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2, #06b6d4);">Phase 28 — animated Math→Code derivation</div>
+          <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">▶ Play</button>
+            <button class="anim-pause" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⏸ Pause</button>
+            <button class="anim-replay" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">↺ Replay</button>
+            <button class="anim-record" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⬇ Record WebM</button>
+            <button class="anim-share" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">🔗 Share</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="concept-{aid}" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;"></canvas>
+      </div>''')
+
+    # ---- Inline scripts: register derivation + CODE_BANK + tabs ----
+    code_json = json.dumps({lang: code for lang, code in demo['code'].items()})
+    derivation_id = f'concept-{aid}'
+    duration = max(8, len(demo['derivation']) * 2.4)
+    # Pre-compute the derivation steps as JSON (outside the f-string to avoid escaping issues)
+    steps_json = json.dumps([{"title": s["title"], "math": s["math"], "explain": s["explain"]} for s in demo['derivation']])
+    title_json = json.dumps(article["title"])
+    parts.append(f'''      <script>
+        // Register the derivation for this concept card
+        AIHPC_ANIM.register('{derivation_id}', {{
+          title: {title_json},
+          steps: {steps_json},
+          duration: {duration:.1f},
+        }});
+        // CODE_BANK for the polyglot code panel
+        const CODE_BANK = {code_json};
+        // Initial render: set Python code on page load
+        document.addEventListener('DOMContentLoaded', function () {{
+          var block = document.getElementById('code-block-{aid}');
+          if (block) block.textContent = CODE_BANK.python || '';
+          // Wire up language toggles
+          document.querySelectorAll('.code-panel .lang-toggle button').forEach(function (btn) {{
+            btn.addEventListener('click', function () {{
+              var panel = btn.closest('.code-panel');
+              panel.querySelectorAll('.lang-toggle button').forEach(function (b) {{ b.classList.toggle('active', b === btn); }});
+              var lang = btn.dataset.lang;
+              var block = panel.querySelector('pre.code-block');
+              if (block) block.textContent = CODE_BANK[lang] || '// code not available for ' + lang;
+            }});
+          }});
+          // Wire up observe tabs
+          document.querySelectorAll('.demo-tabs button').forEach(function (tab) {{
+            tab.addEventListener('click', function () {{
+              var target = tab.dataset.tab;
+              document.querySelectorAll('.demo-tabs button').forEach(function (t) {{ t.classList.toggle('active', t === tab); }});
+              document.querySelectorAll('.demo-tab-content').forEach(function (c) {{ c.classList.toggle('active', c.dataset.tab === target); }});
+            }});
+          }});
+          // Init the animated-derivation canvas
+          AIHPC_ANIM.init();
+        }});
+      </script>''')
+
+    # ---- Footer ----
+    parts.append(f'''      <div class="meta" style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Auto-generated concept card from <a href="../digest.html">Weekly Digest Issue #{manifest["issue"]}</a> (article id: <code>{aid}</code>). Generated by <code>scripts/gen-concept-cards.py</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      // Particle background
+      (function () {{
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d');
+        var W, H, P = [];
+        var N = 50, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() {{ W = c.width = innerWidth; H = c.height = innerHeight; }}
+        r();
+        addEventListener('resize', r);
+        for (var i = 0; i < N; i++) {{
+          P.push({{ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] }});
+        }}
+        function s() {{
+          x.clearRect(0, 0, W, H);
+          for (var i = 0; i < N; i++) {{
+            for (var j = i+1; j < N; j++) {{
+              var d = Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y);
+              if (d < 100) {{
+                x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')';
+                x.lineWidth = .5;
+                x.beginPath();
+                x.moveTo(P[i].x, P[i].y);
+                x.lineTo(P[j].x, P[j].y);
+                x.stroke();
+              }}
+            }}
+          }}
+          for (var p of P) {{
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+            x.fillStyle = p.c; x.globalAlpha = .4;
+            x.beginPath();
+            x.arc(p.x, p.y, p.r, 0, 6.28);
+            x.fill();
+          }}
+          x.globalAlpha = 1;
+          requestAnimationFrame(s);
+        }}
+        s();
+      }})();
+
+      // ---- Ribbon theme toggle ----
+      (function () {{
+        var KEY = 'aihpc-theme';
+        var b = document.body, r = document.querySelector('.ribbon'), i = document.getElementById('ribbon-theme-icon');
+        function a(t) {{
+          if (t === 'light') {{ b.classList.add('light'); r && r.classList.add('light'); if (i) i.textContent = '☀'; }}
+          else {{ b.classList.remove('light'); r && r.classList.remove('light'); if (i) i.textContent = '🌙'; }}
+        }}
+        var d = 'dark';
+        try {{ var s = localStorage.getItem(KEY); if (s === 'light' || s === 'dark') d = s; else if (matchMedia('(prefers-color-scheme:light)').matches) d = 'light'; }} catch (e) {{}}
+        a(d);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () {{ var n = b.classList.contains('light') ? 'dark' : 'light'; a(n); try {{ localStorage.setItem(KEY, n); }} catch (e) {{}} }});
+      }})();
+    </script>
+  </body>
+</html>''')
+    return '\n'.join(parts)
+
+
+# ---- CSS for the concept cards (matches the digest + science sub-pages) ----
+CSS = """      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.1), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(196,181,253,0.2); }
+      .lead { font-size: 17px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .abstract p { font-size: 14px; color: var(--text-muted); margin: 0 0 10px; }
+      .dataset-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin: 16px 0 32px; }
+      .dataset-card .ds-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-3); margin-bottom: 8px; }
+      .dataset-card .ds-row { display: grid; grid-template-columns: 80px 1fr; gap: 8px; font-size: 12px; color: var(--text-muted); padding: 2px 0; }
+      .dataset-card .ds-row .k { color: var(--text-muted-2); font-weight: 600; }
+      .dataset-card .ds-row .v { color: var(--text); }
+      .dataset-card .ds-row .v a { color: var(--accent-2); text-decoration: none; word-break: break-all; }
+      .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); margin-bottom: 16px; }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px 0; }
+      .demo-tab-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, Consolas, monospace; }
+      .meta a { color: var(--text); text-decoration: none; }
+      body.light { background: #fafafa; color: #18181b; }
+      body.light .dataset-card, body.light .derivation-step, body.light .stats-grid .stat, body.light .report-block, body.light pre.code-block { background: white; border-color: #e5e7eb; }
+      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .abstract p, body.light .summary-block ul, body.light .meta, body.light .crumbs { color: #4b5563; }
+      body.light .ribbon-btn-primary { color: white; }
+"""
+
+# Standard AIHPC ribbon HTML (root-relative paths since concept cards are at /concepts/)
+RIBBON_HTML = '''    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">📊 Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="lazy-evaluation.html">Lazy Evaluation as UX</a><a href="provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>'''
+
+
+def main():
+    print("Loading MANIFEST from scripts/gen-digest.py ...")
+    manifest = load_manifest()
+    n_articles = len(manifest['articles'])
+    print(f"  ✓ loaded Issue #{manifest['issue']} ({n_articles} articles)")
+
+    os.makedirs(OUT_DIR, exist_ok=True)
+
+    for article in manifest['articles']:
+        aid = article['id']
+        html_str = emit_concept_card(article, manifest)
+        out_path = os.path.join(OUT_DIR, f"digest-{aid}.html")
+        with open(out_path, 'w', encoding='utf-8') as f:
+            f.write(html_str)
+        rel = os.path.relpath(out_path, ROOT)
+        print(f"  ✓ generated: {rel} ({len(html_str):,} bytes)")
+
+    # Also generate an index page that lists all concept cards
+    index_parts = ['<!doctype html>',
+                   '<html lang="en">',
+                   '  <head>',
+                   '    <meta charset="utf-8" />',
+                   '    <meta name="viewport" content="width=device-width, initial-scale=1" />',
+                   '    <meta name="description" content="Auto-generated concept cards from the Weekly Science Digest — AIHPC Advanced." />',
+                   '    <title>Digest Concept Cards — AIHPC Advanced</title>',
+                   '    <style>body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0b0f1a; color: #f3f4f6; margin: 0; min-height: 100vh; line-height: 1.7; } .container { max-width: 800px; margin: 0 auto; padding: 56px 24px; } h1 { font-size: 32px; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; margin: 0 0 8px; } .lead { font-size: 15px; color: #9ca3af; margin: 0 0 32px; } ul { list-style: none; padding: 0; margin: 0; } a { color: #06b6d4; text-decoration: none; }</style>',
+                   '  </head>',
+                   '  <body>',
+                   '    <div class="container">',
+                   '      <p style="font-size: 13px; color: #9ca3af; margin-bottom: 8px;"><a href="../index.html">Home</a> / Concept Cards / Digest</p>',
+                   '      <h1>Digest Concept Cards</h1>',
+                   f'      <p class="lead">Auto-generated concept cards from <a href="../digest.html">Weekly Digest Issue #{manifest["issue"]}</a> ({manifest["date"]}). Each card is a standalone page with the article metadata + abstract + dataset + data sample table + full ClickForDemo + animated-derivation clip.</p>',
+                   '      <ul>']
+    for article in manifest['articles']:
+        aid = article['id']
+        title = article['title']
+        is_futuristic = article.get('futuristic_vision', False)
+        pill = '🚀 ' if is_futuristic else ''
+        index_parts.append(f'        <li style="margin-bottom: 16px; padding: 16px; background: #121826; border: 1px solid #1f2937; border-radius: 12px;"><strong style="font-size: 16px; color: #f3f4f6;">{pill}{title}</strong><br><span style="color: #9ca3af; font-size: 13px;">{article["source"]} · {article["published"]} · {article["domain_label"]}</span><br><a href="digest-{aid}.html" style="color: #06b6d4; text-decoration: none; font-size: 13px; font-weight: 600;">Open concept card &rarr;</a></li>')
+    index_parts.append('      </ul>')
+    index_parts.append('      <div style="margin-top: 32px;"><a href="../digest.html" style="color: #06b6d4; text-decoration: none;">← Back to the latest digest issue</a></div>')
+    index_parts.append('    </div>')
+    index_parts.append('  </body>')
+    index_parts.append('</html>')
+    index_path = os.path.join(OUT_DIR, 'digest-index.html')
+    with open(index_path, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(index_parts))
+    print(f"  ✓ generated index: {os.path.relpath(index_path, ROOT)}")
+
+    print(f"\nTotal: {n_articles} concept cards + 1 index page")
+
+
+if __name__ == "__main__":
+    main()

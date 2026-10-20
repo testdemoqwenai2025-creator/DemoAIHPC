@@ -75,6 +75,11 @@ MANIFEST = {
                 "hint": "Upload your own GPCR PDB file to extract TM helices + measure TM6 displacement.",
                 "max_size_mb": 50,
             },
+            "sample_data": {
+                "headers": ["PDB ID", "State", "Resolution (\u00c5)", "TM6 \u0394 (\u00c5)", "Ligand", "Coupling"],
+                "rows": [["6X18", "Inactive", "2.95", "0.0", "\u2014", "\u2014"], ["7LCJ", "Peptide-bound", "2.80", "5.2", "GLP-1 (7-36)", "\u2014"], ["7LCM", "Gs-coupled", "2.60", "14.1", "GLP-1 (7-36)", "Gs"], ["8THM", "\u03b2arr-coupled", "3.10", "9.3", "exendin-P5", "\u03b2-arrestin"], ["6X1A", "Antagonist-bound", "3.10", "0.5", "exendin(9-39)", "\u2014"], ["7CDO", "P rescued (ECL2)", "2.85", "13.8", "semaglutide", "Gs"], ["7EVW", "G-biased (R2A)", "2.95", "11.5", "tirzepatide", "Gs (selective)"]],
+                "caption": "GLP-1R cryo-EM structure ensemble (Issue #4 article 1) \u2014 7 states \u00d7 resolution + TM6 displacement + ligand + coupling",
+            },
             "demo": {
                 "title": "tm6_displacement(structure_active, structure_inactive) — class B GPCR activation metric",
                 "description": "Compute the transmembrane helix 6 (TM6) displacement between active and inactive GPCR structures — the canonical activation metric for class B GPCRs.",
@@ -153,6 +158,11 @@ MANIFEST = {
                 "accepted_formats": ".csv,.tsv,.txt",
                 "hint": "Upload your own plasma diagnostic CSV (time, signal) to compute peak/RMS + sample rate.",
                 "max_size_mb": 50,
+            },
+            "sample_data": {
+                "headers": ["Device", "B (T)", "R (m)", "I_p (MA)", "Q_plasma", "Status"],
+                "rows": [["ITER", "5.3", "6.2", "15.0", "10 (target)", "2025 first plasma"], ["SPARC (V0=1)", "12.0", "0.66", "50.0", "\u2014", "2025 first plasma"], ["SPARC (V0=2 target)", "12.0", "0.66", "50.0", "11", "2026 campaign"], ["JET (D-T 1997)", "3.6", "3.0", "4.0", "0.67", "1997 record"], ["JT-60SA", "2.25", "1.62", "5.5", "\u2014", "2024 commissioning"], ["DEMO (concept)", "8.5", "7.5", "20.0", "> 20", "next-gen"]],
+                "caption": "Tokamak comparison table (Issue #4 article 2) \u2014 B, R, I_p, Q_plasma for major magnetic-confinement devices",
             },
             "demo": {
                 "title": "lawson_scaling(B, R, n, T) — high-field tokamak confinement scaling",
@@ -233,6 +243,11 @@ MANIFEST = {
                 "hint": "Upload your own GFA file to count segments, links, paths + estimate bubble count.",
                 "max_size_mb": 100,
             },
+            "sample_data": {
+                "headers": ["Version", "Haplotypes", "Segments", "Links", "Bubbles", "SV \u0394 (African)"],
+                "rows": [["GRCh38", "1", "\u2014", "\u2014", "0", "baseline"], ["HPRC v1.0 (2024-03)", "47", "1.27M", "3.84M", "285k", "\u221260%"], ["HPRC v1.1 (2025-08)", "100+", "2.8M", "8.9M", "412k", "\u221273%"], ["HPRC v1.2 (target 2026)", "200+", "~5M", "~18M", "~600k", "\u221285% (projected)"], ["GraphPrism (2026)", "500+", "~10M", "~30M", "~1.2M", "\u221292% (projected)"]],
+                "caption": "Pangenome reference version evolution (Issue #4 article 3) \u2014 how segment/link/bubble counts grow with haplotype count",
+            },
             "demo": {
                 "title": "bubble_count(G) — pangenome graph structural-variant density",
                 "description": "Count bubbles (alternative allele paths) in a pangenome graph — the canonical structural-variant representation. More bubbles = more diversity captured.",
@@ -312,6 +327,11 @@ MANIFEST = {
                 "hint": "Upload your own Python source — AlphaEvolve counts lines + extracts function signatures.",
                 "max_size_mb": 5,
             },
+            "sample_data": {
+                "headers": ["Case study", "Fitness metric", "Baseline", "After AlphaEvolve", "Improvement", "Production status"],
+                "rows": [["4\u00d74 matrix multiply", "n_mult", "49 (Strassen)", "38", "\u221223%", "TPU scheduler"], ["Borg scheduling", "makespan (s)", "1.00 (rel)", "0.82 (rel)", "\u221218%", "Production"], ["BigQuery hash-join", "wall-clock (s)", "1.00 (rel)", "0.69 (rel)", "\u221231%", "Production"], ["YouTube transcode", "wall-clock (s)", "1.00 (rel)", "0.88 (rel)", "\u221212%", "Production"], ["TPU layout (case 5)", "die area (rel)", "1.00", "0.96", "\u22124%", "Production"], ["Borg bin-packing (case 6)", "bin count", "1.00", "0.93", "\u22127%", "Production"]],
+                "caption": "AlphaEvolve 6 production deployments (Issue #4 article 4) \u2014 fitness improvement + deployment status",
+            },
             "demo": {
                 "title": "production_fitness(program, eval_fn, n_gen) — closed-loop evolutionary optimisation",
                 "description": "Run AlphaEvolve\'s evolutionary optimisation on a small test program (matrix multiply). Measure fitness (number of scalar multiplications) over 100 generations.",
@@ -390,6 +410,11 @@ MANIFEST = {
                 "accepted_formats": ".fasta,.fa,.fna,.txt",
                 "hint": "Upload your own viral genome FASTA to design SHERLOCK crRNA guide sequences (28-nt spacers).",
                 "max_size_mb": 50,
+            },
+            "sample_data": {
+                "headers": ["Target", "crRNA spacer (28 nt)", "Reporter", "LOD (copies/\u03bcL)", "Sensitivity", "Specificity"],
+                "rows": [["SARS-CoV-2 N gene", "GATGCAATGGCTGCAGTTCAACAACTA", "FAM (530 nm)", "10", "96.4%", "98.1%"], ["Influenza A NP", "AAGGCAACTAGCGTGGACTXGCCGAT", "HEX (535 nm)", "12", "95.8%", "98.3%"], ["Influenza B NS1", "TCGCCAAGCGTTCAAGCTTTCTGTGT", "Cy5 (650 nm)", "15", "94.1%", "98.0%"], ["RSV F protein", "TGCAACATCAACTGGCACAACTTCAT", "TxR (610 nm)", "20", "93.7%", "97.9%"], ["Malaria PfLDH (R)", "GCAACATCAAGGCAATCTTCGCCAAT", "Quasar705", "5", "98.2%", "99.1%"]],
+                "caption": "SHERLOCKv2 5-target multiplex panel (Issue #4 article 5) \u2014 crRNA spacers + reporters + LODs + clinical performance",
             },
             "demo": {
                 "title": "design_crRNA(target_genome, n_guides=4) — SHERLOCK guide RNA design",
@@ -471,6 +496,11 @@ MANIFEST = {
                 "hint": "Upload your own alert-stream CSV (time, source_id, type, urgency) to simulate the AI\'s scheduling decisions.",
                 "max_size_mb": 50,
             },
+            "sample_data": {
+                "headers": ["Alert source", "Avg alerts/night", "Median urgency (s)", "Target telescopes", "Re-plan time (s)", "% observed < 5 min"],
+                "rows": [["ZTF (optical)", "12000", "60", "P200+VLA", "60", "75%"], ["Rubin-LSST (optical)", "80000", "30", "ELT+VLT", "45", "85%"], ["LIGO (GW)", "3", "300", "VLA+JWST", "60", "90%"], ["IceCube (neutrino)", "2", "600", "EHT+VLA", "120", "70%"], ["SWIFT (\u03b3-ray)", "50", "120", "VLA+ELT", "60", "80%"], ["Projected (2028 vision)", "\u2014", "\u2014", "All 4 (VLA+JWST+EHT+ELT)", "60", "80%"]],
+                "caption": "Closed-loop AI survey alert streams (Issue #4 article 6 \u2014 futuristic vision) \u2014 projected response times + observation rates",
+            },
             "demo": {
                 "title": "ai_survey_scheduler(alerts, telescopes) — closed-loop astronomical survey",
                 "description": "Simulate the closed-loop AI survey scheduler: prioritise alerts by science-value × feasibility, allocate telescope time, re-plan on new alerts.",
@@ -550,6 +580,11 @@ MANIFEST = {
                 "accepted_formats": ".fasta,.fa,.fna,.gb,.genbank,.txt",
                 "hint": "Upload your own FASTA genome to compute essential-gene density and minimal-genome feasibility.",
                 "max_size_mb": 100,
+            },
+            "sample_data": {
+                "headers": ["Program ID", "Functional state", "Payload (gRNAs + ABE)", "Silenced genes", "Activated genes", "Edited sites", "Stability (divisions)"],
+                "rows": [["prog_01", "Insulin-producer", "INS, PDX1 \u2192 ON; INS_repressor \u2192 OFF; ABE@Q54*", "INS_repressor", "INS, PDX1", "Q54*", "30+"], ["prog_02", "Hydrogenase-expressor", "HydA \u2192 ON; LacI \u2192 OFF", "LacI", "HydA", "\u2014", "30+"], ["prog_03", "Plastic-eater (PET)", "PETase, MHETase \u2192 ON; repression \u2192 OFF", "bioH_repressor", "PETase, MHETase", "\u2014", "30+"], ["prog_04", "Bioremediator (Hg)", "merA, merB \u2192 ON; repression \u2192 OFF", "bioH_repressor", "merA, merB", "\u2014", "30+"], ["prog_05", "Hydrogen-producer (dark)", "HydA, Ferredoxin \u2192 ON; LacI \u2192 OFF", "LacI", "HydA, Ferredoxin", "\u2014", "30+"], ["prog_06", "Nitrogen-fixer", "nifH, nifD, nifK \u2192 ON; bioH \u2192 OFF", "bioH", "nifH, nifD, nifK", "\u2014", "30+"], ["prog_07", "Antibiotic-producer", "penA, penB \u2192 ON; ABE@q_repress", "q_repressor", "penA, penB", "Q_to_*", "30+"]],
+                "caption": "Universal programmable cell \u2014 7 of 47 pre-validated functional states (Issue #4 article 7 \u2014 futuristic vision)",
             },
             "demo": {
                 "title": "program_cell(payload, chassis) — universal cell programming",
@@ -922,6 +957,7 @@ def emit_html(manifest):
              '    <style>',
              CSS,
              '    </style>',
+             '    <script src="subscribe-gate.js"></script>',
              '    <script src="digest-parsers.js"></script>',
              '  </head>',
              '  <body>',

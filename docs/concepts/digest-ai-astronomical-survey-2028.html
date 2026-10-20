@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Futuristic Vision (2028): closed-loop AI that designs, schedules, and executes astronomical surveys — AIHPC Advanced auto-generated concept card (digest Issue #4)." />
+    <title>Futuristic Vision (2028): closed-loop AI that designs, schedules, and executes astronomical surveys — AIHPC Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.1), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(196,181,253,0.2); }
+      .lead { font-size: 17px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .abstract p { font-size: 14px; color: var(--text-muted); margin: 0 0 10px; }
+      .dataset-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin: 16px 0 32px; }
+      .dataset-card .ds-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-3); margin-bottom: 8px; }
+      .dataset-card .ds-row { display: grid; grid-template-columns: 80px 1fr; gap: 8px; font-size: 12px; color: var(--text-muted); padding: 2px 0; }
+      .dataset-card .ds-row .k { color: var(--text-muted-2); font-weight: 600; }
+      .dataset-card .ds-row .v { color: var(--text); }
+      .dataset-card .ds-row .v a { color: var(--accent-2); text-decoration: none; word-break: break-all; }
+      .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); margin-bottom: 16px; }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px 0; }
+      .demo-tab-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, Consolas, monospace; }
+      .meta a { color: var(--text); text-decoration: none; }
+      body.light { background: #fafafa; color: #18181b; }
+      body.light .dataset-card, body.light .derivation-step, body.light .stats-grid .stat, body.light .report-block, body.light pre.code-block { background: white; border-color: #e5e7eb; }
+      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .abstract p, body.light .summary-block ul, body.light .meta, body.light .crumbs { color: #4b5563; }
+      body.light .ribbon-btn-primary { color: white; }
+
+    </style>
+    <script src="../subscribe-gate.js"></script>
+    <script src="../digest-parsers.js"></script>
+    <script src="../animated-derivation.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">📊 Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="lazy-evaluation.html">Lazy Evaluation as UX</a><a href="provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../concepts.html">Concept Cards</a> / <a href="../digest.html">Weekly Digest Issue #4</a> / Space · AI Astronomy (Futuristic Vision)</p>
+      <span class="tag">🚀 Futuristic Vision · Auto-generated · Issue #4</span>
+      <h1>Futuristic Vision (2028): closed-loop AI that designs, schedules, and executes astronomical surveys</h1>
+      <p class="lead">AIHPC Editorial Board — extrapolated from EHT, JWST, TOI-700, AlphaEvolve (2024-2027) · AIHPC Futuristic Vision · 2028-Q3 (extrapolated)</p>
+
+      <h2>Abstract</h2>
+      <div class="abstract">
+        <p>🚀 This is a futuristic vision, not a real publication. We extrapolate from EHT (2019-2024), JWST (2022-2024), TOI-700 e discovery (2024), and AlphaEvolve (2024) to predict that by Q3 2028, closed-loop AI will design, schedule, and execute astronomical surveys — autonomously responding to transient events in real-time.</p>
+        <p>The vision: an AI controller (Gemini-derived LLM + RL agent) reads alert streams from ZTF + Rubin-LSST + LIGO + IceCube + SWIFT, decides which targets to observe with which telescope (VLA, JWST, EHT, ELT), submits scripts to telescope schedulers, and re-plans as new alerts arrive. AlphaEvolve provides the optimised scheduler code.</p>
+        <p>All observations + AI decisions are downloadable as a single HDF5 file per night — the AIHPC data-residency posture is preserved.</p>
+      </div>
+      <div class="dataset-card">
+        <div class="ds-title">📁 Dataset — accompanying open data</div>
+        <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic night&#x27;s observations + AI decision trace</span></div>
+        <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 (alerts + decisions + observations × 1 night)</span></div>
+        <div class="ds-row"><span class="k">Size</span><span class="v">180 MB</span></div>
+        <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.lsst.org/" target="_blank" rel="noopener">https://www.lsst.org/</a></span></div>
+      </div>
+      <h2>Data sample</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Closed-loop AI survey alert streams (Issue #4 article 6 — futuristic vision) — projected response times + observation rates · click "Show more" to reveal additional rows (10 at a time).</p>
+      <div class="data-table-container" style="overflow-x: auto; background: var(--bg-elevated, #121826); border: 1px solid var(--border, #1f2937); border-radius: 12px; padding: 16px; margin-bottom: 32px;">
+        <table class="data-table" data-total-rows="6" data-visible-rows="5" style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr><th style="padding: 6px 10px; text-align: left; font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border);">Alert source</th><th style="padding: 6px 10px; text-align: left; font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border);">Avg alerts/night</th><th style="padding: 6px 10px; text-align: left; font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border);">Median urgency (s)</th><th style="padding: 6px 10px; text-align: left; font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border);">Target telescopes</th><th style="padding: 6px 10px; text-align: left; font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border);">Re-plan time (s)</th><th style="padding: 6px 10px; text-align: left; font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border);">% observed &lt; 5 min</th></tr>
+          </thead>
+          <tbody>
+            <tr class="data-table-row" data-row-index="0"><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">ZTF (optical)</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">12000</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">60</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">P200+VLA</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">60</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">75%</td></tr>
+<tr class="data-table-row" data-row-index="1"><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">Rubin-LSST (optical)</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">80000</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">30</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">ELT+VLT</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">45</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">85%</td></tr>
+<tr class="data-table-row" data-row-index="2"><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">LIGO (GW)</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">3</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">300</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">VLA+JWST</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">60</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">90%</td></tr>
+<tr class="data-table-row" data-row-index="3"><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">IceCube (neutrino)</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">2</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">600</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">EHT+VLA</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">120</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">70%</td></tr>
+<tr class="data-table-row" data-row-index="4"><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">SWIFT (γ-ray)</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">50</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">120</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">VLA+ELT</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">60</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">80%</td></tr>
+<tr class="data-table-row data-table-hidden" data-row-index="5"><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">Projected (2028 vision)</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">—</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">—</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">All 4 (VLA+JWST+EHT+ELT)</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">60</td><td style="padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace;">80%</td></tr>
+          </tbody>
+        </table>
+        <button class="data-table-show-more" style="margin-top: 12px; background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="dataTableShowMore(this)">▼ Show more (1 hidden)</button>
+      </div>
+      <script>
+        function dataTableShowMore(btn) {
+          var table = btn.closest('.data-table-container').querySelector('.data-table');
+          var visible = parseInt(table.dataset.visibleRows || '5', 10);
+          var total = parseInt(table.dataset.totalRows || '0', 10);
+          var newVisible = Math.min(total, visible + 10);
+          // Show rows up to newVisible
+          var rows = table.querySelectorAll('.data-table-row');
+          rows.forEach(function(r, i) {
+            if (i < newVisible) r.classList.remove('data-table-hidden');
+          });
+          table.dataset.visibleRows = newVisible;
+          // Update button text or hide
+          var remaining = total - newVisible;
+          if (remaining > 0) {
+            btn.textContent = '▼ Show more (' + remaining + ' hidden)';
+          } else {
+            btn.textContent = '✓ All ' + total + ' rows shown';
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+          }
+        }
+      </script>
+      <style>
+        .data-table-hidden { display: none; }
+      </style>
+      <h2>Demo — ai_survey_scheduler(alerts, telescopes) — closed-loop astronomical survey</h2>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">Simulate the closed-loop AI survey scheduler: prioritise alerts by science-value × feasibility, allocate telescope time, re-plan on new alerts.</p>
+      <h2>Math &rarr; Code derivation</h2>
+      <div class="math-panel" style="padding: 14px; background: rgba(6,182,212,0.05); border-left: 3px solid var(--accent-2); border-radius: 8px; margin-bottom: 16px;">
+        <div class="math-eq" style="font-family: 'Cambria Math', Georgia, serif; font-size: 16px; color: var(--accent-2); margin-bottom: 6px;">priority(alert) = science_value(alert) × feasibility(alert, telescope) × urgency(alert)</div>
+        <div class="math-plain" style="font-size: 13px; color: var(--text-muted);">Each alert is scored by scientific value × telescope feasibility × urgency. The AI scheduler maximises the total priority observed per night, subject to telescope constraints (visibility, weather, slew time).</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 1: Alert stream</strong>
+        <div class="step-math">alerts = [(time, source_id, type, urgency)] from ZTF + Rubin + LIGO + IceCube + SWIFT</div>
+        <div class="step-explain">Real-time alert streams from 5 surveys. Each alert has a type (transient, GW neutrino counterpart, etc.) and urgency (seconds to hours response window).</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 2: Science-value scoring</strong>
+        <div class="step-math">science_value(alert) = rarity(alert_type) × multi-messenger(alert)</div>
+        <div class="step-explain">AI scores each alert: rare event types (kilonova, neutrino counterpart) get high value; multi-messenger events (GW + EM) get a 10× multiplier.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 3: Feasibility</strong>
+        <div class="step-math">feasibility(alert, telescope) = visibility(alert, telescope) × weather × slew_time</div>
+        <div class="step-explain">For each (alert, telescope) pair, compute feasibility: is the source visible from this telescope at this time? Is the weather clear? How long is the slew?</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 4: RL scheduler</strong>
+        <div class="step-math">π_θ(state) → action = (telescope, target, exposure_time)</div>
+        <div class="step-explain">The RL agent (PPO-trained on 10 years of historical observations) decides: which telescope points where for how long. The reward is the total science-value observed.</div>
+      </div>
+      <div class="derivation-step">
+        <strong>Step 5: Closed-loop re-planning</strong>
+        <div class="step-math">on new alert: re-plan within 60s, re-allocate telescopes</div>
+        <div class="step-explain">When a new alert arrives, the AI re-plans within 60 seconds — potentially interrupting a current observation to chase the higher-value target. The 2028 vision: 80% of transient events observed within 5 minutes of detection.</div>
+      </div>
+      <h2>Polyglot code (6 languages)</h2>
+      <div class="code-panel">
+        <div class="lang-toggle">
+          <button data-lang="python" class="active">Python</button>
+          <button data-lang="rust">Rust</button>
+          <button data-lang="go">Go</button>
+          <button data-lang="c">C</button>
+          <button data-lang="elixir">Elixir</button>
+          <button data-lang="scala">Scala</button>
+        </div>
+        <pre class="code-block" id="code-block-ai-astronomical-survey-2028"></pre>
+      </div>
+      <h2>Observe</h2>
+      <div class="demo-tabs">
+        <button class="active" data-tab="stats">Stats</button>
+        <button data-tab="reports">Reports</button>
+        <button data-tab="graphs">Graphs</button>
+        <button data-tab="summary">Summary</button>
+      </div>
+      <div class="demo-tab-content active" data-tab="stats">
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="l">Alert sources</div>
+            <div class="v">5 surveys</div>
+          </div>
+          <div class="stat">
+            <div class="l">Telescopes</div>
+            <div class="v">VLA+JWST+EHT+ELT</div>
+          </div>
+          <div class="stat">
+            <div class="l">Re-plan time</div>
+            <div class="v">60s on new alert</div>
+          </div>
+          <div class="stat">
+            <div class="l">Observation rate</div>
+            <div class="v">80% within 5 min</div>
+          </div>
+          <div class="stat">
+            <div class="l">Reward signal</div>
+            <div class="v">total science value</div>
+          </div>
+          <div class="stat">
+            <div class="l">Training data</div>
+            <div class="v">10 years</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-tab-content" data-tab="reports">
+        <div class="report-block">The 2028 vision: a closed-loop AI survey scheduler reads alerts from 5 surveys (ZTF, Rubin-LSST, LIGO, IceCube, SWIFT), allocates time across VLA + JWST + EHT + ELT, and re-plans within 60 seconds on new alerts. 80% of transient events observed within 5 minutes of detection — a 10× improvement over human schedulers.</div>
+      </div>
+      <div class="demo-tab-content" data-tab="graphs">
+        <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+  <line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/>
+  <path d="M 20 175 L 60 130 L 100 100 L 140 80 L 180 65 L 220 50 L 260 40 L 300 35 L 340 30 L 380 25" stroke="#f59e0b" stroke-width="2" fill="none"/>
+  <text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">year</text>
+  <text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">% events within 5 min</text>
+  <text x="300" y="20" font-size="9" fill="#f59e0b" font-family="ui-monospace">2028 vision: 80%</text>
+</svg></div>
+      </div>
+      <div class="demo-tab-content" data-tab="summary">
+        <div class="summary-block"><ul>
+          <li>🚀 By 2028, we predict closed-loop AI controlling 4 major telescopes (VLA, JWST, EHT, ELT) in response to 5 alert-stream sources.</li>
+          <li>The AI re-plans within 60 seconds of a new alert — chasing rare transients (kilonovae, neutrino counterparts) before humans could respond.</li>
+          <li>AlphaEvolve provides the optimised scheduler code; the RL agent maximises total science value observed per night.</li>
+          <li>80% of transient events observed within 5 minutes of detection — a 10× improvement over human schedulers.</li>
+        </ul></div>
+      </div>
+      <h2>🎬 Animated derivation clip</h2>
+      <div class="anim-container" style="padding: 20px; background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px); margin: 24px 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2, #06b6d4);">Phase 28 — animated Math→Code derivation</div>
+          <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <button class="anim-play" style="background: linear-gradient(90deg,#8b5cf6,#06b6d4); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">▶ Play</button>
+            <button class="anim-pause" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⏸ Pause</button>
+            <button class="anim-replay" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">↺ Replay</button>
+            <button class="anim-record" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">⬇ Record WebM</button>
+            <button class="anim-share" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">🔗 Share</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="concept-ai-astronomical-survey-2028" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;"></canvas>
+      </div>
+      <script>
+        // Register the derivation for this concept card
+        AIHPC_ANIM.register('concept-ai-astronomical-survey-2028', {
+          title: "Futuristic Vision (2028): closed-loop AI that designs, schedules, and executes astronomical surveys",
+          steps: [{"title": "Step 1: Alert stream", "math": "alerts = [(time, source_id, type, urgency)] from ZTF + Rubin + LIGO + IceCube + SWIFT", "explain": "Real-time alert streams from 5 surveys. Each alert has a type (transient, GW neutrino counterpart, etc.) and urgency (seconds to hours response window)."}, {"title": "Step 2: Science-value scoring", "math": "science_value(alert) = rarity(alert_type) \u00d7 multi-messenger(alert)", "explain": "AI scores each alert: rare event types (kilonova, neutrino counterpart) get high value; multi-messenger events (GW + EM) get a 10\u00d7 multiplier."}, {"title": "Step 3: Feasibility", "math": "feasibility(alert, telescope) = visibility(alert, telescope) \u00d7 weather \u00d7 slew_time", "explain": "For each (alert, telescope) pair, compute feasibility: is the source visible from this telescope at this time? Is the weather clear? How long is the slew?"}, {"title": "Step 4: RL scheduler", "math": "\u03c0_\u03b8(state) \u2192 action = (telescope, target, exposure_time)", "explain": "The RL agent (PPO-trained on 10 years of historical observations) decides: which telescope points where for how long. The reward is the total science-value observed."}, {"title": "Step 5: Closed-loop re-planning", "math": "on new alert: re-plan within 60s, re-allocate telescopes", "explain": "When a new alert arrives, the AI re-plans within 60 seconds \u2014 potentially interrupting a current observation to chase the higher-value target. The 2028 vision: 80% of transient events observed within 5 minutes of detection."}],
+          duration: 12.0,
+        });
+        // CODE_BANK for the polyglot code panel
+        const CODE_BANK = {"python": "def ai_survey_scheduler(alerts, telescopes, n_iterations=100):\n    schedule = {}\n    for alert in alerts:\n        priorities = [(t, science_value(alert) * feasibility(alert, t)) for t in telescopes]\n        best_t, best_p = max(priorities, key=lambda x: x[1])\n        if best_p > 0:\n            schedule[best_t] = (alert, exposure_time(alert, best_t))\n    return schedule", "rust": "fn ai_survey_scheduler(alerts: &[Alert], telescopes: &[Telescope]) -> HashMap<Telescope, (Alert, f64)> {\n    let mut schedule = HashMap::new();\n    for alert in alerts {\n        let best = telescopes.iter()\n            .map(|t| (t, science_value(alert) * feasibility(alert, t)))\n            .max_by(|a, b| a.1.partial_cmp(&b.1).unwrap());\n        if let Some((t, p)) = best {\n            if p > 0.0 { schedule.insert(t.clone(), (alert.clone(), exposure_time(alert, t))); }\n        }\n    }\n    schedule\n}", "go": "func aiSurveyScheduler(alerts []Alert, telescopes []Telescope) map[Telescope]struct{ A Alert; T float64 } {\n\tschedule := map[Telescope]struct{ A Alert; T float64 }{}\n\tfor _, alert := range alerts {\n\t\tvar bestT Telescope; var bestP float64 = -1\n\t\tfor _, t := range telescopes {\n\t\t\tp := scienceValue(alert) * feasibility(alert, t)\n\t\t\tif p > bestP { bestT = t; bestP = p }\n\t\t}\n\t\tif bestP > 0 { schedule[bestT] = struct{ A Alert; T float64 }{alert, exposureTime(alert, bestT)} }\n\t}\n\treturn schedule\n}", "c": "typedef struct { Telescope t; Alert a; double exp_time; } SchedEntry;\nint ai_survey_scheduler(Alert* alerts, int n_alerts, Telescope* tels, int n_tels, SchedEntry* out) {\n    int k = 0;\n    for (int i = 0; i < n_alerts; i++) {\n        double best_p = -1; int best_t = -1;\n        for (int j = 0; j < n_tels; j++) {\n            double p = science_value(&alerts[i]) * feasibility(&alerts[i], &tels[j]);\n            if (p > best_p) { best_p = p; best_t = j; }\n        }\n        if (best_p > 0 && best_t >= 0) {\n            out[k] = (SchedEntry){tels[best_t], alerts[i], exposure_time(&alerts[i], &tels[best_t])};\n            k++;\n        }\n    }\n    return k;\n}", "elixir": "defmodule SurveyScheduler do\n  def run(alerts, telescopes) do\n    Enum.reduce(alerts, %{}, fn alert, schedule ->\n      best = telescopes |> Enum.max_by(fn t -> science_value(alert) * feasibility(alert, t) end)\n      p = science_value(alert) * feasibility(alert, best)\n      if p > 0, do: Map.put(schedule, best, {alert, exposure_time(alert, best)}), else: schedule\n    end)\n  end\nend", "scala": "def aiSurveyScheduler(alerts: List[Alert], telescopes: List[Telescope]): Map[Telescope, (Alert, Double)] = {\n  alerts.flatMap { alert =>\n    val scored = telescopes.map(t => (t, scienceValue(alert) * feasibility(alert, t)))\n    val best = scored.maxBy(_._2)\n    if (best._2 > 0) Some(best._1 -> (alert, exposureTime(alert, best._1))) else None\n  }.toMap\n}"};
+        // Initial render: set Python code on page load
+        document.addEventListener('DOMContentLoaded', function () {
+          var block = document.getElementById('code-block-ai-astronomical-survey-2028');
+          if (block) block.textContent = CODE_BANK.python || '';
+          // Wire up language toggles
+          document.querySelectorAll('.code-panel .lang-toggle button').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var panel = btn.closest('.code-panel');
+              panel.querySelectorAll('.lang-toggle button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+              var lang = btn.dataset.lang;
+              var block = panel.querySelector('pre.code-block');
+              if (block) block.textContent = CODE_BANK[lang] || '// code not available for ' + lang;
+            });
+          });
+          // Wire up observe tabs
+          document.querySelectorAll('.demo-tabs button').forEach(function (tab) {
+            tab.addEventListener('click', function () {
+              var target = tab.dataset.tab;
+              document.querySelectorAll('.demo-tabs button').forEach(function (t) { t.classList.toggle('active', t === tab); });
+              document.querySelectorAll('.demo-tab-content').forEach(function (c) { c.classList.toggle('active', c.dataset.tab === target); });
+            });
+          });
+          // Init the animated-derivation canvas
+          AIHPC_ANIM.init();
+        });
+      </script>
+      <div class="meta" style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px;">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Auto-generated concept card from <a href="../digest.html">Weekly Digest Issue #4</a> (article id: <code>ai-astronomical-survey-2028</code>). Generated by <code>scripts/gen-concept-cards.py</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      // Particle background
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d');
+        var W, H, P = [];
+        var N = 50, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; }
+        r();
+        addEventListener('resize', r);
+        for (var i = 0; i < N; i++) {
+          P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        }
+        function s() {
+          x.clearRect(0, 0, W, H);
+          for (var i = 0; i < N; i++) {
+            for (var j = i+1; j < N; j++) {
+              var d = Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y);
+              if (d < 100) {
+                x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')';
+                x.lineWidth = .5;
+                x.beginPath();
+                x.moveTo(P[i].x, P[i].y);
+                x.lineTo(P[j].x, P[j].y);
+                x.stroke();
+              }
+            }
+          }
+          for (var p of P) {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+            x.fillStyle = p.c; x.globalAlpha = .4;
+            x.beginPath();
+            x.arc(p.x, p.y, p.r, 0, 6.28);
+            x.fill();
+          }
+          x.globalAlpha = 1;
+          requestAnimationFrame(s);
+        }
+        s();
+      })();
+
+      // ---- Ribbon theme toggle ----
+      (function () {
+        var KEY = 'aihpc-theme';
+        var b = document.body, r = document.querySelector('.ribbon'), i = document.getElementById('ribbon-theme-icon');
+        function a(t) {
+          if (t === 'light') { b.classList.add('light'); r && r.classList.add('light'); if (i) i.textContent = '☀'; }
+          else { b.classList.remove('light'); r && r.classList.remove('light'); if (i) i.textContent = '🌙'; }
+        }
+        var d = 'dark';
+        try { var s = localStorage.getItem(KEY); if (s === 'light' || s === 'dark') d = s; else if (matchMedia('(prefers-color-scheme:light)').matches) d = 'light'; } catch (e) {}
+        a(d);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () { var n = b.classList.contains('light') ? 'dark' : 'light'; a(n); try { localStorage.setItem(KEY, n); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

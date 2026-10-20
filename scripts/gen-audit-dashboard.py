@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 """
-gen-audit-dashboard.py — Phase 28 audit dashboard generator.
+gen-audit-dashboard.py — Phase 28 + 29 audit dashboard generator.
 
 Runs scripts/audit.py --json and emits docs/audit.html — a live
 status board rendering the audit results.
+
+Phase 29 additions:
+  - Stores each run's results to docs/audit-history/audit-<timestamp>.json
+  - Loads the last 10 historical runs when generating the dashboard
+  - Shows a timeline of recent runs at the bottom
 
 The dashboard:
   - Shows total / passed / failed summary at the top
   - Lists each check with a green ✓ or red ✗ symbol
   - Shows the check name + detail + items (for failures)
   - Shows the last-run timestamp + commit SHA
+  - Shows a history timeline of the last 10 runs (Phase 29)
   - Auto-regenerates with each release via this script
 
 Run:
@@ -19,11 +25,14 @@ import json
 import os
 import subprocess
 import sys
+import re
 from datetime import datetime, timezone
 
 ROOT = "/home/z/my-project/AETH-1-Content-Archive"
 AUDIT_PATH = os.path.join(ROOT, "scripts", "audit.py")
 OUT_PATH = os.path.join(ROOT, "docs", "audit.html")
+HISTORY_DIR = os.path.join(ROOT, "docs", "audit-history")
+HISTORY_MAX = 10  # keep the last 10 runs
 
 
 def get_commit_sha():
@@ -55,7 +64,43 @@ def run_audit():
         return None, f"unexpected error: {e}"
 
 
-def emit_dashboard(audit_result, error, commit_sha):
+def save_history_run(audit_result, commit_sha):
+    """Save the current run to docs/audit-history/audit-<timestamp>.json."""
+    if not audit_result:
+        return
+    os.makedirs(HISTORY_DIR, exist_ok=True)
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%SZ")
+    record = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "commit": commit_sha,
+        "total": audit_result.get("total", 0),
+        "passed": audit_result.get("passed", 0),
+        "failed": audit_result.get("failed", 0),
+        "checks": [{"name": c.get("name"), "passed": c.get("passed")} for c in audit_result.get("checks", [])],
+    }
+    path = os.path.join(HISTORY_DIR, f"audit-{timestamp}.json")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(record, f, indent=2)
+    return path
+
+
+def load_history_runs():
+    """Load the last N historical runs (newest first)."""
+    if not os.path.isdir(HISTORY_DIR):
+        return []
+    files = sorted([f for f in os.listdir(HISTORY_DIR) if f.startswith("audit-") and f.endswith(".json")], reverse=True)
+    runs = []
+    for fname in files[:HISTORY_MAX]:
+        path = os.path.join(HISTORY_DIR, fname)
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                runs.append(json.load(f))
+        except Exception:
+            pass
+    return runs
+
+
+def emit_dashboard(audit_result, error, commit_sha, history_runs):
     """Emit the audit dashboard HTML."""
     timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     if error:
@@ -106,12 +151,60 @@ def emit_dashboard(audit_result, error, commit_sha):
 
     checks_html = "\n".join(check_rows)
 
+    # Phase 29: history timeline
+    history_html = ""
+    if history_runs:
+        history_rows = []
+        for run in history_runs:
+            run_ts = run.get("timestamp", "")[:19].replace("T", " ")
+            run_pass = run.get("passed", 0)
+            run_fail = run.get("failed", 0)
+            run_total = run.get("total", 0)
+            run_commit = run.get("commit", "?")[:8]
+            run_status_color = "#10b981" if run_fail == 0 else "#ef4444"
+            run_status_text = "✓ pass" if run_fail == 0 else f"✗ {run_fail} fail"
+            # Build per-check dot row (mini visualisation)
+            dots_html = ""
+            for c in run.get("checks", []):
+                color = "#10b981" if c.get("passed") else "#ef4444"
+                dots_html += f'<span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:{color}; margin-right:2px; vertical-align:middle;"></span>'
+            history_rows.append(f"""
+          <tr style="border-bottom: 1px solid #1f2937;">
+            <td style="padding: 8px 12px; font-family: 'SF Mono', Menlo, monospace; font-size: 11px; color: #9ca3af;">{run_ts}</td>
+            <td style="padding: 8px 12px; font-family: 'SF Mono', Menlo, monospace; font-size: 11px; color: #9ca3af;">{run_commit}</td>
+            <td style="padding: 8px 12px; font-size: 11px;">{dots_html}</td>
+            <td style="padding: 8px 12px; font-family: 'SF Mono', Menlo, monospace; font-size: 11px; color: #9ca3af;">{run_pass}/{run_total}</td>
+            <td style="padding: 8px 12px; color: {run_status_color}; font-size: 11px; font-weight: 700;">{run_status_text}</td>
+          </tr>""")
+        history_rows_html = "\n".join(history_rows)
+        history_html = f"""
+      <div class="checks">
+        <h2>Audit history (last {len(history_runs)} runs)</h2>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+          Each row is one audit run (newest first). Green dots = checks that passed; red = failed.
+          Historical runs are stored at <code>docs/audit-history/audit-YYYY-MM-DDTHH-MM-SSZ.json</code>.
+        </p>
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="border-bottom: 1px solid #1f2937;">
+              <th style="padding: 8px 12px; text-align: left; font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em;">Timestamp</th>
+              <th style="padding: 8px 12px; text-align: left; font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em;">Commit</th>
+              <th style="padding: 8px 12px; text-align: left; font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em;">Checks</th>
+              <th style="padding: 8px 12px; text-align: left; font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em;">Score</th>
+              <th style="padding: 8px 12px; text-align: left; font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em;">Status</th>
+            </tr>
+          </thead>
+          <tbody>{history_rows_html}
+          </tbody>
+        </table>
+      </div>"""
+
     html = f"""<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="AIHPC Advanced — application audit dashboard. Live status board for {total} functional checks across the platform." />
+    <meta name="description" content="AIHPC Advanced — application audit dashboard. Live status board for {total} functional checks across the platform, with {len(history_runs)} historical runs." />
     <title>Application Audit — AIHPC Advanced</title>
     <style>
       :root {{
@@ -209,6 +302,7 @@ def emit_dashboard(audit_result, error, commit_sha):
         The audit script (<code>scripts/audit.py</code>) runs on every <code>v*</code> tag
         push via the <code>application-audit</code> CI job. This page is regenerated by
         <code>scripts/gen-audit-dashboard.py</code> as part of each release.
+        Phase 29: each run is archived to <code>docs/audit-history/</code> — {len(history_runs)} historical runs shown below.
       </p>
 
       <div class="meta-row">
@@ -234,12 +328,14 @@ def emit_dashboard(audit_result, error, commit_sha):
       </div>
 
       <div class="checks">
-        <h2>Checks ({len(checks)})</h2>
+        <h2>Current run ({len(checks)} checks)</h2>
         {checks_html}
       </div>
 
+      {history_html}
+
       <div class="footer">
-        <p>&copy; 2026 AIHPC Advanced. &middot; Generated by <code>scripts/gen-audit-dashboard.py</code>. The underlying audit is in <code>scripts/audit.py</code> (17 checks). The CI workflow is at <code>.github/workflows/mirror-to-public.yml</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+        <p>&copy; 2026 AIHPC Advanced. &middot; Generated by <code>scripts/gen-audit-dashboard.py</code>. The underlying audit is in <code>scripts/audit.py</code> ({total} checks). The CI workflow is at <code>.github/workflows/mirror-to-public.yml</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
       </div>
     </div>
   </body>
@@ -262,7 +358,17 @@ def main():
     commit_sha = get_commit_sha()
     print(f"  commit: {commit_sha}")
 
-    html = emit_dashboard(audit_result, error, commit_sha)
+    # Phase 29: save the current run to history
+    if audit_result:
+        hist_path = save_history_run(audit_result, commit_sha)
+        if hist_path:
+            print(f"  history saved: {hist_path}")
+
+    # Load history (including the run we just saved)
+    history_runs = load_history_runs()
+    print(f"  history loaded: {len(history_runs)} runs")
+
+    html = emit_dashboard(audit_result, error, commit_sha, history_runs)
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"  written to: {OUT_PATH} ({len(html):,} bytes)")
