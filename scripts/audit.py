@@ -1033,6 +1033,85 @@ def check_digest_issue_7():
 
 
 # ---------------------------------------------------------------------------
+# Phase 39 checks
+# ---------------------------------------------------------------------------
+
+def check_medical_imaging_loaded():
+    """Check (Phase 39): science-biology.html has the multi-organ
+    medical-imaging viewer + TotalSegmentator-inspired section."""
+    bio_path = os.path.join(DOCS, "science-biology.html")
+    med_js = os.path.join(DOCS, "medical-imaging.js")
+    if not os.path.isfile(bio_path) or not os.path.isfile(med_js):
+        return CheckResult("medical_imaging_loaded", False,
+                           "docs/science-biology.html or docs/medical-imaging.js missing")
+    page = open(bio_path, encoding="utf-8").read()
+    js = open(med_js, encoding="utf-8").read()
+    failures = []
+    if "medical-imaging.js" not in page:
+        failures.append("science-biology.html does not load medical-imaging.js")
+    if 'id="bio-medimg-container"' not in page:
+        failures.append("missing #bio-medimg-container element")
+    if "AIHPC_MEDIMG" not in js:
+        failures.append("medical-imaging.js does not expose AIHPC_MEDIMG global")
+    if "ORGAN_COLORS" not in js:
+        failures.append("medical-imaging.js missing ORGAN_COLORS palette")
+    if "drawOrganMask" not in js:
+        failures.append("medical-imaging.js missing drawOrganMask method")
+    if "TotalSegmentator" not in page:
+        failures.append("science-biology.html missing TotalSegmentator reference")
+    # nnU-Net/MedSAM may be in the page or in the JS file (injected via innerHTML)
+    if "nnU-Net" not in page and "nnU-Net" not in js:
+        failures.append("nnU-Net reference missing (checked page + js)")
+    if "MedSAM" not in page and "MedSAM" not in js:
+        failures.append("MedSAM reference missing (checked page + js)")
+    if failures:
+        return CheckResult("medical_imaging_loaded", False,
+                           f"{len(failures)} issues with medical imaging viewer", failures)
+    return CheckResult("medical_imaging_loaded", True,
+                       "science-biology.html loads medical-imaging.js + TotalSegmentator/nnU-Net/MedSAM references + multi-organ viewer")
+
+
+def check_quantum_vqc_loaded():
+    """Check (Phase 39): science/physics/quantum.html has the VQC
+    animator + QGNN pipeline diagram + barren-plateau chart."""
+    q_path = os.path.join(DOCS, "science", "physics", "quantum.html")
+    vqc_js = os.path.join(DOCS, "vqc-animator.js")
+    if not os.path.isfile(q_path) or not os.path.isfile(vqc_js):
+        return CheckResult("quantum_vqc_loaded", False,
+                           "docs/science/physics/quantum.html or docs/vqc-animator.js missing")
+    page = open(q_path, encoding="utf-8").read()
+    js = open(vqc_js, encoding="utf-8").read()
+    failures = []
+    if "vqc-animator.js" not in page:
+        failures.append("quantum.html does not load vqc-animator.js")
+    if 'id="quantum-vqc-container"' not in page:
+        failures.append("missing #quantum-vqc-container element")
+    if "AIHPC_VQC" not in js:
+        failures.append("vqc-animator.js does not expose AIHPC_VQC global")
+    if "parameter-shift" not in page.lower() and "parameter shift" not in page.lower():
+        failures.append("quantum.html missing parameter-shift rule reference")
+    if "QGNN" not in page:
+        failures.append("quantum.html missing QGNN pipeline")
+    if "barren" not in page.lower():
+        failures.append("quantum.html missing barren-plateau mention")
+    if "PennyLane" not in page:
+        failures.append("quantum.html missing PennyLane reference")
+    if "Qiskit" not in page:
+        failures.append("quantum.html missing Qiskit reference")
+    if "Hamiltonian" not in page:
+        failures.append("quantum.html missing Hamiltonian evolution reference")
+    if "renderBarrenPlateauChart" not in js:
+        failures.append("vqc-animator.js missing renderBarrenPlateauChart")
+    if "expectationZ" not in js:
+        failures.append("vqc-animator.js missing expectationZ (Hamiltonian measurement)")
+    if failures:
+        return CheckResult("quantum_vqc_loaded", False,
+                           f"{len(failures)} issues with quantum VQC animator", failures)
+    return CheckResult("quantum_vqc_loaded", True,
+                       "quantum.html loads vqc-animator.js + QGNN pipeline + barren-plateau chart + PennyLane/Qiskit/Hamiltonian references")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -1075,6 +1154,9 @@ def main():
         check_cheminformatics_3d(),
         check_optimiser_showdown_extended(),
         check_digest_issue_7(),
+        # Phase 39
+        check_medical_imaging_loaded(),
+        check_quantum_vqc_loaded(),
     ]
 
     if args.json:

@@ -270,6 +270,12 @@
         { id: 'digest:ai-abiogenesis-2031', type: 'digest', label: 'AI abiogenesis 2031', href: 'concepts/digest-ai-abiogenesis-2031.html', meta: 'Issue #7' },
         // Phase 38: Cheminformatics 3D viewer node
         { id: 'demo:mol3d', type: 'demo', label: '3D Molecule Viewer (molecule-3d.js)', href: 'science-cheminformatics.html#chem-mol3d-container' },
+        // Phase 39: Medical imaging + quantum VQC
+        { id: 'demo:medimg', type: 'demo', label: 'Multi-Organ Imaging Lab (medical-imaging.js)', href: 'science-biology.html#bio-medimg-container' },
+        { id: 'demo:vqc', type: 'demo', label: 'VQC Animator + QGNN pipeline (vqc-animator.js)', href: 'science/physics/quantum.html#quantum-vqc-container' },
+        { id: 'paper:TotalSegmentator2023', type: 'paper', label: 'TotalSegmentator (Wass 2023)' },
+        { id: 'paper:QGNN2019', type: 'paper', label: 'QGNN (Verdon 2019)' },
+        { id: 'paper:BarrenPlateaus2018', type: 'paper', label: 'Barren Plateaus (McClean 2018)' },
         // Science sub-pages (22)
         { id: 'science:biology/evolutionary', type: 'science', label: 'Evolutionary Biology', href: 'science/biology/evolutionary.html', meta: 'biology' },
         { id: 'science:biology/imaging', type: 'science', label: 'Bio-Imaging', href: 'science/biology/imaging.html', meta: 'biology' },
@@ -389,6 +395,16 @@
         ['digest:causal-chemprop', 'hub:chemistry', 'contains'],
         ['demo:mol3d', 'aethel:connector', 'hosted-by'],
         ['demo:mol3d', 'hub:chemistry', 'extends'],
+        // Phase 39: Medical imaging + quantum VQC
+        ['demo:medimg', 'paper:TotalSegmentator2023', 'cites'],
+        ['demo:medimg', 'aethel:connector', 'hosted-by'],
+        ['demo:medimg', 'hub:biology', 'extends'],
+        ['demo:vqc', 'paper:QGNN2019', 'cites'],
+        ['demo:vqc', 'paper:BarrenPlateaus2018', 'cites'],
+        ['demo:vqc', 'bloch:shorts', 'extends'],
+        ['demo:vqc', 'aethel:connector', 'hosted-by'],
+        ['demo:vqc', 'hub:physics', 'extends'],
+        ['bloch:shorts', 'paper:QGNN2019', 'related'],
         // Phase 37 — Digest article relationships
         ['digest:alphafold-missense-evolve', 'dataset:PDB-1AKI', 'uses'],
         ['digest:jwst-k2-18b-dms', 'dataset:OpenAlex', 'uses'],

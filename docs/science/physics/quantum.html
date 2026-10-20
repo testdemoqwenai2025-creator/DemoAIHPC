@@ -204,6 +204,98 @@
         AIHPC_ANIM.init();
       </script>
 
+      <!-- Phase 39: QGNN pipeline + VQC animator + barren plateau -->
+      <section style="margin: 32px 0; padding: 24px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px);">
+        <p class="h-tag" style="color: #06b6d4;">Phase 39 · Quantum Machine Learning</p>
+        <h2 style="font-size: 22px; margin: 8px 0 12px; background: linear-gradient(90deg,#06b6d4,#a855f7); -webkit-background-clip: text; background-clip: text; color: transparent;">QGNN pipeline · VQC animator · Barren plateau</h2>
+        <p style="font-size: 14px; color: var(--text-muted, #9ca3af); max-width: 920px;">Inspired by the LinkedIn QGNN post — variational quantum circuits (VQC) + graph neural networks + Hamiltonian evolution + the barren-plateau problem on NISQ hardware. Below: (1) the QGNN pipeline diagram showing the classical → quantum → classical flow, (2) a live VQC animator that trains via the parameter-shift rule, (3) the barren-plateau variance chart (Var ~ 2<sup>-n</sup>).</p>
+
+        <!-- QGNN pipeline diagram -->
+        <div style="margin-top: 20px;">
+          <h3 style="font-size: 14px; color: #06b6d4; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.08em;">1. QGNN pipeline (classical GNN → quantum encoding → VQC → measure → train)</h3>
+          <svg viewBox="0 0 800 220" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: auto; background: #0a0e1a; border-radius: 10px; border: 1px solid var(--border, #1f2937);">
+            <defs>
+              <marker id="arr39" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#06b6d4"/>
+              </marker>
+              <linearGradient id="gQ1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#10b981" stop-opacity="0.4"/><stop offset="100%" stop-color="#10b981" stop-opacity="0.1"/></linearGradient>
+              <linearGradient id="gQ2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#06b6d4" stop-opacity="0.4"/><stop offset="100%" stop-color="#06b6d4" stop-opacity="0.1"/></linearGradient>
+              <linearGradient id="gQ3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.4"/><stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.1"/></linearGradient>
+              <linearGradient id="gQ4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ec4899" stop-opacity="0.4"/><stop offset="100%" stop-color="#ec4899" stop-opacity="0.1"/></linearGradient>
+              <linearGradient id="gQ5" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.4"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0.1"/></linearGradient>
+              <linearGradient id="gQ6" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a855f7" stop-opacity="0.4"/><stop offset="100%" stop-color="#a855f7" stop-opacity="0.1"/></linearGradient>
+            </defs>
+            <!-- 1. Classical GNN -->
+            <rect x="20" y="80" width="110" height="60" rx="10" fill="url(#gQ1)" stroke="#10b981" stroke-width="1.5"/>
+            <text x="75" y="105" text-anchor="middle" font-size="11" fill="#10b981" font-family="ui-monospace" font-weight="700">GNN</text>
+            <text x="75" y="120" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">node emb h_v</text>
+            <text x="75" y="135" text-anchor="middle" font-size="8" fill="#6b7280" font-family="ui-monospace">classical</text>
+            <!-- arrow -->
+            <line x1="130" y1="110" x2="160" y2="110" stroke="#06b6d4" stroke-width="1.5" marker-end="url(#arr39)"/>
+            <!-- 2. Quantum encoding -->
+            <rect x="160" y="80" width="110" height="60" rx="10" fill="url(#gQ2)" stroke="#06b6d4" stroke-width="1.5"/>
+            <text x="215" y="105" text-anchor="middle" font-size="11" fill="#06b6d4" font-family="ui-monospace" font-weight="700">Angle encode</text>
+            <text x="215" y="120" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">|x⟩ = ⊗ RY(x_i)|0⟩</text>
+            <text x="215" y="135" text-anchor="middle" font-size="8" fill="#6b7280" font-family="ui-monospace">h_v → amplitudes</text>
+            <!-- arrow -->
+            <line x1="270" y1="110" x2="300" y2="110" stroke="#06b6d4" stroke-width="1.5" marker-end="url(#arr39)"/>
+            <!-- 3. VQC -->
+            <rect x="300" y="80" width="110" height="60" rx="10" fill="url(#gQ3)" stroke="#8b5cf6" stroke-width="1.5"/>
+            <text x="355" y="105" text-anchor="middle" font-size="11" fill="#8b5cf6" font-family="ui-monospace" font-weight="700">VQC(θ)</text>
+            <text x="355" y="120" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">U(θ)|x⟩</text>
+            <text x="355" y="135" text-anchor="middle" font-size="8" fill="#6b7280" font-family="ui-monospace">entangle + rotate</text>
+            <!-- arrow -->
+            <line x1="410" y1="110" x2="440" y2="110" stroke="#06b6d4" stroke-width="1.5" marker-end="url(#arr39)"/>
+            <!-- 4. Hamiltonian evolution (optional, for quantum walk GNN) -->
+            <rect x="440" y="80" width="110" height="60" rx="10" fill="url(#gQ4)" stroke="#ec4899" stroke-width="1.5"/>
+            <text x="495" y="105" text-anchor="middle" font-size="11" fill="#ec4899" font-family="ui-monospace" font-weight="700">e^(-iHt)</text>
+            <text x="495" y="120" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Hamiltonian</text>
+            <text x="495" y="135" text-anchor="middle" font-size="8" fill="#6b7280" font-family="ui-monospace">quantum walk</text>
+            <!-- arrow -->
+            <line x1="550" y1="110" x2="580" y2="110" stroke="#06b6d4" stroke-width="1.5" marker-end="url(#arr39)"/>
+            <!-- 5. Measurement -->
+            <rect x="580" y="80" width="110" height="60" rx="10" fill="url(#gQ5)" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="635" y="105" text-anchor="middle" font-size="11" fill="#f59e0b" font-family="ui-monospace" font-weight="700">⟨H⟩</text>
+            <text x="635" y="120" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">measure</text>
+            <text x="635" y="135" text-anchor="middle" font-size="8" fill="#6b7280" font-family="ui-monospace">Born's rule</text>
+            <!-- arrow up -->
+            <line x1="635" y1="80" x2="635" y2="55" stroke="#06b6d4" stroke-width="1.5" marker-end="url(#arr39)"/>
+            <!-- 6. Loss + param shift + backprop to θ -->
+            <rect x="450" y="20" width="370" height="35" rx="8" fill="url(#gQ6)" stroke="#a855f7" stroke-width="1.5"/>
+            <text x="635" y="42" text-anchor="middle" font-size="10" fill="#a855f7" font-family="ui-monospace" font-weight="700">Loss = -⟨H⟩;  ∂L/∂θ_i = (⟨H⟩(θ+π/2) - ⟨H⟩(θ-π/2))/2  [parameter shift]</text>
+            <!-- arrow back to VQC -->
+            <path d="M 355 55 Q 355 35 355 25" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="3 3" fill="none" marker-end="url(#arr39)"/>
+            <text x="280" y="50" text-anchor="end" font-size="9" fill="#a855f7" font-family="ui-monospace">update θ</text>
+            <!-- annotation row at bottom -->
+            <text x="20" y="20" font-size="11" fill="#06b6d4" font-family="ui-monospace" font-weight="700">Fig. 2 — QGNN pipeline: classical GNN → quantum encoding → VQC → Hamiltonian → measure → train via parameter-shift rule</text>
+            <text x="20" y="180" font-size="9" fill="#9ca3af" font-family="ui-monospace">NISQ reality: noise + limited qubit count + barren plateau (Var ~ 2^-n) make training hard for n > 8.</text>
+            <text x="20" y="195" font-size="9" fill="#9ca3af" font-family="ui-monospace">PennyLane · Qiskit · Cirq · Pennylane-Lightning (simulator) — all support VQC + parameter-shift.</text>
+          </svg>
+        </div>
+
+        <!-- Live VQC animator -->
+        <div style="margin-top: 20px;">
+          <h3 style="font-size: 14px; color: #06b6d4; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.08em;">2. Live VQC animator — trains via parameter-shift rule</h3>
+          <div id="quantum-vqc-container"></div>
+          <p style="font-size: 11px; color: #6b7280; margin-top: 8px;">Press <strong>Train</strong> to run VQE optimisation in-browser. The circuit shows the live parameter values (RZ(θ<sub>i</sub>)) updating as gradient descent minimises the loss ⟨H⟩. Use the qubit-count dropdown to switch between 2-8 qubits — watch the barren-plateau chart on the right update in tandem.</p>
+        </div>
+
+        <!-- Research + tooling content -->
+        <div style="margin-top: 20px; padding: 16px; background: rgba(11,15,26,0.6); border-radius: 10px; border: 1px solid var(--border, #1f2937);">
+          <h3 style="margin: 0 0 8px; font-size: 13px; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.08em;">Recent QML research + tooling</h3>
+          <ul style="margin: 0 0 8px; padding-left: 18px; color: #9ca3af; font-size: 11px; line-height: 1.7;">
+            <li><strong style="color:#06b6d4;">QGNN — Quantum Graph Neural Networks</strong> (Verdon et al. 2019, arXiv:1905.10860; recent 2024 follow-ups): embed graph nodes as quantum states, apply VQC layers, measure node classification.</li>
+            <li><strong style="color:#06b6d4;">PennyLane</strong> (Xanadu): diff-rule-aware quantum ML library. Native support for parameter-shift, finite-diff, adjoint, and backprop on simulators.</li>
+            <li><strong style="color:#06b6d4;">Qiskit + Qiskit Machine Learning</strong> (IBM): VQC + QuantumKernel + QSVC. Recently merged Qiskit 1.0 primitives (Sampler + Estimator V2).</li>
+            <li><strong style="color:#06b6d4;">Cirq + TFQ</strong> (Google + TensorFlow Quantum): hybrid differentiable quantum circuits integrated with TensorFlow.</li>
+            <li><strong style="color:#06b6d4;">Barren plateaus</strong> (McClean et al. 2018, Nature Communications): for global cost functions on random parameterised circuits, gradient variance decays as ~2<sup>-n</sup> — the central NISQ challenge.</li>
+            <li><strong style="color:#06b6d4;">Layered ansatz strategies</strong> (Havlíček et al. 2019; Schuld et al. 2020): local cost functions + hardware-efficient ansatz mitigate (but don't eliminate) the barren-plateau problem.</li>
+            <li><strong style="color:#06b6d4;">Hamiltonian evolution / quantum walk GNNs</strong> (Verdon et al. 2019): the e<sup>-iHt</sup> step (where H is the graph Laplacian) implements a continuous-time quantum walk on the graph — exponentially faster mixing on certain topologies.</li>
+          </ul>
+          <p style="margin: 0; color: #6b7280; font-size: 11px;">Pure client-side VQE simulation up to n=8 (64-element state vector). For larger systems use PennyLane-Lightning (GPU) or Qiskit Aer (statevector simulator).</p>
+        </div>
+      </section>
+
       <h2>Math &rarr; Code derivation</h2>
       <div class="derivation-step">
         <strong>Step 1: The qubit</strong>
@@ -314,6 +406,14 @@
         });
         AIHPC_GTS.init();
       })();
+
+      // Phase 39: mount VQC animator
+      document.addEventListener('DOMContentLoaded', function () {
+        if (!window.AIHPC_VQC) return;
+        AIHPC_VQC.mount('quantum-vqc-container', { nQubits: 4 });
+        AIHPC_VQC.play('quantum-vqc-container');
+      });
     </script>
+    <script src="../../vqc-animator.js"></script>
   </body>
 </html>
