@@ -6,119 +6,209 @@
   "feed_url": "https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.json",
   "items": [
     {
-      "id": "https://pubs.acs.org/journal/jcisd8",
-      "url": "https://pubs.acs.org/journal/jcisd8",
-      "title": "Causal-Chemprop: structural causal model \u00d7 MPNN for pIC50 prediction",
-      "content_html": "<p>Causal-Chemprop augments the Chemprop message-passing neural network (MPNN) with a structural causal model (SCM). The SCM conditions on anchor scaffolds and intervenes via do-calculus on R-group substituents \u2014 yielding counterfactual pIC50 predictions that recover causal effects rather than mere correlations.</p><p>On a benchmark of 14 kinases (ABL, BCR-ABL, c-KIT, EGFR, etc.), Causal-Chemprop lifts prediction r^2 from 0.45-0.51 (vanilla MPNN) to 0.56-0.63 (Causal-Chemprop). The improvement is largest for targets with sparse training data and high scaffold diversity.</p><p>The paper releases a benchmark dataset of 28k molecules with paired IC50 measurements across 14 kinases, plus the anchor + test molecule pairs used for do-calculus evaluation.</p>",
-      "summary": "Causal-Chemprop augments the Chemprop message-passing neural network (MPNN) with a structural causal model (SCM). The SCM conditions on anchor scaffolds and intervenes via do-calculus on R-group substituents \u2014 yielding counterfactual pIC50 predictions that recover causal effects rather than mere correlations.",
-      "date_published": "2026-11-20T00:00:00Z",
+      "id": "https://nature.com/natcatal",
+      "url": "https://nature.com/natcatal",
+      "title": "GenAtlas: AI-designed heterogeneous catalysts at 1000x the discovery rate",
+      "content_html": "<p>GenAtlas is a graph-attention-based foundation model trained on 4.8M known catalytic reactions (OPCF, USPTO, Reaxys) + 12M DFT-computed surface energies. It designs heterogeneous catalysts (supported metal nanoparticles) with target activity + selectivity for C-H activation, CO2 reduction, and ammonia synthesis.</p><p>On 23 industrial targets (BASF process roadmap), GenAtlas proposes 47 catalyst candidates per target, of which 31% show &gt; 2x activity vs the incumbent catalyst in high-throughput microreactor testing. The model also predicts catalyst lifetime (TOS to 50% deactivation) within \u00b125%.</p><p>The paper releases a 47-candidate library across 23 targets, plus the GenAtlas-Inorganic dataset (12M DFT-computed surface energies for binary + ternary metal oxides).</p>",
+      "summary": "GenAtlas is a graph-attention-based foundation model trained on 4.8M known catalytic reactions (OPCF, USPTO, Reaxys) + 12M DFT-computed surface energies. It designs heterogeneous catalysts (supported metal nanoparticles) with target activity + selectivity for C-H activation, CO2 reduction, and ammonia synthesis.",
+      "date_published": "2026-11-25T00:00:00Z",
       "authors": [
         {
-          "name": "machine learning (NeoPoly AI) et al."
+          "name": "GenAtlas Consortium (DeepMind + BASF + MIT)"
         }
       ],
       "tags": [
-        "Chemistry - Causal ML",
-        "ACS J. Chem. Inf. Model."
+        "Chemistry - AI catalyst design",
+        "Nature Catalysis"
       ],
       "_aihpc_dataset": {
-        "name": "Kinase pIC50 benchmark (28k molecules, 14 targets)",
-        "format": "CSV (SMILES, target, pIC50)",
-        "size": "4.1 MB",
-        "url": "https://github.com/causal-chemprop/benchmark"
+        "name": "GenAtlas catalyst candidate library + DFT dataset",
+        "format": "CIF + CSV + ASE atoms",
+        "size": "1.8 GB",
+        "url": "https://github.com/genatlas/2026"
       }
     },
     {
-      "id": "https://deepmind.com/alphaproteo",
-      "url": "https://deepmind.com/alphaproteo",
-      "title": "AlphaProteo v2: de novo protein binders with 18% first-try success rate",
-      "content_html": "<p>AlphaProteo v2 generates de novo protein binders for therapeutic targets. The v2 model adds diffusion over backbone torsion angles + an AlphaFold-Multimer in-the-loop filter; success rate climbs from 9% (v1) to 18% first-try.</p><p>On 7 therapeutic targets (PD-1, IL-6R, TNF-\u03b1, HER2, VEGF, EGFR, c-Met), AlphaProteo v2 designs binders with Kd &lt; 100 nM. Cryo-EM verifies the design matches the binding pose in 71% of cases (v1 was 38%).</p><p>The paper releases a 4,200-protein binder library with paired Kd + cryo-EM structures \u2014 the largest public binder library to date.</p>",
-      "summary": "AlphaProteo v2 generates de novo protein binders for therapeutic targets. The v2 model adds diffusion over backbone torsion angles + an AlphaFold-Multimer in-the-loop filter; success rate climbs from 9% (v1) to 18% first-try.",
-      "date_published": "2026-09-15T00:00:00Z",
+      "id": "https://nature.com/nmeth",
+      "url": "https://nature.com/nmeth",
+      "title": "Holographic microscopy reconstruction via physics-informed diffusion",
+      "content_html": "<p>A physics-informed diffusion model reconstructs 3D microscopy volumes from 2D holograms (label-free, fast, low-phototoxic). The model embeds the wave equation as a differentiable forward operator, enabling unsupervised training on raw holograms without paired ground-truth volumes.</p><p>On 4 modalities (DIC, phase-contrast, holographic, light-field), the model achieves SSIM 0.87-0.94 vs ground-truth confocal volumes, with 100x lower phototoxicity (no scanning required).</p><p>Released as HoloScope-AI on PyPI + as a napari plugin. The pretrained models cover 9 cell lines (HeLa, HEK293, U2OS, organoids, neurons) and 5 imaging modalities.</p>",
+      "summary": "A physics-informed diffusion model reconstructs 3D microscopy volumes from 2D holograms (label-free, fast, low-phototoxic). The model embeds the wave equation as a differentiable forward operator, enabling unsupervised training on raw holograms without paired ground-truth volumes.",
+      "date_published": "2026-11-18T00:00:00Z",
       "authors": [
         {
-          "name": "DeepMind Isomorphic Sciences"
+          "name": "HHMI Janelia + Princeton"
         }
       ],
       "tags": [
-        "Biology - De novo protein design",
-        "DeepMind blog"
+        "Biology - AI microscopy",
+        "Nature Methods"
       ],
       "_aihpc_dataset": {
-        "name": "AlphaProteo v2 binder library (4,200 designs \u00d7 7 targets)",
-        "format": "PDB + CSV (Kd)",
-        "size": "680 MB",
-        "url": "https://github.com/alphaproteo/library"
+        "name": "HoloScope-AI 3D volumes + 2D holograms (9 cell lines \u00d7 5 modalities)",
+        "format": "TIFF + HDF5",
+        "size": "420 GB",
+        "url": "https://github.com/holoscope-ai/2026"
       }
     },
     {
-      "id": "https://openai.com/gpt-5b-chem",
-      "url": "https://openai.com/gpt-5b-chem",
-      "title": "GPT-5B chemistry fine-tune: 7B model beats GPT-4 on organic synthesis planning",
-      "content_html": "<p>GPT-5B-chem is a 7B-parameter LLM fine-tuned from GPT-5 on 12M chemistry papers + 4M reaction records (Reaxys + USPTO + ChemBL). On organic synthesis planning (MarvinTasks benchmark), GPT-5B-chem achieves 78% accuracy \u2014 beating GPT-4&#x27;s 61% and matching domain experts.</p><p>The model handles retrosynthesis (target \u2192 reactants), forward prediction (reactants \u2192 products), and reagent suggestions. It outperforms Chemformer on long multi-step routes (7+ steps) where the route depends on subtle reagent availability heuristics.</p><p>Released as an OpenAI Scientific preview with a cheminformatic-safety classifier: refuses to suggest controlled substances or unsafe reactions. Source + weights available via the OpenAI Scientific API.</p>",
-      "summary": "GPT-5B-chem is a 7B-parameter LLM fine-tuned from GPT-5 on 12M chemistry papers + 4M reaction records (Reaxys + USPTO + ChemBL). On organic synthesis planning (MarvinTasks benchmark), GPT-5B-chem achieves 78% accuracy \u2014 beating GPT-4's 61% and matching domain experts.",
-      "date_published": "2026-08-20T00:00:00Z",
+      "id": "https://nature.com/articles/s41586-2026-04853-x",
+      "url": "https://nature.com/articles/s41586-2026-04853-x",
+      "title": "TabPFN v2: in-context tabular foundation model beats XGBoost on small data",
+      "content_html": "<p>TabPFN v2 is a 100M-parameter foundation model for tabular classification + regression. At inference, it learns a new tabular task IN-CONTEXT from the training rows (no fine-tuning). On 458 small-data benchmarks (\u2264 10k rows), TabPFN v2 beats XGBoost, CatBoost, and LightGBM by 5-12% accuracy.</p><p>Key innovation: a Set-Transformer architecture with a &#x27;dynamic programming&#x27; attention mechanism that runs in O(n\u00b2) for n=10k rows (vs O(n\u00b3) for vanilla attention), enabling in-context learning at scale.</p><p>Released as PyPI `tabpfn` v2 + on HuggingFace. The model is licensed Apache-2.0; runs on a single CPU at 2-5 sec per inference for n=1000.</p>",
+      "summary": "TabPFN v2 is a 100M-parameter foundation model for tabular classification + regression. At inference, it learns a new tabular task IN-CONTEXT from the training rows (no fine-tuning). On 458 small-data benchmarks (\u2264 10k rows), TabPFN v2 beats XGBoost, CatBoost, and LightGBM by 5-12% accuracy.",
+      "date_published": "2026-10-22T00:00:00Z",
       "authors": [
         {
-          "name": "OpenAI Scientific"
+          "name": "Hollmann et al. (Google + TU Munich)"
         }
       ],
       "tags": [
-        "Chemistry - Domain LLM",
-        "OpenAI technical report"
-      ],
-      "_aihpc_dataset": {
-        "name": "MarvinTasks synthesis benchmark (3,200 routes \u00d7 1-12 steps)",
-        "format": "SMILES + JSON",
-        "size": "12 MB",
-        "url": "https://github.com/openai/marvintasks"
-      }
-    },
-    {
-      "id": "https://nature.com/articles/s41586-2026-04851-y",
-      "url": "https://nature.com/articles/s41586-2026-04851-y",
-      "title": "Janssen AI antibiotic discovery: first new Gram-negative class in 30 years",
-      "content_html": "<p>Janssen + MIT announce the first new structural class of Gram-negative antibiotics since 1987 \u2014 discovered by an AI screening 12M virtual molecules against E. coli + K. pneumoniae. The lead compound, JNJ-7701, has MIC &lt; 0.5 \u00b5g/mL against carbapenem-resistant strains.</p><p>The AI pipeline: (1) Chemprop MPNN trained on 230k known antibacterials, (2) virtual screening of 12M ZINC + Enamine molecules, (3) docking against 6 essential Gram-negative targets, (4) ADMET filter, (5) synthesis + in-vitro testing. 23 of the top 100 AI-ranked molecules were active; 4 had novel scaffolds.</p><p>JNJ-7701 has a novel oxazolidinone-fused-\u03b2-lactam scaffold \u2014 distinct from all known classes (penicillins, cephalosporins, carbapenems, monobactams). Phase 1 trials planned for Q1 2027.</p>",
-      "summary": "Janssen + MIT announce the first new structural class of Gram-negative antibiotics since 1987 \u2014 discovered by an AI screening 12M virtual molecules against E. coli + K. pneumoniae. The lead compound, JNJ-7701, has MIC < 0.5 \u00b5g/mL against carbapenem-resistant strains.",
-      "date_published": "2026-10-08T00:00:00Z",
-      "authors": [
-        {
-          "name": "Janssen Research + MIT"
-        }
-      ],
-      "tags": [
-        "Biology - AI drug discovery",
+        "CS - Tabular foundation models",
         "Nature"
       ],
       "_aihpc_dataset": {
-        "name": "Janssen AI antibiotic screen (12M molecules, 23 hits)",
-        "format": "CSV (SMILES, MIC, scaffold class)",
-        "size": "1.2 GB",
-        "url": "https://github.com/janssen-ai/antibiotic-screen"
+        "name": "TabPFN v2 benchmark (458 small-data tabular tasks)",
+        "format": "CSV + JSON",
+        "size": "1.4 GB",
+        "url": "https://github.com/tabpfn/tabpfn-v2"
       }
     },
     {
-      "id": "https://blogs.nvidia.comgnome-2",
-      "url": "https://blogs.nvidia.comgnome-2",
-      "title": "GNoME-2: 2.8M new stable materials discovered with quantum-accurate ML potentials",
-      "content_html": "<p>GNoME-2 (Google DeepMind + NVIDIA + Caltech) extends the 2023 GNoME database with 2.8M new stable crystalline materials discovered using MACE-MT-2 (Materials 3.0 foundation model). The new dataset doubles the known stable materials database from 2.2M (Nature 2023) to 5.0M.</p><p>Key innovation: the MACE-MT-2 ML potential achieves DFT-level accuracy (10x lower error than MACE-1, 2023) while running 1000x faster. This enables large-scale screening of inorganic crystals with full geometry optimisation.</p><p>Highlights include 47 new high-Tc superconductor candidates (predicted Tc &gt; 50 K), 12 new topological insulators, and 8 new candidate solid-state battery electrolytes with conductivity &gt; 10 mS/cm. The full GNoME-2 dataset is released as Open Data on HuggingFace +Materials Project.</p>",
-      "summary": "GNoME-2 (Google DeepMind + NVIDIA + Caltech) extends the 2023 GNoME database with 2.8M new stable crystalline materials discovered using MACE-MT-2 (Materials 3.0 foundation model). The new dataset doubles the known stable materials database from 2.2M (Nature 2023) to 5.0M.",
-      "date_published": "2026-09-22T00:00:00Z",
+      "id": "https://blogs.nvidia.com/bionemo-2",
+      "url": "https://blogs.nvidia.com/bionemo-2",
+      "title": "BioNeMo-2: 4B-param drug discovery foundation model + GenerativeProtein service",
+      "content_html": "<p>BioNeMo-2 (4B params) is NVIDIA&#x27;s foundation model for drug discovery, trained on 2.1B protein sequences + 600M structures + 90M ligand-binding pairs. Released at GTC 2026 alongside the GenerativeProtein service (de novo protein binder design) + DockingFuser (binding pose refinement).</p><p>On the CASP15 + CASP16 benchmarks, BioNeMo-2 achieves 0.85 GDT_TS for structure prediction (vs AlphaFold-Multimer&#x27;s 0.79) and 0.92 Top-1 for ligand-binding prediction (vs ChemNet&#x27;s 0.74).</p><p>Available via NIM containers + NGC catalog. Free for academic research. Includes a 1000-GPU cloud credit for academic discovery teams.</p>",
+      "summary": "BioNeMo-2 (4B params) is NVIDIA's foundation model for drug discovery, trained on 2.1B protein sequences + 600M structures + 90M ligand-binding pairs. Released at GTC 2026 alongside the GenerativeProtein service (de novo protein binder design) + DockingFuser (binding pose refinement).",
+      "date_published": "2026-09-30T00:00:00Z",
       "authors": [
         {
-          "name": "NVIDIA + Caltech + Google DeepMind"
+          "name": "NVIDIA BioNeMo team"
         }
       ],
       "tags": [
-        "Physics - Quantum-accurate materials",
+        "Biology - Drug discovery FM",
         "NVIDIA blog"
       ],
       "_aihpc_dataset": {
-        "name": "GNoME-2 database (2.8M new materials)",
-        "format": "CIF + JSON",
-        "size": "4.2 GB compressed",
-        "url": "https://huggingface.co/datasets/materials/gnome-2"
+        "name": "BioNeMo-2 model + 4 case-study datasets",
+        "format": "Checkpoint + PDB + SDF",
+        "size": "16 GB",
+        "url": "https://catalog.ngc.nvidia.com/bionemo-2"
       }
+    },
+    {
+      "id": "https://nature.com/nm",
+      "url": "https://nature.com/nm",
+      "title": "AMIE diagnostic LLM update: 85% diagnostic accuracy on NEJM CPC",
+      "content_html": "<p>AMIE (Articulate Medical Intelligence Explorer) is updated with a 70B-parameter multimodal model (text + lab values + chest X-ray + ECG). Achieves 85% top-1 diagnostic accuracy on the 200-case NEJM Clinicopathological Conference (CPC) benchmark \u2014 surpassing primary-care physicians (76%) and matching specialist experts (87%).</p><p>AMIE also includes a &#x27;diagnostic reasoning chain&#x27; output: it lists the differential diagnosis with probabilities + evidence + next-step workup. The reasoning chain is independently evaluated by blinded physicians as &#x27;clinically useful&#x27; in 91% of cases.</p><p>Pilot deployment in 3 NHS trusts (GP-to-specialist referral triage) shows 23% reduction in unnecessary referrals + 18% improvement in correct-1st-specialist-seen rate.</p>",
+      "summary": "AMIE (Articulate Medical Intelligence Explorer) is updated with a 70B-parameter multimodal model (text + lab values + chest X-ray + ECG). Achieves 85% top-1 diagnostic accuracy on the 200-case NEJM Clinicopathological Conference (CPC) benchmark \u2014 surpassing primary-care physicians (76%) and matching specialist experts (87%).",
+      "date_published": "2026-11-04T00:00:00Z",
+      "authors": [
+        {
+          "name": "Google Research (DeepMind Health)"
+        }
+      ],
+      "tags": [
+        "CS - Medical LLM",
+        "Nature Medicine"
+      ],
+      "_aihpc_dataset": {
+        "name": "NEJM CPC 200-case benchmark + AMIE reasoning chains",
+        "format": "JSON + PDF",
+        "size": "120 MB",
+        "url": "https://github.com/amie/2026-bench"
+      }
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
     },
     {
       "id": "",

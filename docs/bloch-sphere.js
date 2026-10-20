@@ -110,6 +110,68 @@
       duration: 6,
       color: '#10b981',
     },
+    // ---- Phase 40: 2-qubit Bell states + CHSH inequality violation ----
+    {
+      title: 'Bell state |Φ+⟩',
+      math: '|Φ+⟩ = (|00⟩ + |11⟩) / √2',
+      explain: 'The maximally-entangled Bell state |Φ+⟩. Measuring qubit A in the computational basis instantly determines qubit B (same outcome) — even if A and B are light-years apart. Einstein called this "spooky action at a distance."',
+      // 2-qubit state is rendered as 2 Bloch spheres + a correlation line
+      twoQubit: true,
+      qubitA: { theta: 0, phi: 0 },          // |0⟩
+      qubitB: { theta: 0, phi: 0 },          // |0⟩ (correlated)
+      correlation: 1.0,                       // perfectly correlated
+      trajectory: function (t) {
+        // Build entanglement: A stays at |0⟩, B transitions from |1⟩ to |0⟩ (correlated)
+        return {
+          qubitA: { theta: 0, phi: 0 },
+          qubitB: { theta: 0, phi: 0 },
+          correlation: 1.0,
+        };
+      },
+      duration: 5,
+      color: '#8b5cf6',
+    },
+    {
+      title: 'Bell state |Ψ-⟩ (singlet)',
+      math: '|Ψ-⟩ = (|01⟩ - |10⟩) / √2',
+      explain: 'The singlet Bell state |Ψ-⟩. Measuring qubit A in ANY basis instantly determines B as the opposite (anti-correlated in every basis). This is the state used in CHSH inequality tests — the maximum quantum correlation exceeds the classical bound of 2.',
+      twoQubit: true,
+      trajectory: function (t) {
+        return {
+          qubitA: { theta: Math.PI / 2, phi: t * 2 * Math.PI },  // rotates around equator
+          qubitB: { theta: Math.PI / 2, phi: t * 2 * Math.PI + Math.PI },  // opposite phase
+          correlation: -1.0,  // anti-correlated
+        };
+      },
+      duration: 6,
+      color: '#ec4899',
+    },
+    {
+      title: 'CHSH inequality violation',
+      math: 'S = |E(a,b) - E(a,b\') + E(a\',b) + E(a\',b\')| ≤ 2 (classical), ≤ 2√2 ≈ 2.83 (quantum)',
+      explain: 'CHSH test: measure 4 correlation terms with different measurement bases (a, a\') on A and (b, b\') on B. Classical hidden-variable theories bound |S| ≤ 2 (Bell 1964). Quantum mechanics predicts |S| = 2√2 ≈ 2.83 for entangled states. Experiments (Aspect 1982, Hensen 2015) confirm the quantum value, ruling out local hidden variables.',
+      twoQubit: true,
+      trajectory: function (t) {
+        // Animate the 4 measurement configurations cycling
+        var cycle = Math.floor(t * 4);  // 0..3 over the duration
+        var cycleProgress = (t * 4) % 1;
+        var phases = [
+          { a: 0, b: Math.PI / 8 },         // E(a, b)
+          { a: 0, b: -Math.PI / 8 },        // E(a, b')
+          { a: Math.PI / 4, b: Math.PI / 8 }, // E(a', b)
+          { a: Math.PI / 4, b: -Math.PI / 8 }, // E(a', b')
+        ];
+        var cfg = phases[cycle % 4];
+        return {
+          qubitA: { theta: Math.PI / 2, phi: cfg.a + cycleProgress * 0.5 },
+          qubitB: { theta: Math.PI / 2, phi: cfg.b + cycleProgress * 0.5 + Math.PI },  // anti-correlated
+          correlation: -Math.cos(2 * (cfg.a - cfg.b)),
+          chshCycle: cycle % 4,
+        };
+      },
+      duration: 8,
+      color: '#f59e0b',
+    },
   ];
 
   function ease(t) {
@@ -496,6 +558,11 @@
     // ---- State vector ----
     var scene = this.scenes[this.currentScene];
     var state = scene.trajectory(sceneT);
+    // Phase 40: 2-qubit scenes (Bell states + CHSH) render side-by-side
+    if (scene.twoQubit) {
+      this.render2Qubit(ctx, W, H, state, scene, sceneT);
+      return;
+    }
     var r = state.r !== undefined ? state.r : 1.0;
     var stateVec = sphericalToCartesian(state.theta, state.phi, r);
     var stateScreen = this.transformPoint(stateVec, cx, cy, R);
@@ -598,6 +665,131 @@
   BlochComponent.prototype.transformPoint = function (p, cx, cy, R) {
     var rp = rotateYawPitch(p, this.yaw, this.pitch);
     return project(rp, cx, cy, R);
+  };
+
+  // ---- Phase 40: 2-qubit renderer (Bell states + CHSH) ----
+  // Renders 2 smaller Bloch spheres side-by-side + a correlation line.
+  BlochComponent.prototype.render2Qubit = function (ctx, W, H, state, scene, sceneT) {
+    // Two smaller spheres: left (qubit A) + right (qubit B), each at ~36% of width
+    var halfW = W / 2;
+    var A_cx = halfW * 0.5, B_cx = halfW * 1.5;
+    var A_cy = H * 0.46, B_cy = H * 0.46;
+    var R_small = Math.min(halfW, H) * 0.32;
+
+    // Draw each sphere (reuse drawCircle etc.)
+    this.drawSphere(ctx, A_cx, A_cy, R_small, 'A');
+    this.drawSphere(ctx, B_cx, B_cy, R_small, 'B');
+
+    // State vectors
+    var qA = state.qubitA || { theta: 0, phi: 0 };
+    var qB = state.qubitB || { theta: 0, phi: 0 };
+    var vA = sphericalToCartesian(qA.theta || 0, qA.phi || 0, 1.0);
+    var vB = sphericalToCartesian(qB.theta || 0, qB.phi || 0, 1.0);
+    var sA = this.transformPoint(vA, A_cx, A_cy, R_small);
+    var sB = this.transformPoint(vB, B_cx, B_cy, R_small);
+
+    // Vector arrows + glow
+    [sA, sB].forEach(function (sp, idx) {
+      var cx_ = idx === 0 ? A_cx : B_cx;
+      var cy_ = idx === 0 ? A_cy : B_cy;
+      var lbl = idx === 0 ? 'A' : 'B';
+      ctx.save();
+      ctx.shadowColor = scene.color;
+      ctx.shadowBlur = 12;
+      ctx.strokeStyle = scene.color;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(cx_, cy_);
+      ctx.lineTo(sp.x, sp.y);
+      ctx.stroke();
+      ctx.fillStyle = scene.color;
+      ctx.beginPath();
+      ctx.arc(sp.x, sp.y, 4, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.restore();
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 12px ui-monospace';
+      ctx.fillText(lbl, cx_ - 4, cy_ + 4);
+    });
+
+    // Correlation line between the two state vectors (Bell entanglement)
+    var corr = state.correlation !== undefined ? state.correlation : 1.0;
+    ctx.save();
+    ctx.shadowColor = scene.color;
+    ctx.shadowBlur = 8;
+    ctx.strokeStyle = corr > 0 ? '#10b981' : '#ef4444';
+    if (Math.abs(corr) < 0.3) ctx.strokeStyle = '#9ca3af';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(sA.x, sA.y);
+    ctx.lineTo(sB.x, sB.y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+
+    // Correlation readout in middle
+    ctx.fillStyle = corr > 0 ? '#10b981' : (corr < 0 ? '#ef4444' : '#9ca3af');
+    ctx.font = 'bold 14px ui-monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('E(A,B) = ' + corr.toFixed(3), halfW, H - 36);
+
+    // CHSH S value if this is the CHSH scene
+    if (scene.title.indexOf('CHSH') >= 0) {
+      // Compute S = |E(a,b) - E(a,b') + E(a',b) + E(a',b')|
+      // Using the quantum formula S = 2√2 * (sign of anti-correlation phase)
+      var S = 2 * Math.SQRT2;
+      var cycle = state.chshCycle !== undefined ? state.chshCycle : 0;
+      var termLabels = ['E(a,b)', 'E(a,b\')', 'E(a\',b)', 'E(a\',b\')'];
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = 'bold 13px ui-monospace';
+      ctx.fillText('|S| = ' + S.toFixed(3) + ' (quantum, > 2 classical)', halfW, H - 18);
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '10px ui-monospace';
+      ctx.fillText('currently measuring: ' + termLabels[cycle], halfW, H - 4);
+    } else {
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '11px ui-monospace';
+      ctx.fillText(scene.math, halfW, H - 18);
+    }
+
+    // Title at top
+    ctx.fillStyle = scene.color;
+    ctx.font = 'bold 12px ui-monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(scene.title, halfW, 18);
+    ctx.textAlign = 'left';
+  };
+
+  BlochComponent.prototype.drawSphere = function (ctx, cx, cy, R, label) {
+    // Compact Bloch sphere — wireframe only, no axes labels
+    var latSteps = 6;
+    for (var li = 1; li < latSteps; li++) {
+      var latTheta = (Math.PI / latSteps) * li;
+      this.drawCircle(ctx, cx, cy, R, this.yaw, this.pitch,
+        function (a) { return sphericalToCartesian(latTheta, a); },
+        'rgba(139,92,246,0.15)', 0.8);
+    }
+    var lonSteps = 8;
+    for (var lo = 0; lo < lonSteps; lo++) {
+      var lonPhi = (2 * Math.PI / lonSteps) * lo;
+      this.drawCircle(ctx, cx, cy, R, this.yaw, this.pitch,
+        function (a) { return sphericalToCartesian(a, lonPhi); },
+        'rgba(6,182,212,0.12)', 0.8);
+    }
+    this.drawCircle(ctx, cx, cy, R, this.yaw, this.pitch,
+      function (a) { return sphericalToCartesian(Math.PI / 2, a); },
+      'rgba(255,255,255,0.45)', 1.4);
+    this.drawCircleOutline(ctx, cx, cy, R, 'rgba(148,163,184,0.4)', 1.0);
+    // Z axis (north-south)
+    var zTop = this.transformPoint({ x: 0, y: 0, z: 1 }, cx, cy, R);
+    var zBot = this.transformPoint({ x: 0, y: 0, z: -1 }, cx, cy, R);
+    this.drawLine3D(ctx, zTop, zBot, 'rgba(148,163,184,0.5)', 1);
+    // Labels
+    ctx.fillStyle = '#f3f4f6';
+    ctx.font = '11px ui-monospace';
+    ctx.fillText('|0⟩', zTop.x + 4, zTop.y - 4);
+    ctx.fillText('|1⟩', zBot.x + 4, zBot.y + 14);
   };
 
   BlochComponent.prototype.drawCircle = function (ctx, cx, cy, R, yaw, pitch, pointFn, color, lineWidth) {

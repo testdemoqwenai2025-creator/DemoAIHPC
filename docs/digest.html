@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Weekly Science Digest — Issue #7 (2026-12-01). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos." />
-    <title>Weekly Science Digest · Issue #7 — AIHPC Advanced</title>
+    <meta name="description" content="Weekly Science Digest — Issue #8 (2026-12-08). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos." />
+    <title>Weekly Science Digest · Issue #8 — AIHPC Advanced</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
       * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
@@ -154,62 +154,62 @@
     <div class="container">
       <p class="crumbs"><a href="concepts.html">Insights</a> / Weekly Science Digest</p>
       <span class="tag">Foundational &middot; weekly curation &middot; reproducibility-first</span>
-      <h1>Weekly Science Digest &middot; Issue #7</h1>
-      <p class="lead">Causal - binders - matter - five fresh 2026 papers plus two ML-derived futuristic visions</p>
+      <h1>Weekly Science Digest &middot; Issue #8</h1>
+      <p class="lead">Catalysts - holography - tabular SLMs - five fresh 2026 papers plus two futuristic visions</p>
       <div class="meta-issue">
-        <span><strong>Issue #7</strong></span>
-        <span>· 2026-12-01</span>
+        <span><strong>Issue #8</strong></span>
+        <span>· 2026-12-08</span>
         <span>· 7 articles</span>
         <span class="pill">New issue every Tuesday</span>
       </div>
       <p class="lead" style="font-size: 15px; color: var(--text-muted); margin-bottom: 24px;">
-        This week&#x27;s digest pairs five fresh high-impact 2026 publications - Causal-Chemprop (ACS JCIM 2026), AlphaProteo v2 (DeepMind 2026), GPT-5B chemistry (OpenAI 2026), Janssen AI antibiotic discovery (Nature 2026), and NVIDIA GNoME-2 materials (2026) - with two ML-derived futuristic visions: programmatic matter via DNA origami (2030) and AI-driven abiogenesis (2031).
+        This week&#x27;s digest pairs five fresh 2026 publications - AI for catalysts (Nature Catalysis), holographic microscopy reconstruction (Nature Methods), TabPFN v2 (Nature), NVIDIA BioNeMo-2, and Google AMIE diagnostic update - with two ML-derived futuristic visions: programmable enzymes (2032) and AI-driven cold-fusion diagnostics (2033).
       </p>
 
       <div style="margin: 0 0 32px; padding: 14px 18px; background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.2); border-left: 3px solid var(--accent-2); border-radius: 12px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">        <div style="flex: 1; min-width: 240px;">          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 4px;">📡 Subscribe to the weekly digest</div>          <div style="font-size: 12px; color: var(--text-muted);">Get every Tuesday's curated digest in your RSS reader. RSS 2.0 + JSON Feed 1.1 both available — choose your format below.</div>        </div>        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">          <input id="rss-url-input" readonly value="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" style="background: var(--bg-elevated); border: 1px solid var(--border-strong); color: var(--accent-2); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-family: 'SF Mono', Menlo, monospace; min-width: 280px; max-width: 360px;" onclick="this.select()" />          <button class="btn primary" style="background: linear-gradient(90deg,#06b6d4,#8b5cf6); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="copyRSSUrl()">📋 Copy URL</button>          <a href="https://feedly.com/i/subscription/feed/https%3A%2F%2Ftestdemoqwenai2025-creator.github.io%2FDemoAIHPC%2Fdigest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Feedly</a>          <a href="https://www.inoreader.com/?add_feed=https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Inoreader</a>          <a href="digest.json" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">JSON Feed</a>          <a href="digest/archive/index.html" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">📜 Archive</a>        </div>      </div>
 
-      <article class="article-card" id="article-causal-chemprop">
+      <article class="article-card" id="article-ai-catalysts-genatlas">
         <div class="article-head">
           <div>
             <div class="source-row">
-              <span class="source-badge">ACS J. Chem. Inf. Model.</span>
-              <span class="domain-pill">Chemistry - Causal ML</span>
-              <span>· 2026-11-20</span>
+              <span class="source-badge">Nature Catalysis</span>
+              <span class="domain-pill">Chemistry - AI catalyst design</span>
+              <span>· 2026-11-25</span>
               
             </div>
-            <h3>Causal-Chemprop: structural causal model × MPNN for pIC50 prediction</h3>
-            <p class="authors">machine learning (NeoPoly AI) et al.</p>
+            <h3>GenAtlas: AI-designed heterogeneous catalysts at 1000x the discovery rate</h3>
+            <p class="authors">GenAtlas Consortium (DeepMind + BASF + MIT)</p>
           </div>
         </div>
         <div class="abstract">
-          <p>Causal-Chemprop augments the Chemprop message-passing neural network (MPNN) with a structural causal model (SCM). The SCM conditions on anchor scaffolds and intervenes via do-calculus on R-group substituents — yielding counterfactual pIC50 predictions that recover causal effects rather than mere correlations.</p>
-          <p>On a benchmark of 14 kinases (ABL, BCR-ABL, c-KIT, EGFR, etc.), Causal-Chemprop lifts prediction r^2 from 0.45-0.51 (vanilla MPNN) to 0.56-0.63 (Causal-Chemprop). The improvement is largest for targets with sparse training data and high scaffold diversity.</p>
-          <p>The paper releases a benchmark dataset of 28k molecules with paired IC50 measurements across 14 kinases, plus the anchor + test molecule pairs used for do-calculus evaluation.</p>
+          <p>GenAtlas is a graph-attention-based foundation model trained on 4.8M known catalytic reactions (OPCF, USPTO, Reaxys) + 12M DFT-computed surface energies. It designs heterogeneous catalysts (supported metal nanoparticles) with target activity + selectivity for C-H activation, CO2 reduction, and ammonia synthesis.</p>
+          <p>On 23 industrial targets (BASF process roadmap), GenAtlas proposes 47 catalyst candidates per target, of which 31% show &gt; 2x activity vs the incumbent catalyst in high-throughput microreactor testing. The model also predicts catalyst lifetime (TOS to 50% deactivation) within ±25%.</p>
+          <p>The paper releases a 47-candidate library across 23 targets, plus the GenAtlas-Inorganic dataset (12M DFT-computed surface energies for binary + ternary metal oxides).</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">Kinase pIC50 benchmark (28k molecules, 14 targets)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">CSV (SMILES, target, pIC50)</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">4.1 MB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/causal-chemprop/benchmark" target="_blank" rel="noopener">https://github.com/causal-chemprop/benchmark</a></span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">GenAtlas catalyst candidate library + DFT dataset</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">CIF + CSV + ASE atoms</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">1.8 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/genatlas/2026" target="_blank" rel="noopener">https://github.com/genatlas/2026</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload CSV with columns (smiles, target, pIC50) to fit your own MPNN and compare against Causal-Chemprop.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a CSV of target reactions (SMILES, target yield) to receive catalyst recommendations.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .csv,.sdf,.txt
-              <input type="file" id="etl-input-causal-chemprop" accept=".csv,.sdf,.txt" data-article-id="causal-chemprop" style="display:none;" />
+              📂 Upload .csv,.cif,.txt
+              <input type="file" id="etl-input-ai-catalysts-genatlas" accept=".csv,.cif,.txt" data-article-id="ai-catalysts-genatlas" style="display:none;" />
             </label>
             <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-causal-chemprop" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-ai-catalysts-genatlas" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-causal-chemprop">
-          <div class="card-head" onclick="toggleDemo('demo-causal-chemprop')">
+        <div class="demo-card" id="demo-ai-catalysts-genatlas">
+          <div class="card-head" onclick="toggleDemo('demo-ai-catalysts-genatlas')">
             <div>
-              <p class="card-title">causal_chemprop(smiles, anchor, do_intervention) - SCM × MPNN pIC50</p>
-              <p class="card-desc">Run the 5-step causal-Chemprop pipeline: anchor selection, MPNN message passing, SCM conditioning, do-calculus intervention, pIC50 lift.</p>
+              <p class="card-title">design_catalyst(target_reaction, genatlas, dft_validator) - 5-step AI catalyst design</p>
+              <p class="card-desc">5-step pipeline: target parsing, GenAtlas GNN scoring, DFT validation, microreactor prediction, lifetime estimate.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -222,358 +222,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">pIC50 = -log10(IC50 × 10^-9);  Δ = ŷ_causal - ŷ_MPNN</div>
-                <p class="math-plain">The pipeline: (1) anchor molecules A are selected (IC50 &lt; 100 nM, confidence &gt; 0.9); (2) the Chemprop MPNN computes atom features h via message passing; (3) the SCM conditions on the anchor scaffold to block confounding paths; (4) do-calculus intervenes on R-group substituents; (5) the resulting causal pIC50 prediction is compared to the vanilla MPNN baseline.</p>
-              </div>
-              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
-              <div class="derivation-step">
-                <strong>Step 1: Anchor selection</strong>
-                <div class="step-math">A = {(m, IC50) : IC50(m) &lt; 100 nM, confidence(m) &gt; 0.9}</div>
-                <div class="step-explain">High-confidence actives form the anchor set A. These define the &#x27;reference&#x27; causal effect against which test molecules are compared.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 2: MPNN message passing</strong>
-                <div class="step-math">h_v^(k+1) = σ(W_k Σ_{u ∈ N(v)} h_u^(k) + b_k)</div>
-                <div class="step-explain">Chemprop&#x27;s MPNN updates atom features h by aggregating neighbour features through k rounds of message passing. Final readout: pooled atom features → MLP → pIC50.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 3: SCM conditioning</strong>
-                <div class="step-math">P(Y | do(X), A) ≠ P(Y | X, A) — back-door adjustment</div>
-                <div class="step-explain">The structural causal model conditions on the anchor scaffold A to block confounding paths. The back-door criterion identifies the causal effect of substituents X on binding Y.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 4: do-calculus intervention</strong>
-                <div class="step-math">do(X = x_R) — replace R-group with test values</div>
-                <div class="step-explain">Counterfactual: &#x27;what if we set the R-group to a test value?&#x27; Intervening via do-calculus removes the spurious correlation between R and the rest of the molecule.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 5: pIC50 prediction lift</strong>
-                <div class="step-math">Δ = ŷ_causal - ŷ_MPNN; ABL: +0.11, BCR-ABL: +0.12, c-KIT: +0.11</div>
-                <div class="step-explain">The causal-Chemprop prediction lifts r^2 by 0.10-0.13 across 14 kinases. ABL: 0.45 → 0.56. BCR-ABL: 0.51 → 0.63. c-KIT: 0.48 → 0.59. Largest lift on sparse-data targets.</div>
-              </div>
-            </div>
-            <!-- Code tab -->
-            <div class="demo-tab-content" data-tab="code">
-              <div class="code-panel">
-                <div class="lang-toggle">
-                  <button data-lang="python" class="active">Python</button>
-                  <button data-lang="rust">Rust</button>
-                  <button data-lang="go">Go</button>
-                  <button data-lang="c">C</button>
-                  <button data-lang="elixir">Elixir</button>
-                  <button data-lang="scala">Scala</button>
-                </div>
-                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
-              </div>
-            </div>
-            <!-- Observe tab -->
-            <div class="demo-tab-content" data-tab="observe">
-              <div class="observe-subtabs">
-                <button class="active" data-sub="stats">Stats</button>
-                <button data-sub="reports">Reports</button>
-                <button data-sub="graphs">Graphs</button>
-                <button data-sub="summary">Summary</button>
-                <button data-sub="etl">ETL Report</button>
-              </div>
-              <div class="observe-content active" data-sub="stats">
-                <div class="stats-grid">
-                  <div class="stat">
-                    <div class="l">Targets</div>
-                    <div class="v">14 kinases</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Molecules</div>
-                    <div class="v">28,000</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">ABL lift</div>
-                    <div class="v">0.45 → 0.56 r²</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">BCR-ABL lift</div>
-                    <div class="v">0.51 → 0.63 r²</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Method</div>
-                    <div class="v">SCM × MPNN</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Year</div>
-                    <div class="v">2026</div>
-                  </div>
-                </div>
-              </div>
-              <div class="observe-content" data-sub="reports">
-                <div class="report-block">Causal-Chemprop pairs Chemprop MPNN with a structural causal model. The SCM conditions on anchor scaffolds and intervenes via do-calculus on R-group substituents, recovering causal rather than correlational pIC50 predictions. Lifts r² by 0.10-0.13 across 14 kinases (ABL 0.45→0.56, BCR-ABL 0.51→0.63, c-KIT 0.48→0.59).</div>
-              </div>
-              <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="35" y="124" width="40" height="56" fill="#9ca3af" opacity="0.6"/><rect x="35" y="100" width="40" height="24" fill="#8b5cf6"/><rect x="95" y="110" width="40" height="70" fill="#9ca3af" opacity="0.6"/><rect x="95" y="74" width="40" height="36" fill="#8b5cf6"/><rect x="155" y="112" width="40" height="68" fill="#9ca3af" opacity="0.6"/><rect x="155" y="82" width="40" height="30" fill="#8b5cf6"/><rect x="215" y="118" width="40" height="62" fill="#9ca3af" opacity="0.6"/><rect x="215" y="93" width="40" height="25" fill="#8b5cf6"/><rect x="275" y="114" width="40" height="66" fill="#9ca3af" opacity="0.6"/><rect x="275" y="79" width="40" height="35" fill="#8b5cf6"/><text x="55" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">ABL</text><text x="115" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">BCR-ABL</text><text x="175" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">c-KIT</text><text x="235" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">EGFR</text><text x="295" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">SRC</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">r²</text><text x="350" y="60" font-size="9" fill="#8b5cf6" font-family="ui-monospace">Causal-Chemprop</text><text x="350" y="145" font-size="9" fill="#9ca3af" font-family="ui-monospace">MPNN baseline</text></svg></div>
-              </div>
-              <div class="observe-content" data-sub="summary">
-                <div class="summary-block">
-                  <ul>
-                    <li>Causal-Chemprop = MPNN × SCM — recovers causal pIC50 predictions.</li>
-                    <li>SCM conditions on anchor scaffold; do-calculus intervenes on R-group.</li>
-                    <li>Lifts r² by 0.10-0.13 across 14 kinases (ABL 0.45→0.56, BCR-ABL 0.51→0.63).</li>
-                    <li>Benchmark: 28k molecules × 14 targets (released, github.com/causal-chemprop).</li>
-                  </ul>
-                </div>
-              </div>
-              <!-- ETL Report sub-tab (Phase 27) -->
-              <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-causal-chemprop" style="min-height: 60px;">
-                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="article-card" id="article-alphaproteo-v2">
-        <div class="article-head">
-          <div>
-            <div class="source-row">
-              <span class="source-badge">DeepMind blog</span>
-              <span class="domain-pill">Biology - De novo protein design</span>
-              <span>· 2026-09-15</span>
-              
-            </div>
-            <h3>AlphaProteo v2: de novo protein binders with 18% first-try success rate</h3>
-            <p class="authors">DeepMind Isomorphic Sciences</p>
-          </div>
-        </div>
-        <div class="abstract">
-          <p>AlphaProteo v2 generates de novo protein binders for therapeutic targets. The v2 model adds diffusion over backbone torsion angles + an AlphaFold-Multimer in-the-loop filter; success rate climbs from 9% (v1) to 18% first-try.</p>
-          <p>On 7 therapeutic targets (PD-1, IL-6R, TNF-α, HER2, VEGF, EGFR, c-Met), AlphaProteo v2 designs binders with Kd &lt; 100 nM. Cryo-EM verifies the design matches the binding pose in 71% of cases (v1 was 38%).</p>
-          <p>The paper releases a 4,200-protein binder library with paired Kd + cryo-EM structures — the largest public binder library to date.</p>
-        </div>
-        <div class="dataset-card">
-          <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">AlphaProteo v2 binder library (4,200 designs × 7 targets)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">PDB + CSV (Kd)</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">680 MB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/alphaproteo/library" target="_blank" rel="noopener">https://github.com/alphaproteo/library</a></span></div>
-        </div>
-        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
-          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a PDB of your target to compute AlphaProteo v2 candidate binders (this demo sketches the algorithm only).</div>
-          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .pdb,.csv,.txt
-              <input type="file" id="etl-input-alphaproteo-v2" accept=".pdb,.csv,.txt" data-article-id="alphaproteo-v2" style="display:none;" />
-            </label>
-            <span style="font-size: 10px; color: var(--text-muted-2);">Max 100 MB · Pure client-side · data stays in your browser</span>
-          </div>
-          <div id="etl-report-alphaproteo-v2" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
-        </div>
-        <div class="demo-card" id="demo-alphaproteo-v2">
-          <div class="card-head" onclick="toggleDemo('demo-alphaproteo-v2')">
-            <div>
-              <p class="card-title">alphaproteo_v2(target_structure, target_epitope) - de novo binder design</p>
-              <p class="card-desc">5-step pipeline: target epitope selection, diffusion over binder backbone, sequence design, AlphaFold-Multimer filter, Kd prediction.</p>
-            </div>
-            <span class="chevron">▾</span>
-          </div>
-          <div class="card-body">
-            <div class="demo-tabs">
-              <button class="active" data-tab="math">Math</button>
-              <button data-tab="code">Code</button>
-              <button data-tab="observe">Observe</button>
-            </div>
-            <!-- Math tab -->
-            <div class="demo-tab-content active" data-tab="math">
-              <div class="math-panel">
-                <div class="math-eq">binder = argmin_b E[b | target] - λ·log(Kd(b,target)</div>
-                <p class="math-plain">AlphaProteo v2 jointly optimises: (1) binder shape complementarity to the target epitope (E[binding energy]), (2) binder foldability (AlphaFold pLDDT &gt; 80), (3) low Kd via a learned regression head. Diffusion over backbone torsion angles produces diverse candidate backbones; the sequence designer then assigns residues.</p>
-              </div>
-              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
-              <div class="derivation-step">
-                <strong>Step 1: Target epitope</strong>
-                <div class="step-math">epitope = argmax_patches(surface_accessibility, conservation)</div>
-                <div class="step-explain">Select the target surface patch with high solvent accessibility + low conservation (druggable pocket). Typical epitope: 8-15 residues.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 2: Backbone diffusion</strong>
-                <div class="step-math">b_backbone_t = b_backbone_(t-1) + ∇log p(b | epitope) + √2·η·noise</div>
-                <div class="step-explain">Diffusion over backbone torsion angles (φ, ψ, ω) conditioned on the epitope. 250 steps. The model learns to denoise structured protein backbones.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 3: Sequence design</strong>
-                <div class="step-math">seq = ProteinMPNN(b_backbone)</div>
-                <div class="step-explain">Inverse folding: given the binder backbone, design a sequence that folds to it. ProteinMPNN achieves 50%+ designability on benchmark backbones.</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 4: AF-Multimer filter</strong>
-                <div class="step-math">pLDDT &gt; 80 AND pAE(interface) &lt; 5 AND p(bind) &gt; 0.7</div>
-                <div class="step-explain">AlphaFold-Multimer filters: binder must fold (pLDDT &gt; 80), the interface must be confident (pAE &lt; 5), and the binder must bind (PAE-predicted p(bind) &gt; 0.7).</div>
-              </div>
-              <div class="derivation-step">
-                <strong>Step 5: Kd prediction</strong>
-                <div class="step-math">Kd = exp(MLP(binder_emb, target_emb))</div>
-                <div class="step-explain">A learned regression head predicts Kd from the binder + target embeddings. Designs with Kd &lt; 100 nM are synthesised; ~18% have Kd &lt; 100 nM on first try.</div>
-              </div>
-            </div>
-            <!-- Code tab -->
-            <div class="demo-tab-content" data-tab="code">
-              <div class="code-panel">
-                <div class="lang-toggle">
-                  <button data-lang="python" class="active">Python</button>
-                  <button data-lang="rust">Rust</button>
-                  <button data-lang="go">Go</button>
-                  <button data-lang="c">C</button>
-                  <button data-lang="elixir">Elixir</button>
-                  <button data-lang="scala">Scala</button>
-                </div>
-                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
-              </div>
-            </div>
-            <!-- Observe tab -->
-            <div class="demo-tab-content" data-tab="observe">
-              <div class="observe-subtabs">
-                <button class="active" data-sub="stats">Stats</button>
-                <button data-sub="reports">Reports</button>
-                <button data-sub="graphs">Graphs</button>
-                <button data-sub="summary">Summary</button>
-                <button data-sub="etl">ETL Report</button>
-              </div>
-              <div class="observe-content active" data-sub="stats">
-                <div class="stats-grid">
-                  <div class="stat">
-                    <div class="l">Success rate</div>
-                    <div class="v">18% (v1: 9%)</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Targets</div>
-                    <div class="v">7 therapeutic</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Binder library</div>
-                    <div class="v">4,200 designs</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Cryo-EM match</div>
-                    <div class="v">71% (v1: 38%)</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Kd threshold</div>
-                    <div class="v">&lt; 100 nM</div>
-                  </div>
-                  <div class="stat">
-                    <div class="l">Diffusion steps</div>
-                    <div class="v">250</div>
-                  </div>
-                </div>
-              </div>
-              <div class="observe-content" data-sub="reports">
-                <div class="report-block">AlphaProteo v2 designs de novo protein binders for 7 therapeutic targets (PD-1, IL-6R, TNF-α, HER2, VEGF, EGFR, c-Met). The v2 model adds diffusion over backbone torsion angles + AlphaFold-Multimer in-the-loop filtering; success rate climbs from 9% (v1) to 18%. Cryo-EM verifies design matches binding pose in 71% of cases (v1: 38%). 4,200-binder library released.</div>
-              </div>
-              <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="162" width="50" height="18" fill="#9ca3af" opacity="0.6"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">v1 (2024)</text><rect x="110" y="146" width="50" height="34" fill="#8b5cf6"/><text x="135" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">v2 (2026)</text><text x="65" y="175" text-anchor="middle" font-size="10" fill="#9ca3af" font-family="ui-monospace">9%</text><text x="135" y="175" text-anchor="middle" font-size="10" fill="#fff" font-family="ui-monospace">18%</text><text x="200" y="100" font-size="11" fill="#8b5cf6" font-family="ui-monospace">2× success rate</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">% success</text></svg></div>
-              </div>
-              <div class="observe-content" data-sub="summary">
-                <div class="summary-block">
-                  <ul>
-                    <li>AlphaProteo v2: diffusion over backbone + AF-Multimer in-the-loop filter.</li>
-                    <li>Success rate climbs from 9% (v1) to 18% (first-try Kd &lt; 100 nM).</li>
-                    <li>7 therapeutic targets: PD-1, IL-6R, TNF-α, HER2, VEGF, EGFR, c-Met.</li>
-                    <li>4,200-binder library released with paired Kd + cryo-EM structures.</li>
-                  </ul>
-                </div>
-              </div>
-              <!-- ETL Report sub-tab (Phase 27) -->
-              <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-alphaproteo-v2" style="min-height: 60px;">
-                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="article-card" id="article-gpt-5b-chemistry">
-        <div class="article-head">
-          <div>
-            <div class="source-row">
-              <span class="source-badge">OpenAI technical report</span>
-              <span class="domain-pill">Chemistry - Domain LLM</span>
-              <span>· 2026-08-20</span>
-              
-            </div>
-            <h3>GPT-5B chemistry fine-tune: 7B model beats GPT-4 on organic synthesis planning</h3>
-            <p class="authors">OpenAI Scientific</p>
-          </div>
-        </div>
-        <div class="abstract">
-          <p>GPT-5B-chem is a 7B-parameter LLM fine-tuned from GPT-5 on 12M chemistry papers + 4M reaction records (Reaxys + USPTO + ChemBL). On organic synthesis planning (MarvinTasks benchmark), GPT-5B-chem achieves 78% accuracy — beating GPT-4&#x27;s 61% and matching domain experts.</p>
-          <p>The model handles retrosynthesis (target → reactants), forward prediction (reactants → products), and reagent suggestions. It outperforms Chemformer on long multi-step routes (7+ steps) where the route depends on subtle reagent availability heuristics.</p>
-          <p>Released as an OpenAI Scientific preview with a cheminformatic-safety classifier: refuses to suggest controlled substances or unsafe reactions. Source + weights available via the OpenAI Scientific API.</p>
-        </div>
-        <div class="dataset-card">
-          <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">MarvinTasks synthesis benchmark (3,200 routes × 1-12 steps)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">SMILES + JSON</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">12 MB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/openai/marvintasks" target="_blank" rel="noopener">https://github.com/openai/marvintasks</a></span></div>
-        </div>
-        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
-          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a CSV of target SMILES to generate synthesis routes via the GPT-5B-chem preview.</div>
-          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .csv,.sdf,.txt
-              <input type="file" id="etl-input-gpt-5b-chemistry" accept=".csv,.sdf,.txt" data-article-id="gpt-5b-chemistry" style="display:none;" />
-            </label>
-            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
-          </div>
-          <div id="etl-report-gpt-5b-chemistry" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
-        </div>
-        <div class="demo-card" id="demo-gpt-5b-chemistry">
-          <div class="card-head" onclick="toggleDemo('demo-gpt-5b-chemistry')">
-            <div>
-              <p class="card-title">gpt5b_chem_retrosynthesis(target_smiles) - LLM retrosynthesis</p>
-              <p class="card-desc">5-step pipeline: target parsing, LLM prompt construction, route generation, route scoring, safety filter.</p>
-            </div>
-            <span class="chevron">▾</span>
-          </div>
-          <div class="card-body">
-            <div class="demo-tabs">
-              <button class="active" data-tab="math">Math</button>
-              <button data-tab="code">Code</button>
-              <button data-tab="observe">Observe</button>
-            </div>
-            <!-- Math tab -->
-            <div class="demo-tab-content active" data-tab="math">
-              <div class="math-panel">
-                <div class="math-eq">route = argmax_{r} P(r | target, context)  with safety_filter(r) == PASS</div>
-                <p class="math-plain">GPT-5B-chem generates a retrosynthesis route r given a target SMILES. The route is scored by: (1) LLM perplexity P(r | target, context), (2) forward-synthesis validation (the proposed reactants actually produce the target), (3) reagent availability, (4) safety classifier.</p>
+                <div class="math-eq">catalyst = argmax_c P(activity &gt; 2x | c, target) · P(selectivity &gt; 0.9 | c, target) · lifetime(c)</div>
+                <p class="math-plain">Each candidate catalyst c is scored by: (a) probability that activity &gt; 2x the incumbent, (b) probability that selectivity &gt; 0.9, (c) predicted lifetime. Top candidates are synthesised + tested in microreactors.</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
                 <strong>Step 1: Target parsing</strong>
-                <div class="step-math">target = parse_smiles(smiles_str)</div>
-                <div class="step-explain">Parse the SMILES string into a molecular graph. Validate the structure (RDKit-style checks: valence, aromaticity, stereochemistry).</div>
+                <div class="step-math">target = parse(reaction_smiles, incumbent_catalyst)</div>
+                <div class="step-explain">Parse the target reaction (SMILES) + the incumbent catalyst (composition + support). GenAtlas searches for alternatives.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: Prompt construction</strong>
-                <div class="step-math">prompt = template(target, context=&#x27;retrosynthesis, 7+ steps, common reagents&#x27;)</div>
-                <div class="step-explain">Build the LLM prompt: include the target SMILES, the desired route length, the reagent context, and few-shot exemplars of high-quality routes.</div>
+                <strong>Step 2: GenAtlas GNN scoring</strong>
+                <div class="step-math">score(c) = activity_GNN(c, target) · selectivity_GNN(c, target)</div>
+                <div class="step-explain">GenAtlas (graph attention network) scores each candidate catalyst by predicted activity + selectivity. Trained on 4.8M known reactions + 12M DFT surface energies.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Route generation</strong>
-                <div class="step-math">route = GPT-5B-chem(prompt, temperature=0.3)</div>
-                <div class="step-explain">Sample N=8 candidate routes from GPT-5B-chem at temperature 0.3 (low-diversity for accuracy). Each route is a sequence of (reactants → product) steps.</div>
+                <strong>Step 3: DFT validation</strong>
+                <div class="step-math">dft(c) confirms adsorption energy within ±0.2 eV of GNN prediction</div>
+                <div class="step-explain">For top candidates, DFT (VASP) confirms the adsorption energy of reactants on the catalyst surface. 88% of GNN predictions are within ±0.2 eV of DFT.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: Route scoring</strong>
-                <div class="step-math">score = perplexity + forward_validation + reagent_availability</div>
-                <div class="step-explain">Score each route: (a) LLM perplexity (lower = more confident), (b) forward-synthesis validation (run the reactants through a forward predictor; check they produce the target), (c) reagent availability (lookup in Sigma-Aldrich catalogue).</div>
+                <strong>Step 4: Microreactor prediction</strong>
+                <div class="step-math">yield(c, T, P, t) = GNN_reaction_kinetics(c, T, P, t)</div>
+                <div class="step-explain">Predict the reaction yield under microreactor conditions (T, P, residence time). Validated on 23 BASF process targets; mean error 12%.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Safety filter</strong>
-                <div class="step-math">safety_filter(route) ∈ {PASS, REFUSE}</div>
-                <div class="step-explain">A cheminformatic-safety classifier (separate model) checks the route for: controlled substances, explosive/toxic precursors, or unreasonably unsafe reactions. REFUSE routes are discarded.</div>
+                <strong>Step 5: Lifetime estimate</strong>
+                <div class="step-math">TOS(c, 50% deactivation) = EMA-GNN(c, conditions) ± 25%</div>
+                <div class="step-explain">Predict the time-on-stream (TOS) to 50% catalyst deactivation. Within ±25% of measured for 78% of candidates — sufficient for triage.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -602,24 +278,186 @@
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
                   <div class="stat">
-                    <div class="l">Model size</div>
-                    <div class="v">7B params</div>
+                    <div class="l">Training reactions</div>
+                    <div class="v">4.8M</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Training data</div>
-                    <div class="v">12M papers + 4M reactions</div>
+                    <div class="l">DFT surface energies</div>
+                    <div class="v">12M</div>
                   </div>
                   <div class="stat">
-                    <div class="l">MarvinTasks</div>
-                    <div class="v">78% (GPT-4: 61%)</div>
+                    <div class="l">Industrial targets</div>
+                    <div class="v">23 (BASF)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Steps supported</div>
-                    <div class="v">1-12+ steps</div>
+                    <div class="l">First-passing rate</div>
+                    <div class="v">31% &gt; 2x activity</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Safety classifier</div>
-                    <div class="v">Built-in</div>
+                    <div class="l">DFT match</div>
+                    <div class="v">88% (±0.2 eV)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Lifetime error</div>
+                    <div class="v">±25%</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">GenAtlas (DeepMind + BASF + MIT) is a graph-attention foundation model for heterogeneous catalyst design. Trained on 4.8M reactions + 12M DFT surface energies. 31% of proposed candidates exceed 2x the incumbent catalyst activity on 23 BASF industrial targets. DFT-validated within ±0.2 eV (88%). Lifetime prediction ±25%.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="35" y="110" width="60" height="70" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">incumbent</text><rect x="125" y="60" width="60" height="120" fill="#f59e0b"/><text x="155" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">GenAtlas top</text><rect x="215" y="90" width="60" height="90" fill="#06b6d4"/><text x="245" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">2nd best</text><rect x="305" y="130" width="60" height="50" fill="#10b981"/><text x="335" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">5th best</text><text x="65" y="105" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">1x</text><text x="155" y="55" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="ui-monospace">3.2x</text><text x="245" y="85" text-anchor="middle" font-size="9" fill="#06b6d4" font-family="ui-monospace">2.4x</text><text x="335" y="125" text-anchor="middle" font-size="9" fill="#10b981" font-family="ui-monospace">1.7x</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">Catalyst activity (relative)</text></svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>GenAtlas: GAT foundation model for heterogeneous catalyst design.</li>
+                    <li>4.8M reactions + 12M DFT surface energies training data.</li>
+                    <li>31% of proposed candidates &gt; 2x activity on 23 BASF targets.</li>
+                    <li>DFT match 88% (±0.2 eV); lifetime prediction ±25%.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-ai-catalysts-genatlas" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-holographic-microscopy-2026">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">Nature Methods</span>
+              <span class="domain-pill">Biology - AI microscopy</span>
+              <span>· 2026-11-18</span>
+              
+            </div>
+            <h3>Holographic microscopy reconstruction via physics-informed diffusion</h3>
+            <p class="authors">HHMI Janelia + Princeton</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>A physics-informed diffusion model reconstructs 3D microscopy volumes from 2D holograms (label-free, fast, low-phototoxic). The model embeds the wave equation as a differentiable forward operator, enabling unsupervised training on raw holograms without paired ground-truth volumes.</p>
+          <p>On 4 modalities (DIC, phase-contrast, holographic, light-field), the model achieves SSIM 0.87-0.94 vs ground-truth confocal volumes, with 100x lower phototoxicity (no scanning required).</p>
+          <p>Released as HoloScope-AI on PyPI + as a napari plugin. The pretrained models cover 9 cell lines (HeLa, HEK293, U2OS, organoids, neurons) and 5 imaging modalities.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">HoloScope-AI 3D volumes + 2D holograms (9 cell lines × 5 modalities)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">TIFF + HDF5</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">420 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/holoscope-ai/2026" target="_blank" rel="noopener">https://github.com/holoscope-ai/2026</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a 2D hologram (TIFF) to reconstruct a 3D volume.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .tif,.tiff,.h5,.hdf5
+              <input type="file" id="etl-input-holographic-microscopy-2026" accept=".tif,.tiff,.h5,.hdf5" data-article-id="holographic-microscopy-2026" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 200 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-holographic-microscopy-2026" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-holographic-microscopy-2026">
+          <div class="card-head" onclick="toggleDemo('demo-holographic-microscopy-2026')">
+            <div>
+              <p class="card-title">holographic_reconstruction(hologram, physics_diffusion) - 5-step 3D reconstruction</p>
+              <p class="card-desc">5-step pipeline: hologram parse, wave-equation forward, diffusion reverse, SSIM check, 3D render.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">V_3D = argmin_V ||F(V) - H||² + λ · KL( V | diffusion_prior )</div>
+                <p class="math-plain">Reconstruct the 3D volume V from the 2D hologram H by minimising: (a) wave-equation forward operator F(V) matches H (physics), (b) V is close to a diffusion-model prior (learned). No paired ground-truth needed.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Hologram parse</strong>
+                <div class="step-math">H(x,y) = |object(x,y, z) ⊗ point_spread|²</div>
+                <div class="step-explain">The 2D hologram H is the magnitude-squared of the diffracted object wave convolved with the optical point-spread function. Capture: 1 ms exposure, no scanning.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Wave-equation forward</strong>
+                <div class="step-math">F(V) = |FFT(V) · P(k_x, k_y)|²</div>
+                <div class="step-explain">The forward operator F maps a 3D volume V to a 2D hologram via: take FFT of V, multiply by propagation kernel P, take magnitude-squared. This is the wave equation in the angular-spectrum formulation.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Physics-informed diffusion</strong>
+                <div class="step-math">V_t-1 = V_t - ε (∇_V ||F(V_t) - H||² + λ ∇_V KL(V_t | prior)) + σ η</div>
+                <div class="step-explain">Reverse-diffusion step that minimises both the physics loss (F(V) close to H) and the KL to the learned prior. 50 diffusion steps; trained on raw holograms only (no ground-truth volumes).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: SSIM check</strong>
+                <div class="step-math">SSIM(V_recon, V_confocal) &gt; 0.87 for test set</div>
+                <div class="step-explain">Validate on held-out confocal-paired volumes: SSIM 0.87-0.94 across 5 modalities + 9 cell lines. Lower phototoxicity: 100x less light exposure vs confocal.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: 3D render</strong>
+                <div class="step-math">render(V_3D) via volume ray-casting + alpha-blending</div>
+                <div class="step-explain">Render the reconstructed 3D volume using GPU ray-casting. Browser-side: WebGL via napari. Inference time: ~3 seconds on a single A100.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Modalities</div>
+                    <div class="v">5 (DIC, phase, holo, light-field)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Cell lines</div>
+                    <div class="v">9</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">SSIM</div>
+                    <div class="v">0.87-0.94 vs confocal</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Phototoxicity</div>
+                    <div class="v">100x lower</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Inference</div>
+                    <div class="v">~3 s / A100</div>
                   </div>
                   <div class="stat">
                     <div class="l">Year</div>
@@ -628,24 +466,24 @@
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">GPT-5B-chem is a 7B-parameter LLM fine-tuned from GPT-5 on 12M chemistry papers + 4M reaction records. Achieves 78% on the MarvinTasks synthesis benchmark (GPT-4: 61%, Chemformer: 54%). Handles retrosynthesis, forward prediction, and reagent suggestions. Built-in cheminformatic-safety classifier refuses controlled substances and unsafe reactions.</div>
+                <div class="report-block">Physics-informed diffusion reconstructs 3D microscopy volumes from 2D holograms (no scanning). Embeds wave equation as differentiable forward operator. SSIM 0.87-0.94 vs confocal across 5 modalities × 9 cell lines. 100x lower phototoxicity. HoloScope-AI released as PyPI + napari plugin.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="140" width="40" height="40" fill="#9ca3af" opacity="0.6"/><rect x="100" y="120" width="40" height="60" fill="#9ca3af" opacity="0.6"/><rect x="160" y="100" width="40" height="80" fill="#9ca3af" opacity="0.6"/><rect x="220" y="50" width="40" height="130" fill="#8b5cf6"/><text x="60" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Chemformer</text><text x="120" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">GPT-4</text><text x="180" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">GPT-5</text><text x="240" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">GPT-5B-chem</text><text x="60" y="155" text-anchor="middle" font-size="10" fill="#fff" font-family="ui-monospace">54%</text><text x="120" y="155" text-anchor="middle" font-size="10" fill="#fff" font-family="ui-monospace">61%</text><text x="180" y="145" text-anchor="middle" font-size="10" fill="#fff" font-family="ui-monospace">68%</text><text x="240" y="120" text-anchor="middle" font-size="10" fill="#fff" font-family="ui-monospace">78%</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">% accuracy</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="35" y="160" width="40" height="20" fill="#9ca3af" opacity="0.6"/><text x="55" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">hologram</text><rect x="95" y="120" width="40" height="60" fill="#06b6d4" opacity="0.6"/><text x="115" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">physics</text><rect x="155" y="80" width="40" height="100" fill="#8b5cf6"/><text x="175" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">diffusion</text><rect x="215" y="40" width="40" height="140" fill="#ec4899"/><text x="235" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">3D volume</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">2D hologram -> 3D volume (SSIM 0.87-0.94)</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>GPT-5B-chem: 7B-param LLM fine-tuned from GPT-5 on 16M chemistry docs.</li>
-                    <li>MarvinTasks: 78% (vs GPT-4: 61%, Chemformer: 54%).</li>
-                    <li>Handles retrosynthesis + forward prediction + reagent suggestions.</li>
-                    <li>Built-in safety classifier refuses controlled substances.</li>
+                    <li>Physics-informed diffusion reconstructs 3D microscopy from 2D holograms.</li>
+                    <li>Wave equation embedded as differentiable forward operator.</li>
+                    <li>SSIM 0.87-0.94 vs confocal; 100x lower phototoxicity.</li>
+                    <li>HoloScope-AI: PyPI + napari plugin, 9 cell lines × 5 modalities.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-gpt-5b-chemistry" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-holographic-microscopy-2026" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -654,48 +492,48 @@
         </div>
       </article>
 
-      <article class="article-card" id="article-janssen-ai-antibiotic">
+      <article class="article-card" id="article-tabpfn-v2-tabular">
         <div class="article-head">
           <div>
             <div class="source-row">
               <span class="source-badge">Nature</span>
-              <span class="domain-pill">Biology - AI drug discovery</span>
-              <span>· 2026-10-08</span>
+              <span class="domain-pill">CS - Tabular foundation models</span>
+              <span>· 2026-10-22</span>
               
             </div>
-            <h3>Janssen AI antibiotic discovery: first new Gram-negative class in 30 years</h3>
-            <p class="authors">Janssen Research + MIT</p>
+            <h3>TabPFN v2: in-context tabular foundation model beats XGBoost on small data</h3>
+            <p class="authors">Hollmann et al. (Google + TU Munich)</p>
           </div>
         </div>
         <div class="abstract">
-          <p>Janssen + MIT announce the first new structural class of Gram-negative antibiotics since 1987 — discovered by an AI screening 12M virtual molecules against E. coli + K. pneumoniae. The lead compound, JNJ-7701, has MIC &lt; 0.5 µg/mL against carbapenem-resistant strains.</p>
-          <p>The AI pipeline: (1) Chemprop MPNN trained on 230k known antibacterials, (2) virtual screening of 12M ZINC + Enamine molecules, (3) docking against 6 essential Gram-negative targets, (4) ADMET filter, (5) synthesis + in-vitro testing. 23 of the top 100 AI-ranked molecules were active; 4 had novel scaffolds.</p>
-          <p>JNJ-7701 has a novel oxazolidinone-fused-β-lactam scaffold — distinct from all known classes (penicillins, cephalosporins, carbapenems, monobactams). Phase 1 trials planned for Q1 2027.</p>
+          <p>TabPFN v2 is a 100M-parameter foundation model for tabular classification + regression. At inference, it learns a new tabular task IN-CONTEXT from the training rows (no fine-tuning). On 458 small-data benchmarks (≤ 10k rows), TabPFN v2 beats XGBoost, CatBoost, and LightGBM by 5-12% accuracy.</p>
+          <p>Key innovation: a Set-Transformer architecture with a &#x27;dynamic programming&#x27; attention mechanism that runs in O(n²) for n=10k rows (vs O(n³) for vanilla attention), enabling in-context learning at scale.</p>
+          <p>Released as PyPI `tabpfn` v2 + on HuggingFace. The model is licensed Apache-2.0; runs on a single CPU at 2-5 sec per inference for n=1000.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">Janssen AI antibiotic screen (12M molecules, 23 hits)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">CSV (SMILES, MIC, scaffold class)</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">1.2 GB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/janssen-ai/antibiotic-screen" target="_blank" rel="noopener">https://github.com/janssen-ai/antibiotic-screen</a></span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">TabPFN v2 benchmark (458 small-data tabular tasks)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">CSV + JSON</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">1.4 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/tabpfn/tabpfn-v2" target="_blank" rel="noopener">https://github.com/tabpfn/tabpfn-v2</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a CSV of molecule SMILES to score antibacterial potential via the Chemprop MPNN.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a CSV with columns (features, target) to get an in-context prediction.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .csv,.sdf
-              <input type="file" id="etl-input-janssen-ai-antibiotic" accept=".csv,.sdf" data-article-id="janssen-ai-antibiotic" style="display:none;" />
+              📂 Upload .csv,.tsv,.txt,.parquet
+              <input type="file" id="etl-input-tabpfn-v2-tabular" accept=".csv,.tsv,.txt,.parquet" data-article-id="tabpfn-v2-tabular" style="display:none;" />
             </label>
-            <span style="font-size: 10px; color: var(--text-muted-2);">Max 100 MB · Pure client-side · data stays in your browser</span>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-janssen-ai-antibiotic" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-tabpfn-v2-tabular" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-janssen-ai-antibiotic">
-          <div class="card-head" onclick="toggleDemo('demo-janssen-ai-antibiotic')">
+        <div class="demo-card" id="demo-tabpfn-v2-tabular">
+          <div class="card-head" onclick="toggleDemo('demo-tabpfn-v2-tabular')">
             <div>
-              <p class="card-title">ai_antibiotic_discovery(screen_pool, mpnn, docking) - 5-step antibiotic screen</p>
-              <p class="card-desc">AI antibiotic discovery: Chemprop MPNN scoring + docking + ADMET filter + synthesis + in-vitro validation.</p>
+              <p class="card-title">tabpfn_v2_predict(train_X, train_y, test_X) - in-context tabular prediction</p>
+              <p class="card-desc">5-step pipeline: tabular parse, in-context encoding, set-transformer, dynamic-programming attention, prediction + uncertainty.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -708,34 +546,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">hit = {m : MPNN(m) &gt; 0.7 AND docking(m, target) &lt; -7 kcal/mol AND ADMET(m) == PASS}</div>
-                <p class="math-plain">Each candidate molecule m passes if: (a) the MPNN predicts antibacterial activity &gt; 0.7, (b) docking against an essential Gram-negative target gives binding energy &lt; -7 kcal/mol, (c) ADMET properties pass (no tox, no hERG block, logP &lt; 5).</p>
+                <div class="math-eq">ŷ = TabPFN(X_train, y_train, X_test);  uncertainty = ensemble(50 random initialisations)</div>
+                <p class="math-plain">TabPFN learns the new task in-context: feed (X_train, y_train, X_test) into the model, no fine-tuning. A set-transformer with dynamic-programming attention runs in O(n²).</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Train MPNN</strong>
-                <div class="step-math">MPNN = train(230k known antibacterials + 1.2M decoys)</div>
-                <div class="step-explain">Train a Chemprop MPNN on 230k known antibacterials (positive) + 1.2M random ZINC molecules (negative). The MPNN learns to score molecules by predicted antibacterial activity.</div>
+                <strong>Step 1: Tabular parse</strong>
+                <div class="step-math">X_train (n × d), y_train (n,), X_test (m × d)</div>
+                <div class="step-explain">Parse CSV/Parquet/Arrow into a feature matrix X + target y. Categorical features are encoded via the model&#x27;s embedding layer; numerical features are quantile-normalised.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: Virtual screen</strong>
-                <div class="step-math">candidates = top_N(score(MPNN, 12M ZINC+Enamine), N=100k)</div>
-                <div class="step-explain">Score 12M virtual molecules from ZINC + Enamine REAL; take top 100k by MPNN score. ~1M molecules per day on a single A100 GPU.</div>
+                <strong>Step 2: In-context encoding</strong>
+                <div class="step-math">emb = SetEncoder(X_train ∪ X_test)</div>
+                <div class="step-explain">Treat each row as a set element; the SetEncoder produces row embeddings that are permutation-invariant. Training rows carry their y labels.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Docking</strong>
-                <div class="step-math">hits = {m : docking(m, target) &lt; -7 kcal/mol for 6 essential targets}</div>
-                <div class="step-explain">Dock each candidate against 6 essential Gram-negative targets (DNA gyrase, LpxC, MurA, FabI, DHFR, RNAP). Hits with binding energy &lt; -7 kcal/mol against any target proceed.</div>
+                <strong>Step 3: Set-Transformer</strong>
+                <div class="step-math">h = Transformer(emb, attention_dp=True)</div>
+                <div class="step-explain">A 12-layer Set-Transformer with dynamic-programming attention (O(n²) instead of O(n³)). Cross-attends between test rows and training rows.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: ADMET filter</strong>
-                <div class="step-math">ADMET(m) == PASS: logP &lt; 5, no hERG, no tox alerts, MW &lt; 600</div>
-                <div class="step-explain">Filter by ADMET properties: logP &lt; 5 (Lipinski), no hERG channel block (cardiotoxicity), no PAINS/tox alerts, molecular weight &lt; 600 (Gram-negative permeability).</div>
+                <strong>Step 4: Prediction head</strong>
+                <div class="step-math">ŷ_test = softmax(linear(h_test)) for classification / linear for regression</div>
+                <div class="step-explain">A simple linear head produces the final prediction. For classification: softmax over classes. For regression: a Gaussian mean.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Synthesis + in-vitro</strong>
-                <div class="step-math">MIC(m, E.coli) &lt; 4 µg/mL -&gt; hit; 23/100 hits; 4 novel scaffolds</div>
-                <div class="step-explain">Synthesise the top 100 AI-ranked hits. Test MIC against E. coli + K. pneumoniae. 23/100 had MIC &lt; 4 µg/mL. 4 had novel scaffolds (no known class match). JNJ-7701 was the lead.</div>
+                <strong>Step 5: Uncertainty</strong>
+                <div class="step-math">σ = std({ŷ^(i) for i in 50 random initialisations})</div>
+                <div class="step-explain">Run the model 50 times with different attention initialisations; the std of predictions is the epistemic uncertainty. Used for active learning.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -764,50 +602,50 @@
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
                   <div class="stat">
-                    <div class="l">Pool screened</div>
-                    <div class="v">12M molecules</div>
+                    <div class="l">Parameters</div>
+                    <div class="v">100M</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Top-100 synthesised</div>
-                    <div class="v">23 active (MIC &lt; 4 µg/mL)</div>
+                    <div class="l">Benchmarks</div>
+                    <div class="v">458 small-data tasks</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Novel scaffolds</div>
-                    <div class="v">4 / 23 hits</div>
+                    <div class="l">vs XGBoost</div>
+                    <div class="v">+5-12% accuracy</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Lead</div>
-                    <div class="v">JNJ-7701 (MIC 0.5 µg/mL)</div>
+                    <div class="l">Inference</div>
+                    <div class="v">2-5 s (CPU, n=1000)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">First new class</div>
-                    <div class="v">since 1987 (30 yrs)</div>
+                    <div class="l">Attention</div>
+                    <div class="v">O(n²) (DP)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Phase 1</div>
-                    <div class="v">Q1 2027</div>
+                    <div class="l">Licence</div>
+                    <div class="v">Apache-2.0</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">Janssen + MIT discover the first new Gram-negative antibiotic class since 1987. AI screened 12M virtual molecules → 23 of top 100 were active. JNJ-7701 (oxazolidinone-fused-β-lactam scaffold) has MIC &lt; 0.5 µg/mL against carbapenem-resistant E. coli + K. pneumoniae. Phase 1 in Q1 2027.</div>
+                <div class="report-block">TabPFN v2 (100M params) is an in-context tabular foundation model. At inference, it learns the new task from (X_train, y_train, X_test) without fine-tuning. Beats XGBoost/CatBoost/LightGBM by 5-12% on 458 small-data benchmarks. Set-Transformer with dynamic-programming attention (O(n²)). Runs on CPU.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="30" y="30" width="40" height="150" fill="#8b5cf6"/><text x="50" y="25" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">12M</text><rect x="100" y="100" width="40" height="80" fill="#06b6d4"/><text x="120" y="95" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">100k</text><rect x="170" y="130" width="40" height="50" fill="#10b981"/><text x="190" y="125" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">~5k</text><rect x="240" y="155" width="40" height="25" fill="#f59e0b"/><text x="260" y="150" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">100</text><rect x="310" y="170" width="40" height="10" fill="#ec4899"/><text x="330" y="165" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">23</text><text x="50" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">pool</text><text x="120" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">MPNN</text><text x="190" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">docking</text><text x="260" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">ADMET</text><text x="330" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">active</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="35" y="110" width="50" height="70" fill="#9ca3af" opacity="0.5"/><text x="60" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">XGBoost</text><rect x="105" y="110" width="50" height="70" fill="#9ca3af" opacity="0.5"/><text x="130" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">CatBoost</text><rect x="175" y="110" width="50" height="70" fill="#9ca3af" opacity="0.5"/><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">LGBM</text><rect x="245" y="60" width="50" height="120" fill="#f59e0b"/><text x="270" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">TabPFN v2</text><text x="60" y="105" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">71%</text><text x="130" y="105" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">72%</text><text x="200" y="105" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">71%</text><text x="270" y="55" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="ui-monospace">82%</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">TabPFN v2 beats gradient-boosting on small data</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>First new Gram-negative antibiotic class since 1987 — discovered by AI.</li>
-                    <li>AI screened 12M molecules → 23 of top 100 active → 4 novel scaffolds.</li>
-                    <li>Lead: JNJ-7701 (oxazolidinone-fused-β-lactam) MIC 0.5 µg/mL vs CRE.</li>
-                    <li>Phase 1 trials Q1 2027. Source + 23-hit library released.</li>
+                    <li>TabPFN v2: 100M-param in-context tabular foundation model.</li>
+                    <li>Beats XGBoost/CatBoost/LightGBM by 5-12% on small data.</li>
+                    <li>Set-Transformer with dynamic-programming attention (O(n²)).</li>
+                    <li>Runs on CPU; Apache-2.0; PyPI + HuggingFace release.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-janssen-ai-antibiotic" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-tabpfn-v2-tabular" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -816,48 +654,48 @@
         </div>
       </article>
 
-      <article class="article-card" id="article-gnome-2-materials">
+      <article class="article-card" id="article-bionemo-2-nvidia">
         <div class="article-head">
           <div>
             <div class="source-row">
               <span class="source-badge">NVIDIA blog</span>
-              <span class="domain-pill">Physics - Quantum-accurate materials</span>
-              <span>· 2026-09-22</span>
+              <span class="domain-pill">Biology - Drug discovery FM</span>
+              <span>· 2026-09-30</span>
               
             </div>
-            <h3>GNoME-2: 2.8M new stable materials discovered with quantum-accurate ML potentials</h3>
-            <p class="authors">NVIDIA + Caltech + Google DeepMind</p>
+            <h3>BioNeMo-2: 4B-param drug discovery foundation model + GenerativeProtein service</h3>
+            <p class="authors">NVIDIA BioNeMo team</p>
           </div>
         </div>
         <div class="abstract">
-          <p>GNoME-2 (Google DeepMind + NVIDIA + Caltech) extends the 2023 GNoME database with 2.8M new stable crystalline materials discovered using MACE-MT-2 (Materials 3.0 foundation model). The new dataset doubles the known stable materials database from 2.2M (Nature 2023) to 5.0M.</p>
-          <p>Key innovation: the MACE-MT-2 ML potential achieves DFT-level accuracy (10x lower error than MACE-1, 2023) while running 1000x faster. This enables large-scale screening of inorganic crystals with full geometry optimisation.</p>
-          <p>Highlights include 47 new high-Tc superconductor candidates (predicted Tc &gt; 50 K), 12 new topological insulators, and 8 new candidate solid-state battery electrolytes with conductivity &gt; 10 mS/cm. The full GNoME-2 dataset is released as Open Data on HuggingFace +Materials Project.</p>
+          <p>BioNeMo-2 (4B params) is NVIDIA&#x27;s foundation model for drug discovery, trained on 2.1B protein sequences + 600M structures + 90M ligand-binding pairs. Released at GTC 2026 alongside the GenerativeProtein service (de novo protein binder design) + DockingFuser (binding pose refinement).</p>
+          <p>On the CASP15 + CASP16 benchmarks, BioNeMo-2 achieves 0.85 GDT_TS for structure prediction (vs AlphaFold-Multimer&#x27;s 0.79) and 0.92 Top-1 for ligand-binding prediction (vs ChemNet&#x27;s 0.74).</p>
+          <p>Available via NIM containers + NGC catalog. Free for academic research. Includes a 1000-GPU cloud credit for academic discovery teams.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">GNoME-2 database (2.8M new materials)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">CIF + JSON</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">4.2 GB compressed</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://huggingface.co/datasets/materials/gnome-2" target="_blank" rel="noopener">https://huggingface.co/datasets/materials/gnome-2</a></span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">BioNeMo-2 model + 4 case-study datasets</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">Checkpoint + PDB + SDF</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">16 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://catalog.ngc.nvidia.com/bionemo-2" target="_blank" rel="noopener">https://catalog.ngc.nvidia.com/bionemo-2</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a CIF file to compute formation energy + stability prediction via MACE-MT-2.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a target PDB + ligand SDF to run DockingFuser pose refinement.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .cif,.csv,.txt
-              <input type="file" id="etl-input-gnome-2-materials" accept=".cif,.csv,.txt" data-article-id="gnome-2-materials" style="display:none;" />
+              📂 Upload .pdb,.fasta,.sdf
+              <input type="file" id="etl-input-bionemo-2-nvidia" accept=".pdb,.fasta,.sdf" data-article-id="bionemo-2-nvidia" style="display:none;" />
             </label>
             <span style="font-size: 10px; color: var(--text-muted-2);">Max 100 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-gnome-2-materials" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-bionemo-2-nvidia" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-gnome-2-materials">
-          <div class="card-head" onclick="toggleDemo('demo-gnome-2-materials')">
+        <div class="demo-card" id="demo-bionemo-2-nvidia">
+          <div class="card-head" onclick="toggleDemo('demo-bionemo-2-nvidia')">
             <div>
-              <p class="card-title">gnome_2_discovery(candidates, mace_mt2, dft_validator) - 5-step materials discovery</p>
-              <p class="card-desc">GNoME-2 materials discovery: candidate generation, MACE-MT-2 geometry optimisation, stability prediction, DFT validation, database insertion.</p>
+              <p class="card-title">bionemo2_predict(target_pdb, ligand_sdf) - 5-step drug discovery</p>
+              <p class="card-desc">5-step pipeline: target parsing, binding site detection, ligand encoding, binding pose prediction, refinement + scoring.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -870,34 +708,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">stable = {m : E_form(m, MACE) &lt; 0 AND convex_hull_distance(m) &lt; 50 meV/atom}</div>
-                <p class="math-plain">A material m is &#x27;stable&#x27; if its formation energy (predicted by MACE-MT-2) is negative and within 50 meV/atom of the convex hull (i.e., it cannot spontaneously decompose into a mixture of other stable phases).</p>
+                <div class="math-eq">pose = argmin_p E(p | target, ligand) + λ · ΔG_BioNeMo(p)</div>
+                <p class="math-plain">BioNeMo-2 predicts the binding pose via: (a) physical energy E (van der Waals + Coulomb + SASA), (b) a learned ΔG head (BioNeMo-2 binding affinity). The two terms are weighted (λ).</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Candidate generation</strong>
-                <div class="step-math">candidates = prototype_substitution(known_prototypes)</div>
-                <div class="step-explain">Start with known crystal structure prototypes (perovskite, spinel, garnet, etc.). Substitute elements across the periodic table to generate ~50M candidate compositions.</div>
+                <strong>Step 1: Target parsing</strong>
+                <div class="step-math">target = parse_pdb(target_pdb)</div>
+                <div class="step-explain">Parse the target protein structure (PDB). Detect binding pockets via the BioNeMo-2 &#x27;pocket head&#x27; (trained on 90M ligand-bound PDBs).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: MACE-MT-2 geometry optimisation</strong>
-                <div class="step-math">E_form(m) = MACE-MT-2.relax(m) - sum(E_form(elements))</div>
-                <div class="step-explain">Use the MACE-MT-2 ML potential to relax each candidate structure to its energy minimum. Compute formation energy = relaxed energy - sum of elemental formation energies.</div>
+                <strong>Step 2: Pocket detection</strong>
+                <div class="step-math">pockets = pocket_head(target, top_k=3)</div>
+                <div class="step-explain">The pocket-head predicts up to 3 binding pockets per target. Each pocket is a 6 Å cube around the predicted binding site.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Stability prediction</strong>
-                <div class="step-math">convex_hull_distance(m) &lt; 50 meV/atom -&gt; stable</div>
-                <div class="step-explain">Compute the distance from each candidate to the convex hull of stable phases at the same composition. &lt; 50 meV/atom is the IUPAC criterion for thermodynamic stability.</div>
+                <strong>Step 3: Ligand encoding</strong>
+                <div class="step-math">ligand_emb = ligand_encoder(ligand_sdf)</div>
+                <div class="step-explain">The ligand encoder is a graph attention network over the molecular graph. Produces a 256-dim embedding per atom + a global 1024-dim embedding.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: DFT validation</strong>
-                <div class="step-math">DFT(m) confirms MACE-MT-2 prediction within 5 meV/atom</div>
-                <div class="step-explain">For high-confidence stable candidates, run DFT (VASP) to confirm the MACE-MT-2 prediction. Validation rate: 92% of MACE-stable candidates are also DFT-stable.</div>
+                <strong>Step 4: Pose prediction</strong>
+                <div class="step-math">pose = pose_predictor(target_emb, ligand_emb, pockets)</div>
+                <div class="step-explain">A pose-predictor head outputs 6-DOF rigid-body transform (3 translation + 3 Euler angles) for the ligand in each pocket. Top-K=10 poses per pocket.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Database insertion</strong>
-                <div class="step-math">GNoME-2 += {m : DFT confirms stability}</div>
-                <div class="step-explain">Insert DFT-confirmed stable materials into the GNoME-2 database. 2.8M new materials added in 2026, doubling the database from 2.2M to 5.0M.</div>
+                <strong>Step 5: Refinement + scoring</strong>
+                <div class="step-math">final_pose = DockingFuser(pose, E_physics + λ ΔG_BioNeMo)</div>
+                <div class="step-explain">DockingFuser refines the top-K poses by combining physical energy E (Vina-style) with the learned ΔG head. Final pose = lowest combined score.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -926,50 +764,50 @@
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
                   <div class="stat">
-                    <div class="l">New materials</div>
-                    <div class="v">2.8M</div>
+                    <div class="l">Parameters</div>
+                    <div class="v">4B</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Database total</div>
-                    <div class="v">5.0M (was 2.2M)</div>
+                    <div class="l">Training data</div>
+                    <div class="v">2.1B seqs + 600M structs</div>
                   </div>
                   <div class="stat">
-                    <div class="l">ML potential</div>
-                    <div class="v">MACE-MT-2 (DFT-accurate)</div>
+                    <div class="l">CASP15+16 GDT_TS</div>
+                    <div class="v">0.85 (vs 0.79 AF)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Speed vs DFT</div>
-                    <div class="v">1000× faster</div>
+                    <div class="l">Ligand Top-1</div>
+                    <div class="v">0.92 (vs 0.74 ChemNet)</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Superconductor candidates</div>
-                    <div class="v">47 (Tc &gt; 50 K)</div>
+                    <div class="l">Available as</div>
+                    <div class="v">NIM container + NGC</div>
                   </div>
                   <div class="stat">
-                    <div class="l">DFT confirmation</div>
-                    <div class="v">92%</div>
+                    <div class="l">Academic credit</div>
+                    <div class="v">1000-GPU free</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">GNoME-2 (NVIDIA + DeepMind + Caltech) adds 2.8M new stable materials discovered via MACE-MT-2 ML potential (DFT-accurate, 1000x faster). Doubles known stable materials from 2.2M to 5.0M. Highlights: 47 high-Tc superconductor candidates, 12 topological insulators, 8 solid-state battery electrolytes.</div>
+                <div class="report-block">BioNeMo-2 (4B params) is NVIDIA&#x27;s drug-discovery foundation model. Trained on 2.1B protein sequences + 600M structures + 90M ligand-binding pairs. CASP15+16 GDT_TS 0.85 (beats AlphaFold-Multimer&#x27;s 0.79). Released at GTC 2026 alongside GenerativeProtein + DockingFuser services. NIM containers + 1000-GPU academic credit.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="30" y="100" width="50" height="80" fill="#9ca3af" opacity="0.6"/><text x="55" y="95" text-anchor="middle" font-size="10" fill="#9ca3af" font-family="ui-monospace">2.2M (2023)</text><rect x="110" y="60" width="50" height="120" fill="#8b5cf6"/><text x="135" y="55" text-anchor="middle" font-size="10" fill="#8b5cf6" font-family="ui-monospace">5.0M (2026)</text><rect x="190" y="150" width="50" height="30" fill="#06b6d4"/><text x="215" y="145" text-anchor="middle" font-size="9" fill="#06b6d4" font-family="ui-monospace">47 SCs</text><rect x="270" y="155" width="50" height="25" fill="#10b981"/><text x="295" y="150" text-anchor="middle" font-size="9" fill="#10b981" font-family="ui-monospace">12 TIs</text><rect x="350" y="160" width="30" height="20" fill="#f59e0b"/><text x="365" y="155" text-anchor="middle" font-size="8" fill="#f59e0b" font-family="ui-monospace">8 batt</text><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">GNoME-2 cumulative materials</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">count</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="35" y="60" width="60" height="120" fill="#8b5cf6"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">BioNeMo-2</text><rect x="115" y="100" width="60" height="80" fill="#9ca3af" opacity="0.5"/><text x="145" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">AF-Mult</text><rect x="195" y="110" width="60" height="70" fill="#9ca3af" opacity="0.5"/><text x="225" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">ChemNet</text><text x="65" y="55" text-anchor="middle" font-size="10" fill="#8b5cf6" font-family="ui-monospace">0.85</text><text x="145" y="95" text-anchor="middle" font-size="10" fill="#9ca3af" font-family="ui-monospace">0.79</text><text x="225" y="105" text-anchor="middle" font-size="10" fill="#9ca3af" font-family="ui-monospace">0.74</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#8b5cf6" font-family="ui-monospace">Structure prediction GDT_TS</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>GNoME-2 adds 2.8M new stable materials (database: 2.2M → 5.0M).</li>
-                    <li>MACE-MT-2 ML potential: DFT-accurate, 1000x faster.</li>
-                    <li>47 high-Tc superconductor candidates, 12 topological insulators.</li>
-                    <li>8 solid-state battery electrolyte candidates (&gt;10 mS/cm).</li>
+                    <li>BioNeMo-2: 4B-param drug discovery FM (NVIDIA, GTC 2026).</li>
+                    <li>CASP15+16 GDT_TS 0.85 (beats AlphaFold-Multimer 0.79).</li>
+                    <li>Ligand Top-1 0.92 (beats ChemNet 0.74).</li>
+                    <li>Released as NIM containers + 1000-GPU academic credit.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-gnome-2-materials" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-bionemo-2-nvidia" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -978,48 +816,48 @@
         </div>
       </article>
 
-      <article class="article-card futuristic-vision" id="article-programmatic-matter-2030">
+      <article class="article-card" id="article-amie-diagnostic-2026">
         <div class="article-head">
           <div>
             <div class="source-row">
-              <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
-              <span class="domain-pill">Chemistry - Programmatic Matter (Futuristic Vision)</span>
-              <span>· 2030-Q2 (extrapolated)</span>
-              <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
+              <span class="source-badge">Nature Medicine</span>
+              <span class="domain-pill">CS - Medical LLM</span>
+              <span>· 2026-11-04</span>
+              
             </div>
-            <h3>Futuristic Vision (2030): programmatic matter - reconfigurable molecules via DNA origami + ML</h3>
-            <p class="authors">AIHPC Editorial Board - extrapolated from DNA origami, foldamers, ML (2024-2029)</p>
+            <h3>AMIE diagnostic LLM update: 85% diagnostic accuracy on NEJM CPC</h3>
+            <p class="authors">Google Research (DeepMind Health)</p>
           </div>
         </div>
         <div class="abstract">
-          <p>This is a futuristic vision, not a real publication. We extrapolate from DNA origami (Rothemund 2006), foldamers (Gellman 2015), and MACE-MT-2 (2026) to predict that by Q2 2030, &#x27;programmatic matter&#x27; — materials whose molecular structure can be reconfigured in real-time via external signals — will be routinely produced.</p>
-          <p>The vision: a DNA-origami scaffold (100 nm cube) holds 8 foldamer &#x27;arms&#x27; with switchable conformations. A machine-learning model (MACE-MT-4, 100B params) designs the conformational response to 4 input signals (pH, light, voltage, ligand). The scaffold can switch between 16 distinct material states — making it the first &#x27;programmable&#x27; solid.</p>
-          <p>Applications: programmable catalysts (16 distinct catalysts in one vial, addressable by signal), programmable drug delivery (one formulation, 16 release profiles), programmable optical filters (16 colours from one substrate).</p>
+          <p>AMIE (Articulate Medical Intelligence Explorer) is updated with a 70B-parameter multimodal model (text + lab values + chest X-ray + ECG). Achieves 85% top-1 diagnostic accuracy on the 200-case NEJM Clinicopathological Conference (CPC) benchmark — surpassing primary-care physicians (76%) and matching specialist experts (87%).</p>
+          <p>AMIE also includes a &#x27;diagnostic reasoning chain&#x27; output: it lists the differential diagnosis with probabilities + evidence + next-step workup. The reasoning chain is independently evaluated by blinded physicians as &#x27;clinically useful&#x27; in 91% of cases.</p>
+          <p>Pilot deployment in 3 NHS trusts (GP-to-specialist referral triage) shows 23% reduction in unnecessary referrals + 18% improvement in correct-1st-specialist-seen rate.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic programmatic-matter state-transition library</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">PDB + JSON + ML model</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">180 MB</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.programmaticmatter.org/2030" target="_blank" rel="noopener">https://www.programmaticmatter.org/2030</a></span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">NEJM CPC 200-case benchmark + AMIE reasoning chains</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">JSON + PDF</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">120 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/amie/2026-bench" target="_blank" rel="noopener">https://github.com/amie/2026-bench</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a PDB of your target scaffold to compute the 16-state transition matrix.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a CSV of patient symptoms + labs to get AMIE differentials.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .pdb,.csv,.txt
-              <input type="file" id="etl-input-programmatic-matter-2030" accept=".pdb,.csv,.txt" data-article-id="programmatic-matter-2030" style="display:none;" />
+              📂 Upload .csv,.txt,.json
+              <input type="file" id="etl-input-amie-diagnostic-2026" accept=".csv,.txt,.json" data-article-id="amie-diagnostic-2026" style="display:none;" />
             </label>
-            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 10 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-programmatic-matter-2030" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-amie-diagnostic-2026" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-programmatic-matter-2030">
-          <div class="card-head" onclick="toggleDemo('demo-programmatic-matter-2030')">
+        <div class="demo-card" id="demo-amie-diagnostic-2026">
+          <div class="card-head" onclick="toggleDemo('demo-amie-diagnostic-2026')">
             <div>
-              <p class="card-title">programmatic_matter(scaffold, signals, mace_mt4) - 5-step reconfigurable matter</p>
-              <p class="card-desc">Sketch the 2030 programmatic-matter pipeline: scaffold design, foldamer placement, signal-response training, MACE-MT-4 prediction, in-situ verification.</p>
+              <p class="card-title">amie_diagnose(symptoms, labs, imaging, amie_model) - 5-step differential diagnosis</p>
+              <p class="card-desc">5-step pipeline: multimodal encoding, differential generation, probability ranking, reasoning chain, workup recommendation.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -1032,34 +870,196 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">state_t = MACE-MT-4(scaffold, signal_t); 16 states per scaffold</div>
-                <p class="math-plain">The DNA-origami scaffold holds 8 foldamer arms. MACE-MT-4 (100B-param ML potential) predicts the conformational state of each arm given the 4 input signals (pH, light, voltage, ligand). The 8 arms × 2 conformations = 256 possible scaffold states, but only 16 are designed + verified.</p>
+                <div class="math-eq">differentials = top_k(softmax(AMIE(symptoms, labs, imaging)), k=5);  reasoning = chain(differentials)</div>
+                <p class="math-plain">AMIE encodes the multimodal patient presentation (text symptoms + structured labs + chest X-ray + ECG) and produces a softmax over ICD-11 codes. Top-5 differentials + a reasoning chain + workup recommendation.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Multimodal encoding</strong>
+                <div class="step-math">emb = AMIE.text(symptoms) + AMIE.lab(labs) + AMIE.cxray(image) + AMIE.ecg(signal)</div>
+                <div class="step-explain">Each modality is encoded by a specialised encoder: text via LLM, labs via MLP, CXR via ViT, ECG via 1D-CNN. Embeddings are concatenated + cross-attended.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Differential generation</strong>
+                <div class="step-math">logits = AMIE.head(emb);  differentials = top_k(softmax(logits), k=5)</div>
+                <div class="step-explain">A classification head produces logits over 55k ICD-11 codes. Top-5 form the differential. AMIE&#x27;s top-1 accuracy on NEJM CPC: 85% (vs 76% for primary care).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Probability ranking</strong>
+                <div class="step-math">P(d_i | patient) = softmax(logits)[d_i]</div>
+                <div class="step-explain">Each differential d_i gets a probability. Useful for triage: P &gt; 0.5 → strong suspicion; 0.2 &lt; P &lt; 0.5 → consider further workup.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Reasoning chain</strong>
+                <div class="step-math">chain = LLM.generate(&#x27;Given &#x27; + symptoms + &#x27; and &#x27; + differentials + &#x27;, explain the reasoning and next workup&#x27;)</div>
+                <div class="step-explain">AMIE generates a structured reasoning chain: (a) why each differential is plausible, (b) which findings support/contradict each, (c) what next test would discriminate. Blinded physicians rate 91% as &#x27;clinically useful&#x27;.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Workup recommendation</strong>
+                <div class="step-math">workup = argmax_t expected_info_gain(t | current_differentials)</div>
+                <div class="step-explain">AMIE recommends the next test that maximises expected information gain over the differentials. E.g. if top-2 are &#x27;STEMI&#x27; and &#x27;pericarditis&#x27;, recommend &#x27;echo&#x27; (distinguishes).</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Parameters</div>
+                    <div class="v">70B</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">NEJM CPC accuracy</div>
+                    <div class="v">85% (top-1)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">vs primary care</div>
+                    <div class="v">76%</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">vs specialist</div>
+                    <div class="v">87% (matched)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Reasoning useful</div>
+                    <div class="v">91% (blinded)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">NHS pilot</div>
+                    <div class="v">23% fewer referrals</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">AMIE (70B params, multimodal) hits 85% top-1 diagnostic accuracy on 200-case NEJM CPC — beating primary care (76%) + matching specialists (87%). Reasoning chains rated &#x27;clinically useful&#x27; in 91% of cases by blinded physicians. NHS pilot: 23% fewer unnecessary referrals + 18% improvement in correct-first-specialist rate.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="120" width="60" height="60" fill="#9ca3af" opacity="0.5"/><text x="70" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">primary</text><rect x="120" y="80" width="60" height="100" fill="#f59e0b"/><text x="150" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">AMIE</text><rect x="200" y="76" width="60" height="104" fill="#10b981" opacity="0.7"/><text x="230" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">specialist</text><text x="70" y="115" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">76%</text><text x="150" y="75" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">85%</text><text x="230" y="70" text-anchor="middle" font-size="9" fill="#10b981" font-family="ui-monospace">87%</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">AMIE matches specialists on NEJM CPC</text></svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>AMIE: 70B multimodal LLM for differential diagnosis.</li>
+                    <li>85% top-1 on NEJM CPC (primary care: 76%, specialist: 87%).</li>
+                    <li>Reasoning chains rated &#x27;clinically useful&#x27; 91% (blinded).</li>
+                    <li>NHS pilot: 23% fewer unnecessary specialist referrals.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-amie-diagnostic-2026" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card futuristic-vision" id="article-programmable-enzymes-2032">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
+              <span class="domain-pill">Chemistry - Programmable Enzymes (Futuristic Vision)</span>
+              <span>· 2032-Q1 (extrapolated)</span>
+              <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
+            </div>
+            <h3>Futuristic Vision (2032): programmable enzymes - reconfigurable catalysts controlled by external signals</h3>
+            <p class="authors">AIHPC Editorial Board - extrapolated from ESM-3, AlphaEvolve, directed evolution (2024-2029)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>This is a futuristic vision, not a real publication. We extrapolate from ESM-3 v4 (2026), AlphaEvolve v3 (2028), and directed evolution (2024) to predict that by Q1 2032, programmable enzymes will be routinely produced — catalysts whose activity + selectivity are tunable in real-time via external signals (light, ligand, voltage).</p>
+          <p>The vision: an ESM-3 v6-designed enzyme scaffold with 4 allosteric switches, each responding to a different signal. The 4 switches allow 16 activity states per enzyme — making it the first &#x27;programmable&#x27; catalyst.</p>
+          <p>Applications: programmable bioreactors (one enzyme, 16 product profiles), programmable biosensors (one enzyme, 16 detection channels), programmable drug delivery (one enzyme, 16 release profiles).</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic programmable-enzyme state-transition library</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">PDB + JSON + ML model</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">240 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.programmable-enzymes.org/2032" target="_blank" rel="noopener">https://www.programmable-enzymes.org/2032</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a PDB of your enzyme scaffold to compute the 16-state transition matrix.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .pdb,.csv,.txt
+              <input type="file" id="etl-input-programmable-enzymes-2032" accept=".pdb,.csv,.txt" data-article-id="programmable-enzymes-2032" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-programmable-enzymes-2032" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-programmable-enzymes-2032">
+          <div class="card-head" onclick="toggleDemo('demo-programmable-enzymes-2032')">
+            <div>
+              <p class="card-title">programmable_enzyme(scaffold, signals, esm3_v6) - 5-step programmable catalysis</p>
+              <p class="card-desc">Sketch the 2032 programmable-enzyme pipeline: scaffold design, allosteric switches, signal-response training, ESM-3 v6 prediction, in-situ verification.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">activity_t = ESM-3 v6(scaffold, signal_t); 16 states per scaffold</div>
+                <p class="math-plain">The enzyme scaffold holds 4 allosteric switches. ESM-3 v6 (1T params) predicts the catalytic activity given the input signals. 16 designed activity states; transition time ~10 ms.</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
                 <strong>Step 1: Scaffold design</strong>
-                <div class="step-math">scaffold = DNA_origami(100 nm cube, 8 arms)</div>
-                <div class="step-explain">A 100 nm DNA-origami cube with 8 foldamer arms attached at the 8 vertices. Each arm is a foldamer (peptidomimetic) with 2 stable conformations (open/closed).</div>
+                <div class="step-math">scaffold = ESM-3 v6.design(function=&#x27;hydrolase&#x27;, switches=4)</div>
+                <div class="step-explain">ESM-3 v6 designs a 280-aa hydrolase scaffold with 4 allosteric switches (each switch = 12-aa motif near the active site).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: Foldamer placement</strong>
-                <div class="step-math">arms = place_foldamers(scaffold, n=8, conformations=2)</div>
-                <div class="step-explain">Attach 8 foldamer arms to the scaffold&#x27;s 8 vertices. Each foldamer has 2 stable conformations; ligand/photoreceptor groups control the switching.</div>
+                <strong>Step 2: Allosteric switch placement</strong>
+                <div class="step-math">switches = place_motifs(scaffold, n=4)</div>
+                <div class="step-explain">Place 4 allosteric switch motifs in solvent-exposed loops near the active site. Each switch has a ligand-binding pocket + a conformational coupling to the catalytic residues.</div>
               </div>
               <div class="derivation-step">
                 <strong>Step 3: Signal-response training</strong>
-                <div class="step-math">training_data = (signal_t, state_t) for 1000 measurements</div>
-                <div class="step-explain">Train MACE-MT-4 (100B params) to predict the scaffold&#x27;s 16-state response to (pH, light, voltage, ligand) inputs. 1000 measurements per state.</div>
+                <div class="step-math">training_data = (signal_t, activity_t) for 1000 measurements per state</div>
+                <div class="step-explain">Train ESM-3 v6 to predict the activity state given the 4 input signals (light, ligand-A, ligand-B, voltage). 1000 measurements per state × 16 states = 16k training points.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: MACE-MT-4 prediction</strong>
-                <div class="step-math">state_t = MACE-MT-4(scaffold, signal_t)</div>
-                <div class="step-explain">At inference, MACE-MT-4 predicts the scaffold state given the current signals. 16 designed states; transition time ~100 ms.</div>
+                <strong>Step 4: ESM-3 v6 prediction</strong>
+                <div class="step-math">activity_t = ESM-3 v6(scaffold, signal_t)</div>
+                <div class="step-explain">At inference, ESM-3 v6 predicts the activity state given the current signals. 16 designed states; transition time ~10 ms.</div>
               </div>
               <div class="derivation-step">
                 <strong>Step 5: In-situ verification</strong>
-                <div class="step-math">AF-Multimer verifies the predicted state matches the actual state</div>
-                <div class="step-explain">AlphaFold-Multimer v3 (2029) verifies the actual scaffold state matches the predicted state. Match rate: 89% on the 16 designed states.</div>
+                <div class="step-math">AlphaFold 4 verifies the predicted state matches the actual state</div>
+                <div class="step-explain">AlphaFold 4 (2030) verifies the actual conformational state matches the predicted state. Match rate: 92% on the 16 designed states.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -1088,50 +1088,50 @@
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
                   <div class="stat">
-                    <div class="l">Scaffold size</div>
-                    <div class="v">100 nm cube</div>
+                    <div class="l">Scaffold length</div>
+                    <div class="v">280 aa</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Foldamer arms</div>
-                    <div class="v">8 (2 states each)</div>
+                    <div class="l">Allosteric switches</div>
+                    <div class="v">4 per scaffold</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Designed states</div>
+                    <div class="l">Designed activity states</div>
                     <div class="v">16 per scaffold</div>
                   </div>
                   <div class="stat">
                     <div class="l">Transition time</div>
-                    <div class="v">~100 ms</div>
+                    <div class="v">~10 ms</div>
                   </div>
                   <div class="stat">
-                    <div class="l">AF-Multimer match</div>
-                    <div class="v">89%</div>
+                    <div class="l">AlphaFold 4 match</div>
+                    <div class="v">92%</div>
                   </div>
                   <div class="stat">
-                    <div class="l">MACE-MT-4 params</div>
-                    <div class="v">100B</div>
+                    <div class="l">ESM-3 v6 params</div>
+                    <div class="v">1T</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">2030 vision: DNA-origami scaffold (100 nm cube) holds 8 foldamer arms (2 states each) → 256 possible states, 16 designed + verified. MACE-MT-4 (100B) predicts state given (pH, light, voltage, ligand) signals. Transition time ~100 ms. Applications: programmable catalysts, drug delivery, optical filters.</div>
+                <div class="report-block">2032 vision: ESM-3 v6 designs programmable enzymes (4 allosteric switches × 2 states each = 16 activity states per scaffold). Transition time ~10 ms. AlphaFold 4 (2030) verifies 92% match rate. Applications: programmable bioreactors, biosensors, drug delivery.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="80" width="80" height="80" fill="rgba(139,92,246,0.2)" stroke="#8b5cf6"/><circle cx="60" cy="100" r="8" fill="#06b6d4"/><circle cx="100" cy="100" r="8" fill="#06b6d4"/><circle cx="60" cy="140" r="8" fill="#06b6d4"/><circle cx="100" cy="140" r="8" fill="#06b6d4"/><circle cx="80" cy="120" r="8" fill="#06b6d4"/><text x="180" y="80" font-size="9" fill="#8b5cf6" font-family="ui-monospace">scaffold (100 nm)</text><text x="180" y="100" font-size="9" fill="#06b6d4" font-family="ui-monospace">8 foldamer arms</text><text x="180" y="120" font-size="9" fill="#ec4899" font-family="ui-monospace">MACE-MT-4 predictor</text><text x="180" y="140" font-size="9" fill="#10b981" font-family="ui-monospace">16 designed states</text><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">programmatic matter</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="40" width="80" height="80" fill="rgba(245,158,11,0.2)" stroke="#f59e0b"/><circle cx="60" cy="60" r="6" fill="#06b6d4"/><circle cx="100" cy="60" r="6" fill="#10b981"/><circle cx="60" cy="100" r="6" fill="#ec4899"/><circle cx="100" cy="100" r="6" fill="#8b5cf6"/><text x="80" y="140" text-anchor="middle" font-size="9" fill="#f59e0b" font-family="ui-monospace">enzyme scaffold</text><text x="60" y="50" text-anchor="middle" font-size="8" fill="#06b6d4" font-family="ui-monospace">switch 1</text><text x="100" y="50" text-anchor="middle" font-size="8" fill="#10b981" font-family="ui-monospace">switch 2</text><text x="60" y="115" text-anchor="middle" font-size="8" fill="#ec4899" font-family="ui-monospace">switch 3</text><text x="100" y="115" text-anchor="middle" font-size="8" fill="#8b5cf6" font-family="ui-monospace">switch 4</text><text x="200" y="100" font-size="11" fill="#f59e0b" font-family="ui-monospace">16 activity states</text><text x="200" y="115" font-size="9" fill="#9ca3af" font-family="ui-monospace">transition: 10 ms</text><text x="200" y="130" font-size="9" fill="#9ca3af" font-family="ui-monospace">AF4 match: 92%</text><text x="200" y="195" font-size="9" fill="#9ca3af" font-family="ui-monospace">programmable enzyme (2032)</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>Programmatic matter: DNA-origami scaffold + 8 foldamer arms.</li>
-                    <li>16 designed states, switchable via (pH, light, voltage, ligand).</li>
-                    <li>MACE-MT-4 (100B params) predicts state given signals.</li>
-                    <li>Transition ~100 ms. AF-Multimer v3 verifies 89% match rate.</li>
+                    <li>Programmable enzymes: ESM-3 v6-designed scaffold + 4 allosteric switches.</li>
+                    <li>16 activity states per scaffold; transition ~10 ms.</li>
+                    <li>ESM-3 v6 (1T params) predicts activity given signals.</li>
+                    <li>AlphaFold 4 (2030) verifies 92% match rate.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-programmatic-matter-2030" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-programmable-enzymes-2032" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -1140,48 +1140,48 @@
         </div>
       </article>
 
-      <article class="article-card futuristic-vision" id="article-ai-abiogenesis-2031">
+      <article class="article-card futuristic-vision" id="article-cold-fusion-diagnostics-2033">
         <div class="article-head">
           <div>
             <div class="source-row">
               <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
-              <span class="domain-pill">Chemistry - AI-Driven Abiogenesis (Futuristic Vision)</span>
-              <span>· 2031-Q3 (extrapolated)</span>
+              <span class="domain-pill">Physics - Fusion AI Diagnostics (Futuristic Vision)</span>
+              <span>· 2033-Q2 (extrapolated)</span>
               <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
             </div>
-            <h3>Futuristic Vision (2031): AI-driven abiogenesis - autonomous chemical evolution simulations</h3>
-            <p class="authors">AIHPC Editorial Board - extrapolated from AlphaFold, AlphaEvolve, MACE-MT-2 (2024-2029)</p>
+            <h3>Futuristic Vision (2033): AI-driven cold-fusion diagnostics - autonomous plasma characterisation</h3>
+            <p class="authors">AIHPC Editorial Board - extrapolated from SPARC, AI fusion control, plasma diagnostics (2025-2031)</p>
           </div>
         </div>
         <div class="abstract">
-          <p>This is a futuristic vision, not a real publication. We extrapolate from AlphaFold 4 (2026), AlphaEvolve v3 (2028), and MACE-MT-2 (2026) to predict that by Q3 2031, AI will autonomously simulate full chemical evolution pathways from prebiotic soup to self-replicating protocells.</p>
-          <p>The vision: an AI &#x27;origin-of-life engine&#x27; simulates 10^12 chemical reactions over 10^9 simulated years on an exaflop GPU. The engine starts from HCN + H2O + CH4 + NH3 (Miller-Urey mixture), enumerates all possible reaction products, and applies a fitness function (replicability, energy capture, compartmentalisation).</p>
-          <p>In 6 of 1000 runs, the engine finds a self-replicating protocell with 18-22 residue RNA + lipid vesicle + autocatalytic network. The full simulation trace is downloadable (10 TB per run).</p>
+          <p>This is a futuristic vision, not a real publication. We extrapolate from CFS SPARC (2026), AI fusion control (2028), and high-throughput plasma diagnostics (2030) to predict that by Q2 2033, AI-driven autonomous diagnostics will characterise low-energy nuclear reaction (LENR / &#x27;cold fusion&#x27;) experiments in real-time, settling the 1989 Fleischmann-Pons controversy.</p>
+          <p>The vision: a &#x27;plasma diagnostics foundation model&#x27; (PlasmaDM v3, 10B params) ingests 12 simultaneous plasma observables (neutron flux, gamma spectrum, tritium count, calorimetry, mass-spec, X-ray, neutron spectroscopy, charged-particle spectrum, IR imaging, UV emission, magnetic probes, acoustic emission) and infers the underlying nuclear reaction rate + branching ratios.</p>
+          <p>By 2033, 7 of 10 LENR experiments show consistent above-background tritium + heat signatures (&gt;= 3 sigma) when run with PlasmaDM v3 diagnostics. The remaining 3 show only calorimetric anomalies (consistent with electrochemical artefacts). The controversy is effectively settled: LENR effects are real but small, and require hyper-pure Pd-D loading + specific crystal facets.</p>
         </div>
         <div class="dataset-card">
           <div class="ds-title">📁 Dataset — accompanying open data</div>
-          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic AI-abiogenesis simulation trace (1000 runs)</span></div>
-          <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 + RNA structures</span></div>
-          <div class="ds-row"><span class="k">Size</span><span class="v">10 TB per run</span></div>
-          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.ai-abiogenesis.org/2031" target="_blank" rel="noopener">https://www.ai-abiogenesis.org/2031</a></span></div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic LENR diagnostic trace (10 experiments × 12 observables × 1 kHz)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 + JSON</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">8 TB per experiment</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.lenr-diagnostics.org/2033" target="_blank" rel="noopener">https://www.lenr-diagnostics.org/2033</a></span></div>
         </div>
         <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
           <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a CSV of starting chemicals to enumerate reaction products via the AI engine.</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a CSV of plasma observables (time, neutron, gamma, heat, ...) for AI diagnosis.</div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-              📂 Upload .csv,.txt
-              <input type="file" id="etl-input-ai-abiogenesis-2031" accept=".csv,.txt" data-article-id="ai-abiogenesis-2031" style="display:none;" />
+              📂 Upload .csv,.h5,.hdf5,.txt
+              <input type="file" id="etl-input-cold-fusion-diagnostics-2033" accept=".csv,.h5,.hdf5,.txt" data-article-id="cold-fusion-diagnostics-2033" style="display:none;" />
             </label>
             <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
           </div>
-          <div id="etl-report-ai-abiogenesis-2031" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+          <div id="etl-report-cold-fusion-diagnostics-2033" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
         </div>
-        <div class="demo-card" id="demo-ai-abiogenesis-2031">
-          <div class="card-head" onclick="toggleDemo('demo-ai-abiogenesis-2031')">
+        <div class="demo-card" id="demo-cold-fusion-diagnostics-2033">
+          <div class="card-head" onclick="toggleDemo('demo-cold-fusion-diagnostics-2033')">
             <div>
-              <p class="card-title">ai_abiogenesis(starting_mix, simulator, fitness) - autonomous chemical evolution</p>
-              <p class="card-desc">Sketch the 2031 AI-abiogenesis engine: starting mixture, reaction enumeration, fitness scoring, selection, protocell detection.</p>
+              <p class="card-title">lenr_diagnose(observables, plasma_dm_v3) - autonomous plasma characterisation</p>
+              <p class="card-desc">5-step pipeline: observable ingestion, signal processing, PlasmaDM v3 inference, statistical validation, branching-ratio output.</p>
             </div>
             <span class="chevron">▾</span>
           </div>
@@ -1194,34 +1194,34 @@
             <!-- Math tab -->
             <div class="demo-tab-content active" data-tab="math">
               <div class="math-panel">
-                <div class="math-eq">protocell = argmax_p fitness(p) for p in enumerate_reactions(starting_mix, t=10^9 yr)</div>
-                <p class="math-plain">The AI engine enumerates all possible reaction products from the starting mixture over 10^9 simulated years, scores each product by fitness (replicability, energy capture, compartmentalisation), and detects when a self-replicating protocell emerges.</p>
+                <div class="math-eq">R_nuclear(t) = PlasmaDM-v3(obs_1(t), ..., obs_12(t));  branching = softmax(R_nuclear)</div>
+                <p class="math-plain">PlasmaDM v3 (10B params) ingests 12 simultaneous observables + outputs the underlying nuclear reaction rate R(t) + branching ratios (D+D → T+p, D+D → He3+n, D+T → He4+n, etc.).</p>
               </div>
               <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
               <div class="derivation-step">
-                <strong>Step 1: Starting mixture</strong>
-                <div class="step-math">S_0 = {HCN, H2O, CH4, NH3, H2S, phosphate}</div>
-                <div class="step-explain">Start with the Miller-Urey 1953 mixture: HCN, water, methane, ammonia, hydrogen sulfide, phosphate. This is the canonical prebiotic chemistry.</div>
+                <strong>Step 1: Observable ingestion</strong>
+                <div class="step-math">O = {neutron_flux(t), gamma_spectrum(t), tritium(t), heat(t), ...}</div>
+                <div class="step-explain">12 simultaneous observables at 1 kHz: neutron flux, gamma spectrum, tritium count, calorimetry, mass-spec, X-ray, neutron spectroscopy, charged-particle spectrum, IR imaging, UV emission, magnetic probes, acoustic emission.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 2: Reaction enumeration</strong>
-                <div class="step-math">products_t = enumerate_reactions(S_t, k=10^12 per step)</div>
-                <div class="step-explain">Use MACE-MT-2 (2026) + reaction templates to enumerate 10^12 possible reactions per time step. Each time step is ~1000 simulated years.</div>
+                <strong>Step 2: Signal processing</strong>
+                <div class="step-math">O_clean = filter(O) - background(O)</div>
+                <div class="step-explain">Each observable is filtered (high-pass for acoustic, low-pass for calorimetry) and background-subtracted using a matched-filter against the reactor&#x27;s quiescent baseline.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 3: Fitness scoring</strong>
-                <div class="step-math">fitness(p) = α·replicability + β·energy_capture + γ·compartmentalisation</div>
-                <div class="step-explain">Score each product p by: (a) replicability (can it template its own synthesis?), (b) energy capture (does it use ATP-equivalents?), (c) compartmentalisation (does it form vesicles?).</div>
+                <strong>Step 3: PlasmaDM v3 inference</strong>
+                <div class="step-math">R_nuclear(t) = PlasmaDM-v3(O_clean)</div>
+                <div class="step-explain">PlasmaDM v3 (10B params, trained on 100M simulated + 1M real plasma shots) infers the underlying nuclear reaction rate R(t) from the 12 observables. Outputs branching ratios for each reaction channel.</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 4: Selection</strong>
-                <div class="step-math">S_(t+1) = top_k(products_t, k=10^6, by=fitness)</div>
-                <div class="step-explain">Select the top 10^6 products by fitness; carry forward to the next time step. Total simulated time: 10^9 years (~10^6 time steps).</div>
+                <strong>Step 4: Statistical validation</strong>
+                <div class="step-math">significance = R_nuclear(t) / sigma_background &gt; 3 -&gt; detection</div>
+                <div class="step-explain">Statistical significance: 3-sigma above background = detection. 7 of 10 LENR experiments show 3-sigma above-background tritium + heat (the remaining 3 show only calorimetric anomalies).</div>
               </div>
               <div class="derivation-step">
-                <strong>Step 5: Protocell detection</strong>
-                <div class="step-math">protocell if fitness(p) &gt; threshold AND is_self_replicating(p)</div>
-                <div class="step-explain">A product is a &#x27;protocell&#x27; if it exceeds the fitness threshold AND is verified self-replicating (RNA world: 18-22 nt RNA + lipid vesicle + autocatalytic network). In 6 of 1000 runs, a protocell emerged.</div>
+                <strong>Step 5: Branching-ratio output</strong>
+                <div class="step-math">branching = softmax([R_DD_Tp, R_DD_He3n, R_DT_He4n])</div>
+                <div class="step-explain">The branching ratios between D+D reactions (T+p vs He3+n) and D+T reaction (He4+n) reveal the underlying mechanism. 7/10 experiments show D+D branching consistent with hot-fusion plasma — suggesting a surface-catalysed D+D mechanism in Pd-D.</div>
               </div>
             </div>
             <!-- Code tab -->
@@ -1250,50 +1250,50 @@
               <div class="observe-content active" data-sub="stats">
                 <div class="stats-grid">
                   <div class="stat">
-                    <div class="l">Starting mix</div>
-                    <div class="v">Miller-Urey (HCN+H2O+CH4+NH3)</div>
+                    <div class="l">Observables</div>
+                    <div class="v">12 simultaneous</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Reactions/step</div>
-                    <div class="v">10^12</div>
+                    <div class="l">Sample rate</div>
+                    <div class="v">1 kHz</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Simulated time</div>
-                    <div class="v">10^9 years</div>
+                    <div class="l">PlasmaDM v3 params</div>
+                    <div class="v">10B</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Time steps</div>
-                    <div class="v">~10^6</div>
+                    <div class="l">Detection threshold</div>
+                    <div class="v">3 σ</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Protocell success</div>
-                    <div class="v">6 of 1000 runs</div>
+                    <div class="l">Experiments positive</div>
+                    <div class="v">7 of 10</div>
                   </div>
                   <div class="stat">
-                    <div class="l">Protocell</div>
-                    <div class="v">18-22 nt RNA + vesicle</div>
+                    <div class="l">Year</div>
+                    <div class="v">2033</div>
                   </div>
                 </div>
               </div>
               <div class="observe-content" data-sub="reports">
-                <div class="report-block">2031 vision: AI &#x27;origin-of-life engine&#x27; simulates 10^12 reactions × 10^6 time steps = 10^18 total reactions over 10^9 simulated years. In 6 of 1000 runs, a self-replicating protocell emerges (18-22 nt RNA + lipid vesicle + autocatalytic network). Full simulation trace = 10 TB per run.</div>
+                <div class="report-block">2033 vision: PlasmaDM v3 (10B params) ingests 12 simultaneous plasma observables + infers underlying nuclear reaction rate + branching ratios. 7 of 10 LENR experiments show 3-σ above-background tritium + heat — settling the 1989 Fleischmann-Pons controversy: LENR effects are real but small, surface-catalysed D+D in Pd-D.</div>
               </div>
               <div class="observe-content" data-sub="graphs">
-                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><path d="M 20 170 Q 80 168 140 165 Q 200 160 260 130 Q 320 80 380 30" stroke="#06b6d4" stroke-width="2" fill="none"/><line x1="20" y1="100" x2="380" y2="100" stroke="#9ca3af" stroke-width="0.5" stroke-dasharray="3 3"/><text x="380" y="95" text-anchor="end" font-size="9" fill="#9ca3af" font-family="ui-monospace">fitness threshold</text><circle cx="350" cy="40" r="5" fill="#8b5cf6"/><text x="350" y="25" text-anchor="middle" font-size="9" fill="#8b5cf6" font-family="ui-monospace">protocell!</text><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">time (10^9 yr)</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">fitness</text></svg></div>
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="35" y="60" width="30" height="120" fill="#06b6d4"/><text x="50" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">neutron</text><rect x="75" y="90" width="30" height="90" fill="#8b5cf6"/><text x="90" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">gamma</text><rect x="115" y="110" width="30" height="70" fill="#ec4899"/><text x="130" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">tritium</text><rect x="155" y="100" width="30" height="80" fill="#f59e0b"/><text x="170" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">heat</text><rect x="195" y="140" width="30" height="40" fill="#10b981"/><text x="210" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">mass-spec</text><text x="290" y="60" font-size="10" fill="#06b6d4" font-family="ui-monospace">PlasmaDM v3 (10B)</text><text x="290" y="75" font-size="9" fill="#9ca3af" font-family="ui-monospace">-> reaction rate R(t)</text><text x="290" y="90" font-size="9" fill="#9ca3af" font-family="ui-monospace">-> branching ratios</text><text x="290" y="105" font-size="9" fill="#10b981" font-family="ui-monospace">3σ detection: 7/10</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">signal</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">12 observables -> autonomous LENR diagnosis</text></svg></div>
               </div>
               <div class="observe-content" data-sub="summary">
                 <div class="summary-block">
                   <ul>
-                    <li>AI origin-of-life engine: 10^12 reactions × 10^6 steps = 10^18 total reactions.</li>
-                    <li>Simulates 10^9 years of prebiotic chemical evolution on exaflop GPU.</li>
-                    <li>6 of 1000 runs find a self-replicating protocell (18-22 nt RNA + vesicle).</li>
-                    <li>Full simulation trace: 10 TB per run, released as Open Data.</li>
+                    <li>PlasmaDM v3 (10B params) ingests 12 simultaneous plasma observables.</li>
+                    <li>Infers nuclear reaction rate + branching ratios in real-time.</li>
+                    <li>7 of 10 LENR experiments show 3-σ above-background tritium + heat.</li>
+                    <li>Settles 1989 Fleischmann-Pons: LENR effects are real but small.</li>
                   </ul>
                 </div>
               </div>
               <!-- ETL Report sub-tab (Phase 27) -->
               <div class="observe-content" data-sub="etl">
-                <div class="report-block" id="etl-result-ai-abiogenesis-2031" style="min-height: 60px;">
+                <div class="report-block" id="etl-result-cold-fusion-diagnostics-2033" style="min-height: 60px;">
                   <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
                 </div>
               </div>
@@ -1351,61 +1351,61 @@
       // (See CODE_BANK below.)
 
       const CODE_BANK = {
-        'causal-chemprop': {
-          python: "# \u0394 = \u0177_causal - \u0177_MPNN; ABL: 0.45 -> 0.56\n# A -> anchor set  MPNN -> message passing  SCM -> causal model\nimport numpy as np\ndef causal_chemprop(mol_smiles, anchor_smiles, mpnn, scm):\n    # Step 1-2: MPNN encode molecule + anchor\n    h_mol = mpnn.encode(mol_smiles)\n    h_anchor = mpnn.encode(anchor_smiles)\n    # Step 3-4: SCM conditioning + do-calculus intervention\n    y_causal = scm.intervene(h_mol, h_anchor, do='R-group')\n    # Step 5: baseline + lift\n    y_mpnn = mpnn.predict(h_mol)\n    return {'pIC50_causal': y_causal, 'pIC50_mpnn': y_mpnn, 'delta': y_causal - y_mpnn}",
-          rust: "fn causal_chemprop(mol: &str, anchor: &str, mpnn: &MPNN, scm: &SCM) -> (f64, f64) {\n    let h_mol = mpnn.encode(mol);\n    let h_anchor = mpnn.encode(anchor);\n    let y_causal = scm.intervene(&h_mol, &h_anchor, 'R-group');\n    let y_mpnn = mpnn.predict(&h_mol);\n    (y_causal, y_mpnn)\n}",
-          go: "func CausalChemprop(mol, anchor string, mpnn MPNN, scm SCM) (causal, mpnn float64) {\n\thMol := mpnn.Encode(mol)\n\thAnchor := mpnn.Encode(anchor)\n\tcausal = scm.Intervene(hMol, hAnchor, \"R-group\")\n\tmpnn = mpnn.Predict(hMol)\n\treturn\n}",
-          c: "typedef struct { double causal; double mpnn; double delta; } Pred;\nPred causal_chemprop(const char* mol, const char* anchor, MPNN* mpnn, SCM* scm) {\n    Vec h_mol = mpnn_encode(mpnn, mol);\n    Vec h_anchor = mpnn_encode(mpnn, anchor);\n    Pred p;\n    p.causal = scm_intervene(scm, h_mol, h_anchor, \"R-group\");\n    p.mpnn = mpnn_predict(mpnn, h_mol);\n    p.delta = p.causal - p.mpnn;\n    return p;\n}",
-          elixir: "defmodule CausalChemprop do\n  def run(mol, anchor, mpnn, scm) do\n    h_mol = mpnn.encode(mol)\n    h_anchor = mpnn.encode(anchor)\n    y_causal = scm.intervene(h_mol, h_anchor, \"R-group\")\n    y_mpnn = mpnn.predict(h_mol)\n    %{causal: y_causal, mpnn: y_mpnn, delta: y_causal - y_mpnn}\n  end\nend",
-          scala: "case class Pred(causal: Double, mpnn: Double, delta: Double)\ndef causalChemprop(mol: String, anchor: String, mpnn: MPNN, scm: SCM): Pred = {\n  val hMol = mpnn.encode(mol)\n  val hAnchor = mpnn.encode(anchor)\n  val yCausal = scm.intervene(hMol, hAnchor, \"R-group\")\n  val yMpnn = mpnn.predict(hMol)\n  Pred(yCausal, yMpnn, yCausal - yMpnn)\n}",
+        'ai-catalysts-genatlas': {
+          python: "# catalyst = argmax_c P(activity>2x | c, target) \u00b7 P(sel>0.9 | c, target) \u00b7 lifetime(c)\n# target -> reaction SMILES  c -> catalyst composition\ndef design_catalyst(target, genatlas, dft, microreactor):\n    candidates = genatlas.propose(target, n=47)\n    scored = [(c, genatlas.score(c, target)) for c in candidates]\n    scored.sort(key=lambda x: -x[1])\n    for c, _ in scored:\n        if dft.confirm(c, target, tol=0.2) and microreactor.predict(c) > 2.0:\n            return c  # first-passing candidate\n    return None",
+          rust: "fn design_catalyst(target: &Target, genatlas: &GenAtlas, dft: &DFT, micro: &Microreactor) -> Option<Catalyst> {\n    let candidates = genatlas.propose(target, 47);\n    let mut scored: Vec<(Catalyst, f64)> = candidates.iter().map(|c| (c.clone(), genatlas.score(c, target))).collect();\n    scored.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());\n    for (c, _) in scored { if dft.confirm(&c, target, 0.2) && micro.predict(&c) > 2.0 { return Some(c); } }\n    None\n}",
+          go: "func DesignCatalyst(target *Target, genatlas *GenAtlas, dft *DFT, micro *Microreactor) *Catalyst {\n\tcandidates := genatlas.Propose(target, 47)\n\tvar scored []struct{ c Catalyst; s float64 }\n\tfor _, c := range candidates { scored = append(scored, struct{ c Catalyst; s float64 }{c, genatlas.Score(c, target)}) }\n\tsort.Slice(scored, func(i, j int) bool { return scored[i].s > scored[j].s })\n\tfor _, sc := range scored { if dft.Confirm(sc.c, target, 0.2) && micro.Predict(sc.c) > 2.0 { return &sc.c } }\n\treturn nil\n}",
+          c: "Catalyst* design_catalyst(Target* target, GenAtlas* gen, DFT* dft, Micro* micro) {\n    Candidate* cands = gen_propose(gen, target, 47);\n    int n = count_candidates(cands);\n    qsort(cands, n, sizeof(Candidate), cmp_score_desc);\n    for (int i = 0; i < n; i++) {\n        if (dft_confirm(dft, &cands[i], target, 0.2) && micro_predict(micro, &cands[i]) > 2.0) {\n            Catalyst* out = malloc(sizeof(Catalyst)); *out = cands[i].c; free(cands); return out;\n        }\n    }\n    free(cands); return NULL;\n}",
+          elixir: "defmodule GenAtlas do\n  def design(target, genatlas, dft, micro) do\n    genatlas.propose(target, 47)\n    |> Enum.map(fn c -> {c, genatlas.score(c, target)} end)\n    |> Enum.sort_by(fn {_, s} -> -s end)\n    |> Enum.find(fn {c, _} -> dft.confirm(c, target, 0.2) and micro.predict(c) > 2.0 end)\n    |> case do nil -> nil; {c, _} -> c end\n  end\nend",
+          scala: "def designCatalyst(target: Target, gen: GenAtlas, dft: DFT, micro: Micro): Option[Catalyst] = {\n  val candidates = gen.propose(target, 47)\n  val scored = candidates.map(c => (c, gen.score(c, target))).sortBy(-_._2)\n  scored.find { case (c, _) => dft.confirm(c, target, 0.2) && micro.predict(c) > 2.0 }.map(_._1)\n}",
         },
-        'alphaproteo-v2': {
-          python: "# binder = argmin_b E[b | target] - \u03bb\u00b7log(Kd)\n# epitope -> target patch  diffusion -> backbone  MPNN -> sequence\ndef alphaproteo_v2(target_pdb, target_epitope):\n    epitope = select_epitope(target_pdb, target_epitope)\n    backbone = diffuse_backbone(epitope, steps=250)\n    sequence = protein_mpnn(backbone)\n    if af_multimer_filter(sequence, target_pdb):\n        return sequence, predict_kd(sequence, target_pdb)\n    return None",
-          rust: "fn alphaproteo_v2(target: &PDB, epitope: &Epitope) -> Option<(Seq, f64)> {\n    let epi = select_epitope(target, epitope);\n    let bb = diffuse_backbone(&epi, 250);\n    let seq = protein_mpnn(&bb);\n    if af_multimer_filter(&seq, target) {\n        Some((seq, predict_kd(&seq, target)))\n    } else { None }\n}",
-          go: "func AlphaProteoV2(target *PDB, epitope string) (*Seq, float64) {\n\tepi := SelectEpitope(target, epitope)\n\tbb := DiffuseBackbone(epi, 250)\n\tseq := ProteinMPNN(bb)\n\tif AFMultimerFilter(seq, target) {\n\t\treturn &seq, PredictKd(seq, target)\n\t}\n\treturn nil, 0\n}",
-          c: "typedef struct { char* seq; double kd; } Binder;\nBinder alphaproteo_v2(const PDB* target, const char* epitope) {\n    Epitope epi = select_epitope(target, epitope);\n    Backbone bb = diffuse_backbone(&epi, 250);\n    char* seq = protein_mpnn(&bb);\n    Binder b = {0};\n    if (af_multimer_filter(seq, target)) {\n        b.seq = seq; b.kd = predict_kd(seq, target);\n    } else { free(seq); }\n    return b;\n}",
-          elixir: "defmodule AlphaProteo do\n  def v2(target, epitope) do\n    epi = select_epitope(target, epitope)\n    bb = diffuse_backbone(epi, 250)\n    seq = protein_mpnn(bb)\n    if af_multimer_filter(seq, target), do: {seq, predict_kd(seq, target)}, else: nil\n  end\nend",
-          scala: "case class Binder(seq: String, kd: Double)\ndef alphaProteoV2(target: PDB, epitope: String): Option[Binder] = {\n  val epi = selectEpitope(target, epitope)\n  val bb = diffuseBackbone(epi, 250)\n  val seq = proteinMPNN(bb)\n  if (afMultimerFilter(seq, target)) Some(Binder(seq, predictKd(seq, target))) else None\n}",
+        'holographic-microscopy-2026': {
+          python: "# V_3D = argmin_V ||F(V) - H||\u00b2 + \u03bb \u00b7 KL(V | prior)\n# F -> wave-equation forward  H -> 2D hologram  V -> 3D volume\ndef holographic_reconstruction(hologram, physics_diffusion):\n    H = parse_hologram(hologram)\n    V = physics_diffusion.reverse(H, steps=50, lambda_phys=1.0, lambda_prior=0.1)\n    ssim = validate(V, held_out_confocal)\n    return V if ssim > 0.87 else None",
+          rust: "fn holographic_reconstruction(h: &Hologram, pd: &PhysicsDiffusion) -> Option<Volume> {\n    let v = pd.reverse(h, 50, 1.0, 0.1);\n    let ssim = validate(&v, &held_out_confocal);\n    if ssim > 0.87 { Some(v) } else { None }\n}",
+          go: "func HolographicReconstruction(h *Hologram, pd *PhysicsDiffusion) *Volume {\n\tv := pd.Reverse(h, 50, 1.0, 0.1)\n\tif Validate(v, HeldOutConfocal) > 0.87 { return v }\n\treturn nil\n}",
+          c: "Volume* holographic_reconstruction(Hologram* h, PhysicsDiffusion* pd) {\n    Volume* v = pd_reverse(pd, h, 50, 1.0, 0.1);\n    if (validate_ssim(v, held_out_confocal) > 0.87) return v;\n    free(v); return NULL;\n}",
+          elixir: "defmodule HoloScope do\n  def reconstruct(h, pd) do\n    v = pd.reverse(h, 50, 1.0, 0.1)\n    if validate(v) > 0.87, do: v, else: nil\n  end\nend",
+          scala: "def holographicReconstruction(h: Hologram, pd: PhysicsDiffusion): Option[Volume] = {\n  val v = pd.reverse(h, 50, 1.0, 0.1)\n  if (validateSsim(v) > 0.87) Some(v) else None\n}",
         },
-        'gpt-5b-chemistry': {
-          python: "# route = argmax_r P(r | target)  with safety_filter(r) == PASS\n# target -> SMILES  prompt -> LLM input  route -> synthesis path\ndef gpt5b_chem_retrosynthesis(target_smiles, llm, forward_predictor, safety):\n    target = parse_smiles(target_smiles)\n    prompt = build_prompt(target, context='retro, 7+ steps, common reagents')\n    candidates = [llm.generate(prompt, temperature=0.3) for _ in range(8)]\n    scored = [(r, score(r, target, forward_predictor)) for r in candidates]\n    scored.sort(key=lambda x: -x[1])\n    for route, _ in scored:\n        if safety.filter(route) == 'PASS': return route\n    return None",
-          rust: "fn gpt5b_chem_retrosynthesis(target: &str, llm: &LLM, fwd: &Forward, safety: &Safety) -> Option<Route> {\n    let prompt = build_prompt(target, \"retro, 7+ steps, common reagents\");\n    let mut scored: Vec<(Route, f64)> = (0..8).map(|_| {\n        let r = llm.generate(&prompt, 0.3);\n        let s = score(&r, target, fwd);\n        (r, s)\n    }).collect();\n    scored.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());\n    for (route, _) in scored { if safety.filter(&route) == Pass { return Some(route); } }\n    None\n}",
-          go: "func GPT5BChemRetrosynthesis(target string, llm LLM, fwd Forward, safety Safety) *Route {\n\tprompt := BuildPrompt(target, \"retro, 7+ steps, common reagents\")\n\tvar scored []struct{ route Route; score float64 }\n\tfor i := 0; i < 8; i++ {\n\t\tr := llm.Generate(prompt, 0.3)\n\t\tsc := Score(r, target, fwd)\n\t\tscored = append(scored, struct{ route Route; score float64 }{r, sc})\n\t}\n\tsort.Slice(scored, func(i, j int) bool { return scored[i].score > scored[j].score })\n\tfor _, s := range scored { if safety.Filter(s.route) == PASS { return &s.route } }\n\treturn nil\n}",
-          c: "Route* gpt5b_chem_retrosynthesis(const char* target, LLM* llm, Forward* fwd, Safety* safety) {\n    char prompt[1024]; build_prompt(prompt, target, \"retro, 7+ steps, common reagents\");\n    ScoredRoute scored[8];\n    for (int i = 0; i < 8; i++) {\n        Route r = llm_generate(llm, prompt, 0.3);\n        scored[i] = (ScoredRoute){r, score(r, target, fwd)};\n    }\n    qsort(scored, 8, sizeof(ScoredRoute), cmp_score_desc);\n    for (int i = 0; i < 8; i++) {\n        if (safety_filter(safety, scored[i].route) == PASS) { return &scored[i].route; }\n    }\n    return NULL;\n}",
-          elixir: "defmodule GPT5BChem do\n  def retrosynthesis(target, llm, fwd, safety) do\n    prompt = build_prompt(target, \"retro, 7+ steps, common reagents\")\n    candidates = Enum.map(1..8, fn _ -> llm.generate(prompt, 0.3) end)\n    scored = Enum.map(candidates, fn r -> {r, score(r, target, fwd)} end)\n            |> Enum.sort_by(fn {_, s} -> -s end)\n    Enum.find(scored, fn {r, _} -> safety.filter(r) == :pass end) |> elem(0)\n  end\nend",
-          scala: "def gpt5bChemRetrosynthesis(target: String, llm: LLM, fwd: Forward, safety: Safety): Option[Route] = {\n  val prompt = buildPrompt(target, \"retro, 7+ steps, common reagents\")\n  val scored = (1 to 8).map(_ => llm.generate(prompt, 0.3)).map(r => (r, score(r, target, fwd))).toList\n  val sorted = scored.sortBy(-_._2)\n  sorted.find { case (r, _) => safety.filter(r) == Pass }.map(_._1)\n}",
+        'tabpfn-v2-tabular': {
+          python: "# \u0177 = TabPFN(X_train, y_train, X_test);  \u03c3 = std(50 inits)\n# X_train -> (n,d) features  y_train -> labels  X_test -> query\ndef tabpfn_v2_predict(X_train, y_train, X_test):\n    preds = [tabpfn.forward(X_train, y_train, X_test, init=i) for i in range(50)]\n    y_hat = np.mean(preds, axis=0)\n    sigma = np.std(preds, axis=0)\n    return y_hat, sigma",
+          rust: "fn tabpfn_v2_predict(x_train: &Tensor, y_train: &Tensor, x_test: &Tensor) -> (Vec<f64>, Vec<f64>) {\n    let preds: Vec<Vec<f64>> = (0..50).map(|i| tabpfn.forward(x_train, y_train, x_test, i)).collect();\n    let y_hat = mean(&preds);\n    let sigma = std(&preds);\n    (y_hat, sigma)\n}",
+          go: "func TabPFNV2Predict(XTrain, yTrain, XTest *Tensor) (yHat, sigma []float64) {\n\tvar preds [][]float64\n\tfor i := 0; i < 50; i++ { preds = append(preds, tabpfn.Forward(XTrain, yTrain, XTest, i)) }\n\tyHat = mean(preds); sigma = std(preds); return\n}",
+          c: "void tabpfn_v2_predict(double* X_train, double* y_train, double* X_test, int n, int d, int m, double* y_hat, double* sigma) {\n    double preds[50][MAX_M];\n    for (int i = 0; i < 50; i++) tabpfn_forward(X_train, y_train, X_test, n, d, m, i, preds[i]);\n    for (int j = 0; j < m; j++) { double s = 0; for (int i = 0; i < 50; i++) s += preds[i][j]; y_hat[j] = s / 50; }\n    for (int j = 0; j < m; j++) { double v = 0; for (int i = 0; i < 50; i++) v += (preds[i][j] - y_hat[j])*(preds[i][j] - y_hat[j]); sigma[j] = sqrt(v / 50); }\n}",
+          elixir: "defmodule TabPFN do\n  def predict(x_train, y_train, x_test) do\n    preds = Enum.map(0..49, fn i -> tabpfn.forward(x_train, y_train, x_test, i) end)\n    {mean(preds), std(preds)}\n  end\nend",
+          scala: "def tabpfnV2Predict(XTrain: Tensor, yTrain: Tensor, XTest: Tensor): (Array[Double], Array[Double]) = {\n  val preds = (0 until 50).map(i => tabpfn.forward(XTrain, yTrain, XTest, i))\n  val yHat = preds.reduce((a, b) => a.zip(b).map { case (x, y) => x + y }).map(_ / 50)\n  val sigma = preds.map { p => p.zip(yHat).map { case (pi, yh) => (pi - yh) * (pi - yh) } }.reduce((a, b) => a.zip(b).map { case (x, y) => x + y }).map(s => math.sqrt(s / 50))\n  (yHat, sigma)\n}",
         },
-        'janssen-ai-antibiotic': {
-          python: "# hit = {m : MPNN(m) > 0.7 AND docking(m, target) < -7 AND ADMET(m) == PASS}\n# MPNN -> activity predictor  docking -> binding energy  ADMET -> tox filter\ndef ai_antibiotic_discovery(pool, mpnn, docking, admet):\n    scored = [(m, mpnn.score(m)) for m in pool]\n    candidates = [m for m, s in scored if s > 0.7][:100000]\n    docked = [m for m in candidates if docking.best(m, targets=6) < -7.0]\n    return [m for m in docked if admet.passes(m)]",
-          rust: "fn ai_antibiotic_discovery(pool: &[Mol], mpnn: &MPNN, docking: &Docking, admet: &ADMET) -> Vec<Mol> {\n    let mut scored: Vec<(Mol, f64)> = pool.iter().map(|m| (m.clone(), mpnn.score(m))).collect();\n    scored.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());\n    let candidates: Vec<Mol> = scored.iter().take(100000).map(|(m, _)| m.clone()).filter(|(_, s)| *s > 0.7).map(|(m, _)| m).collect();\n    candidates.into_iter().filter(|m| docking.best(m, 6) < -7.0).filter(|m| admet.passes(m)).collect()\n}",
-          go: "func AIAntibioticDiscovery(pool []Mol, mpnn MPNN, docking Docking, admet ADMET) []Mol {\n\tvar scored []struct{ m Mol; s float64 }\n\tfor _, m := range pool { scored = append(scored, struct{ m Mol; s float64 }{m, mpnn.Score(m)}) }\n\tsort.Slice(scored, func(i, j int) bool { return scored[i].s > scored[j].s })\n\tvar out []Mol\n\tfor i := 0; i < 100000 && i < len(scored); i++ {\n\t\tm := scored[i].m\n\t\tif scored[i].s > 0.7 && docking.Best(m, 6) < -7.0 && admet.Passes(m) { out = append(out, m) }\n\t}\n\treturn out\n}",
-          c: "int ai_antibiotic_discovery(Mol* pool, int n, MPNN* mpnn, Docking* d, ADMET* a, Mol* out, int max_out) {\n    ScoredMol* scored = malloc(n * sizeof(ScoredMol));\n    for (int i = 0; i < n; i++) { scored[i] = (ScoredMol){pool[i], mpnn_score(mpnn, &pool[i])}; }\n    qsort(scored, n, sizeof(ScoredMol), cmp_desc);\n    int k = 0;\n    for (int i = 0; i < n && i < 100000; i++) {\n        Mol m = scored[i].m; double s = scored[i].s;\n        if (s > 0.7 && docking_best(d, &m, 6) < -7.0 && admet_passes(a, &m)) {\n            out[k++] = m; if (k == max_out) break;\n        }\n    }\n    free(scored); return k;\n}",
-          elixir: "defmodule AntibioticDiscovery do\n  def run(pool, mpnn, docking, admet) do\n    pool\n    |> Enum.map(fn m -> {m, mpnn.score(m)} end)\n    |> Enum.filter(fn {_, s} -> s > 0.7 end)\n    |> Enum.take(100_000)\n    |> Enum.filter(fn {m, _} -> docking.best(m, 6) < -7.0 end)\n    |> Enum.filter(fn {m, _} -> admet.passes(m) end)\n    |> Enum.map(fn {m, _} -> m end)\n  end\nend",
-          scala: "def aiAntibioticDiscovery(pool: Vector[Mol], mpnn: MPNN, docking: Docking, admet: ADMET): Vector[Mol] = {\n  pool.map(m => (m, mpnn.score(m))).filter(_._2 > 0.7).take(100000)\n    .filter { case (m, _) => docking.best(m, 6) < -7.0 }\n    .filter { case (m, _) => admet.passes(m) }\n    .map(_._1)\n}",
+        'bionemo-2-nvidia': {
+          python: "# pose = argmin_p E(p | target, ligand) + \u03bb \u00b7 \u0394G_BioNeMo(p)\n# target -> protein PDB  ligand -> SDF  E -> physics  \u0394G -> learned\ndef bionemo2_predict(target_pdb, ligand_sdf, bionemo2):\n    target = parse_pdb(target_pdb)\n    pockets = bionemo2.pocket_head(target, top_k=3)\n    ligand_emb = bionemo2.ligand_encoder(ligand_sdf)\n    poses = bionemo2.pose_predictor(target, ligand_emb, pockets)\n    return bionemo2.docking_fuser(poses, lambda_phys=1.0, lambda_dg=0.5)",
+          rust: "fn bionemo2_predict(target_pdb: &PDB, ligand_sdf: &SDF, bn2: &BioNeMo2) -> Pose {\n    let target = parse_pdb(target_pdb);\n    let pockets = bn2.pocket_head(&target, 3);\n    let ligand_emb = bn2.ligand_encoder(ligand_sdf);\n    let poses = bn2.pose_predictor(&target, &ligand_emb, &pockets);\n    bn2.docking_fuser(&poses, 1.0, 0.5)\n}",
+          go: "func BioNeMo2Predict(targetPDB *PDB, ligandSDF *SDF, bn2 *BioNeMo2) Pose {\n\ttarget := ParsePDB(targetPDB)\n\tpockets := bn2.PocketHead(target, 3)\n\tligandEmb := bn2.LigandEncoder(ligandSDF)\n\tposes := bn2.PosePredictor(target, ligandEmb, pockets)\n\treturn bn2.DockingFuser(poses, 1.0, 0.5)\n}",
+          c: "Pose* bionemo2_predict(PDB* target_pdb, SDF* ligand_sdf, BioNeMo2* bn2) {\n    PDB* target = parse_pdb(target_pdb);\n    Pocket* pockets = bn2_pocket_head(bn2, target, 3);\n    Vec* ligand_emb = bn2_ligand_encoder(bn2, ligand_sdf);\n    Pose* poses = bn2_pose_predictor(bn2, target, ligand_emb, pockets);\n    return bn2_docking_fuser(bn2, poses, 1.0, 0.5);\n}",
+          elixir: "defmodule BioNeMo2 do\n  def predict(target_pdb, ligand_sdf, bn2) do\n    target = parse_pdb(target_pdb)\n    pockets = bn2.pocket_head(target, 3)\n    ligand_emb = bn2.ligand_encoder(ligand_sdf)\n    poses = bn2.pose_predictor(target, ligand_emb, pockets)\n    bn2.docking_fuser(poses, 1.0, 0.5)\n  end\nend",
+          scala: "def bionemo2Predict(targetPDB: PDB, ligandSDF: SDF, bn2: BioNeMo2): Pose = {\n  val target = parsePDB(targetPDB)\n  val pockets = bn2.pocketHead(target, 3)\n  val ligandEmb = bn2.ligandEncoder(ligandSDF)\n  val poses = bn2.posePredictor(target, ligandEmb, pockets)\n  bn2.dockingFuser(poses, 1.0, 0.5)\n}",
         },
-        'gnome-2-materials': {
-          python: "# stable = {m : E_form(m, MACE) < 0 AND convex_hull(m) < 50 meV}\n# MACE -> ML potential  DFT -> validator  convex_hull -> stability\ndef gnome_2_discovery(candidates, mace, dft, hull_db):\n    stable = []\n    for m in candidates:\n        relaxed = mace.relax(m)\n        e_form = mace.formation_energy(relaxed)\n        if e_form < 0:\n            hull_dist = hull_db.distance(relaxed)\n            if hull_dist < 0.050:  # 50 meV/atom\n                if dft.confirm(relaxed, e_form):\n                    stable.append(relaxed)\n    return stable",
-          rust: "fn gnome_2_discovery(candidates: &[Crystal], mace: &MACE, dft: &DFT, hull: &HullDB) -> Vec<Crystal> {\n    let mut stable = Vec::new();\n    for m in candidates {\n        let relaxed = mace.relax(m);\n        let e_form = mace.formation_energy(&relaxed);\n        if e_form < 0.0 {\n            let hull_dist = hull.distance(&relaxed);\n            if hull_dist < 0.050 && dft.confirm(&relaxed, e_form) {\n                stable.push(relaxed);\n            }\n        }\n    }\n    stable\n}",
-          go: "func GNoME2Discovery(candidates []Crystal, mace MACE, dft DFT, hull HullDB) []Crystal {\n\tvar stable []Crystal\n\tfor _, m := range candidates {\n\t\trelaxed := mace.Relax(m)\n\t\teForm := mace.FormationEnergy(relaxed)\n\t\tif eForm < 0 {\n\t\t\thullDist := hull.Distance(relaxed)\n\t\t\tif hullDist < 0.050 && dft.Confirm(relaxed, eForm) {\n\t\t\t\tstable = append(stable, relaxed)\n\t\t\t}\n\t\t}\n\t}\n\treturn stable\n}",
-          c: "int gnome_2_discovery(Crystal* candidates, int n, MACE* mace, DFT* dft, HullDB* hull, Crystal* out, int max_out) {\n    int k = 0;\n    for (int i = 0; i < n; i++) {\n        Crystal relaxed; mace_relax(mace, &candidates[i], &relaxed);\n        double e_form = mace_formation_energy(mace, &relaxed);\n        if (e_form < 0) {\n            double hull_dist = hull_distance(hull, &relaxed);\n            if (hull_dist < 0.050 && dft_confirm(dft, &relaxed, e_form)) {\n                out[k++] = relaxed; if (k == max_out) break;\n            }\n        }\n    }\n    return k;\n}",
-          elixir: "defmodule GNoME2 do\n  def discover(candidates, mace, dft, hull) do\n    Enum.filter(candidates, fn m ->\n      relaxed = mace.relax(m)\n      e_form = mace.formation_energy(relaxed)\n      e_form < 0 and hull.distance(relaxed) < 0.050 and dft.confirm(relaxed, e_form)\n    end)\n  end\nend",
-          scala: "def gnome2Discovery(candidates: Vector[Crystal], mace: MACE, dft: DFT, hull: HullDB): Vector[Crystal] = {\n  candidates.flatMap { m =>\n    val relaxed = mace.relax(m)\n    val eForm = mace.formationEnergy(relaxed)\n    if (eForm < 0 && hull.distance(relaxed) < 0.050 && dft.confirm(relaxed, eForm))\n      Some(relaxed)\n    else None\n  }\n}",
+        'amie-diagnostic-2026': {
+          python: "# differentials = top_k(softmax(AMIE(symptoms, labs, imaging)), k=5)\n# symptoms -> text  labs -> structured  imaging -> CXR/ECG\ndef amie_diagnose(symptoms, labs, imaging, amie_model):\n    emb = amie_model.encode(symptoms, labs, imaging)\n    logits = amie_model.head(emb)\n    differentials = top_k(softmax(logits), k=5)\n    reasoning = amie_model.generate_reasoning(symptoms, differentials)\n    workup = amie_model.recommend_workup(differentials)\n    return differentials, reasoning, workup",
+          rust: "fn amie_diagnose(symptoms: &str, labs: &Labs, imaging: &Imaging, amie: &AMIE) -> (Vec<Diff>, String, Workup) {\n    let emb = amie.encode(symptoms, labs, imaging);\n    let logits = amie.head(&emb);\n    let differentials = top_k(softmax(&logits), 5);\n    let reasoning = amie.generate_reasoning(symptoms, &differentials);\n    let workup = amie.recommend_workup(&differentials);\n    (differentials, reasoning, workup)\n}",
+          go: "func AMIEDiagnose(symptoms string, labs *Labs, imaging *Imaging, amie *AMIE) ([]Diff, string, Workup) {\n\temb := amie.Encode(symptoms, labs, imaging)\n\tlogits := amie.Head(emb)\n\tdifferentials := TopK(Softmax(logits), 5)\n\treasoning := amie.GenerateReasoning(symptoms, differentials)\n\tworkup := amie.RecommendWorkup(differentials)\n\treturn differentials, reasoning, workup\n}",
+          c: "typedef struct { Diff diffs[5]; char* reasoning; Workup workup; } DiagResult;\nDiagResult amie_diagnose(const char* symptoms, Labs* labs, Imaging* imaging, AMIE* amie) {\n    Vec emb = amie_encode(amie, symptoms, labs, imaging);\n    Vec logits = amie_head(amie, &emb);\n    DiagResult r; top_k_softmax(logits, 5, r.diffs); r.reasoning = amie_generate_reasoning(amie, symptoms, r.diffs); r.workup = amie_recommend_workup(amie, r.diffs); return r;\n}",
+          elixir: "defmodule AMIE do\n  def diagnose(symptoms, labs, imaging, amie) do\n    emb = amie.encode(symptoms, labs, imaging)\n    logits = amie.head(emb)\n    differentials = top_k(softmax(logits), 5)\n    reasoning = amie.generate_reasoning(symptoms, differentials)\n    workup = amie.recommend_workup(differentials)\n    {differentials, reasoning, workup}\n  end\nend",
+          scala: "def amieDiagnose(symptoms: String, labs: Labs, imaging: Imaging, amie: AMIE): (Vector[Diff], String, Workup) = {\n  val emb = amie.encode(symptoms, labs, imaging)\n  val logits = amie.head(emb)\n  val differentials = topK(softmax(logits), 5)\n  val reasoning = amie.generateReasoning(symptoms, differentials)\n  val workup = amie.recommendWorkup(differentials)\n  (differentials, reasoning, workup)\n}",
         },
-        'programmatic-matter-2030': {
-          python: "# state_t = MACE-MT-4(scaffold, signal_t); 16 states per scaffold\n# scaffold -> DNA origami  arms -> foldamers  signal -> {pH, light, V, ligand}\ndef programmatic_matter(scaffold, signal, mace_mt4):\n    state = mace_mt4.predict(scaffold, signal)\n    if af_multimer_verify(scaffold, state):\n        return state\n    return None",
-          rust: "fn programmatic_matter(scaffold: &Scaffold, signal: &Signal, mace: &MACE) -> Option<State> {\n    let state = mace.predict(scaffold, signal);\n    if af_multimer_verify(scaffold, &state) { Some(state) } else { None }\n}",
-          go: "func ProgrammaticMatter(scaffold *Scaffold, signal *Signal, mace MACE) *State {\n\tstate := mace.Predict(scaffold, signal)\n\tif AFMultimerVerify(scaffold, state) { return state }\n\treturn nil\n}",
-          c: "State* programmatic_matter(Scaffold* s, Signal* sig, MACE* mace) {\n    State* st = mace_predict(mace, s, sig);\n    if (af_multimer_verify(s, st)) return st;\n    free(st); return NULL;\n}",
-          elixir: "defmodule ProgrammaticMatter do\n  def run(scaffold, signal, mace) do\n    state = mace.predict(scaffold, signal)\n    if af_multimer_verify(scaffold, state), do: state, else: nil\n  end\nend",
-          scala: "def programmaticMatter(scaffold: Scaffold, signal: Signal, mace: MACE): Option[State] = {\n  val state = mace.predict(scaffold, signal)\n  if (afMultimerVerify(scaffold, state)) Some(state) else None\n}",
+        'programmable-enzymes-2032': {
+          python: "# activity_t = ESM-3 v6(scaffold, signal_t); 16 states per scaffold\n# scaffold -> ESM-3 designed  signals -> {light, ligand_A, ligand_B, V}\ndef programmable_enzyme(scaffold, signal, esm3_v6):\n    activity = esm3_v6.predict(scaffold, signal)\n    if alpha_fold_4_verify(scaffold, activity):\n        return activity\n    return None",
+          rust: "fn programmable_enzyme(scaffold: &Scaffold, signal: &Signal, esm3: &ESM3) -> Option<Activity> {\n    let activity = esm3.predict(scaffold, signal);\n    if alpha_fold_4_verify(scaffold, &activity) { Some(activity) } else { None }\n}",
+          go: "func ProgrammableEnzyme(scaffold *Scaffold, signal *Signal, esm3 *ESM3) *Activity {\n\tactivity := esm3.Predict(scaffold, signal)\n\tif AlphaFold4Verify(scaffold, activity) { return activity }\n\treturn nil\n}",
+          c: "Activity* programmable_enzyme(Scaffold* s, Signal* sig, ESM3* esm3) {\n    Activity* a = esm3_predict(esm3, s, sig);\n    if (alpha_fold_4_verify(s, a)) return a;\n    free(a); return NULL;\n}",
+          elixir: "defmodule ProgrammableEnzyme do\n  def run(scaffold, signal, esm3) do\n    activity = esm3.predict(scaffold, signal)\n    if alpha_fold_4_verify(scaffold, activity), do: activity, else: nil\n  end\nend",
+          scala: "def programmableEnzyme(scaffold: Scaffold, signal: Signal, esm3: ESM3): Option[Activity] = {\n  val a = esm3.predict(scaffold, signal)\n  if (alphaFold4Verify(scaffold, a)) Some(a) else None\n}",
         },
-        'ai-abiogenesis-2031': {
-          python: "# protocell = argmax_p fitness(p) for p in enumerate_reactions(S_0, t=10^9 yr)\n# S_0 -> Miller-Urey mix  fitness -> replicability+energy+compartment\ndef ai_abiogenesis(starting_mix, simulator, fitness_fn, steps=10**6):\n    s = starting_mix\n    for t in range(steps):\n        products = simulator.enumerate(s, k=10**12)\n        scored = [(p, fitness_fn(p)) for p in products]\n        s = [p for p, _ in sorted(scored, key=lambda x: -x[1])[:10**6]]\n        if any(is_self_replicating(p) for p in s):\n            return p  # protocell found\n    return None",
-          rust: "fn ai_abiogenesis(start: &Mix, sim: &Simulator, fitness: &Fitness, steps: u64) -> Option<Mol> {\n    let mut s = start.clone();\n    for _ in 0..steps {\n        let products = sim.enumerate(&s, 1_000_000_000_000);\n        let mut scored: Vec<(Mol, f64)> = products.into_iter().map(|p| (p.clone(), fitness.score(&p))).collect();\n        scored.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());\n        s = scored.into_iter().take(1_000_000).map(|(p, _)| p).collect();\n        if s.iter().any(is_self_replicating) { return s.into_iter().find(is_self_replicating); }\n    }\n    None\n}",
-          go: "func AIAbiogenesis(start Mix, sim Simulator, fitness Fitness, steps int) *Mol {\n\ts := start\n\tfor t := 0; t < steps; t++ {\n\t\tproducts := sim.Enumerate(s, 1_000_000_000_000)\n\t\tvar scored []struct{ m Mol; f float64 }\n\t\tfor _, p := range products { scored = append(scored, struct{ m Mol; f float64 }{p, fitness.Score(p)}) }\n\t\tsort.Slice(scored, func(i, j int) bool { return scored[i].f > scored[j].f })\n\t\tif len(scored) > 1_000_000 { scored = scored[:1_000_000] }\n\t\ts = make([]Mol, len(scored))\n\t\tfor i, sc := range scored { s[i] = sc.m }\n\t\tfor _, p := range s { if IsSelfReplicating(p) { return &p } }\n\t}\n\treturn nil\n}",
-          c: "Mol* ai_abiogenesis(Mix* start, Simulator* sim, Fitness* fitness, int steps) {\n    Mix s = *start;\n    for (int t = 0; t < steps; t++) {\n        int n_products; Mol* products = sim_enumerate(sim, &s, 1000000000000, &n_products);\n        ScoredMol* scored = malloc(n_products * sizeof(ScoredMol));\n        for (int i = 0; i < n_products; i++) { scored[i] = (ScoredMol){products[i], fitness_score(fitness, &products[i])}; }\n        qsort(scored, n_products, sizeof(ScoredMol), cmp_desc);\n        // Take top 1M, free rest\n        for (int i = 0; i < n_products && i < 1000000; i++) {\n            if (is_self_replicating(&scored[i].m)) { Mol* out = malloc(sizeof(Mol)); *out = scored[i].m; free(scored); free(products); return out; }\n        }\n        free(scored); free(products);\n    }\n    return NULL;\n}",
-          elixir: "defmodule AIAbiogenesis do\n  def run(start, sim, fitness, steps) do\n    Enum.reduce_while(0..(steps-1), start, fn t, s ->\n      products = sim.enumerate(s, 1_000_000_000_000)\n      scored = Enum.map(products, fn p -> {p, fitness.score(p)} end)\n              |> Enum.sort_by(fn {_, f} -> -f end)\n              |> Enum.take(1_000_000)\n              |> Enum.map(fn {p, _} -> p end)\n      case Enum.find(scored, &is_self_replicating/1) do\n        nil -> {:cont, scored}\n        p -> {:halt, p}\n      end\n    end)\n  end\nend",
-          scala: "def aiAbiogenesis(start: Mix, sim: Simulator, fitness: Fitness, steps: Int): Option[Mol] = {\n  var s = start\n  for (t <- 0 until steps) {\n    val products = sim.enumerate(s, 1000000000000L)\n    val scored = products.map(p => (p, fitness.score(p))).sortBy(-_._2).take(1000000).map(_._1)\n    s = scored\n    val protocell = s.find(isSelfReplicating)\n    if (protocell.isDefined) return protocell\n  }\n  None\n}",
+        'cold-fusion-diagnostics-2033': {
+          python: "# R_nuclear(t) = PlasmaDM-v3(O_1(t), ..., O_12(t))\n# O -> 12 observables  R -> reaction rate  branching -> reaction channels\ndef lenr_diagnose(observables, plasma_dm_v3):\n    O_clean = filter_and_subtract(observables)\n    R = plasma_dm_v3.infer(O_clean)\n    significance = R / sigma_background\n    if significance > 3:\n        branching = softmax(plasma_dm_v3.branching_head(R))\n        return {'detected': True, 'branching': branching}\n    return {'detected': False}",
+          rust: "fn lenr_diagnose(obs: &Observables, pdm: &PlasmaDM) -> DiagResult {\n    let o_clean = filter_and_subtract(obs);\n    let r = pdm.infer(&o_clean);\n    let sig = r / sigma_background;\n    if sig > 3.0 { DiagResult { detected: true, branching: softmax(pdm.branching_head(&r)) } }\n    else { DiagResult { detected: false, branching: vec![] } }\n}",
+          go: "func LENRDiagnose(obs *Observables, pdm *PlasmaDM) DiagResult {\n\toClean := FilterAndSubtract(obs)\n\tr := pdm.Infer(oClean)\n\tsig := r / SigmaBackground\n\tif sig > 3.0 { return DiagResult{Detected: true, Branching: Softmax(pdm.BranchingHead(r))} }\n\treturn DiagResult{Detected: false}\n}",
+          c: "typedef struct { int detected; float* branching; int n_branches; } DiagResult;\nDiagResult lenr_diagnose(Observables* obs, PlasmaDM* pdm) {\n    Observables oc = filter_and_subtract(obs);\n    float r = pdm_infer(pdm, &oc);\n    float sig = r / SIGMA_BACKGROUND;\n    if (sig > 3.0) { DiagResult d = {1, pdm_branching_head(pdm, r), N_BRANCHES}; return d; }\n    DiagResult d0 = {0, NULL, 0}; return d0;\n}",
+          elixir: "defmodule LENRDiag do\n  def run(obs, pdm) do\n    o_clean = filter_and_subtract(obs)\n    r = pdm.infer(o_clean)\n    sig = r / sigma_background()\n    if sig > 3.0 do\n      %{detected: true, branching: softmax(pdm.branching_head(r))}\n    else\n      %{detected: false}\n    end\n  end\nend",
+          scala: "case class DiagResult(detected: Boolean, branching: Vector[Double])\ndef lenrDiagnose(obs: Observables, pdm: PlasmaDM): DiagResult = {\n  val oClean = filterAndSubtract(obs)\n  val r = pdm.infer(oClean)\n  val sig = r / sigmaBackground\n  if (sig > 3.0) DiagResult(true, softmax(pdm.branchingHead(r))) else DiagResult(false, Vector.empty)\n}",
         },
       };
 

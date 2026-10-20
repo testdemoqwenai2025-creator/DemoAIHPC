@@ -172,6 +172,40 @@ def emit_concept_card(article, manifest):
         .data-table-hidden {{ display: none; }}
       </style>''')
 
+    # ---- Phase 40: N-D parallel-coords strip — auto-embedded on every card ----
+    # Extract the article's properties (from stats + observe) into a uniform dict.
+    nd_props = []
+    nd_props.append({'label': 'Issue', 'value': manifest.get('issue', '?')})
+    nd_props.append({'label': 'Source', 'value': article.get('source', '?')})
+    nd_props.append({'label': 'Published', 'value': article.get('published', '?')})
+    nd_props.append({'label': 'Authors', 'value': article.get('authors', '?')[:30]})
+    if 'dataset' in article:
+        nd_props.append({'label': 'Dataset', 'value': article['dataset'].get('name', '?')[:30]})
+        nd_props.append({'label': 'Format', 'value': article['dataset'].get('format', '?')[:30]})
+        nd_props.append({'label': 'Size', 'value': article['dataset'].get('size', '?')[:20]})
+    # Add stats from the demo.observe if present
+    demo = article.get('demo', {})
+    observe = demo.get('observe', {})
+    if 'stats' in observe:
+        for stat in observe['stats'][:6]:
+            nd_props.append({'label': stat.get('label', '?'), 'value': stat.get('value', '?')})
+
+    # Render as a parallel-coords-style inline strip (pure CSS)
+    nd_cells = ''.join([
+        f'<div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);">'
+        f'<div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{html_mod.escape(p["label"])}</div>'
+        f'<div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{html_mod.escape(str(p["value"]))}</div>'
+        f'</div>' for p in nd_props
+    ])
+    parts.append(f'''      <section style="margin: 24px 0; padding: 14px 16px; background: rgba(11,15,26,0.6); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; backdrop-filter: blur(12px);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#06b6d4;">📊 N-D properties strip</span>
+          <span style="font-size:10px;color:var(--text-muted-2, #6b7280);">Phase 40 · auto-generated · {len(nd_props)} properties</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;overflow-x:auto;">{nd_cells}</div>
+        <p style="font-size:10px;color:var(--text-muted-2, #6b7280);margin:8px 0 0;">Parallel-coordinates strip — read left-to-right across the article's metadata. Use for cross-article comparison (e.g. for two concept cards, the strip shows dataset sizes / publication dates at a glance).</p>
+      </section>''')
+
     # ---- ClickForDemo (Math + Code + Observe + ETL Report) ----
     demo = article['demo']
     parts.append(f'''      <h2>Demo — {html_mod.escape(demo["title"])}</h2>

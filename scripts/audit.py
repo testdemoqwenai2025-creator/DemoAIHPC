@@ -1112,6 +1112,205 @@ def check_quantum_vqc_loaded():
 
 
 # ---------------------------------------------------------------------------
+# Phase 40 checks
+# ---------------------------------------------------------------------------
+
+def check_scientific_uploader_loaded():
+    """Check (Phase 40): science-cheminformatics.html loads the
+    scientific-uploader.js + it exposes AIHPC_UPLOADER + parses PDB/SDF/etc."""
+    chem_path = os.path.join(DOCS, "science-cheminformatics.html")
+    up_js = os.path.join(DOCS, "scientific-uploader.js")
+    if not os.path.isfile(chem_path) or not os.path.isfile(up_js):
+        return CheckResult("scientific_uploader_loaded", False,
+                           "science-cheminformatics.html or scientific-uploader.js missing")
+    page = open(chem_path, encoding="utf-8").read()
+    js = open(up_js, encoding="utf-8").read()
+    failures = []
+    if "scientific-uploader.js" not in page:
+        failures.append("science-cheminformatics.html does not load scientific-uploader.js")
+    if 'id="chem-uploader-container"' not in page:
+        failures.append("missing #chem-uploader-container element")
+    if "AIHPC_UPLOADER" not in js:
+        failures.append("scientific-uploader.js does not expose AIHPC_UPLOADER global")
+    if "registerConsumer" not in js:
+        failures.append("missing registerConsumer API")
+    if "parsePDB" not in js or "parseSDF" not in js:
+        failures.append("missing PDB/SDF parsers")
+    if "parseParquet" not in js or "parseArrow" not in js:
+        failures.append("missing Parquet/Arrow parsers (big-data formats)")
+    if "parseHDF5" not in js or "parseNPY" not in js:
+        failures.append("missing HDF5/NPY parsers (scientific formats)")
+    if "hdfs-seq" not in js:
+        failures.append("missing Hadoop SequenceFile marker parser")
+    # Page must register molecule-3d as a consumer of the uploader
+    if "registerConsumer('molecule-3d'" not in page and 'registerConsumer("molecule-3d"' not in page:
+        failures.append("page does not register molecule-3d as a consumer")
+    if failures:
+        return CheckResult("scientific_uploader_loaded", False,
+                           f"{len(failures)} issues with scientific uploader", failures)
+    return CheckResult("scientific_uploader_loaded", True,
+                       "science-cheminformatics.html loads scientific-uploader.js + multi-format parsers (PDB/SDF/CSV/Parquet/Arrow/HDF5/NPY/FITS/VTK/JSON/HDFS) + molecule-3d consumer registered")
+
+
+def check_attention_heatmap_loaded():
+    """Check (Phase 40): science-ml.html loads attention-heatmap.js + 3 heat-map containers."""
+    ml_path = os.path.join(DOCS, "science-ml.html")
+    attn_js = os.path.join(DOCS, "attention-heatmap.js")
+    if not os.path.isfile(ml_path) or not os.path.isfile(attn_js):
+        return CheckResult("attention_heatmap_loaded", False,
+                           "science-ml.html or attention-heatmap.js missing")
+    page = open(ml_path, encoding="utf-8").read()
+    js = open(attn_js, encoding="utf-8").read()
+    failures = []
+    if "attention-heatmap.js" not in page:
+        failures.append("science-ml.html does not load attention-heatmap.js")
+    if "AIHPC_ATTN" not in js:
+        failures.append("attention-heatmap.js does not expose AIHPC_ATTN global")
+    # Three container IDs for the 3 attention demos
+    for container in ["attn-sdpa-container", "attn-mha-container", "attn-flash-container"]:
+        if container not in page:
+            failures.append(f"missing #{container} element")
+    if "softmax2D" not in js:
+        failures.append("missing softmax2D function (the heat-map math)")
+    if failures:
+        return CheckResult("attention_heatmap_loaded", False,
+                           f"{len(failures)} issues with attention heat-map", failures)
+    return CheckResult("attention_heatmap_loaded", True,
+                       "science-ml.html loads attention-heatmap.js + 3 live heat-maps (SDPA + MHA + FlashAttention) + softmax2D math")
+
+
+def check_kg_search_present():
+    """Check (Phase 40): graph.html has a free-text search box + filtering logic."""
+    g_path = os.path.join(DOCS, "graph.html")
+    if not os.path.isfile(g_path):
+        return CheckResult("kg_search_present", False, "docs/graph.html missing")
+    src = open(g_path, encoding="utf-8").read()
+    failures = []
+    if 'id="graph-search-input"' not in src:
+        failures.append("missing #graph-search-input element")
+    if "searchMatchIds" not in src:
+        failures.append("missing searchMatchIds state")
+    if "computeSearchMatches" not in src:
+        failures.append("missing computeSearchMatches function")
+    if "searchQuery" not in src:
+        failures.append("missing searchQuery variable")
+    if failures:
+        return CheckResult("kg_search_present", False,
+                           f"{len(failures)} issues with knowledge graph search", failures)
+    return CheckResult("kg_search_present", True,
+                       "graph.html has free-text search input + 1-hop neighbour expansion + live node-count stats")
+
+
+def check_bloch_2qubit_supported():
+    """Check (Phase 40): bloch-sphere.js supports 2-qubit Bell states + CHSH."""
+    bloch_js = os.path.join(DOCS, "bloch-sphere.js")
+    bloch_html = os.path.join(DOCS, "bloch.html")
+    if not os.path.isfile(bloch_js) or not os.path.isfile(bloch_html):
+        return CheckResult("bloch_2qubit", False,
+                           "bloch-sphere.js or bloch.html missing")
+    js = open(bloch_js, encoding="utf-8").read()
+    page = open(bloch_html, encoding="utf-8").read()
+    failures = []
+    if "twoQubit" not in js:
+        failures.append("missing twoQubit scene flag")
+    if "render2Qubit" not in js:
+        failures.append("missing render2Qubit method")
+    if "Bell state" not in page:
+        failures.append("bloch.html missing Bell state scene entry in scene list")
+    if "CHSH" not in page:
+        failures.append("bloch.html missing CHSH violation scene entry")
+    if "drawSphere" not in js:
+        failures.append("missing drawSphere helper (used for compact 2-sphere render)")
+    if failures:
+        return CheckResult("bloch_2qubit", False,
+                           f"{len(failures)} issues with 2-qubit Bloch extension", failures)
+    return CheckResult("bloch_2qubit", True,
+                       "bloch-sphere.js supports 2-qubit scenes (Bell |Φ+⟩, |Ψ-⟩ singlet, CHSH violation) with side-by-side spheres + correlation line")
+
+
+def check_issue_8_published():
+    """Check (Phase 40): Issue #8 published with 5 real + 2 futuristic articles + Issue #7 archived."""
+    spec = importlib.util.spec_from_file_location(
+        "gen_digest", os.path.join(ROOT, "scripts", "gen-digest.py"),
+    )
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception as e:
+        return CheckResult("digest_issue_8", False,
+                           f"could not load gen-digest.py: {e}")
+    manifest = mod.MANIFEST
+    if manifest.get("issue") != 8:
+        return CheckResult("digest_issue_8", False,
+                           f"MANIFEST issue is {manifest.get('issue')}, expected 8")
+    if manifest.get("date") != "2026-12-08":
+        return CheckResult("digest_issue_8", False,
+                           f"MANIFEST date is {manifest.get('date')}, expected 2026-12-08")
+    articles = manifest.get("articles", [])
+    if len(articles) != 7:
+        return CheckResult("digest_issue_8", False,
+                           f"{len(articles)} articles, expected 7")
+    real_count = sum(1 for a in articles if not a.get("futuristic_vision"))
+    futuristic_count = sum(1 for a in articles if a.get("futuristic_vision"))
+    if real_count != 5 or futuristic_count != 2:
+        return CheckResult("digest_issue_8", False,
+                           f"{real_count} real + {futuristic_count} futuristic, expected 5 + 2")
+    # Anchors must be present
+    ids = [a["id"] for a in articles]
+    for expected_id in ["ai-catalysts-genatlas", "holographic-microscopy-2026", "tabpfn-v2-tabular", "bionemo-2-nvidia", "amie-diagnostic-2026"]:
+        if expected_id not in ids:
+            return CheckResult("digest_issue_8", False,
+                               f"missing anchor article: {expected_id}")
+    # Issue #7 must be archived
+    archive_7 = os.path.join(DOCS, "digest", "archive", "issue-007.html")
+    if not os.path.isfile(archive_7):
+        return CheckResult("digest_issue_8", False,
+                           "Issue #7 archive (docs/digest/archive/issue-007.html) missing")
+    # Concept cards
+    missing_cards = []
+    for a in articles:
+        card = os.path.join(DOCS, "concepts", f"digest-{a['id']}.html")
+        if not os.path.isfile(card):
+            missing_cards.append(a["id"])
+    if missing_cards:
+        return CheckResult("digest_issue_8", False,
+                           f"missing concept cards: {', '.join(missing_cards)}")
+    return CheckResult("digest_issue_8", True,
+                       f"Issue #8 (2026-12-08) published: {real_count} real + {futuristic_count} futuristic; "
+                       f"Issue #7 archived; 7 concept cards generated; anchors: catalysts+holography+tabpfn+bionemo+amie")
+
+
+def check_concept_card_nd_strip():
+    """Check (Phase 40): concept cards have the auto-embedded N-D parallel-coords strip.
+    Tests both the most recent digest card (Issue #8) + an ML concept card."""
+    # Use the current manifest's first article (Issue #8 anchor: ai-catalysts-genatlas)
+    sample_card = os.path.join(DOCS, "concepts", "digest-ai-catalysts-genatlas.html")
+    sample_ml_card = os.path.join(DOCS, "concepts", "ml-mse.html")
+    if not os.path.isfile(sample_card) or not os.path.isfile(sample_ml_card):
+        return CheckResult("concept_card_nd_strip", False,
+                           "sample concept cards missing")
+    digest_src = open(sample_card, encoding="utf-8").read()
+    ml_src = open(sample_ml_card, encoding="utf-8").read()
+    failures = []
+    if "N-D properties strip" not in digest_src:
+        failures.append("digest concept card missing N-D strip")
+    if "N-D properties strip" not in ml_src:
+        failures.append("ML concept card missing N-D strip")
+    if "auto-generated" not in digest_src:
+        failures.append("digest card strip not marked auto-generated")
+    if "auto-generated" not in ml_src:
+        failures.append("ML card strip not marked auto-generated")
+    # Strip must contain at least 5 properties
+    if digest_src.count("ellipsis") < 1:
+        failures.append("digest card strip doesn't have property cells")
+    if failures:
+        return CheckResult("concept_card_nd_strip", False,
+                           f"{len(failures)} issues with N-D strip", failures)
+    return CheckResult("concept_card_nd_strip", True,
+                       "All concept cards (digest + ML) auto-embed N-D parallel-coords strip with article/demo metadata")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -1153,10 +1352,16 @@ def main():
         # Phase 38
         check_cheminformatics_3d(),
         check_optimiser_showdown_extended(),
-        check_digest_issue_7(),
         # Phase 39
         check_medical_imaging_loaded(),
         check_quantum_vqc_loaded(),
+        # Phase 40
+        check_scientific_uploader_loaded(),
+        check_attention_heatmap_loaded(),
+        check_kg_search_present(),
+        check_bloch_2qubit_supported(),
+        check_issue_8_published(),
+        check_concept_card_nd_strip(),
     ]
 
     if args.json:

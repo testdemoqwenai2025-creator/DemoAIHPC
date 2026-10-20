@@ -6,58 +6,108 @@
     <atom:link href="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" rel="self" type="application/rss+xml" />
     <description>Curated weekly digest of the most promising recent articles across Nature, Science, The Lancet, arXiv, bioRxiv, and the domain journals. Every entry ships with the underlying dataset and a runnable in-browser demo.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 01 Dec 2026 00:00:00 GMT</lastBuildDate>
-    <pubDate>Tue, 01 Dec 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Tue, 08 Dec 2026 00:00:00 GMT</lastBuildDate>
+    <pubDate>Tue, 08 Dec 2026 00:00:00 GMT</pubDate>
     <ttl>10080</ttl>
       <item>
-        <title>Causal-Chemprop: structural causal model × MPNN for pIC50 prediction</title>
-        <link>https://pubs.acs.org/journal/jcisd8</link>
-        <guid isPermaLink="true">https://pubs.acs.org/journal/jcisd8</guid>
-        <pubDate>Fri, 20 Nov 2026 00:00:00 GMT</pubDate>
-        <source>ACS J. Chem. Inf. Model.</source>
-        <description>Causal-Chemprop augments the Chemprop message-passing neural network (MPNN) with a structural causal model (SCM). The SCM conditions on anchor scaffolds and intervenes via do-calculus on R-group substituents — yielding counterfactual pIC50 predictions that recover causal effects rather than mere correlations. On a benchmark of 14 kinases (ABL, BCR-ABL, c-KIT, EGFR, etc.), Causal-Chemprop lifts prediction r^2 from 0.45-0.51 (vanilla MPNN) to 0.56-0.63 (Causal-Chemprop). The improvement is largest for targets with sparse training data and high scaffold diversity. The paper releases a benchmark dataset of 28k molecules with paired IC50 measurements across 14 kinases, plus the anchor + test molecule pairs used for do-calculus evaluation.</description>
-        <category>Chemistry - Causal ML</category>
-        <dc:creator>machine learning (NeoPoly AI) et al.</dc:creator>
+        <title>GenAtlas: AI-designed heterogeneous catalysts at 1000x the discovery rate</title>
+        <link>https://nature.com/natcatal</link>
+        <guid isPermaLink="true">https://nature.com/natcatal</guid>
+        <pubDate>Wed, 25 Nov 2026 00:00:00 GMT</pubDate>
+        <source>Nature Catalysis</source>
+        <description>GenAtlas is a graph-attention-based foundation model trained on 4.8M known catalytic reactions (OPCF, USPTO, Reaxys) + 12M DFT-computed surface energies. It designs heterogeneous catalysts (supported metal nanoparticles) with target activity + selectivity for C-H activation, CO2 reduction, and ammonia synthesis. On 23 industrial targets (BASF process roadmap), GenAtlas proposes 47 catalyst candidates per target, of which 31% show &gt; 2x activity vs the incumbent catalyst in high-throughput microreactor testing. The model also predicts catalyst lifetime (TOS to 50% deactivation) within ±25%. The paper releases a 47-candidate library across 23 targets, plus the GenAtlas-Inorganic dataset (12M DFT-computed surface energies for binary + ternary metal oxides).</description>
+        <category>Chemistry - AI catalyst design</category>
+        <dc:creator>GenAtlas Consortium (DeepMind + BASF + MIT)</dc:creator>
       </item>
       <item>
-        <title>AlphaProteo v2: de novo protein binders with 18% first-try success rate</title>
-        <link>https://deepmind.com/alphaproteo</link>
-        <guid isPermaLink="true">https://deepmind.com/alphaproteo</guid>
-        <pubDate>Tue, 15 Sep 2026 00:00:00 GMT</pubDate>
-        <source>DeepMind blog</source>
-        <description>AlphaProteo v2 generates de novo protein binders for therapeutic targets. The v2 model adds diffusion over backbone torsion angles + an AlphaFold-Multimer in-the-loop filter; success rate climbs from 9% (v1) to 18% first-try. On 7 therapeutic targets (PD-1, IL-6R, TNF-α, HER2, VEGF, EGFR, c-Met), AlphaProteo v2 designs binders with Kd &lt; 100 nM. Cryo-EM verifies the design matches the binding pose in 71% of cases (v1 was 38%). The paper releases a 4,200-protein binder library with paired Kd + cryo-EM structures — the largest public binder library to date.</description>
-        <category>Biology - De novo protein design</category>
-        <dc:creator>DeepMind Isomorphic Sciences</dc:creator>
+        <title>Holographic microscopy reconstruction via physics-informed diffusion</title>
+        <link>https://nature.com/nmeth</link>
+        <guid isPermaLink="true">https://nature.com/nmeth</guid>
+        <pubDate>Wed, 18 Nov 2026 00:00:00 GMT</pubDate>
+        <source>Nature Methods</source>
+        <description>A physics-informed diffusion model reconstructs 3D microscopy volumes from 2D holograms (label-free, fast, low-phototoxic). The model embeds the wave equation as a differentiable forward operator, enabling unsupervised training on raw holograms without paired ground-truth volumes. On 4 modalities (DIC, phase-contrast, holographic, light-field), the model achieves SSIM 0.87-0.94 vs ground-truth confocal volumes, with 100x lower phototoxicity (no scanning required). Released as HoloScope-AI on PyPI + as a napari plugin. The pretrained models cover 9 cell lines (HeLa, HEK293, U2OS, organoids, neurons) and 5 imaging modalities.</description>
+        <category>Biology - AI microscopy</category>
+        <dc:creator>HHMI Janelia + Princeton</dc:creator>
       </item>
       <item>
-        <title>GPT-5B chemistry fine-tune: 7B model beats GPT-4 on organic synthesis planning</title>
-        <link>https://openai.com/gpt-5b-chem</link>
-        <guid isPermaLink="true">https://openai.com/gpt-5b-chem</guid>
-        <pubDate>Thu, 20 Aug 2026 00:00:00 GMT</pubDate>
-        <source>OpenAI technical report</source>
-        <description>GPT-5B-chem is a 7B-parameter LLM fine-tuned from GPT-5 on 12M chemistry papers + 4M reaction records (Reaxys + USPTO + ChemBL). On organic synthesis planning (MarvinTasks benchmark), GPT-5B-chem achieves 78% accuracy — beating GPT-4&#x27;s 61% and matching domain experts. The model handles retrosynthesis (target → reactants), forward prediction (reactants → products), and reagent suggestions. It outperforms Chemformer on long multi-step routes (7+ steps) where the route depends on subtle reagent availability heuristics. Released as an OpenAI Scientific preview with a cheminformatic-safety classifier: refuses to suggest controlled substances or unsafe reactions. Source + weights available via the OpenAI Scientific API.</description>
-        <category>Chemistry - Domain LLM</category>
-        <dc:creator>OpenAI Scientific</dc:creator>
-      </item>
-      <item>
-        <title>Janssen AI antibiotic discovery: first new Gram-negative class in 30 years</title>
-        <link>https://nature.com/articles/s41586-2026-04851-y</link>
-        <guid isPermaLink="true">https://nature.com/articles/s41586-2026-04851-y</guid>
-        <pubDate>Thu, 08 Oct 2026 00:00:00 GMT</pubDate>
+        <title>TabPFN v2: in-context tabular foundation model beats XGBoost on small data</title>
+        <link>https://nature.com/articles/s41586-2026-04853-x</link>
+        <guid isPermaLink="true">https://nature.com/articles/s41586-2026-04853-x</guid>
+        <pubDate>Thu, 22 Oct 2026 00:00:00 GMT</pubDate>
         <source>Nature</source>
-        <description>Janssen + MIT announce the first new structural class of Gram-negative antibiotics since 1987 — discovered by an AI screening 12M virtual molecules against E. coli + K. pneumoniae. The lead compound, JNJ-7701, has MIC &lt; 0.5 µg/mL against carbapenem-resistant strains. The AI pipeline: (1) Chemprop MPNN trained on 230k known antibacterials, (2) virtual screening of 12M ZINC + Enamine molecules, (3) docking against 6 essential Gram-negative targets, (4) ADMET filter, (5) synthesis + in-vitro testing. 23 of the top 100 AI-ranked molecules were active; 4 had novel scaffolds. JNJ-7701 has a novel oxazolidinone-fused-β-lactam scaffold — distinct from all known classes (penicillins, cephalosporins, carbapenems, monobactams). Phase 1 trials planned for Q1 2027.</description>
-        <category>Biology - AI drug discovery</category>
-        <dc:creator>Janssen Research + MIT</dc:creator>
+        <description>TabPFN v2 is a 100M-parameter foundation model for tabular classification + regression. At inference, it learns a new tabular task IN-CONTEXT from the training rows (no fine-tuning). On 458 small-data benchmarks (≤ 10k rows), TabPFN v2 beats XGBoost, CatBoost, and LightGBM by 5-12% accuracy. Key innovation: a Set-Transformer architecture with a &#x27;dynamic programming&#x27; attention mechanism that runs in O(n²) for n=10k rows (vs O(n³) for vanilla attention), enabling in-context learning at scale. Released as PyPI `tabpfn` v2 + on HuggingFace. The model is licensed Apache-2.0; runs on a single CPU at 2-5 sec per inference for n=1000.</description>
+        <category>CS - Tabular foundation models</category>
+        <dc:creator>Hollmann et al. (Google + TU Munich)</dc:creator>
       </item>
       <item>
-        <title>GNoME-2: 2.8M new stable materials discovered with quantum-accurate ML potentials</title>
-        <link>https://blogs.nvidia.comgnome-2</link>
-        <guid isPermaLink="true">https://blogs.nvidia.comgnome-2</guid>
-        <pubDate>Tue, 22 Sep 2026 00:00:00 GMT</pubDate>
+        <title>BioNeMo-2: 4B-param drug discovery foundation model + GenerativeProtein service</title>
+        <link>https://blogs.nvidia.com/bionemo-2</link>
+        <guid isPermaLink="true">https://blogs.nvidia.com/bionemo-2</guid>
+        <pubDate>Wed, 30 Sep 2026 00:00:00 GMT</pubDate>
         <source>NVIDIA blog</source>
-        <description>GNoME-2 (Google DeepMind + NVIDIA + Caltech) extends the 2023 GNoME database with 2.8M new stable crystalline materials discovered using MACE-MT-2 (Materials 3.0 foundation model). The new dataset doubles the known stable materials database from 2.2M (Nature 2023) to 5.0M. Key innovation: the MACE-MT-2 ML potential achieves DFT-level accuracy (10x lower error than MACE-1, 2023) while running 1000x faster. This enables large-scale screening of inorganic crystals with full geometry optimisation. Highlights include 47 new high-Tc superconductor candidates (predicted Tc &gt; 50 K), 12 new topological insulators, and 8 new candidate solid-state battery electrolytes with conductivity &gt; 10 mS/cm. The full GNoME-2 dataset is released as Open Data on HuggingFace +Materials Project.</description>
-        <category>Physics - Quantum-accurate materials</category>
-        <dc:creator>NVIDIA + Caltech + Google DeepMind</dc:creator>
+        <description>BioNeMo-2 (4B params) is NVIDIA&#x27;s foundation model for drug discovery, trained on 2.1B protein sequences + 600M structures + 90M ligand-binding pairs. Released at GTC 2026 alongside the GenerativeProtein service (de novo protein binder design) + DockingFuser (binding pose refinement). On the CASP15 + CASP16 benchmarks, BioNeMo-2 achieves 0.85 GDT_TS for structure prediction (vs AlphaFold-Multimer&#x27;s 0.79) and 0.92 Top-1 for ligand-binding prediction (vs ChemNet&#x27;s 0.74). Available via NIM containers + NGC catalog. Free for academic research. Includes a 1000-GPU cloud credit for academic discovery teams.</description>
+        <category>Biology - Drug discovery FM</category>
+        <dc:creator>NVIDIA BioNeMo team</dc:creator>
+      </item>
+      <item>
+        <title>AMIE diagnostic LLM update: 85% diagnostic accuracy on NEJM CPC</title>
+        <link>https://nature.com/nm</link>
+        <guid isPermaLink="true">https://nature.com/nm</guid>
+        <pubDate>Wed, 04 Nov 2026 00:00:00 GMT</pubDate>
+        <source>Nature Medicine</source>
+        <description>AMIE (Articulate Medical Intelligence Explorer) is updated with a 70B-parameter multimodal model (text + lab values + chest X-ray + ECG). Achieves 85% top-1 diagnostic accuracy on the 200-case NEJM Clinicopathological Conference (CPC) benchmark — surpassing primary-care physicians (76%) and matching specialist experts (87%). AMIE also includes a &#x27;diagnostic reasoning chain&#x27; output: it lists the differential diagnosis with probabilities + evidence + next-step workup. The reasoning chain is independently evaluated by blinded physicians as &#x27;clinically useful&#x27; in 91% of cases. Pilot deployment in 3 NHS trusts (GP-to-specialist referral triage) shows 23% reduction in unnecessary referrals + 18% improvement in correct-1st-specialist-seen rate.</description>
+        <category>CS - Medical LLM</category>
+        <dc:creator>Google Research (DeepMind Health)</dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
       </item>
       <item>
         <title></title>

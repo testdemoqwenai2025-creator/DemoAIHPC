@@ -198,6 +198,15 @@
 
         <p style="font-size: 11px; color: #6b7280; margin-top: 16px;">References: Causal-Chemprop, ACS J. Chem. Inf. Model. 2026. Chemprop (Yang et al. 2019). Structural causal models (Pearl 2009). The concept card at <a href="concepts/digest-causal-chemprop.html" style="color: #06b6d4;">concepts/digest-causal-chemprop.html</a> has the 6-language polyglot code (Python / Rust / Go / C / Elixir / Scala).</p>
       </section>
+
+      <!-- Phase 40: Scientific File Uploader — drop PDB/SDF/CSV/Parquet/Arrow/HDF5/HDFS/etc -->
+      <section style="margin-top: 32px;">
+        <p class="h-tag" style="color:#06b6d4;">Phase 40 · Scientific + Big-Data File Uploader</p>
+        <h2 style="font-size: 22px; margin: 8px 0 12px; background: linear-gradient(90deg,#06b6d4,#a855f7); -webkit-background-clip: text; background-clip: text; color: transparent;">Drop your molecule / data → live 3D view + parsed stats</h2>
+        <p class="lead" style="font-size: 14px; max-width: 920px;">Drop a <code>.pdb</code>, <code>.sdf</code>, <code>.mol</code>, <code>.cif</code> file to see real 3D coordinates rendered in the molecule-3d viewer above (no SMILES needed). Also accepts big-data + scientific formats — <code>.csv</code>, <code>.tsv</code>, <code>.parquet</code>, <code>.arrow</code>, <code>.feather</code>, <code>.h5</code>/<code>.hdf5</code>, <code>.nc</code>/<code>.netcdf</code>, <code>.npy</code>/<code>.npz</code>, <code>.mat</code>, <code>.fits</code>, <code>.vtk</code>, <code>.json</code>, <code>.hdfs</code>. Pure client-side. Nothing leaves the browser.</p>
+        <div id="chem-uploader-container"></div>
+        <p style="font-size: 11px; color: #6b7280; margin-top: 8px;">Magic-bytes detection (PAR1 / ARROW1 / \x89HDF\r\n\x1A\n / \x93NUMPY / SEQ) means the right parser is chosen automatically by file content — even if the extension is wrong. The uploader registers molecule-3d as a downstream consumer: any parsed <code>kind: 'molecule'</code> result is automatically pushed into the viewer above.</p>
+      </section>
       <div class="meta"><p>&copy; 2026 AIHPC Advanced. &middot; <code>/docs/science-cheminformatics.html</code>. Next.js: <code>/science/cheminformatics</code>. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p></div>
     </div>
     <script>
@@ -208,6 +217,32 @@
       document.addEventListener('DOMContentLoaded', function () {
         if (!window.AIHPC_MOL3D) return;
         AIHPC_MOL3D.mount('chem-mol3d-container');
+        // Phase 40: register molecule-3d as a consumer of the scientific-uploader
+        if (window.AIHPC_UPLOADER) {
+          AIHPC_UPLOADER.registerConsumer('molecule-3d', function (parsed, fileName) {
+            if (parsed.kind !== 'molecule') return;
+            AIHPC_MOL3D.register('chem-mol3d-container', 'uploaded-' + fileName, {
+              id: 'uploaded-' + fileName,
+              smiles: '(uploaded ' + parsed.format.toUpperCase() + ')',
+              name: fileName + ' (' + parsed.atoms.length + ' atoms)',
+              atoms: parsed.atoms.map(function (a) {
+                return {
+                  element: a.element,
+                  x: a.x - 0, y: a.y - 0, z: a.z - 0,
+                  r: 0.18,
+                  color: undefined,
+                  label: a.element,
+                };
+              }),
+              bonds: parsed.bonds,
+              properties: { atoms: parsed.atoms.length, bonds: parsed.bonds.length, format: parsed.format },
+              landscapeProperty: 'atoms',
+              caption: 'Uploaded ' + parsed.format.toUpperCase() + ' file — ' + parsed.atoms.length + ' atoms + ' + parsed.bonds.length + ' bonds. Real coordinates; no SMILES.',
+            });
+            AIHPC_MOL3D.setActive('chem-mol3d-container', 'uploaded-' + fileName);
+            AIHPC_MOL3D.play('chem-mol3d-container');
+          });
+        }
         AIHPC_MOL3D.register('chem-mol3d-container', 'aspirin', {
           id: 'aspirin',
           smiles: 'CC(=O)Oc1ccccc1C(=O)O',
@@ -275,7 +310,13 @@
           list.querySelector('li').style.background = 'rgba(6,182,212,0.08)';
         }
       });
+
+      // Phase 40: mount scientific file uploader
+      if (window.AIHPC_UPLOADER) {
+        AIHPC_UPLOADER.mount('chem-uploader-container');
+      }
     </script>
     <script src="molecule-3d.js"></script>
+    <script src="scientific-uploader.js"></script>
   </body>
 </html>

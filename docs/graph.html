@@ -116,6 +116,7 @@
           <div class="graph-header">
             <span class="title">Live interactive graph</span>
             <span style="font-size: 11px; color: var(--text-muted-2); font-family: SF Mono, monospace;" id="graph-stats">— nodes / — edges</span>
+            <input type="text" id="graph-search-input" placeholder="Search: antibiotic, lung, Adam, Bloch, quantum..." style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-family: SF Mono, monospace; width: 240px;" />
           </div>
           <div class="graph-canvas-wrap">
             <svg class="graph" id="graph" viewBox="0 0 900 520" preserveAspectRatio="xMidYMid meet"></svg>
@@ -268,6 +269,19 @@
         { id: 'digest:gnome-2-materials', type: 'digest', label: 'GNoME-2 materials (NVIDIA 2026)', href: 'concepts/digest-gnome-2-materials.html', meta: 'Issue #7' },
         { id: 'digest:programmatic-matter-2030', type: 'digest', label: 'Programmatic matter 2030', href: 'concepts/digest-programmatic-matter-2030.html', meta: 'Issue #7' },
         { id: 'digest:ai-abiogenesis-2031', type: 'digest', label: 'AI abiogenesis 2031', href: 'concepts/digest-ai-abiogenesis-2031.html', meta: 'Issue #7' },
+        // Phase 40: Issue #8 digest articles (Tuesday 2026-12-08)
+        { id: 'digest:ai-catalysts-genatlas', type: 'digest', label: 'GenAtlas AI catalyst design (NatCat 2026)', href: 'concepts/digest-ai-catalysts-genatlas.html', meta: 'Issue #8' },
+        { id: 'digest:holographic-microscopy-2026', type: 'digest', label: 'Holographic microscopy (NatMethods 2026)', href: 'concepts/digest-holographic-microscopy-2026.html', meta: 'Issue #8' },
+        { id: 'digest:tabpfn-v2-tabular', type: 'digest', label: 'TabPFN v2 tabular FM (Nature 2026)', href: 'concepts/digest-tabpfn-v2-tabular.html', meta: 'Issue #8' },
+        { id: 'digest:bionemo-2-nvidia', type: 'digest', label: 'BioNeMo-2 drug discovery FM (NVIDIA 2026)', href: 'concepts/digest-bionemo-2-nvidia.html', meta: 'Issue #8' },
+        { id: 'digest:amie-diagnostic-2026', type: 'digest', label: 'AMIE diagnostic LLM update (NatMed 2026)', href: 'concepts/digest-amie-diagnostic-2026.html', meta: 'Issue #8' },
+        { id: 'digest:programmable-enzymes-2032', type: 'digest', label: 'Programmable enzymes 2032', href: 'concepts/digest-programmable-enzymes-2032.html', meta: 'Issue #8' },
+        { id: 'digest:cold-fusion-diagnostics-2033', type: 'digest', label: 'Cold fusion diagnostics 2033', href: 'concepts/digest-cold-fusion-diagnostics-2033.html', meta: 'Issue #8' },
+        // Phase 40: New demo component nodes
+        { id: 'demo:scientific-uploader', type: 'demo', label: 'Scientific File Uploader (scientific-uploader.js)', href: 'science-cheminformatics.html#chem-uploader-container' },
+        { id: 'demo:attn-heatmap', type: 'demo', label: 'Attention Heat-Map (attention-heatmap.js)', href: 'science-ml.html#attn-sdpa-container' },
+        { id: 'paper:TabPFNv2', type: 'paper', label: 'TabPFN v2 (Hollmann 2026)' },
+        { id: 'paper:AMIE2026', type: 'paper', label: 'AMIE diagnostic LLM (Google 2026)' },
         // Phase 38: Cheminformatics 3D viewer node
         { id: 'demo:mol3d', type: 'demo', label: '3D Molecule Viewer (molecule-3d.js)', href: 'science-cheminformatics.html#chem-mol3d-container' },
         // Phase 39: Medical imaging + quantum VQC
@@ -405,6 +419,20 @@
         ['demo:vqc', 'aethel:connector', 'hosted-by'],
         ['demo:vqc', 'hub:physics', 'extends'],
         ['bloch:shorts', 'paper:QGNN2019', 'related'],
+        // Phase 40: Issue #8 — new edges
+        ['digest:ai-catalysts-genatlas', 'hub:chemistry', 'contains'],
+        ['digest:ai-catalysts-genatlas', 'paper:AlphaFold2021', 'related'],
+        ['digest:holographic-microscopy-2026', 'demo:medimg', 'related'],
+        ['digest:tabpfn-v2-tabular', 'paper:TabPFNv2', 'cites'],
+        ['digest:bionemo-2-nvidia', 'paper:AlphaFold2021', 'cites'],
+        ['digest:amie-diagnostic-2026', 'paper:AMIE2026', 'cites'],
+        ['digest:programmable-enzymes-2032', 'hub:chemistry', 'futuristic'],
+        ['digest:cold-fusion-diagnostics-2033', 'hub:physics', 'futuristic'],
+        ['demo:scientific-uploader', 'demo:mol3d', 'feeds-into'],
+        ['demo:scientific-uploader', 'aethel:connector', 'hosted-by'],
+        ['demo:attn-heatmap', 'ml:scaled-dot-product-attention', 'extends'],
+        ['demo:attn-heatmap', 'ml:multi-head-attention', 'extends'],
+        ['demo:attn-heatmap', 'ml:flash-attention', 'extends'],
         // Phase 37 — Digest article relationships
         ['digest:alphafold-missense-evolve', 'dataset:PDB-1AKI', 'uses'],
         ['digest:jwst-k2-18b-dms', 'dataset:OpenAlex', 'uses'],
@@ -534,14 +562,70 @@
       const infoEl = document.getElementById('info-content');
       let selectedId = null;
       let filterType = null;
+      let searchQuery = '';
+      let searchMatchIds = new Set();  // node IDs that match the search query
 
       function isVisible(n) {
-        if (!filterType) return true;
+        if (!filterType) {
+          // If search is active, only show matching nodes + their 1-hop neighbours
+          if (searchMatchIds.size > 0) {
+            return searchMatchIds.has(n.id);
+          }
+          return true;
+        }
+        // When both type-filter and search are active, intersect
+        if (searchMatchIds.size > 0 && !searchMatchIds.has(n.id)) return false;
         return n.type === filterType;
       }
       function edgeVisible(e) {
         return isVisible(e.source) && isVisible(e.target);
       }
+      // Phase 40: compute search matches (1-hop neighbours of matching nodes)
+      function computeSearchMatches(q) {
+        searchMatchIds = new Set();
+        if (!q) return;
+        var ql = q.toLowerCase();
+        // Direct matches: any node whose label/id/href/meta contains the query
+        var directMatches = new Set();
+        for (var i = 0; i < nodes.length; i++) {
+          var n = nodes[i];
+          var hay = ((n.label || '') + ' ' + (n.id || '') + ' ' + (n.href || '') + ' ' + (n.meta || '')).toLowerCase();
+          if (hay.indexOf(ql) >= 0) directMatches.add(n.id);
+        }
+        // Expand to 1-hop neighbours (preserve context around matches)
+        directMatches.forEach(function (id) {
+          searchMatchIds.add(id);
+        });
+        for (var e = 0; e < edges.length; e++) {
+          if (directMatches.has(edges[e].source.id)) searchMatchIds.add(edges[e].target.id);
+          if (directMatches.has(edges[e].target.id)) searchMatchIds.add(edges[e].source.id);
+        }
+      }
+      // Wire search input
+      (function () {
+        var input = document.getElementById('graph-search-input');
+        if (!input) return;
+        var timeout = null;
+        input.addEventListener('input', function (e) {
+          searchQuery = e.target.value.trim();
+          clearTimeout(timeout);
+          timeout = setTimeout(function () {
+            computeSearchMatches(searchQuery);
+            // Reheat the layout
+            for (var i = 0; i < nodes.length; i++) {
+              nodes[i].vx = (Math.random() - 0.5) * 30;
+              nodes[i].vy = (Math.random() - 0.5) * 30;
+            }
+            render();
+            // Update stats
+            var visibleCount = 0;
+            for (var j = 0; j < nodes.length; j++) if (isVisible(nodes[j])) visibleCount++;
+            statsEl.textContent = searchMatchIds.size > 0
+              ? visibleCount + ' / ' + nodes.length + ' nodes match "' + searchQuery + '"'
+              : nodes.length + ' nodes / ' + edges.length + ' edges';
+          }, 250);
+        });
+      })();
 
       function render() {
         const parts = [];

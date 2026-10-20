@@ -177,6 +177,44 @@ def emit_ml_concept_card(lf):
     duration = max(8, len(lf["derivation"]) * 2.4)
     code_json = json.dumps(lf["code"])
 
+    # Phase 40: N-D parallel-coords strip — auto-embedded on every ML concept card
+    nd_props_ml = [
+        {'label': 'ID', 'value': aid},
+        {'label': 'Category', 'value': lf.get('category', '?')},
+        {'label': 'Equation', 'value': lf.get('equation', '?')[:50]},
+    ]
+    if 'stats' in lf:
+        for stat in lf['stats'][:6]:
+            nd_props_ml.append({'label': stat.get('label', '?'), 'value': stat.get('value', '?')})
+    if 'sample_data' in lf:
+        sd = lf['sample_data']
+        # Coerce headers + caption to safe strings
+        headers_list = sd.get('headers', [])
+        if isinstance(headers_list, list):
+            headers_str = ', '.join(str(h) for h in headers_list)
+        else:
+            headers_str = str(headers_list)
+        nd_props_ml.append({'label': 'Headers', 'value': headers_str[:40]})
+        nd_props_ml.append({'label': 'Rows', 'value': str(len(sd.get('rows', [])))})
+        caption_val = sd.get('caption', '')
+        if not isinstance(caption_val, str):
+            caption_val = str(caption_val)
+        nd_props_ml.append({'label': 'Caption', 'value': caption_val[:40]})
+    nd_cells_ml = ''.join([
+        f'<div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:0 6px;border-right:1px solid var(--border, #1f2937);">'
+        f'<div style="font-size:9px;color:var(--text-muted-2, #6b7280);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{html_mod.escape(str(p["label"]))}</div>'
+        f'<div style="font-size:10px;color:var(--text, #f3f4f6);font-family:SF Mono, Menlo, monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{html_mod.escape(str(p["value"]))}</div>'
+        f'</div>' for p in nd_props_ml
+    ])
+    parts.append(f'''      <section style="margin:24px 0;padding:14px 16px;background:rgba(11,15,26,0.6);border:1px solid rgba(139,92,246,0.25);border-radius:10px;backdrop-filter:blur(12px);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#06b6d4;">📊 N-D properties strip</span>
+          <span style="font-size:10px;color:var(--text-muted-2, #6b7280);">Phase 40 · auto-generated · {len(nd_props_ml)} properties</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;overflow-x:auto;">{nd_cells_ml}</div>
+        <p style="font-size:10px;color:var(--text-muted-2, #6b7280);margin:8px 0 0;">Parallel-coordinates strip — read left-to-right. Useful for cross-demo comparison (e.g. MSE vs MAE vs Huber stats at a glance).</p>
+      </section>''')
+
     parts.append(f'''      <h2>Animated Derivation Clip</h2>
       <div class="anim-container" style="padding:20px;background:rgba(18,24,38,0.6);border:1px solid rgba(139,92,246,0.25);border-radius:16px;margin:24px 0;">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
