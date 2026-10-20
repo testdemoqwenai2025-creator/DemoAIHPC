@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Component Registry Dashboard — interactive grid of all AIHPC canvas components with status, mount pages, and concept-card links. Reads component-manifest.json." />
+    <title>Component Registry — AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#8b5cf6; --accent-2:#06b6d4; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+      h1 { font-size: 32px; background: linear-gradient(90deg,#06b6d4,#8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      h2 { font-size: 20px; color: var(--accent-2); margin: 24px 0 12px; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; margin-bottom: 12px; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 800px; margin: 0 0 24px; }
+      .stats-row { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+      .stat-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px; padding: 16px; backdrop-filter: blur(12px); min-width: 140px; }
+      .stat-card .num { font-size: 32px; font-weight: 800; background: linear-gradient(90deg,#06b6d4,#8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .stat-card .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+      .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+      .comp-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px; padding: 16px; backdrop-filter: blur(12px); transition: all 0.2s; }
+      .comp-card:hover { border-color: rgba(6,182,212,0.5); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+      .comp-card h3 { font-size: 14px; margin: 0 0 4px; color: var(--text); font-family: ui-monospace; }
+      .comp-card .phase { display: inline-block; padding: 2px 6px; border-radius: 4px; background: rgba(139,92,246,0.15); color: var(--accent); font-size: 10px; font-weight: 700; margin-bottom: 8px; }
+      .comp-card .desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; margin: 0 0 8px; }
+      .comp-card .meta { font-size: 10px; color: var(--text-muted); font-family: ui-monospace; }
+      .comp-card .meta .ok { color: var(--success); } .comp-card .meta .lazy { color: var(--warn); }
+      .comp-card .links { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+      .comp-card .links a { font-size: 10px; color: var(--accent-2); text-decoration: none; padding: 2px 6px; border: 1px solid var(--border); border-radius: 4px; }
+      .comp-card .links a:hover { border-color: var(--accent-2); }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <p style="font-size: 13px; color: var(--text-muted);"><a href="index.html" style="color: var(--accent-2); text-decoration: none;">← Home</a></p>
+      <span class="tag">Phase 48 · Component Registry Dashboard</span>
+      <h1>Component Registry</h1>
+      <p class="lead">Interactive dashboard of all AIHPC canvas components — the platform's bill of materials for reproducibility. Reads from <code>docs/component-manifest.json</code>. Each component shows its phase, lazy-load status, global variable, mount pages, and concept-card links.</p>
+
+      <div class="stats-row" id="stats-row"></div>
+      <h2>All Components</h2>
+      <div class="comp-grid" id="comp-grid"></div>
+
+      <p style="font-size: 11px; color: var(--text-muted); margin-top: 24px;">The manifest is auto-verified by <code>scripts/gen-component-registry.py</code> (run as audit check <code>component_registry_generator</code>). To add a new component: add it to <code>docs/component-manifest.json</code> + create the JS file + wire it into its mount page(s).</p>
+    </div>
+
+    <script>
+      // Embedded manifest data (same as docs/component-manifest.json)
+      var MANIFEST = {
+        version: "48",
+        total_components: 17,
+        phases_covered: "28-48",
+        lazy_loaded_components: 7,
+        concept_cards_with_components: 2,
+        components: [
+          { name: "animated-derivation.js", global: "AIHPC_ANIM", phase: "28", lazy_load: false, concept_card: null, description: "Canvas-based Math→Code derivation animator with Play/Pause/Replay/Record-WebM/Share" },
+          { name: "graph-table-sync.js", global: "AIHPC_GTS", phase: "32-37", lazy_load: false, concept_card: null, description: "Animated graph-table sync: data table rows on SVG graph + inflection-point annotations. 2D + 3D modes." },
+          { name: "nd-viewer.js", global: "AIHPC_ND", phase: "35", lazy_load: true, concept_card: "concepts/lazy-evaluation.html", description: "N-D hypercube viewer (4-10D) — projects N-D vertices to 3D via rotation chain." },
+          { name: "bloch-sphere.js", global: "AIHPC_BLOCH", phase: "37-40", lazy_load: false, concept_card: null, description: "3D Bloch sphere with 9 scenes: ground → Hadamard → Rabi → phase → measurement → decoherence → Bell → CHSH. Record-WebM." },
+          { name: "ml-etl.js", global: "AIHPC_ML_ETL", phase: "37", lazy_load: false, concept_card: null, description: "CSV upload (y_true, y_pred) → live loss computation (MSE/MAE/log-cosh/Huber/KL/cosine) + push to GTS." },
+          { name: "molecule-3d.js", global: "AIHPC_MOL3D", phase: "38", lazy_load: false, concept_card: null, description: "3D ball-and-stick molecule viewer: SMILES→3D, CPK palette, pharmacophore overlay, 3D QSAR surface, N-D strip." },
+          { name: "medical-imaging.js", global: "AIHPC_MEDIMG", phase: "39-41", lazy_load: false, concept_card: null, description: "Multi-organ medical-imaging viewer: 6 peripheral slices + animated scanner sweep + 8 CPK organs + DICOM consumer." },
+          { name: "vqc-animator.js", global: "AIHPC_VQC", phase: "39", lazy_load: false, concept_card: null, description: "Variational quantum circuit: parameterised RZ gates + CNOT ring + parameter-shift training + barren-plateau chart." },
+          { name: "fock-state-viewer.js", global: "AIHPC_FOCK", phase: "42", lazy_load: true, concept_card: "concepts/fock-state.html", description: "Second-quantisation Fock state viewer: Hermite wavefunctions + energy ladder + animated a/a† operators. Record-WebM." },
+          { name: "coupled-oscillator.js", global: "AIHPC_COUPLE", phase: "45", lazy_load: true, concept_card: null, description: "Coupled quantum oscillators: 4-panel viewer (mode A/B + joint state + correlation). HOM, 2-mode squeezing, NOON." },
+          { name: "quantum-circuit-canvas.js", global: "AIHPC_QCIRCUIT", phase: "46", lazy_load: true, concept_card: null, description: "Interactive quantum-circuit builder: drag-and-drop gates (H/X/Y/Z/S/T/CNOT) → real-time state vector + presets." },
+          { name: "quantum-algorithm-visualiser.js", global: "AIHPC_QALGO", phase: "47", lazy_load: true, concept_card: null, description: "Animates famous quantum algorithms step-by-step: Deutsch-Jozsa, Grover's search, QFT." },
+          { name: "surface-code-visualiser.js", global: "AIHPC_QEC", phase: "48", lazy_load: true, concept_card: null, description: "Surface code QEC visualiser: logical qubits in physical qubits, syndrome measurement, error detection + correction." },
+          { name: "attention-heatmap.js", global: "AIHPC_ATTN", phase: "40", lazy_load: false, concept_card: null, description: "Live attention heat-map: Q·K^T/√d_k weights as square heat-map with multi-head selector." },
+          { name: "segmentation-pipeline.js", global: "AIHPC_SEG", phase: "43", lazy_load: true, concept_card: null, description: "Medical image segmentation pipeline: MRI→prediction mask→3D reconstruction + Dice/IoU/Hausdorff + tumour volume." },
+          { name: "biomolecular-dynamics.js", global: "AIHPC_BIODYN", phase: "43", lazy_load: true, concept_card: null, description: "BioEmu2-style 4-panel biomolecular dynamics: structure + complex + ensemble + dynamics." },
+          { name: "scientific-uploader.js", global: "AIHPC_UPLOADER", phase: "40-41", lazy_load: false, concept_card: null, description: "Multi-format scientific+big-data file uploader: PDB/SDF/CSV/Parquet/Arrow/HDF5/NPY/DICOM/FITS/VTK/JSON/HDFS." },
+        ]
+      };
+
+      // Stats row
+      var statsRow = document.getElementById('stats-row');
+      statsRow.innerHTML = ''
+        + '<div class="stat-card"><div class="num">' + MANIFEST.total_components + '</div><div class="label">Components</div></div>'
+        + '<div class="stat-card"><div class="num">' + MANIFEST.lazy_loaded_components + '</div><div class="label">Lazy-loaded</div></div>'
+        + '<div class="stat-card"><div class="num">' + MANIFEST.concept_cards_with_components + '</div><div class="label">Concept cards</div></div>'
+        + '<div class="stat-card"><div class="num">' + MANIFEST.phases_covered + '</div><div class="label">Phases covered</div></div>';
+
+      // Component grid
+      var grid = document.getElementById('comp-grid');
+      MANIFEST.components.forEach(function (c) {
+        var card = document.createElement('div');
+        card.className = 'comp-card';
+        var lazyBadge = c.lazy_load ? '<span class="lazy">lazy</span>' : '<span class="ok">loaded</span>';
+        var conceptLink = c.concept_card ? '<a href="' + c.concept_card + '">📄 concept card</a>' : '';
+        var scriptLink = '<a href="' + c.name + '">📜 script</a>';
+        card.innerHTML = ''
+          + '<h3>' + c.name + '</h3>'
+          + '<span class="phase">Phase ' + c.phase + '</span>'
+          + '<p class="desc">' + c.description + '</p>'
+          + '<div class="meta">global: <span style="color: var(--accent-2);">' + c.global + '</span> | ' + lazyBadge + '</div>'
+          + '<div class="links">' + scriptLink + conceptLink + '</div>';
+        grid.appendChild(card);
+      });
+    </script>
+  </body>
+</html>

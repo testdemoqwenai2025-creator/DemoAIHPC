@@ -1,0 +1,209 @@
+{
+  "timestamp": "2026-10-20T12:51:46.180998+00:00",
+  "commit": "c07f84a",
+  "total": 50,
+  "passed": 50,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "div_balance",
+      "passed": true
+    },
+    {
+      "name": "script_style_balance",
+      "passed": true
+    },
+    {
+      "name": "ribbon",
+      "passed": true
+    },
+    {
+      "name": "subscribe_gate",
+      "passed": true
+    },
+    {
+      "name": "math_derivations",
+      "passed": true
+    },
+    {
+      "name": "particle_bg_js",
+      "passed": true
+    },
+    {
+      "name": "git_config_clean",
+      "passed": true
+    },
+    {
+      "name": "internal_links",
+      "passed": true
+    },
+    {
+      "name": "seed_demos",
+      "passed": true
+    },
+    {
+      "name": "digest_pattern",
+      "passed": true
+    },
+    {
+      "name": "weekly_digest_in_ribbon",
+      "passed": true
+    },
+    {
+      "name": "generator_scripts",
+      "passed": true
+    },
+    {
+      "name": "dag_provenance",
+      "passed": true
+    },
+    {
+      "name": "temporal_graph_route",
+      "passed": true
+    },
+    {
+      "name": "digest_parsers_loaded",
+      "passed": true
+    },
+    {
+      "name": "etl_panels_present",
+      "passed": true
+    },
+    {
+      "name": "rss_subscribe_panel",
+      "passed": true
+    },
+    {
+      "name": "animated_derivations_loaded",
+      "passed": true
+    },
+    {
+      "name": "audit_dashboard",
+      "passed": true
+    },
+    {
+      "name": "concept_cards_generated",
+      "passed": true
+    },
+    {
+      "name": "data_tables_present",
+      "passed": true
+    },
+    {
+      "name": "concept_card_etl",
+      "passed": true
+    },
+    {
+      "name": "bloch_component_loaded",
+      "passed": true
+    },
+    {
+      "name": "gts_3d_mode",
+      "passed": true
+    },
+    {
+      "name": "ml_etl_widget",
+      "passed": true
+    },
+    {
+      "name": "knowledge_graph_extended",
+      "passed": true
+    },
+    {
+      "name": "cheminformatics_3d",
+      "passed": true
+    },
+    {
+      "name": "optimiser_showdown_extended",
+      "passed": true
+    },
+    {
+      "name": "medical_imaging_loaded",
+      "passed": true
+    },
+    {
+      "name": "quantum_vqc_loaded",
+      "passed": true
+    },
+    {
+      "name": "scientific_uploader_loaded",
+      "passed": true
+    },
+    {
+      "name": "attention_heatmap_loaded",
+      "passed": true
+    },
+    {
+      "name": "kg_search_present",
+      "passed": true
+    },
+    {
+      "name": "bloch_2qubit",
+      "passed": true
+    },
+    {
+      "name": "concept_card_nd_strip",
+      "passed": true
+    },
+    {
+      "name": "dicom_loader_wired",
+      "passed": true
+    },
+    {
+      "name": "medical_atlas_present",
+      "passed": true
+    },
+    {
+      "name": "fock_viewer_loaded",
+      "passed": true
+    },
+    {
+      "name": "playground_present",
+      "passed": true
+    },
+    {
+      "name": "segmentation_pipeline_loaded",
+      "passed": true
+    },
+    {
+      "name": "biomolecular_dynamics_loaded",
+      "passed": true
+    },
+    {
+      "name": "coupled_oscillator_loaded",
+      "passed": true
+    },
+    {
+      "name": "recipe_library_present",
+      "passed": true
+    },
+    {
+      "name": "quantum_circuit_canvas_loaded",
+      "passed": true
+    },
+    {
+      "name": "component_manifest_present",
+      "passed": true
+    },
+    {
+      "name": "quantum_algo_visualiser_loaded",
+      "passed": true
+    },
+    {
+      "name": "component_registry_generator",
+      "passed": true
+    },
+    {
+      "name": "surface_code_visualiser_loaded",
+      "passed": true
+    },
+    {
+      "name": "component_registry_dashboard_present",
+      "passed": true
+    },
+    {
+      "name": "digest_issue_14",
+      "passed": true
+    }
+  ]
+}

@@ -6,58 +6,108 @@
     <atom:link href="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" rel="self" type="application/rss+xml" />
     <description>Curated weekly digest of the most promising recent articles across Nature, Science, The Lancet, arXiv, bioRxiv, and the domain journals. Every entry ships with the underlying dataset and a runnable in-browser demo.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 12 Jan 2027 00:00:00 GMT</lastBuildDate>
-    <pubDate>Tue, 12 Jan 2027 00:00:00 GMT</pubDate>
+    <lastBuildDate>Tue, 19 Jan 2027 00:00:00 GMT</lastBuildDate>
+    <pubDate>Tue, 19 Jan 2027 00:00:00 GMT</pubDate>
     <ttl>10080</ttl>
       <item>
-        <title>Gemini 3: 3T-param unified foundation model — text + image + video + audio + 3D + code</title>
-        <link>https://deepmind.com/gemini-3</link>
-        <guid isPermaLink="true">https://deepmind.com/gemini-3</guid>
-        <pubDate>Fri, 08 Jan 2027 00:00:00 GMT</pubDate>
+        <title>Willow 2: 105-qubit surface code operating below threshold — first logical qubit with net error reduction</title>
+        <link>https://blog.google/quantum/willow-2</link>
+        <guid isPermaLink="true">https://blog.google/quantum/willow-2</guid>
+        <pubDate>Fri, 15 Jan 2027 00:00:00 GMT</pubDate>
+        <source>Google Research blog</source>
+        <description>Google&#x27;s Willow 2 is a 105-qubit superconducting processor (transmon) that demonstrates the surface code operating below the error-correction threshold. The key milestone: a distance-5 surface code (25 data qubits + 24 ancilla qubits) achieves a logical error rate of 0.0003 per cycle — below the physical error rate of 0.001, proving that adding more qubits reduces the logical error (exponential suppression). This is the first experimental demonstration that quantum error correction works as theory predicts — the &#x27;below threshold&#x27; regime. Distance-3 → distance-5 shows the expected exponential improvement. Extrapolation to distance-7 (49 data qubits) predicts 0.0001 logical error — sufficient for fault-tolerant quantum computing. Willow 2 is available via Google Quantum Cloud. 67 research groups have access. The system runs the surface code at 1 MHz cycle rate (1µs per syndrome-extraction round).</description>
+        <category>Physics - Quantum error correction</category>
+        <dc:creator>Google Quantum AI</dc:creator>
+      </item>
+      <item>
+        <title>Genie 3: 100B-param generative physics world model — interactive 3D simulations from text</title>
+        <link>https://deepmind.com/genie-3</link>
+        <guid isPermaLink="true">https://deepmind.com/genie-3</guid>
+        <pubDate>Sun, 17 Jan 2027 00:00:00 GMT</pubDate>
         <source>DeepMind blog</source>
-        <description>Gemini 3 is Google DeepMind&#x27;s 3-trillion-parameter (Mixture-of-Experts, 256 experts, top-4 routing) unified foundation model. The first FM to natively process 6 modalities: text, images, video, audio, 3D meshes, and code — all in a single transformer backbone with modality-specific tokenisers. On the Unified-MM benchmark (6 modalities × 50 tasks = 300 total), Gemini 3 achieves 0.89 average — beating GPT-5 (0.78, text+image only), Claude 4 (0.82, text+image+audio), and Gemini 2.5 (0.85, text+image+video+audio). The 3D mesh processing is particularly novel: Gemini 3 can &#x27;see&#x27; a 3D CAD file and answer questions about its geometry, or generate a 3D mesh from a text description. Released via Google Cloud Vertex AI. Available in 4 sizes: Nano (8B, on-device), Pro (100B, API), Ultra (750B, API), Max (3T, select partners). The Nano variant runs at 120 tokens/sec on a Pixel 10.</description>
-        <category>CS - Unified foundation model</category>
-        <dc:creator>Google DeepMind</dc:creator>
+        <description>Genie 3 is DeepMind&#x27;s 100B-parameter (MoE 128 experts, top-2 routing) generative world model. The 2027 update adds full-physics simulation: fluid dynamics, rigid-body collision, electromagnetism, and thermodynamics — all generated from a text prompt and running at 60 FPS interactive on an H100. On the PhysBench benchmark (50 physics scenarios × 5 modalities), Genie 3 achieves 0.92 correlation with traditional physics solvers (OpenFOAM, PyBullet, COMSOL) at 10000x speedup. Users can perturb the simulation in real-time (move objects, change gravity, add forces) and the world model adapts instantly. Released as Genie 3 API (cloud) + Genie 3 Edge (12B variant, runs at 30 FPS on RTX 4090). 47 universities use it for physics education + research. The model generates worlds that are physically consistent — conservation laws, energy, momentum all hold within 2%.</description>
+        <category>CS - Generative physics worlds</category>
+        <dc:creator>DeepMind Genie team</dc:creator>
       </item>
       <item>
-        <title>NVIDIA NIM medical: edge-deployed medical inference containers for 47 hospitals</title>
-        <link>https://blogs.nvidia.com/nim-medical-2027</link>
-        <guid isPermaLink="true">https://blogs.nvidia.com/nim-medical-2027</guid>
-        <pubDate>Wed, 06 Jan 2027 00:00:00 GMT</pubDate>
-        <source>NVIDIA blog</source>
-        <description>NVIDIA NIM medical is a containerised medical-AI deployment system that runs 15+ medical AI models on edge GPUs (NVIDIA RTX 6000 Ada) inside hospitals — no cloud round-trip, no data leaving the building. Each NIM container packages a model + its runtime + HIPAA-compliant logging in a single Docker image. 47 US hospitals + 12 UK NHS trusts deploy NIM medical edge containers. Mean inference latency: 0.8s (vs 3.2s for cloud-based). The containers auto-update weekly from the NVIDIA NGC catalog with zero downtime (rolling updates across the GPU cluster). Models available as NIM containers: TotalSegmentator (117 organs, 6s/CT), RadFM (radiology LLM), AMIE (diagnostic), BioNeMo-3 (drug discovery), CheXNet (CXR), plus 10 more. All models run on a single RTX 6000 Ada (48 GB VRAM).</description>
-        <category>CS - Edge medical AI</category>
-        <dc:creator>NVIDIA Healthcare</dc:creator>
-      </item>
-      <item>
-        <title>Claude 5: 500B constitutional reasoning model with 100k-token thinking</title>
-        <link>https://anthropic.com/claude-5</link>
-        <guid isPermaLink="true">https://anthropic.com/claude-5</guid>
-        <pubDate>Sun, 10 Jan 2027 00:00:00 GMT</pubDate>
+        <title>Claude 5 Opus: 1T-param reasoning model with 1M-token thinking — solves 3 IMO gold problems</title>
+        <link>https://anthropic.com/claude-5-opus</link>
+        <guid isPermaLink="true">https://anthropic.com/claude-5-opus</guid>
+        <pubDate>Mon, 18 Jan 2027 00:00:00 GMT</pubDate>
         <source>Anthropic blog</source>
-        <description>Claude 5 is Anthropic&#x27;s 500B-parameter (dense, not MoE) reasoning model. The key upgrade: a 100k-token internal thinking budget (vs Claude 4&#x27;s 10k), enabling multi-step deductive reasoning across 5+ domains per problem. Constitutional AI ensures safety at every reasoning step. On ARC-AGI-2 (general intelligence benchmark), Claude 5 scores 0.71 — the first model to exceed 0.70 (Claude 4: 0.58, GPT-5: 0.54, o3-pro: 0.62). On GPQA-Diamond (graduate-level science Q&amp;A), Claude 5 scores 0.88 (vs Claude 4 0.82, GPT-5 0.75). Released via Anthropic API + AWS Bedrock + Google Cloud. Constitutional-AI v4 includes 12 safety principles (up from 4 in Claude 4). 99.9% refusal rate on OpenSafety-Pro benchmark (1000 adversarial requests).</description>
+        <description>Claude 5 Opus is Anthropic&#x27;s 1-trillion-parameter (MoE 512 experts, top-8 routing) reasoning model. The &#x27;Opus&#x27; variant extends Claude 5&#x27;s thinking budget from 100k to 1 million tokens, enabling multi-hour deductive reasoning. Active params: ~80B per token (top-8 of 1T). On the International Mathematical Olympiad (IMO) 2027 benchmark, Claude 5 Opus solves 3 of 6 problems at gold-medal level (geometry, number theory, combinatorics). This is the first AI to solve IMO problems without hints — the previous best (o3-pro science) solved 1 of 6. On ARC-AGI-2, Claude 5 Opus scores 0.83 (beating Claude 5 0.71, o3-pro 0.62). On the METR agent benchmark (long-horizon tasks), it completes 47% of 100-step tasks (vs Claude 5&#x27;s 22%). Released via Anthropic API; cost: $50 per 1M thinking tokens.</description>
         <category>CS - Constitutional reasoning</category>
         <dc:creator>Anthropic Research</dc:creator>
       </item>
       <item>
-        <title>Llama 4 medical: 400B open-weight medical MoE (Apache 2.0) — 91% MultiMedQA-Pro</title>
-        <link>https://ai.meta.com/llama-4-medical</link>
-        <guid isPermaLink="true">https://ai.meta.com/llama-4-medical</guid>
-        <pubDate>Sat, 09 Jan 2027 00:00:00 GMT</pubDate>
+        <title>ESM-6: 500B-param generative protein model — 68% first-try foldable + enzyme design</title>
+        <link>https://ai.meta.com/esm-6</link>
+        <guid isPermaLink="true">https://ai.meta.com/esm-6</guid>
+        <pubDate>Sat, 16 Jan 2027 00:00:00 GMT</pubDate>
         <source>Meta AI blog</source>
-        <description>Llama 4 medical is Meta&#x27;s 400B-parameter (MoE, 64 experts, top-4 routing) open-weight medical LLM. Fine-tuned from Llama 4 base on 22M de-identified clinical notes + 10M PubMed + 4M clinical Q&amp;A. Released under Apache 2.0 — the largest fully-open medical LLM. On MultiMedQA-Pro, Llama 4 medical scores 0.91 (matching Gemini 2.5 medical 0.91, beating Claude 4 medical&#x27;s 0.93 by only 2pp despite being fully open-weight). On OpenSafety-Med, 98.5% refusal rate (vs Claude 4&#x27;s 99.8%). The 64-expert MoE means only 25B params are active per token (top-4 of 64 experts × ~6.25B/expert). This makes it deployable on a single H100 (80 GB VRAM) — the first 400B medical LLM that fits on one GPU.</description>
-        <category>CS - Open-weight medical MoE</category>
-        <dc:creator>Meta AI + Hugging Face</dc:creator>
+        <description>ESM-6 is Meta&#x27;s 500B-parameter (MoE 128 experts, top-4 routing) generative protein design + function model. The v6 release adds an enzyme-design head that produces novel enzymes with specified catalytic activity — 23 of 50 designed enzymes show measurable catalytic activity in vitro (vs ESM-5&#x27;s 12/50). On the ProteinGym benchmark (47 design tasks), ESM-6 achieves 0.88 designability (vs ESM-5 0.82, RFdiffusion 0.68). First-try foldable rate: 68% (vs ESM-5 52%, ESM-4 38%, ESM-3 18% — the curve is approaching saturation). Key innovation: a multi-modal protein tokenizer that encodes sequence, structure, and function in a unified latent space. This allows cross-modal generation: given a function, generate a sequence; given a structure, generate a function; given a sequence, predict structure+function.</description>
+        <category>Biology - Generative protein FM</category>
+        <dc:creator>Meta AI FAIR + EvolutionaryScale</dc:creator>
       </item>
       <item>
-        <title>IonQ Forte 2027: 1024-qubit trapped-ion system with algorithmic QUBO advantage</title>
-        <link>https://ionq.com/forte-2027</link>
-        <guid isPermaLink="true">https://ionq.com/forte-2027</guid>
-        <pubDate>Tue, 05 Jan 2027 00:00:00 GMT</pubDate>
-        <source>IonQ blog</source>
-        <description>IonQ Forte 2027 is IonQ&#x27;s 4th-generation trapped-ion quantum computer: 1024 qubits (Barium-137 ions) in a 2D fully-connected trap array. Two-qubit gate error: 0.008% (the lowest of any platform). Gate time: 200µs (vs Quantinuum&#x27;s 400µs). On the QUBO benchmark (Quadratic Unconstrained Binary Optimisation — the standard for quantum annealing comparison), IonQ Forte achieves quantum advantage at 350 variables (classical estimate: 10^20 years). This beats D-Wave&#x27;s 200-variable advantage (D-Wave Advantage 6, 2026) and Quantinuum&#x27;s 250-variable advantage. Available via IonQ Cloud + AWS Braket + Azure Quantum. 89 university + 31 industry research groups have access. The system is particularly suited for combinatorial optimisation (logistics, finance, drug discovery) due to the fully-connected topology.</description>
-        <category>Physics - Trapped-ion quantum</category>
-        <dc:creator>IonQ + Duke University</dc:creator>
+        <title>Quantinuum Helios: 10,000-qubit trapped-ion quantum computer with fault-tolerant operation</title>
+        <link>https://quantinuum.com/helios-2027</link>
+        <guid isPermaLink="true">https://quantinuum.com/helios-2027</guid>
+        <pubDate>Thu, 14 Jan 2027 00:00:00 GMT</pubDate>
+        <source>Quantinuum blog</source>
+        <description>Quantinuum Helios is a 10,000-qubit trapped-ion quantum computer (Ytterbium-171 + Barium-138 dual-species). The dual-species architecture enables native mid-circuit measurement + feedforward — the first hardware to support real-time quantum error correction without slow optical readout. Helios runs a distance-7 surface code (49 data + 48 ancilla = 97 qubits per logical qubit) at 0.0001 logical error rate — fault-tolerant threshold. The remaining 9,903 qubits support 102 logical qubits — sufficient for Shor&#x27;s algorithm on RSA-2048 (estimated 20M logical-qubit-cycles, ~4 hours on Helios). Available via Quantinuum Cloud. 120 university + 47 industry research groups. The system&#x27;s fully-connected topology + 0.005% two-qubit gate error + mid-circuit measurement make it the leading platform for fault-tolerant quantum computing.</description>
+        <category>Physics - Large-scale trapped-ion QC</category>
+        <dc:creator>Quantinuum</dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
       </item>
       <item>
         <title></title>

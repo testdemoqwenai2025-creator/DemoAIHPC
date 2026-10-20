@@ -430,6 +430,20 @@
         </div>
       </section>
 
+      <!-- Phase 48: Surface Code QEC Visualiser -->
+      <section style="margin: 32px 0; padding: 24px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px);">
+        <p class="h-tag" style="color: #06b6d4;">Phase 48 · Quantum Error Correction</p>
+        <h2 style="font-size: 22px; margin: 8px 0 12px; background: linear-gradient(90deg,#06b6d4,#10b981); -webkit-background-clip: text; background-clip: text; color: transparent;">Surface code — logical qubits, syndrome measurement, error correction</h2>
+        <p style="font-size: 14px; color: var(--text-muted, #9ca3af); max-width: 920px;">The surface code is the leading quantum error correction scheme. Watch how 1 logical qubit is encoded in d²=25 physical qubits (d=5). The viewer cycles through 7 scenes: idle → X error injection → syndrome detection → decoder (mWPM) → correction → Z error → below-threshold verification. The logical error rate (0.0003) is below the physical error rate (0.001) — proving that adding more qubits reduces the logical error exponentially.</p>
+        <div style="margin-top: 20px;">
+          <div id="quantum-qec-container"></div>
+        </div>
+        <div style="margin-top: 16px; padding: 12px; background: rgba(11,15,26,0.6); border-radius: 8px; border: 1px solid var(--border, #1f2937); font-size: 11px; line-height: 1.7; color: var(--text-muted, #9ca3af);">
+          <strong style="color: #06b6d4;">Math:</strong> logical_error = physical_error ^ ((d+1)/2). Below threshold: increasing d reduces logical error exponentially. d=3→0.003, d=5→0.0003, d=7→0.0001 (extrapolated). Decoder: minimum-weight perfect matching (mWPM).<br/>
+          <strong style="color: #8b5cf6;">References:</strong> Fowler et al. (2012, Phys. Rev. A) — surface code theory; Google Willow (2027, Nature) — first below-threshold demonstration; Corcoles et al. (2015) — experimental QEC on superconducting hardware.
+        </div>
+      </section>
+
       <h2>Math &rarr; Code derivation</h2>
       <div class="derivation-step">
         <strong>Step 1: The qubit</strong>
@@ -632,11 +646,33 @@
           window.addEventListener('scroll', load, { once: true, passive: true });
         }
       })();
+
+      // Phase 48: lazy-mount surface-code visualiser
+      (function () {
+        var loaded = false;
+        var el = document.getElementById('quantum-qec-container');
+        if (!el) return;
+        function load() {
+          if (loaded || !window.AIHPC_QEC) return;
+          loaded = true;
+          AIHPC_QEC.mount('quantum-qec-container', { distance: 5 });
+          setTimeout(function () { AIHPC_QEC.play('quantum-qec-container'); }, 200);
+        }
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (e.isIntersecting) { load(); io.disconnect(); } });
+          }, { rootMargin: '200px' });
+          io.observe(el);
+        } else {
+          window.addEventListener('scroll', load, { once: true, passive: true });
+        }
+      })();
     </script>
     <script src="../../vqc-animator.js"></script>
     <script src="../../fock-state-viewer.js" defer></script>
     <script src="../../coupled-oscillator.js" defer></script>
     <script src="../../quantum-circuit-canvas.js" defer></script>
     <script src="../../quantum-algorithm-visualiser.js" defer></script>
+    <script src="../../surface-code-visualiser.js" defer></script>
   </body>
 </html>

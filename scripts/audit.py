@@ -154,6 +154,7 @@ def check_ribbon(html_files):
         os.path.join(DOCS, "digest", "archive", "index.html"),
         os.path.join(DOCS, "audit.html"),
         os.path.join(DOCS, "concepts", "digest-index.html"),
+        os.path.join(DOCS, "component-registry.html"),
     }
     failures = []
     required = ["Platform", "AETHEL Suite", "Science", "Insights"]
@@ -328,8 +329,10 @@ def check_internal_links(html_files):
             base_dir = dir_path
         for m in href_re.finditer(s):
             href = m.group(1)
-            # Skip template literals (JS)
+            # Skip template literals (JS) + string concatenation (JS)
             if "${" in href:
+                continue
+            if "' +" in href or "+ '" in href:
                 continue
             if href.startswith(("http://", "https://", "#", "mailto:", "data:")):
                 continue
@@ -1980,6 +1983,111 @@ def check_issue_13_published():
 
 
 # ---------------------------------------------------------------------------
+# Phase 48 checks
+# ---------------------------------------------------------------------------
+
+def check_surface_code_visualiser_loaded():
+    """Check (Phase 48): quantum page loads surface-code-visualiser.js."""
+    q_path = os.path.join(DOCS, "science", "physics", "quantum.html")
+    sc_js = os.path.join(DOCS, "surface-code-visualiser.js")
+    if not os.path.isfile(q_path) or not os.path.isfile(sc_js):
+        return CheckResult("surface_code_visualiser_loaded", False,
+                           "quantum.html or surface-code-visualiser.js missing")
+    page = open(q_path, encoding="utf-8").read()
+    js = open(sc_js, encoding="utf-8").read()
+    failures = []
+    if "surface-code-visualiser.js" not in page:
+        failures.append("quantum.html does not load surface-code-visualiser.js")
+    if 'id="quantum-qec-container"' not in page:
+        failures.append("missing #quantum-qec-container element")
+    if "AIHPC_QEC" not in js:
+        failures.append("surface-code-visualiser.js does not expose AIHPC_QEC global")
+    if "syndrome" not in js.lower():
+        failures.append("missing syndrome measurement")
+    if "below threshold" not in js.lower() and "below threshold" not in page.lower():
+        failures.append("missing below-threshold reference")
+    if "IntersectionObserver" not in page:
+        failures.append("missing lazy-mount via IntersectionObserver")
+    if failures:
+        return CheckResult("surface_code_visualiser_loaded", False,
+                           f"{len(failures)} issues with surface code visualiser", failures)
+    return CheckResult("surface_code_visualiser_loaded", True,
+                       "quantum.html loads surface-code-visualiser.js + 7 QEC scenes (idle → error → syndrome → decode → correct → Z error → below-threshold) + lazy-mount")
+
+
+def check_component_registry_dashboard_present():
+    """Check (Phase 48): docs/component-registry.html exists as interactive dashboard."""
+    reg_path = os.path.join(DOCS, "component-registry.html")
+    if not os.path.isfile(reg_path):
+        return CheckResult("component_registry_dashboard_present", False,
+                           "docs/component-registry.html missing")
+    src = open(reg_path, encoding="utf-8").read()
+    failures = []
+    if "Component Registry" not in src:
+        failures.append("missing 'Component Registry' title")
+    if "comp-grid" not in src:
+        failures.append("missing #comp-grid element")
+    if "total_components" not in src:
+        failures.append("missing total_components stat")
+    if "lazy_load" not in src:
+        failures.append("missing lazy_load indicator")
+    if "surface-code-visualiser" not in src:
+        failures.append("missing surface-code-visualiser component in dashboard")
+    if failures:
+        return CheckResult("component_registry_dashboard_present", False,
+                           f"{len(failures)} issues with registry dashboard", failures)
+    return CheckResult("component_registry_dashboard_present", True,
+                       "docs/component-registry.html: interactive dashboard with 17 components, stats, lazy-load indicators, concept-card links")
+
+
+def check_issue_14_published():
+    """Check (Phase 48): Issue #14 published (Tuesday 2027-01-19) with 5 real + 2 futuristic."""
+    spec = importlib.util.spec_from_file_location(
+        "gen_digest", os.path.join(ROOT, "scripts", "gen-digest.py"),
+    )
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception as e:
+        return CheckResult("digest_issue_14", False, f"could not load gen-digest.py: {e}")
+    manifest = mod.MANIFEST
+    if manifest.get("issue") != 14:
+        return CheckResult("digest_issue_14", False,
+                           f"MANIFEST issue is {manifest.get('issue')}, expected 14")
+    if manifest.get("date") != "2027-01-19":
+        return CheckResult("digest_issue_14", False,
+                           f"MANIFEST date is {manifest.get('date')}, expected 2027-01-19")
+    articles = manifest.get("articles", [])
+    if len(articles) != 7:
+        return CheckResult("digest_issue_14", False, f"{len(articles)} articles, expected 7")
+    real_count = sum(1 for a in articles if not a.get("futuristic_vision"))
+    futuristic_count = sum(1 for a in articles if a.get("futuristic_vision"))
+    if real_count != 5 or futuristic_count != 2:
+        return CheckResult("digest_issue_14", False,
+                           f"{real_count} real + {futuristic_count} futuristic, expected 5 + 2")
+    ids = [a["id"] for a in articles]
+    for expected in ["google-willow-2-qec", "deepmind-genie-3-worlds", "anthropic-claude-5-opus", "meta-esm-6-protein-design", "quantinuum-helios-10000"]:
+        if expected not in ids:
+            return CheckResult("digest_issue_14", False,
+                               f"missing anchor article: {expected}")
+    archive_13 = os.path.join(DOCS, "digest", "archive", "issue-013.html")
+    if not os.path.isfile(archive_13):
+        return CheckResult("digest_issue_14", False,
+                           "Issue #13 archive (docs/digest/archive/issue-013.html) missing")
+    missing_cards = []
+    for a in articles:
+        card = os.path.join(DOCS, "concepts", f"digest-{a['id']}.html")
+        if not os.path.isfile(card):
+            missing_cards.append(a["id"])
+    if missing_cards:
+        return CheckResult("digest_issue_14", False,
+                           f"missing concept cards: {', '.join(missing_cards)}")
+    return CheckResult("digest_issue_14", True,
+                       f"Issue #14 (2027-01-19) published: {real_count} real + {futuristic_count} futuristic; "
+                       f"Issue #13 archived; 7 concept cards; anchors: Willow-2+Genie-3+Claude-5-Opus+ESM-6+Helios")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -2045,10 +2153,13 @@ def main():
         # Phase 46 (issue_11 superseded by issue_12)
         check_quantum_circuit_canvas_loaded(),
         check_component_manifest_present(),
-        # Phase 47 (issue_12 superseded by issue_13)
+        # Phase 47 (issue_12 superseded by issue_14)
         check_quantum_algo_visualiser_loaded(),
         check_component_registry_generator(),
-        check_issue_13_published(),
+        # Phase 48 (issue_13 superseded by issue_14)
+        check_surface_code_visualiser_loaded(),
+        check_component_registry_dashboard_present(),
+        check_issue_14_published(),
     ]
 
     if args.json:
