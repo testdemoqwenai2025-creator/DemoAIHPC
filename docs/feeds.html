@@ -234,6 +234,35 @@
         }
       });
 
+      // Read URL query params for deep-linking — allows
+      // feeds.html?domain=biology to filter to biology on load,
+      // and feeds.html?search=mse to pre-fill the search box.
+      (function applyUrlParams() {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var d = params.get('domain');
+          if (d) {
+            var chip = document.querySelector('.chip[data-domain="' + d + '"]');
+            if (chip) {
+              document.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+              chip.classList.add('active');
+              activeDomain = d;
+            }
+          }
+          var s = params.get('search');
+          if (s) {
+            searchTerm = s;
+            document.getElementById('filter-input').value = s;
+          }
+          var hashSearch = window.location.hash.match(/search=([^&]+)/);
+          if (hashSearch) {
+            try { s = decodeURIComponent(hashSearch[1]); } catch (e) { s = hashSearch[1]; }
+            searchTerm = s;
+            document.getElementById('filter-input').value = s;
+          }
+        } catch (e) { /* URLSearchParams not available — ignore */ }
+      })();
+
       // Fetch the JSON snapshot
       fetch('feeds/all.json?nocache=' + Date.now())
         .then(function (r) {

@@ -3490,3 +3490,49 @@ Local verification:
 - Concepts index page generated successfully (125 cards indexed, 59KB HTML)
 - Feed refresh script runs successfully locally (413 entries from 11/12 feeds)
 - 404 page renders cleanly with all 22 link cards
+
+---
+Task ID: P51-followup
+Agent: main
+Task: Make Live Journal Feeds discoverable from home page + add domain-filter deep-links to science hubs
+
+User feedback: "413 entries from 11 journals, refreshes every 6h, this needs to be attached to the appropriate page...can't find it on the application from the home"
+
+Investigation: The 📡 Live Journal Feeds link was in the Insights dropdown of the ribbon at the top of every page (sticky, z-index 50), but the user couldn't find it because:
+1. The Insights dropdown is the 4th of 5 dropdowns in the ribbon — easy to miss
+2. The home page body itself had no prominent entry point for feeds (only the Weekly Digest featured section + the actions buttons)
+3. No way to deep-link to a pre-filtered domain view (e.g. biology feeds for the Biology hub)
+
+Fix 1: Added a prominent "📡 Live Journal Feeds — 413 entries from 11 journals" button in the home page's actions row (between "Weekly Science Digest" and "Browse Concept Cards"). This is the row of ghost buttons users see right under the hero title.
+
+Fix 2: Added a full-width hero banner for Live Journal Feeds right after the Weekly Digest hero banner on the home page. The banner features:
+  - Cyan-purple-pink gradient background (visually distinct from the Weekly Digest amber-purple one)
+  - "📡 Live Journal Feeds · Continuous ingestion · Auto-refreshed every 6 hours" tag
+  - Headline: "413 entries from 11 journals — Science Daily, Nature, arXiv, PLOS"
+  - Description explaining the GitHub Actions cron + pure-client-side architecture
+  - "Browse live feeds →" CTA button (cyan-purple gradient)
+
+Fix 3: Added URL parameter support to feeds.html:
+  - ?domain=biology pre-filters to biology entries on load
+  - ?search=mse pre-fills the search box
+  - #search=mse also works (hash form for 404 page redirect)
+  - All implemented in a single IIFE that runs before fetch() so the activeDomain state is set when data arrives
+
+Fix 4: Wrote scripts/add-feeds-deeplink-to-hubs.py — adds a "📡 <Domain> feeds →" callout button at the end of the <p class="lead"> paragraph in each of the 7 science hubs:
+  - science-biology.html → feeds.html?domain=biology (Biology feeds)
+  - science-chemistry.html → feeds.html?domain=chemistry (Chemistry feeds)
+  - science-physics.html → feeds.html?domain=physics (Physics feeds)
+  - science-maths.html → feeds.html?domain=general (Mathematics feeds — no dedicated maths domain, falls back to general)
+  - science-ml.html → feeds.html?domain=computer-science (Machine Learning feeds)
+  - science-bioinformatics.html → feeds.html?domain=biology (Bioinformatics feeds)
+  - science-cheminformatics.html → feeds.html?domain=chemistry (Cheminformatics feeds)
+
+The deep-link callout is styled as a small pill button with a cyan-purple gradient background — visually distinct from regular text links so users notice it.
+
+Local audit: 58/58 pass with --skip-live-check (no new audit checks needed — internal_links + script_srcs_resolve already cover the new hrefs).
+
+Stage Summary:
+- Live Journal Feeds now discoverable from THREE places on the home page: (a) Insights dropdown in ribbon, (b) actions row ghost button, (c) full-width hero banner with CTA
+- Each of the 7 science hubs has a domain-specific deep-link callout that lands users on a pre-filtered feeds view
+- feeds.html now accepts ?domain= and ?search= URL params for deep-linking
+- The 404 page's search input already redirects to concepts.html#search=... — works correctly with the new URL param support

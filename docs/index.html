@@ -885,6 +885,11 @@
         >
         <a
           class="btn btn-ghost"
+          href="feeds.html"
+          >📡 Live Journal Feeds &mdash; 413 entries from 11 journals</a
+        >
+        <a
+          class="btn btn-ghost"
           href="concepts.html"
           >Browse Concept Cards</a
         >
@@ -910,6 +915,16 @@
           <p style="margin: 0; font-size: 14px; color: var(--text-muted);">Curated this week: AlphaFold 3 (Nature), LIGO-Virgo-KAGRA O4 (PRD), JWST transmission spectrum of WASP-39b (Nature), Human Pangenome draft (Nat Biotech), Polynomial Freiman-Ruzsa proof (arXiv). Each entry ships with the underlying dataset and a 6-language polyglot demo with math→code 5-step derivation.</p>
         </div>
         <a href="digest.html" style="display: inline-flex; align-items: center; gap: 6px; padding: 12px 24px; border-radius: 9999px; background: linear-gradient(90deg, #f59e0b, #8b5cf6); color: white; text-decoration: none; font-size: 14px; font-weight: 600;">Read Issue #1 &rarr;</a>
+      </section>
+
+      <!-- ============ LIVE JOURNAL FEEDS HERO BANNER (Phase 51) ============ -->
+      <section style="margin-top: 24px; padding: 24px; background: linear-gradient(135deg, rgba(6,182,212,0.10) 0%, rgba(139,92,246,0.10) 50%, rgba(236,72,153,0.10) 100%); border: 1px solid rgba(6,182,212,0.3); border-radius: 16px; backdrop-filter: blur(12px); display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 280px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #06b6d4; margin-bottom: 6px;">📡 Live Journal Feeds &middot; Continuous ingestion &middot; Auto-refreshed every 6 hours</div>
+          <h2 style="margin: 0 0 8px; font-size: 22px; color: var(--text); line-height: 1.3;">413 entries from 11 journals — Science Daily, Nature, arXiv, PLOS</h2>
+          <p style="margin: 0; font-size: 14px; color: var(--text-muted);">A GitHub Actions cron job fetches 12 journal RSS feeds every 6 hours, normalises them to a single JSON snapshot, and commits it to <code style="color: #06b6d4;">docs/feeds/all.json</code>. The <a href="feeds.html" style="color: #06b6d4; text-decoration: underline;">feeds page</a> renders the unified timeline client-side — no backend, no API keys. Browse by domain (chemistry, biology, physics, computer-science, medical, general) or search by keyword.</p>
+        </div>
+        <a href="feeds.html" style="display: inline-flex; align-items: center; gap: 6px; padding: 12px 24px; border-radius: 9999px; background: linear-gradient(90deg, #06b6d4, #8b5cf6); color: white; text-decoration: none; font-size: 14px; font-weight: 600;">Browse live feeds &rarr;</a>
       </section>
 
       <!-- ============ LIVE DEMO ============ -->
