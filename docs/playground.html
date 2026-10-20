@@ -271,7 +271,7 @@
             },
             'molecule-sdf': {
               name: 'aspirin.sdf',
-              content: '\n\n\n  8  8  0  0  0  0  0  0  0  0999 V2000\n   -0.5  -0.5   0.0 C 0  0  0  0  0\n    0.5  -0.5   0.0 C 0  0  0  0  0\n    0.5   0.5   0.0 C 0  0  0  0  0\n   -0.5   0.5   0.0 C 0  0  0  0  0\n    1.5  -0.5   0.0 O 0  0  0  0  0\n    1.5   0.5   0.0 O 0  0  0  0  0\n   -1.5   0.5   0.0 N 0  0  0  0  0\n   -1.5  -0.5   0.0 O 0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  1  0  0  0  0\n  4  1  1  0  0  0  0\n  2  5  1  0  0  0  0\n  3  6  2  0  0  0  0\n  4  7  1  0  0  0  0\n  1  8  2  0  0  0  0\n  5  6  1  0  0  0  0\n  7  8  1  0  0  0  0\nM  END\n',
+              content: '\n  playground\n  AIHPCGenerated\n 13 13  0  0  0  0  0  0  0  0999 V2000\n   -1.4000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0999 V2000\n   -0.7000    1.2000    0.0000 C   0  0  0  0  0  0  0  0  0  0999 V2000\n    0.7000    1.2000    0.0000 C   0  0  0  0  0  0  0  0  0  0999 V2000\n    1.4000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0999 V2000\n    0.7000   -1.2000    0.0000 C   0  0  0  0  0  0  0  0  0  0999 V2000\n   -0.7000   -1.2000    0.0000 C   0  0  0  0  0  0  0  0  0  0999 V2000\n    2.8000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0999 V2000\n    3.5000    1.1000    0.0000 O   0  0  0  0  0  0  0  0  0  0999 V2000\n    3.5000   -1.1000    0.0000 N   0  0  0  0  0  0  0  0  0  0999 V2000\n    2.8000   -2.0000    0.0000 H   0  0  0  0  0  0  0  0  0  0999 V2000\n    4.5000   -1.1000    0.0000 H   0  0  0  0  0  0  0  0  0  0999 V2000\n   -1.4000    2.3000    0.0000 O   0  0  0  0  0  0  0  0  0  0999 V2000\n   -2.3000    2.3000    0.0000 H   0  0  0  0  0  0  0  0  0  0999 V2000\n  1  2  2  0  0  0  0\n  2  3  1  0  0  0  0\n  3  4  2  0  0  0  0\n  4  5  1  0  0  0  0\n  5  6  2  0  0  0  0\n  6  1  1  0  0  0  0\n  4  7  1  0  0  0  0\n  7  8  2  0  0  0  0\n  7  9  1  0  0  0  0\n  9 10  1  0  0  0  0\n  9 11  1  0  0  0  0\n  2 12  1  0  0  0  0\n 12 13  1  0  0  0  0\nM  END\n$$$$\n',
               type: 'chemical/x-mdl-sdfile',
             },
             'dicom-dcm': {
@@ -870,18 +870,239 @@
       }
 
       function renderLossTable(container, losses, parsed) {
-        var html = '<div style="padding: 16px;">';
-        html += '<h3 style="margin: 0 0 12px; color: var(--accent-2); font-size: 14px;">Live loss values for ' + (pgState.fileName || 'dataset') + '</h3>';
-        html += '<table style="width: 100%; border-collapse: collapse; font-family: ui-monospace; font-size: 12px;">';
-        html += '<tr><th style="text-align:left; padding: 8px; border-bottom: 1px solid var(--border);">Loss</th><th style="text-align:right; padding: 8px; border-bottom: 1px solid var(--border);">Value</th></tr>';
-        ['mse', 'mae', 'logCosh', 'huber', 'kl', 'cosine'].forEach(function (k) {
-          var color = ({ mse: '#06b6d4', mae: '#10b981', logCosh: '#8b5cf6', huber: '#f59e0b', kl: '#ec4899', cosine: '#22d3ee' })[k];
-          html += '<tr><td style="padding: 6px 8px; color: ' + color + ';">' + k + '</td><td style="padding: 6px 8px; text-align: right; color: #f3f4f6;">' + losses[k].toFixed(4) + '</td></tr>';
+        // Phase 50+ follow-up: replaced the plain 6-row table with a
+        // richer "loss analysis view" — relative-magnitude bar chart +
+        // per-loss radial spider chart + sample-data preview + per-loss
+        // explanation tooltips. Matches the user's request: "is it only
+        // going to output a table? don't you think a view would be
+        // better consider for the table".
+        var lossKeys = ['mse', 'mae', 'logCosh', 'huber', 'kl', 'cosine'];
+        var lossMeta = {
+          mse:       { color: '#06b6d4', name: 'Mean Squared Error',    desc: 'Penalises large errors quadratically (2× error → 4× loss). The default for regression. Sensitive to outliers.' },
+          mae:       { color: '#10b981', name: 'Mean Absolute Error',   desc: 'Linear in error magnitude. Robust to outliers. Commonly used when you want a clear, interpretable metric.' },
+          logCosh:   { color: '#8b5cf6', name: 'Log-Cosh Loss',          desc: 'log(cosh(e)) ≈ e²/2 for small e, |e| - log(2) for large e. Smooth + differentiable everywhere — like MSE near 0, like MAE far away.' },
+          huber:     { color: '#f59e0b', name: 'Huber Loss',            desc: 'Quadratic for |e| < δ, linear beyond. Combines MSE\'s smoothness near 0 with MAE\'s robustness to outliers. Used in robust regression.' },
+          kl:        { color: '#ec4899', name: 'KL Divergence',         desc: 'D_KL(p ‖ q) = Σ p · log(p/q). Measures the information-theoretic distance between two distributions. Non-symmetric — use for distribution matching.' },
+          cosine:    { color: '#22d3ee', name: 'Cosine Similarity',     desc: 'cos(θ) between y and ŷ. 1 = parallel, 0 = orthogonal, -1 = anti-parallel. Invariant to magnitude — measures directional alignment.' },
+        };
+        var lossValues = lossKeys.map(function (k) { return losses[k]; });
+        var maxLoss = Math.max.apply(null, lossValues.map(Math.abs)) || 1;
+
+        container.innerHTML = '';
+        var root = document.createElement('div');
+        root.style.cssText = 'padding: 16px; font-family: -apple-system, "Segoe UI", sans-serif;';
+
+        // ---- Header ----
+        var header = document.createElement('div');
+        header.style.cssText = 'display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;';
+        header.innerHTML =
+            '<div><span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #06b6d4;">📊 ML Loss Analysis</span>'
+          + '<span style="font-size: 13px; color: #f3f4f6; margin-left: 8px;">— live loss values for ' + (pgState.fileName || 'dataset') + ' · n = ' + losses.n + ' rows</span></div>'
+          + '<div style="font-size: 11px; color: #9ca3af; font-family: ui-monospace;">6 losses computed from y_true vs y_pred columns · hover any bar or radar point for details</div>';
+        root.appendChild(header);
+
+        // ---- Two-column layout: bars (left) + radar (right) ----
+        var layout = document.createElement('div');
+        layout.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;';
+        // On narrow screens, stack vertically
+        layout.innerHTML = '@media (max-width: 800px) { .pg-loss-layout { grid-template-columns: 1fr !important; } }';
+        var styleTag = document.createElement('style');
+        styleTag.textContent = '@media (max-width: 800px) { .pg-loss-layout { grid-template-columns: 1fr !important; } }';
+        document.head.appendChild(styleTag);
+        layout.className = 'pg-loss-layout';
+
+        // ---- Bar chart (relative magnitudes) ----
+        var barsDiv = document.createElement('div');
+        barsDiv.style.cssText = 'background: rgba(11,15,26,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px;';
+        var barsHtml = '<div style="font-size: 11px; font-weight: 700; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">Relative magnitude (normalised to max)</div>';
+        lossKeys.forEach(function (k, i) {
+          var v = losses[k];
+          var pct = (Math.abs(v) / maxLoss * 100).toFixed(1);
+          var meta = lossMeta[k];
+          var sign = v >= 0 ? '+' : '−';
+          var absV = Math.abs(v).toFixed(4);
+          barsHtml += '<div style="margin-bottom: 10px;">';
+          barsHtml += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 11px;">';
+          barsHtml += '<span style="color: ' + meta.color + '; font-weight: 700; font-family: ui-monospace;">' + k + '</span>';
+          barsHtml += '<span style="color: #f3f4f6; font-family: ui-monospace; font-size: 12px;">' + sign + absV + '</span>';
+          barsHtml += '</div>';
+          barsHtml += '<div style="position: relative; height: 18px; background: rgba(148,163,184,0.1); border-radius: 4px; overflow: hidden;" title="' + meta.name + ' — ' + meta.desc + '">';
+          barsHtml += '<div style="position: absolute; left: 0; top: 0; height: 100%; width: ' + pct + '%; background: linear-gradient(90deg, ' + meta.color + ', ' + meta.color + 'aa); border-right: 2px solid ' + meta.color + '; transition: width 0.4s ease;"></div>';
+          barsHtml += '<div style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-size: 10px; color: rgba(255,255,255,0.85); font-family: ui-monospace;">' + pct + '%</div>';
+          barsHtml += '</div>';
+          barsHtml += '</div>';
         });
-        html += '</table>';
-        html += '<p style="font-size: 11px; color: var(--text-muted); margin-top: 12px;">n = ' + losses.n + ' rows. Push to GTS graphs by visiting the <a href="science-ml.html#ml-etl-widget" style="color: var(--accent-2);">ML page ETL widget</a>.</p>';
-        html += '</div>';
-        container.innerHTML = html;
+        barsDiv.innerHTML = barsHtml;
+        layout.appendChild(barsDiv);
+
+        // ---- Radar / spider chart (normalised, all 6 axes) ----
+        var radarDiv = document.createElement('div');
+        radarDiv.style.cssText = 'background: rgba(11,15,26,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px;';
+        var radarCanvas = document.createElement('canvas');
+        radarCanvas.width = 320;
+        radarCanvas.height = 320;
+        radarCanvas.style.cssText = 'width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto;';
+        radarDiv.appendChild(radarCanvas);
+        var radarTitle = document.createElement('div');
+        radarTitle.style.cssText = 'font-size: 11px; font-weight: 700; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; text-align: center;';
+        radarTitle.textContent = 'Loss landscape (radial spider)';
+        radarDiv.insertBefore(radarTitle, radarCanvas);
+        layout.appendChild(radarDiv);
+        root.appendChild(layout);
+
+        // Draw the radar chart
+        var rctx = radarCanvas.getContext('2d');
+        var W = radarCanvas.width, H = radarCanvas.height;
+        var cx = W / 2, cy = H / 2;
+        var R = Math.min(W, H) * 0.38;
+        var nAxes = lossKeys.length;
+        // Background grid (concentric polygons)
+        rctx.strokeStyle = 'rgba(148,163,184,0.15)';
+        rctx.lineWidth = 0.5;
+        for (var ring = 1; ring <= 4; ring++) {
+          rctx.beginPath();
+          for (var ax = 0; ax < nAxes; ax++) {
+            var angle = (ax / nAxes) * Math.PI * 2 - Math.PI / 2;
+            var r = R * ring / 4;
+            var x = cx + Math.cos(angle) * r;
+            var y = cy + Math.sin(angle) * r;
+            if (ax === 0) rctx.moveTo(x, y); else rctx.lineTo(x, y);
+          }
+          rctx.closePath();
+          rctx.stroke();
+        }
+        // Axes lines
+        rctx.strokeStyle = 'rgba(148,163,184,0.20)';
+        rctx.lineWidth = 0.5;
+        for (var ax = 0; ax < nAxes; ax++) {
+          var angle = (ax / nAxes) * Math.PI * 2 - Math.PI / 2;
+          rctx.beginPath();
+          rctx.moveTo(cx, cy);
+          rctx.lineTo(cx + Math.cos(angle) * R, cy + Math.sin(angle) * R);
+          rctx.stroke();
+        }
+        // Loss polygon (filled)
+        rctx.beginPath();
+        lossKeys.forEach(function (k, i) {
+          var angle = (i / nAxes) * Math.PI * 2 - Math.PI / 2;
+          var v = Math.abs(losses[k]) / maxLoss;
+          var r = R * v;
+          var x = cx + Math.cos(angle) * r;
+          var y = cy + Math.sin(angle) * r;
+          if (i === 0) rctx.moveTo(x, y); else rctx.lineTo(x, y);
+        });
+        rctx.closePath();
+        // Gradient fill
+        var gradFill = rctx.createRadialGradient(cx, cy, 0, cx, cy, R);
+        gradFill.addColorStop(0, 'rgba(139,92,246,0.30)');
+        gradFill.addColorStop(1, 'rgba(6,182,212,0.15)');
+        rctx.fillStyle = gradFill;
+        rctx.fill();
+        rctx.strokeStyle = '#8b5cf6';
+        rctx.lineWidth = 1.5;
+        rctx.stroke();
+        // Per-axis points + labels
+        lossKeys.forEach(function (k, i) {
+          var angle = (i / nAxes) * Math.PI * 2 - Math.PI / 2;
+          var v = Math.abs(losses[k]) / maxLoss;
+          var r = R * v;
+          var x = cx + Math.cos(angle) * r;
+          var y = cy + Math.sin(angle) * r;
+          rctx.fillStyle = lossMeta[k].color;
+          rctx.beginPath();
+          rctx.arc(x, y, 4, 0, 2 * Math.PI);
+          rctx.fill();
+          rctx.strokeStyle = '#fff';
+          rctx.lineWidth = 1;
+          rctx.stroke();
+          // Axis label (outside the ring)
+          var labelR = R + 18;
+          var lx = cx + Math.cos(angle) * labelR;
+          var ly = cy + Math.sin(angle) * labelR;
+          rctx.fillStyle = '#9ca3af';
+          rctx.font = 'bold 10px ui-monospace';
+          rctx.textAlign = (Math.cos(angle) > 0.1) ? 'left' : (Math.cos(angle) < -0.1) ? 'right' : 'center';
+          rctx.textBaseline = (Math.sin(angle) > 0.1) ? 'top' : (Math.sin(angle) < -0.1) ? 'bottom' : 'middle';
+          rctx.fillText(k, lx, ly);
+        });
+        rctx.textAlign = 'left';
+        rctx.textBaseline = 'alphabetic';
+
+        // ---- Per-loss explanation grid ----
+        var explainTitle = document.createElement('div');
+        explainTitle.style.cssText = 'font-size: 11px; font-weight: 700; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 16px; margin-bottom: 8px;';
+        explainTitle.textContent = 'Loss function reference (hover for description)';
+        root.appendChild(explainTitle);
+
+        var explainGrid = document.createElement('div');
+        explainGrid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px;';
+        lossKeys.forEach(function (k) {
+          var meta = lossMeta[k];
+          var v = losses[k];
+          var card = document.createElement('div');
+          card.style.cssText = 'background: rgba(11,15,26,0.5); border-left: 3px solid ' + meta.color + '; border-radius: 6px; padding: 10px 12px; cursor: help;';
+          card.title = meta.desc;
+          card.innerHTML =
+              '<div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">'
+            + '<span style="color: ' + meta.color + '; font-family: ui-monospace; font-weight: 700; font-size: 13px;">' + k + '</span>'
+            + '<span style="color: #f3f4f6; font-family: ui-monospace; font-size: 13px;">' + v.toFixed(4) + '</span>'
+            + '</div>'
+            + '<div style="font-size: 11px; color: #9ca3af; margin-bottom: 4px; font-weight: 600;">' + meta.name + '</div>'
+            + '<div style="font-size: 10px; color: #64748b; line-height: 1.4;">' + meta.desc + '</div>';
+          explainGrid.appendChild(card);
+        });
+        root.appendChild(explainGrid);
+
+        // ---- Sample data preview (first 5 rows from parsed) ----
+        if (parsed.headers && parsed.rows && parsed.headers.indexOf('y_true') >= 0) {
+          var dataTitle = document.createElement('div');
+          dataTitle.style.cssText = 'font-size: 11px; font-weight: 700; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 16px; margin-bottom: 8px;';
+          dataTitle.textContent = 'Sample data (first 5 rows from ' + (pgState.fileName || 'dataset') + ')';
+          root.appendChild(dataTitle);
+
+          var dataDiv = document.createElement('div');
+          dataDiv.style.cssText = 'overflow-x: auto; background: rgba(11,15,26,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 8px;';
+          var ytCol = parsed.headers.indexOf('y_true');
+          var ypCol = parsed.headers.indexOf('y_pred');
+          var html = '<table style="border-collapse: collapse; font-family: ui-monospace; font-size: 11px; width: 100%;">';
+          html += '<tr><th style="padding: 6px 10px; color: #06b6d4; border-bottom: 1px solid var(--border); text-align: left;">#</th>';
+          parsed.headers.forEach(function (h) {
+            var color = h === 'y_true' ? '#10b981' : (h === 'y_pred' ? '#06b6d4' : '#9ca3af');
+            html += '<th style="padding: 6px 10px; color: ' + color + '; border-bottom: 1px solid var(--border); text-align: right;">' + h + '</th>';
+          });
+          html += '<th style="padding: 6px 10px; color: #f59e0b; border-bottom: 1px solid var(--border); text-align: right;">error</th>';
+          html += '</tr>';
+          parsed.rows.slice(0, 5).forEach(function (r, i) {
+            var yt = parseFloat(r[ytCol]);
+            var yp = parseFloat(r[ypCol]);
+            var err = (isNaN(yt) || isNaN(yp)) ? '—' : (yp - yt).toFixed(4);
+            html += '<tr>';
+            html += '<td style="padding: 4px 10px; color: #64748b;">' + (i + 1) + '</td>';
+            r.forEach(function (c) {
+              html += '<td style="padding: 4px 10px; color: #f3f4f6; text-align: right;">' + c + '</td>';
+            });
+            html += '<td style="padding: 4px 10px; color: ' + (parseFloat(err) >= 0 ? '#10b981' : '#ef4444') + '; text-align: right; font-weight: 700;">' + err + '</td>';
+            html += '</tr>';
+          });
+          html += '</table>';
+          dataDiv.innerHTML = html;
+          root.appendChild(dataDiv);
+        }
+
+        // ---- Footer ----
+        var footer = document.createElement('div');
+        footer.style.cssText = 'font-size: 10px; color: #64748b; font-family: ui-monospace; margin-top: 16px; padding: 10px; background: rgba(11,15,26,0.5); border-radius: 6px; border-left: 3px solid #06b6d4;';
+        footer.innerHTML =
+            '<strong style="color: #9ca3af;">How to read:</strong> '
+          + '<span style="color: #06b6d4;">MSE</span> + <span style="color: #10b981;">MAE</span> are on the same scale as your data (squared + absolute respectively). '
+          + '<span style="color: #8b5cf6;">logCosh</span> + <span style="color: #f59e0b;">Huber</span> are approximately equal to MSE for small errors, ~MAE for large errors. '
+          + '<span style="color: #ec4899;">KL</span> is for distribution matching (not regression). '
+          + '<span style="color: #22d3ee;">Cosine</span> is in [-1, 1] — 1.0 means perfect directional alignment. '
+          + 'For a complete loss-landscape 3D tour, visit the <a href="science-ml.html#ml-etl-widget" style="color: #06b6d4;">ML page ETL widget</a>.';
+        root.appendChild(footer);
+
+        container.appendChild(root);
+        setStatus('✓ Loss analysis rendered: 6 loss functions computed across ' + losses.n + ' rows. Bar chart + radar + per-loss reference cards + sample-data preview.');
       }
 
       function renderRawTable(container, parsed) {

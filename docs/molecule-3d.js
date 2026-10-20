@@ -403,6 +403,22 @@
     } else {
       layout = smilesTo3D(smiles);
     }
+    // Enrich atoms with element-typed radius + color if not already set.
+    // This handles atoms coming from external parsers (SDF/PDB) that
+    // only set { element, x, y, z, label } — without this, render()
+    // would compute `radius = a.r * R * depthAlpha(...)` = NaN, which
+    // crashes createRadialGradient with 'The provided double value is
+    // non-finite'. Phase 50+ follow-up fix.
+    for (var ai = 0; ai < layout.atoms.length; ai++) {
+      var a = layout.atoms[ai];
+      if (a.r === undefined) {
+        a.r = ELEMENT_RADII[a.element] || ELEMENT_RADII.default;
+      }
+      if (!a.color) {
+        a.color = ELEMENT_COLORS[a.element] || ELEMENT_COLORS.default;
+      }
+      if (!a.label) a.label = a.element;
+    }
     m.atoms = layout.atoms;
     m.bonds = layout.bonds;
     this.molecules[id] = m;
@@ -524,6 +540,12 @@
     // Project all atoms + compute depth-sorted render order
     var projected = m.atoms.map(function (a, i) {
       var p = rotateYawPitch(a, this.yaw, this.pitch);
+      // Defensive: if the atom's x/y/z are NaN (from a malformed parser
+      // output), p.x/p.y/p.z will also be NaN, and the createRadialGradient
+      // call below will crash with 'non-finite' error. Default to 0.
+      if (!isFinite(p.x)) p.x = 0;
+      if (!isFinite(p.y)) p.y = 0;
+      if (!isFinite(p.z)) p.z = 0;
       var s = project(p, cx, cy, R);
       return { atom: a, screen: s, idx: i };
     }, this);
@@ -578,6 +600,10 @@
       var a = item.atom;
       var s = item.screen;
       var radius = a.r * R * depthAlpha(s.depth);  // depth fog on size too
+      // Defensive: if radius is non-finite (atom had no `r` set),
+      // fall back to a sensible default rather than crash
+      // createRadialGradient with 'non-finite' error.
+      if (!isFinite(radius) || radius <= 0) radius = R * 0.04;
       // Glow (subtle on light theme — only visible on dark)
       ctx.save();
       ctx.shadowColor = a.color;

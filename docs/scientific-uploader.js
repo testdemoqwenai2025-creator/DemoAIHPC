@@ -206,6 +206,14 @@
       var y = parseFloat(line.substring(10, 20));
       var z = parseFloat(line.substring(20, 30));
       var element = (line.substring(31, 34) || '').trim();
+      // Defensive: if any coordinate failed to parse (common with
+      // hand-typed SDF samples that don't follow the strict 10-char
+      // per column spec), default to 0 instead of NaN. NaN coordinates
+      // would later crash molecule-3d.js's createRadialGradient with
+      // 'The provided double value is non-finite'.
+      if (!isFinite(x)) x = 0;
+      if (!isFinite(y)) y = 0;
+      if (!isFinite(z)) z = 0;
       if (!element) continue;
       atoms.push({ element: element, x: x, y: y, z: z, label: element });
     }

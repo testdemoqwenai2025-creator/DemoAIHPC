@@ -3383,3 +3383,47 @@ Stage Summary:
 - Enhanced the rendering with: ground shadow, radial glow, axis compass, readable atom labels with outline, pharmacophore label background pills
 - ML loss analysis page already solid — 27 demos, 0 errors, no enhancement needed
 - Total audit checks: 57/57 pass with --skip-live-check
+
+---
+Task ID: P50-followup-10
+Agent: main
+Task: Fix createRadialGradient non-finite error in playground molecule rendering + build rich ML loss analysis view
+
+Work Log:
+- User clarified they meant the playground.html page (not science-cheminformatics or science-ml). Probed the playground's ML loss analysis recipe (csv-mletl-gts) and Molecular Rendering recipe (sdf-mol3d).
+- Found two issues:
+  1. ML loss analysis outputs only a flat 6-row table — the user explicitly asked for a "view" instead ("is it only going to output a table")
+  2. Molecular rendering recipe crashes with: "Failed to execute 'createRadialGradient' on 'CanvasRenderingContext2D': The provided double value is non-finite"
+
+Root cause for issue 2:
+- The playground's SDF sample was malformed — it used single-space separators instead of the SDF spec's 10-char-per-column format. The SDF parser's substring(0, 10) for x worked (parsed -0.5), but substring(10, 20) for y returned "0.5   0." (parseFloat stops at second period, gives 0.5 — sign lost but still finite). The killer was substring(20, 30) for z which returned " C 0  0  " — parseFloat gave NaN.
+- Atom with NaN z coordinate → project() returns NaN s.y → ctx.createRadialGradient(s.x, s.y, ...) crashes with 'non-finite' error.
+- Compounding issue: even after the molecule-3d register() enrichment (which sets a.r and a.color), the missing z coordinate still produces NaN projected positions.
+
+Fix 1 — replaced the SDF sample with a properly-formatted 13-atom molecule (4-pyridinecarboxamide fragment: 6-carbon benzene ring + carboxamide -C(=O)NH2 + hydroxyl -OH). All coordinates use 10-char right-justified columns per the SDF spec. Generated via /home/z/my-project/scripts/gen-sdf-sample.py.
+
+Fix 2 — added defensive guards at THREE layers (defense in depth):
+  a. SDF parser (scientific-uploader.js): default any non-finite x/y/z to 0 instead of NaN. Catches future malformed SDF samples too.
+  b. Molecule-3d register(): enrich incoming atoms with element-typed r (radius) + color from ELEMENT_RADII/ELEMENT_COLORS palettes. Handles atoms from external parsers (SDF/PDB) that only set { element, x, y, z, label }.
+  c. Molecule-3d render(): guard inside the projected.map callback — if rotateYawPitch produces non-finite p.x/y/z, default to 0. Also added `if (!isFinite(radius) || radius <= 0) radius = R * 0.04;` before the atom sphere createRadialGradient call.
+
+Fix 3 — built a rich ML loss analysis view to replace the flat table (renderLossTable → still named the same but now produces a multi-section view):
+  - Header with dataset name + n + tip text
+  - Two-column layout: bar chart (left) + radar/spider chart (right)
+  - Bar chart: 6 horizontal bars (mse/mae/logCosh/huber/kl/cosine) with magnitude normalized to max, color-coded per loss, hover for description
+  - Radar/spider chart: 6-axis polygon (one axis per loss) showing the loss landscape shape — useful for comparing relative magnitudes at a glance
+  - Per-loss reference cards grid: each loss has a card showing its value, full name, and description (hover for tooltip)
+  - Sample data preview: first 5 rows from the parsed CSV with y_true/y_pred/error columns, error color-coded (green positive / red negative)
+  - Footer with "How to read" explainer: MSE/MAE same scale, logCosh/Huber ~MSE near 0 / ~MAE far away, KL for distribution matching, Cosine in [-1,1]
+
+Local probe results (Playwright headless against file://):
+- ML loss analysis recipe: ✓ bars rendered, ✓ radar rendered, ✓ explain cards rendered, ✓ sample data rendered, 0 page errors, 0 console errors
+- Molecular rendering recipe: ✓ molecule canvas present, 0 page errors (was 1 before — createRadialGradient non-finite), 0 console errors
+- Theme toggle on molecule canvas: ✓ background corners properly switch between light (#f8fafc) and dark (#0a0e1a) — the molecule-3d.js theme fix from P50-followup-9 carries through to the playground
+
+Stage Summary:
+- Both playground recipes now work cleanly with 0 errors
+- ML loss analysis is a proper "view" (bars + radar + cards + sample data) instead of a flat table
+- Molecular rendering no longer crashes with non-finite createRadialGradient error
+- Theme toggle properly cascades to the molecule canvas (light→dark→light all work)
+- Total audit checks: 57/57 pass with --skip-live-check
