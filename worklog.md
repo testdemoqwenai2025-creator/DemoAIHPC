@@ -3328,3 +3328,58 @@ Stage Summary:
 - The genomic view is a proper genome browser: chromosome ideograms + variant ticks + INFO-field detail panel + AF histogram
 - The big-data view is a proper columnar-storage inspector: per-column type/encoding/compression/nulls + row-group breakdown + file-structure explainer
 - Total audit checks: 57/57 pass with --skip-live-check
+
+---
+Task ID: P50-followup-9
+Agent: main
+Task: Fix molecule-3d.js dark/light theme toggle bug + enhance rendering
+
+Work Log:
+- User reported that the dark/light theme toggle on science-cheminformatics.html doesn't behave properly during molecular rendering — the canvas stays dark even when the body switches to light.
+- Wrote /home/z/my-project/scripts/probe-ml-and-molecule.py + probe-molecule-theme-targeted.py to reproduce the bug. Confirmed: body switches between light/dark, but molecule canvas pixel samples stay at [10, 14, 26] (dark navy #0a0e1a) regardless of theme.
+- Root cause: molecule-3d.js had hardcoded dark colors everywhere:
+  * Line 348 (now ~487): ctx.fillStyle = '#0a0e1a' for canvas background
+  * Line 188 (now ~281): card.style.cssText background: rgba(11,15,26,0.7)
+  * Line 206 (now ~299): wrap radial-gradient with rgba(11,15,26,1)
+  * Lines 215, 220, 226: info/caption/status text colors hardcoded for dark
+  * Line 436 (now ~574): ctx.fillStyle = '#fff' for atom labels (invisible on light)
+  * Line 457 (now ~595): HUD text rgba(255,255,255,0.7)
+  * Line 568 (now ~789): starfield white particles (invisible on light)
+  * Component didn't listen for theme changes at all
+- Also probed the ML loss analysis page (science-ml.html) — 27 demo cards, all load cleanly, 0 page errors, 0 console errors. The Math→Code→Observe→Data tab structure is solid (6-language polyglot: Python/Rust/Go/C/Elixir/Scala). No enhancement needed there.
+
+Fix applied — molecule-3d.js now fully theme-aware + enhanced:
+
+1. Added THEMES palette object with dark + light variants:
+   - Dark: bg=#0a0e1a, glow=rgba(139,92,246,0.18), card=rgba(11,15,26,0.7), stars visible, white labels
+   - Light: bg=#f8fafc, glow=rgba(139,92,246,0.10), card=rgba(255,255,255,0.85), stars hidden, dark labels
+   - All hardcoded colors replaced with T.bgFill / T.cardBg / T.labelColor / T.hudColor / etc.
+
+2. Added _setupThemeObserver() in constructor — uses MutationObserver on document.body's class attribute. When the user clicks the ribbon theme toggle, body.light is added/removed, the observer fires, _applyThemeChrome() updates the card/wrap/info/caption/status/name styles, then render() repaints the canvas with the new theme's palette. No more "dark island" canvas.
+
+3. Added _applyThemeChrome() — updates the cached card/wrap/info/caption/status/name DOM elements' inline styles with the new theme's colors, without rebuilding the entire component.
+
+4. Enhanced render() with three new visual elements:
+   a. Subtle radial glow on top of the solid bg fill — gives depth on both themes (purple center fading to transparent edge)
+   b. Ground shadow — soft elliptical shadow under the molecule (positioned at cy + R*0.65, R*0.55 radius). Uses the theme's groundShadowColor, computed via a radial gradient that fades to transparent at the edge. Adds visual depth.
+   c. Atom labels now have a 3px strokeText outline (dark on light theme, light on dark theme) so the labels are readable on ANY atom color, on either theme
+
+5. Added new drawCompass() method — small X/Y/Z axis indicator in the top-right corner. Shows the current rotation state (red=X, green=Y, blue=Z) projected through the same yaw+pitch chain as the molecule. Has a backing circle for readability on both themes. The user can now see which face of the molecule is toward the viewer.
+
+6. Enhanced drawPharmacophore() — pharmacophore feature labels (HBD/HBA/HYD) now have a background pill (rgba(11,15,26,0.85) on dark, rgba(255,255,255,0.85) on light) so they're readable on any background.
+
+7. drawLandscape() + drawNDAxis() + drawStarfield() + updateInfo() all updated to use theme colors (equatorColor, ndStripBg, ndKeyColor, ndValColor, starColor, infoColor, captionColor).
+
+Local probe results (Playwright headless against file://):
+- Initial state: body=light, canvas pixels=[[248,250,252], ...] (LIGHT — was dark before)
+- After toggle to dark: body=dark, canvas pixels=[[10,14,26], ...] (DARK)
+- After toggle back to light: body=light, canvas pixels=[[248,250,252], ...] (LIGHT again)
+- 0 page errors during 3+ rapid toggles
+- 0 console errors
+
+Stage Summary:
+- The user's specific complaint ("toggle button dark/light not behaving the way it should during molecular rendering") is fully resolved
+- The molecule canvas now follows the theme toggle in real-time via MutationObserver
+- Enhanced the rendering with: ground shadow, radial glow, axis compass, readable atom labels with outline, pharmacophore label background pills
+- ML loss analysis page already solid — 27 demos, 0 errors, no enhancement needed
+- Total audit checks: 57/57 pass with --skip-live-check
