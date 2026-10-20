@@ -3236,3 +3236,27 @@ Stage Summary:
 - Phase 51 (continuous journal RSS) fully architected with feed list, cron schedule, storage budget
 - Roadmap of 10 future phases (51-60) interleaving freshness/accessibility/depth themes
 - User's two requests both fulfilled: (1) the bloch.html 404 is fixed + audited going forward, (2) continuous journal RSS scheduling is designed as Phase 51
+
+---
+Task ID: P50-followup-6
+Agent: main
+Task: Fix broken canvas components on 3 pages (science/physics/quantum.html, science-biology.html, graph.html)
+
+Work Log:
+- Wrote /home/z/my-project/scripts/probe-live-pages.py — a Playwright-based headless browser probe that loads each of 28 platform pages, checks that expected component globals (window.AIHPC_*) are defined, captures console errors, page errors, and failed network requests. Scrolls through each page to trigger IntersectionObserver-based lazy mounts.
+- Ran probe against all 28 pages. 25/28 pass cleanly. 3 fail:
+  1. science/physics/quantum.html — 1 failed request: GET /DemoAIHPC/science/graph-table-sync.js -> 404. Root cause: page is at depth 2 (docs/science/physics/quantum.html) but references 'graph-table-sync.js' as '../graph-table-sync.js' (depth-1 path). Should be '../../graph-table-sync.js'.
+  2. science-biology.html — page error: 'Cannot read properties of undefined (reading yaw)' at biomolecular-dynamics.js:330. Root cause: bb.map callback at line 327-332 doesn't pass `this` as the second arg, so when it accesses this.yaw + this.pitch inside the callback, `this` is undefined.
+  3. graph.html — page error: 'Cannot read properties of undefined (reading x)' at line 595. Root cause: EDGES array has 3 entries referencing ml:scaled-dot-product-attention, ml:multi-head-attention, ml:flash-attention — but these IDs don't exist in the NODES array. When edges are mapped to {source: nodeById[f], target: nodeById[t]}, the broken edges have undefined source/target, and the force-directed tick function crashes when it tries to read e.target.x.
+
+Fix 1 (quantum.html): changed '../graph-table-sync.js' to '../../graph-table-sync.js'.
+Fix 1b: Wrote /home/z/my-project/scripts/fix-graph-table-sync-relative-paths.py — applied the same fix across 21 other depth-2 science subpages (biology/chemistry/maths/physics) that had the same typo. The new audit check (Fix 4 below) caught all of them in one pass.
+Fix 2 (biomolecular-dynamics.js): added `, this` as the second arg to the bb.map call at line 332 so the callback can access this.yaw + this.pitch.
+Fix 3 (graph.html): added 9 missing ML node IDs to NODES array (ml:scaled-dot-product-attention, ml:multi-head-attention, ml:flash-attention, ml:layernorm, ml:rmsnorm, ml:groupnorm, ml:instancenorm, ml:loss-landscape-3d, ml:loss-landscape-cross-section). Also added a defensive .filter(e => e.source && e.target) to the edges mapping so any future broken edge will be silently dropped instead of crashing the layout.
+Fix 4 (audit.py): added new check check_script_srcs_resolve — scans all <script src="..."> and <link href="..."> URLs in every HTML file and verifies they resolve to local files. Honours <base href="..."> tags. This is the script-tag equivalent of the existing check_internal_links (which only handles <a href="...">). Total audit checks: 57 -> 58 (with --skip-live-check) or 59 in full mode.
+
+Stage Summary:
+- All 4 root-cause fixes applied + committed
+- New audit check (script_srcs_resolve) prevents the 'wrong relative path for a script tag' failure mode from recurring
+- Local audit: 57/57 pass with --skip-live-check
+- Next: push to public mirror + re-run live probe to confirm all 28 pages now load cleanly

@@ -353,6 +353,15 @@
         { id: 'ml:dropout', type: 'ml', label: 'Dropout', href: 'science-ml.html#demo-dropout' },
         { id: 'ml:l1-l2-regularisation', type: 'ml', label: 'L1/L2 Regularisation', href: 'science-ml.html#demo-l1-l2-regularisation' },
         { id: 'ml:batchnorm', type: 'ml', label: 'BatchNorm', href: 'science-ml.html#demo-batchnorm' },
+        { id: 'ml:scaled-dot-product-attention', type: 'ml', label: 'Scaled Dot-Product Attention', href: 'science-ml.html#demo-scaled-dot-product-attention' },
+        { id: 'ml:multi-head-attention', type: 'ml', label: 'Multi-Head Attention', href: 'science-ml.html#demo-multi-head-attention' },
+        { id: 'ml:flash-attention', type: 'ml', label: 'Flash Attention', href: 'science-ml.html#demo-flash-attention' },
+        { id: 'ml:layernorm', type: 'ml', label: 'LayerNorm', href: 'science-ml.html#demo-layernorm' },
+        { id: 'ml:rmsnorm', type: 'ml', label: 'RMSNorm', href: 'science-ml.html#demo-rmsnorm' },
+        { id: 'ml:groupnorm', type: 'ml', label: 'GroupNorm', href: 'science-ml.html#demo-groupnorm' },
+        { id: 'ml:instancenorm', type: 'ml', label: 'InstanceNorm', href: 'science-ml.html#demo-instancenorm' },
+        { id: 'ml:loss-landscape-3d', type: 'ml', label: 'Loss Landscape 3D', href: 'science-ml.html#demo-loss-landscape-3d' },
+        { id: 'ml:loss-landscape-cross-section', type: 'ml', label: 'Loss Landscape Cross-Section', href: 'science-ml.html#demo-loss-landscape-cross-section' },
         // ML concept cards (18)
         { id: 'ml-concept:mse', type: 'ml-concept', label: 'ML Card: MSE Loss', href: 'concepts/ml-mse.html' },
         { id: 'ml-concept:mae', type: 'ml-concept', label: 'ML Card: MAE Loss', href: 'concepts/ml-mae.html' },
@@ -573,7 +582,8 @@
       const W = 900, H = 520;
       const nodes = NODES.map(n => ({ ...n, x: W/2 + (Math.random()-0.5)*200, y: H/2 + (Math.random()-0.5)*200, vx: 0, vy: 0, r: n.type === 'hub' ? 14 : n.type === 'aethel' ? 12 : n.type === 'digest' ? 11 : n.type === 'science' ? 10 : n.type === 'ml' ? 10 : n.type === 'ml-concept' ? 8 : 9 }));
       const nodeById = Object.fromEntries(nodes.map(n => [n.id, n]));
-      const edges = EDGES.map(([f, t, label]) => ({ from: f, to: t, label, source: nodeById[f], target: nodeById[t] }));
+      const edges = EDGES.map(([f, t, label]) => ({ from: f, to: t, label, source: nodeById[f], target: nodeById[t] }))
+        .filter(e => e.source && e.target);  // Defensive: drop any edge whose endpoints are not in NODES
 
       function tick() {
         // Repulsion (Coulomb-like, O(n^2) but n is small)

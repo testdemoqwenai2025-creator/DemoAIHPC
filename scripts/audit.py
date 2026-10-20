@@ -352,6 +352,50 @@ def check_internal_links(html_files):
                        f"all internal links across {len(html_files)} pages resolve")
 
 
+def check_script_srcs_resolve(html_files):
+    """Check (Phase 50+ follow-up): all <script src="..."> and
+    <link href="..."> URLs in every HTML file resolve to existing
+    local files. Catches the failure mode where a page references
+    'graph-table-sync.js' as a relative URL but the path is wrong
+    (e.g. '../graph-table-sync.js' from docs/science/physics/foo.html
+    resolves to docs/science/graph-table-sync.js — which 404s).
+
+    Honours <base href="..."> tags — same as check_internal_links.
+    """
+    failures = []
+    src_re = re.compile(r'(?:src|href)="([^"]+\.(?:js|css)[^"]*)"')
+    base_re = re.compile(r'<base\s+href="([^"]+)"\s*/?>', re.IGNORECASE)
+    for path in html_files:
+        with open(path, "r", encoding="utf-8") as f:
+            s = f.read()
+        rel_path = os.path.relpath(path, DOCS)
+        dir_path = os.path.dirname(path)
+        base_match = base_re.search(s)
+        if base_match:
+            base_dir = os.path.normpath(os.path.join(dir_path, base_match.group(1)))
+        else:
+            base_dir = dir_path
+        for m in src_re.finditer(s):
+            src = m.group(1)
+            # Skip absolute URLs, data URIs, and inline event handlers
+            if src.startswith(("http://", "https://", "//", "data:", "mailto:", "#")):
+                continue
+            if "${" in src or "' +" in src or "+ '" in src:
+                continue
+            target = src.split("#")[0].split("?")[0]
+            if not target:
+                continue
+            resolved = os.path.normpath(os.path.join(base_dir, target))
+            if not os.path.exists(resolved):
+                failures.append(f"{rel_path}: src/href='{src}' -> missing")
+    if failures:
+        return CheckResult("script_srcs_resolve", False,
+                           f"{len(failures)} broken script/style URL(s) (showing first 20)",
+                           failures[:20])
+    return CheckResult("script_srcs_resolve", True,
+                       f"all script + style URLs across {len(html_files)} pages resolve")
+
+
 def check_seed_demos():
     """Check 9: all 5 seed demos are present."""
     seed_demos = [
@@ -2565,6 +2609,7 @@ def main():
         check_particle_bg_js(html_files),
         check_git_config_clean(),
         check_internal_links(html_files),
+        check_script_srcs_resolve(html_files),
         check_seed_demos(),
         check_digest_pattern(),
         check_weekly_digest_in_ribbon(html_files),

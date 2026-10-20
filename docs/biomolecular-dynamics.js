@@ -329,7 +329,7 @@
         var p2 = { x: p.x + pert, y: p.y + pert * 0.7, z: p.z + pert * 0.5 };
         var rp = rotateYawPitch(p2, this.yaw - trail * 0.05, this.pitch);
         return project(rp, cx, cy, scale);
-      });
+      }, this);  // <-- pass `this` as the second arg so the callback can read this.yaw + this.pitch
       ctx.strokeStyle = 'rgba(245,158,11,' + (0.6 - trail * 0.1).toFixed(3) + ')';
       ctx.lineWidth = 1.5;
       ctx.beginPath();
