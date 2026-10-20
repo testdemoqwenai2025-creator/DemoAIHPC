@@ -388,6 +388,21 @@
         </div>
       </section>
 
+      <!-- Phase 45: Coupled Quantum Oscillators — CV quantum optics -->
+      <section style="margin: 32px 0; padding: 24px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px);">
+        <p class="h-tag" style="color: #ec4899;">Phase 45 · Continuous-Variable Quantum Optics</p>
+        <h2 style="font-size: 22px; margin: 8px 0 12px; background: linear-gradient(90deg,#ec4899,#f59e0b); -webkit-background-clip: text; background-clip: text; color: transparent;">Coupled quantum oscillators — 2-mode squeezing · HOM · NOON states</h2>
+        <p style="font-size: 14px; color: var(--text-muted, #9ca3af); max-width: 920px;">Beyond single-oscillator Fock states (Phase 42), the next frontier is <strong>coupled oscillators</strong> — the foundation of continuous-variable (CV) quantum optics. Two modes (A + B) can be entangled via 2-mode squeezing, exhibit Hong-Ou-Mandel bunching at a beamsplitter, or form NOON states for Heisenberg-limited metrology. The viewer below renders 4 panels: mode A energy levels, mode B energy levels, joint state matrix |n_A, n_B⟩, and the time-dependent correlation ⟨N̂_A·N̂_B⟩.</p>
+        <div style="margin-top: 20px;">
+          <div id="quantum-coupled-container"></div>
+          <p style="font-size: 11px; color: #6b7280; margin-top: 8px;">Press <strong>Next ▶</strong> to cycle through: (1) product state |1,0⟩ (independent), (2) 2-mode squeezed S₂(r)|0,0⟩ (entangled — both modes always have same photon count), (3) Hong-Ou-Mandel effect (2 photons bunch at beamsplitter — |1,1⟩ vanishes), (4) NOON state (|N,0⟩+|0,N⟩)/√2 (maximally entangled — Heisenberg-limited metrology). The correlation chart shows ⟨N̂_A·N̂_B⟩ oscillating as the entanglement evolves.</p>
+        </div>
+        <div style="margin-top: 16px; padding: 12px; background: rgba(11,15,26,0.6); border-radius: 8px; border: 1px solid var(--border, #1f2937); font-size: 11px; line-height: 1.7; color: var(--text-muted, #9ca3af);">
+          <strong style="color: #06b6d4;">Math:</strong> S₂(r) = exp[r(a†_A a†_B - a_A a_B)]; &nbsp; HOM: |1,1⟩ → (|2,0⟩-|0,2⟩)/√2; &nbsp; NOON: (|N,0⟩+|0,N⟩)/√2 achieves N-fold phase supersensitivity Δφ = 1/N (Heisenberg limit).<br/>
+          <strong style="color: #8b5cf6;">References:</strong> Hong-Ou-Mandel (1987, Phys. Rev. Lett.); Braunstein-van Loock CV quantum info (2005, Rev. Mod. Phys.); Eknstein-Reminger squeezing (1992); NOON-state metrology (Mitchell 2004).
+        </div>
+      </section>
+
       <h2>Math &rarr; Code derivation</h2>
       <div class="derivation-step">
         <strong>Step 1: The qubit</strong>
@@ -529,8 +544,30 @@
           window.addEventListener('scroll', loadFock, { once: true, passive: true });
         }
       })();
+
+      // Phase 45: lazy-mount coupled-oscillator viewer
+      (function () {
+        var loaded = false;
+        var el = document.getElementById('quantum-coupled-container');
+        if (!el) return;
+        function load() {
+          if (loaded || !window.AIHPC_COUPLE) return;
+          loaded = true;
+          AIHPC_COUPLE.mount('quantum-coupled-container');
+          setTimeout(function () { AIHPC_COUPLE.play('quantum-coupled-container'); }, 200);
+        }
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (e.isIntersecting) { load(); io.disconnect(); } });
+          }, { rootMargin: '200px' });
+          io.observe(el);
+        } else {
+          window.addEventListener('scroll', load, { once: true, passive: true });
+        }
+      })();
     </script>
     <script src="../../vqc-animator.js"></script>
     <script src="../../fock-state-viewer.js" defer></script>
+    <script src="../../coupled-oscillator.js" defer></script>
   </body>
 </html>

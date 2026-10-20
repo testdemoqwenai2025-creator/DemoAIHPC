@@ -81,6 +81,45 @@
       <h1>Cross-Domain Playground</h1>
       <p class="lead">The platform's first true <strong>labs</strong> experience. Combine <em>any uploaded dataset</em> (CSV / Parquet / Arrow / DICOM via the scientific-uploader) with <em>any model</em> (ML loss functions via the ml-etl widget) with <em>any visualisation</em> (GTS 2D / 3D, attention heat-map, molecule-3d, medical-imaging viewer). Press <strong>Combine</strong> to wire the pipeline. Pure client-side; nothing leaves your browser.</p>
 
+      <!-- Phase 45: Recipe Library — pre-built pipeline recipes -->
+      <section style="margin-bottom: 24px;">
+        <span class="tag" style="color: var(--accent-2, #06b6d4);">Phase 45 · Recipe Library</span>
+        <h2 style="font-size: 22px; margin: 8px 0 12px; background: linear-gradient(90deg,#06b6d4,#a855f7); -webkit-background-clip: text; background-clip: text; color: transparent;">One-click pipeline recipes</h2>
+        <p style="font-size: 13px; color: var(--text-muted, #9ca3af); max-width: 920px; margin: 0 0 16px;">Pre-built combinations of dataset + model + visualisation. Click any recipe to auto-load it into the playground above — the dataset is synthesised, the model + viz are pre-selected, and the pipeline runs immediately.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;" id="recipe-grid">
+          <button class="recipe-btn" data-recipe="dicom-medimg" style="padding: 14px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; cursor: pointer; text-align: left; transition: all 0.2s;" onmouseover="this.style.borderColor='#06b6d4'" onmouseout="this.style.borderColor='rgba(139,92,246,0.25)'">
+            <div style="font-size: 11px; font-weight: 700; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.08em;">🏥 Medical imaging</div>
+            <div style="font-size: 13px; color: var(--text, #f3f4f6); margin: 4px 0;">DICOM → medical-imaging viewer</div>
+            <div style="font-size: 10px; color: var(--text-muted-2, #6b7280);">Drop a .dcm file → multi-organ segmentation viewer with metadata badge overlay</div>
+          </button>
+          <button class="recipe-btn" data-recipe="csv-mletl-gts" style="padding: 14px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; cursor: pointer; text-align: left; transition: all 0.2s;" onmouseover="this.style.borderColor='#06b6d4'" onmouseout="this.style.borderColor='rgba(139,92,246,0.25)'">
+            <div style="font-size: 11px; font-weight: 700; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.08em;">📊 ML loss analysis</div>
+            <div style="font-size: 13px; color: var(--text, #f3f4f6); margin: 4px 0;">CSV → ml-etl → loss table</div>
+            <div style="font-size: 10px; color: var(--text-muted-2, #6b7280);">Upload y_true,y_pred CSV → live MSE/MAE/Huber/KL/cosine loss computation</div>
+          </button>
+          <button class="recipe-btn" data-recipe="sdf-mol3d" style="padding: 14px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; cursor: pointer; text-align: left; transition: all 0.2s;" onmouseover="this.style.borderColor='#06b6d4'" onmouseout="this.style.borderColor='rgba(139,92,246,0.25)'">
+            <div style="font-size: 11px; font-weight: 700; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.08em;">⚛ Molecule rendering</div>
+            <div style="font-size: 13px; color: var(--text, #f3f4f6); margin: 4px 0;">SDF → molecule-3d viewer</div>
+            <div style="font-size: 10px; color: var(--text-muted-2, #6b7280);">Drop an .sdf file → 3D ball-and-stick render with pharmacophore overlay</div>
+          </button>
+          <button class="recipe-btn" data-recipe="tokens-attn" style="padding: 14px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; cursor: pointer; text-align: left; transition: all 0.2s;" onmouseover="this.style.borderColor='#06b6d4'" onmouseout="this.style.borderColor='rgba(139,92,246,0.25)'">
+            <div style="font-size: 11px; font-weight: 700; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.08em;">🔥 Attention analysis</div>
+            <div style="font-size: 13px; color: var(--text, #f3f4f6); margin: 4px 0;">Text → attention-heatmap</div>
+            <div style="font-size: 10px; color: var(--text-muted-2, #6b7280);">Enter a sentence → live Q·K^T/√d_k heat-map with multi-head selector</div>
+          </button>
+          <button class="recipe-btn" data-recipe="parquet-table" style="padding: 14px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; cursor: pointer; text-align: left; transition: all 0.2s;" onmouseover="this.style.borderColor='#06b6d4'" onmouseout="this.style.borderColor='rgba(139,92,246,0.25)'">
+            <div style="font-size: 11px; font-weight: 700; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.08em;">🗃 Big-data probe</div>
+            <div style="font-size: 13px; color: var(--text, #f3f4f6); margin: 4px 0;">Parquet/Arrow → raw table</div>
+            <div style="font-size: 10px; color: var(--text-muted-2, #6b7280);">Drop a .parquet/.arrow → magic-bytes detection + header probe + raw stats</div>
+          </button>
+          <button class="recipe-btn" data-recipe="vcf-genomics" style="padding: 14px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; cursor: pointer; text-align: left; transition: all 0.2s;" onmouseover="this.style.borderColor='#06b6d4'" onmouseout="this.style.borderColor='rgba(139,92,246,0.25)'">
+            <div style="font-size: 11px; font-weight: 700; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.08em;">🧬 Genomics</div>
+            <div style="font-size: 13px; color: var(--text, #f3f4f6); margin: 4px 0;">VCF → variant table</div>
+            <div style="font-size: 10px; color: var(--text-muted-2, #6b7280);">Drop a .vcf → parsed variant table with chrom/pos/ref/alt/quality</div>
+          </button>
+        </div>
+      </section>
+
       <div class="playground-grid">
         <div class="palette">
           <!-- 1. Dataset selector -->
@@ -295,6 +334,35 @@
       document.getElementById('pg-viz-select').addEventListener('change', function (e) { pgState.viz = e.target.value; });
 
       // Combine button
+      // Phase 45: Recipe Library — one-click pipeline loading
+      var RECIPE_MAP = {
+        'dicom-medimg': { preset: 'dicom-dcm', model: 'medical-imaging', viz: 'canvas' },
+        'csv-mletl-gts': { preset: 'regression-csv', model: 'ml-etl', viz: 'table' },
+        'sdf-mol3d': { preset: 'molecule-sdf', model: 'molecule-3d', viz: 'canvas' },
+        'tokens-attn': { preset: 'attention-tokens', model: 'attention-heatmap', viz: 'canvas' },
+        'parquet-table': { preset: 'parquet-table', model: 'none', viz: 'table' },
+        'vcf-genomics': { preset: 'genomic-vcf', model: 'none', viz: 'table' },
+      };
+      document.querySelectorAll('.recipe-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var recipe = RECIPE_MAP[btn.dataset.recipe];
+          if (!recipe) return;
+          // Set model + viz selectors
+          document.getElementById('pg-model-select').value = recipe.model;
+          document.getElementById('pg-viz-select').value = recipe.viz;
+          pgState.model = recipe.model;
+          pgState.viz = recipe.viz;
+          // Trigger the preset sample
+          var presetBtn = document.querySelector('button[data-preset="' + recipe.preset + '"]');
+          if (presetBtn) presetBtn.click();
+          // Auto-combine after 500ms (give the parser time)
+          setTimeout(function () {
+            document.getElementById('pg-combine-btn').click();
+          }, 500);
+          setStatus('✓ Recipe loaded: ' + btn.dataset.recipe + ' → running pipeline…');
+        });
+      });
+
       document.getElementById('pg-combine-btn').addEventListener('click', function () {
         if (!pgState.parsed) {
           setStatus('⚠ No dataset yet — drop a file or click a preset.');

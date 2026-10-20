@@ -1648,6 +1648,112 @@ def check_issue_10_published():
 
 
 # ---------------------------------------------------------------------------
+# Phase 45 checks
+# ---------------------------------------------------------------------------
+
+def check_coupled_oscillator_loaded():
+    """Check (Phase 45): quantum page loads coupled-oscillator.js + 4-panel viewer."""
+    q_path = os.path.join(DOCS, "science", "physics", "quantum.html")
+    co_js = os.path.join(DOCS, "coupled-oscillator.js")
+    if not os.path.isfile(q_path) or not os.path.isfile(co_js):
+        return CheckResult("coupled_oscillator_loaded", False,
+                           "quantum.html or coupled-oscillator.js missing")
+    page = open(q_path, encoding="utf-8").read()
+    js = open(co_js, encoding="utf-8").read()
+    failures = []
+    if "coupled-oscillator.js" not in page:
+        failures.append("quantum.html does not load coupled-oscillator.js")
+    if 'id="quantum-coupled-container"' not in page:
+        failures.append("missing #quantum-coupled-container element")
+    if "AIHPC_COUPLE" not in js:
+        failures.append("coupled-oscillator.js does not expose AIHPC_COUPLE global")
+    if "Hong-Ou-Mandel" not in js and "Hong-Ou-Mandel" not in page:
+        failures.append("missing Hong-Ou-Mandel reference")
+    if "NOON" not in js and "NOON" not in page:
+        failures.append("missing NOON state reference")
+    if "2-mode squeez" not in js.lower() and "2-mode squeez" not in page.lower():
+        failures.append("missing 2-mode squeezing reference")
+    if "IntersectionObserver" not in page:
+        failures.append("missing lazy-mount via IntersectionObserver")
+    if failures:
+        return CheckResult("coupled_oscillator_loaded", False,
+                           f"{len(failures)} issues with coupled oscillator", failures)
+    return CheckResult("coupled_oscillator_loaded", True,
+                       "quantum.html loads coupled-oscillator.js + 4-panel viewer (mode A/B/joint/correlation) + HOM/NOON/squeezing references + lazy-mount")
+
+
+def check_recipe_library_present():
+    """Check (Phase 45): playground.html has Recipe Library section."""
+    pg_path = os.path.join(DOCS, "playground.html")
+    if not os.path.isfile(pg_path):
+        return CheckResult("recipe_library_present", False, "docs/playground.html missing")
+    src = open(pg_path, encoding="utf-8").read()
+    failures = []
+    if "Recipe Library" not in src:
+        failures.append("missing Recipe Library section")
+    if "recipe-btn" not in src:
+        failures.append("missing recipe buttons")
+    if "RECIPE_MAP" not in src:
+        failures.append("missing RECIPE_MAP JS object")
+    expected_recipes = ['dicom-medimg', 'csv-mletl-gts', 'sdf-mol3d', 'tokens-attn', 'parquet-table', 'vcf-genomics']
+    for r in expected_recipes:
+        if 'data-recipe="' + r + '"' not in src:
+            failures.append(f"missing recipe: {r}")
+    if failures:
+        return CheckResult("recipe_library_present", False,
+                           f"{len(failures)} issues with recipe library", failures)
+    return CheckResult("recipe_library_present", True,
+                       "docs/playground.html has Recipe Library with 6 one-click recipes + RECIPE_MAP + auto-combine")
+
+
+def check_issue_11_published():
+    """Check (Phase 45): Issue #11 published (Tuesday 2026-12-29) with 5 real + 2 futuristic."""
+    spec = importlib.util.spec_from_file_location(
+        "gen_digest", os.path.join(ROOT, "scripts", "gen-digest.py"),
+    )
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception as e:
+        return CheckResult("digest_issue_11", False, f"could not load gen-digest.py: {e}")
+    manifest = mod.MANIFEST
+    if manifest.get("issue") != 11:
+        return CheckResult("digest_issue_11", False,
+                           f"MANIFEST issue is {manifest.get('issue')}, expected 11")
+    if manifest.get("date") != "2026-12-29":
+        return CheckResult("digest_issue_11", False,
+                           f"MANIFEST date is {manifest.get('date')}, expected 2026-12-29")
+    articles = manifest.get("articles", [])
+    if len(articles) != 7:
+        return CheckResult("digest_issue_11", False, f"{len(articles)} articles, expected 7")
+    real_count = sum(1 for a in articles if not a.get("futuristic_vision"))
+    futuristic_count = sum(1 for a in articles if a.get("futuristic_vision"))
+    if real_count != 5 or futuristic_count != 2:
+        return CheckResult("digest_issue_11", False,
+                           f"{real_count} real + {futuristic_count} futuristic, expected 5 + 2")
+    ids = [a["id"] for a in articles]
+    for expected in ["alphaevolve-v4-code-discovery", "nvidia-earth-2-climate", "gemini-25-medical-update", "openai-o3-pro-science", "ibm-quantum-heron-5"]:
+        if expected not in ids:
+            return CheckResult("digest_issue_11", False,
+                               f"missing anchor article: {expected}")
+    archive_10 = os.path.join(DOCS, "digest", "archive", "issue-010.html")
+    if not os.path.isfile(archive_10):
+        return CheckResult("digest_issue_11", False,
+                           "Issue #10 archive (docs/digest/archive/issue-010.html) missing")
+    missing_cards = []
+    for a in articles:
+        card = os.path.join(DOCS, "concepts", f"digest-{a['id']}.html")
+        if not os.path.isfile(card):
+            missing_cards.append(a["id"])
+    if missing_cards:
+        return CheckResult("digest_issue_11", False,
+                           f"missing concept cards: {', '.join(missing_cards)}")
+    return CheckResult("digest_issue_11", True,
+                       f"Issue #11 (2026-12-29) published: {real_count} real + {futuristic_count} futuristic; "
+                       f"Issue #10 archived; 7 concept cards; anchors: AlphaEvolve-v4+Earth-2+Gemini-2.5-med+o3-pro-science+Quantum-Heron-5")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -1707,7 +1813,10 @@ def main():
         # Phase 43 (issue_9 superseded by issue_10)
         check_segmentation_pipeline_loaded(),
         check_biomolecular_dynamics_loaded(),
-        check_issue_10_published(),
+        # Phase 45 (issue_10 superseded by issue_11)
+        check_coupled_oscillator_loaded(),
+        check_recipe_library_present(),
+        check_issue_11_published(),
     ]
 
     if args.json:

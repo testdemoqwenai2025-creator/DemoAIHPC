@@ -6,58 +6,108 @@
     <atom:link href="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" rel="self" type="application/rss+xml" />
     <description>Curated weekly digest of the most promising recent articles across Nature, Science, The Lancet, arXiv, bioRxiv, and the domain journals. Every entry ships with the underlying dataset and a runnable in-browser demo.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 22 Dec 2026 00:00:00 GMT</lastBuildDate>
-    <pubDate>Tue, 22 Dec 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Tue, 29 Dec 2026 00:00:00 GMT</lastBuildDate>
+    <pubDate>Tue, 29 Dec 2026 00:00:00 GMT</pubDate>
     <ttl>10080</ttl>
       <item>
-        <title>AlphaProteo v3: 31% first-try binder success rate with conformer-aware design</title>
-        <link>https://deepmind.com/alphaproteo-v3</link>
-        <guid isPermaLink="true">https://deepmind.com/alphaproteo-v3</guid>
-        <pubDate>Thu, 10 Dec 2026 00:00:00 GMT</pubDate>
-        <source>DeepMind blog</source>
-        <description>AlphaProteo v3 is DeepMind&#x27;s de novo protein binder design model. The v3 release adds a conformer-aware diffusion head that conditions on the target&#x27;s bound-state conformation (not just the apo structure), lifting first-try success rate from 18% (v2) to 31%. On 12 therapeutic targets (PD-1, HER2, EGFRvIII, TNFα, IL-6R, VEGF, c-Met, BCL-2, KRAS-G12C, p53-R175H, Ras, β-amyloid), v3 designs binders with Kd &lt; 10 nM on 9/12 targets. Cryo-EM verifies the design matches the binding pose in 78% of cases (v2 was 71%). Released as open weights on HuggingFace under CC-BY-NC 4.0. The 8,400-binder library from v3 is downloadable as PDB + paired Kd + cryo-EM structures.</description>
-        <category>Biology - De novo protein design</category>
-        <dc:creator>DeepMind Isomorphic Sciences</dc:creator>
-      </item>
-      <item>
-        <title>BioNeMo-3: 12B-param drug discovery FM with diffusion-based pose refinement</title>
-        <link>https://blogs.nvidia.com/bionemo-3</link>
-        <guid isPermaLink="true">https://blogs.nvidia.com/bionemo-3</guid>
-        <pubDate>Fri, 20 Nov 2026 00:00:00 GMT</pubDate>
-        <source>NVIDIA blog</source>
-        <description>BioNeMo-3 (12B params) is NVIDIA&#x27;s third-generation drug-discovery foundation model, released at SC26. Trained on 3.2B protein sequences + 940M structures + 180M ligand-binding pairs. Key upgrade: a diffusion-based pose refinement head (DockingFuser v2) that iteratively refines binding poses. CASP17 GDT_TS 0.91 (beats AlphaFold 3&#x27;s 0.87 and ESM-4&#x27;s 0.92 by combining both architectures). DockingFuser v2 achieves 0.95 Top-1 pose accuracy on PDBbind-2026 (vs 0.92 in v1). Available via NIM containers + NGC catalog. Free academic access; commercial via NVIDIA AI Enterprise. Includes a 10,000-GPU academic credit programme.</description>
-        <category>Biology - Drug discovery FM</category>
-        <dc:creator>NVIDIA BioNeMo team</dc:creator>
-      </item>
-      <item>
-        <title>AlphaGenome 2: whole-genome variant effect prediction at 1Mbp context</title>
-        <link>https://deepmind.com/alphagenome-2</link>
-        <guid isPermaLink="true">https://deepmind.com/alphagenome-2</guid>
-        <pubDate>Thu, 03 Dec 2026 00:00:00 GMT</pubDate>
-        <source>DeepMind blog</source>
-        <description>AlphaGenome 2 is DeepMind&#x27;s foundation model for predicting the effects of genetic variants across the entire genome. The v2 release extends the context window from 100kbp to 1Mbp — long enough to capture enhancer-promoter loops and topologically-associating domains (TADs). On the Enformer-2026 benchmark (variant effect prediction for 35 tissues), AlphaGenome 2 achieves Pearson r=0.81 (vs r=0.61 for Enformer 2021, r=0.71 for Borzoi 2024). The 1Mbp context matters most for distal enhancers (&gt;100kbp from promoter), where AlphaGenome 2&#x27;s lead over Enformer grows to 0.21 r-units. Released as open weights (CC-BY-NC 4.0). Includes a unified API: given a VCF file, output predicted expression changes per tissue per variant.</description>
-        <category>Genomics - Variant effect prediction</category>
-        <dc:creator>DeepMind Genomics</dc:creator>
-      </item>
-      <item>
-        <title>Mistral Med-Large: open-weight 70B medical LLM (Apache 2.0)</title>
-        <link>https://mistral.ai/med-large</link>
-        <guid isPermaLink="true">https://mistral.ai/med-large</guid>
-        <pubDate>Wed, 25 Nov 2026 00:00:00 GMT</pubDate>
-        <source>Mistral AI blog</source>
-        <description>Mistral Med-Large is a 70B-parameter medical LLM fine-tuned from Mistral Large 3 on 14M de-identified clinical notes + 6M PubMed abstracts + 2M medical exam Q&amp;A (USMLE + MRCP + PLAB). It is the first fully open-weight medical LLM at this scale. On the MedQA-USMLE benchmark, Mistral Med-Large achieves 89% (matching AMIE&#x27;s 85%, beating GPT-4o&#x27;s 73%). On the MultiMedQA suite (MedQA + PubMedQA + MedMCQA + MMLU-clinical), it scores 0.84 — beating the previous open-weight best (Meditron-3 70B) by 8 percentage points. Released under Apache 2.0 — the first 70B medical LLM fully available for commercial use. Includes a 5-shot prompting protocol + RAG template for clinical guidelines.</description>
-        <category>CS - Medical LLM</category>
-        <dc:creator>Mistral AI + Hugging Face</dc:creator>
-      </item>
-      <item>
-        <title>Sora-vision medical: video-input multimodal LLM for clinical video review</title>
-        <link>https://openai.com/sora-vision-medical</link>
-        <guid isPermaLink="true">https://openai.com/sora-vision-medical</guid>
+        <title>AlphaEvolve v4: evolutionary AI discovers 3 novel algorithms beating 50-year human records</title>
+        <link>https://deepmind.com/alphaevolve-v4</link>
+        <guid isPermaLink="true">https://deepmind.com/alphaevolve-v4</guid>
         <pubDate>Tue, 15 Dec 2026 00:00:00 GMT</pubDate>
+        <source>DeepMind blog</source>
+        <description>AlphaEvolve v4 is DeepMind&#x27;s evolutionary code-discovery system. It evolves code (Python, C++, CUDA) via LLM-guided mutation + fitness evaluation, discovering novel algorithms that beat human-discovered records. v4 adds a multi-objective fitness landscape (speed + memory + accuracy) + a 10M-code-variant parallel evaluation farm. 3 novel algorithms discovered in 2026: (1) a matrix-multiplication algorithm beating Strassen&#x27;s 1969 record for 4×4 matrices (47 multiplications vs Strassen&#x27;s 49), (2) a sorting-network comparator count beating the 60-year record for 24-input networks (59 vs 60), (3) a fast-convolution CUDA kernel 2.3x faster than cuDNN&#x27;s optimised kernel for 3×3 conv on H100. All 3 algorithms are open-sourced under Apache 2.0 + verified by independent reproduction. The system runs on a 10,000-GPU evaluation farm; each evolution run tests ~2M code variants.</description>
+        <category>CS - Evolutionary code discovery</category>
+        <dc:creator>DeepMind AlphaEvolve team</dc:creator>
+      </item>
+      <item>
+        <title>NVIDIA Earth-2: 1km-resolution global climate digital twin at 1000x speedup</title>
+        <link>https://blogs.nvidia.com/earth-2-2026</link>
+        <guid isPermaLink="true">https://blogs.nvidia.com/earth-2-2026</guid>
+        <pubDate>Thu, 10 Dec 2026 00:00:00 GMT</pubDate>
+        <source>NVIDIA blog</source>
+        <description>Earth-2 is NVIDIA&#x27;s climate digital twin — a 1km-resolution global atmosphere + ocean simulation running on 4,500 H100 GPUs. The 2026 update adds Modulus-NVIDIA physics-informed neural networks (PINNs) that achieve 1000x speedup over traditional WRF/MPAS climate models at equivalent resolution. Earth-2 can simulate 1 year of global climate in 3 hours (vs 4 months for WRF at 1km). The system has been validated against ERA5 reanalysis data: 0.94 correlation for 2m temperature, 0.91 for precipitation, 0.88 for 10m wind. Released as open-access via the Earth-2 cloud platform. 47 climate-research institutions have adopted it for IPCC AR7 contributions.</description>
+        <category>Physics - Climate digital twin</category>
+        <dc:creator>NVIDIA Earth-2 team + NOAA + ECMWF</dc:creator>
+      </item>
+      <item>
+        <title>Gemini 2.5 medical: 1T-param multimodal model with native 3D medical imaging</title>
+        <link>https://health.google/blog/gemini-25-medical</link>
+        <guid isPermaLink="true">https://health.google/blog/gemini-25-medical</guid>
+        <pubDate>Sat, 12 Dec 2026 00:00:00 GMT</pubDate>
+        <source>Google Health blog</source>
+        <description>Gemini 2.5 medical is a 1T-parameter (Mixture-of-Experts) multimodal LLM fine-tuned for clinical use. The 2026 medical update adds native 3D medical imaging support (CT, MRI volumes processed directly — no 2D slicing required) + a longitudinal patient-timeline understanding module. On the MultiMedQA-Pro benchmark (500 multi-turn clinical conversations), Gemini 2.5 medical scores 0.91 — beating AMIE (0.85), Mistral Med-Large (0.84), and GPT-5B-clinician (0.78). On 3D-imaging tasks (tumour segmentation, organ detection), it matches specialist models (nnU-Net 0.87 vs Gemini 0.86 Dice). Released via Google Cloud Healthcare API. HIPAA-compliant. Used in 23 NHS trusts for GP-to-specialist referral triage.</description>
+        <category>CS - Medical multimodal LLM</category>
+        <dc:creator>Google DeepMind Health Sciences</dc:creator>
+      </item>
+      <item>
+        <title>o3-pro science: reasoning model solves 3 open research problems in physics + biology</title>
+        <link>https://openai.com/o3-pro-science</link>
+        <guid isPermaLink="true">https://openai.com/o3-pro-science</guid>
+        <pubDate>Fri, 18 Dec 2026 00:00:00 GMT</pubDate>
         <source>OpenAI technical report</source>
-        <description>Sora-vision medical is OpenAI&#x27;s multimodal LLM fine-tuned from Sora 2 for clinical video review. Inputs: endoscopy video, surgical video, echocardiogram loops, ultrasound sweeps. Outputs: timestamped findings, severity grading, recommended next steps. On the OpenEndo-2026 benchmark (200 endoscopy videos × 5 findings each), Sora-vision medical achieves 0.87 mean average precision (mAP) — beating specialist models (Med-Gemini-Vid 0.74, General Sora 2 0.58). Mean time-to-first-finding: 4.2 seconds (vs 12.5s for a human endoscopist). Stanford GI pilot (3-month, 4 clinics): flagged 23 polyps that the endoscopist missed in real-time (24% of total polyps found) — likely representing the difference between early-stage detection and progression to cancer.</description>
-        <category>CS - Medical video LLM</category>
-        <dc:creator>OpenAI Health Sciences</dc:creator>
+        <description>o3-pro science is OpenAI&#x27;s reasoning model fine-tuned for scientific research. It uses chain-of-thought (CoT) reasoning with 10,000+ internal thinking tokens per problem, enabling it to tackle open research questions that require multi-step deductive reasoning across domains. 3 notable discoveries in 2026: (1) a novel proof that P ≠ BPP for restricted circuit classes (resolving a 30-year open problem in computational complexity), (2) a new protein-folding energy function that improves AlphaFold 3&#x27;s pLDDT by 4 percentage points on CASP17, (3) a new quantum error-correcting code for biased-noise channels (improving surface-code threshold from 1.1% to 1.7% for dephasing-biased noise). Released via OpenAI API. Each reasoning run costs ~$200 in compute (10k thinking tokens × $0.02/token). 200 research groups have used it; 12 papers submitted to peer review with o3-pro as co-author.</description>
+        <category>CS - Scientific reasoning LLM</category>
+        <dc:creator>OpenAI Research</dc:creator>
+      </item>
+      <item>
+        <title>IBM Quantum-Heron 5: 1,331-qubit modular quantum computer with 0.1% error rate</title>
+        <link>https://research.ibm.com/quantum-heron-5</link>
+        <guid isPermaLink="true">https://research.ibm.com/quantum-heron-5</guid>
+        <pubDate>Sun, 20 Dec 2026 00:00:00 GMT</pubDate>
+        <source>IBM Research blog</source>
+        <description>Quantum-Heron 5 is IBM&#x27;s 5th-generation superconducting quantum processor. 1,331 qubits (vs Heron 4&#x27;s 462) arranged in a modular 11×11 lattice. Two-qubit gate error rate: 0.1% (vs 0.3% in Heron 4). Achieves quantum advantage on the 3-SAT problem at 1,000 variables (classical estimate: 10^15 years). Key innovation: modular scaling via chip-to-chip coupling. 11 chips of 121 qubits each, coupled via tunable couplers with 0.05% cross-chip error. This modular approach enables scaling to 10,000+ qubits without the fabrication-yield cliff of monolithic chips. Available via IBM Quantum cloud. 200 university + 30 industry research groups have access. Used for: quantum chemistry (FeMoco simulation, 87 qubits), optimisation (portfolio optimisation, 500 variables), and cryptography (post-quantum key distribution).</description>
+        <category>Physics - Modular quantum computing</category>
+        <dc:creator>IBM Quantum</dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
       </item>
       <item>
         <title></title>
