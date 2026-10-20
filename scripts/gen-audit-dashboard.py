@@ -332,6 +332,19 @@ def emit_dashboard(audit_result, error, commit_sha, history_runs):
         push to DemoAIHPC will not proceed until all checks pass.
       </div>
 
+      <div class="quick-links" style="margin-top: 16px; padding: 14px 16px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 8px;">
+        <div style="font-size: 11px; font-weight: 700; color: #06b6d4; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;">Platform self-tests · verify these pages work</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <a href="404.html" style="display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px; border-radius: 9999px; background: linear-gradient(90deg, rgba(239,68,68,0.15), rgba(245,158,11,0.15)); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; text-decoration: none; font-size: 12px; font-weight: 600;">🚧 404 page</a>
+          <a href="feeds.html" style="display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px; border-radius: 9999px; background: linear-gradient(90deg, rgba(6,182,212,0.15), rgba(139,92,246,0.15)); border: 1px solid rgba(6,182,212,0.4); color: #67e8f9; text-decoration: none; font-size: 12px; font-weight: 600;">📡 Live feeds</a>
+          <a href="concepts.html" style="display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px; border-radius: 9999px; background: linear-gradient(90deg, rgba(139,92,246,0.15), rgba(236,72,153,0.15)); border: 1px solid rgba(139,92,246,0.4); color: #c4b5fd; text-decoration: none; font-size: 12px; font-weight: 600;">🗂 Concepts index</a>
+          <a href="index.html" style="display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px; border-radius: 9999px; background: rgba(18,24,38,0.6); border: 1px solid var(--border-strong); color: #f3f4f6; text-decoration: none; font-size: 12px; font-weight: 600;">🏠 Home</a>
+          <a href="timeline.html" style="display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px; border-radius: 9999px; background: rgba(18,24,38,0.6); border: 1px solid var(--border-strong); color: #f3f4f6; text-decoration: none; font-size: 12px; font-weight: 600;">📅 Timeline</a>
+          <a href="retrospective.html" style="display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px; border-radius: 9999px; background: rgba(18,24,38,0.6); border: 1px solid var(--border-strong); color: #f3f4f6; text-decoration: none; font-size: 12px; font-weight: 600;">📜 Retrospective</a>
+          <a href="component-registry.html" style="display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px; border-radius: 9999px; background: rgba(18,24,38,0.6); border: 1px solid var(--border-strong); color: #f3f4f6; text-decoration: none; font-size: 12px; font-weight: 600;">🧩 Component Registry</a>
+        </div>
+      </div>
+
       <div class="checks">
         <h2>Current run ({len(checks)} checks)</h2>
         {checks_html}
