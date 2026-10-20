@@ -3160,3 +3160,21 @@ Stage Summary:
 - Local audit (live-only mode): 1/1 fails (expected — mirror hasn't been updated yet)
 - Files changed: 5 (audit.py, gen-audit-dashboard.py, gen-concept-cards.py, gen-ml-concept-cards.py, .github/workflows/mirror-to-public.yml)
 - Next: tag v50.2 + push to trigger fresh CI run; CI should now succeed (audit passes pre-mirror, mirror pushes, post-mirror live probe retries until all endpoints return 200)
+
+---
+Task ID: P50-followup-3
+Agent: main
+Task: Diagnose v50.2 CI failure + make artifact upload non-blocking
+
+Work Log:
+- v50.2 CI ran: Gitleaks pre-check passed, audit step (step 5) passed, dashboard generator (step 6) passed
+- The job-level failure was caused by step 7 (Upload audit results as artifact) failing with "Artifact storage quota has been hit" — this is a per-account GitHub Actions storage quota, not a per-repo quota, and not a code issue
+- Fix: added `continue-on-error: true` to the artifact upload step so a quota failure doesn't block the mirror push (the audit + dashboard still run; only the artifact upload is best-effort)
+- Verified no old artifacts exist in this repo (per-repo artifacts list returns 0); quota must be consumed by other repos under the same account
+- Re-ran audit locally: 56/56 pre-mirror checks pass with --skip-live-check
+- Committed fix; tagged v50.3 to trigger fresh CI run
+
+Stage Summary:
+- All three pre-mirror CI steps now pass: gitleaks, audit (with --skip-live-check), dashboard generator
+- Artifact upload is now best-effort (won't fail the job if quota is hit)
+- Mirror push step + post-mirror live probe will run once v50.3 CI triggers
