@@ -3260,3 +3260,26 @@ Stage Summary:
 - New audit check (script_srcs_resolve) prevents the 'wrong relative path for a script tag' failure mode from recurring
 - Local audit: 57/57 pass with --skip-live-check
 - Next: push to public mirror + re-run live probe to confirm all 28 pages now load cleanly
+
+---
+Task ID: P50-followup-7
+Agent: main
+Task: Push fix to live + verify all 28 pages clean via headless-browser probe
+
+Work Log:
+- Pushed commit 1010397 (Phase 50 follow-up #6) to private origin + mirrored to public DemoAIHPC
+- Triggered GitHub Pages rebuild via POST /repos/{owner}/{repo}/pages/builds API
+- Re-ran headless-browser probe against all 28 platform pages
+- Initial re-probe showed all 3 page errors fixed, but graph.html had 12136 SVG path NaN console errors and science/physics/quantum.html had 1640 — the force-directed graph layout was producing NaN coordinates when two nodes happened to land on the same point (d = sqrt(0) = 0, then dx/d = 0/0 = NaN, propagating to vx/vy and finally to x/y).
+- Fixed graph.html line 606: added +0.01 to the edge attraction d calculation (the repulsion loop already had this guard). Committed as Phase 50 follow-up #7.
+- Pushed to private + mirrored to public + triggered Pages rebuild
+- Re-ran probe with cache bypass — all 3 pages now report 'No page errors! No console errors!'
+- Ran full 28-page probe with corrected expected-globals list (removed incorrect AIHPC_BLOCH expectation on quantum.html; added AIHPC_QKD which I had missed).
+- FINAL RESULT: ALL 28 PAGES CLEAN — every page returns HTTP 200 with 0 console errors, 0 page errors, 0 failed network requests.
+
+Stage Summary:
+- Public mirror: HEAD at 7f1a203 (Phase 50 follow-up #7)
+- All 28 platform pages verified clean via headless Chromium probe
+- All canvas components mount correctly: AIHPC_BLOCH, AIHPC_VQC, AIHPC_FOCK, AIHPC_COUPLE, AIHPC_QCIRCUIT, AIHPC_QALGO, AIHPC_QEC, AIHPC_QTELEPORT, AIHPC_QKD, AIHPC_MOL3D, AIHPC_MEDIMG, AIHPC_BIODYN, AIHPC_ATTN, AIHPC_ML_ETL all initialize
+- The user's original complaint ('some demos are not loading') is fully resolved
+- New audit check (script_srcs_resolve) prevents the broken-script-URL failure mode from recurring
