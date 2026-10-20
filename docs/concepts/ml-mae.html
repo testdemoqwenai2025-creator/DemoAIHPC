@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Mean Absolute Error (MAE) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability." />
+    <title>Mean Absolute Error (MAE) — AIHPC ML Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .container { max-width: 1000px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .math-panel .math-eq { font-family: "Cambria Math", Georgia, serif; font-size: 17px; color: var(--accent-2); padding: 10px 14px; background: rgba(6,182,212,0.05); border-radius: 8px; border-left: 3px solid var(--accent-2); margin: 8px 0 12px; }
+      .math-panel .math-plain { font-size: 13px; color: var(--text-muted); }
+      .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, monospace; }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); margin-bottom: 16px; }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px 0; }
+      .demo-tab-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .data-table-container { overflow-x: auto; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+      .data-table-container table { width: 100%; border-collapse: collapse; }
+      .data-table-container th { padding: 6px 10px; text-align: left; font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+      .data-table-container td { padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: "SF Mono", Menlo, monospace; }
+      .data-table-hidden { display: none; }
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+    </style>
+    <script src="../animated-derivation.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-ml.html">Machine Learning</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="lazy-evaluation.html">Lazy Evaluation as UX</a><a href="provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../science-ml.html">ML Hub</a> / Regression</p>
+      <span class="tag">ML Concept Card · Regression</span>
+      <h1>Mean Absolute Error (MAE)</h1>
+      <p class="lead">MAE is the average absolute difference between predicted and actual values. Unlike MSE, it penalises errors linearly — a 2× error gives 2× the loss. MAE is more robust to outliers but has a non-differentiable point at zero.</p>
+
+      <h2>Math → Code</h2>
+      <div class="math-panel"><div class="math-eq">L = (1/n) Σ_{i=1}^{n} |y_i − ŷ_i|</div></div>
+      <div class="derivation-step"><strong>Step 1</strong><div class="step-math">e_i = y_i − ŷ_i</div><div class="step-explain">Same as MSE — the error for sample i is the difference between true and predicted values.</div></div>
+      <div class="derivation-step"><strong>Step 2</strong><div class="step-math">|e_i| = |y_i − ŷ_i|</div><div class="step-explain">Absolute value removes the sign — both positive and negative errors contribute positively. Unlike squaring, the penalty is linear, not quadratic.</div></div>
+      <div class="derivation-step"><strong>Step 3</strong><div class="step-math">L = (1/n) Σ |e_i|</div><div class="step-explain">Sum the absolute errors and divide by n. The result is the mean absolute deviation.</div></div>
+      <div class="derivation-step"><strong>Step 4</strong><div class="step-math">∂L/∂ŷ_i = sign(ŷ_i − y_i) / n</div><div class="step-explain">The gradient is ±1/n — constant magnitude regardless of error size. This makes SGD steps uniform, but the non-differentiable point at e=0 can cause oscillation near convergence.</div></div>
+      <div class="derivation-step"><strong>Step 5</strong><div class="step-math">MAE outlier penalty: 10× error → 10× loss (linear)</div><div class="step-explain">Unlike MSE&#x27;s quadratic penalty, MAE&#x27;s linear penalty means outliers don&#x27;t dominate the loss. MAE is the maximum-likelihood estimator when residuals follow a Laplace distribution.</div></div>
+      <h2>Polyglot Code (6 languages)</h2>
+      <div class="code-panel"><div class="lang-toggle">
+        <button data-lang="python" class="active">Python</button>
+        <button data-lang="rust">Rust</button>
+        <button data-lang="go">Go</button>
+        <button data-lang="c">C</button>
+        <button data-lang="elixir">Elixir</button>
+        <button data-lang="scala">Scala</button>
+      </div><pre class="code-block" id="code-block-mae"></pre></div>
+      <h2>Observe</h2>
+      <div class="demo-tabs">
+        <button class="active" data-tab="stats">Stats</button>
+        <button data-tab="reports">Reports</button>
+        <button data-tab="graphs">Graphs</button>
+        <button data-tab="summary">Summary</button>
+        <button data-tab="data">Data</button>
+      </div>
+      <div class="demo-tab-content active" data-tab="stats"><div class="stats-grid">
+        <div class="stat"><div class="l">Type</div><div class="v">Regression</div></div>
+        <div class="stat"><div class="l">Penalty</div><div class="v">Linear</div></div>
+        <div class="stat"><div class="l">Outlier sensitivity</div><div class="v">Low</div></div>
+        <div class="stat"><div class="l">Gradient</div><div class="v">±1/n (constant)</div></div>
+        <div class="stat"><div class="l">Convex</div><div class="v">Yes</div></div>
+        <div class="stat"><div class="l">Differentiable</div><div class="v">No (at e=0)</div></div>
+      </div></div>
+      <div class="demo-tab-content" data-tab="reports"><div class="report-block">MAE is the robust alternative to MSE — it penalises errors linearly, making it less sensitive to outliers. The gradient is ±1/n regardless of error magnitude, which means SGD steps are uniform but can oscillate near convergence. MAE is the MLE when residuals follow a Laplace distribution.</div></div>
+      <div class="demo-tab-content" data-tab="graphs"><div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><path d="M 20 175 L 200 100 L 380 25" stroke="#06b6d4" stroke-width="2" fill="none"/><path d="M 20 175 Q 200 170 380 20" stroke="#8b5cf6" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">error (y−ŷ)</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">loss</text><text x="300" y="45" font-size="9" fill="#06b6d4" font-family="ui-monospace">MAE (linear)</text><text x="300" y="35" font-size="9" fill="#8b5cf6" font-family="ui-monospace">MSE (quadratic, dashed)</text></svg></div></div>
+      <div class="demo-tab-content" data-tab="summary"><div class="summary-block"><ul>
+        <li>MAE = (1/n) Σ |y−ŷ| — linear penalty, robust to outliers.</li>
+        <li>Gradient is ±1/n — constant magnitude regardless of error size.</li>
+        <li>Non-differentiable at e=0 — sub-gradient methods handle this.</li>
+        <li>MLE when residuals follow a Laplace (double-exponential) distribution.</li>
+      </ul></div></div>
+      <div class="demo-tab-content" data-tab="data">
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">MAE sample — 5 data points with absolute errors</p>
+        <div class="data-table-container"><table class="data-table"><thead><tr><th>Sample</th><th>y_true</th><th>y_pred</th><th>|error|</th></tr></thead><tbody><tr class="data-table-row"><td>1</td><td>3.0</td><td>2.5</td><td>0.5</td></tr>
+<tr class="data-table-row"><td>2</td><td>1.0</td><td>1.2</td><td>0.2</td></tr>
+<tr class="data-table-row"><td>3</td><td>4.5</td><td>3.8</td><td>0.7</td></tr>
+<tr class="data-table-row"><td>4</td><td>2.0</td><td>2.1</td><td>0.1</td></tr>
+<tr class="data-table-row"><td>5</td><td>5.0</td><td>4.0</td><td>1.0</td></tr></tbody></table>
+        </div></div>
+      <h2>Animated Derivation Clip</h2>
+      <div class="anim-container" style="padding:20px;background:rgba(18,24,38,0.6);border:1px solid rgba(139,92,246,0.25);border-radius:16px;margin:24px 0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#06b6d4;">Phase 28</span>
+          <div style="display:flex;gap:4px;">
+            <button class="anim-play" style="background:linear-gradient(90deg,#8b5cf6,#06b6d4);border:none;color:white;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;">Play</button>
+            <button class="anim-replay" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">Replay</button>
+            <button class="anim-record" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">WebM</button>
+            <button class="anim-share" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">Share</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="ml-cc-mae" style="display:block;max-width:100%;height:auto;border-radius:6px;background:#0b0f1a;"></canvas>
+      </div>
+      <div class="meta">
+        <p>Auto-generated ML concept card from <a href="../science-ml.html">science-ml.html</a> (demo id: <code>mae</code>). Generated by <code>scripts/gen-ml-concept-cards.py</code>.</p>
+      </div>
+    </div>
+    <script>
+      var CODE_BANK = {"python": "# L = (1/n) Sum |y_i - y_hat_i|\n# y_i -> y_true[i]  y_hat_i -> y_pred[i]  n -> len(y_true)\n# |.| -> np.abs()  Sum -> .sum()  (1/n) -> np.mean()\nimport numpy as np\ndef mae(y_true, y_pred):\n    return np.mean(np.abs(y_true - y_pred))\ndef mae_grad(y_true, y_pred):\n    return np.sign(y_pred - y_true) / len(y_true)", "rust": "fn mae(y_true: &[f64], y_pred: &[f64]) -> f64 {\n    let n = y_true.len() as f64;\n    y_true.iter().zip(y_pred.iter())\n        .map(|(t, p)| (t - p).abs()).sum::<f64>() / n\n}", "go": "func MAE(yTrue, yPred []float64) float64 {\n\tn := float64(len(yTrue))\n\tvar sum float64\n\tfor i := range yTrue { sum += math.Abs(yTrue[i] - yPred[i]) }\n\treturn sum / n\n}", "c": "double mae(const double* y_true, const double* y_pred, int n) {\n    double sum = 0;\n    for (int i = 0; i < n; i++) sum += fabs(y_true[i] - y_pred[i]);\n    return sum / n;\n}", "elixir": "defmodule MAE do\n  def loss(y_true, y_pred) do\n    n = length(y_true)\n    Enum.zip(y_true, y_pred) |> Enum.map(fn {t, p} -> abs(t - p) end) |> Enum.sum() / n\n  end\nend", "scala": "def mae(yTrue: Array[Double], yPred: Array[Double]): Double = {\n  val n = yTrue.length\n  yTrue.indices.map(i => math.abs(yTrue(i) - yPred(i))).sum / n\n}"};
+      AIHPC_ANIM.register('ml-cc-mae', {
+        title: "Mean Absolute Error (MAE)",
+        steps: [{"title": "Step 1: Define the error", "math": "e_i = y_i \u2212 \u0177_i", "explain": "Same as MSE \u2014 the error for sample i is the difference between true and predicted values."}, {"title": "Step 2: Take the absolute value", "math": "|e_i| = |y_i \u2212 \u0177_i|", "explain": "Absolute value removes the sign \u2014 both positive and negative errors contribute positively. Unlike squaring, the penalty is linear, not quadratic."}, {"title": "Step 3: Average over all samples", "math": "L = (1/n) \u03a3 |e_i|", "explain": "Sum the absolute errors and divide by n. The result is the mean absolute deviation."}, {"title": "Step 4: Sub-gradient (non-smooth at 0)", "math": "\u2202L/\u2202\u0177_i = sign(\u0177_i \u2212 y_i) / n", "explain": "The gradient is \u00b11/n \u2014 constant magnitude regardless of error size. This makes SGD steps uniform, but the non-differentiable point at e=0 can cause oscillation near convergence."}, {"title": "Step 5: Robustness to outliers", "math": "MAE outlier penalty: 10\u00d7 error \u2192 10\u00d7 loss (linear)", "explain": "Unlike MSE's quadratic penalty, MAE's linear penalty means outliers don't dominate the loss. MAE is the maximum-likelihood estimator when residuals follow a Laplace distribution."}],
+        duration: 12.0,
+      });
+      function dataTableShowMore(btn) {
+        var table = btn.closest('.data-table-container').querySelector('.data-table');
+        var visible = parseInt(table.dataset.visibleRows || '5', 10);
+        var total = parseInt(table.dataset.totalRows || '0', 10);
+        var newVisible = Math.min(total, visible + 10);
+        table.querySelectorAll('.data-table-row').forEach(function(r, i) { if (i < newVisible) r.classList.remove('data-table-hidden'); });
+        table.dataset.visibleRows = newVisible;
+        var remaining = total - newVisible;
+        if (remaining > 0) btn.textContent = 'Show more (' + remaining + ' hidden)';
+        else { btn.textContent = 'All ' + total + ' rows shown'; btn.disabled = true; btn.style.opacity = '0.5'; }
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        var block = document.getElementById('code-block-mae');
+        if (block) block.textContent = CODE_BANK.python || '';
+        document.querySelectorAll('.code-panel .lang-toggle button').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var panel = btn.closest('.code-panel');
+            panel.querySelectorAll('.lang-toggle button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+            var block = panel.querySelector('pre.code-block');
+            if (block) block.textContent = CODE_BANK[btn.dataset.lang] || '';
+          });
+        });
+        document.querySelectorAll('.demo-tabs button').forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            var target = tab.dataset.tab;
+            document.querySelectorAll('.demo-tabs button').forEach(function (t) { t.classList.toggle('active', t === tab); });
+            document.querySelectorAll('.demo-tab-content').forEach(function (c) { c.classList.toggle('active', c.dataset.tab === target); });
+          });
+        });
+        AIHPC_ANIM.init();
+      });
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d'); var W, H, P = []; var N = 50, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; } r(); addEventListener('resize', r);
+        for (var i = 0; i < N; i++) P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        function s() { x.clearRect(0,0,W,H); for (var i = 0; i < N; i++) { for (var j = i+1; j < N; j++) { var d = Math.hypot(P[i].x-P[j].x, P[i].y-P[j].y); if (d < 100) { x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')'; x.lineWidth = .5; x.beginPath(); x.moveTo(P[i].x, P[i].y); x.lineTo(P[j].x, P[j].y); x.stroke(); } } for (var p of P) { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = W; if (p.x > W) p.x = 0; if (p.y < 0) p.y = H; if (p.y > H) p.y = 0; x.fillStyle = p.c; x.globalAlpha = .4; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.28); x.fill(); } x.globalAlpha = 1; requestAnimationFrame(s); } } s();
+      })();
+      (function () {
+        var KEY = 'aihpc-theme'; var b = document.body, r = document.querySelector('.ribbon'), i = document.getElementById('ribbon-theme-icon');
+        function a(t) { if (t === 'light') { b.classList.add('light'); r && r.classList.add('light'); if (i) i.textContent = 'Sun'; } else { b.classList.remove('light'); r && r.classList.remove('light'); if (i) i.textContent = 'Moon'; } }
+        var d = 'dark'; try { var s = localStorage.getItem(KEY); if (s === 'light' || s === 'dark') d = s; } catch (e) {} a(d);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () { var n = b.classList.contains('light') ? 'dark' : 'light'; a(n); try { localStorage.setItem(KEY, n); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

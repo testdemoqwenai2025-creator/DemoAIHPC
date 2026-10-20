@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AdamW (Adam with Decoupled Weight Decay) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability." />
+    <title>AdamW (Adam with Decoupled Weight Decay) — AIHPC ML Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .container { max-width: 1000px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .math-panel .math-eq { font-family: "Cambria Math", Georgia, serif; font-size: 17px; color: var(--accent-2); padding: 10px 14px; background: rgba(6,182,212,0.05); border-radius: 8px; border-left: 3px solid var(--accent-2); margin: 8px 0 12px; }
+      .math-panel .math-plain { font-size: 13px; color: var(--text-muted); }
+      .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, monospace; }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); margin-bottom: 16px; }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px 0; }
+      .demo-tab-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .data-table-container { overflow-x: auto; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+      .data-table-container table { width: 100%; border-collapse: collapse; }
+      .data-table-container th { padding: 6px 10px; text-align: left; font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+      .data-table-container td { padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: "SF Mono", Menlo, monospace; }
+      .data-table-hidden { display: none; }
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+    </style>
+    <script src="../animated-derivation.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-ml.html">Machine Learning</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="lazy-evaluation.html">Lazy Evaluation as UX</a><a href="provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../science-ml.html">ML Hub</a> / Optimiser</p>
+      <span class="tag">ML Concept Card · Optimiser</span>
+      <h1>AdamW (Adam with Decoupled Weight Decay)</h1>
+      <p class="lead">AdamW fixes a subtle issue in Adam&#x27;s L2 regularisation: in standard Adam, weight decay is coupled with the gradient (wd * grad), which interacts with the adaptive learning rate in unintended ways. AdamW decouples weight decay from the gradient update, applying it directly to the parameters. This gives better generalisation, especially for transformers.</p>
+
+      <h2>Math → Code</h2>
+      <div class="math-panel"><div class="math-eq">Same as Adam + theta &lt;- theta - eta * wd * theta (decoupled from gradient)</div></div>
+      <div class="derivation-step"><strong>Step 1</strong><div class="step-math">In Adam, L2 reg adds wd*theta to the gradient: g&#x27; = g + wd*theta</div><div class="step-explain">L2 regularisation is implemented by adding wd*theta to the gradient before computing the moments. But Adam&#x27;s adaptive denominator (sqrt(v)) interacts with this: the weight decay gets scaled differently for each parameter.</div></div>
+      <div class="derivation-step"><strong>Step 2</strong><div class="step-math">Coupled: g&#x27; = g + wd*theta (Adam).  Decoupled: theta -= eta*wd*theta (AdamW)</div><div class="step-explain">AdamW applies weight decay directly to theta, NOT through the gradient. This makes the weight decay equivalent across all parameters — independent of the adaptive learning rate.</div></div>
+      <div class="derivation-step"><strong>Step 3</strong><div class="step-math">1. Compute Adam moments (m, v) from g (WITHOUT wd*theta)
+2. theta &lt;- theta - eta*wd*theta (decoupled weight decay)
+3. theta &lt;- theta - eta * m_hat / sqrt(v_hat + eps) (Adam step)</div><div class="step-explain">The weight decay is a simple multiplication (step 2), applied BEFORE the Adam gradient step (step 3). This is mathematically equivalent to L2 for SGD but different for Adam.</div></div>
+      <div class="derivation-step"><strong>Step 4</strong><div class="step-math">Transformers need large weight decay (0.1) for generalisation</div><div class="step-explain">In standard Adam, the large weight decay gets distorted by the adaptive learning rate. AdamW&#x27;s decoupled decay applies uniformly, enabling the large wd=0.1 that transformers need.</div></div>
+      <div class="derivation-step"><strong>Step 5</strong><div class="step-math">eta=1e-3, beta1=0.9, beta2=0.999, wd=0.01 (vision) / 0.1 (NLP)</div><div class="step-explain">AdamW&#x27;s weight decay is typically 0.01 for CNNs (ResNet) and 0.1 for transformers (BERT, ViT). The higher wd for transformers prevents overfitting on large datasets.</div></div>
+      <h2>Polyglot Code (6 languages)</h2>
+      <div class="code-panel"><div class="lang-toggle">
+        <button data-lang="python" class="active">Python</button>
+        <button data-lang="rust">Rust</button>
+        <button data-lang="go">Go</button>
+        <button data-lang="c">C</button>
+        <button data-lang="elixir">Elixir</button>
+        <button data-lang="scala">Scala</button>
+      </div><pre class="code-block" id="code-block-adamw"></pre></div>
+      <h2>Observe</h2>
+      <div class="demo-tabs">
+        <button class="active" data-tab="stats">Stats</button>
+        <button data-tab="reports">Reports</button>
+        <button data-tab="graphs">Graphs</button>
+        <button data-tab="summary">Summary</button>
+        <button data-tab="data">Data</button>
+      </div>
+      <div class="demo-tab-content active" data-tab="stats"><div class="stats-grid">
+        <div class="stat"><div class="l">Type</div><div class="v">Adam + decoupled wd</div></div>
+        <div class="stat"><div class="l">Weight decay</div><div class="v">Decoupled (uniform)</div></div>
+        <div class="stat"><div class="l">wd (vision)</div><div class="v">0.01</div></div>
+        <div class="stat"><div class="l">wd (NLP/transformer)</div><div class="v">0.1</div></div>
+        <div class="stat"><div class="l">vs Adam</div><div class="v">Better generalisation</div></div>
+        <div class="stat"><div class="l">Used in</div><div class="v">ViT, BERT, GPT</div></div>
+      </div></div>
+      <div class="demo-tab-content" data-tab="reports"><div class="report-block">AdamW decouples weight decay from the gradient update, applying it directly to parameters (theta -= eta*wd*theta) BEFORE the Adam step. This fixes Adam&#x27;s L2 regularisation issue where the adaptive learning rate distorts the weight decay. AdamW is the default optimiser for transformers (ViT, BERT, GPT) where large weight decay (0.1) is needed for generalisation.</div></div>
+      <div class="demo-tab-content" data-tab="graphs"><div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><path d="M 20 170 L 60 100 L 100 60 L 140 35 L 200 20 L 380 15" stroke="#10b981" stroke-width="2" fill="none"/><path d="M 20 170 L 60 120 L 100 80 L 140 50 L 200 30 L 380 25" stroke="#8b5cf6" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">iteration</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">val loss</text><text x="250" y="20" font-size="9" fill="#10b981" font-family="ui-monospace">AdamW (lower val loss)</text><text x="250" y="35" font-size="9" fill="#8b5cf6" font-family="ui-monospace">Adam+L2 (overfits)</text></svg></div></div>
+      <div class="demo-tab-content" data-tab="summary"><div class="summary-block"><ul>
+        <li>AdamW = Adam + decoupled weight decay (theta -= eta*wd*theta, not g += wd*theta).</li>
+        <li>Decoupled wd is uniform across parameters — independent of adaptive learning rate.</li>
+        <li>Default wd: 0.01 (vision/CNN), 0.1 (NLP/transformers).</li>
+        <li>Successor to Adam; default for ViT, BERT, GPT, LLaMA.</li>
+      </ul></div></div>
+      <div class="demo-tab-content" data-tab="data">
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">AdamW trajectory — weight decay shrinks theta by eta*wd each step; Adam step -&gt; 0 as gradient vanishes</p>
+        <div class="data-table-container"><table class="data-table"><thead><tr><th>t</th><th>theta</th><th>theta after wd</th><th>Adam step</th><th>theta_new</th></tr></thead><tbody><tr class="data-table-row"><td>1</td><td>1.000</td><td>0.9999</td><td>-0.001</td><td>0.9989</td></tr>
+<tr class="data-table-row"><td>50</td><td>0.950</td><td>0.9490</td><td>-0.005</td><td>0.9440</td></tr>
+<tr class="data-table-row"><td>100</td><td>0.900</td><td>0.8990</td><td>-0.003</td><td>0.8960</td></tr>
+<tr class="data-table-row"><td>200</td><td>0.850</td><td>0.8491</td><td>-0.001</td><td>0.8481</td></tr>
+<tr class="data-table-row"><td>500</td><td>0.800</td><td>0.7992</td><td>0.000</td><td>0.7992</td></tr></tbody></table>
+        </div></div>
+      <h2>Animated Derivation Clip</h2>
+      <div class="anim-container" style="padding:20px;background:rgba(18,24,38,0.6);border:1px solid rgba(139,92,246,0.25);border-radius:16px;margin:24px 0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#06b6d4;">Phase 28</span>
+          <div style="display:flex;gap:4px;">
+            <button class="anim-play" style="background:linear-gradient(90deg,#8b5cf6,#06b6d4);border:none;color:white;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;">Play</button>
+            <button class="anim-replay" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">Replay</button>
+            <button class="anim-record" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">WebM</button>
+            <button class="anim-share" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">Share</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="ml-cc-adamw" style="display:block;max-width:100%;height:auto;border-radius:6px;background:#0b0f1a;"></canvas>
+      </div>
+      <div class="meta">
+        <p>Auto-generated ML concept card from <a href="../science-ml.html">science-ml.html</a> (demo id: <code>adamw</code>). Generated by <code>scripts/gen-ml-concept-cards.py</code>.</p>
+      </div>
+    </div>
+    <script>
+      var CODE_BANK = {"python": "# Same as Adam + theta <- theta - eta * wd * theta (decoupled)\n# wd -> weight decay (decoupled from gradient)\nimport numpy as np\ndef adamw_step(theta, g, m, v, t, eta=1e-3, b1=0.9, b2=0.999, eps=1e-8, wd=0.01):\n    m = b1 * m + (1 - b1) * g\n    v = b2 * v + (1 - b2) * g**2\n    m_hat = m / (1 - b1**t)\n    v_hat = v / (1 - b2**t)\n    theta = theta - eta * wd * theta  # decoupled weight decay\n    theta = theta - eta * m_hat / (np.sqrt(v_hat) + eps)  # Adam step\n    return theta, m, v", "rust": "fn adamw_step(theta: f64, g: f64, m: f64, v: f64, t: f64, eta: f64, b1: f64, b2: f64, eps: f64, wd: f64) -> (f64, f64, f64) {\n    let m = b1 * m + (1.0 - b1) * g;\n    let v = b2 * v + (1.0 - b2) * g * g;\n    let m_hat = m / (1.0 - b1.powf(t));\n    let v_hat = v / (1.0 - b2.powf(t));\n    let theta = theta - eta * wd * theta;  // decoupled weight decay\n    (theta - eta * m_hat / (v_hat.sqrt() + eps), m, v)\n}", "go": "func AdamWStep(theta, g, m, v, t, eta, b1, b2, eps, wd float64) (float64, float64, float64) {\n\tm = b1*m + (1-b1)*g\n\tv = b2*v + (1-b2)*g*g\n\tmHat := m / (1 - math.Pow(b1, t))\n\tvHat := v / (1 - math.Pow(b2, t))\n\ttheta -= eta * wd * theta\n\treturn theta - eta*mHat/(math.Sqrt(vHat)+eps), m, v\n}", "c": "void adamw_step(double* theta, double g, double* m, double* v, double t, double eta, double b1, double b2, double eps, double wd) {\n    *m = b1 * *m + (1 - b1) * g;\n    *v = b2 * *v + (1 - b2) * g * g;\n    double m_hat = *m / (1 - pow(b1, t));\n    double v_hat = *v / (1 - pow(b2, t));\n    *theta -= eta * wd * *theta;  /* decoupled weight decay */\n    *theta -= eta * m_hat / (sqrt(v_hat) + eps);\n}", "elixir": "defmodule AdamW do\n  def step(theta, g, m, v, t, eta, b1, b2, eps, wd) do\n    m = b1*m + (1-b1)*g\n    v = b2*v + (1-b2)*g*g\n    m_hat = m / (1 - :math.pow(b1, t))\n    v_hat = v / (1 - :math.pow(b2, t))\n    theta = theta - eta * wd * theta\n    {theta - eta * m_hat / (:math.sqrt(v_hat) + eps), m, v}\n  end\nend", "scala": "def adamwStep(theta: Double, g: Double, m: Double, v: Double, t: Double, eta: Double = 1e-3, b1: Double = 0.9, b2: Double = 0.999, eps: Double = 1e-8, wd: Double = 0.01): (Double, Double, Double) = {\n  val m1 = b1 * m + (1 - b1) * g\n  val v1 = b2 * v + (1 - b2) * g * g\n  val mHat = m1 / (1 - math.pow(b1, t))\n  val vHat = v1 / (1 - math.pow(b2, t))\n  val theta1 = theta - eta * wd * theta\n  (theta1 - eta * mHat / (math.sqrt(vHat) + eps), m1, v1)\n}"};
+      AIHPC_ANIM.register('ml-cc-adamw', {
+        title: "AdamW (Adam with Decoupled Weight Decay)",
+        steps: [{"title": "Step 1: Adam's L2 issue", "math": "In Adam, L2 reg adds wd*theta to the gradient: g' = g + wd*theta", "explain": "L2 regularisation is implemented by adding wd*theta to the gradient before computing the moments. But Adam's adaptive denominator (sqrt(v)) interacts with this: the weight decay gets scaled differently for each parameter."}, {"title": "Step 2: Coupled vs decoupled", "math": "Coupled: g' = g + wd*theta (Adam).  Decoupled: theta -= eta*wd*theta (AdamW)", "explain": "AdamW applies weight decay directly to theta, NOT through the gradient. This makes the weight decay equivalent across all parameters \u2014 independent of the adaptive learning rate."}, {"title": "Step 3: AdamW update", "math": "1. Compute Adam moments (m, v) from g (WITHOUT wd*theta)\n2. theta <- theta - eta*wd*theta (decoupled weight decay)\n3. theta <- theta - eta * m_hat / sqrt(v_hat + eps) (Adam step)", "explain": "The weight decay is a simple multiplication (step 2), applied BEFORE the Adam gradient step (step 3). This is mathematically equivalent to L2 for SGD but different for Adam."}, {"title": "Step 4: Why it matters for transformers", "math": "Transformers need large weight decay (0.1) for generalisation", "explain": "In standard Adam, the large weight decay gets distorted by the adaptive learning rate. AdamW's decoupled decay applies uniformly, enabling the large wd=0.1 that transformers need."}, {"title": "Step 5: Default hyperparameters", "math": "eta=1e-3, beta1=0.9, beta2=0.999, wd=0.01 (vision) / 0.1 (NLP)", "explain": "AdamW's weight decay is typically 0.01 for CNNs (ResNet) and 0.1 for transformers (BERT, ViT). The higher wd for transformers prevents overfitting on large datasets."}],
+        duration: 12.0,
+      });
+      function dataTableShowMore(btn) {
+        var table = btn.closest('.data-table-container').querySelector('.data-table');
+        var visible = parseInt(table.dataset.visibleRows || '5', 10);
+        var total = parseInt(table.dataset.totalRows || '0', 10);
+        var newVisible = Math.min(total, visible + 10);
+        table.querySelectorAll('.data-table-row').forEach(function(r, i) { if (i < newVisible) r.classList.remove('data-table-hidden'); });
+        table.dataset.visibleRows = newVisible;
+        var remaining = total - newVisible;
+        if (remaining > 0) btn.textContent = 'Show more (' + remaining + ' hidden)';
+        else { btn.textContent = 'All ' + total + ' rows shown'; btn.disabled = true; btn.style.opacity = '0.5'; }
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        var block = document.getElementById('code-block-adamw');
+        if (block) block.textContent = CODE_BANK.python || '';
+        document.querySelectorAll('.code-panel .lang-toggle button').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var panel = btn.closest('.code-panel');
+            panel.querySelectorAll('.lang-toggle button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+            var block = panel.querySelector('pre.code-block');
+            if (block) block.textContent = CODE_BANK[btn.dataset.lang] || '';
+          });
+        });
+        document.querySelectorAll('.demo-tabs button').forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            var target = tab.dataset.tab;
+            document.querySelectorAll('.demo-tabs button').forEach(function (t) { t.classList.toggle('active', t === tab); });
+            document.querySelectorAll('.demo-tab-content').forEach(function (c) { c.classList.toggle('active', c.dataset.tab === target); });
+          });
+        });
+        AIHPC_ANIM.init();
+      });
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d'); var W, H, P = []; var N = 50, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; } r(); addEventListener('resize', r);
+        for (var i = 0; i < N; i++) P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        function s() { x.clearRect(0,0,W,H); for (var i = 0; i < N; i++) { for (var j = i+1; j < N; j++) { var d = Math.hypot(P[i].x-P[j].x, P[i].y-P[j].y); if (d < 100) { x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')'; x.lineWidth = .5; x.beginPath(); x.moveTo(P[i].x, P[i].y); x.lineTo(P[j].x, P[j].y); x.stroke(); } } for (var p of P) { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = W; if (p.x > W) p.x = 0; if (p.y < 0) p.y = H; if (p.y > H) p.y = 0; x.fillStyle = p.c; x.globalAlpha = .4; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.28); x.fill(); } x.globalAlpha = 1; requestAnimationFrame(s); } } s();
+      })();
+      (function () {
+        var KEY = 'aihpc-theme'; var b = document.body, r = document.querySelector('.ribbon'), i = document.getElementById('ribbon-theme-icon');
+        function a(t) { if (t === 'light') { b.classList.add('light'); r && r.classList.add('light'); if (i) i.textContent = 'Sun'; } else { b.classList.remove('light'); r && r.classList.remove('light'); if (i) i.textContent = 'Moon'; } }
+        var d = 'dark'; try { var s = localStorage.getItem(KEY); if (s === 'light' || s === 'dark') d = s; } catch (e) {} a(d);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () { var n = b.classList.contains('light') ? 'dark' : 'light'; a(n); try { localStorage.setItem(KEY, n); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

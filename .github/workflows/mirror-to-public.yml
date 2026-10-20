@@ -105,6 +105,8 @@ jobs:
           python3 scripts/gen-audit-dashboard.py || true
           # Phase 33: regenerate concept cards from the latest digest manifest
           python3 scripts/gen-concept-cards.py || true
+          # Phase 35: regenerate ML concept cards from the ML page manifest
+          python3 scripts/gen-ml-concept-cards.py || true
           # Stage the updated dashboard + history + concept cards for the mirror
           git add docs/audit.html docs/audit-history/ docs/concepts/ 2>/dev/null || true
           git commit -m "CI: auto-update audit dashboard" 2>/dev/null || true

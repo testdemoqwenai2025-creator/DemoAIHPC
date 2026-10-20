@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Dropout — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability." />
+    <title>Dropout — AIHPC ML Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .container { max-width: 1000px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .math-panel .math-eq { font-family: "Cambria Math", Georgia, serif; font-size: 17px; color: var(--accent-2); padding: 10px 14px; background: rgba(6,182,212,0.05); border-radius: 8px; border-left: 3px solid var(--accent-2); margin: 8px 0 12px; }
+      .math-panel .math-plain { font-size: 13px; color: var(--text-muted); }
+      .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, monospace; }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); margin-bottom: 16px; }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px 0; }
+      .demo-tab-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .data-table-container { overflow-x: auto; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+      .data-table-container table { width: 100%; border-collapse: collapse; }
+      .data-table-container th { padding: 6px 10px; text-align: left; font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+      .data-table-container td { padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: "SF Mono", Menlo, monospace; }
+      .data-table-hidden { display: none; }
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+    </style>
+    <script src="../animated-derivation.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-ml.html">Machine Learning</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="lazy-evaluation.html">Lazy Evaluation as UX</a><a href="provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../science-ml.html">ML Hub</a> / Regularisation</p>
+      <span class="tag">ML Concept Card · Regularisation</span>
+      <h1>Dropout</h1>
+      <p class="lead">Dropout randomly sets a fraction p of activations to zero during training, forcing the network to learn redundant representations. At inference, all activations are used (scaled by 1/(1-p) during training to compensate). Dropout prevents co-adaptation: no single neuron can rely on any other specific neuron being active.</p>
+
+      <h2>Math → Code</h2>
+      <div class="math-panel"><div class="math-eq">y = x * mask,  where mask[i] ~ Bernoulli(1-p) / (1-p)</div></div>
+      <div class="derivation-step"><strong>Step 1</strong><div class="step-math">mask[i] ~ Bernoulli(1 - p)</div><div class="step-explain">For each neuron, draw a random binary mask: 1 with probability (1-p), 0 with probability p. p is the dropout rate (typically 0.1-0.5).</div></div>
+      <div class="derivation-step"><strong>Step 2</strong><div class="step-math">y = x * mask</div><div class="step-explain">Element-wise multiply the activations by the mask. p fraction of neurons are &#x27;dropped&#x27; (output 0). The surviving neurons must learn to function without the dropped ones.</div></div>
+      <div class="derivation-step"><strong>Step 3</strong><div class="step-math">y = x * mask / (1 - p)</div><div class="step-explain">Divide by (1-p) during training so that the expected output E[y] = x. This &#x27;inverted dropout&#x27; means no scaling is needed at inference time — just use y = x (all neurons active).</div></div>
+      <div class="derivation-step"><strong>Step 4</strong><div class="step-math">Each neuron must work with random subsets of others</div><div class="step-explain">Since any neuron can be dropped, no two neurons can co-adapt (rely on each other). The network learns redundant, robust features — like training an ensemble of sub-networks in one pass.</div></div>
+      <div class="derivation-step"><strong>Step 5</strong><div class="step-math">At test time: y = x (no dropout, no scaling needed)</div><div class="step-explain">Thanks to inverted dropout (step 3), inference is just the identity — all neurons active, no scaling. The network behaves as an ensemble of the 2^N sub-networks sampled during training.</div></div>
+      <h2>Polyglot Code (6 languages)</h2>
+      <div class="code-panel"><div class="lang-toggle">
+        <button data-lang="python" class="active">Python</button>
+        <button data-lang="rust">Rust</button>
+        <button data-lang="go">Go</button>
+        <button data-lang="c">C</button>
+        <button data-lang="elixir">Elixir</button>
+        <button data-lang="scala">Scala</button>
+      </div><pre class="code-block" id="code-block-dropout"></pre></div>
+      <h2>Observe</h2>
+      <div class="demo-tabs">
+        <button class="active" data-tab="stats">Stats</button>
+        <button data-tab="reports">Reports</button>
+        <button data-tab="graphs">Graphs</button>
+        <button data-tab="summary">Summary</button>
+        <button data-tab="data">Data</button>
+      </div>
+      <div class="demo-tab-content active" data-tab="stats"><div class="stats-grid">
+        <div class="stat"><div class="l">Type</div><div class="v">Stochastic regulariser</div></div>
+        <div class="stat"><div class="l">Default p</div><div class="v">0.1 (transformers), 0.5 (CNNs)</div></div>
+        <div class="stat"><div class="l">Inference</div><div class="v">Identity (no scaling)</div></div>
+        <div class="stat"><div class="l">Ensemble</div><div class="v">2^N sub-networks</div></div>
+        <div class="stat"><div class="l">Memory</div><div class="v">O(1) (mask only)</div></div>
+        <div class="stat"><div class="l">Prevents</div><div class="v">Co-adaptation</div></div>
+      </div></div>
+      <div class="demo-tab-content" data-tab="reports"><div class="report-block">Dropout randomly zeros p fraction of activations during training, preventing neuron co-adaptation. Inverted dropout (scaling by 1/(1-p)) means no scaling is needed at inference. The network behaves as an ensemble of 2^N sub-networks. Default p=0.1 for transformers, 0.5 for CNNs. Dropout is the most widely used regulariser in deep learning (2012-present).</div></div>
+      <div class="demo-tab-content" data-tab="graphs"><div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><g><circle cx="50" cy="50" r="6" fill="#8b5cf6"/><circle cx="80" cy="50" r="6" fill="rgba(148,163,184,0.2)"/><circle cx="110" cy="50" r="6" fill="#8b5cf6"/><circle cx="140" cy="50" r="6" fill="#8b5cf6"/><circle cx="170" cy="50" r="6" fill="rgba(148,163,184,0.2)"/><circle cx="200" cy="50" r="6" fill="#8b5cf6"/><text x="100" y="30" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">p=0.4: 2 of 5 dropped</text></g><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">neuron index</text></svg></div></div>
+      <div class="demo-tab-content" data-tab="summary"><div class="summary-block"><ul>
+        <li>Dropout = x * mask / (1-p), mask ~ Bernoulli(1-p) — random zeroing during training.</li>
+        <li>Inverted dropout (1/(1-p) scaling) means no scaling at inference.</li>
+        <li>Prevents co-adaptation: neurons can&#x27;t rely on specific others being active.</li>
+        <li>Equivalent to training 2^N sub-networks — powerful ensemble effect.</li>
+      </ul></div></div>
+      <div class="demo-tab-content" data-tab="data">
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Dropout sample (p=0.4) — 2 of 5 neurons dropped; survivors scaled by 1/(1-0.4)=1.67</p>
+        <div class="data-table-container"><table class="data-table"><thead><tr><th>neuron</th><th>x (input)</th><th>mask (p=0.4)</th><th>y = x*mask/(1-p)</th></tr></thead><tbody><tr class="data-table-row"><td>1</td><td>0.8</td><td>1</td><td>1.33</td></tr>
+<tr class="data-table-row"><td>2</td><td>0.5</td><td>0 (dropped)</td><td>0.0</td></tr>
+<tr class="data-table-row"><td>3</td><td>-0.3</td><td>1</td><td>-0.50</td></tr>
+<tr class="data-table-row"><td>4</td><td>0.6</td><td>1</td><td>1.00</td></tr>
+<tr class="data-table-row"><td>5</td><td>0.2</td><td>0 (dropped)</td><td>0.0</td></tr></tbody></table>
+        </div></div>
+      <h2>Animated Derivation Clip</h2>
+      <div class="anim-container" style="padding:20px;background:rgba(18,24,38,0.6);border:1px solid rgba(139,92,246,0.25);border-radius:16px;margin:24px 0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#06b6d4;">Phase 28</span>
+          <div style="display:flex;gap:4px;">
+            <button class="anim-play" style="background:linear-gradient(90deg,#8b5cf6,#06b6d4);border:none;color:white;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;">Play</button>
+            <button class="anim-replay" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">Replay</button>
+            <button class="anim-record" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">WebM</button>
+            <button class="anim-share" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">Share</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="ml-cc-dropout" style="display:block;max-width:100%;height:auto;border-radius:6px;background:#0b0f1a;"></canvas>
+      </div>
+      <div class="meta">
+        <p>Auto-generated ML concept card from <a href="../science-ml.html">science-ml.html</a> (demo id: <code>dropout</code>). Generated by <code>scripts/gen-ml-concept-cards.py</code>.</p>
+      </div>
+    </div>
+    <script>
+      var CODE_BANK = {"python": "# y = x * mask / (1-p),  mask ~ Bernoulli(1-p)\n# x -> activations  p -> dropout rate  mask -> random binary\nimport numpy as np\ndef dropout(x, p=0.5, training=True):\n    if not training: return x\n    mask = (np.random.rand(*x.shape) > p) / (1 - p)\n    return x * mask", "rust": "fn dropout(x: &[f64], p: f64) -> Vec<f64> {\n    let scale = 1.0 / (1.0 - p);\n    x.iter().map(|&v| if rand::random::<f64>() > p { v * scale } else { 0.0 }).collect()\n}", "go": "func Dropout(x []float64, p float64) []float64 {\n\tscale := 1 / (1 - p)\n\tfor i := range x { if rand.Float64() < p { x[i] = 0 } else { x[i] *= scale } }\n\treturn x\n}", "c": "void dropout(double* x, int n, double p) {\n    double scale = 1.0 / (1.0 - p);\n    for (int i = 0; i < n; i++)\n        x[i] = ((double)rand()/RAND_MAX > p) ? x[i] * scale : 0.0;\n}", "elixir": "defmodule Dropout do\n  def f(x, p) do\n    scale = 1 / (1 - p)\n    Enum.map(x, fn v -> if :rand.uniform() > p, do: v * scale, else: 0.0 end)\n  end\nend", "scala": "def dropout(x: Array[Double], p: Double): Array[Double] = {\n  val scale = 1.0 / (1 - p)\n  x.map(v => if (math.random > p) v * scale else 0.0)\n}"};
+      AIHPC_ANIM.register('ml-cc-dropout', {
+        title: "Dropout",
+        steps: [{"title": "Step 1: Mask generation", "math": "mask[i] ~ Bernoulli(1 - p)", "explain": "For each neuron, draw a random binary mask: 1 with probability (1-p), 0 with probability p. p is the dropout rate (typically 0.1-0.5)."}, {"title": "Step 2: Apply mask", "math": "y = x * mask", "explain": "Element-wise multiply the activations by the mask. p fraction of neurons are 'dropped' (output 0). The surviving neurons must learn to function without the dropped ones."}, {"title": "Step 3: Inverted dropout (scaling)", "math": "y = x * mask / (1 - p)", "explain": "Divide by (1-p) during training so that the expected output E[y] = x. This 'inverted dropout' means no scaling is needed at inference time \u2014 just use y = x (all neurons active)."}, {"title": "Step 4: Preventing co-adaptation", "math": "Each neuron must work with random subsets of others", "explain": "Since any neuron can be dropped, no two neurons can co-adapt (rely on each other). The network learns redundant, robust features \u2014 like training an ensemble of sub-networks in one pass."}, {"title": "Step 5: Inference", "math": "At test time: y = x (no dropout, no scaling needed)", "explain": "Thanks to inverted dropout (step 3), inference is just the identity \u2014 all neurons active, no scaling. The network behaves as an ensemble of the 2^N sub-networks sampled during training."}],
+        duration: 12.0,
+      });
+      function dataTableShowMore(btn) {
+        var table = btn.closest('.data-table-container').querySelector('.data-table');
+        var visible = parseInt(table.dataset.visibleRows || '5', 10);
+        var total = parseInt(table.dataset.totalRows || '0', 10);
+        var newVisible = Math.min(total, visible + 10);
+        table.querySelectorAll('.data-table-row').forEach(function(r, i) { if (i < newVisible) r.classList.remove('data-table-hidden'); });
+        table.dataset.visibleRows = newVisible;
+        var remaining = total - newVisible;
+        if (remaining > 0) btn.textContent = 'Show more (' + remaining + ' hidden)';
+        else { btn.textContent = 'All ' + total + ' rows shown'; btn.disabled = true; btn.style.opacity = '0.5'; }
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        var block = document.getElementById('code-block-dropout');
+        if (block) block.textContent = CODE_BANK.python || '';
+        document.querySelectorAll('.code-panel .lang-toggle button').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var panel = btn.closest('.code-panel');
+            panel.querySelectorAll('.lang-toggle button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+            var block = panel.querySelector('pre.code-block');
+            if (block) block.textContent = CODE_BANK[btn.dataset.lang] || '';
+          });
+        });
+        document.querySelectorAll('.demo-tabs button').forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            var target = tab.dataset.tab;
+            document.querySelectorAll('.demo-tabs button').forEach(function (t) { t.classList.toggle('active', t === tab); });
+            document.querySelectorAll('.demo-tab-content').forEach(function (c) { c.classList.toggle('active', c.dataset.tab === target); });
+          });
+        });
+        AIHPC_ANIM.init();
+      });
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d'); var W, H, P = []; var N = 50, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; } r(); addEventListener('resize', r);
+        for (var i = 0; i < N; i++) P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        function s() { x.clearRect(0,0,W,H); for (var i = 0; i < N; i++) { for (var j = i+1; j < N; j++) { var d = Math.hypot(P[i].x-P[j].x, P[i].y-P[j].y); if (d < 100) { x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')'; x.lineWidth = .5; x.beginPath(); x.moveTo(P[i].x, P[i].y); x.lineTo(P[j].x, P[j].y); x.stroke(); } } for (var p of P) { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = W; if (p.x > W) p.x = 0; if (p.y < 0) p.y = H; if (p.y > H) p.y = 0; x.fillStyle = p.c; x.globalAlpha = .4; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.28); x.fill(); } x.globalAlpha = 1; requestAnimationFrame(s); } } s();
+      })();
+      (function () {
+        var KEY = 'aihpc-theme'; var b = document.body, r = document.querySelector('.ribbon'), i = document.getElementById('ribbon-theme-icon');
+        function a(t) { if (t === 'light') { b.classList.add('light'); r && r.classList.add('light'); if (i) i.textContent = 'Sun'; } else { b.classList.remove('light'); r && r.classList.remove('light'); if (i) i.textContent = 'Moon'; } }
+        var d = 'dark'; try { var s = localStorage.getItem(KEY); if (s === 'light' || s === 'dark') d = s; } catch (e) {} a(d);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () { var n = b.classList.contains('light') ? 'dark' : 'light'; a(n); try { localStorage.setItem(KEY, n); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

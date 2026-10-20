@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Binary Cross-Entropy (BCE) — AIHPC Advanced ML concept card. Math-to-Code derivation, 6-language polyglot, observability." />
+    <title>Binary Cross-Entropy (BCE) — AIHPC ML Concept Card</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .container { max-width: 1000px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .math-panel .math-eq { font-family: "Cambria Math", Georgia, serif; font-size: 17px; color: var(--accent-2); padding: 10px 14px; background: rgba(6,182,212,0.05); border-radius: 8px; border-left: 3px solid var(--accent-2); margin: 8px 0 12px; }
+      .math-panel .math-plain { font-size: 13px; color: var(--text-muted); }
+      .derivation-step { background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, monospace; }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); margin-bottom: 16px; }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px 0; }
+      .demo-tab-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .data-table-container { overflow-x: auto; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+      .data-table-container table { width: 100%; border-collapse: collapse; }
+      .data-table-container th { padding: 6px 10px; text-align: left; font-size: 11px; color: var(--text-muted-2); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+      .data-table-container td { padding: 6px 10px; font-size: 12px; color: var(--text-muted); font-family: "SF Mono", Menlo, monospace; }
+      .data-table-hidden { display: none; }
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+    </style>
+    <script src="../animated-derivation.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="../index.html">Home</a><a href="../demos.html">Demos</a><a href="../dashboard.html">Dashboard</a><a href="../graph.html">Knowledge Graph</a><a href="../benchmark.html">Agentic Benchmark</a><a href="../subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="../aethel.html">AETHEL Connector</a><a href="../connectors.html">Scientific Connectors Hub</a><a href="../query.html">Query Executor</a><a href="../graph.html">Knowledge Graph</a><a href="../workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="../science-biology.html">Biology Hub</a><a href="../science-chemistry.html">Chemistry Hub</a><a href="../science-physics.html">Physics Hub</a><a href="../science-maths.html">Mathematics Hub</a><a href="../science-ml.html">Machine Learning</a><a href="../science-bioinformatics.html">Bioinformatics</a><a href="../science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="../digest.html">Weekly Science Digest</a><a href="../audit.html">Audit Dashboard</a><a href="../dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="../concepts.html">Concept Cards</a><a href="lazy-evaluation.html">Lazy Evaluation as UX</a><a href="provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="../demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <p class="crumbs"><a href="../science-ml.html">ML Hub</a> / Binary Classification</p>
+      <span class="tag">ML Concept Card · Binary Classification</span>
+      <h1>Binary Cross-Entropy (BCE)</h1>
+      <p class="lead">BCE is the standard loss for binary classification. It measures the dissimilarity between the true binary distribution (y ∈ {0,1}) and the predicted probability distribution (ŷ ∈ (0,1)). The logarithm penalises confident wrong predictions heavily — a prediction of 0.01 for a true positive gives a loss of ~4.6, while a prediction of 0.49 gives only ~0.71.</p>
+
+      <h2>Math → Code</h2>
+      <div class="math-panel"><div class="math-eq">L = −(1/n) Σ [y_i log(ŷ_i) + (1−y_i) log(1−ŷ_i)]</div></div>
+      <div class="derivation-step"><strong>Step 1</strong><div class="step-math">P(y | ŷ) = ŷ^y · (1−ŷ)^(1−y)</div><div class="step-explain">For a binary label y ∈ {0,1} and predicted probability ŷ ∈ (0,1), the likelihood is the Bernoulli PMF. y=1 gives P=ŷ; y=0 gives P=1−ŷ.</div></div>
+      <div class="derivation-step"><strong>Step 2</strong><div class="step-math">log P = y log(ŷ) + (1−y) log(1−ŷ)</div><div class="step-explain">Take the log to convert the product into a sum (easier to optimise). The log-likelihood is negative because log(ŷ) &lt; 0 when ŷ &lt; 1.</div></div>
+      <div class="derivation-step"><strong>Step 3</strong><div class="step-math">L = −log P = −[y log(ŷ) + (1−y) log(1−ŷ)]</div><div class="step-explain">Negate to convert maximisation into minimisation. This is the cross-entropy between the true distribution [y, 1−y] and the predicted [ŷ, 1−ŷ].</div></div>
+      <div class="derivation-step"><strong>Step 4</strong><div class="step-math">L = −(1/n) Σ [y_i log(ŷ_i) + (1−y_i) log(1−ŷ_i)]</div><div class="step-explain">Sum the per-sample losses and divide by n. The 1/n normalises for batch size.</div></div>
+      <div class="derivation-step"><strong>Step 5</strong><div class="step-math">∂L/∂ŷ_i = −(y_i/ŷ_i − (1−y_i)/(1−ŷ_i)) = (ŷ_i − y_i) / (ŷ_i(1−ŷ_i))</div><div class="step-explain">The gradient simplifies to (ŷ−y) / (ŷ(1−ŷ)). When paired with a sigmoid output, the denominator cancels the sigmoid derivative, giving a clean gradient of (ŷ−y). This is why BCE + sigmoid is the canonical binary-classification setup.</div></div>
+      <h2>Polyglot Code (6 languages)</h2>
+      <div class="code-panel"><div class="lang-toggle">
+        <button data-lang="python" class="active">Python</button>
+        <button data-lang="rust">Rust</button>
+        <button data-lang="go">Go</button>
+        <button data-lang="c">C</button>
+        <button data-lang="elixir">Elixir</button>
+        <button data-lang="scala">Scala</button>
+      </div><pre class="code-block" id="code-block-binary-cross-entropy"></pre></div>
+      <h2>Observe</h2>
+      <div class="demo-tabs">
+        <button class="active" data-tab="stats">Stats</button>
+        <button data-tab="reports">Reports</button>
+        <button data-tab="graphs">Graphs</button>
+        <button data-tab="summary">Summary</button>
+        <button data-tab="data">Data</button>
+      </div>
+      <div class="demo-tab-content active" data-tab="stats"><div class="stats-grid">
+        <div class="stat"><div class="l">Type</div><div class="v">Binary classification</div></div>
+        <div class="stat"><div class="l">Output activation</div><div class="v">Sigmoid</div></div>
+        <div class="stat"><div class="l">Penalty</div><div class="v">Logarithmic</div></div>
+        <div class="stat"><div class="l">Confident wrong</div><div class="v">Heavy (→∞)</div></div>
+        <div class="stat"><div class="l">Convex</div><div class="v">Yes</div></div>
+        <div class="stat"><div class="l">MLE</div><div class="v">Bernoulli</div></div>
+      </div></div>
+      <div class="demo-tab-content" data-tab="reports"><div class="report-block">BCE is the standard loss for binary classification. Paired with a sigmoid output, the gradient simplifies to (ŷ−y) — the prediction error. The logarithm heavily penalises confident wrong predictions: predicting 0.01 for a true positive gives loss ~4.6, while predicting 0.49 gives only ~0.71. BCE is the MLE for Bernoulli-distributed labels.</div></div>
+      <div class="demo-tab-content" data-tab="graphs"><div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><path d="M 20 175 Q 60 160 100 120 Q 140 60 200 25 L 380 22" stroke="#ec4899" stroke-width="2" fill="none"/><path d="M 20 175 Q 60 170 100 150 Q 140 120 200 100 Q 260 80 380 70" stroke="#06b6d4" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/><text x="200" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">predicted probability ŷ</text><text x="10" y="100" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace" transform="rotate(-90, 10, 100)">loss</text><text x="200" y="20" text-anchor="middle" font-size="9" fill="#ec4899" font-family="ui-monospace">y=1: −log(ŷ)</text><text x="300" y="90" text-anchor="middle" font-size="9" fill="#06b6d4" font-family="ui-monospace">y=0: −log(1−ŷ)</text></svg></div></div>
+      <div class="demo-tab-content" data-tab="summary"><div class="summary-block"><ul>
+        <li>BCE = −(1/n) Σ [y log(ŷ) + (1−y) log(1−ŷ)] — the Bernoulli negative log-likelihood.</li>
+        <li>Paired with sigmoid output, the gradient simplifies to (ŷ−y) — clean and stable.</li>
+        <li>Confident wrong predictions are heavily penalised: ŷ=0.01 for y=1 gives loss ~4.6.</li>
+        <li>MLE for Bernoulli-distributed labels; the canonical binary-classification loss.</li>
+      </ul></div></div>
+      <div class="demo-tab-content" data-tab="data">
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">BCE sample — 6 data points showing how confident wrong predictions (samples 5,6) get ~4.6 loss</p>
+        <div class="data-table-container"><table class="data-table"><thead><tr><th>Sample</th><th>y_true</th><th>ŷ_pred</th><th>−log(ŷ) if y=1</th><th>−log(1−ŷ) if y=0</th><th>loss</th></tr></thead><tbody><tr class="data-table-row"><td>1</td><td>1</td><td>0.9</td><td>0.105</td><td>—</td><td>0.105</td></tr>
+<tr class="data-table-row"><td>2</td><td>0</td><td>0.1</td><td>—</td><td>0.105</td><td>0.105</td></tr>
+<tr class="data-table-row"><td>3</td><td>1</td><td>0.5</td><td>0.693</td><td>—</td><td>0.693</td></tr>
+<tr class="data-table-row"><td>4</td><td>0</td><td>0.8</td><td>—</td><td>1.609</td><td>1.609</td></tr>
+<tr class="data-table-row"><td>5</td><td>1</td><td>0.01</td><td>4.605</td><td>—</td><td>4.605</td></tr>
+<tr class="data-table-row data-table-hidden"><td>6</td><td>0</td><td>0.99</td><td>—</td><td>4.605</td><td>4.605</td></tr></tbody></table>
+        <button class="data-table-show-more" style="margin-top:12px;background:var(--bg-elevated-2);border:1px solid var(--border-strong);color:var(--text);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;" onclick="dataTableShowMore(this)">Show more (1 hidden)</button>
+        </div></div>
+      <h2>Animated Derivation Clip</h2>
+      <div class="anim-container" style="padding:20px;background:rgba(18,24,38,0.6);border:1px solid rgba(139,92,246,0.25);border-radius:16px;margin:24px 0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#06b6d4;">Phase 28</span>
+          <div style="display:flex;gap:4px;">
+            <button class="anim-play" style="background:linear-gradient(90deg,#8b5cf6,#06b6d4);border:none;color:white;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;">Play</button>
+            <button class="anim-replay" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">Replay</button>
+            <button class="anim-record" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">WebM</button>
+            <button class="anim-share" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">Share</button>
+          </div>
+        </div>
+        <canvas class="anim-derivation" data-derivation-id="ml-cc-binary-cross-entropy" style="display:block;max-width:100%;height:auto;border-radius:6px;background:#0b0f1a;"></canvas>
+      </div>
+      <div class="meta">
+        <p>Auto-generated ML concept card from <a href="../science-ml.html">science-ml.html</a> (demo id: <code>binary-cross-entropy</code>). Generated by <code>scripts/gen-ml-concept-cards.py</code>.</p>
+      </div>
+    </div>
+    <script>
+      var CODE_BANK = {"python": "# L = -(1/n) Sum [y log(y_hat) + (1-y) log(1-y_hat)]\n# y -> y_true[i]  y_hat -> y_pred[i] (sigmoid output)\n# log -> np.log()  clip y_hat to (1e-15, 1-1e-15)\nimport numpy as np\ndef bce(y_true, y_pred):\n    eps = 1e-15\n    y_pred = np.clip(y_pred, eps, 1 - eps)\n    return -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))", "rust": "fn bce(y_true: &[f64], y_pred: &[f64]) -> f64 {\n    let n = y_true.len() as f64;\n    y_true.iter().zip(y_pred.iter()).map(|(t, p)| {\n        let p = p.clamp(1e-15, 1.0 - 1e-15);\n        -(t * p.ln() + (1.0 - t) * (1.0 - p).ln())\n    }).sum::<f64>() / n\n}", "go": "func BCE(yTrue, yPred []float64) float64 {\n\tn := float64(len(yTrue))\n\tvar sum float64\n\tfor i := range yTrue {\n\t\tp := math.Max(1e-15, math.Min(1-1e-15, yPred[i]))\n\t\tsum += -(yTrue[i]*math.Log(p) + (1-yTrue[i])*math.Log(1-p))\n\t}\n\treturn sum / n\n}", "c": "double bce(const double* y_true, const double* y_pred, int n) {\n    double sum = 0;\n    for (int i = 0; i < n; i++) {\n        double p = fmax(1e-15, fmin(1-1e-15, y_pred[i]));\n        sum += -(y_true[i]*log(p) + (1-y_true[i])*log(1-p));\n    }\n    return sum / n;\n}", "elixir": "defmodule BCE do\n  def loss(y_true, y_pred) do\n    n = length(y_true)\n    Enum.zip(y_true, y_pred) |> Enum.map(fn {t, p} ->\n      p = max(1.0e-15, min(1.0 - 1.0e-15, p))\n      -(t * :math.log(p) + (1 - t) * :math.log(1 - p))\n    end) |> Enum.sum() / n\n  end\nend", "scala": "def bce(yTrue: Array[Double], yPred: Array[Double]): Double = {\n  val n = yTrue.length.toDouble\n  yTrue.indices.map(i => {\n    val p = math.max(1e-15, math.min(1-1e-15, yPred(i)))\n    -(yTrue(i)*math.log(p) + (1-yTrue(i))*math.log(1-p))\n  }).sum / n\n}"};
+      AIHPC_ANIM.register('ml-cc-binary-cross-entropy', {
+        title: "Binary Cross-Entropy (BCE)",
+        steps: [{"title": "Step 1: Bernoulli likelihood", "math": "P(y | \u0177) = \u0177^y \u00b7 (1\u2212\u0177)^(1\u2212y)", "explain": "For a binary label y \u2208 {0,1} and predicted probability \u0177 \u2208 (0,1), the likelihood is the Bernoulli PMF. y=1 gives P=\u0177; y=0 gives P=1\u2212\u0177."}, {"title": "Step 2: Log-likelihood", "math": "log P = y log(\u0177) + (1\u2212y) log(1\u2212\u0177)", "explain": "Take the log to convert the product into a sum (easier to optimise). The log-likelihood is negative because log(\u0177) < 0 when \u0177 < 1."}, {"title": "Step 3: Negative log-likelihood (loss)", "math": "L = \u2212log P = \u2212[y log(\u0177) + (1\u2212y) log(1\u2212\u0177)]", "explain": "Negate to convert maximisation into minimisation. This is the cross-entropy between the true distribution [y, 1\u2212y] and the predicted [\u0177, 1\u2212\u0177]."}, {"title": "Step 4: Average over all samples", "math": "L = \u2212(1/n) \u03a3 [y_i log(\u0177_i) + (1\u2212y_i) log(1\u2212\u0177_i)]", "explain": "Sum the per-sample losses and divide by n. The 1/n normalises for batch size."}, {"title": "Step 5: Gradient", "math": "\u2202L/\u2202\u0177_i = \u2212(y_i/\u0177_i \u2212 (1\u2212y_i)/(1\u2212\u0177_i)) = (\u0177_i \u2212 y_i) / (\u0177_i(1\u2212\u0177_i))", "explain": "The gradient simplifies to (\u0177\u2212y) / (\u0177(1\u2212\u0177)). When paired with a sigmoid output, the denominator cancels the sigmoid derivative, giving a clean gradient of (\u0177\u2212y). This is why BCE + sigmoid is the canonical binary-classification setup."}],
+        duration: 12.0,
+      });
+      function dataTableShowMore(btn) {
+        var table = btn.closest('.data-table-container').querySelector('.data-table');
+        var visible = parseInt(table.dataset.visibleRows || '5', 10);
+        var total = parseInt(table.dataset.totalRows || '0', 10);
+        var newVisible = Math.min(total, visible + 10);
+        table.querySelectorAll('.data-table-row').forEach(function(r, i) { if (i < newVisible) r.classList.remove('data-table-hidden'); });
+        table.dataset.visibleRows = newVisible;
+        var remaining = total - newVisible;
+        if (remaining > 0) btn.textContent = 'Show more (' + remaining + ' hidden)';
+        else { btn.textContent = 'All ' + total + ' rows shown'; btn.disabled = true; btn.style.opacity = '0.5'; }
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        var block = document.getElementById('code-block-binary-cross-entropy');
+        if (block) block.textContent = CODE_BANK.python || '';
+        document.querySelectorAll('.code-panel .lang-toggle button').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var panel = btn.closest('.code-panel');
+            panel.querySelectorAll('.lang-toggle button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+            var block = panel.querySelector('pre.code-block');
+            if (block) block.textContent = CODE_BANK[btn.dataset.lang] || '';
+          });
+        });
+        document.querySelectorAll('.demo-tabs button').forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            var target = tab.dataset.tab;
+            document.querySelectorAll('.demo-tabs button').forEach(function (t) { t.classList.toggle('active', t === tab); });
+            document.querySelectorAll('.demo-tab-content').forEach(function (c) { c.classList.toggle('active', c.dataset.tab === target); });
+          });
+        });
+        AIHPC_ANIM.init();
+      });
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d'); var W, H, P = []; var N = 50, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; } r(); addEventListener('resize', r);
+        for (var i = 0; i < N; i++) P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        function s() { x.clearRect(0,0,W,H); for (var i = 0; i < N; i++) { for (var j = i+1; j < N; j++) { var d = Math.hypot(P[i].x-P[j].x, P[i].y-P[j].y); if (d < 100) { x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')'; x.lineWidth = .5; x.beginPath(); x.moveTo(P[i].x, P[i].y); x.lineTo(P[j].x, P[j].y); x.stroke(); } } for (var p of P) { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = W; if (p.x > W) p.x = 0; if (p.y < 0) p.y = H; if (p.y > H) p.y = 0; x.fillStyle = p.c; x.globalAlpha = .4; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.28); x.fill(); } x.globalAlpha = 1; requestAnimationFrame(s); } } s();
+      })();
+      (function () {
+        var KEY = 'aihpc-theme'; var b = document.body, r = document.querySelector('.ribbon'), i = document.getElementById('ribbon-theme-icon');
+        function a(t) { if (t === 'light') { b.classList.add('light'); r && r.classList.add('light'); if (i) i.textContent = 'Sun'; } else { b.classList.remove('light'); r && r.classList.remove('light'); if (i) i.textContent = 'Moon'; } }
+        var d = 'dark'; try { var s = localStorage.getItem(KEY); if (s === 'light' || s === 'dark') d = s; } catch (e) {} a(d);
+        var btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', function () { var n = b.classList.contains('light') ? 'dark' : 'light'; a(n); try { localStorage.setItem(KEY, n); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>
