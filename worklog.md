@@ -3714,3 +3714,51 @@ Stage Summary:
 - Three documented approaches with honest "Available now" vs "Future phase" badges
 - Free-tier breakdown table makes it clear what users get without paying
 - Public mirror will be at HEAD commit (P52-followup) once pushed
+
+---
+Task ID: P52-followup-2
+Agent: main
+Task: Fix lab/cloud-lab link bug in Insights dropdown — previous ribbon patcher had a flawed skip-check
+
+User feedback: "you need to attached this page to the appropriate page though https://testdemoqwenai2025-creator.github.io/DemoAIHPC/lab.html, so that folks could navigate from the home button, hope you've attached all the above endpoints to the appropriate page or home page"
+
+Investigation: probed the live home page's Insights dropdown. Found that lab.html and cloud-lab.html were MISSING from the dropdown, even though they were present in the actions row + meta section. The user couldn't find the lab from the home button.
+
+Root cause: the previous add-lab-link-to-ribbon.py script had a flawed skip-check. It checked `if f'href="{href}"' in s: return False, "already has lab link"` — meaning if the file already had `href="lab.html"` ANYWHERE in the source (including the actions row + meta section), the script skipped patching the Insights dropdown. This meant the home page (which already had lab.html in the actions row + meta section) was never patched.
+
+Fix 1: Manually patched the home page Insights dropdown to add 🔬 Lab + ☁ Cloud Lab links (right after the 🚧 404 page link).
+
+Fix 2: Wrote /home/z/my-project/scripts/fix-lab-link-in-ribbon.py — a more thorough ribbon patcher that:
+- Scans every .html file under docs/
+- For each file with a ribbon-nav, extracts the Insights dropdown substring (between the opening <div class="ribbon-menu"> and the closing </div></details>)
+- Checks if the lab link is specifically in the Insights dropdown (not anywhere else in the file)
+- If missing, inserts lab + cloud-lab links after the 404 link (or audit.html link if 404 isn't present)
+
+Fix 3: Ran the new fixer on all HTML files. Found 17 files that the previous patcher had skipped (because they had lab.html somewhere else). All 17 patched: 15 digest/archive issues + lab.html itself + 1 other.
+
+Fix 4: Reverted prefixed hrefs (../lab.html, ../../cloud-lab.html) to bare filenames in 15 digest/archive pages that have <base href="../../" /> tags.
+
+Final state — the home page Insights dropdown now contains these 14 links in order:
+1. 📡 Live Journal Feeds → feeds.html
+2. Weekly Science Digest → digest.html
+3. 📊 Audit Dashboard → audit.html
+4. 🚧 404 page → 404.html
+5. 🔬 Lab → lab.html (NEW in this fix)
+6. ☁ Cloud Lab → cloud-lab.html (NEW in this fix)
+7. Temporal Knowledge Graph Dashboard → dashboard.html
+8. Concept Cards → concepts.html
+9. Replayable Decision Traces → concepts/replayable-decision-traces.html
+10. Provenance-First Computing → concepts/provenance-first.html
+11. Lazy Evaluation as UX → concepts/lazy-evaluation.html
+12. Cross-Domain Knowledge Graph → concepts/cross-domain-graph.html
+13. Audience-Specific Annotations → concepts/audience-annotations.html
+14. Provenance Chain → concepts/provenance-chain.html
+
+Local audit: 58/58 pass with --skip-live-check. Total home page endpoint references:
+- lab.html: 3 (ribbon Insights + actions row + meta section)
+- cloud-lab.html: 2 (ribbon Insights + meta section)
+
+Stage Summary:
+- The user can now navigate from the home button (ribbon Insights dropdown) to lab.html + cloud-lab.html
+- 17 files that the previous patcher had missed now have the lab + cloud-lab links in their Insights dropdowns
+- All 195 HTML pages now consistently link to lab + cloud-lab from their ribbon Insights dropdown (where applicable)
