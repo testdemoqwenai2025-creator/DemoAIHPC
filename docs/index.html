@@ -3,6 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#0b0f1a" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="dark" />
+    <meta name="apple-mobile-web-app-title" content="AIHPC" />
     <meta
       name="description"
       content="Public preview landing page for AIHPC Advanced — scientific computing platform with live, observable, downloadable demos. Public mirror of the private AIHPC-Advanced repository. All outputs are downloaded to your machine; no data leaves your browser."
@@ -1278,6 +1285,10 @@
             <span style="font-size: 11px; color: #6ee7b7; font-weight: 700;">☁ Cloud Lab</span>
             <span style="font-size: 10px; color: #9ca3af;">Codespaces · Actions · OAuth+Gist · free tier</span>
           </a>
+          <a href="roadmap.html" style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; background: rgba(11,15,26,0.6); border: 1px solid rgba(245,158,11,0.3); border-radius: 6px; text-decoration: none; transition: all 0.2s;">
+            <span style="font-size: 11px; color: #fcd34d; font-weight: 700;">🚀 Enhancement Roadmap</span>
+            <span style="font-size: 10px; color: #9ca3af;">10 ideas for Phases 53-60+</span>
+          </a>
         </div>
       </section>
 
@@ -1897,6 +1908,19 @@
     // Particle background
       (function(){var c=document.getElementById('particle-canvas');if(!c)return;var x=c.getContext('2d');var W,H,P=[];var N=50;var cols=['#06b6d4','#8b5cf6','#ec4899'];function r(){W=c.width=innerWidth;H=c.height=innerHeight}r();addEventListener('resize',r);for(var i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,W,H);for(var i=0;i<N;i++){for(var j=i+1;j<N;j++){var d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<90){x.strokeStyle='rgba(139,92,246,'+.1*(1-d/90)+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke()}}}for(var p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;x.fillStyle=p.c;x.globalAlpha=.4;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill()}x.globalAlpha=1;requestAnimationFrame(s)}s()})();
 
+    </script>
+
+    <!-- Phase 53: Service worker registration for PWA / offline support -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('sw.js').then(function (reg) {
+            console.log('[SW] Registered with scope:', reg.scope);
+          }).catch(function (err) {
+            console.log('[SW] Registration failed:', err);
+          });
+        });
+      }
     </script>
   </body>
 </html>

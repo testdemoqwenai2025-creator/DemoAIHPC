@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AIHPC Advanced — Platform Enhancement Roadmap (Phases 53-60+). 10 ideas ranked by impact × feasibility: PWA/offline, unified search, learning paths, AI-powered Q&A, progress tracking, citation export, reduced-motion, mobile responsive, collaborative notebooks, i18n." />
+    <title>🚀 Enhancement Roadmap — AIHPC Advanced</title>
+    <style>
+      :root { --bg: #0b0f1a; --bg-elevated: #121826; --border: #1f2937; --text: #f3f4f6; --text-muted: #9ca3af; --accent: #8b5cf6; --accent-2: #06b6d4; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.5; min-height: 100vh; }
+      body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), radial-gradient(900px 500px at 90% 110%, rgba(6,182,212,0.12), transparent 60%); pointer-events: none; z-index: 0; }
+      .container { max-width: 1000px; margin: 0 auto; padding: 32px 24px; position: relative; z-index: 1; }
+      h1 { font-size: 32px; margin: 0 0 4px; background: linear-gradient(90deg, #06b6d4, #8b5cf6, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lead { font-size: 15px; color: var(--text-muted); margin: 0 0 24px; max-width: 700px; }
+      .back-link { display: inline-block; font-size: 13px; color: var(--accent-2); text-decoration: none; margin-bottom: 16px; }
+
+      .idea { background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+      .idea.high { border-left: 4px solid var(--success); }
+      .idea.medium { border-left: 4px solid var(--warning); }
+      .idea.low { border-left: 4px solid var(--text-muted); }
+      .idea h2 { font-size: 18px; margin: 0 0 6px; display: flex; align-items: center; gap: 8px; }
+      .idea h2 .phase { font-size: 11px; padding: 2px 8px; border-radius: 9999px; font-weight: 700; }
+      .phase.high { background: var(--success); color: white; }
+      .phase.medium { background: var(--warning); color: white; }
+      .phase.low { background: var(--text-muted); color: white; }
+      .idea .summary { font-size: 14px; color: var(--text-muted); margin: 0 0 12px; }
+      .idea .details { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 12px; }
+      .idea .detail { background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .idea .detail h4 { font-size: 10px; font-weight: 700; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 4px; }
+      .idea .detail p { font-size: 12px; color: var(--text-muted); margin: 0; line-height: 1.5; }
+      .idea .effort { font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace; margin-top: 8px; }
+
+      .footer { font-size: 11px; color: var(--text-muted); margin-top: 32px; text-align: center; font-family: ui-monospace, monospace; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="index.html" class="back-link">← Home</a>
+      <h1>🚀 Enhancement Roadmap</h1>
+      <p class="lead">10 ideas for further platform enhancement, ranked by impact × feasibility. Built on the existing pure-client-side architecture — no backend needed for any of them. Green = build soon, amber = medium priority, gray = later.</p>
+
+      <!-- 1. PWA -->
+      <div class="idea high">
+        <h2>📱 1. Progressive Web App (PWA) — installable + offline <span class="phase high">Phase 53</span></h2>
+        <p class="summary">Add a service worker + manifest.json so the platform can be installed on phones/desktops (Add to Home Screen) and works offline. The biggest single UX upgrade — turns a "website" into an "app".</p>
+        <div class="details">
+          <div class="detail"><h4>What it gives</h4><p>Installable on iOS/Android/desktop. Works offline (core pages + JS cached). Native app-like experience (splash screen, app icon, no browser chrome). Push notification potential (future).</p></div>
+          <div class="detail"><h4>Effort</h4><p>Medium — one manifest.json + one sw.js (~100 lines) + one SVG icon. Service worker caches the 21 JS files + 10 core HTML pages. Cache invalidation on new releases.</p></div>
+          <div class="detail"><h4>Impact</h4><p>HIGH — every user benefits. Critical for field-work use (no network). Makes the platform feel "real" to students who expect apps, not websites.</p></div>
+          <div class="detail"><h4>Feasibility</h4><p>Service workers work on GitHub Pages (HTTPS required ✓). Standard web API. Well-documented. No backend needed.</p></div>
+        </div>
+        <p class="effort">Status: not yet built · Estimated effort: 1-2 hours · Files: docs/manifest.json + docs/sw.js + docs/icon.svg</p>
+      </div>
+
+      <!-- 2. Unified Search -->
+      <div class="idea high">
+        <h2>🔍 2. Unified cross-platform search <span class="phase high">Phase 54</span></h2>
+        <p class="summary">A single search page that searches across ALL content: 126 concept cards, 413 feed entries, 27 ML demos, 16 digest issues, timeline phases. Pure client-side — fetches the existing JSON indexes + builds a search index.</p>
+        <div class="details">
+          <div class="detail"><h4>What it gives</h4><p>One search box → results from concept cards + feeds + demos + digest. Click any result → go directly to that page. Like Algolia but pure client-side.</p></div>
+          <div class="detail"><h4>Effort</h4><p>Medium — one new page (search.html) + client-side search index built from existing JSON snapshots. No external dependencies.</p></div>
+          <div class="detail"><h4>Impact</h4><p>HIGH — the platform has 200 pages but no global search. The concepts index searches only 125 cards; the feeds page searches only 413 entries. Unified search connects everything.</p></div>
+          <div class="detail"><h4>Feasibility</h4><p>The concepts index generator already produces a JSON array of all 125 cards with titles + descriptions. The feeds page already has all.json. The search page fetches both + the ML page demo list → unified index.</p></div>
+        </div>
+        <p class="effort">Status: not yet built · Estimated effort: 2-3 hours · Files: docs/search.html</p>
+      </div>
+
+      <!-- 3. Learning Paths -->
+      <div class="idea high">
+        <h2>📚 3. Learning paths — guided tutorials <span class="phase high">Phase 55</span></h2>
+        <p class="summary">Chain concept cards + lab notebooks + demos into structured learning sequences. E.g. "Intro to ML in 10 steps": MSE → MAE → Huber → KL → gradient descent → Adam → training visualization. Each step has a "Mark complete" button.</p>
+        <div class="details">
+          <div class="detail"><h4>What it gives</h4><p>Structured learning journeys for undergrads + postgrads. Each path has 8-12 steps. Progress tracked in localStorage. "Continue where you left off" on return.</p></div>
+          <div class="detail"><h4>Effort</h4><p>Medium — one new page (paths.html) + a JSON manifest of learning paths. Each path references existing concept cards + demos by ID. No new content needed — just sequencing.</p></div>
+          <div class="detail"><h4>Impact</h4><p>HIGH for students — the platform has 126 concept cards + 27 demos + 6 lab notebooks but no structured path through them. Students don't know where to start.</p></div>
+          <div class="detail"><h4>Proposed paths</h4><p>1. Intro to ML (10 steps) 2. Quantum Computing Foundations (8 steps) 3. Bioinformatics (8 steps) 4. Statistical Methods (10 steps) 5. Cheminformatics (6 steps)</p></div>
+        </div>
+        <p class="effort">Status: not yet built · Estimated effort: 2-3 hours · Files: docs/paths.html + scripts/paths/registry.json</p>
+      </div>
+
+      <!-- 4. AI Q&A on concept cards -->
+      <div class="idea high">
+        <h2>🤖 4. AI-powered "Ask about this card" <span class="phase high">Phase 56</span></h2>
+        <p class="summary">Add an "Ask AI about this concept" button on every concept card. Clicking it loads the card's Math→Code→Output content into the AI Lab as context, so users can ask follow-up questions like "why does MSE penalise large errors more than MAE?" and get an answer grounded in the card's content.</p>
+        <div class="details">
+          <div class="detail"><h4>What it gives</h4><p>Every concept card becomes interactive — not just static reading but a conversation. The AI sees the card's math + code + explanation and can answer domain-specific questions about it.</p></div>
+          <div class="detail"><h4>Effort</h4><p>Low — one button per concept card + a URL parameter on ai-lab.html that pre-loads context. The AI Lab already supports ?search= URL params; extend to ?context=<card-id>.</p></div>
+          <div class="detail"><h4>Impact</h4><p>HIGH for learning — students can ask "I don't understand step 3 of this derivation" and get a targeted explanation. Bridges passive reading with active learning.</p></div>
+          <div class="detail"><h4>Feasibility</h4><p>The 126 concept cards already have structured content (title + description + math + code). Extracting it as context is a simple scrape. The AI Lab already handles the chat.</p></div>
+        </div>
+        <p class="effort">Status: not yet built · Estimated effort: 1-2 hours · Files: modify concept card template + ai-lab.html</p>
+      </div>
+
+      <!-- 5. Progress Tracker -->
+      <div class="idea medium">
+        <h2>📊 5. Progress tracker <span class="phase medium">Phase 57</span></h2>
+        <p class="summary">localStorage-based "I've read this" tracking on every concept card + demo. Shows a progress bar on the home page (e.g. "47/126 concept cards read · 12/27 demos visited"). Each card gets a "Mark as read" button.</p>
+        <div class="details">
+          <div class="detail"><h4>What it gives</h4><p>Students can track their learning progress across the platform. Gamification-lite — seeing a progress bar fill up is motivating. No login needed (localStorage).</p></div>
+          <div class="detail"><h4>Effort</h4><p>Low — a small JS snippet injected into each page that marks the page as visited on load, + a progress widget on the home page that reads from localStorage.</p></div>
+          <div class="detail"><h4>Impact</h4><p>MEDIUM — nice-to-have for students but not essential. The platform already works without it. More of a UX polish item.</p></div>
+          <div class="detail"><h4>Privacy</h4><p>All tracking is in localStorage — no server, no cookies, no third-party analytics. User can clear progress anytime.</p></div>
+        </div>
+        <p class="effort">Status: not yet built · Estimated effort: 1 hour · Files: docs/progress.js (shared) + home page widget</p>
+      </div>
+
+      <!-- 6. Citation Export -->
+      <div class="idea medium">
+        <h2>📋 6. Citation export (BibTeX / APA / MLA) <span class="phase medium">Phase 58</span></h2>
+        <p class="summary">Every concept card + demo gets a "Cite this" button that generates BibTeX / APA / MLA citations. Researchers can cite the platform's content in their papers.</p>
+        <div class="details">
+          <div class="detail"><h4>What it gives</h4><p>Academic credibility — researchers can cite specific concept cards or demos. Each card gets a stable URL + auto-generated citation in 3 formats.</p></div>
+          <div class="detail"><h4>Effort</h4><p>Low — citation generator is ~30 lines of JS per format. Pulls title + URL + date from the page metadata.</p></div>
+          <div class="detail"><h4>Impact</h4><p>MEDIUM — useful for academic users but most users are students who don't need citations yet.</p></div>
+          <div class="detail"><h4>Formats</h4><p>BibTeX (for LaTeX), APA 7th, MLA 9th, Chicago, IEEE. Copy-to-clipboard + download .bib file.</p></div>
+        </div>
+        <p class="effort">Status: not yet built · Estimated effort: 1 hour · Files: docs/cite.js (shared snippet)</p>
+      </div>
+
+      <!-- 7. Reduced Motion -->
+      <div class="idea medium">
+        <h2>♿ 7. Accessibility — reduced motion + ARIA <span class="phase medium">Phase 59</span></h2>
+        <p class="summary">Respect prefers-reduced-motion across all 18 canvas components. Add ARIA live regions for screen-reader narration. Add full keyboard navigation to canvas control buttons. The largest remaining accessibility gap.</p>
+        <div class="details">
+          <div class="detail"><h4>What it gives</h4><p>Users with motion sensitivity can freeze animations. Screen-reader users get spoken status updates. Keyboard-only users can navigate all controls. WCAG 2.2 AA compliance.</p></div>
+          <div class="detail"><h4>Effort</h4><p>HIGH — each of the 18 canvas components needs individual modifications. The molecule-3d component already has theme-awareness from Phase 50 follow-up #9; the pattern can be extended.</p></div>
+          <div class="detail"><h4>Impact</h4><p>HIGH for accessibility — currently 0 of 18 canvas components respect reduced-motion. This is the #1 accessibility gap.</p></div>
+          <div class="detail"><h4>Approach</h4><p>Add a shared utils.js that checks prefers-reduced-motion. Each component's animation loop checks it and skips frame updates when motion is reduced. ARIA live regions update with status text.</p></div>
+        </div>
+        <p class="effort">Status: not yet built · Estimated effort: 4-6 hours (18 components) · Files: docs/accessibility.js + modify each component</p>
+      </div>
+
+      <!-- 8. Mobile Responsive -->
+      <div class="idea low">
+        <h2>📱 8. Mobile-responsive canvas components <span class="phase low">Phase 60</span></h2>
+        <p class="summary">Many canvas components have fixed 480×480 or 600×400 dimensions that don't render well on phones. Add touch events, viewport meta, pinch-zoom for the 3D molecule viewer, Bloch sphere, etc.</p>
+        <div class="details">
+          <div class="detail"><h4>What it gives</h4><p>The platform becomes usable on phones + tablets. Touch-drag to rotate molecules. Pinch-zoom on the Bloch sphere. Responsive layout grids.</p></div>
+          <div class="detail"><h4>Effort</h4><p>HIGH — each canvas component needs touch event handlers + responsive CSS. The 3D math (rotateYawPitch) stays the same; just the input handling changes.</p></div>
+          <div class="detail"><h4>Impact</h4><p>MEDIUM — most users access the platform on desktop. Mobile is a secondary use case. But for students on phones, it's essential.</p></div>
+          <div class="detail"><h4>Approach</h4><p>Add touchstart/touchmove/touchend event listeners to each canvas. Map touch coordinates to yaw/pitch deltas. Use CSS media queries to shrink canvases on small viewports.</p></div>
+        </div>
+        <p class="effort">Status: not yet built · Estimated effort: 6-8 hours (18 components) · Files: modify each component</p>
+      </div>
+
+      <!-- 9. Collaborative Notebooks -->
+      <div class="idea low">
+        <h2>👥 9. Collaborative notebooks via GitHub Gists <span class="phase low">Phase 60+</span></h2>
+        <p class="summary">"Sign in with GitHub" → save notebooks as Gists → share via URL. Others can fork + edit. True multi-user collaboration without a backend database.</p>
+        <div class="details">
+          <div class="detail"><h4>What it gives</h4><p>Students can share notebooks with instructors. Instructors can assign starter notebooks that students fork + complete. Research groups can share analysis code.</p></div>
+          <div class="detail"><h4>Effort</h4><p>HIGH — GitHub OAuth Device Flow (no backend), Gist API integration, fork+edit UX. Complex but well-documented.</p></div>
+          <div class="detail"><h4>Impact</h4><p>HIGH for collaborative use cases — but most users are solo. The in-browser lab already has .ipynb export for manual sharing.</p></div>
+          <div class="detail"><h4>Alternative</h4><p>Users can already export .ipynb → email/Slack → recipient imports. The Gist path is a UX improvement, not a capability addition.</p></div>
+        </div>
+        <p class="effort">Status: not yet built · Estimated effort: 4-6 hours · Files: docs/oauth.js + lab.html modifications</p>
+      </div>
+
+      <!-- 10. Internationalisation -->
+      <div class="idea low">
+        <h2>🌍 10. Internationalisation (i18n) <span class="phase low">Future</span></h2>
+        <p class="summary">Add multi-language support — Chinese, Spanish, French, Arabic. Each page detects browser language and serves the appropriate translation. Content pipeline would need restructuring.</p>
+        <div class="details">
+          <div class="detail"><h4>What it gives</h4><p>Non-English-speaking students can use the platform in their native language. Critical for global adoption in universities.</p></div>
+          <div class="detail"><h4>Effort</h4><p>VERY HIGH — 200 HTML pages × 5 languages = 1000 translation units. Concept cards have math + code (language-agnostic) but descriptions need translation. Machine translation + human review.</p></div>
+          <div class="detail"><h4>Impact</h4><p>HIGH for international adoption — but the platform is currently English-only and serves its existing audience well.</p></div>
+          <div class="detail"><h4>Approach</h4><p>Start with the AI Lab — users can already ask questions in any language. Use the AI to auto-translate concept card descriptions on demand. Full i18n is a much larger project.</p></div>
+        </div>
+        <p class="effort">Status: not yet built · Estimated effort: 20+ hours · Files: entire docs/ tree × 5 languages</p>
+      </div>
+
+      <div class="footer">
+        AIHPC Advanced · Enhancement Roadmap · 10 ideas for Phases 53-60+ · pure client-side · no backend needed for any of them
+      </div>
+    </div>
+  </body>
+</html>

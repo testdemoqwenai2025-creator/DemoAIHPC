@@ -1,0 +1,28 @@
+{
+  "name": "AIHPC Advanced — Scientific Computing Platform",
+  "short_name": "AIHPC",
+  "description": "Scientific computing platform with 18 canvas components, 126 concept cards, 27 ML demos, in-browser Python lab (Pyodide), 14 AI providers, live journal feeds, and a 50-phase timeline. Pure client-side — no backend, no login.",
+  "start_url": "/DemoAIHPC/index.html",
+  "scope": "/DemoAIHPC/",
+  "display": "standalone",
+  "background_color": "#0b0f1a",
+  "theme_color": "#0b0f1a",
+  "orientation": "any",
+  "categories": ["education", "science", "productivity", "developer"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    { "name": "🔬 Scientific Lab", "url": "/DemoAIHPC/lab.html" },
+    { "name": "🤖 AI Lab", "url": "/DemoAIHPC/ai-lab.html" },
+    { "name": "📡 Journal Feeds", "url": "/DemoAIHPC/feeds.html" },
+    { "name": "🗂 Concept Cards", "url": "/DemoAIHPC/concepts.html" },
+    { "name": "☁ Cloud Lab", "url": "/DemoAIHPC/cloud-lab.html" }
+  ]
+}

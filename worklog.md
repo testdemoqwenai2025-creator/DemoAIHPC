@@ -3832,3 +3832,71 @@ Implementation: docs/ai-lab.html — a unified chat interface for 14 AI provider
    - ai-lab.html itself has its own ribbon with Platform / Visualisers / Science / Insights dropdowns, including itself in the Insights list
 
 Local audit: 58/58 pass with --skip-live-check. Home page has 2 ai-lab.html references (ribbon + meta section).
+
+---
+Task ID: P53
+Agent: main
+Task: Phase 53 — PWA (service worker + manifest) + Enhancement Roadmap page (10 ideas for Phases 53-60+)
+
+User question: "why don't you provide some additional thoughts to further enhance the platform please"
+
+Analysis: identified 10 enhancement ideas ranked by impact × feasibility. Built the #1 priority (PWA) + documented all 10 on a new roadmap page.
+
+Implementation:
+
+1. ENHANCEMENT ROADMAP PAGE (docs/roadmap.html):
+   - 10 idea cards, each with: title, phase badge, summary, 4 detail cards (what it gives / effort / impact / feasibility), effort estimate
+   - Color-coded by priority: green (high/Phase 53-56), amber (medium/Phase 57-59), gray (low/Phase 60+)
+   - The 10 ideas:
+     1. 📱 PWA / offline (Phase 53, HIGH) — service worker + manifest, installable + works offline
+     2. 🔍 Unified cross-platform search (Phase 54, HIGH) — searches concept cards + feeds + demos + digest in one box
+     3. 📚 Learning paths (Phase 55, HIGH) — guided tutorials chaining concept cards + lab notebooks + demos
+     4. 🤖 AI-powered "Ask about this card" (Phase 56, HIGH) — each concept card gets an "Ask AI" button
+     5. 📊 Progress tracker (Phase 57, MEDIUM) — localStorage "I've read this" + progress bar on home
+     6. 📋 Citation export (Phase 58, MEDIUM) — BibTeX / APA / MLA on every concept card
+     7. ♿ Accessibility — reduced motion + ARIA (Phase 59, MEDIUM) — the #1 remaining accessibility gap
+     8. 📱 Mobile responsive canvas components (Phase 60, LOW) — touch events, pinch-zoom
+     9. 👥 Collaborative notebooks via Gists (Phase 60+, LOW) — GitHub OAuth + Gist storage
+     10. 🌍 Internationalisation (Future, LOW) — multi-language support
+
+2. PWA MANIFEST (docs/manifest.json):
+   - name: "AIHPC Advanced — Scientific Computing Platform"
+   - short_name: "AIHPC"
+   - start_url: "/DemoAIHPC/index.html" (GitHub Pages subpath-aware)
+   - scope: "/DemoAIHPC/"
+   - display: standalone (no browser chrome when installed)
+   - background_color + theme_color: #0b0f1a (matches the platform's dark bg)
+   - categories: education, science, productivity, developer
+   - icon: docs/icon.svg (any size, maskable)
+   - shortcuts: 🔬 Lab, 🤖 AI Lab, 📡 Feeds, 🗂 Concepts, ☁ Cloud Lab
+
+3. APP ICON (docs/icon.svg):
+   - 512×512 SVG with gradient background + "A" letter in cyan-purple-pink gradient
+   - Includes "AIHPC" subtitle text
+   - Decorative concentric circles for visual interest
+   - SVG format = resolution-independent (works at any size)
+
+4. SERVICE WORKER (docs/sw.js):
+   - Cache strategy: cache-first for static assets (.js, .json, .svg, .css), network-first for HTML pages
+   - Pre-caches 16 core assets on install: 12 HTML pages + 6 key JS components + feeds/all.json + manifest + icon
+   - Skips: Pyodide CDN (10MB+ WASM, too large), digest/archive/* (15 files), concept cards (126 files), cross-origin requests
+   - Cache version: 'aihpc-v52-3' (bumps on every deploy via SW URL change)
+   - On activate: cleans up old caches
+   - On fetch (HTML): try network → fall back to cache → fall back to 404 page if nothing cached
+   - On fetch (static): serve from cache if available → update cache in background → fall back to fetch
+
+5. HOME PAGE PWA META TAGS:
+   - <link rel="manifest" href="manifest.json">
+   - <meta name="theme-color" content="#0b0f1a">
+   - <link rel="icon" href="icon.svg" type="image/svg+xml">
+   - <link rel="apple-touch-icon" href="icon.svg">
+   - <meta name="apple-mobile-web-app-capable" content="yes">
+   - <meta name="apple-mobile-web-app-status-bar-style" content="dark">
+   - <meta name="apple-mobile-web-app-title" content="AIHPC">
+   - Service worker registration script at bottom of page
+
+6. ROADMAP CARD on home page Platform Meta Pages section (amber border, "10 ideas for Phases 53-60+")
+
+7. AUDIT: added roadmap.html to check_ribbon MINIMAL_PAGES allowlist. Total: 58 checks.
+
+Local audit: 58/58 pass with --skip-live-check.
