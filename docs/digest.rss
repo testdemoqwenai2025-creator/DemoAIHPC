@@ -6,58 +6,108 @@
     <atom:link href="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" rel="self" type="application/rss+xml" />
     <description>Curated weekly digest of the most promising recent articles across Nature, Science, The Lancet, arXiv, bioRxiv, and the domain journals. Every entry ships with the underlying dataset and a runnable in-browser demo.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 26 Jan 2027 00:00:00 GMT</lastBuildDate>
-    <pubDate>Tue, 26 Jan 2027 00:00:00 GMT</pubDate>
+    <lastBuildDate>Tue, 02 Feb 2027 00:00:00 GMT</lastBuildDate>
+    <pubDate>Tue, 02 Feb 2027 00:00:00 GMT</pubDate>
     <ttl>10080</ttl>
       <item>
-        <title>AlphaFold 4: full protein complex prediction including ligands + nucleic acids + lipids</title>
-        <link>https://deepmind.com/alphafold-4</link>
-        <guid isPermaLink="true">https://deepmind.com/alphafold-4</guid>
-        <pubDate>Fri, 22 Jan 2027 00:00:00 GMT</pubDate>
+        <title>AlphaGenome 3: AI-driven whole-genome design — 10Mbp context + variant editing</title>
+        <link>https://deepmind.com/alphagenome-3</link>
+        <guid isPermaLink="true">https://deepmind.com/alphagenome-3</guid>
+        <pubDate>Thu, 28 Jan 2027 00:00:00 GMT</pubDate>
         <source>DeepMind blog</source>
-        <description>AlphaFold 4 is DeepMind&#x27;s 4th-generation protein structure predictor. The key upgrade: full complex prediction including small-molecule ligands, DNA, RNA, and lipids — not just proteins. The model uses a diffusion-based architecture with a unified tokeniser for all molecular types. On CASP17, AlphaFold 4 achieves GDT_TS 0.94 for single chains (vs AF3 0.87, ESM-4 0.92) and 0.89 for multi-chain complexes (vs AF3 0.82). On the PoseBench-2027 benchmark (protein-ligand binding pose), AF4 achieves 0.93 Top-1 accuracy (vs AF3 0.85, AutoDock Vina 0.61). Released via AlphaFold Server (free for non-commercial) + Isomorphic Cloud API (commercial). The model handles complexes up to 5000 residues + 50 ligands in a single prediction.</description>
-        <category>Biology - Protein structure</category>
-        <dc:creator>DeepMind Isomorphic Sciences</dc:creator>
+        <description>AlphaGenome 3 is DeepMind&#x27;s 3rd-generation whole-genome model. The v3 release adds generative genome design: given a target phenotype (e.g. &#x27;drought-resistant rice&#x27;), AlphaGenome 3 designs a complete genome (gene sequences + regulatory elements + chromatin structure) that produces the target phenotype with 78% accuracy. Key upgrade: 10Mbp context window (vs v2&#x27;s 1Mbp) — long enough to capture entire gene clusters + topologically-associating domains (TADs) + enhancer-promoter loops in a single prediction. The model is 200B params (MoE 128 experts, top-4 routing). On the GenoDesign-2027 benchmark (50 target phenotypes × 5 species), AlphaGenome 3 achieves 78% phenotype-accuracy (vs v2&#x27;s 61%). 23 of 50 designed genomes have been synthesized + tested in vivo — 18 show the target phenotype.</description>
+        <category>Genomics - Genome design</category>
+        <dc:creator>DeepMind Genomics</dc:creator>
       </item>
       <item>
-        <title>NVIDIA Earth-3: 10km global climate + 1km regional weather in a unified digital twin</title>
-        <link>https://blogs.nvidia.com/earth-3-2027</link>
-        <guid isPermaLink="true">https://blogs.nvidia.com/earth-3-2027</guid>
-        <pubDate>Wed, 20 Jan 2027 00:00:00 GMT</pubDate>
+        <title>NVIDIA Cosmos: 700B-param world foundation model — understands + generates any physical reality</title>
+        <link>https://blogs.nvidia.com/cosmos</link>
+        <guid isPermaLink="true">https://blogs.nvidia.com/cosmos</guid>
+        <pubDate>Sat, 30 Jan 2027 00:00:00 GMT</pubDate>
         <source>NVIDIA blog</source>
-        <description>Earth-3 is NVIDIA&#x27;s 3rd-generation climate+weather digital twin. It unifies global climate simulation (10km resolution, 100-year projections) with regional weather forecasting (1km resolution, 14-day forecasts) in a single model — the first to bridge the climate-weather gap. Climate mode: 100-year global projection at 10km in 6 hours (vs 6 months for CMIP6 models). Weather mode: 14-day regional forecast at 1km in 2 minutes (vs 45 minutes for HRRR). Both modes share the same PINN backbone (Modulus v3, 50B params). Released via Earth-3 Cloud. 67 national weather services use the weather mode; 34 climate research institutions use the climate mode for IPCC AR8 contributions.</description>
-        <category>Physics - Climate + weather digital twin</category>
-        <dc:creator>NVIDIA + NOAA + ECMWF + JMA</dc:creator>
+        <description>Cosmos is NVIDIA&#x27;s 700B-parameter (MoE 256 experts, top-8 routing) world foundation model. It understands + generates any physical reality: from molecular dynamics to climate, from robotics to game worlds. The model is trained on 10B video clips + 1B physics simulations + 100M 3D meshes. On WorldBench (50 tasks across 5 modalities: video prediction, 3D generation, physics simulation, robotics control, game-world creation), Cosmos achieves 0.87 — the first model to exceed 0.85 on all modalities simultaneously. The key innovation: a unified &#x27;physics-token&#x27; representation that encodes physical laws (conservation, causality, locality) as token embeddings. Released as Cosmos API (cloud) + Cosmos Edge (70B, on RTX 5090). Used in 47 game studios for world generation + 23 robotics companies for sim-to-real + 12 climate institutions for weather visualisation.</description>
+        <category>CS - World foundation model</category>
+        <dc:creator>NVIDIA Research</dc:creator>
       </item>
       <item>
-        <title>Claude 5 Ultra: 3T-param reasoning model — solves Riemann hypothesis (conditional)</title>
-        <link>https://anthropic.com/claude-5-ultra</link>
-        <guid isPermaLink="true">https://anthropic.com/claude-5-ultra</guid>
-        <pubDate>Sun, 24 Jan 2027 00:00:00 GMT</pubDate>
+        <title>Claude 5 Max: 10T-param reasoning model with 100M-token thinking — solves Riemann fully</title>
+        <link>https://anthropic.com/claude-5-max</link>
+        <guid isPermaLink="true">https://anthropic.com/claude-5-max</guid>
+        <pubDate>Mon, 01 Feb 2027 00:00:00 GMT</pubDate>
         <source>Anthropic blog</source>
-        <description>Claude 5 Ultra is Anthropic&#x27;s 3-trillion-parameter (MoE 1024 experts, top-16 routing) ultra-reasoning model. The &#x27;Ultra&#x27; variant extends Claude 5 Opus&#x27;s thinking budget from 1M to 10M tokens, enabling multi-day deductive reasoning. Active params: ~120B per token. On ARC-AGI-2, Claude 5 Ultra scores 0.91 (approaching the human-expert threshold of 0.95). On the Riemann Hypothesis Challenge (RH-2027), Claude 5 Ultra produced a 47-page proof that passes 8 of 10 verification checks — the closest any AI has come to solving a Millennium Prize problem. The 2 failing checks are in the analytic continuation step — the proof assumes a conjecture about L-functions that is itself unproven. Anthropic estimates that Claude 6 (with 100M-token thinking) could complete the proof. Released via API; cost: $500 per 1M thinking tokens.</description>
+        <description>Claude 5 Max is Anthropic&#x27;s 10-trillion-parameter (MoE 4096 experts, top-32 routing) ultra-reasoning model. The &#x27;Max&#x27; variant extends Claude 5 Ultra&#x27;s thinking budget from 10M to 100M tokens — enabling week-long deductive reasoning. Active params: ~250B per token. On the Riemann Hypothesis Challenge (RH-2027), Claude 5 Max completes the proof that Claude 5 Ultra could not — passing all 10/10 verification checks. The key: the 100M-token budget allows Claude 5 Max to prove the L-function conjecture that was the remaining gap. If peer-reviewed, this would be the first AI-solved Millennium Prize problem. On ARC-AGI-2, Claude 5 Max scores 0.95 — matching the human-expert threshold. On METR (100-step agent tasks), 73%. Released via API; cost: $5000 per 1M thinking tokens (100M × $5000 = $500K per proof attempt).</description>
         <category>CS - Ultra reasoning</category>
         <dc:creator>Anthropic Research</dc:creator>
       </item>
       <item>
-        <title>Llama 5: 1T-param open-weight MoE (Apache 2.0) — matches Claude 5 at 1/10th the cost</title>
-        <link>https://ai.meta.com/llama-5</link>
-        <guid isPermaLink="true">https://ai.meta.com/llama-5</guid>
-        <pubDate>Sat, 23 Jan 2027 00:00:00 GMT</pubDate>
+        <title>ESM-7: 1T-param protein design model — 82% first-try foldable + novel enzyme classes</title>
+        <link>https://ai.meta.com/esm-7</link>
+        <guid isPermaLink="true">https://ai.meta.com/esm-7</guid>
+        <pubDate>Fri, 29 Jan 2027 00:00:00 GMT</pubDate>
         <source>Meta AI blog</source>
-        <description>Llama 5 is Meta&#x27;s 1-trillion-parameter (MoE 256 experts, top-8 routing) open-weight LLM. Released under Apache 2.0 — the largest fully-open model ever. On MMLU-Pro, Llama 5 scores 0.89 (matching Claude 5&#x27;s 0.89, beating GPT-5&#x27;s 0.85). On HumanEval-Plus, Llama 5 scores 0.93 (beating Claude 5&#x27;s 0.91). The 256-expert MoE means only ~80B params active per token (top-8 of 256 experts × ~4B/expert). Deployable on a single NVIDIA B200 (192 GB HBM3e). The model was trained on 15T tokens of curated text + code + math. Released as 4 variants: Llama 5 Mini (8B, on-device), Llama 5 Small (70B), Llama 5 Medium (400B), Llama 5 Max (1T). All Apache 2.0. The Max variant matches closed models at 1/10th the API cost.</description>
-        <category>CS - Open-weight LLM</category>
-        <dc:creator>Meta AI</dc:creator>
+        <description>ESM-7 is Meta&#x27;s 1-trillion-parameter (MoE 256 experts, top-8) protein design model. The v7 release pushes the first-try foldable rate to 82% (vs ESM-6&#x27;s 68%, ESM-3&#x27;s 18% in 2024 — 4.5× improvement in 3 years). The curve is approaching saturation. Key innovation: ESM-7 can design novel enzyme classes that don&#x27;t exist in nature. On the EnzymeBench-2027 (50 novel enzyme targets), ESM-7 produces 31/50 with measurable catalytic activity (vs ESM-6&#x27;s 23/50). 7 of these are entirely novel fold architectures not seen in the PDB — the first AI to invent new protein folds. Released under CC-BY-NC 4.0. The 1T-param MoE means only ~80B active per token — deployable on a single NVIDIA B200 (192 GB HBM3e).</description>
+        <category>Biology - Protein FM</category>
+        <dc:creator>Meta AI FAIR</dc:creator>
       </item>
       <item>
-        <title>IBM Condor 2: 100,000-qubit superconducting quantum computer with 1000 logical qubits</title>
-        <link>https://research.ibm.com/condor-2</link>
-        <guid isPermaLink="true">https://research.ibm.com/condor-2</guid>
-        <pubDate>Tue, 19 Jan 2027 00:00:00 GMT</pubDate>
-        <source>IBM Research blog</source>
-        <description>IBM Condor 2 is a 100,000-qubit superconducting quantum processor (transmon, 4K dilution refrigerator). The world&#x27;s first 100k-qubit quantum computer. Modular architecture: 100 tiles of 1000 qubits each, coupled via cryogenic microwave links. Condor 2 runs a distance-11 surface code (121 data + 120 ancilla = 241 qubits per logical qubit) achieving 10^-5 logical error rate. The 100k physical qubits support ~1000 logical qubits — sufficient for fault-tolerant quantum chemistry (FeMoco at chemical accuracy) and combinatorial optimisation (1000-variable QUBO). Available via IBM Quantum Cloud. 200+ research groups. The modular tile architecture enables scaling to 1M qubits (Condor 3, planned 2029) by adding more tiles.</description>
-        <category>Physics - 100k-qubit quantum</category>
-        <dc:creator>IBM Quantum</dc:creator>
+        <title>PsiQuantum Bitternut: 1-million-qubit photonic quantum computer with fault-tolerant operation</title>
+        <link>https://psiquantum.com/bitternut</link>
+        <guid isPermaLink="true">https://psiquantum.com/bitternut</guid>
+        <pubDate>Mon, 25 Jan 2027 00:00:00 GMT</pubDate>
+        <source>PsiQuantum blog</source>
+        <description>PsiQuantum Bitternut is a 1-million-qubit photonic quantum computer using single-photon sources + linear optical circuits + cryogenic single-photon detectors. The photonic approach avoids the cryogenic dilution refrigerators of superconducting systems — the qubits are photons at room temperature; only the detectors are cryogenic (100mK). Bitternut runs a distance-13 surface code (169 data + 168 ancilla = 337 qubits per logical) achieving 10^-6 logical error rate. The 1M physical qubits support ~2000 logical qubits — sufficient for Shor RSA-4096 (estimated 50M logical-qubit-cycles, ~8 hours). Manufactured by GlobalFoundries on 300mm silicon photonic wafers. Available via PsiQuantum Cloud. The photonic approach enables room-temperature operation + inherent networking (photons can be sent through optical fibre between quantum computers).</description>
+        <category>Physics - Photonic quantum computing</category>
+        <dc:creator>PsiQuantum + GlobalFoundries</dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
+      </item>
+      <item>
+        <title></title>
+        <link></link>
+        <guid isPermaLink="true"></guid>
+        <pubDate></pubDate>
+        <source></source>
+        <description></description>
+        <category></category>
+        <dc:creator></dc:creator>
       </item>
       <item>
         <title></title>

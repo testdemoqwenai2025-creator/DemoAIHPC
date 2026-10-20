@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="50-Phase Retrospective — celebrating the AIHPC Advanced platform's 50th phase milestone. Summary of all 50 phases with key metrics." />
+    <title>50-Phase Retrospective — AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#8b5cf6; --accent-2:#06b6d4; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+      h1 { font-size: 42px; background: linear-gradient(90deg,#06b6d4,#8b5cf6,#ec4899,#f59e0b); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(196,181,253,0.2); }
+      h2 { font-size: 20px; color: var(--accent-2); margin: 24px 0 12px; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; margin-bottom: 12px; }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 32px; }
+      .stat-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px; padding: 16px; backdrop-filter: blur(12px); text-align: center; }
+      .stat-card .num { font-size: 36px; font-weight: 800; background: linear-gradient(90deg,#06b6d4,#8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .stat-card .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+      .milestone-list { list-style: none; padding: 0; }
+      .milestone-list li { padding: 12px 16px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.2); border-radius: 10px; margin-bottom: 8px; backdrop-filter: blur(8px); transition: all 0.2s; }
+      .milestone-list li:hover { border-color: rgba(6,182,212,0.5); }
+      .milestone-list .phase { font-weight: 700; color: var(--accent-2); font-family: ui-monospace; }
+      .milestone-list .desc { color: var(--text-muted); font-size: 13px; }
+      .milestone-list .stat { color: var(--accent); font-size: 11px; font-family: ui-monospace; }
+      .links-row { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+      .links-row a { color: var(--accent-2); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); }
+      .links-row a:hover { border-color: var(--accent-2); }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <p style="font-size: 13px; color: var(--text-muted);"><a href="index.html" style="color: var(--accent-2); text-decoration: none;">← Home</a> / <a href="timeline.html" style="color: var(--accent-2); text-decoration: none;">Timeline</a></p>
+      <span class="tag">Phase 50 · Milestone Celebration</span>
+      <h1>50-Phase Retrospective</h1>
+      <p class="lead">Celebrating 50 phases of AIHPC Advanced — a pure client-side scientific computing platform with 19 canvas components, 16 weekly digests, 52+ audit checks, 27 ML demos, and zero external services. From Phase 1 (static HTML) to Phase 50 (QKD visualiser + retrospective), the platform has evolved into a comprehensive reference for quantum computing, machine learning, medical imaging, cheminformatics, and cross-domain scientific computing.</p>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="num">50</div><div class="label">Phases</div></div>
+        <div class="stat-card"><div class="num">19</div><div class="label">Canvas components</div></div>
+        <div class="stat-card"><div class="num">16</div><div class="label">Weekly digests</div></div>
+        <div class="stat-card"><div class="num">52+</div><div class="label">Audit checks</div></div>
+        <div class="stat-card"><div class="num">27</div><div class="label">ML demos</div></div>
+        <div class="stat-card"><div class="num">9</div><div class="label">Quantum visualisers</div></div>
+        <div class="stat-card"><div class="num">6</div><div class="label">Medical cases</div></div>
+        <div class="stat-card"><div class="num">11</div><div class="label">Playground presets</div></div>
+        <div class="stat-card"><div class="num">0</div><div class="label">External services</div></div>
+        <div class="stat-card"><div class="num">100%</div><div class="label">Client-side</div></div>
+      </div>
+
+      <h2>Key Milestones (Phases 1-50)</h2>
+      <ul class="milestone-list">
+        <li><span class="phase">Phase 1:</span> <span class="desc">Platform launched — 5 static pages + GitHub Pages deployment</span> <span class="stat">| 0 components, 0 checks</span></li>
+        <li><span class="phase">Phase 25:</span> <span class="desc">Weekly Science Digest Issue #1 + 11 ETL parsers</span> <span class="stat">| 1 component, 0 checks</span></li>
+        <li><span class="phase">Phase 28:</span> <span class="desc">Animated derivation clips + audit system (22 checks)</span> <span class="stat">| 1 component, 22 checks</span></li>
+        <li><span class="phase">Phase 30:</span> <span class="desc">ML page with 18 demos (9 loss + 3 activation + 3 optimiser + 3 regularisation)</span> <span class="stat">| 2 components, 22 checks</span></li>
+        <li><span class="phase">Phase 37:</span> <span class="desc">Bloch sphere (9 scenes) + cross-domain knowledge graph + 9 new ML demos</span> <span class="stat">| 4 components, 26 checks</span></li>
+        <li><span class="phase">Phase 40:</span> <span class="desc">Scientific uploader (15 formats) + attention heat-map + KG search</span> <span class="stat">| 8 components, 36 checks</span></li>
+        <li><span class="phase">Phase 42:</span> <span class="desc">Fock state viewer (second quantisation) + cross-domain playground</span> <span class="stat">| 10 components, 40 checks</span></li>
+        <li><span class="phase">Phase 46:</span> <span class="desc">Quantum circuit builder + component manifest (bill of materials)</span> <span class="stat">| 14 components, 46 checks</span></li>
+        <li><span class="phase">Phase 48:</span> <span class="desc">Surface code QEC + component registry dashboard</span> <span class="stat">| 17 components, 50 checks</span></li>
+        <li><span class="phase">Phase 50:</span> <span class="desc">QKD visualiser (BB84) + 50-phase retrospective — this milestone</span> <span class="stat">| 19 components, 52+ checks</span></li>
+      </ul>
+
+      <h2>Quantum Visualisation Suite (9 components)</h2>
+      <ul class="milestone-list">
+        <li><span class="phase">Bloch sphere (P37):</span> <span class="desc">9 scenes — ground → Hadamard → Rabi → phase → measurement → decoherence → Bell → CHSH</span></li>
+        <li><span class="phase">VQC animator (P39):</span> <span class="desc">Variational quantum circuit training via parameter-shift rule + barren-plateau chart</span></li>
+        <li><span class="phase">Fock state viewer (P42):</span> <span class="desc">Second quantisation — Hermite wavefunctions + animated a/a† operators</span></li>
+        <li><span class="phase">Coupled oscillator (P45):</span> <span class="desc">CV quantum optics — HOM effect, 2-mode squeezing, NOON states</span></li>
+        <li><span class="phase">Circuit builder (P46):</span> <span class="desc">Interactive drag-and-drop gates (H/X/Y/Z/S/T/CNOT) → real-time state vector</span></li>
+        <li><span class="phase">Algorithm visualiser (P47):</span> <span class="desc">Deutsch-Jozsa, Grover, QFT animated step-by-step</span></li>
+        <li><span class="phase">Surface code QEC (P48):</span> <span class="desc">Syndrome measurement, error detection, correction, below-threshold verification</span></li>
+        <li><span class="phase">Teleportation (P49):</span> <span class="desc">Full protocol: entangle → Bell measure → classical → correct → teleported</span></li>
+        <li><span class="phase">QKD BB84 (P50):</span> <span class="desc">Quantum key distribution: polarised photons → measurement → eavesdropper detection</span></li>
+      </ul>
+
+      <h2>Design Principles That Made It Last</h2>
+      <ul class="milestone-list">
+        <li><span class="phase">Pure client-side:</span> <span class="desc">Zero external services, zero backend, zero API keys. The platform works in 2027 or 2047 — GitHub Pages just serves static files.</span></li>
+        <li><span class="phase">No-cloning theorem:</span> <span class="desc">Quantum mechanics guarantees that unknown quantum states cannot be copied — the foundation of BB84 QKD security (Phase 50).</span></li>
+        <li><span class="phase">Composable components:</span> <span class="desc">Every canvas component has a clean public API + registerConsumer pattern. New visualisations compose with new uploaders without rewriting either.</span></li>
+        <li><span class="phase">Math is the contract:</span> <span class="desc">Every equation (a|n⟩ = √n|n-1⟩, Dice = 2|A∩B|/(|A|+|B|), E = mc²) stays mathematically true forever. Implementations evolve; math doesn't.</span></li>
+        <li><span class="phase">Audit-gated CI:</span> <span class="desc">52+ machine-checked invariants ensure no regression. The CI workflow tags + pushes to public mirror automatically.</span></li>
+        <li><span class="phase">Lazy evaluation:</span> <span class="desc">IntersectionObserver-based lazy mounting means a single page can host 9+ visualisations without page-load cost.</span></li>
+        <li><span class="phase">Open standards:</span> <span class="desc">Every demo cites real papers (Bennett 1993, Nielsen & Chuang, TotalSegmentator, etc.). Content ages gracefully; we just refresh citations.</span></li>
+      </ul>
+
+      <div class="links-row">
+        <a href="timeline.html">Platform Timeline</a>
+        <a href="component-registry.html">Component Registry</a>
+        <a href="audit.html">Audit Dashboard</a>
+        <a href="graph.html">Knowledge Graph</a>
+        <a href="digest.html">Weekly Digest</a>
+        <a href="playground.html">Playground</a>
+        <a href="quantum-shorts.html">Quantum Shorts</a>
+        <a href="bloch.html">Bloch Shorts</a>
+        <a href="medical-atlas.html">Medical Atlas</a>
+        <a href="science/physics/quantum.html">Quantum Mechanics</a>
+      </div>
+    </div>
+  </body>
+</html>

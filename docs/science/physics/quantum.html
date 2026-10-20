@@ -458,6 +458,20 @@
         </div>
       </section>
 
+      <!-- Phase 50: BB84 QKD Visualiser -->
+      <section style="margin: 32px 0; padding: 24px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 16px; backdrop-filter: blur(12px);">
+        <p class="h-tag" style="color: #06b6d4;">Phase 50 · Quantum Key Distribution</p>
+        <h2 style="font-size: 22px; margin: 8px 0 12px; background: linear-gradient(90deg,#06b6d4,#10b981); -webkit-background-clip: text; background-clip: text; color: transparent;">BB84 protocol — unbreakable encryption via quantum mechanics</h2>
+        <p style="font-size: 14px; color: var(--text-muted, #9ca3af); max-width: 920px;">Watch the BB84 quantum key distribution protocol: Alice sends polarised photons (4 bases) → Bob measures in random bases → public basis comparison → eavesdropper detection (Eve's interception causes ~25% error rate in matched bits) → key extraction + privacy amplification. Press <strong>Toggle Eve</strong> to add an eavesdropper and watch the error rate spike. The final key is unbreakable — guaranteed by the no-cloning theorem.</p>
+        <div style="margin-top: 20px;">
+          <div id="quantum-qkd-container"></div>
+        </div>
+        <div style="margin-top: 16px; padding: 12px; background: rgba(11,15,26,0.6); border-radius: 8px; border: 1px solid var(--border, #1f2937); font-size: 11px; line-height: 1.7; color: var(--text-muted, #9ca3af);">
+          <strong style="color: #06b6d4;">Math:</strong> If Eve measures with wrong basis (50% chance), she introduces 25% error in matched bits. Threshold: if error > 11% (BB84 threshold), Eve detected → abort. Below threshold: privacy amplification → secure key.<br/>
+          <strong style="color: #8b5cf6;">References:</strong> Bennett & Brassard (1984, BB84 original paper); Ekert (1991, E91 — entanglement-based QKD); Nobel Prize 2022 (Aspect, Clauser, Zeilinger — QKD experimental foundation).
+        </div>
+      </section>
+
       <h2>Math &rarr; Code derivation</h2>
       <div class="derivation-step">
         <strong>Step 1: The qubit</strong>
@@ -702,6 +716,26 @@
           window.addEventListener('scroll', load, { once: true, passive: true });
         }
       })();
+
+      // Phase 50: lazy-mount QKD visualiser
+      (function () {
+        var loaded = false;
+        var el = document.getElementById('quantum-qkd-container');
+        if (!el) return;
+        function load() {
+          if (loaded || !window.AIHPC_QKD) return;
+          loaded = true;
+          AIHPC_QKD.mount('quantum-qkd-container');
+        }
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (e.isIntersecting) { load(); io.disconnect(); } });
+          }, { rootMargin: '200px' });
+          io.observe(el);
+        } else {
+          window.addEventListener('scroll', load, { once: true, passive: true });
+        }
+      })();
     </script>
     <script src="../../vqc-animator.js"></script>
     <script src="../../fock-state-viewer.js" defer></script>
@@ -710,5 +744,6 @@
     <script src="../../quantum-algorithm-visualiser.js" defer></script>
     <script src="../../surface-code-visualiser.js" defer></script>
     <script src="../../quantum-teleportation.js" defer></script>
+    <script src="../../qkd-visualiser.js" defer></script>
   </body>
 </html>

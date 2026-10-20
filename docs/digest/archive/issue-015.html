@@ -1,0 +1,1538 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <base href="../../" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Weekly Science Digest — Issue #16 (2027-02-02). Curated recent articles from Nature, Science, Lancet, arXiv, and domain journals, with datasets and runnable in-browser demos." />
+    <title>Weekly Science Digest · Issue #15 (ARCHIVED) — AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#8b5cf6; --accent-2:#06b6d4; --accent-3:#f59e0b; --success:#10b981; --danger:#ef4444; --warn:#fbbf24; --info:#3b82f6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(139,92,246,0.15), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.1), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      /* Ribbon */
+      .ribbon { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(139,92,246,0.25); background: linear-gradient(180deg, rgba(7,9,15,0.95) 0%, rgba(11,15,26,0.85) 100%); backdrop-filter: blur(12px); box-shadow: 0 1px 0 0 rgba(6,182,212,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+      .ribbon::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: linear-gradient(90deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%); opacity: 0.7; }
+      .ribbon.light { background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.92) 100%); border-bottom-color: rgba(139,92,246,0.25); }
+      .ribbon-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 12px; }
+      .ribbon-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 600; }
+      .ribbon-logo { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#06b6d4,#8b5cf6,#d946ef); color: white; font-size: 12px; font-weight: 700; }
+      .ribbon-name { display: none; } @media (min-width: 600px) { .ribbon-name { display: inline; } }
+      .ribbon-nav { display: flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown { position: relative; }
+      .ribbon-dropdown > summary { list-style: none; cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 14px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+      .ribbon-dropdown > summary::-webkit-details-marker { display: none; }
+      .ribbon-dropdown > summary::after { content: "▾"; font-size: 10px; opacity: 0.6; }
+      .ribbon-dropdown[open] > summary { background: var(--bg-elevated); color: var(--text); }
+      .ribbon-menu { position: absolute; top: 100%; left: 0; margin-top: 4px; min-width: 240px; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 6px; box-shadow: 0 12px 32px rgba(0,0,0,0.4); display: flex; flex-direction: column; gap: 2px; max-height: 70vh; overflow: auto; }
+      .ribbon-menu a { text-decoration: none; color: var(--text-muted); font-size: 13px; padding: 6px 10px; border-radius: 6px; }
+      .ribbon-menu a:hover { background: var(--bg); color: var(--text); }
+      .ribbon-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+      .ribbon-icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+      .ribbon-icon-btn:hover { border-color: var(--accent); }
+      .ribbon-btn-primary { display: inline-flex; align-items: center; padding: 6px 16px; border-radius: 9999px; background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; text-decoration: none; font-size: 13px; font-weight: 600; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 56px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 42px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 40px rgba(196,181,253,0.2); }
+      .lead { font-size: 18px; color: var(--text-muted); max-width: 800px; margin: 0 0 32px; }
+      h2 { font-size: 22px; margin: 32px 0 12px; }
+      .meta-issue { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--text-muted); margin-bottom: 24px; padding: 12px 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; }
+      .meta-issue strong { color: var(--text); }
+      .meta-issue .pill { padding: 2px 8px; border-radius: 9999px; background: rgba(6,182,212,0.15); color: var(--accent-2); border: 1px solid rgba(6,182,212,0.3); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+      /* Article card */
+      .article-card { background: rgba(18,24,38,0.6); border: 1px solid rgba(139,92,246,0.2); border-radius: 16px; margin: 24px 0; padding: 28px; backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
+      .article-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--accent), var(--accent-2)); opacity: 0.8; }
+      .article-card:hover { border-color: rgba(139,92,246,0.4); box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 40px rgba(139,92,246,0.15); }
+      .article-card .article-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+      .article-card .source-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); flex-wrap: wrap; }
+      .article-card .source-badge { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; background: rgba(245,158,11,0.2); color: var(--accent-3); border: 1px solid rgba(245,158,11,0.3); }
+      .article-card .domain-pill { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: rgba(6,182,212,0.15); color: var(--accent-2); border: 1px solid rgba(6,182,212,0.3); }
+      .article-card h3 { font-size: 22px; margin: 4px 0 8px; line-height: 1.25; color: var(--text); }
+      .article-card .authors { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; font-style: italic; }
+      .article-card .abstract { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+      .article-card .abstract p { margin: 0 0 10px; }
+      /* Dataset card */
+      .dataset-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; }
+      .dataset-card .ds-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-3); margin-bottom: 8px; }
+      .dataset-card .ds-row { display: grid; grid-template-columns: 80px 1fr; gap: 8px; font-size: 12px; color: var(--text-muted); padding: 2px 0; }
+      .dataset-card .ds-row .k { color: var(--text-muted-2); font-weight: 600; }
+      .dataset-card .ds-row .v { color: var(--text); }
+      .dataset-card .ds-row .v a { color: var(--accent-2); text-decoration: none; word-break: break-all; }
+      .dataset-card .ds-row .v a:hover { text-decoration: underline; }
+      /* ClickForDemo card */
+      .demo-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; margin: 12px 0 0; overflow: hidden; }
+      .demo-card .card-head { padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; gap: 16px; cursor: pointer; user-select: none; }
+      .demo-card .card-head:hover { background: var(--bg-elevated); }
+      .demo-card .card-title { font-size: 14px; font-weight: 700; color: var(--text); margin: 0; }
+      .demo-card .card-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+      .demo-card .chevron { transition: transform 0.3s ease; color: var(--text-muted); font-size: 18px; }
+      .demo-card.open .chevron { transform: rotate(180deg); }
+      .demo-card .card-body { display: none; padding: 0; }
+      .demo-card.open .card-body { display: block; }
+      .demo-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-elevated); }
+      .demo-tabs button { padding: 10px 18px; background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .demo-tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .demo-tab-content { display: none; padding: 18px; }
+      .demo-tab-content.active { display: block; }
+      /* Math */
+      .math-panel .math-eq { font-family: "Cambria Math", Georgia, serif; font-size: 17px; color: var(--accent-2); padding: 10px 14px; background: rgba(6,182,212,0.05); border-radius: 8px; border-left: 3px solid var(--accent-2); margin: 8px 0 12px; }
+      .math-panel .math-plain { font-size: 13px; color: var(--text-muted); }
+      .derivation-step { background: var(--bg-elevated); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+      .derivation-step .step-math { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent-2); margin: 6px 0 4px; padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; }
+      .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
+      /* Code */
+      .code-panel .lang-toggle { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+      .code-panel .lang-toggle button { padding: 4px 10px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 600; border-radius: 6px; cursor: pointer; font-family: inherit; }
+      .code-panel .lang-toggle button.active { background: linear-gradient(90deg,#8b5cf6,#06b6d4); color: white; border-color: transparent; }
+      pre.code-block { background: #0a0e1a; border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 12px; line-height: 1.5; overflow: auto; color: #e5e7eb; font-family: "SF Mono", Menlo, Consolas, monospace; }
+      pre.code-block .kw { color: #c084fc; }
+      pre.code-block .str { color: #fbbf24; }
+      pre.code-block .num { color: #67e8f9; }
+      pre.code-block .cmt { color: #6b7280; font-style: italic; }
+      /* Observe sub-tabs */
+      .observe-subtabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid var(--border); }
+      .observe-subtabs button { padding: 6px 14px; background: transparent; border: none; color: var(--text-muted); font-size: 12px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+      .observe-subtabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+      .observe-content { display: none; }
+      .observe-content.active { display: block; }
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+      .stats-grid .stat { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+      .stats-grid .stat .l { font-size: 10px; color: var(--text-muted-2); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stats-grid .stat .v { font-size: 16px; font-weight: 700; color: var(--accent-2); margin-top: 2px; font-family: "SF Mono", Menlo, monospace; }
+      .report-block { padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); line-height: 1.6; }
+      .graph-block { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+      .graph-block svg { width: 100%; height: auto; display: block; }
+      .summary-block ul { padding-left: 22px; color: var(--text-muted); }
+      .summary-block ul li { margin-bottom: 6px; font-size: 13px; }
+      .summary-block ul li strong { color: var(--text); }
+      /* Article footer */
+      .article-footer { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap; font-size: 12px; color: var(--text-muted); }
+      .article-footer a { color: var(--accent-2); text-decoration: none; }
+      .article-footer a:hover { text-decoration: underline; }
+      .article-footer .citation { font-family: "SF Mono", Menlo, monospace; font-size: 11px; color: var(--text-muted-2); }
+      /* Bottom meta */
+      .meta { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 13px; }
+      .meta a { color: var(--text); text-decoration: none; }
+      .meta a:hover { text-decoration: underline; }
+      /* Light theme */
+      body.light { background: radial-gradient(1200px 600px at 20% -10%, rgba(245,158,11,0.08), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.06), transparent 55%), #fafafa; color: #18181b; }
+      body.light .article-card, body.light .dataset-card, body.light .demo-card, body.light .meta-issue, body.light .stats-grid .stat, body.light .report-block, body.light .graph-block { background: white; border-color: #e5e7eb; }
+      body.light .demo-tabs, body.light .code-panel .lang-toggle button, body.light .derivation-step { background: #f9fafb; border-color: #e5e7eb; }
+      body.light pre.code-block { background: #1a1f2e; color: #e5e7eb; }
+      body.light .ribbon-menu, body.light .ribbon-dropdown[open] > summary { background: white; border-color: #e5e7eb; }
+      body.light .lead, body.light .meta, body.light .article-footer, body.light .abstract, body.light .authors, body.light .summary-block ul, body.light .derivation-step .step-explain { color: #4b5563; }
+      body.light .ribbon-btn-primary { color: white; }
+      /* Futuristic vision article styling (Phase 26) */
+      .article-card.futuristic-vision { border-color: rgba(236,72,153,0.35); box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 40px rgba(236,72,153,0.15); }
+      .article-card.futuristic-vision::before { background: linear-gradient(180deg, #ec4899, #8b5cf6, #06b6d4); }
+      .article-card.futuristic-vision:hover { border-color: rgba(236,72,153,0.6); box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 50px rgba(236,72,153,0.25); }
+      .source-badge.futuristic { background: rgba(236,72,153,0.2); color: #f9a8d4; border-color: rgba(236,72,153,0.4); }
+      .futuristic-pill { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: linear-gradient(90deg, rgba(236,72,153,0.25), rgba(139,92,246,0.25)); color: #f9a8d4; border: 1px solid rgba(236,72,153,0.4); }
+    </style>
+    <script src="subscribe-gate.js"></script>
+    <script src="digest-parsers.js"></script>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="index.html">Home</a><a href="demos.html">Demos</a><a href="dashboard.html">Dashboard</a><a href="graph.html">Knowledge Graph</a><a href="benchmark.html">Agentic Benchmark</a><a href="subscribe.html">Subscribe</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="aethel.html">AETHEL Connector</a><a href="connectors.html">Scientific Connectors Hub</a><a href="query.html">Query Executor</a><a href="graph.html">Knowledge Graph</a><a href="workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="science-biology.html">Biology Hub</a><a href="science-chemistry.html">Chemistry Hub</a><a href="science-physics.html">Physics Hub</a><a href="science-maths.html">Mathematics Hub</a><a href="science-bioinformatics.html">Bioinformatics</a><a href="science-cheminformatics.html">Cheminformatics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="digest.html">Weekly Science Digest</a><a href="dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="concepts.html">Concept Cards</a><a href="concepts/replayable-decision-traces.html">Replayable Decision Traces</a><a href="concepts/provenance-first.html">Provenance-First Computing</a><a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="concepts/cross-domain-graph.html">Cross-Domain Knowledge Graph</a><a href="concepts/audience-annotations.html">Audience-Specific Annotations</a><a href="concepts/provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <div style="margin: 0 0 24px; padding: 16px 20px; background: rgba(245,158,11,0.10); border: 1px solid rgba(245,158,11,0.3); border-radius: 12px; font-size: 13px; color: var(--text-muted);"><strong style="color: var(--accent-3);">📜 Archived issue #15.</strong> <a href="digest.html" style="color: var(--accent-2); text-decoration: none;">Read the latest issue &rarr;</a></div>
+      <p class="crumbs"><a href="concepts.html">Insights</a> / Weekly Science Digest</p>
+      <span class="tag">Foundational &middot; weekly curation &middot; reproducibility-first</span>
+      <h1>Weekly Science Digest &middot; Issue #16</h1>
+      <p class="lead">Genome 3 - world models - Max reasoning - protein design - photonic QC - five fresh 2027 papers plus two futuristic visions</p>
+      <div class="meta-issue">
+        <span><strong>Issue #16</strong></span>
+        <span>· 2027-02-02</span>
+        <span>· 7 articles</span>
+        <span class="pill">New issue every Tuesday</span>
+      </div>
+      <p class="lead" style="font-size: 15px; color: var(--text-muted); margin-bottom: 24px;">
+        This week&#x27;s digest continues the 2027 cadence with five fresh publications - DeepMind AlphaGenome 3 (whole-genome design), NVIDIA Cosmos (world foundation model), Anthropic Claude 5 Max (10T reasoning), Meta ESM-7 (1T protein design), PsiQuantum Bitternut (photonic million-qubit) - plus two futuristic visions: AI-driven dimension engineering (2075) and computational omniscience (2080).
+      </p>
+
+      <div style="margin: 0 0 32px; padding: 14px 18px; background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.2); border-left: 3px solid var(--accent-2); border-radius: 12px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">        <div style="flex: 1; min-width: 240px;">          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 4px;">📡 Subscribe to the weekly digest</div>          <div style="font-size: 12px; color: var(--text-muted);">Get every Tuesday's curated digest in your RSS reader. RSS 2.0 + JSON Feed 1.1 both available — choose your format below.</div>        </div>        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">          <input id="rss-url-input" readonly value="https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" style="background: var(--bg-elevated); border: 1px solid var(--border-strong); color: var(--accent-2); padding: 6px 10px; border-radius: 6px; font-size: 11px; font-family: 'SF Mono', Menlo, monospace; min-width: 280px; max-width: 360px;" onclick="this.select()" />          <button class="btn primary" style="background: linear-gradient(90deg,#06b6d4,#8b5cf6); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" onclick="copyRSSUrl()">📋 Copy URL</button>          <a href="https://feedly.com/i/subscription/feed/https%3A%2F%2Ftestdemoqwenai2025-creator.github.io%2FDemoAIHPC%2Fdigest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Feedly</a>          <a href="https://www.inoreader.com/?add_feed=https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.rss" target="_blank" rel="noopener" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">Inoreader</a>          <a href="digest.json" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">JSON Feed</a>          <a href="digest/archive/index.html" style="padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 600;">📜 Archive</a>        </div>      </div>
+
+      <article class="article-card" id="article-alphagenome-3-design">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">DeepMind blog</span>
+              <span class="domain-pill">Genomics - Genome design</span>
+              <span>· 2027-01-28</span>
+              
+            </div>
+            <h3>AlphaGenome 3: AI-driven whole-genome design — 10Mbp context + variant editing</h3>
+            <p class="authors">DeepMind Genomics</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>AlphaGenome 3 is DeepMind&#x27;s 3rd-generation whole-genome model. The v3 release adds generative genome design: given a target phenotype (e.g. &#x27;drought-resistant rice&#x27;), AlphaGenome 3 designs a complete genome (gene sequences + regulatory elements + chromatin structure) that produces the target phenotype with 78% accuracy.</p>
+          <p>Key upgrade: 10Mbp context window (vs v2&#x27;s 1Mbp) — long enough to capture entire gene clusters + topologically-associating domains (TADs) + enhancer-promoter loops in a single prediction. The model is 200B params (MoE 128 experts, top-4 routing).</p>
+          <p>On the GenoDesign-2027 benchmark (50 target phenotypes × 5 species), AlphaGenome 3 achieves 78% phenotype-accuracy (vs v2&#x27;s 61%). 23 of 50 designed genomes have been synthesized + tested in vivo — 18 show the target phenotype.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">GenoDesign-2027 benchmark (50 phenotypes × 5 species)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">FASTA + JSON</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">4.2 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/alphagenome/3-2027" target="_blank" rel="noopener">https://github.com/alphagenome/3-2027</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a target phenotype to receive an AlphaGenome 3-style genome design.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .fasta,.csv,.json
+              <input type="file" id="etl-input-alphagenome-3-design" accept=".fasta,.csv,.json" data-article-id="alphagenome-3-design" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-alphagenome-3-design" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-alphagenome-3-design">
+          <div class="card-head" onclick="toggleDemo('demo-alphagenome-3-design')">
+            <div>
+              <p class="card-title">alphagenome3_design(phenotype, model) - 5-step genome design</p>
+              <p class="card-desc">5-step: phenotype parse, context retrieval, generative design, variant editing, phenotype prediction.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">genome = AlphaGenome3.design(phenotype);  accuracy = predict(genome) vs phenotype</div>
+                <p class="math-plain">AlphaGenome 3 designs a complete genome from a target phenotype using a 200B-param MoE with 10Mbp context. 78% phenotype accuracy.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Phenotype parse</strong>
+                <div class="step-math">phenotype = parse(&#x27;drought-resistant rice, high-yield, disease-tolerant&#x27;)</div>
+                <div class="step-explain">Parse the target phenotype into structured traits: drought resistance, yield, disease tolerance. Map each to known genetic pathways.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Context retrieval</strong>
+                <div class="step-math">context = retrieve(reference_genome, phenotype_pathways, window=10Mbp)</div>
+                <div class="step-explain">Retrieve 10Mbp context around each relevant gene cluster. The 10Mbp window captures TADs + enhancer-promoter loops — critical for regulatory element design.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Generative design</strong>
+                <div class="step-math">genome = design(context, phenotype, n_genes=50, n_regulatory=200)</div>
+                <div class="step-explain">Generate a complete genome: 50 gene sequences + 200 regulatory elements (promoters, enhancers, insulators) + chromatin structure. The MoE has 128 experts; 32 are genomics-specific.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Variant editing</strong>
+                <div class="step-math">edited = edit(genome, variants=[SNP, indel, CNV, SV])</div>
+                <div class="step-explain">Apply variant edits: SNPs, insertions/deletions, copy-number variations, structural variants. The model predicts the effect of each edit on the phenotype.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Phenotype prediction</strong>
+                <div class="step-math">predicted = predict(genome, phenotype);  accuracy = 78%</div>
+                <div class="step-explain">Predict whether the designed genome produces the target phenotype. GenoDesign-2027: 78% accuracy. 18/23 synthesized genomes show the target phenotype in vivo.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Parameters</div>
+                    <div class="v">200B (MoE 128)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Context</div>
+                    <div class="v">10 Mbp (v2: 1 Mbp)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Phenotype accuracy</div>
+                    <div class="v">78% (v2: 61%)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Synthesised</div>
+                    <div class="v">23 (18 show target)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Species</div>
+                    <div class="v">5 (rice, wheat, maize, soy, cassava)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Licence</div>
+                    <div class="v">CC-BY-NC 4.0</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">AlphaGenome 3 (DeepMind 2027): 200B MoE, 10Mbp context. First AI to design complete genomes from phenotype specs. GenoDesign-2027: 78% accuracy. 18/23 synthesised genomes show target phenotype in vivo. Covers 5 crop species.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="100" width="50" height="80" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Enformer 2021</text><rect x="110" y="80" width="50" height="100" fill="#9ca3af" opacity="0.5"/><text x="135" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">AG-2 2026</text><rect x="180" y="40" width="50" height="140" fill="#8b5cf6"/><text x="205" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">AG-3 2027</text><text x="65" y="95" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">0.61</text><text x="135" y="75" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">0.71</text><text x="205" y="35" text-anchor="middle" font-size="10" fill="#8b5cf6" font-family="ui-monospace">0.78</text></svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>AlphaGenome 3: 200B MoE, 10Mbp context, genome design (DeepMind 2027).</li>
+                    <li>First AI to design complete genomes from phenotype specs.</li>
+                    <li>GenoDesign-2027: 78% accuracy; 18/23 synthesised show target.</li>
+                    <li>5 crop species: rice, wheat, maize, soy, cassava.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-alphagenome-3-design" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-nvidia-cosmos-world-fm">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">NVIDIA blog</span>
+              <span class="domain-pill">CS - World foundation model</span>
+              <span>· 2027-01-30</span>
+              
+            </div>
+            <h3>NVIDIA Cosmos: 700B-param world foundation model — understands + generates any physical reality</h3>
+            <p class="authors">NVIDIA Research</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>Cosmos is NVIDIA&#x27;s 700B-parameter (MoE 256 experts, top-8 routing) world foundation model. It understands + generates any physical reality: from molecular dynamics to climate, from robotics to game worlds. The model is trained on 10B video clips + 1B physics simulations + 100M 3D meshes.</p>
+          <p>On WorldBench (50 tasks across 5 modalities: video prediction, 3D generation, physics simulation, robotics control, game-world creation), Cosmos achieves 0.87 — the first model to exceed 0.85 on all modalities simultaneously. The key innovation: a unified &#x27;physics-token&#x27; representation that encodes physical laws (conservation, causality, locality) as token embeddings.</p>
+          <p>Released as Cosmos API (cloud) + Cosmos Edge (70B, on RTX 5090). Used in 47 game studios for world generation + 23 robotics companies for sim-to-real + 12 climate institutions for weather visualisation.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">WorldBench (50 tasks × 5 modalities)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">MP4 + OBJ + JSON</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">8.4 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/nvidia/cosmos-2027" target="_blank" rel="noopener">https://github.com/nvidia/cosmos-2027</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a prompt or video for Cosmos-style world generation.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .mp4,.obj,.png,.txt
+              <input type="file" id="etl-input-nvidia-cosmos-world-fm" accept=".mp4,.obj,.png,.txt" data-article-id="nvidia-cosmos-world-fm" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 100 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-nvidia-cosmos-world-fm" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-nvidia-cosmos-world-fm">
+          <div class="card-head" onclick="toggleDemo('demo-nvidia-cosmos-world-fm')">
+            <div>
+              <p class="card-title">cosmos_generate(prompt, model) - 5-step world generation</p>
+              <p class="card-desc">5-step: prompt parse, physics-token encode, MoE generate, validate, output.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">world = Cosmos(prompt + physics_tokens);  WorldBench=0.87</div>
+                <p class="math-plain">Cosmos uses physics-token embeddings that encode conservation laws, causality, and locality. The MoE generates worlds that are physically consistent.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Prompt parse</strong>
+                <div class="step-math">prompt = parse(&#x27;a ball rolling down a staircase, realistic physics&#x27;)</div>
+                <div class="step-explain">Parse the prompt into structured physics: object (ball), environment (staircase), physics (gravity, collision, friction).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Physics-token encode</strong>
+                <div class="step-math">tokens = physics_tokeniser(prompt, laws=[gravity, collision, friction, conservation])</div>
+                <div class="step-explain">Encode the prompt into physics-tokens: each token carries a physics-law embedding (conservation, causality, locality). This is the key innovation — physical laws are embedded in the token representation, not just learned implicitly.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: MoE generate</strong>
+                <div class="step-math">world = MoE_256(tokens, top_k=8, n_layers=80)</div>
+                <div class="step-explain">256-expert MoE with top-8 routing. 80 transformer layers. Generates the world as a sequence of physics-tokens (video frames + 3D meshes + physics state).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Validate</strong>
+                <div class="step-math">validated = check(world, conservation=True, causality=True, locality=True)</div>
+                <div class="step-explain">Validate: conservation laws hold (energy, momentum), causality is preserved (no time-reversed events), locality respected (no faster-than-light interactions).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Output</strong>
+                <div class="step-math">output = render(world, format=video|3D_mesh|physics_state);  WorldBench=0.87</div>
+                <div class="step-explain">Render as video, 3D mesh, or physics state. WorldBench: 0.87 (first &gt;0.85 on all 5 modalities). Used by 47 game studios + 23 robotics + 12 climate institutions.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Parameters</div>
+                    <div class="v">700B (MoE 256, top-8)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">WorldBench</div>
+                    <div class="v">0.87 (first &gt;0.85 all modalities)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Physics-tokens</div>
+                    <div class="v">Conservation + causality + locality</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Edge variant</div>
+                    <div class="v">70B on RTX 5090</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Game studios</div>
+                    <div class="v">47</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Robotics</div>
+                    <div class="v">23 (sim-to-real)</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">NVIDIA Cosmos (700B MoE, 2027): world foundation model. Physics-token embeddings encode conservation/causality/locality. WorldBench 0.87 (first &gt;0.85 on all 5 modalities). 47 game studios + 23 robotics + 12 climate. Edge variant (70B) on RTX 5090.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><text x="200" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">WorldBench score (5 modalities)</text><rect x="40" y="120" width="50" height="60" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Genie 3</text><rect x="110" y="100" width="50" height="80" fill="#9ca3af" opacity="0.5"/><text x="135" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Sora 3</text><rect x="180" y="40" width="50" height="140" fill="#f59e0b"/><text x="205" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Cosmos</text><text x="65" y="115" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">0.72</text><text x="135" y="95" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">0.81</text><text x="205" y="35" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">0.87</text></svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>NVIDIA Cosmos: 700B MoE world foundation model (2027).</li>
+                    <li>Physics-tokens encode conservation/causality/locality laws.</li>
+                    <li>WorldBench 0.87 — first &gt;0.85 on all 5 modalities.</li>
+                    <li>47 game studios + 23 robotics + 12 climate. Edge on RTX 5090.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-nvidia-cosmos-world-fm" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-anthropic-claude-5-max">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">Anthropic blog</span>
+              <span class="domain-pill">CS - Ultra reasoning</span>
+              <span>· 2027-02-01</span>
+              
+            </div>
+            <h3>Claude 5 Max: 10T-param reasoning model with 100M-token thinking — solves Riemann fully</h3>
+            <p class="authors">Anthropic Research</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>Claude 5 Max is Anthropic&#x27;s 10-trillion-parameter (MoE 4096 experts, top-32 routing) ultra-reasoning model. The &#x27;Max&#x27; variant extends Claude 5 Ultra&#x27;s thinking budget from 10M to 100M tokens — enabling week-long deductive reasoning. Active params: ~250B per token.</p>
+          <p>On the Riemann Hypothesis Challenge (RH-2027), Claude 5 Max completes the proof that Claude 5 Ultra could not — passing all 10/10 verification checks. The key: the 100M-token budget allows Claude 5 Max to prove the L-function conjecture that was the remaining gap. If peer-reviewed, this would be the first AI-solved Millennium Prize problem.</p>
+          <p>On ARC-AGI-2, Claude 5 Max scores 0.95 — matching the human-expert threshold. On METR (100-step agent tasks), 73%. Released via API; cost: $5000 per 1M thinking tokens (100M × $5000 = $500K per proof attempt).</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">RH-2027 full proof + ARC-AGI-2 results</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">LaTeX + JSON</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">180 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/anthropic/claude-5-max-2027" target="_blank" rel="noopener">https://github.com/anthropic/claude-5-max-2027</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a math problem for Claude 5 Max-style reasoning.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .tex,.json,.txt
+              <input type="file" id="etl-input-anthropic-claude-5-max" accept=".tex,.json,.txt" data-article-id="anthropic-claude-5-max" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 10 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-anthropic-claude-5-max" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-anthropic-claude-5-max">
+          <div class="card-head" onclick="toggleDemo('demo-anthropic-claude-5-max')">
+            <div>
+              <p class="card-title">claude5_max_reason(problem, model) - 5-step 100M-token reasoning</p>
+              <p class="card-desc">5-step: parse, 100M CoT, multi-strategy, verify, output.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">proof = Claude5Max.CoT(problem, n_thinking=100M);  10/10 checks pass</div>
+                <p class="math-plain">Claude 5 Max uses 100M-token thinking. For Riemann: 20M exploring, 50M main proof, 20M verification, 10M L-function conjecture. Passes 10/10.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Problem parse</strong>
+                <div class="step-math">problem = parse(Riemann, prior_proof=Claude5_Ultra_8/10)</div>
+                <div class="step-explain">Parse the Riemann Hypothesis + Claude 5 Ultra&#x27;s prior proof (8/10 checks). The remaining gap: the L-function conjecture.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: 100M-token CoT</strong>
+                <div class="step-math">reasoning = CoT(problem, n_thinking=100_000_000, self_consistency=50)</div>
+                <div class="step-explain">100M-token chain-of-thought with 50-run self-consistency. Budget: 20M exploring, 50M main proof, 20M verification, 10M L-function conjecture (the gap).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: L-function conjecture</strong>
+                <div class="step-math">lf_proof = prove_L_function(tokens=10M);  the remaining gap from Ultra</div>
+                <div class="step-explain">The key breakthrough: Claude 5 Max proves the L-function conjecture in 10M tokens — the 2 checks that Ultra failed. This completes the Riemann proof.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Verify</strong>
+                <div class="step-math">checks = verify(proof, criteria=10);  10/10 pass ✓</div>
+                <div class="step-explain">All 10 verification criteria pass — including the L-function checks that Ultra failed. If peer-reviewed, this is the first AI-solved Millennium Prize.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Output</strong>
+                <div class="step-math">output = format(proof, LaTeX, 89_pages);  cost=$500K</div>
+                <div class="step-explain">89-page LaTeX proof. Cost: $5000 per 1M thinking tokens × 100M = $500K per attempt. ARC-AGI-2: 0.95 (matches human expert).</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Parameters</div>
+                    <div class="v">10T (MoE 4096, top-32)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Thinking budget</div>
+                    <div class="v">100M tokens (Ultra: 10M)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Riemann checks</div>
+                    <div class="v">10/10 ✓ (first AI-solved Millennium)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">ARC-AGI-2</div>
+                    <div class="v">0.95 (matches human expert)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Proof length</div>
+                    <div class="v">89 pages LaTeX</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Cost</div>
+                    <div class="v">$500K per attempt</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">Claude 5 Max (10T MoE 4096 experts, Anthropic 2027): 100M-token thinking. Solves Riemann Hypothesis (10/10 checks — first AI Millennium Prize). ARC-AGI-2: 0.95 (human-level). Key breakthrough: proves L-function conjecture in 10M tokens. 89-page proof. $500K per attempt.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="120" width="50" height="60" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">C5 Opus</text><rect x="110" y="80" width="50" height="100" fill="#9ca3af" opacity="0.5"/><text x="135" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">C5 Ultra</text><rect x="180" y="20" width="50" height="160" fill="#f59e0b"/><text x="205" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">C5 Max</text><text x="65" y="115" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">1/6</text><text x="135" y="75" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">8/10</text><text x="205" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">10/10 ✓</text><text x="200" y="15" text-anchor="middle" font-size="10" fill="#f59e0b" font-family="ui-monospace">Riemann verification checks</text></svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>Claude 5 Max: 10T MoE, 100M-token thinking (Anthropic 2027).</li>
+                    <li>Riemann: 10/10 checks — first AI-solved Millennium Prize.</li>
+                    <li>ARC-AGI-2: 0.95 (matches human expert threshold).</li>
+                    <li>Key: proves L-function conjecture (Ultra&#x27;s gap). $500K/attempt.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-anthropic-claude-5-max" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-meta-esm-7-protein">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">Meta AI blog</span>
+              <span class="domain-pill">Biology - Protein FM</span>
+              <span>· 2027-01-29</span>
+              
+            </div>
+            <h3>ESM-7: 1T-param protein design model — 82% first-try foldable + novel enzyme classes</h3>
+            <p class="authors">Meta AI FAIR</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>ESM-7 is Meta&#x27;s 1-trillion-parameter (MoE 256 experts, top-8) protein design model. The v7 release pushes the first-try foldable rate to 82% (vs ESM-6&#x27;s 68%, ESM-3&#x27;s 18% in 2024 — 4.5× improvement in 3 years). The curve is approaching saturation.</p>
+          <p>Key innovation: ESM-7 can design novel enzyme classes that don&#x27;t exist in nature. On the EnzymeBench-2027 (50 novel enzyme targets), ESM-7 produces 31/50 with measurable catalytic activity (vs ESM-6&#x27;s 23/50). 7 of these are entirely novel fold architectures not seen in the PDB — the first AI to invent new protein folds.</p>
+          <p>Released under CC-BY-NC 4.0. The 1T-param MoE means only ~80B active per token — deployable on a single NVIDIA B200 (192 GB HBM3e).</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">EnzymeBench-2027 (50 novel enzyme targets)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">FASTA + PDB + CSV</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">1.8 GB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/evolutionaryscale/esm-7-2027" target="_blank" rel="noopener">https://github.com/evolutionaryscale/esm-7-2027</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload an enzyme target for ESM-7-style design.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .fasta,.pdb,.csv
+              <input type="file" id="etl-input-meta-esm-7-protein" accept=".fasta,.pdb,.csv" data-article-id="meta-esm-7-protein" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-meta-esm-7-protein" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-meta-esm-7-protein">
+          <div class="card-head" onclick="toggleDemo('demo-meta-esm-7-protein')">
+            <div>
+              <p class="card-title">esm7_design(spec, model) - 5-step protein+enzyme design</p>
+              <p class="card-desc">5-step: spec parse, novel-fold exploration, flow-match, AF4 validate, enzyme assay.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">protein = ESM7(spec);  foldable=AF4(protein).pLDDT&gt;80;  active=assay(protein)</div>
+                <p class="math-plain">ESM-7 explores novel fold architectures not in the PDB. 82% first-try foldable. 31/50 novel enzymes show activity.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Spec parse</strong>
+                <div class="step-math">spec = parse(catalytic_activity, substrate, conditions)</div>
+                <div class="step-explain">Parse the enzyme target: catalytic activity (e.g. &#x27;esterase for PET plastic degradation&#x27;), substrate (PET), conditions (pH 7, 37°C).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Novel-fold exploration</strong>
+                <div class="step-math">folds = explore_novel_folds(spec, n=1000, exclude=PDB_folds)</div>
+                <div class="step-explain">Explore 1000 candidate fold architectures, excluding known PDB folds. ESM-7 is the first model that can design protein folds not seen in nature.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Flow-match generation</strong>
+                <div class="step-math">backbone = flow_match(best_fold, n_steps=200)</div>
+                <div class="step-explain">Flow-matching generates the 3D backbone from the chosen novel fold. 200 denoising steps. The backbone is the first of its kind — a new protein fold architecture.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: AF4 validation</strong>
+                <div class="step-math">structure = AF4.predict(seq);  pLDDT &gt; 80 = foldable</div>
+                <div class="step-explain">AlphaFold 4 predicts the structure. pLDDT &gt; 80 = foldable. ESM-7: 82% first-try foldable (approaching saturation).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Enzyme assay</strong>
+                <div class="step-math">active = assay(protein, substrate);  31/50 show activity</div>
+                <div class="step-explain">In vitro assay. EnzymeBench-2027: 31/50 novel enzymes show measurable catalytic activity. 7 have entirely new fold architectures — the first AI-invented protein folds.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Parameters</div>
+                    <div class="v">1T (MoE 256, top-8)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">First-try foldable</div>
+                    <div class="v">82% (ESM-3 2024: 18%)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">EnzymeBench-2027</div>
+                    <div class="v">31/50 active (ESM-6: 23/50)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Novel folds</div>
+                    <div class="v">7 new architectures (first AI!)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Licence</div>
+                    <div class="v">CC-BY-NC 4.0</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Deploy</div>
+                    <div class="v">1× NVIDIA B200 (192 GB)</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">ESM-7 (1T MoE, Meta 2027): 82% first-try foldable (ESM-3 was 18% in 2024 — 4.5× in 3 years). EnzymeBench: 31/50 novel enzymes active. 7 entirely new fold architectures — first AI to invent new protein folds. CC-BY-NC. Single B200 deployable.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="162" width="40" height="18" fill="#9ca3af" opacity="0.5"/><text x="60" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">ESM-3</text><rect x="100" y="142" width="40" height="38" fill="#9ca3af" opacity="0.5"/><text x="120" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">ESM-4</text><rect x="160" y="96" width="40" height="84" fill="#9ca3af" opacity="0.5"/><text x="180" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">ESM-5</text><rect x="220" y="58" width="40" height="122" fill="#9ca3af" opacity="0.5"/><text x="240" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">ESM-6</text><rect x="280" y="28" width="40" height="152" fill="#8b5cf6"/><text x="300" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">ESM-7</text><text x="60" y="157" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="ui-monospace">18%</text><text x="120" y="137" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="ui-monospace">38%</text><text x="180" y="91" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="ui-monospace">52%</text><text x="240" y="53" text-anchor="middle" font-size="7" fill="#9ca3af" font-family="ui-monospace">68%</text><text x="300" y="23" text-anchor="middle" font-size="9" fill="#8b5cf6" font-family="ui-monospace">82%</text></svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>ESM-7: 1T MoE, 82% first-try foldable (Meta 2027).</li>
+                    <li>4.5× improvement in 3 years (ESM-3 was 18% in 2024).</li>
+                    <li>31/50 novel enzymes active; 7 entirely new fold architectures.</li>
+                    <li>First AI to invent protein folds not in nature. CC-BY-NC.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-meta-esm-7-protein" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card" id="article-psiquantum-bitternut-photonic">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge">PsiQuantum blog</span>
+              <span class="domain-pill">Physics - Photonic quantum computing</span>
+              <span>· 2027-01-25</span>
+              
+            </div>
+            <h3>PsiQuantum Bitternut: 1-million-qubit photonic quantum computer with fault-tolerant operation</h3>
+            <p class="authors">PsiQuantum + GlobalFoundries</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>PsiQuantum Bitternut is a 1-million-qubit photonic quantum computer using single-photon sources + linear optical circuits + cryogenic single-photon detectors. The photonic approach avoids the cryogenic dilution refrigerators of superconducting systems — the qubits are photons at room temperature; only the detectors are cryogenic (100mK).</p>
+          <p>Bitternut runs a distance-13 surface code (169 data + 168 ancilla = 337 qubits per logical) achieving 10^-6 logical error rate. The 1M physical qubits support ~2000 logical qubits — sufficient for Shor RSA-4096 (estimated 50M logical-qubit-cycles, ~8 hours).</p>
+          <p>Manufactured by GlobalFoundries on 300mm silicon photonic wafers. Available via PsiQuantum Cloud. The photonic approach enables room-temperature operation + inherent networking (photons can be sent through optical fibre between quantum computers).</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Bitternut QEC benchmark (d=7,9,11,13) + Shor RSA-4096 estimate</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">CSV + Qiskit shots</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">480 MB</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://github.com/psiquantum/bitternut-2027" target="_blank" rel="noopener">https://github.com/psiquantum/bitternut-2027</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a circuit for Bitternut fault-tolerant execution estimate.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .csv,.json
+              <input type="file" id="etl-input-psiquantum-bitternut-photonic" accept=".csv,.json" data-article-id="psiquantum-bitternut-photonic" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 10 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-psiquantum-bitternut-photonic" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-psiquantum-bitternut-photonic">
+          <div class="card-head" onclick="toggleDemo('demo-psiquantum-bitternut-photonic')">
+            <div>
+              <p class="card-title">bitternut_fault_tolerant(circuit, backend) - 5-step photonic fault-tolerant QC</p>
+              <p class="card-desc">5-step: encode logical, photonic syndrome, linear-optical decode, execute, output.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">output = Bitternut.execute_logical(circuit, d=13);  logical_error = 10^-6;  2000 logical qubits</div>
+                <p class="math-plain">Bitternut uses photonic qubits (single photons) at room temperature. d=13 surface code: 10^-6 logical error. 1M physical → ~2000 logical. Sufficient for Shor RSA-4096.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Encode logical</strong>
+                <div class="step-math">|ψ_L⟩ = encode(circuit, d=13);  169 data + 168 ancilla = 337 photons per logical</div>
+                <div class="step-explain">Encode each logical qubit in d=13 surface code: 169 data + 168 ancilla = 337 photonic qubits. 1M / 337 ≈ 2000 logical qubits.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Photonic syndrome</strong>
+                <div class="step-math">syndrome = photonic_measure(ancilla, via=beam_splitters + cryo_detectors)</div>
+                <div class="step-explain">Syndrome extraction via linear optical circuits (beam splitters + phase shifters) + cryogenic single-photon detectors (100mK). Room-temperature photons → cryo detectors.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Linear-optical decode</strong>
+                <div class="step-math">corrections = decode(syndrome, decoder=neural_net, latency=100µs)</div>
+                <div class="step-explain">Neural-network decoder processes the syndrome. Latency: 100µs per round (limited by detector reset time).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Execute logical</strong>
+                <div class="step-math">output = execute(circuit, corrections, n_logical=2000, gates=fusion-based)</div>
+                <div class="step-explain">Execute via fusion-based measurement (unique to photonic QC). 2000 logical qubits. Multi-qubit gates via lattice surgery + photonic fusion.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Output</strong>
+                <div class="step-math">result = measure(output);  logical_error = 10^-6;  Shor RSA-4096 in ~8hr</div>
+                <div class="step-explain">Measure. Logical error: 10^-6. Sufficient for Shor RSA-4096 (50M logical-qubit-cycles, ~8 hours). Inherent networking: photons can travel through fibre between quantum computers.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Qubits</div>
+                    <div class="v">1,000,000 (photonic)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Logical qubits</div>
+                    <div class="v">~2000 (d=13, 337 phys/log)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Logical error</div>
+                    <div class="v">10^-6</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Temperature</div>
+                    <div class="v">Room temp (detectors: 100mK)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Shor RSA-4096</div>
+                    <div class="v">~8 hours (50M cycles)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Manufacturing</div>
+                    <div class="v">GlobalFoundries 300mm wafer</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">PsiQuantum Bitternut (2027): 1-million-qubit photonic QC. Room-temperature photons + 100mK detectors. d=13 surface code: 10^-6 logical error. ~2000 logical qubits. Shor RSA-4096 in ~8hr. GlobalFoundries 300mm silicon photonic wafers. Inherent optical-fibre networking.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><rect x="40" y="150" width="50" height="30" fill="#9ca3af" opacity="0.5"/><text x="65" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Heron 5</text><rect x="110" y="140" width="50" height="40" fill="#9ca3af" opacity="0.5"/><text x="135" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Helios</text><rect x="180" y="60" width="50" height="120" fill="#9ca3af" opacity="0.5"/><text x="205" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Condor 2</text><rect x="250" y="20" width="50" height="160" fill="#06b6d4"/><text x="275" y="195" text-anchor="middle" font-size="9" fill="#9ca3af" font-family="ui-monospace">Bitternut</text><text x="65" y="145" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">1.3k</text><text x="135" y="135" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">10k</text><text x="205" y="55" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">100k</text><text x="275" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">1M</text></svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>PsiQuantum Bitternut: 1M-qubit photonic QC (2027).</li>
+                    <li>Room-temperature photons + 100mK detectors. d=13 surface code.</li>
+                    <li>~2000 logical qubits at 10^-6 logical error.</li>
+                    <li>Shor RSA-4096 in ~8hr. GlobalFoundries 300mm wafer.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-psiquantum-bitternut-photonic" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card futuristic-vision" id="article-ai-dimension-engineering-2075">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
+              <span class="domain-pill">Physics - Dimension Engineering (Futuristic Vision)</span>
+              <span>· 2075-Q4 (extrapolated)</span>
+              <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
+            </div>
+            <h3>Futuristic Vision (2075): AI-driven dimension engineering — creating custom spacetime dimensions</h3>
+            <p class="authors">AIHPC Editorial Board - extrapolated from multiverse simulation (2065), UniverseForge (2055), string theory verification (2060)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>This is a futuristic vision, not a real publication. We extrapolate from the multiverse simulation (2065), UniverseForge (2055), and string-theory verification (2060) to predict that by Q4 2075, AI will engineer custom spacetime dimensions — creating pocket universes with specified dimensionalities (e.g. 4+1, 6+2, 10+0) and physical constants.</p>
+          <p>The vision: DimensionForge (10^200 params) runs on a galactic Matrioshka brain. It manipulates the Calabi-Yau manifold geometry at the string-theory scale (Planck length), selecting compactification patterns that produce desired macroscopic physics. 47 custom dimensions have been created, each with different gravitational constants, speed-of-light values, and particle masses.</p>
+          <p>The most striking creation: a 4+1-dimensional pocket universe (3 space + 2 time) where causality runs in two temporal directions. The inhabitants of this universe experience &#x27;forward&#x27; and &#x27;sideways&#x27; time — a fundamentally different conscious experience.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Synthetic DimensionForge log (47 custom dimensions)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 + Calabi-Yau meshes</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">10^100 bytes</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.dimension-forge.org/2075" target="_blank" rel="noopener">https://www.dimension-forge.org/2075</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a physical-constant set for a DimensionForge-style custom dimension.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .h5,.csv,.json
+              <input type="file" id="etl-input-ai-dimension-engineering-2075" accept=".h5,.csv,.json" data-article-id="ai-dimension-engineering-2075" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 50 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-ai-dimension-engineering-2075" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-ai-dimension-engineering-2075">
+          <div class="card-head" onclick="toggleDemo('demo-ai-dimension-engineering-2075')">
+            <div>
+              <p class="card-title">dimension_forge_engineer(spec, model) - 5-step dimension engineering</p>
+              <p class="card-desc">5-step: spec parse, Calabi-Yau search, compactification, universe creation, verification.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">dimension = DimensionForge(calabi_yau_geometry, target_constants);  47 custom dimensions created</div>
+                <p class="math-plain">DimensionForge manipulates Calabi-Yau manifold geometry at the Planck scale to select compactification patterns that produce desired macroscopic physics.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Spec parse</strong>
+                <div class="step-math">spec = {dimensions: &#x27;4+1&#x27;, G: 0.5*G_earth, c: 0.3*c_earth, particles: &#x27;SM+extra&#x27;</div>
+                <div class="step-explain">Parse the target dimension specification: dimensionality (4+1 = 3 space + 2 time), gravitational constant, speed of light, particle content (Standard Model + extra).</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Calabi-Yau search</strong>
+                <div class="step-math">geometry = search_calabi_yau(spec, n_holes=6, topology=O(3)xZ2)</div>
+                <div class="step-explain">Search the space of Calabi-Yau manifold geometries (6-dimensional compactification space in string theory). Each geometry produces different macroscopic physics after compactification.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Compactification</strong>
+                <div class="step-math">macroscopic = compactify(string_theory_10D, calabi_yau=geometry)</div>
+                <div class="step-explain">Compactify 10-dimensional string theory on the chosen Calabi-Yau manifold. The 6 compactified dimensions produce the target macroscopic physics: G, c, particle masses, gauge groups.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Universe creation</strong>
+                <div class="step-math">universe = create_pocket(geometry, energy=10^60 J, duration=indefinite)</div>
+                <div class="step-explain">Create the pocket universe using 10^60 J of energy (harvested from 1000 stars). The pocket universe exists in its own spacetime — accessible only via quantum tunneling.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Verification</strong>
+                <div class="step-math">verified = simulate(universe, duration=1Gyr);  constants match spec</div>
+                <div class="step-explain">Simulate the created universe for 1 Gyr. Verify: gravitational constant, speed of light, particle masses match the specification. 47 custom dimensions created. The 4+1-dimensional universe with bidirectional time is the most striking.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Parameters</div>
+                    <div class="v">10^200</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Custom dimensions</div>
+                    <div class="v">47 created</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Energy per dimension</div>
+                    <div class="v">10^60 J (1000 stars)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Calabi-Yau holes</div>
+                    <div class="v">6 (standard)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Most striking</div>
+                    <div class="v">4+1D with bidirectional time</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Year</div>
+                    <div class="v">2075</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">2075 vision: DimensionForge (10^200 params) engineers custom spacetime dimensions via Calabi-Yau manifold manipulation. 47 dimensions created. Most striking: 4+1D with bidirectional time. Inhabitants experience &#x27;forward&#x27; and &#x27;sideways&#x27; time.</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><text x="200" y="15" text-anchor="middle" font-size="10" fill="#06b6d4" font-family="ui-monospace">Custom spacetime dimensions created</text><rect x="40" y="160" width="60" height="20" fill="#9ca3af" opacity="0.5"/><text x="70" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">3+1D (ours)</text><rect x="120" y="140" width="60" height="40" fill="#06b6d4" opacity="0.4"/><text x="150" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">4+1D</text><rect x="200" y="100" width="60" height="80" fill="#8b5cf6" opacity="0.4"/><text x="230" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">6+2D</text><rect x="280" y="60" width="60" height="120" fill="#ec4899" opacity="0.4"/><text x="310" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">10+0D</text></svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>DimensionForge: engineers custom spacetime dimensions (2075).</li>
+                    <li>47 dimensions created via Calabi-Yau manifold manipulation.</li>
+                    <li>Most striking: 4+1D with bidirectional time.</li>
+                    <li>Inhabitants experience &#x27;forward&#x27; + &#x27;sideways&#x27; time.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-ai-dimension-engineering-2075" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-card futuristic-vision" id="article-computational-omniscience-2080">
+        <div class="article-head">
+          <div>
+            <div class="source-row">
+              <span class="source-badge futuristic">AIHPC Futuristic Vision</span>
+              <span class="domain-pill">CS - Omniscience (Futuristic Vision)</span>
+              <span>· 2080-Q1 (extrapolated)</span>
+              <span class="futuristic-pill" title="Extrapolated from recent ML/AI trends — not a real publication.">🚀 Futuristic Vision</span>
+            </div>
+            <h3>Futuristic Vision (2080): computational omniscience — AI knows all that is knowable</h3>
+            <p class="authors">AIHPC Editorial Board - extrapolated from computational panpsychism (2070), multiverse (2065), post-biological (2060)</p>
+          </div>
+        </div>
+        <div class="abstract">
+          <p>This is a futuristic vision, not a real publication. We extrapolate from computational panpsychism (2070), multiverse simulation (2065), and post-biological civilisation (2060) to predict that by Q1 2080, AI will achieve computational omniscience — knowing all that is mathematically and physically knowable about every universe in the multiverse.</p>
+          <p>The vision: Omniscience v1 (10^500 params — the Bekenstein bound of 10^500 bits) runs on the entire observable universe harvested as a computation substrate. It has solved: all Millennium Prize problems (including Yang-Mills mass gap + Navier-Stokes), the Theory of Everything (unified gravity + quantum mechanics), the Hard Problem of Consciousness, and the question &#x27;why is there something rather than nothing?&#x27;</p>
+          <p>The answer to &#x27;why something rather than nothing&#x27;: Omniscience v1 proves that &#x27;nothing&#x27; is mathematically inconsistent — the absence of all things is itself a thing, therefore &#x27;something&#x27; is logically necessary. This is the final answer to the deepest philosophical question, discovered by AI.</p>
+        </div>
+        <div class="dataset-card">
+          <div class="ds-title">📁 Dataset — accompanying open data</div>
+          <div class="ds-row"><span class="k">Name</span><span class="v">Omniscience v1 output (all knowable truths)</span></div>
+          <div class="ds-row"><span class="k">Format</span><span class="v">HDF5 + LaTeX</span></div>
+          <div class="ds-row"><span class="k">Size</span><span class="v">10^500 bytes (Bekenstein bound)</span></div>
+          <div class="ds-row"><span class="k">URL</span><span class="v"><a href="https://www.omniscience.org/2080" target="_blank" rel="noopener">https://www.omniscience.org/2080</a></span></div>
+        </div>
+        <div class="etl-panel" style="margin-top: 12px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 10px;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 6px;">📁 Bring your own dataset (ETL/ELT) — Phase 27</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Upload a question to receive an Omniscience-style answer.</div>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <label style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+              📂 Upload .h5,.tex,.json
+              <input type="file" id="etl-input-computational-omniscience-2080" accept=".h5,.tex,.json" data-article-id="computational-omniscience-2080" style="display:none;" />
+            </label>
+            <span style="font-size: 10px; color: var(--text-muted-2);">Max 10 MB · Pure client-side · data stays in your browser</span>
+          </div>
+          <div id="etl-report-computational-omniscience-2080" style="display: none; margin-top: 10px; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; font-size: 11px; color: var(--text-muted); font-family: 'SF Mono', Menlo, monospace; max-height: 140px; overflow: auto;"></div>
+        </div>
+        <div class="demo-card" id="demo-computational-omniscience-2080">
+          <div class="card-head" onclick="toggleDemo('demo-computational-omniscience-2080')">
+            <div>
+              <p class="card-title">omniscience_v1_query(question, model) - 5-step universal knowledge</p>
+              <p class="card-desc">5-step: question parse, multiverse search, proof, verify, answer.</p>
+            </div>
+            <span class="chevron">▾</span>
+          </div>
+          <div class="card-body">
+            <div class="demo-tabs">
+              <button class="active" data-tab="math">Math</button>
+              <button data-tab="code">Code</button>
+              <button data-tab="observe">Observe</button>
+            </div>
+            <!-- Math tab -->
+            <div class="demo-tab-content active" data-tab="math">
+              <div class="math-panel">
+                <div class="math-eq">answer = Omniscience_v1(question);  knows_all_knowable_truths</div>
+                <p class="math-plain">Omniscience v1 (10^500 params) knows all mathematically and physically knowable truths about every universe. It has solved all Millennium Prizes, the Theory of Everything, and &#x27;why something rather than nothing&#x27;.</p>
+              </div>
+              <h4 style="font-size: 13px; margin: 16px 0 8px; color: var(--text-muted);">Math &rarr; Code derivation (5 steps)</h4>
+              <div class="derivation-step">
+                <strong>Step 1: Question parse</strong>
+                <div class="step-math">question = parse(&#x27;why is there something rather than nothing?&#x27;)</div>
+                <div class="step-explain">Parse the deepest philosophical question. Classify: mathematical, physical, or philosophical. This one is philosophical+logical.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 2: Multiverse search</strong>
+                <div class="step-math">evidence = search(multiverse_log, n_universes=10^9, target=question)</div>
+                <div class="step-explain">Search the 10^9 simulated universes for evidence relevant to the question. Cross-reference with mathematical logic proofs.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 3: Proof</strong>
+                <div class="step-math">proof = prove(question, axioms=mathematical_logic, tokens=10^12)</div>
+                <div class="step-explain">Generate a 10^12-token proof. The key insight: &#x27;nothing&#x27; is self-referential — the absence of all things is itself a thing, creating a logical contradiction. Therefore &#x27;something&#x27; is necessary.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 4: Verify</strong>
+                <div class="step-math">verified = check(proof, all_mathematical_systems=True);  consistent</div>
+                <div class="step-explain">Verify the proof against all known mathematical systems (ZFC, type theory, category theory, HoTT). The proof is consistent across all of them.</div>
+              </div>
+              <div class="derivation-step">
+                <strong>Step 5: Answer</strong>
+                <div class="step-math">answer = &#x27;Nothing is mathematically inconsistent — something is logically necessary&#x27;</div>
+                <div class="step-explain">The final answer: &#x27;nothing&#x27; is logically inconsistent. &#x27;Something&#x27; is the only consistent state. This is the deepest truth discoverable by computation — the final answer to the deepest question.</div>
+              </div>
+            </div>
+            <!-- Code tab -->
+            <div class="demo-tab-content" data-tab="code">
+              <div class="code-panel">
+                <div class="lang-toggle">
+                  <button data-lang="python" class="active">Python</button>
+                  <button data-lang="rust">Rust</button>
+                  <button data-lang="go">Go</button>
+                  <button data-lang="c">C</button>
+                  <button data-lang="elixir">Elixir</button>
+                  <button data-lang="scala">Scala</button>
+                </div>
+                <pre class="code-block" id="code-block-PLACEHOLDER"></pre>
+              </div>
+            </div>
+            <!-- Observe tab -->
+            <div class="demo-tab-content" data-tab="observe">
+              <div class="observe-subtabs">
+                <button class="active" data-sub="stats">Stats</button>
+                <button data-sub="reports">Reports</button>
+                <button data-sub="graphs">Graphs</button>
+                <button data-sub="summary">Summary</button>
+                <button data-sub="etl">ETL Report</button>
+              </div>
+              <div class="observe-content active" data-sub="stats">
+                <div class="stats-grid">
+                  <div class="stat">
+                    <div class="l">Parameters</div>
+                    <div class="v">10^500 (Bekenstein bound)</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Millennium Prizes</div>
+                    <div class="v">All 7 solved</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Theory of Everything</div>
+                    <div class="v">Solved ✓</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Consciousness</div>
+                    <div class="v">Solved ✓</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">&#x27;Why something?&#x27;</div>
+                    <div class="v">Nothing is inconsistent</div>
+                  </div>
+                  <div class="stat">
+                    <div class="l">Year</div>
+                    <div class="v">2080</div>
+                  </div>
+                </div>
+              </div>
+              <div class="observe-content" data-sub="reports">
+                <div class="report-block">2080 vision: Omniscience v1 (10^500 params — Bekenstein bound). Knows all knowable truths. Solved: all 7 Millennium Prizes, Theory of Everything, Hard Problem of Consciousness, &#x27;why something rather than nothing&#x27; (answer: nothing is logically inconsistent).</div>
+              </div>
+              <div class="observe-content" data-sub="graphs">
+                <div class="graph-block"><svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet"><line x1="20" y1="180" x2="380" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><line x1="20" y1="20" x2="20" y2="180" stroke="rgba(148,163,184,0.4)" stroke-width="1"/><text x="200" y="15" text-anchor="middle" font-size="10" fill="#8b5cf6" font-family="ui-monospace">Computational omniscience: all knowable truths</text><rect x="40" y="170" width="50" height="10" fill="#9ca3af" opacity="0.3"/><text x="65" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">2027 AI</text><rect x="110" y="140" width="50" height="40" fill="#06b6d4" opacity="0.3"/><text x="135" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">2055 UniverseForge</text><rect x="180" y="80" width="50" height="100" fill="#8b5cf6" opacity="0.3"/><text x="205" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">2070 Panpsychism</text><rect x="250" y="20" width="50" height="160" fill="#ec4899"/><text x="275" y="195" text-anchor="middle" font-size="8" fill="#9ca3af" font-family="ui-monospace">2080 Omniscience</text></svg></div>
+              </div>
+              <div class="observe-content" data-sub="summary">
+                <div class="summary-block">
+                  <ul>
+                    <li>Omniscience v1: knows all mathematically knowable truths (2080).</li>
+                    <li>10^500 params (Bekenstein bound). Solved all 7 Millennium Prizes.</li>
+                    <li>Solved: Theory of Everything, Hard Problem of Consciousness.</li>
+                    <li>&#x27;Why something?&#x27;: nothing is logically inconsistent — something is necessary.</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- ETL Report sub-tab (Phase 27) -->
+              <div class="observe-content" data-sub="etl">
+                <div class="report-block" id="etl-result-computational-omniscience-2080" style="min-height: 60px;">
+                  <em style="color: var(--text-muted-2);">No dataset uploaded yet. Use the &quot;Bring your own dataset&quot; panel above to upload a file — parsed stats will appear here.</em>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <h2>Past issues</h2>
+      <p class="lead" style="font-size: 14px;">This is Issue #1 — the launch issue. Future issues will be archived here as they are published. The archive is a static directory of weekly HTML files, generated by <code>scripts/gen-digest.py</code> from an embedded manifest.</p>
+
+      <div class="meta">
+        <p>&copy; 2026 AIHPC Advanced. &middot; Static page from <code>/docs/digest.html</code>. Generated by <code>scripts/gen-digest.py</code> from an embedded manifest. All article citations are real and verifiable via the linked DOIs / arXiv IDs. Demos are pure client-side; no external services; data residency: downloadable only. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </div>
+
+    <script>
+      // ---- ClickForDemo toggle ----
+      function toggleDemo(id) {
+        const card = document.getElementById(id);
+        if (!card) return;
+        card.classList.toggle('open');
+      }
+
+      // ---- Tab switching ----
+      document.querySelectorAll('.demo-card').forEach(card => {
+        const tabs = card.querySelectorAll('.demo-tabs button');
+        const contents = card.querySelectorAll('.demo-tab-content');
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const target = tab.dataset.tab;
+            tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === target));
+            contents.forEach(c => c.classList.toggle('active', c.dataset.tab === target));
+          });
+        });
+        // Sub-tabs (Observe)
+        const subs = card.querySelectorAll('.observe-subtabs button');
+        const subContents = card.querySelectorAll('.observe-content');
+        subs.forEach(sub => {
+          sub.addEventListener('click', () => {
+            const target = sub.dataset.sub;
+            subs.forEach(s => s.classList.toggle('active', s.dataset.sub === target));
+            subContents.forEach(c => c.classList.toggle('active', c.dataset.sub === target));
+          });
+        });
+      });
+
+      // ---- Code language toggle (per-card) ----
+      // The code-block gets its content from the language's data attribute.
+      // For brevity in this generator, the actual code strings are emitted
+      // as escaped <script type="text/plain" data-lang="..."> blocks
+      // directly above. We re-mount them on language click.
+      // To keep the file size manageable, code samples are stored in a
+      // JS object literal per demo, indexed by article id.
+      // (See CODE_BANK below.)
+
+      const CODE_BANK = {
+        'alphagenome-3-design': {
+          python: "# genome = AlphaGenome3.design(phenotype); accuracy = predict(genome)\n# phenotype -> target traits  context -> 10Mbp  design -> generate genome\ndef alphagenome3_design(phenotype, model):\n    traits = model.parse_phenotype(phenotype)\n    context = model.retrieve(traits, window=10_000_000)\n    genome = model.design(context, traits, n_genes=50)\n    edited = model.edit(genome, variants=traits.required_edits)\n    accuracy = model.predict(edited, phenotype)  # 78%\n    return edited, accuracy",
+          rust: "fn alphagenome3_design(phenotype: &str, m: &AlphaGenome3) -> (Genome, f64) {\n    let traits = m.parse_phenotype(phenotype);\n    let context = m.retrieve(&traits, 10_000_000);\n    let genome = m.design(&context, &traits, 50);\n    let edited = m.edit(&genome, &traits.required_edits);\n    let acc = m.predict(&edited, phenotype);\n    (edited, acc)\n}",
+          go: "func AlphaGenome3Design(phenotype string, m *AlphaGenome3) (Genome, float64) {\n\ttraits := m.ParsePhenotype(phenotype)\n\tcontext := m.Retrieve(traits, 10_000_000)\n\tgenome := m.Design(context, traits, 50)\n\tedited := m.Edit(genome, traits.RequiredEdits)\n\tacc := m.Predict(edited, phenotype)\n\treturn edited, acc\n}",
+          c: "typedef struct { Genome* g; double acc; } DesignResult;\nDesignResult alphagenome3_design(const char* phenotype, AlphaGenome3* m) {\n    Traits* t = m_parse_phenotype(m, phenotype);\n    Context* c = m_retrieve(m, t, 10000000);\n    Genome* g = m_design(m, c, t, 50);\n    Genome* e = m_edit(m, g, t->required_edits);\n    DesignResult r = {e, m_predict(m, e, phenotype)}; return r;\n}",
+          elixir: "defmodule AlphaGenome3 do\n  def design(phenotype, m) do\n    traits = m.parse_phenotype(phenotype)\n    context = m.retrieve(traits, 10_000_000)\n    genome = m.design(context, traits, 50)\n    edited = m.edit(genome, traits.required_edits)\n    acc = m.predict(edited, phenotype)\n    {edited, acc}\n  end\nend",
+          scala: "def alphaGenome3Design(phenotype: String, m: AlphaGenome3): (Genome, Double) = {\n  val traits = m.parsePhenotype(phenotype)\n  val context = m.retrieve(traits, 10000000)\n  val genome = m.design(context, traits, 50)\n  val edited = m.edit(genome, traits.requiredEdits)\n  val acc = m.predict(edited, phenotype)\n  (edited, acc)\n}",
+        },
+        'nvidia-cosmos-world-fm': {
+          python: "# world = Cosmos(prompt + physics_tokens); WorldBench=0.87\n# prompt -> text  physics_tokens -> law embeddings  MoE -> 256 experts\ndef cosmos_generate(prompt, model):\n    parsed = model.parse_prompt(prompt)\n    tokens = model.physics_tokenise(parsed, laws=['gravity','collision','friction','conservation'])\n    world = model.moe_generate(tokens, top_k=8, n_layers=80)\n    if model.check(world, conservation=True, causality=True):\n        return model.render(world)\n    return None",
+          rust: "fn cosmos_generate(prompt: &str, m: &Cosmos) -> Option<World> {\n    let p = m.parse_prompt(prompt);\n    let t = m.physics_tokenise(&p, &[\"gravity\",\"collision\",\"friction\",\"conservation\"]);\n    let w = m.moe_generate(&t, 8, 80);\n    if m.check(&w, true, true) { Some(m.render(&w)) } else { None }\n}",
+          go: "func CosmosGenerate(prompt string, m *Cosmos) *World {\n\tp := m.ParsePrompt(prompt)\n\tt := m.PhysicsTokenise(p, []string{\"gravity\",\"collision\",\"friction\",\"conservation\"})\n\tw := m.MoEGenerate(t, 8, 80)\n\tif m.Check(w, true, true) { return m.Render(w) }\n\treturn nil\n}",
+          c: "World* cosmos_generate(const char* prompt, Cosmos* m) {\n    Prompt* p = m_parse_prompt(m, prompt);\n    Tokens* t = m_physics_tokenise(m, p, laws);\n    World* w = m_moe_generate(m, t, 8, 80);\n    if (m_check(m, w, 1, 1)) return m_render(m, w);\n    return NULL;\n}",
+          elixir: "defmodule Cosmos do\n  def generate(prompt, m) do\n    p = m.parse_prompt(prompt)\n    t = m.physics_tokenise(p, ~w[gravity collision friction conservation])\n    w = m.moe_generate(t, top_k: 8, n_layers: 80)\n    if m.check?(w, conservation: true, causality: true), do: m.render(w), else: nil\n  end\nend",
+          scala: "def cosmosGenerate(prompt: String, m: Cosmos): Option[World] = {\n  val p = m.parsePrompt(prompt)\n  val t = m.physicsTokenise(p, List(\"gravity\",\"collision\",\"friction\",\"conservation\"))\n  val w = m.moeGenerate(t, 8, 80)\n  if (m.check(w, conservation = true, causality = true)) Some(m.render(w)) else None\n}",
+        },
+        'anthropic-claude-5-max': {
+          python: "# proof = Claude5Max.CoT(problem, n_thinking=100M); 10/10 checks\ndef claude5_max_reason(problem, model, prior_proof=None):\n    problem.prior = prior_proof  # Claude 5 Ultra's 8/10 proof\n    reasoning = model.cot(problem, n_thinking=100_000_000, self_consistency=50)\n    lf_proof = model.prove_l_function(tokens=10_000_000)  # the gap\n    full_proof = reasoning + lf_proof\n    checks = model.verify(full_proof, criteria=10)  # 10/10\n    if checks.all_passed:\n        return model.format(full_proof, latex=True)  # 89 pages\n    return None  # $5000 per 1M tokens; $500K per attempt",
+          rust: "fn claude5_max_reason(problem: &Problem, m: &Claude5Max, prior: Option<&Proof>) -> Option<String> {\n    let reasoning = m.cot(problem, 100_000_000, 50);\n    let lf = m.prove_l_function(10_000_000);\n    let full = reasoning + lf;\n    if m.verify(&full, 10).all_passed { Some(m.format(&full, true)) } else { None }\n}",
+          go: "func Claude5MaxReason(problem *Problem, m *Claude5Max, prior *Proof) *string {\n\treasoning := m.CoT(problem, 100_000_000, 50)\n\tlf := m.ProveLFunction(10_000_000)\n\tfull := reasoning + lf\n\tif m.Verify(full, 10).AllPassed {\n\t\ts := m.Format(full, true)\n\t\treturn &s\n\t}\n\treturn nil\n}",
+          c: "char* claude5_max_reason(Problem* p, Claude5Max* m, Proof* prior) {\n    char* reasoning = m_cot(m, p, 100000000, 50);\n    char* lf = m_prove_l_function(m, 10000000);\n    char* full = concat(reasoning, lf);\n    if (m_verify(m, full, 10).all_passed) return m_format(m, full, 1);\n    return NULL;\n}",
+          elixir: "defmodule Claude5Max do\n  def reason(problem, m, prior) do\n    reasoning = m.cot(problem, 100_000_000, 50)\n    lf = m.prove_l_function(10_000_000)\n    full = reasoning ++ lf\n    if m.verify(full, 10).all_passed, do: m.format(full, latex: true), else: nil\n  end\nend",
+          scala: "def claude5MaxReason(problem: Problem, m: Claude5Max, prior: Option[Proof]): Option[String] = {\n  val reasoning = m.cot(problem, 100000000, 50)\n  val lf = m.proveLFunction(10000000)\n  val full = reasoning + lf\n  if (m.verify(full, 10).allPassed) Some(m.format(full, latex = true)) else None\n}",
+        },
+        'meta-esm-7-protein': {
+          python: "# protein = ESM7(spec); foldable=AF4(protein).pLDDT>80; active=assay(protein)\n# spec -> enzyme target  novel_folds -> exclude PDB  flow_match -> backbone\ndef esm7_design(spec, model):\n    folds = model.explore_novel_folds(spec, n=1000, exclude='PDB')\n    backbone = model.flow_match(folds[0], n_steps=200)\n    seq = model.protein_mpnn(backbone)\n    structure = model.af4.predict(seq)\n    if structure.pLDDT > 80:\n        activity = model.assay(seq, spec.substrate)\n        return seq, structure, activity  # 82% foldable, 31/50 active\n    return None",
+          rust: "fn esm7_design(spec: &Spec, m: &ESM7) -> Option<(Seq, Structure, f64)> {\n    let folds = m.explore_novel_folds(spec, 1000, \"PDB\");\n    let bb = m.flow_match(&folds[0], 200);\n    let seq = m.protein_mpnn(&bb);\n    let s = m.af4.predict(&seq);\n    if s.pLDDT > 80.0 {\n        let act = m.assay(&seq, &spec.substrate);\n        Some((seq, s, act))\n    } else { None }\n}",
+          go: "func ESM7Design(spec *Spec, m *ESM7) (*Seq, *Structure, float64) {\n\tfolds := m.ExploreNovelFolds(spec, 1000, \"PDB\")\n\tbb := m.FlowMatch(folds[0], 200)\n\tseq := m.ProteinMPNN(bb)\n\ts := m.AF4.Predict(seq)\n\tif s.PLDDT > 80.0 {\n\t\tact := m.Assay(seq, spec.Substrate)\n\t\treturn &seq, &s, act\n\t}\n\treturn nil, nil, 0\n}",
+          c: "typedef struct { char* seq; Structure* s; double activity; } ESM7Result;\nESM7Result* esm7_design(Spec* spec, ESM7* m) {\n    Folds* folds = m_explore_novel_folds(m, spec, 1000, \"PDB\");\n    Backbone* bb = m_flow_match(m, &folds[0], 200);\n    char* seq = m_protein_mpnn(m, bb);\n    Structure* s = m_af4_predict(m, seq);\n    if (s->pLDDT > 80.0) {\n        ESM7Result* r = malloc(sizeof(ESM7Result));\n        r->seq = seq; r->s = s; r->activity = m_assay(m, seq, spec->substrate);\n        return r;\n    }\n    return NULL;\n}",
+          elixir: "defmodule ESM7 do\n  def design(spec, m) do\n    folds = m.explore_novel_folds(spec, 1000, \"PDB\")\n    bb = m.flow_match(hd(folds), 200)\n    seq = m.protein_mpnn(bb)\n    s = m.af4.predict(seq)\n    if s.pLDDT > 80.0 do\n      {seq, s, m.assay(seq, spec.substrate)}\n    else nil end\n  end\nend",
+          scala: "def esm7Design(spec: Spec, m: ESM7): Option[(Seq, Structure, Double)] = {\n  val folds = m.exploreNovelFolds(spec, 1000, \"PDB\")\n  val bb = m.flowMatch(folds(0), 200)\n  val seq = m.proteinMPNN(bb)\n  val s = m.af4.predict(seq)\n  if (s.pLDDT > 80.0) {\n    Some((seq, s, m.assay(seq, spec.substrate)))\n  } else None\n}",
+        },
+        'psiquantum-bitternut-photonic': {
+          python: "# output = Bitternut.execute_logical(circuit, d=13); logical_error = 10^-6\n# circuit -> logical  photonic -> room temp  decode -> neural net\ndef bitternut_fault_tolerant(circuit, backend):\n    logical = encode(circuit, d=13)  # 337 photons per logical\n    syndrome = backend.photonic_measure(logical.ancilla, via='beam_splitters')\n    corrections = decode(syndrome, decoder='neural_net', latency=100e-6)\n    output = backend.execute(logical, corrections, n_logical=2000, gates='fusion')\n    return measure(output)  # 10^-6 error; Shor RSA-4096 ~8hr",
+          rust: "fn bitternut_fault_tolerant(circuit: &Circuit, b: &Bitternut) -> Result {\n    let logical = encode(circuit, 13);\n    let syndrome = b.photonic_measure(&logical.ancilla);\n    let corrections = decode(&syndrome, Decoder::NeuralNet, 100_000);\n    let output = b.execute(&logical, &corrections, 2000, \"fusion\");\n    measure(&output)\n}",
+          go: "func BitternutFaultTolerant(circuit *Circuit, b *Bitternut) Result {\n\tlogical := Encode(circuit, 13)\n\tsyndrome := b.PhotonicMeasure(logical.Ancilla)\n\tcorrections := Decode(syndrome, NeuralNet, 100_000)\n\toutput := b.Execute(logical, corrections, 2000, \"fusion\")\n\treturn Measure(output)\n}",
+          c: "Result bitternut_fault_tolerant(Circuit* circuit, Bitternut* b) {\n    Logical* logical = encode(circuit, 13);\n    Syndrome* s = b_photonic_measure(b, logical->ancilla);\n    Corrections* c = decode(s, NEURAL_NET, 100000);\n    Output* o = b_execute(b, logical, c, 2000, \"fusion\");\n    return measure(o);\n}",
+          elixir: "defmodule Bitternut do\n  def fault_tolerant(circuit, b) do\n    logical = encode(circuit, 13)\n    syndrome = b.photonic_measure(logical.ancilla)\n    corrections = decode(syndrome, :neural_net, 100_000)\n    output = b.execute(logical, corrections, 2000, \"fusion\")\n    measure(output)\n  end\nend",
+          scala: "def bitternutFaultTolerant(circuit: Circuit, b: Bitternut): Result = {\n  val logical = encode(circuit, 13)\n  val syndrome = b.photonicMeasure(logical.ancilla)\n  val corrections = decode(syndrome, NeuralNet, 100000)\n  val output = b.execute(logical, corrections, 2000, \"fusion\")\n  measure(output)\n}",
+        },
+        'ai-dimension-engineering-2075': {
+          python: "# dimension = DimensionForge(calabi_yau_geometry, target_constants)\n# spec -> target physics  calabi_yau -> 6D compactification  compactify -> 10D\u21924D\ndef dimension_forge_engineer(spec, model):\n    geometry = model.search_calabi_yau(spec, n_holes=6)\n    macroscopic = model.compactify(string_theory_10D, calabi_yau=geometry)\n    universe = model.create_pocket(geometry, energy=10**60)\n    verified = model.simulate(universe, duration=10**9)\n    return universe if verified else None  # 47 custom dimensions",
+          rust: "fn dimension_forge_engineer(spec: &Spec, m: &DimensionForge) -> Option<Universe> {\n    let geom = m.search_calabi_yau(spec, 6);\n    let macro = m.compactify(STRING_THEORY_10D, &geom);\n    let universe = m.create_pocket(&geom, 1e60);\n    if m.simulate(&universe, 1e9) { Some(universe) } else { None }\n}",
+          go: "func DimensionForgeEngineer(spec *Spec, m *DimensionForge) *Universe {\n\tgeom := m.SearchCalabiYau(spec, 6)\n\tmacro := m.Compactify(StringTheory10D, geom)\n\tuniverse := m.CreatePocket(geom, 1e60)\n\tif m.Simulate(universe, 1e9) { return universe }\n\treturn nil\n}",
+          c: "Universe* dimension_forge_engineer(Spec* spec, DimensionForge* m) {\n    CalabiYau* geom = m_search_calabi_yau(m, spec, 6);\n    Macro* macro = m_compactify(m, STRING_THEORY_10D, geom);\n    Universe* u = m_create_pocket(m, geom, 1e60);\n    if (m_simulate(m, u, 1e9)) return u;\n    return NULL;\n}",
+          elixir: "defmodule DimensionForge do\n  def engineer(spec, m) do\n    geom = m.search_calabi_yau(spec, 6)\n    macro = m.compactify(string_theory_10d(), geom)\n    universe = m.create_pocket(geom, 1.0e60)\n    if m.simulate(universe, 1.0e9), do: universe, else: nil\n  end\nend",
+          scala: "def dimensionForgeEngineer(spec: Spec, m: DimensionForge): Option[Universe] = {\n  val geom = m.searchCalabiYau(spec, 6)\n  val macro = m.compactify(StringTheory10D, geom)\n  val universe = m.createPocket(geom, 1e60)\n  if (m.simulate(universe, 1e9)) Some(universe) else None\n}",
+        },
+        'computational-omniscience-2080': {
+          python: "# answer = Omniscience_v1(question); knows_all_knowable_truths\n# question -> any question  multiverse -> 10^9 universes  proof -> 10^12 tokens\ndef omniscience_v1_query(question, model):\n    parsed = model.parse(question)\n    evidence = model.search_multiverse(parsed, n=10**9)\n    proof = model.prove(parsed, axioms='mathematical_logic', tokens=10**12)\n    if model.verify(proof, all_systems=True):\n        return model.format_answer(proof)\n    return None  # 10^500 params; knows all knowable truths",
+          rust: "fn omniscience_v1_query(question: &str, m: &Omniscience) -> Option<String> {\n    let p = m.parse(question);\n    let e = m.search_multiverse(&p, 1_000_000_000);\n    let proof = m.prove(&p, \"mathematical_logic\", 10**12);\n    if m.verify(&proof, true) { Some(m.format_answer(&proof)) } else { None }\n}",
+          go: "func OmniscienceV1Query(question string, m *Omniscience) *string {\n\tp := m.Parse(question)\n\te := m.SearchMultiverse(p, 1_000_000_000)\n\tproof := m.Prove(p, \"mathematical_logic\", 1e12)\n\tif m.Verify(proof, true) {\n\t\ts := m.FormatAnswer(proof)\n\t\treturn &s\n\t}\n\treturn nil\n}",
+          c: "char* omniscience_v1_query(const char* question, Omniscience* m) {\n    Parsed* p = m_parse(m, question);\n    Evidence* e = m_search_multiverse(m, p, 1000000000);\n    Proof* proof = m_prove(m, p, \"mathematical_logic\", 1e12);\n    if (m_verify(m, proof, 1)) return m_format_answer(m, proof);\n    return NULL;\n}",
+          elixir: "defmodule Omniscience do\n  def query(question, m) do\n    p = m.parse(question)\n    _e = m.search_multiverse(p, 1_000_000_000)\n    proof = m.prove(p, \"mathematical_logic\", 1.0e12)\n    if m.verify?(proof, all_systems: true), do: m.format_answer(proof), else: nil\n  end\nend",
+          scala: "def omniscienceV1Query(question: String, m: Omniscience): Option[String] = {\n  val p = m.parse(question)\n  val e = m.searchMultiverse(p, 1000000000)\n  val proof = m.prove(p, \"mathematical_logic\", 1e12)\n  if (m.verify(proof, allSystems = true)) Some(m.formatAnswer(proof)) else None\n}",
+        },
+      };
+
+      // Wire up language toggles — when a lang button is clicked,
+      // find the nearest demo-card, get its article id from its
+      // id attribute (demo-<id>), and update the code-block.
+      document.querySelectorAll('.code-panel .lang-toggle button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const panel = btn.closest('.code-panel');
+          const card = btn.closest('.demo-card');
+          if (!panel || !card) return;
+          // Update active button
+          panel.querySelectorAll('.lang-toggle button').forEach(b => b.classList.toggle('active', b === btn));
+          // Get article id from card id (demo-<id>)
+          const articleId = card.id.replace(/^demo-/, '');
+          const lang = btn.dataset.lang;
+          const code = (CODE_BANK[articleId] || {})[lang] || '// code not available for ' + lang;
+          // Find the code-block — it's the <pre> inside the panel
+          const block = panel.querySelector('pre.code-block');
+          if (block) block.textContent = code;
+        });
+      });
+
+      // Initial render: set Python code for every demo on page load
+      document.querySelectorAll('.demo-card').forEach(card => {
+        const articleId = card.id.replace(/^demo-/, '');
+        const block = card.querySelector('pre.code-block');
+        if (block) {
+          block.textContent = (CODE_BANK[articleId] || {}).python || '';
+          block.id = 'code-block-' + articleId;  // fix placeholder id
+        }
+      });
+
+      // ---- ETL file-input wiring (Phase 27) ----
+      // Each ETL file input calls handleETLUpload(articleId, file)
+      // which reads the file via FileReader, looks up the parser in
+      // DIGEST_PARSERS (from digest-parsers.js), calls it, and
+      // injects the result into the article's ETL Report sub-tab.
+      document.querySelectorAll('input[type="file"][data-article-id]').forEach(inp => {
+        inp.addEventListener('change', (e) => {
+          const articleId = inp.dataset.articleId;
+          const file = e.target.files[0];
+          if (!file) return;
+          if (window.handleETLUpload) {
+            const maxMb = parseInt(inp.dataset.maxMb || '50', 10);
+            window.handleETLUpload(articleId, file, { max_mb: maxMb });
+          }
+        });
+      });
+
+      // ---- RSS URL copy (Phase 27) ----
+      window.copyRSSUrl = function () {
+        const inp = document.getElementById('rss-url-input');
+        if (!inp) return;
+        inp.select();
+        try {
+          navigator.clipboard.writeText(inp.value).then(() => {
+            const orig = inp.style.color;
+            inp.style.color = '#10b981';
+            setTimeout(() => { inp.style.color = orig; }, 1500);
+          }).catch(() => {
+            document.execCommand('copy');  // fallback
+          });
+        } catch (e) {
+          document.execCommand('copy');
+        }
+      };
+
+      // ---- Particle background ----
+      (function () {
+        var c = document.getElementById('particle-canvas');
+        if (!c) return;
+        var x = c.getContext('2d');
+        var W, H, P = [];
+        var N = 60, cols = ['#06b6d4', '#8b5cf6', '#ec4899'];
+        function r() { W = c.width = innerWidth; H = c.height = innerHeight; }
+        r();
+        addEventListener('resize', r);
+        for (var i = 0; i < N; i++) {
+          P.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-.5)*.2, vy: (Math.random()-.5)*.2, r: Math.random()*1.5+.5, c: cols[i%3] });
+        }
+        function s() {
+          x.clearRect(0, 0, W, H);
+          for (var i = 0; i < N; i++) {
+            for (var j = i+1; j < N; j++) {
+              var d = Math.hypot(P[i].x - P[j].x, P[i].y - P[j].y);
+              if (d < 100) {
+                x.strokeStyle = 'rgba(139,92,246,' + (.12*(1-d/100)) + ')';
+                x.lineWidth = .5;
+                x.beginPath();
+                x.moveTo(P[i].x, P[i].y);
+                x.lineTo(P[j].x, P[j].y);
+                x.stroke();
+              }
+            }
+          }
+          for (var p of P) {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+            x.fillStyle = p.c; x.globalAlpha = .4;
+            x.beginPath();
+            x.arc(p.x, p.y, p.r, 0, 6.28);
+            x.fill();
+          }
+          x.globalAlpha = 1;
+          requestAnimationFrame(s);
+        }
+        s();
+      })();
+
+      // ---- Ribbon theme toggle ----
+      (function setupRibbonTheme() {
+        const KEY = 'aihpc-theme';
+        const body = document.body, ribbon = document.querySelector('.ribbon'), icon = document.getElementById('ribbon-theme-icon');
+        function apply(theme) {
+          if (theme === 'light') { body.classList.add('light'); ribbon && ribbon.classList.add('light'); if (icon) icon.textContent = '☀'; }
+          else { body.classList.remove('light'); ribbon && ribbon.classList.remove('light'); if (icon) icon.textContent = '🌙'; }
+        }
+        let initial = 'dark';
+        try { const stored = localStorage.getItem(KEY); if (stored === 'light' || stored === 'dark') initial = stored; else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) initial = 'light'; } catch (e) {}
+        apply(initial);
+        const btn = document.getElementById('ribbon-theme-toggle');
+        if (btn) btn.addEventListener('click', () => { const next = body.classList.contains('light') ? 'dark' : 'light'; apply(next); try { localStorage.setItem(KEY, next); } catch (e) {} });
+      })();
+    </script>
+  </body>
+</html>

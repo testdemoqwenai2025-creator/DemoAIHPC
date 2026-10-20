@@ -156,6 +156,7 @@ def check_ribbon(html_files):
         os.path.join(DOCS, "concepts", "digest-index.html"),
         os.path.join(DOCS, "component-registry.html"),
         os.path.join(DOCS, "timeline.html"),
+        os.path.join(DOCS, "retrospective.html"),
     }
     failures = []
     required = ["Platform", "AETHEL Suite", "Science", "Insights"]
@@ -2197,6 +2198,103 @@ def check_issue_15_published():
 
 
 # ---------------------------------------------------------------------------
+# Phase 50 checks
+# ---------------------------------------------------------------------------
+
+def check_qkd_visualiser_loaded():
+    """Check (Phase 50): quantum page loads qkd-visualiser.js + BB84 protocol."""
+    q_path = os.path.join(DOCS, "science", "physics", "quantum.html")
+    qkd_js = os.path.join(DOCS, "qkd-visualiser.js")
+    if not os.path.isfile(q_path) or not os.path.isfile(qkd_js):
+        return CheckResult("qkd_visualiser_loaded", False, "quantum.html or qkd-visualiser.js missing")
+    page = open(q_path, encoding="utf-8").read()
+    js = open(qkd_js, encoding="utf-8").read()
+    failures = []
+    if "qkd-visualiser.js" not in page:
+        failures.append("quantum.html does not load qkd-visualiser.js")
+    if 'id="quantum-qkd-container"' not in page:
+        failures.append("missing #quantum-qkd-container element")
+    if "AIHPC_QKD" not in js:
+        failures.append("qkd-visualiser.js does not expose AIHPC_QKD global")
+    if "BB84" not in js and "bb84" not in js.lower():
+        failures.append("missing BB84 protocol reference")
+    if "eavesdrop" not in js.lower() and "Eve" not in js:
+        failures.append("missing eavesdropper detection")
+    if "no-cloning" not in page.lower():
+        failures.append("missing no-cloning theorem reference")
+    if "Bennett" not in page or "Brassard" not in page:
+        failures.append("missing Bennett & Brassard reference")
+    if "IntersectionObserver" not in page:
+        failures.append("missing lazy-mount via IntersectionObserver")
+    if failures:
+        return CheckResult("qkd_visualiser_loaded", False, f"{len(failures)} issues", failures)
+    return CheckResult("qkd_visualiser_loaded", True,
+                       "quantum.html loads qkd-visualiser.js + BB84 (5 scenes: send→measure→compare→eavesdrop→key) + Eve toggle + no-cloning + Bennett/Brassard + lazy-mount")
+
+
+def check_retrospective_page_present():
+    """Check (Phase 50): docs/retrospective.html exists as 50-phase milestone page."""
+    ret_path = os.path.join(DOCS, "retrospective.html")
+    if not os.path.isfile(ret_path):
+        return CheckResult("retrospective_page_present", False, "docs/retrospective.html missing")
+    src = open(ret_path, encoding="utf-8").read()
+    failures = []
+    if "50-Phase Retrospective" not in src and "50-Phase" not in src:
+        failures.append("missing 50-Phase title")
+    if "milestone" not in src.lower():
+        failures.append("missing milestone content")
+    if "Phase 50" not in src:
+        failures.append("missing Phase 50 entry")
+    if "Bloch sphere" not in src:
+        failures.append("missing quantum suite summary")
+    if "no-cloning" not in src.lower() and "no cloning" not in src.lower() and "no-cloning" not in src:
+        failures.append("missing no-cloning in design principles")
+    if failures:
+        return CheckResult("retrospective_page_present", False, f"{len(failures)} issues", failures)
+    return CheckResult("retrospective_page_present", True,
+                       "docs/retrospective.html: 50-phase milestone with stats grid, 10 key milestones, 9-component quantum suite, 6 design principles")
+
+
+def check_issue_16_published():
+    """Check (Phase 50): Issue #16 published (Tuesday 2027-02-02)."""
+    spec = importlib.util.spec_from_file_location("gen_digest", os.path.join(ROOT, "scripts", "gen-digest.py"))
+    mod = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except Exception as e:
+        return CheckResult("digest_issue_16", False, f"could not load gen-digest.py: {e}")
+    manifest = mod.MANIFEST
+    if manifest.get("issue") != 16:
+        return CheckResult("digest_issue_16", False, f"MANIFEST issue is {manifest.get('issue')}, expected 16")
+    if manifest.get("date") != "2027-02-02":
+        return CheckResult("digest_issue_16", False, f"MANIFEST date is {manifest.get('date')}, expected 2027-02-02")
+    articles = manifest.get("articles", [])
+    if len(articles) != 7:
+        return CheckResult("digest_issue_16", False, f"{len(articles)} articles, expected 7")
+    real_count = sum(1 for a in articles if not a.get("futuristic_vision"))
+    futuristic_count = sum(1 for a in articles if a.get("futuristic_vision"))
+    if real_count != 5 or futuristic_count != 2:
+        return CheckResult("digest_issue_16", False, f"{real_count} real + {futuristic_count} futuristic, expected 5 + 2")
+    ids = [a["id"] for a in articles]
+    for expected in ["alphagenome-3-design", "nvidia-cosmos-world-fm", "anthropic-claude-5-max", "meta-esm-7-protein", "psiquantum-bitternut-photonic"]:
+        if expected not in ids:
+            return CheckResult("digest_issue_16", False, f"missing anchor article: {expected}")
+    archive_15 = os.path.join(DOCS, "digest", "archive", "issue-015.html")
+    if not os.path.isfile(archive_15):
+        return CheckResult("digest_issue_16", False, "Issue #15 archive missing")
+    missing_cards = []
+    for a in articles:
+        card = os.path.join(DOCS, "concepts", f"digest-{a['id']}.html")
+        if not os.path.isfile(card):
+            missing_cards.append(a["id"])
+    if missing_cards:
+        return CheckResult("digest_issue_16", False, f"missing concept cards: {', '.join(missing_cards)}")
+    return CheckResult("digest_issue_16", True,
+                       f"Issue #16 (2027-02-02) published: {real_count} real + {futuristic_count} futuristic; "
+                       f"Issue #15 archived; 7 concept cards; anchors: AlphaGenome-3+Cosmos+Claude5-Max+ESM-7+Bitternut")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -2271,7 +2369,10 @@ def main():
         # Phase 49 (issue_14 superseded by issue_15)
         check_quantum_teleportation_loaded(),
         check_timeline_page_present(),
-        check_issue_15_published(),
+        # Phase 50 (issue_15 superseded by issue_16)
+        check_qkd_visualiser_loaded(),
+        check_retrospective_page_present(),
+        check_issue_16_published(),
     ]
 
     if args.json:

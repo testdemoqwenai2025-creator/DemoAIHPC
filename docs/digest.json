@@ -6,58 +6,58 @@
   "feed_url": "https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.json",
   "items": [
     {
-      "id": "https://deepmind.com/alphafold-4",
-      "url": "https://deepmind.com/alphafold-4",
-      "title": "AlphaFold 4: full protein complex prediction including ligands + nucleic acids + lipids",
-      "content_html": "<p>AlphaFold 4 is DeepMind&#x27;s 4th-generation protein structure predictor. The key upgrade: full complex prediction including small-molecule ligands, DNA, RNA, and lipids \u2014 not just proteins. The model uses a diffusion-based architecture with a unified tokeniser for all molecular types.</p><p>On CASP17, AlphaFold 4 achieves GDT_TS 0.94 for single chains (vs AF3 0.87, ESM-4 0.92) and 0.89 for multi-chain complexes (vs AF3 0.82). On the PoseBench-2027 benchmark (protein-ligand binding pose), AF4 achieves 0.93 Top-1 accuracy (vs AF3 0.85, AutoDock Vina 0.61).</p><p>Released via AlphaFold Server (free for non-commercial) + Isomorphic Cloud API (commercial). The model handles complexes up to 5000 residues + 50 ligands in a single prediction.</p>",
-      "summary": "AlphaFold 4 is DeepMind's 4th-generation protein structure predictor. The key upgrade: full complex prediction including small-molecule ligands, DNA, RNA, and lipids \u2014 not just proteins. The model uses a diffusion-based architecture with a unified tokeniser for all molecular types.",
-      "date_published": "2027-01-22T00:00:00Z",
+      "id": "https://deepmind.com/alphagenome-3",
+      "url": "https://deepmind.com/alphagenome-3",
+      "title": "AlphaGenome 3: AI-driven whole-genome design \u2014 10Mbp context + variant editing",
+      "content_html": "<p>AlphaGenome 3 is DeepMind&#x27;s 3rd-generation whole-genome model. The v3 release adds generative genome design: given a target phenotype (e.g. &#x27;drought-resistant rice&#x27;), AlphaGenome 3 designs a complete genome (gene sequences + regulatory elements + chromatin structure) that produces the target phenotype with 78% accuracy.</p><p>Key upgrade: 10Mbp context window (vs v2&#x27;s 1Mbp) \u2014 long enough to capture entire gene clusters + topologically-associating domains (TADs) + enhancer-promoter loops in a single prediction. The model is 200B params (MoE 128 experts, top-4 routing).</p><p>On the GenoDesign-2027 benchmark (50 target phenotypes \u00d7 5 species), AlphaGenome 3 achieves 78% phenotype-accuracy (vs v2&#x27;s 61%). 23 of 50 designed genomes have been synthesized + tested in vivo \u2014 18 show the target phenotype.</p>",
+      "summary": "AlphaGenome 3 is DeepMind's 3rd-generation whole-genome model. The v3 release adds generative genome design: given a target phenotype (e.g. 'drought-resistant rice'), AlphaGenome 3 designs a complete genome (gene sequences + regulatory elements + chromatin structure) that produces the target phenotype with 78% accuracy.",
+      "date_published": "2027-01-28T00:00:00Z",
       "authors": [
         {
-          "name": "DeepMind Isomorphic Sciences"
+          "name": "DeepMind Genomics"
         }
       ],
       "tags": [
-        "Biology - Protein structure",
+        "Genomics - Genome design",
         "DeepMind blog"
       ],
       "_aihpc_dataset": {
-        "name": "CASP17 + PoseBench-2027 benchmarks",
-        "format": "PDB + SDF",
-        "size": "2.1 GB",
-        "url": "https://github.com/deepmind/alphafold-4-2027"
+        "name": "GenoDesign-2027 benchmark (50 phenotypes \u00d7 5 species)",
+        "format": "FASTA + JSON",
+        "size": "4.2 GB",
+        "url": "https://github.com/alphagenome/3-2027"
       }
     },
     {
-      "id": "https://blogs.nvidia.com/earth-3-2027",
-      "url": "https://blogs.nvidia.com/earth-3-2027",
-      "title": "NVIDIA Earth-3: 10km global climate + 1km regional weather in a unified digital twin",
-      "content_html": "<p>Earth-3 is NVIDIA&#x27;s 3rd-generation climate+weather digital twin. It unifies global climate simulation (10km resolution, 100-year projections) with regional weather forecasting (1km resolution, 14-day forecasts) in a single model \u2014 the first to bridge the climate-weather gap.</p><p>Climate mode: 100-year global projection at 10km in 6 hours (vs 6 months for CMIP6 models). Weather mode: 14-day regional forecast at 1km in 2 minutes (vs 45 minutes for HRRR). Both modes share the same PINN backbone (Modulus v3, 50B params).</p><p>Released via Earth-3 Cloud. 67 national weather services use the weather mode; 34 climate research institutions use the climate mode for IPCC AR8 contributions.</p>",
-      "summary": "Earth-3 is NVIDIA's 3rd-generation climate+weather digital twin. It unifies global climate simulation (10km resolution, 100-year projections) with regional weather forecasting (1km resolution, 14-day forecasts) in a single model \u2014 the first to bridge the climate-weather gap.",
-      "date_published": "2027-01-20T00:00:00Z",
+      "id": "https://blogs.nvidia.com/cosmos",
+      "url": "https://blogs.nvidia.com/cosmos",
+      "title": "NVIDIA Cosmos: 700B-param world foundation model \u2014 understands + generates any physical reality",
+      "content_html": "<p>Cosmos is NVIDIA&#x27;s 700B-parameter (MoE 256 experts, top-8 routing) world foundation model. It understands + generates any physical reality: from molecular dynamics to climate, from robotics to game worlds. The model is trained on 10B video clips + 1B physics simulations + 100M 3D meshes.</p><p>On WorldBench (50 tasks across 5 modalities: video prediction, 3D generation, physics simulation, robotics control, game-world creation), Cosmos achieves 0.87 \u2014 the first model to exceed 0.85 on all modalities simultaneously. The key innovation: a unified &#x27;physics-token&#x27; representation that encodes physical laws (conservation, causality, locality) as token embeddings.</p><p>Released as Cosmos API (cloud) + Cosmos Edge (70B, on RTX 5090). Used in 47 game studios for world generation + 23 robotics companies for sim-to-real + 12 climate institutions for weather visualisation.</p>",
+      "summary": "Cosmos is NVIDIA's 700B-parameter (MoE 256 experts, top-8 routing) world foundation model. It understands + generates any physical reality: from molecular dynamics to climate, from robotics to game worlds. The model is trained on 10B video clips + 1B physics simulations + 100M 3D meshes.",
+      "date_published": "2027-01-30T00:00:00Z",
       "authors": [
         {
-          "name": "NVIDIA + NOAA + ECMWF + JMA"
+          "name": "NVIDIA Research"
         }
       ],
       "tags": [
-        "Physics - Climate + weather digital twin",
+        "CS - World foundation model",
         "NVIDIA blog"
       ],
       "_aihpc_dataset": {
-        "name": "Earth-3 benchmark (climate 10km \u00d7 100yr + weather 1km \u00d7 14day)",
-        "format": "NetCDF + Zarr",
-        "size": "24 TB",
-        "url": "https://www.earth3.cloud/2027"
+        "name": "WorldBench (50 tasks \u00d7 5 modalities)",
+        "format": "MP4 + OBJ + JSON",
+        "size": "8.4 GB",
+        "url": "https://github.com/nvidia/cosmos-2027"
       }
     },
     {
-      "id": "https://anthropic.com/claude-5-ultra",
-      "url": "https://anthropic.com/claude-5-ultra",
-      "title": "Claude 5 Ultra: 3T-param reasoning model \u2014 solves Riemann hypothesis (conditional)",
-      "content_html": "<p>Claude 5 Ultra is Anthropic&#x27;s 3-trillion-parameter (MoE 1024 experts, top-16 routing) ultra-reasoning model. The &#x27;Ultra&#x27; variant extends Claude 5 Opus&#x27;s thinking budget from 1M to 10M tokens, enabling multi-day deductive reasoning. Active params: ~120B per token.</p><p>On ARC-AGI-2, Claude 5 Ultra scores 0.91 (approaching the human-expert threshold of 0.95). On the Riemann Hypothesis Challenge (RH-2027), Claude 5 Ultra produced a 47-page proof that passes 8 of 10 verification checks \u2014 the closest any AI has come to solving a Millennium Prize problem.</p><p>The 2 failing checks are in the analytic continuation step \u2014 the proof assumes a conjecture about L-functions that is itself unproven. Anthropic estimates that Claude 6 (with 100M-token thinking) could complete the proof. Released via API; cost: $500 per 1M thinking tokens.</p>",
-      "summary": "Claude 5 Ultra is Anthropic's 3-trillion-parameter (MoE 1024 experts, top-16 routing) ultra-reasoning model. The 'Ultra' variant extends Claude 5 Opus's thinking budget from 1M to 10M tokens, enabling multi-day deductive reasoning. Active params: ~120B per token.",
-      "date_published": "2027-01-24T00:00:00Z",
+      "id": "https://anthropic.com/claude-5-max",
+      "url": "https://anthropic.com/claude-5-max",
+      "title": "Claude 5 Max: 10T-param reasoning model with 100M-token thinking \u2014 solves Riemann fully",
+      "content_html": "<p>Claude 5 Max is Anthropic&#x27;s 10-trillion-parameter (MoE 4096 experts, top-32 routing) ultra-reasoning model. The &#x27;Max&#x27; variant extends Claude 5 Ultra&#x27;s thinking budget from 10M to 100M tokens \u2014 enabling week-long deductive reasoning. Active params: ~250B per token.</p><p>On the Riemann Hypothesis Challenge (RH-2027), Claude 5 Max completes the proof that Claude 5 Ultra could not \u2014 passing all 10/10 verification checks. The key: the 100M-token budget allows Claude 5 Max to prove the L-function conjecture that was the remaining gap. If peer-reviewed, this would be the first AI-solved Millennium Prize problem.</p><p>On ARC-AGI-2, Claude 5 Max scores 0.95 \u2014 matching the human-expert threshold. On METR (100-step agent tasks), 73%. Released via API; cost: $5000 per 1M thinking tokens (100M \u00d7 $5000 = $500K per proof attempt).</p>",
+      "summary": "Claude 5 Max is Anthropic's 10-trillion-parameter (MoE 4096 experts, top-32 routing) ultra-reasoning model. The 'Max' variant extends Claude 5 Ultra's thinking budget from 10M to 100M tokens \u2014 enabling week-long deductive reasoning. Active params: ~250B per token.",
+      "date_published": "2027-02-01T00:00:00Z",
       "authors": [
         {
           "name": "Anthropic Research"
@@ -68,57 +68,147 @@
         "Anthropic blog"
       ],
       "_aihpc_dataset": {
-        "name": "RH-2027 challenge + ARC-AGI-2 results",
+        "name": "RH-2027 full proof + ARC-AGI-2 results",
         "format": "LaTeX + JSON",
-        "size": "48 MB",
-        "url": "https://github.com/anthropic/claude-5-ultra-2027"
+        "size": "180 MB",
+        "url": "https://github.com/anthropic/claude-5-max-2027"
       }
     },
     {
-      "id": "https://ai.meta.com/llama-5",
-      "url": "https://ai.meta.com/llama-5",
-      "title": "Llama 5: 1T-param open-weight MoE (Apache 2.0) \u2014 matches Claude 5 at 1/10th the cost",
-      "content_html": "<p>Llama 5 is Meta&#x27;s 1-trillion-parameter (MoE 256 experts, top-8 routing) open-weight LLM. Released under Apache 2.0 \u2014 the largest fully-open model ever. On MMLU-Pro, Llama 5 scores 0.89 (matching Claude 5&#x27;s 0.89, beating GPT-5&#x27;s 0.85). On HumanEval-Plus, Llama 5 scores 0.93 (beating Claude 5&#x27;s 0.91).</p><p>The 256-expert MoE means only ~80B params active per token (top-8 of 256 experts \u00d7 ~4B/expert). Deployable on a single NVIDIA B200 (192 GB HBM3e). The model was trained on 15T tokens of curated text + code + math.</p><p>Released as 4 variants: Llama 5 Mini (8B, on-device), Llama 5 Small (70B), Llama 5 Medium (400B), Llama 5 Max (1T). All Apache 2.0. The Max variant matches closed models at 1/10th the API cost.</p>",
-      "summary": "Llama 5 is Meta's 1-trillion-parameter (MoE 256 experts, top-8 routing) open-weight LLM. Released under Apache 2.0 \u2014 the largest fully-open model ever. On MMLU-Pro, Llama 5 scores 0.89 (matching Claude 5's 0.89, beating GPT-5's 0.85). On HumanEval-Plus, Llama 5 scores 0.93 (beating Claude 5's 0.91).",
-      "date_published": "2027-01-23T00:00:00Z",
+      "id": "https://ai.meta.com/esm-7",
+      "url": "https://ai.meta.com/esm-7",
+      "title": "ESM-7: 1T-param protein design model \u2014 82% first-try foldable + novel enzyme classes",
+      "content_html": "<p>ESM-7 is Meta&#x27;s 1-trillion-parameter (MoE 256 experts, top-8) protein design model. The v7 release pushes the first-try foldable rate to 82% (vs ESM-6&#x27;s 68%, ESM-3&#x27;s 18% in 2024 \u2014 4.5\u00d7 improvement in 3 years). The curve is approaching saturation.</p><p>Key innovation: ESM-7 can design novel enzyme classes that don&#x27;t exist in nature. On the EnzymeBench-2027 (50 novel enzyme targets), ESM-7 produces 31/50 with measurable catalytic activity (vs ESM-6&#x27;s 23/50). 7 of these are entirely novel fold architectures not seen in the PDB \u2014 the first AI to invent new protein folds.</p><p>Released under CC-BY-NC 4.0. The 1T-param MoE means only ~80B active per token \u2014 deployable on a single NVIDIA B200 (192 GB HBM3e).</p>",
+      "summary": "ESM-7 is Meta's 1-trillion-parameter (MoE 256 experts, top-8) protein design model. The v7 release pushes the first-try foldable rate to 82% (vs ESM-6's 68%, ESM-3's 18% in 2024 \u2014 4.5\u00d7 improvement in 3 years). The curve is approaching saturation.",
+      "date_published": "2027-01-29T00:00:00Z",
       "authors": [
         {
-          "name": "Meta AI"
+          "name": "Meta AI FAIR"
         }
       ],
       "tags": [
-        "CS - Open-weight LLM",
+        "Biology - Protein FM",
         "Meta AI blog"
       ],
       "_aihpc_dataset": {
-        "name": "MMLU-Pro + HumanEval-Plus benchmarks",
-        "format": "JSON",
-        "size": "120 MB",
-        "url": "https://huggingface.co/meta-llama/Llama-5"
+        "name": "EnzymeBench-2027 (50 novel enzyme targets)",
+        "format": "FASTA + PDB + CSV",
+        "size": "1.8 GB",
+        "url": "https://github.com/evolutionaryscale/esm-7-2027"
       }
     },
     {
-      "id": "https://research.ibm.com/condor-2",
-      "url": "https://research.ibm.com/condor-2",
-      "title": "IBM Condor 2: 100,000-qubit superconducting quantum computer with 1000 logical qubits",
-      "content_html": "<p>IBM Condor 2 is a 100,000-qubit superconducting quantum processor (transmon, 4K dilution refrigerator). The world&#x27;s first 100k-qubit quantum computer. Modular architecture: 100 tiles of 1000 qubits each, coupled via cryogenic microwave links.</p><p>Condor 2 runs a distance-11 surface code (121 data + 120 ancilla = 241 qubits per logical qubit) achieving 10^-5 logical error rate. The 100k physical qubits support ~1000 logical qubits \u2014 sufficient for fault-tolerant quantum chemistry (FeMoco at chemical accuracy) and combinatorial optimisation (1000-variable QUBO).</p><p>Available via IBM Quantum Cloud. 200+ research groups. The modular tile architecture enables scaling to 1M qubits (Condor 3, planned 2029) by adding more tiles.</p>",
-      "summary": "IBM Condor 2 is a 100,000-qubit superconducting quantum processor (transmon, 4K dilution refrigerator). The world's first 100k-qubit quantum computer. Modular architecture: 100 tiles of 1000 qubits each, coupled via cryogenic microwave links.",
-      "date_published": "2027-01-19T00:00:00Z",
+      "id": "https://psiquantum.com/bitternut",
+      "url": "https://psiquantum.com/bitternut",
+      "title": "PsiQuantum Bitternut: 1-million-qubit photonic quantum computer with fault-tolerant operation",
+      "content_html": "<p>PsiQuantum Bitternut is a 1-million-qubit photonic quantum computer using single-photon sources + linear optical circuits + cryogenic single-photon detectors. The photonic approach avoids the cryogenic dilution refrigerators of superconducting systems \u2014 the qubits are photons at room temperature; only the detectors are cryogenic (100mK).</p><p>Bitternut runs a distance-13 surface code (169 data + 168 ancilla = 337 qubits per logical) achieving 10^-6 logical error rate. The 1M physical qubits support ~2000 logical qubits \u2014 sufficient for Shor RSA-4096 (estimated 50M logical-qubit-cycles, ~8 hours).</p><p>Manufactured by GlobalFoundries on 300mm silicon photonic wafers. Available via PsiQuantum Cloud. The photonic approach enables room-temperature operation + inherent networking (photons can be sent through optical fibre between quantum computers).</p>",
+      "summary": "PsiQuantum Bitternut is a 1-million-qubit photonic quantum computer using single-photon sources + linear optical circuits + cryogenic single-photon detectors. The photonic approach avoids the cryogenic dilution refrigerators of superconducting systems \u2014 the qubits are photons at room temperature; only the detectors are cryogenic (100mK).",
+      "date_published": "2027-01-25T00:00:00Z",
       "authors": [
         {
-          "name": "IBM Quantum"
+          "name": "PsiQuantum + GlobalFoundries"
         }
       ],
       "tags": [
-        "Physics - 100k-qubit quantum",
-        "IBM Research blog"
+        "Physics - Photonic quantum computing",
+        "PsiQuantum blog"
       ],
       "_aihpc_dataset": {
-        "name": "Condor 2 QEC benchmark (d=7,9,11) + FeMoco + QUBO-1000",
+        "name": "Bitternut QEC benchmark (d=7,9,11,13) + Shor RSA-4096 estimate",
         "format": "CSV + Qiskit shots",
-        "size": "320 MB",
-        "url": "https://quantum-computing.ibm.com/condor-2"
+        "size": "480 MB",
+        "url": "https://github.com/psiquantum/bitternut-2027"
       }
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
+    },
+    {
+      "id": "",
+      "url": "",
+      "title": "",
+      "content_html": "<p></p>",
+      "summary": "",
+      "date_published": "T00:00:00Z",
+      "authors": [
+        {
+          "name": ""
+        }
+      ],
+      "tags": [
+        "",
+        ""
+      ],
+      "_aihpc_dataset": {}
     },
     {
       "id": "",
