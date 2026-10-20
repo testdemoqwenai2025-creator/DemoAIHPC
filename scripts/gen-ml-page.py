@@ -52,7 +52,7 @@ LOSS_FUNCTIONS = [
             ("Step 5: Update rule", "ŷ ← ŷ − η · ∂L/∂ŷ", "Gradient descent: update the prediction by stepping against the gradient, scaled by the learning rate η. For linear regression, this converges to the OLS solution."),
         ],
         "code": {
-            "python": "import numpy as np\ndef mse(y_true, y_pred):\n    return np.mean((y_true - y_pred) ** 2)\ndef mse_grad(y_true, y_pred):\n    return 2 * (y_pred - y_true) / len(y_true)",
+            "python": "# L = (1/n) Sum (y_i - y_hat_i)^2\n# y_i -> y_true[i]  y_hat_i -> y_pred[i]  n -> len(y_true)\n# Sum -> .sum()  ^2 -> ** 2  (1/n) -> np.mean()\nimport numpy as np\ndef mse(y_true, y_pred):\n    return np.mean((y_true - y_pred) ** 2)\ndef mse_grad(y_true, y_pred):\n    return 2 * (y_pred - y_true) / len(y_true)",
             "rust": "fn mse(y_true: &[f64], y_pred: &[f64]) -> f64 {\n    let n = y_true.len() as f64;\n    y_true.iter().zip(y_pred.iter())\n        .map(|(t, p)| (t - p).powi(2)).sum::<f64>() / n\n}",
             "go": "func MSE(yTrue, yPred []float64) float64 {\n\tn := float64(len(yTrue))\n\tvar sum float64\n\tfor i := range yTrue { sum += (yTrue[i] - yPred[i]) * (yTrue[i] - yPred[i]) }\n\treturn sum / n\n}",
             "c": "double mse(const double* y_true, const double* y_pred, int n) {\n    double sum = 0;\n    for (int i = 0; i < n; i++) sum += (y_true[i] - y_pred[i]) * (y_true[i] - y_pred[i]);\n    return sum / n;\n}",
@@ -103,7 +103,7 @@ LOSS_FUNCTIONS = [
             ("Step 5: Robustness to outliers", "MAE outlier penalty: 10× error → 10× loss (linear)", "Unlike MSE's quadratic penalty, MAE's linear penalty means outliers don't dominate the loss. MAE is the maximum-likelihood estimator when residuals follow a Laplace distribution."),
         ],
         "code": {
-            "python": "import numpy as np\ndef mae(y_true, y_pred):\n    return np.mean(np.abs(y_true - y_pred))\ndef mae_grad(y_true, y_pred):\n    return np.sign(y_pred - y_true) / len(y_true)",
+            "python": "# L = (1/n) Sum |y_i - y_hat_i|\n# y_i -> y_true[i]  y_hat_i -> y_pred[i]  n -> len(y_true)\n# |.| -> np.abs()  Sum -> .sum()  (1/n) -> np.mean()\nimport numpy as np\ndef mae(y_true, y_pred):\n    return np.mean(np.abs(y_true - y_pred))\ndef mae_grad(y_true, y_pred):\n    return np.sign(y_pred - y_true) / len(y_true)",
             "rust": "fn mae(y_true: &[f64], y_pred: &[f64]) -> f64 {\n    let n = y_true.len() as f64;\n    y_true.iter().zip(y_pred.iter())\n        .map(|(t, p)| (t - p).abs()).sum::<f64>() / n\n}",
             "go": "func MAE(yTrue, yPred []float64) float64 {\n\tn := float64(len(yTrue))\n\tvar sum float64\n\tfor i := range yTrue { sum += math.Abs(yTrue[i] - yPred[i]) }\n\treturn sum / n\n}",
             "c": "double mae(const double* y_true, const double* y_pred, int n) {\n    double sum = 0;\n    for (int i = 0; i < n; i++) sum += fabs(y_true[i] - y_pred[i]);\n    return sum / n;\n}",
@@ -152,7 +152,7 @@ LOSS_FUNCTIONS = [
             ("Step 5: Gradient", "∂L/∂ŷ_i = −(y_i/ŷ_i − (1−y_i)/(1−ŷ_i)) = (ŷ_i − y_i) / (ŷ_i(1−ŷ_i))", "The gradient simplifies to (ŷ−y) / (ŷ(1−ŷ)). When paired with a sigmoid output, the denominator cancels the sigmoid derivative, giving a clean gradient of (ŷ−y). This is why BCE + sigmoid is the canonical binary-classification setup."),
         ],
         "code": {
-            "python": "import numpy as np\ndef bce(y_true, y_pred):\n    eps = 1e-15\n    y_pred = np.clip(y_pred, eps, 1 - eps)\n    return -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))",
+            "python": "# L = -(1/n) Sum [y log(y_hat) + (1-y) log(1-y_hat)]\n# y -> y_true[i]  y_hat -> y_pred[i] (sigmoid output)\n# log -> np.log()  clip y_hat to (1e-15, 1-1e-15)\nimport numpy as np\ndef bce(y_true, y_pred):\n    eps = 1e-15\n    y_pred = np.clip(y_pred, eps, 1 - eps)\n    return -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))",
             "rust": "fn bce(y_true: &[f64], y_pred: &[f64]) -> f64 {\n    let n = y_true.len() as f64;\n    y_true.iter().zip(y_pred.iter()).map(|(t, p)| {\n        let p = p.clamp(1e-15, 1.0 - 1e-15);\n        -(t * p.ln() + (1.0 - t) * (1.0 - p).ln())\n    }).sum::<f64>() / n\n}",
             "go": "func BCE(yTrue, yPred []float64) float64 {\n\tn := float64(len(yTrue))\n\tvar sum float64\n\tfor i := range yTrue {\n\t\tp := math.Max(1e-15, math.Min(1-1e-15, yPred[i]))\n\t\tsum += -(yTrue[i]*math.Log(p) + (1-yTrue[i])*math.Log(1-p))\n\t}\n\treturn sum / n\n}",
             "c": "double bce(const double* y_true, const double* y_pred, int n) {\n    double sum = 0;\n    for (int i = 0; i < n; i++) {\n        double p = fmax(1e-15, fmin(1-1e-15, y_pred[i]));\n        sum += -(y_true[i]*log(p) + (1-y_true[i])*log(1-p));\n    }\n    return sum / n;\n}",
@@ -202,7 +202,7 @@ LOSS_FUNCTIONS = [
             ("Step 5: Gradient with softmax", "∂L/∂z_c = ŷ_c − y_c", "When paired with a softmax output, the gradient of the loss w.r.t. the pre-activation z_c simplifies to (ŷ_c − y_c) — the prediction error. This clean gradient is why CCE + softmax is the canonical multi-class setup."),
         ],
         "code": {
-            "python": "import numpy as np\ndef cce(y_true, y_pred):\n    eps = 1e-15\n    y_pred = np.clip(y_pred, eps, 1.0)\n    return -np.mean(np.sum(y_true * np.log(y_pred), axis=1))",
+            "python": "# L = -(1/n) Sum_i Sum_c y_ic log(y_hat_ic)\n# y_ic -> y_true[i][c] (one-hot)  y_hat_ic -> y_pred[i][c] (softmax)\n# Sum_c -> sum(axis=1)  Sum_i -> sum()  (1/n) -> mean()\nimport numpy as np\ndef cce(y_true, y_pred):\n    eps = 1e-15\n    y_pred = np.clip(y_pred, eps, 1.0)\n    return -np.mean(np.sum(y_true * np.log(y_pred), axis=1))",
             "rust": "fn cce(y_true: &[Vec<f64>], y_pred: &[Vec<f64>]) -> f64 {\n    let n = y_true.len() as f64;\n    let mut sum = 0.0;\n    for i in 0..y_true.len() {\n        for c in 0..y_true[i].len() {\n            let p = y_pred[i][c].max(1e-15);\n            sum += y_true[i][c] * p.ln();\n        }\n    }\n    -sum / n\n}",
             "go": "func CCE(yTrue, yPred [][]float64) float64 {\n\tn := float64(len(yTrue))\n\tvar sum float64\n\tfor i := range yTrue {\n\t\tfor c := range yTrue[i] {\n\t\t\tp := math.Max(1e-15, yPred[i][c])\n\t\t\tsum += yTrue[i][c] * math.Log(p)\n\t\t}\n\t}\n\treturn -sum / n\n}",
             "c": "double cce(const double* y_true, const double* y_pred, int n, int C) {\n    double sum = 0;\n    for (int i = 0; i < n; i++)\n        for (int c = 0; c < C; c++) {\n            double p = fmax(1e-15, y_pred[i*C+c]);\n            sum += y_true[i*C+c] * log(p);\n        }\n    return -sum / n;\n}",
@@ -251,7 +251,7 @@ LOSS_FUNCTIONS = [
             ("Step 5: Sub-gradient", "∂L/∂ŷ_i = −y_i  if y_i·ŷ_i < 1,  else 0", "The gradient is −y for margin-violating samples (constant magnitude), and 0 for samples with sufficient margin. This makes SVM training focus only on the 'support vectors' — the samples near the margin."),
         ],
         "code": {
-            "python": "import numpy as np\ndef hinge(y_true, y_pred):\n    return np.mean(np.maximum(0, 1 - y_true * y_pred))\ndef hinge_grad(y_true, y_pred):\n    return -y_true * (y_true * y_pred < 1) / len(y_true)",
+            "python": "# L = (1/n) Sum max(0, 1 - y*y_hat)\n# y -> y_true[i] in {-1,+1}  y_hat -> y_pred[i] (raw score)\n# max(0,.) -> np.maximum(0, .)  y*y_hat -> y_true * y_pred\nimport numpy as np\ndef hinge(y_true, y_pred):\n    return np.mean(np.maximum(0, 1 - y_true * y_pred))\ndef hinge_grad(y_true, y_pred):\n    return -y_true * (y_true * y_pred < 1) / len(y_true)",
             "rust": "fn hinge(y_true: &[f64], y_pred: &[f64]) -> f64 {\n    let n = y_true.len() as f64;\n    y_true.iter().zip(y_pred.iter())\n        .map(|(t, p)| (1.0 - t * p).max(0.0)).sum::<f64>() / n\n}",
             "go": "func Hinge(yTrue, yPred []float64) float64 {\n\tn := float64(len(yTrue))\n\tvar sum float64\n\tfor i := range yTrue { sum += math.Max(0, 1-yTrue[i]*yPred[i]) }\n\treturn sum / n\n}",
             "c": "double hinge(const double* y_true, const double* y_pred, int n) {\n    double sum = 0;\n    for (int i = 0; i < n; i++) sum += fmax(0, 1 - y_true[i]*y_pred[i]);\n    return sum / n;\n}",
@@ -300,7 +300,7 @@ LOSS_FUNCTIONS = [
             ("Step 5: Hessian (for Newton methods)", "∂²L/∂ŷ² = sech²(ŷ − y) / n = 1 / (n·cosh²(ŷ − y))", "The Hessian is always positive and bounded — it's the square of the gradient of tanh. This makes log-cosh twice-differentiable, suitable for Newton-Raphson optimisation (used in XGBoost)."),
         ],
         "code": {
-            "python": "import numpy as np\ndef log_cosh(y_true, y_pred):\n    return np.mean(np.log(np.cosh(y_pred - y_true)))\ndef log_cosh_grad(y_true, y_pred):\n    return np.tanh(y_pred - y_true) / len(y_true)",
+            "python": "# L = (1/n) Sum log(cosh(y_hat - y))\n# y -> y_true[i]  y_hat -> y_pred[i]  cosh -> np.cosh()\n# log -> np.log()  cosh(e) ~ e^2/2 (small e) or |e| (large e)\nimport numpy as np\ndef log_cosh(y_true, y_pred):\n    return np.mean(np.log(np.cosh(y_pred - y_true)))\ndef log_cosh_grad(y_true, y_pred):\n    return np.tanh(y_pred - y_true) / len(y_true)",
             "rust": "fn log_cosh(y_true: &[f64], y_pred: &[f64]) -> f64 {\n    let n = y_true.len() as f64;\n    y_true.iter().zip(y_pred.iter())\n        .map(|(t, p)| ((p - t).cosh()).ln()).sum::<f64>() / n\n}",
             "go": "func LogCosh(yTrue, yPred []float64) float64 {\n\tn := float64(len(yTrue))\n\tvar sum float64\n\tfor i := range yTrue { sum += math.Log(math.Cosh(yPred[i] - yTrue[i])) }\n\treturn sum / n\n}",
             "c": "#include <math.h>\ndouble log_cosh(const double* y_true, const double* y_pred, int n) {\n    double sum = 0;\n    for (int i = 0; i < n; i++) sum += log(cosh(y_pred[i] - y_true[i]));\n    return sum / n;\n}",
@@ -349,7 +349,7 @@ LOSS_FUNCTIONS = [
             ("Step 5: Choosing δ", "δ = 1.0 (default) or σ·1.345 (Mad) ", "δ controls the transition. A common heuristic is δ = 1.345·σ (where σ is the residual standard deviation) — this gives 95% efficiency under Gaussian noise while remaining robust to outliers. Smaller δ → more robust (like MAE); larger δ → more sensitive (like MSE)."),
         ],
         "code": {
-            "python": "import numpy as np\ndef huber(y_true, y_pred, delta=1.0):\n    e = y_pred - y_true\n    abs_e = np.abs(e)\n    quad = 0.5 * e**2\n    linear = delta * (abs_e - 0.5 * delta)\n    return np.mean(np.where(abs_e <= delta, quad, linear))",
+            "python": "# L_delta(e) = { 0.5*e^2  if |e|<=delta;  delta*(|e|-0.5*delta)  if |e|>delta }\n# e -> y_pred - y_true  delta -> delta (threshold, default 1.0)\n# 0.5*e^2 -> 0.5*e*e  delta*(|e|-0.5*delta) -> delta*(abs(e)-0.5*delta)\nimport numpy as np\ndef huber(y_true, y_pred, delta=1.0):\n    e = y_pred - y_true\n    abs_e = np.abs(e)\n    quad = 0.5 * e**2\n    linear = delta * (abs_e - 0.5 * delta)\n    return np.mean(np.where(abs_e <= delta, quad, linear))",
             "rust": "fn huber(y_true: &[f64], y_pred: &[f64], delta: f64) -> f64 {\n    let n = y_true.len() as f64;\n    y_true.iter().zip(y_pred.iter()).map(|(t, p)| {\n        let e = (p - t).abs();\n        if e <= delta { 0.5 * e * e } else { delta * (e - 0.5 * delta) }\n    }).sum::<f64>() / n\n}",
             "go": "func Huber(yTrue, yPred []float64, delta float64) float64 {\n\tn := float64(len(yTrue))\n\tvar sum float64\n\tfor i := range yTrue {\n\t\te := math.Abs(yPred[i] - yTrue[i])\n\t\tif e <= delta { sum += 0.5 * e * e } else { sum += delta * (e - 0.5*delta) }\n\t}\n\treturn sum / n\n}",
             "c": "double huber(const double* y_true, const double* y_pred, int n, double delta) {\n    double sum = 0;\n    for (int i = 0; i < n; i++) {\n        double e = fabs(y_pred[i] - y_true[i]);\n        sum += (e <= delta) ? 0.5*e*e : delta*(e - 0.5*delta);\n    }\n    return sum / n;\n}",
@@ -398,7 +398,7 @@ LOSS_FUNCTIONS = [
             ("Step 5: Asymmetry + relation to cross-entropy", "D_KL(P||Q) = H(P,Q) − H(P),  H(P,Q) = −Σ P log Q", "KL = cross-entropy − entropy. Minimising cross-entropy (the standard classification loss) is equivalent to minimising KL (since H(P) is constant for fixed labels). This is why CCE is the MLE."),
         ],
         "code": {
-            "python": "import numpy as np\ndef kl_divergence(p, q):\n    eps = 1e-15\n    p = np.clip(p, eps, 1.0)\n    q = np.clip(q, eps, 1.0)\n    return np.sum(p * np.log(p / q))",
+            "python": "# D_KL(P||Q) = Sum P(x) log(P(x)/Q(x))\n# P -> p[i] (true dist)  Q -> q[i] (predicted dist)\n# log(P/Q) -> np.log(p/q)  Sum -> np.sum()  clip to 1e-15\nimport numpy as np\ndef kl_divergence(p, q):\n    eps = 1e-15\n    p = np.clip(p, eps, 1.0)\n    q = np.clip(q, eps, 1.0)\n    return np.sum(p * np.log(p / q))",
             "rust": "fn kl_divergence(p: &[f64], q: &[f64]) -> f64 {\n    p.iter().zip(q.iter()).map(|(pi, qi)| {\n        let pi = pi.max(1e-15); let qi = qi.max(1e-15);\n        pi * (pi / qi).ln()\n    }).sum()\n}",
             "go": "func KLDivergence(p, q []float64) float64 {\n\tvar sum float64\n\tfor i := range p {\n\t\tpi := math.Max(1e-15, p[i]); qi := math.Max(1e-15, q[i])\n\t\tsum += pi * math.Log(pi / qi)\n\t}\n\treturn sum\n}",
             "c": "double kl_divergence(const double* p, const double* q, int n) {\n    double sum = 0;\n    for (int i = 0; i < n; i++) {\n        double pi = fmax(1e-15, p[i]), qi = fmax(1e-15, q[i]);\n        sum += pi * log(pi / qi);\n    }\n    return sum;\n}",
@@ -446,7 +446,7 @@ LOSS_FUNCTIONS = [
             ("Step 5: Gradient", "∂L/∂A = −B / (||A|| ||B||) + (A · B) A / (||A||³ ||B||)", "The gradient has two terms: one pushing A toward B (alignment) and one regularising A's magnitude (since cosine is scale-invariant, the gradient is perpendicular to A)."),
         ],
         "code": {
-            "python": "import numpy as np\ndef cosine_similarity_loss(a, b):\n    dot = np.dot(a, b)\n    norm_a = np.linalg.norm(a)\n    norm_b = np.linalg.norm(b)\n    return 1.0 - dot / (norm_a * norm_b + 1e-8)",
+            "python": "# L = 1 - (A.B) / (||A||*||B||)\n# A.B -> np.dot(a, b)  ||A|| -> np.linalg.norm(a)\n# L -> 1.0 - dot/(na*nb + eps)  eps=1e-8\nimport numpy as np\ndef cosine_similarity_loss(a, b):\n    dot = np.dot(a, b)\n    norm_a = np.linalg.norm(a)\n    norm_b = np.linalg.norm(b)\n    return 1.0 - dot / (norm_a * norm_b + 1e-8)",
             "rust": "fn cosine_loss(a: &[f64], b: &[f64]) -> f64 {\n    let dot: f64 = a.iter().zip(b.iter()).map(|(ai, bi)| ai * bi).sum();\n    let na: f64 = a.iter().map(|x| x * x).sum::<f64>().sqrt();\n    let nb: f64 = b.iter().map(|x| x * x).sum::<f64>().sqrt();\n    1.0 - dot / (na * nb + 1e-8)\n}",
             "go": "func CosineLoss(a, b []float64) float64 {\n\tvar dot, na, nb float64\n\tfor i := range a { dot += a[i] * b[i]; na += a[i] * a[i]; nb += b[i] * b[i] }\n\treturn 1.0 - dot/(math.Sqrt(na)*math.Sqrt(nb)+1e-8)\n}",
             "c": "double cosine_loss(const double* a, const double* b, int n) {\n    double dot=0, na=0, nb=0;\n    for (int i = 0; i < n; i++) { dot += a[i]*b[i]; na += a[i]*a[i]; nb += b[i]*b[i]; }\n    return 1.0 - dot / (sqrt(na)*sqrt(nb) + 1e-8);\n}",
@@ -667,7 +667,8 @@ def emit_loss_function(lf):
               <div class="report-block">{html.escape(lf['report'])}</div>
             </div>
             <div class="observe-content" data-sub="graphs">
-              <div class="graph-block">{lf['graph_svg']}</div>
+              <div class="gts-container" data-gts-id="gts-{lf['id']}" style="padding: 16px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;"></div>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2);">Press Play to animate the table values onto the graph. Math annotations appear at inflection points.</div>
             </div>
             <div class="observe-content" data-sub="summary">
               <div class="summary-block"><ul>''')
@@ -713,7 +714,7 @@ def main():
              '    <style>',
              CSS,
              '    </style>',
-             '    <script src="animated-derivation.js"></script>',
+             '    <script src="animated-derivation.js"></script>\n    <script src="graph-table-sync.js"></script>',
              '  </head>',
              '  <body>',
              '    <canvas id="particle-canvas"></canvas>',
@@ -830,6 +831,61 @@ def main():
         duration: {duration:.1f},
       }});""")
     parts.append('''
+      
+      // ---- Phase 32: Graph-table-sync ----
+      var GTS_CONFIGS = {
+        'mse': { xCol: 3, yCol: 4, xLabel: 'error (y-Ey)', yLabel: 'loss (e^2)',
+          curveFn: function(x) { return x * x; },
+          inflectionFn: function(row, i, rows) { var mx = Math.max.apply(null, rows.map(function(r){return Math.abs(r[3]);})); return Math.abs(row[3]) === mx ? {annotation: 'L=e^2=' + row[4] + ' - max error, quadratic penalty'} : null; } },
+        'mae': { xCol: 3, yCol: 3, xLabel: 'error (y-Ey)', yLabel: 'loss (|e|)',
+          curveFn: function(x) { return Math.abs(x); },
+          inflectionFn: function(row, i, rows) { var mx = Math.max.apply(null, rows.map(function(r){return Math.abs(r[3]);})); return Math.abs(row[3]) === mx ? {annotation: 'L=|e|=' + Math.abs(row[3]) + ' - max error, linear penalty'} : null; } },
+        'binary-cross-entropy': { xCol: 2, yCol: 5, xLabel: 'y_hat (prob)', yLabel: 'loss',
+          curveFn: function(x) { x = Math.max(1e-15, Math.min(1-1e-15, x)); return -Math.log(x); },
+          inflectionFn: function(row, i, rows) { return parseFloat(row[5]) > 3 ? {annotation: 'L=' + row[5] + ' - confident wrong'} : null; } },
+        'categorical-cross-entropy': { xCol: 2, yCol: 4, xLabel: 'y_hat_true', yLabel: 'loss',
+          curveFn: function(x) { return -Math.log(Math.max(1e-15, x)); },
+          inflectionFn: function(row, i, rows) { return parseFloat(row[4]) > 3 ? {annotation: 'L=' + row[4] + ' - low confidence'} : null; } },
+        'hinge-loss': { xCol: 3, yCol: 4, xLabel: 'y*y_hat (margin)', yLabel: 'loss',
+          curveFn: function(x) { return Math.max(0, 1 - x); },
+          inflectionFn: function(row, i, rows) { return parseFloat(row[4]) > 1.5 ? {annotation: 'L=' + row[4] + ' - margin violation'} : null; } },
+        'log-cosh': { xCol: 3, yCol: 4, xLabel: 'error', yLabel: 'loss (log-cosh)',
+          curveFn: function(x) { return Math.log(Math.cosh(x)); },
+          inflectionFn: function(row, i, rows) { var mx = Math.max.apply(null, rows.map(function(r){return Math.abs(r[3]);})); return Math.abs(row[3]) === mx ? {annotation: 'L=' + row[4] + ' - large error, MAE-like'} : null; } },
+        'huber-loss': { xCol: 3, yCol: 4, xLabel: '|error|', yLabel: 'Huber (delta=1.0)',
+          curveFn: function(x) { return x <= 1.0 ? 0.5*x*x : 1.0*(x - 0.5); },
+          inflectionFn: function(row, i, rows) { return parseFloat(row[3]) > 1.0 ? {annotation: 'L=' + row[4] + ' - beyond delta=1.0, linear'} : (Math.abs(parseFloat(row[3]) - 1.0) < 0.01 ? {annotation: 'delta threshold: quadratic->linear'} : null); } },
+        'kl-divergence': { xCol: 2, yCol: 4, xLabel: 'Q(x)', yLabel: 'P*log(P/Q)',
+          curveFn: null,
+          inflectionFn: function(row, i, rows) { return parseFloat(row[4]) < 0 ? {annotation: 'P<Q: negative contribution'} : null; } },
+        'cosine-similarity': { xCol: 3, yCol: 4, xLabel: 'cos(theta)', yLabel: 'loss=1-cos(theta)',
+          curveFn: function(x) { return 1 - x; },
+          inflectionFn: function(row, i, rows) { return parseFloat(row[4]) > 1.5 ? {annotation: 'L=' + row[4] + ' - anti-parallel'} : null; } },
+      };
+      document.querySelectorAll('.demo-card').forEach(function (card) {
+        var id = card.id.replace(/^demo-/, '');
+        var cfg = GTS_CONFIGS[id];
+        if (!cfg) return;
+        var table = card.querySelector('.data-table');
+        if (!table) return;
+        var headers = [];
+        table.querySelectorAll('thead th').forEach(function (th) { headers.push(th.textContent.trim()); });
+        var rows = [];
+        table.querySelectorAll('tbody tr').forEach(function (tr) {
+          var row = [];
+          tr.querySelectorAll('td').forEach(function (td) { row.push(td.textContent.trim()); });
+          rows.push(row);
+        });
+        if (headers.length && rows.length && window.AIHPC_GTS) {
+          AIHPC_GTS.register('gts-' + id, {
+            title: id, headers: headers, rows: rows,
+            xCol: cfg.xCol, yCol: cfg.yCol, xLabel: cfg.xLabel, yLabel: cfg.yLabel,
+            curveFn: cfg.curveFn, inflectionFn: cfg.inflectionFn, duration: 6,
+          });
+        }
+      });
+      document.addEventListener('DOMContentLoaded', function () { if (window.AIHPC_GTS) AIHPC_GTS.init(); });
+
       // ---- Particle background ----
       (function () {
         var c = document.getElementById('particle-canvas');
