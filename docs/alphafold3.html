@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AlphaFold 3 — DeepMind 2024. Diffusion-based structure prediction for protein + DNA + RNA + ligands + chemical modifications. 50% improvement over AutoDock Vina on protein-ligand interactions." />
+    <title>AlphaFold 3 — Biomolecular Structure Prediction · AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#10b981; --accent-2:#06b6d4; --accent-3:#f59e0b; --purple:#8b5cf6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.18), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 24px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(16,185,129,0.35); background: rgba(16,185,129,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; }
+      h1 { font-size: 36px; margin: 0 0 12px; background: linear-gradient(90deg,#fff,#6ee7b7 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      h2 { font-size: 22px; margin: 32px 0 12px; color: var(--accent-2); }
+      h3 { color: #06b6d4; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 920px; margin: 0 0 24px; }
+      .lead b { color: var(--text); }
+      .lead a { color: var(--accent-2); text-decoration: none; }
+      .viz-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 16px; margin-top: 16px; }
+      .viz-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+      canvas { display: block; width: 100%; height: auto; }
+      .controls-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+      .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: white; }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      .zoom-controls { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 8px; padding: 4px; }
+      .zoom-btn { width: 30px; height: 30px; border: none; background: transparent; color: var(--text); cursor: pointer; font-size: 16px; font-weight: 700; border-radius: 4px; }
+      .zoom-btn:hover { background: rgba(16,185,129,0.2); }
+      .zoom-label { font-size: 9px; color: var(--text-muted); text-align: center; padding: 2px 0; }
+      .math-block { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-family: "Cambria Math", Georgia, serif; }
+      .math-block .eq { font-size: 16px; color: var(--accent); margin: 6px 0; }
+      .math-block .explain { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .callout { background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+      .callout.green { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.3); }
+      .callout.amber { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.3); }
+      .callout.pink { background: rgba(236,72,153,0.06); border-color: rgba(236,72,153,0.3); }
+      .callout h3 { margin: 0 0 10px; }
+      .callout .row { margin: 8px 0; font-size: 13px; line-height: 1.55; color: var(--text); }
+      .callout .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
+      .callout .lbl.use { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .callout .lbl.avoid { background: rgba(239,68,68,0.15); color: #fca5a5; }
+      .callout .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+      .callout .lbl.futur { background: rgba(245,158,11,0.15); color: #fcd34d; }
+      .callout .text { color: var(--text-muted); }
+      .meta { border-top: 1px solid var(--border); margin-top: 40px; padding-top: 16px; font-size: 12px; color: var(--text-muted-2); }
+      .meta a { color: var(--accent-2); text-decoration: none; }
+      .meta code { background: var(--bg-elevated); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+    </style>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+
+    <main class="container">
+      <p class="crumbs"><a href="index.html">Home</a> / <a href="bio-nn.html">Bioinformatics × NN</a> / AlphaFold 3</p>
+      <span class="tag">🔬 Research paper · DeepMind / Isomorphic Labs · 2024</span>
+      <h1>AlphaFold 3 — Biomolecular Structure Prediction</h1>
+      <p class="lead">Extends <b>AlphaFold 2</b> from proteins-only to <b>full biomolecular complexes</b>: proteins + DNA + RNA + ligands + chemical modifications + ions. The structure module is replaced with a <b>diffusion model</b> (vs AlphaFold 2's equivariant transformer). <b>~50% improvement</b> on protein-ligand interactions vs AutoDock Vina; major gains on protein-nucleic-acid complexes. Trained on PDB. Web server at <a href="https://alphafoldserver.com" target="_blank" rel="noopener">alphafoldserver.com</a> (10 free predictions/day); commercial via Isomorphic Labs.</p>
+
+      <div class="viz-card">
+        <h3>Pipeline visualiser — 6 stages</h3>
+        <div class="viz-wrap">
+          <canvas id="main-canvas" width="728" height="420"></canvas>
+          <div class="zoom-controls">
+            <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+            <div class="zoom-label" id="zoom-label">100%</div>
+            <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+            <button class="zoom-btn" id="zoom-reset" title="Reset zoom">↺</button>
+          </div>
+          <div style="position: absolute; bottom: 10px; left: 12px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace;" id="stage-indicator">stage 0/6</div>
+        </div>
+        <div class="controls-row">
+          <button class="btn primary" id="btn-play">▶ Animate pipeline</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="margin-left: auto; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace;" id="state-display">Seq → MSA → Pair → Diffusion → 3D</div>
+        </div>
+      </div>
+
+      <h2>📐 Mathematical formulation</h2>
+
+      <div class="math-block">
+        <div class="eq">Stage 1 — Inputs: sequence (residues + ligands + nucleotides) + MSA + templates</div>
+        <div class="explain">Sequence S = [s₁, ..., s_L] where each sᵢ ∈ {20 amino acids, 4 nucleotides, ligand SMILES, ion, modification}. MSA provides evolutionary coupling; templates provide known structural priors.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 2 — Single + pair representations:
+s ∈ ℝ^{L×d},  p ∈ ℝ^{L×L×d}</div>
+        <div class="explain">Single representation s captures per-residue features; pair representation p captures pairwise relationships (rough distance, orientation). Both initialised from MSA + sequence embeddings.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 3 — Pairformer (replaces Evoformer):
+(s, p) → Pairformerₖ(s, p)  — updates both s + p via triangle attention</div>
+        <div class="explain">48 blocks of triangle attention. Each block updates the pair representation p using row-wise + column-wise attention (treating p as a 2D grid of pairwise relations). Single representation s updated via cross-attention to p.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 4 — Diffusion module (replaces AF2 structure module):
+x_t = √(ᾱ_t) · x_0 + √(1−ᾱ_t) · ε,  ε ~ N(0, I)
+learn ε_θ(x_t, t, s, p) ≈ ε</div>
+        <div class="explain">Atomic positions are noised + denoised through 50 steps. The diffusion model is conditioned on s + p (the Pairformer outputs) — so the chemical context guides the denoising. This is the architectural change that enables multi-molecule complexes: the diffusion model naturally handles variable numbers of atoms, unlike AF2's fixed-point SE(3) structure module.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 5 — Confidence head:
+pTM, pLDDT = MLP(s_final, p_final)</div>
+        <div class="explain">Predicted Template Modelling (pTM) score = expected TM-score, gives global confidence. Predicted Local Distance Difference Test (pLDDT) gives per-residue confidence. Both used to flag uncertain regions.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 6 — Multi-molecule complex assembly:
+output = {x_protein, x_DNA, x_RNA, x_ligand, x_ions, x_modifications}</div>
+        <div class="explain">The diffusion model jointly predicts the structure of all input molecules, with implicit interface prediction (no separate docking step). This is the key capability: AF2 needed separate docking tools; AF3 handles it in one pass.</div>
+      </div>
+
+      <h2>💻 Math → Code — runnable Python implementation</h2>
+
+      <div class="code-section">
+        <h3 style="margin: 0 0 8px; font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em;">AlphaFold 3 minimal reference (~80 lines, numpy)</h3>
+        <pre><span class="cm"># Stage 1: Multi-molecule input encoding</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">encode_inputs</span>(residues, ligand_smiles, nucleotides):
+    <span class="cm"># Concatenate residues + nucleotides + ligand tokens</span>
+    <span class="cm"># Each token = (type, embedding_id) — type ∈ {protein, DNA, RNA, ligand}</span>
+    seq = []
+    <span class="kw">for</span> r <span class="kw">in</span> residues: seq.append((<span class="num">0</span>, r))  <span class="cm"># protein residues</span>
+    <span class="kw">for</span> n <span class="kw">in</span> nucleotides: seq.append((<span class="num">1</span>, n))  <span class="cm"># nucleotides</span>
+    <span class="kw">for</span> l <span class="kw">in</span> ligand_smiles: seq.append((<span class="num">2</span>, l))  <span class="cm"># ligand tokens</span>
+    <span class="kw">return</span> seq
+
+<span class="cm"># Stage 2: Single + pair representations</span>
+<span class="kw">def</span> <span class="fn">init_representations</span>(seq, d_model=<span class="num">384</span>):
+    L = len(seq)
+    s = np.random.randn(L, d_model) * <span class="num">0.02</span>  <span class="cm"># single repr</span>
+    p = np.random.randn(L, L, d_model) * <span class="num">0.02</span>  <span class="cm"># pair repr</span>
+    <span class="kw">return</span> s, p
+
+<span class="cm"># Stage 3: Pairformer block (triangle attention)</span>
+<span class="kw">def</span> <span class="fn">softmax</span>(x, axis=-<span class="num">1</span>):
+    x = x - x.max(axis=axis, keepdims=<span class="num">True</span>)
+    e = np.exp(x); <span class="kw">return</span> e / e.sum(axis=axis, keepdims=<span class="num">True</span>)
+
+<span class="kw">def</span> <span class="fn">triangle_attention</span>(p, W_q, W_k, W_v, <span class="num">True</span>):
+    <span class="cm"># p shape: (L, L, d). For row attn, attention over dim 1.</span>
+    Q = p @ W_q; K = p @ W_k; V = p @ W_v
+    d_k = Q.shape[-<span class="num">1</span>]
+    attn = softmax(Q @ K.transpose(<span class="num">0</span>, <span class="num">2</span>, <span class="num">1</span>) / np.sqrt(d_k), axis=-<span class="num">1</span>)
+    <span class="kw">return</span> attn @ V
+
+<span class="kw">def</span> <span class="fn">pairformer_block</span>(s, p, W_s, W_p, W_cross):
+    <span class="cm"># Update pair via row + column triangle attention</span>
+    p_row = triangle_attention(p, *W_p)
+    p_col = triangle_attention(p.transpose(<span class="num">1</span>, <span class="num">0</span>, <span class="num">2</span>), *W_p).transpose(<span class="num">1</span>, <span class="num">0</span>, <span class="num">2</span>)
+    p_new = p + p_row + p_col
+    <span class="cm"># Update single via cross-attention to pair</span>
+    s_new = s + s @ W_cross + p_new.mean(axis=<span class="num">1</span>) @ W_s
+    <span class="kw">return</span> s_new, p_new
+
+<span class="cm"># Stage 4: Diffusion module</span>
+<span class="kw">class</span> <span class="fn">DiffusionModule</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, num_steps=<span class="num">50</span>, beta_start=<span class="num">1e-4</span>, beta_end=<span class="num">0.02</span>):
+        self.betas = np.linspace(beta_start, beta_end, num_steps)
+        self.alphas = <span class="num">1</span> - self.betas
+        self.alpha_bars = np.cumprod(self.alphas)
+        self.num_steps = num_steps
+
+    <span class="kw">def</span> <span class="fn">forward_noise</span>(self, x_0, t):
+        <span class="cm"># x_t = √(ᾱ_t) · x_0 + √(1-ᾱ_t) · ε</span>
+        eps = np.random.randn(*x_0.shape)
+        ab = self.alpha_bars[t]
+        <span class="kw">return</span> np.sqrt(ab) * x_0 + np.sqrt(<span class="num">1</span> - ab) * eps, eps
+
+    <span class="kw">def</span> <span class="fn">reverse_denoise</span>(self, x_t, t, eps_pred):
+        <span class="cm"># Reverse step — conditioned on s (single repr) + p (pair repr)</span>
+        b = self.betas[t]; a = self.alphas[t]; ab = self.alpha_bars[t]
+        mean = (<span class="num">1</span> / np.sqrt(a)) * (x_t - (<span class="num">1</span> - a) / np.sqrt(<span class="num">1</span> - ab) * eps_pred)
+        <span class="kw">if</span> t &gt; <span class="num">0</span>:
+            <span class="kw">return</span> mean + np.sqrt(b) * np.random.randn(*x_t.shape)
+        <span class="kw">return</span> mean
+
+<span class="cm"># === Example: predict structure of a 50-residue protein + 1 ligand ===</span>
+np.random.seed(<span class="num">0</span>)
+residues = list(<span class="kw">range</span>(<span class="num">20</span>)) * <span class="num">2</span> + [<span class="num">5</span>]  <span class="cm"># 50 residues (toy)</span>
+ligands = [<span class="num">0</span>]  <span class="cm"># 1 ligand (e.g., ATP)</span>
+seq = encode_inputs(residues, ligands, [])
+s, p = init_representations(seq)
+<span class="kw">print</span>(<span class="num">f"Encoded: {len(seq)} tokens (residues+ligand)"</span>)
+<span class="kw">print</span>(<span class="num">f"Single repr: {s.shape}, Pair repr: {p.shape}"</span>)
+diff = DiffusionModule(num_steps=<span class="num">10</span>)
+x_0 = np.random.randn(len(seq), <span class="num">3</span>)  <span class="cm"># 3D coords per token</span>
+x_t, eps = diff.forward_noise(x_0, t=<span class="num">5</span>)
+<span class="kw">print</span>(<span class="num">f"Noised coords shape: {x_t.shape} (3D per token)"</span>)</pre>
+      </div>
+
+      <h2>🧠 Deep thoughts — when to reach for AlphaFold 3</h2>
+
+      <div class="callout">
+        <h3>Strategic guidance</h3>
+        <div class="row"><span class="lbl use">USE WHEN</span><span class="text">Predicting <b>multi-molecule complexes</b> (protein-protein, protein-DNA, protein-RNA, protein-ligand). Drug discovery pipelines where you need protein-ligand binding poses (replaces AutoDock Vina + RoseTTAFold). Structural biology of large complexes (ribosomes, spliceosomes, chromatin). Designing novel proteins with specific binding interfaces. Where AlphaFold 2 failed (multi-chain complexes, disordered regions, ligand docking).</span></div>
+        <div class="row"><span class="lbl avoid">AVOID WHEN</span><span class="text">you need exact atomic coordinates (AF3 confidence is good but not perfect — pTM &lt; 0.7 means reliable but not crystallography-grade). Real-time predictions (server is 10/day free; commercial API needed for high throughput). Protein dynamics / conformational ensembles (AF3 predicts a single static structure — use MD simulations for dynamics). Membrane proteins in lipid bilayers (AF3 doesn't model lipids).</span></div>
+        <div class="row"><span class="lbl why">WHY</span><span class="text">The architectural change from AF2's SE(3)-equivariant structure module to a <b>diffusion model</b> is the key innovation. Diffusion naturally handles variable numbers of atoms (multi-molecule complexes) because it operates in continuous coordinate space — AF2's structure module was a fixed-iteration point-cloud network that struggled with mixed molecule types. The diffusion model also produces <em>multiple plausible structures</em> (via different noise seeds) — useful for disordered proteins + conformational ensembles.</span></div>
+      </div>
+
+      <h2>🚀 Futuristic possibilities</h2>
+
+      <div class="callout amber">
+        <h3>Speculative but grounded</h3>
+        <div class="row"><span class="lbl futur">2025-26</span><span class="text"><b>Drug discovery acceleration.</b> AF3 + generative chemistry models (e.g. DiffDock) → design novel drug candidates against any protein target in 1 day. Pharma pipelines compress from 5 years → 18 months per drug candidate.</span></div>
+        <div class="row"><span class="lbl futur">2027-29</span><span class="text"><b>Rational vaccine design.</b> AF3 predicts viral protein structures + immune-receptor complexes → design mRNA vaccines that target specific epitopes. Pandemic response time: 7 days from sequence to clinical-trial-ready vaccine (vs 11 months for COVID-19 mRNA).</span></div>
+        <div class="row"><span class="lbl futur">2030-32</span><span class="text"><b>Programmable molecular machines.</b> AF3 + protein-design models (RFdiffusion, Chroma) → design proteins that perform specific mechanical / chemical / sensing tasks. First artificial enzymes outperforming natural ones for industrial chemistry.</span></div>
+        <div class="row"><span class="lbl futur">2033+</span><span class="text"><b>Atomically-precise drug delivery.</b> AF3 predicts the structure of a drug + its target + a delivery vehicle (lipid nanoparticle, antibody conjugate) as a single complex → design targeted cancer drugs that activate only in tumour microenvironments. Side-effect-free chemotherapy.</span></div>
+      </div>
+
+      <h2>🔬 Comparison with related approaches</h2>
+
+      <div class="callout pink">
+        <h3>AlphaFold 3 vs other structure predictors</h3>
+        <div class="row"><span class="lbl why">vs AlphaFold 2</span><span class="text">AF2 (2021) was proteins-only with an SE(3)-equivariant structure module. AF3 (2024) handles proteins + DNA + RNA + ligands + modifications via a diffusion module. AF3 is ~50% better on protein-ligand; AF2 still slightly better on isolated monomer proteins (no diffusion overhead). Use AF2 for pure-protein tasks; AF3 for complexes.</span></div>
+        <div class="row"><span class="lbl why">vs RoseTTAFold All-Atom (Baker Lab)</span><span class="text">Open-source alternative. Three-track network + diffusion. Comparable accuracy on most tasks; AF3 wins on ligands. Use RFAA if you need to inspect / modify the model (open weights); use AF3 if you want best-in-class accuracy + can tolerate the closed model.</span></div>
+        <div class="row"><span class="lbl why">vs AutoDock Vina</span><span class="text">AutoDock Vina is a physics-based docking tool (~15 years old, 30M citations). AF3 outperforms it by ~50% on protein-ligand pose prediction. But AutoDock Vina is open-source, fast (~1 min per ligand), and free; AF3 server is 10/day free, commercial API for scale. Use AutoDock Vina for virtual screening of 100K+ ligands; AF3 for the top-10 hits.</span></div>
+        <div class="row"><span class="lbl why">vs DiffDock</span><span class="text">DiffDock (2022) was the first diffusion-based protein-ligand docking model. AF3's diffusion module is conceptually similar but conditioned on the Pairformer's pair representation (so it uses evolutionary + structural priors DiffDock lacks). AF3 wins by ~20% on docking accuracy.</span></div>
+      </div>
+
+      <div class="meta">
+        <p>Page: <code>docs/alphafold3.html</code> · Phase 38.4 · Style inspired by <a href="bolero.html">bolero.html</a>. Paper: <a href="https://www.nature.com/articles/s41586-024-07487-w" target="_blank" rel="noopener">AlphaFold 3 paper (Nature 2024)</a> — Abramson et al. Web server: <a href="https://alphafoldserver.com" target="_blank" rel="noopener">alphafoldserver.com</a>. Commercial: <a href="https://www.isomorphiclabs.com" target="_blank" rel="noopener">Isomorphic Labs</a>. All animations are pure client-side canvas; no external services. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </main>
+
+    <script>
+      // ===== Particle background =====
+      (function() {
+        var c = document.getElementById('particle-canvas');
+        var x = c.getContext('2d');
+        function resize() { c.width = innerWidth; c.height = innerHeight; }
+        resize(); addEventListener('resize', resize);
+        var N = 60, P = [];
+        var cols = ['#10b981', '#06b6d4', '#8b5cf6'];
+        for (var i = 0; i < N; i++) P.push({x: Math.random()*c.width, y: Math.random()*c.height, vx: (Math.random()-.5)*.15, vy: (Math.random()-.5)*.15, r: Math.random()*1.5+.5, c: cols[i%3]});
+        function s() {
+          x.clearRect(0,0,c.width,c.height);
+          for (var i=0;i<N;i++) for (var j=i+1;j<N;j++) { var d=Math.hypot(P[i].x-P[j].x, P[i].y-P[j].y); if (d<120) { x.strokeStyle='rgba(139,92,246,'+(.1*(1-d/120))+')'; x.lineWidth=.5; x.beginPath(); x.moveTo(P[i].x,P[i].y); x.lineTo(P[j].x,P[j].y); x.stroke(); } }
+          for (var p of P) { p.x+=p.vx; p.y+=p.vy; if (p.x<0)p.x=c.width; if (p.x>c.width)p.x=0; if (p.y<0)p.y=c.height; if (p.y>c.height)p.y=0; x.fillStyle=p.c; x.globalAlpha=.35; x.beginPath(); x.arc(p.x,p.y,p.r,0,6.28); x.fill(); }
+          x.globalAlpha=1;
+          requestAnimationFrame(s);
+        }
+        s();
+      })();
+
+      // ===== AlphaFold 3 pipeline canvas =====
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      var W = canvas.width, H = canvas.height;
+      var stage = 0, maxStage = 6, zoom = 1.0, isAnim = false;
+
+      function render() {
+        ctx.save();
+        ctx.fillStyle = '#0a0e1a';
+        ctx.fillRect(0, 0, W, H);
+        ctx.translate(W/2, H/2);
+        ctx.scale(zoom, zoom);
+        ctx.translate(-W/2, -H/2);
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        ctx.fillStyle = '#10b981'; ctx.font = 'bold 14px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('AlphaFold 3 pipeline — stage ' + stage + '/' + maxStage, W/2, 25);
+        ctx.textAlign = 'left';
+        var baseY = 50;
+
+        // Stage 1: Multi-molecule input
+        if (stage >= 1) {
+          var tY = baseY + 20;
+          ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('1. Multi-molecule input: protein + DNA + RNA + ligand', 30, tY - 8);
+          var types = ['Protein', 'DNA', 'RNA', 'Ligand'];
+          var colors = ['#10b981', '#06b6d4', '#8b5cf6', '#f59e0b'];
+          for (var t = 0; t < 4; t++) {
+            ctx.fillStyle = colors[t]; ctx.fillRect(30 + t * 170, tY, 14, 14);
+            ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '10px ui-monospace';
+            ctx.fillText(types[t], 30 + t * 170 + 20, tY + 11);
+          }
+        }
+
+        // Stage 2: Single + pair representations
+        if (stage >= 2) {
+          var eY = baseY + 80;
+          ctx.fillStyle = '#8b5cf6'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('2. Single (L×d) + Pair (L×L×d) representations', 30, eY - 8);
+          // Show pair matrix as heatmap (8x8)
+          for (var i = 0; i < 8; i++) {
+            for (var j = 0; j < 8; j++) {
+              var v = (Math.sin(i*0.5 + j*0.7) + 1) / 2;
+              ctx.fillStyle = 'rgba(139,92,246,' + v + ')';
+              ctx.fillRect(30 + j * 20, eY + i * 20, 18, 18);
+            }
+          }
+          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillText('Pair repr p (8×8 shown of L×L)', 30, eY + 165);
+        }
+
+        // Stage 3: Pairformer — 48 blocks of triangle attention
+        if (stage >= 3) {
+          var trY = baseY + 200;
+          ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('3. Pairformer — 48 blocks of triangle attention', 30, trY - 8);
+          // Show 6 blocks as boxes connected by arrows
+          for (var b = 0; b < 6; b++) {
+            var bx = 30 + b * 110;
+            ctx.fillStyle = 'rgba(245,158,11,0.4)';
+            ctx.fillRect(bx, trY, 80, 30);
+            ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5;
+            ctx.strokeRect(bx, trY, 80, 30);
+            ctx.fillStyle = '#f59e0b'; ctx.font = '10px ui-monospace'; ctx.textAlign = 'center';
+            ctx.fillText('Pairformer ' + (b+1), bx + 40, trY + 18);
+            ctx.textAlign = 'left';
+            if (b < 5) {
+              ctx.strokeStyle = 'rgba(148,163,184,0.4)'; ctx.lineWidth = 1;
+              ctx.beginPath(); ctx.moveTo(bx + 80, trY + 15); ctx.lineTo(bx + 110, trY + 15); ctx.stroke();
+            }
+          }
+          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillText('(6 of 48 blocks shown)', 30, trY + 42);
+        }
+
+        // Stage 4: Diffusion module
+        if (stage >= 4) {
+          var dY = baseY + 290;
+          ctx.fillStyle = '#ec4899'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('4. Diffusion — noise then denoise atomic positions', 30, dY - 8);
+          // Show 6 noise levels (increasing then decreasing)
+          for (var s = 0; s < 6; s++) {
+            var noise = s < 3 ? s / 3 : (6 - s) / 3;
+            var px = 30 + s * 100;
+            ctx.fillStyle = 'rgba(16,185,129,' + (1 - noise * 0.5) + ')';
+            ctx.beginPath(); ctx.arc(px + 30, dY + 30, 18, 0, 6.28); ctx.fill();
+            // Add noise dots
+            for (var d = 0; d < noise * 30; d++) {
+              var dx = (Math.random() - 0.5) * 30;
+              var dy = (Math.random() - 0.5) * 30;
+              ctx.fillStyle = 'rgba(239,68,68,' + noise + ')';
+              ctx.beginPath(); ctx.arc(px + 30 + dx, dY + 30 + dy, 1, 0, 6.28); ctx.fill();
+            }
+          }
+          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillText('Forward → noise  |  Reverse → denoise', 30, dY + 65);
+        }
+
+        // Stage 5: Confidence
+        if (stage >= 5) {
+          var cY = baseY + 380;
+          ctx.fillStyle = '#10b981'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('5. Confidence: pTM + pLDDT', 30, cY - 8);
+          // pTM score bar
+          ctx.fillStyle = 'rgba(16,185,129,0.7)';
+          ctx.fillRect(30, cY, 350, 12);
+          ctx.fillStyle = 'rgba(148,163,184,0.8)'; ctx.font = '10px ui-monospace';
+          ctx.fillText('pTM = 0.82 (high confidence)', 30, cY + 28);
+        }
+
+        // Stage 6: Output structure
+        if (stage >= 6) {
+          var oY = baseY + 450;
+          ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('6. Output: 3D complex (protein + DNA + ligand)', 30, oY - 8);
+        }
+
+        ctx.restore();
+        var states = ['idle', 'input', 's+p', 'Pairformer', 'Diffusion', 'Confidence', '3D complex ✓'];
+        document.getElementById('stage-indicator').textContent = 'stage ' + stage + '/' + maxStage + ' · ' + states[stage];
+        document.getElementById('state-display').textContent = 'Seq → ' + states[stage];
+      }
+
+      function animate() {
+        stage = 0;
+        function step() {
+          if (stage > maxStage) {
+            isAnim = false; document.getElementById('btn-play').disabled = false;
+            document.getElementById('stage-indicator').textContent = 'done ✓';
+            return;
+          }
+          render(); stage++; setTimeout(step, 600);
+        }
+        step();
+      }
+
+      document.getElementById('btn-play').addEventListener('click', function() {
+        if (isAnim) return; isAnim = true;
+        document.getElementById('btn-play').disabled = true;
+        animate();
+      });
+      document.getElementById('btn-reset').addEventListener('click', function() {
+        stage = 0; isAnim = false;
+        document.getElementById('btn-play').disabled = false;
+        document.getElementById('stage-indicator').textContent = 'stage 0/' + maxStage;
+        render();
+      });
+      document.getElementById('zoom-in').addEventListener('click', function() { zoom = Math.min(3.0, zoom + 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; render(); });
+      document.getElementById('zoom-out').addEventListener('click', function() { zoom = Math.max(0.5, zoom - 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; render(); });
+      document.getElementById('zoom-reset').addEventListener('click', function() { zoom = 1.0; document.getElementById('zoom-label').textContent = '100%'; render(); });
+      render();
+    </script>
+    <script src="zoom-loader.js"></script>
+  </body>
+</html>

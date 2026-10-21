@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Geneformer — single-cell foundation model pretrained on Genecorpus-30M (30M human transcriptomes). Theodoris et al. 2023, Harvard/MIT/Broad. Transformer over ranked gene tokens. In-silico perturbation + gene-network inference." />
+    <title>Geneformer — Transcriptome Foundation Model · AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#10b981; --accent-2:#06b6d4; --accent-3:#f59e0b; --purple:#8b5cf6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.18), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 24px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(16,185,129,0.35); background: rgba(16,185,129,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; }
+      h1 { font-size: 36px; margin: 0 0 12px; background: linear-gradient(90deg,#fff,#6ee7b7 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      h2 { font-size: 22px; margin: 32px 0 12px; color: var(--accent-2); }
+      h3 { color: #06b6d4; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 920px; margin: 0 0 24px; }
+      .lead b { color: var(--text); }
+      .lead a { color: var(--accent-2); text-decoration: none; }
+      .viz-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 16px; margin-top: 16px; }
+      .viz-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+      canvas { display: block; width: 100%; height: auto; }
+      .controls-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+      .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: white; }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      .zoom-controls { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 8px; padding: 4px; }
+      .zoom-btn { width: 30px; height: 30px; border: none; background: transparent; color: var(--text); cursor: pointer; font-size: 16px; font-weight: 700; border-radius: 4px; }
+      .zoom-btn:hover { background: rgba(16,185,129,0.2); }
+      .zoom-label { font-size: 9px; color: var(--text-muted); text-align: center; padding: 2px 0; }
+      .math-block { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-family: "Cambria Math", Georgia, serif; }
+      .math-block .eq { font-size: 16px; color: var(--accent); margin: 6px 0; }
+      .math-block .explain { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .callout { background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+      .callout.green { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.3); }
+      .callout.amber { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.3); }
+      .callout.pink { background: rgba(236,72,153,0.06); border-color: rgba(236,72,153,0.3); }
+      .callout h3 { margin: 0 0 10px; }
+      .callout .row { margin: 8px 0; font-size: 13px; line-height: 1.55; color: var(--text); }
+      .callout .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
+      .callout .lbl.use { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .callout .lbl.avoid { background: rgba(239,68,68,0.15); color: #fca5a5; }
+      .callout .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+      .callout .lbl.futur { background: rgba(245,158,11,0.15); color: #fcd34d; }
+      .callout .text { color: var(--text-muted); }
+      .meta { border-top: 1px solid var(--border); margin-top: 40px; padding-top: 16px; font-size: 12px; color: var(--text-muted-2); }
+      .meta a { color: var(--accent-2); text-decoration: none; }
+      .meta code { background: var(--bg-elevated); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+    </style>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+
+    <main class="container">
+      <p class="crumbs"><a href="index.html">Home</a> / <a href="bio-nn.html">Bioinformatics × NN</a> / Geneformer</p>
+      <span class="tag">🔬 Research paper · Harvard / MIT / Broad · 2023</span>
+      <h1>Geneformer — Transcriptome Foundation Model</h1>
+      <p class="lead">A <b>Transformer pretrained on Genecorpus-30M</b> — 30 million human single-cell transcriptomes from the CELLxGENE corpus. Each cell becomes a "sentence" of <b>ranked gene tokens</b> (genes sorted by expression, no magnitudes) — tokenisation that makes the model robust to sequencing-depth variation. Transfer-learns to: <b>in-silico perturbation</b> (predict what happens when you knock out any gene), <b>cell-state classification, gene-network inference, disease classification</b>. Available on <a href="https://huggingface.co/ctheodoris/geneformer" target="_blank" rel="noopener">🤗 Hugging Face</a>.</p>
+
+      <div class="viz-card">
+        <h3>Pipeline visualiser — 5 stages</h3>
+        <div class="viz-wrap">
+          <canvas id="main-canvas" width="728" height="420"></canvas>
+          <div class="zoom-controls">
+            <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+            <div class="zoom-label" id="zoom-label">100%</div>
+            <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+            <button class="zoom-btn" id="zoom-reset" title="Reset zoom">↺</button>
+          </div>
+          <div style="position: absolute; bottom: 10px; left: 12px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace;" id="stage-indicator">stage 0/5</div>
+        </div>
+        <div class="controls-row">
+          <button class="btn primary" id="btn-play">▶ Animate pipeline</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="margin-left: auto; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace;" id="state-display">Cell → Rank → Tokens → Transformer → Fine-tune</div>
+        </div>
+      </div>
+
+      <h2>📐 Mathematical formulation</h2>
+
+      <div class="math-block">
+        <div class="eq">Stage 1 — Rank-based tokenisation: sort genes by expression (descending) → take top-K</div>
+        <div class="explain">Cell C = [g_(1), g_(2), ..., g_(K)] where g_(i) is the gene with i-th highest expression. No magnitudes — just the rank order. Typical K = 2048 (captures >95% of total UMIs in most cells).</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 2 — Token embeddings:
+xᵢ = E_gene(g_(i)) + E_pos(i)</div>
+        <div class="explain">Two additive components per token: gene identity embedding + position embedding (the rank-order signal). Note: <em>no</em> expression-value embedding — magnitudes are discarded.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 3 — Transformer encoder forward:
+hₗ = PostLN(MHSA(PostLN(hₗ₋₁)) + MLP)</div>
+        <div class="explain">Standard post-LN Transformer. The model learns gene-gene regulatory patterns from co-occurrence in ranked order (similar to how BERT learns word semantics from co-occurrence).</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 4 — Masked gene prediction (MLM):
+L = −Σ_{masked tokens} log p(g_(i) | hᵢ)</div>
+        <div class="explain">~15% of gene tokens are masked; model predicts which gene belongs at that position. Forces the model to learn cell-type-specific gene-gene co-occurrence patterns. The ranking structure means the model is invariant to absolute counts (robust to depth).</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 5 — In-silico perturbation:
+Δ COS(h_gene_removed) = COS(h_full) − COS(h_gene_removed)</div>
+        <div class="explain">For any gene in any cell, Geneformer can compute the "shift in cell-state embedding" caused by removing that gene — i.e. the gene's importance to that cell's identity. This is the paper's headline capability: in-silico CRISPR at scale.</div>
+      </div>
+
+      <h2>💻 Math → Code — runnable Python implementation</h2>
+
+      <div class="code-section">
+        <h3 style="margin: 0 0 8px; font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em;">Geneformer minimal reference (~60 lines, numpy)</h3>
+        <pre><span class="cm"># Stage 1: Rank-based tokenisation</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">tokenise_cell</span>(gene_ids, expressions, top_k=<span class="num">2048</span>):
+    <span class="cm"># Sort genes by expression (descending) → take top-K</span>
+    <span class="cm"># Magnitudes are DISCARDED — only rank order is kept</span>
+    order = np.argsort(expressions)[::-<span class="num">1</span>][:top_k]
+    <span class="kw">return</span> gene_ids[order]  <span class="cm"># just gene IDs in ranked order</span>
+
+<span class="cm"># Stage 2: Token embeddings (gene + position, NO expression)</span>
+<span class="kw">class</span> <span class="fn">GeneformerEmbeddings</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, n_genes, d_model=<span class="num">512</span>, max_len=<span class="num">2048</span>):
+        self.gene_emb = np.random.randn(n_genes, d_model) * <span class="num">0.02</span>
+        self.pos_emb = np.random.randn(max_len, d_model) * <span class="num">0.02</span>
+
+    <span class="kw">def</span> <span class="fn">__call__</span>(self, gene_tokens, positions):
+        <span class="kw">return</span> self.gene_emb[gene_tokens] + self.pos_emb[positions]
+
+<span class="cm"># Stage 3: Transformer encoder</span>
+<span class="kw">def</span> <span class="fn">softmax</span>(x, axis=-<span class="num">1</span>):
+    x = x - x.max(axis=axis, keepdims=<span class="num">True</span>)
+    e = np.exp(x); <span class="kw">return</span> e / e.sum(axis=axis, keepdims=<span class="num">True</span>)
+
+<span class="kw">def</span> <span class="fn">transformer_layer</span>(h, W_q, W_k, W_v, W_o, W_ff, b_ff):
+    Q, K, V = h @ W_q, h @ W_k, h @ W_v
+    d_k = Q.shape[-<span class="num">1</span>]
+    attn = softmax(Q @ K.T / np.sqrt(d_k))
+    h_attn = attn @ V @ W_o
+    h_ff = np.maximum(<span class="num">0</span>, (h + h_attn) @ W_ff + b_ff)
+    <span class="kw">return</span> h + h_ff
+
+<span class="cm"># Stage 4: MLM loss (predict masked gene)</span>
+<span class="kw">def</span> <span class="fn">mlm_loss</span>(h_masked, gene_target, W_head):
+    logits = h_masked @ W_head.T
+    <span class="kw">return</span> -np.mean(np.log(softmax(logits)[np.arange(len(gene_target)), gene_target] + <span class="num">1e-10</span>))
+
+<span class="cm"># Stage 5: In-silico perturbation — compute "COS shift" when gene is removed</span>
+<span class="kw">def</span> <span class="fn">in_silico_perturb</span>(model, cell_tokens, gene_to_remove):
+    h_full = model.encode(cell_tokens)
+    <span class="cm"># Remove all occurrences of the target gene from the token sequence</span>
+    filtered = cell_tokens[cell_tokens != gene_to_remove]
+    h_filtered = model.encode(filtered)
+    <span class="cm"># Cosine shift = how much the cell-state embedding moves</span>
+    cos = np.dot(h_full.mean(<span class="num">0</span>), h_filtered.mean(<span class="num">0</span>)) / (
+        np.linalg.norm(h_full.mean(<span class="num">0</span>)) * np.linalg.norm(h_filtered.mean(<span class="num">0</span>)) + <span class="num">1e-8</span>)
+    <span class="kw">return</span> <span class="num">1.0</span> - cos  <span class="cm"># ΔCOS — higher = more important gene</span>
+
+<span class="cm"># === Example: tokenise a single cell ===</span>
+np.random.seed(<span class="num">0</span>)
+n_genes, d_model = <span class="num">10000</span>, <span class="num">128</span>
+embed = GeneformerEmbeddings(n_genes=n_genes, d_model=d_model)
+gene_ids = np.random.randint(<span class="num">0</span>, n_genes, size=<span class="num">500</span>)
+expr = np.random.exponential(size=<span class="num">500</span>)  <span class="cm"># raw UMI counts</span>
+tokens = tokenise_cell(gene_ids, expr, top_k=<span class="num">64</span>)  <span class="cm"># top-64 most-expressed genes</span>
+x = embed(tokens, np.arange(<span class="num">64</span>))
+<span class="kw">print</span>(<span class="num">f"Cell tokenised: {len(tokens)} genes (ranked), shape={x.shape}"</span>)</pre>
+      </div>
+
+      <h2>🧠 Deep thoughts — when to reach for Geneformer</h2>
+
+      <div class="callout">
+        <h3>Strategic guidance</h3>
+        <div class="row"><span class="lbl use">USE WHEN</span><span class="text"><b>In-silico perturbation</b> (the killer feature) — predict the effect of knocking out any gene in any cell type without wet-lab work. Datasets with cross-species / cross-chemistry transfer (rank-based tokens are depth-invariant). Gene-network inference (co-attention patterns reveal regulatory relationships). Disease classification from small fine-tuning sets.</span></div>
+        <div class="row"><span class="lbl avoid">AVOID WHEN</span><span class="text">you need absolute expression magnitudes (Geneformer discards them — use scGPT instead). Multi-omics (RNA + ATAC + protein) — Geneformer is RNA-only. Real-time analysis (model is ~2 GB, slow on CPU). Small fine-tuning datasets with rich feature metadata — specialised models can win.</span></div>
+        <div class="row"><span class="lbl why">WHY</span><span class="text">Geneformer's key innovation is the rank-based tokenisation. By discarding magnitudes and keeping only the order of expressed genes, the model becomes <em>invariant to sequencing depth, chemistry, and platform</em>. This is huge for cross-study transfer (a cell sequenced with 10x 3' v3 looks the same as one sequenced with Smart-seq2). The downside is that fine-grained quantitative predictions (exact fold-changes) are impossible — only rank-based signals.</span></div>
+      </div>
+
+      <h2>🚀 Futuristic possibilities</h2>
+
+      <div class="callout amber">
+        <h3>Speculative but grounded</h3>
+        <div class="row"><span class="lbl futur">2025-26</span><span class="text"><b>Universal in-silico CRISPR.</b> Geneformer-100M cells covering all human cell types + developmental stages — perturbation predictions for any (gene, cell-type) pair become accurate enough to skip wet-lab validation for screening.</span></div>
+        <div class="row"><span class="lbl futur">2027-29</span><span class="text"><b>Gene-therapy target discovery.</b> Mine Geneformer's perturbation predictions for disease-specific cell types — find genes that, when knocked out, push a disease cell back to a healthy state. Drug discovery pipelines converge on these targets.</span></div>
+        <div class="row"><span class="lbl futur">2030+</span><span class="text"><b>Patient-specific transcriptome modelling.</b> Sequence a patient's cells → load into Geneformer → predict personalised perturbation outcomes → design therapy. First widely deployed personalised cell-state model in oncology.</span></div>
+      </div>
+
+      <h2>🔬 Comparison with related approaches</h2>
+
+      <div class="callout pink">
+        <h3>Geneformer vs other models</h3>
+        <div class="row"><span class="lbl why">vs scGPT</span><span class="text">Both are single-cell foundation models. scGPT preserves expression magnitudes (better for fine-grained cell-state distinction); Geneformer uses rank-based tokens (better for cross-platform / cross-chemistry transfer). scGPT wins on perturbation prediction accuracy; Geneformer wins on transfer across labs with different sequencing platforms.</span></div>
+        <div class="row"><span class="lbl why">vs BOLERO</span><span class="text">BOLERO is DNA → ATAC (one level of the central dogma); Geneformer is RNA → cell-state (another level). Compose them: BOLERO predicts which regions are accessible → Geneformer predicts which genes are expressed → both together give a complete model from DNA to phenotype.</span></div>
+        <div class="row"><span class="lbl why">vs scVI / totalVI</span><span class="text">VAEs specialised for batch integration (scVI) or multi-omics (totalVI). Geneformer is a general foundation model — fine-tune once, transfer across tasks. scVI is faster but task-specific.</span></div>
+      </div>
+
+      <div class="meta">
+        <p>Page: <code>docs/geneformer.html</code> · Phase 38.4 · Style inspired by <a href="bolero.html">bolero.html</a>. Paper: <a href="https://www.nature.com/articles/s41586-023-06139-9" target="_blank" rel="noopener">Geneformer paper (Nature 2023)</a> — Theodoris et al. Code: <a href="https://huggingface.co/ctheodoris/geneformer" target="_blank" rel="noopener">🤗 Hugging Face Hub</a>. All animations are pure client-side canvas; no external services. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </main>
+
+    <script>
+      // ===== Particle background =====
+      (function() {
+        var c = document.getElementById('particle-canvas');
+        var x = c.getContext('2d');
+        function resize() { c.width = innerWidth; c.height = innerHeight; }
+        resize(); addEventListener('resize', resize);
+        var N = 60, P = [];
+        var cols = ['#10b981', '#06b6d4', '#8b5cf6'];
+        for (var i = 0; i < N; i++) P.push({x: Math.random()*c.width, y: Math.random()*c.height, vx: (Math.random()-.5)*.15, vy: (Math.random()-.5)*.15, r: Math.random()*1.5+.5, c: cols[i%3]});
+        function s() {
+          x.clearRect(0,0,c.width,c.height);
+          for (var i=0;i<N;i++) for (var j=i+1;j<N;j++) { var d=Math.hypot(P[i].x-P[j].x, P[i].y-P[j].y); if (d<120) { x.strokeStyle='rgba(139,92,246,'+(.1*(1-d/120))+')'; x.lineWidth=.5; x.beginPath(); x.moveTo(P[i].x,P[i].y); x.lineTo(P[j].x,P[j].y); x.stroke(); } }
+          for (var p of P) { p.x+=p.vx; p.y+=p.vy; if (p.x<0)p.x=c.width; if (p.x>c.width)p.x=0; if (p.y<0)p.y=c.height; if (p.y>c.height)p.y=0; x.fillStyle=p.c; x.globalAlpha=.35; x.beginPath(); x.arc(p.x,p.y,p.r,0,6.28); x.fill(); }
+          x.globalAlpha=1;
+          requestAnimationFrame(s);
+        }
+        s();
+      })();
+
+      // ===== Geneformer pipeline canvas =====
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      var W = canvas.width, H = canvas.height;
+      var stage = 0, maxStage = 5, zoom = 1.0, isAnim = false;
+
+      function render() {
+        ctx.save();
+        ctx.fillStyle = '#0a0e1a';
+        ctx.fillRect(0, 0, W, H);
+        ctx.translate(W/2, H/2);
+        ctx.scale(zoom, zoom);
+        ctx.translate(-W/2, -H/2);
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        ctx.fillStyle = '#10b981'; ctx.font = 'bold 14px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('Geneformer pipeline — stage ' + stage + '/' + maxStage, W/2, 25);
+        ctx.textAlign = 'left';
+        var baseY = 60;
+
+        // Stage 1: Rank-based tokenisation
+        if (stage >= 1) {
+          var tY = baseY + 20;
+          ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('1. Cell → rank-based gene tokens (no magnitudes)', 30, tY - 8);
+          // Show 12 gene tokens ranked by expression
+          var geneLabels = ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10', 'G11', 'G12'];
+          for (var i = 0; i < 12; i++) {
+            var v = Math.max(0.1, Math.exp(-i * 0.2));
+            ctx.fillStyle = 'rgba(16,185,129,' + v + ')';
+            ctx.fillRect(30 + i * 50, tY, 40, 18);
+            ctx.fillStyle = '#000'; ctx.font = 'bold 9px ui-monospace'; ctx.textAlign = 'center';
+            ctx.fillText(geneLabels[i], 30 + i * 50 + 20, tY + 12);
+            ctx.textAlign = 'left';
+            // Arrow showing rank order
+            if (i < 11) {
+              ctx.strokeStyle = 'rgba(245,158,11,0.4)'; ctx.lineWidth = 1;
+              ctx.beginPath(); ctx.moveTo(30 + i * 50 + 40, tY + 9); ctx.lineTo(30 + (i+1) * 50, tY + 9); ctx.stroke();
+            }
+          }
+          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillText('Sorted by expression (rank only — magnitudes discarded)', 30, tY + 32);
+        }
+
+        // Stage 2: Embeddings
+        if (stage >= 2) {
+          var eY = baseY + 100;
+          ctx.fillStyle = '#8b5cf6'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('2. Token embeddings: gene_id + position', 30, eY - 8);
+          var embW = 8;
+          for (var idx = 0; idx < 2; idx++) {
+            var rowY = eY + idx * 18;
+            for (var i = 0; i < 32; i++) {
+              var v = (Math.sin(i*0.3 + idx) + Math.cos(i*0.5 + idx*0.7)) * 0.5 + 0.5;
+              ctx.fillStyle = ['rgba(6,182,212,', 'rgba(236,72,153,'][idx] + v + ')';
+              ctx.fillRect(30 + i * embW, rowY, embW - 1, 14);
+            }
+            ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '9px ui-monospace';
+            ctx.fillText(['gene_emb', 'pos_emb'][idx], 30 + 32 * embW + 8, rowY + 11);
+          }
+        }
+
+        // Stage 3: Transformer encoder
+        if (stage >= 3) {
+          var trY = baseY + 180;
+          ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('3. Transformer encoder — bidirectional attention', 30, trY - 8);
+          for (var h = 0; h < 4; h++) {
+            var hx = 30 + h * 90;
+            ctx.fillStyle = 'rgba(148,163,184,0.4)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
+            ctx.fillText('head ' + h, hx + 35, trY - 2);
+            ctx.textAlign = 'left';
+            for (var i = 0; i < 4; i++) for (var j = 0; j < 4; j++) {
+              var v = (Math.sin(i + j + h) + 1) / 2;
+              ctx.fillStyle = 'rgba(16,185,129,' + v + ')';
+              ctx.fillRect(hx + j * 16, trY + i * 16, 14, 14);
+            }
+          }
+        }
+
+        // Stage 4: MLM — predict masked gene
+        if (stage >= 4) {
+          var mY = baseY + 260;
+          ctx.fillStyle = '#ec4899'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('4. MLM — predict masked gene tokens', 30, mY - 8);
+          for (var i = 0; i < 12; i++) {
+            var isMasked = (i === 2 || i === 6 || i === 9);
+            if (isMasked) {
+              ctx.fillStyle = 'rgba(236,72,153,0.5)';
+              ctx.fillRect(30 + i * 50, mY, 40, 18);
+              ctx.strokeStyle = '#ec4899'; ctx.lineWidth = 2;
+              ctx.strokeRect(30 + i * 50, mY, 40, 18);
+              ctx.fillStyle = '#fff'; ctx.font = 'bold 12px ui-monospace'; ctx.textAlign = 'center';
+              ctx.fillText('?', 30 + i * 50 + 20, mY + 13);
+              ctx.textAlign = 'left';
+            } else {
+              ctx.fillStyle = 'rgba(16,185,129,0.7)';
+              ctx.fillRect(30 + i * 50, mY, 40, 18);
+              ctx.fillStyle = '#000'; ctx.font = 'bold 9px ui-monospace'; ctx.textAlign = 'center';
+              ctx.fillText('G' + (i+1), 30 + i * 50 + 20, mY + 12);
+              ctx.textAlign = 'left';
+            }
+          }
+          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillText('3 masked → predict which gene belongs there', 30, mY + 30);
+        }
+
+        // Stage 5: In-silico perturbation
+        if (stage >= 5) {
+          var pY = baseY + 340;
+          ctx.fillStyle = '#10b981'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('5. In-silico perturbation — predict gene importance', 30, pY - 8);
+          // Show ΔCOS shift for 6 genes
+          var genes = ['TP53', 'MYC', 'BRCA1', 'EGFR', 'KRAS', 'CDK4'];
+          var shifts = [0.45, 0.32, 0.18, 0.28, 0.22, 0.15];
+          for (var i = 0; i < genes.length; i++) {
+            var bw = shifts[i] * 400;
+            ctx.fillStyle = 'rgba(16,185,129,0.8)';
+            ctx.fillRect(30, pY + i * 14, bw, 10);
+            ctx.fillStyle = 'rgba(148,163,184,0.8)'; ctx.font = '10px ui-monospace';
+            ctx.fillText(genes[i] + ' (ΔCOS=' + shifts[i].toFixed(2) + ')', 30 + bw + 8, pY + i * 14 + 8);
+          }
+        }
+
+        ctx.restore();
+        var states = ['idle', 'ranked', 'embedded', 'transformer', 'MLM loss', 'perturb ✓'];
+        document.getElementById('stage-indicator').textContent = 'stage ' + stage + '/' + maxStage + ' · ' + states[stage];
+        document.getElementById('state-display').textContent = 'Cell → ' + states[stage];
+      }
+
+      function animate() {
+        stage = 0;
+        function step() {
+          if (stage > maxStage) {
+            isAnim = false; document.getElementById('btn-play').disabled = false;
+            document.getElementById('stage-indicator').textContent = 'done ✓';
+            return;
+          }
+          render(); stage++; setTimeout(step, 700);
+        }
+        step();
+      }
+
+      document.getElementById('btn-play').addEventListener('click', function() {
+        if (isAnim) return; isAnim = true;
+        document.getElementById('btn-play').disabled = true;
+        animate();
+      });
+      document.getElementById('btn-reset').addEventListener('click', function() {
+        stage = 0; isAnim = false;
+        document.getElementById('btn-play').disabled = false;
+        document.getElementById('stage-indicator').textContent = 'stage 0/' + maxStage;
+        render();
+      });
+      document.getElementById('zoom-in').addEventListener('click', function() { zoom = Math.min(3.0, zoom + 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; render(); });
+      document.getElementById('zoom-out').addEventListener('click', function() { zoom = Math.max(0.5, zoom - 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; render(); });
+      document.getElementById('zoom-reset').addEventListener('click', function() { zoom = 1.0; document.getElementById('zoom-label').textContent = '100%'; render(); });
+      render();
+    </script>
+    <script src="zoom-loader.js"></script>
+  </body>
+</html>

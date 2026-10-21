@@ -193,6 +193,10 @@ def check_ribbon(html_files):
         os.path.join(DOCS, "concepts-v2", "ml-flash-attention.html"),
         os.path.join(DOCS, "concepts-v2", "ml-dropout.html"),
         os.path.join(DOCS, "concepts-v2", "ml-l1-l2-regularisation.html"),
+        os.path.join(DOCS, "bio-nn.html"),  # Phase 38.4 bio+NN hub
+        os.path.join(DOCS, "scgpt.html"),  # Phase 38.4 scGPT paper page
+        os.path.join(DOCS, "geneformer.html"),  # Phase 38.4 Geneformer paper page
+        os.path.join(DOCS, "alphafold3.html"),  # Phase 38.4 AlphaFold 3 paper page
     }
     # Phase 38 (NN architecture cards + CoCoNet paper card): auto-include
     # ALL files in concepts-v2/ so the audit picks up new cards automatically.
