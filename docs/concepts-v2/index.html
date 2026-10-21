@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="AIHPC Advanced — Visual Concept Cards (v2). Interactive, visual-first concept cards with animated canvases, real-time sliders, and Math→Code annotations. Less text, more fascination." />
+    <meta name="description" content="AIHPC Advanced — Visual Concept Cards (v2). 27 interactive, visual-first concept cards with animated canvases, real-time sliders, and Math→Code annotations." />
     <title>🎨 Visual Concept Cards — AIHPC Advanced</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; }
@@ -14,6 +14,7 @@
       h1 { font-size: 28px; margin: 0 0 4px; background: linear-gradient(90deg, #06b6d4, #8b5cf6, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
       .lead { font-size: 14px; color: var(--text-muted); margin: 0 0 24px; max-width: 700px; }
       .back-link { font-size: 12px; color: var(--accent); text-decoration: none; margin-bottom: 16px; display: inline-block; }
+      .section-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin: 20px 0 8px; }
       .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
       .card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-decoration: none; color: var(--text); transition: all 0.2s; display: block; }
       .card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(6,182,212,0.12); }
@@ -21,6 +22,9 @@
       .card .cat.loss { background: rgba(6,182,212,0.15); color: #67e8f9; }
       .card .cat.act { background: rgba(139,92,246,0.15); color: #c4b5fd; }
       .card .cat.opt { background: rgba(245,158,11,0.15); color: #fcd34d; }
+      .card .cat.norm { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .card .cat.attn { background: rgba(236,72,153,0.15); color: #f9a8d4; }
+      .card .cat.reg { background: rgba(99,102,241,0.15); color: #a5b4fc; }
       .card h3 { font-size: 14px; font-weight: 700; margin: 0 0 4px; }
       .card p { font-size: 12px; color: var(--text-muted); margin: 0; line-height: 1.4; }
       .foot { font-size: 11px; color: var(--text-muted); margin-top: 24px; text-align: center; }
@@ -31,31 +35,60 @@
     <div class="container">
       <a href="../index.html" class="back-link">← Home</a>
       <h1>🎨 Visual Concept Cards (v2)</h1>
-      <p class="lead">Visual-first concept cards — animated canvas as the hero, minimal text, real-time sliders, gradient descent animation, and code with Math→Code annotations. Less reading, more fascination. Drag the sliders, hit "Run gradient descent", watch the math happen.</p>
-      <div class="grid" id="grid"></div>
+      <p class="lead">27 visual-first concept cards — animated canvas as the hero, minimal text, real-time sliders, and code with Math→Code annotations. Less reading, more fascination. Drag the sliders, hit the action button, watch the math happen.</p>
+
+      <div class="section-title">📊 Loss Functions (9)</div>
+      <div class="grid">
+        <a class="card" href="ml-mse.html"><span class="cat loss">Loss</span><h3>Mean Squared Error</h3><p>Quadratic error · drag slope → watch MSE change · GD animation</p></a>
+        <a class="card" href="ml-mae.html"><span class="cat loss">Loss</span><h3>Mean Absolute Error</h3><p>Linear error · robust to outliers · compare with MSE</p></a>
+        <a class="card" href="ml-huber-loss.html"><span class="cat loss">Loss</span><h3>Huber Loss</h3><p>Quadratic near 0, linear beyond δ · MSE + MAE hybrid</p></a>
+        <a class="card" href="ml-log-cosh.html"><span class="cat loss">Loss</span><h3>Log-Cosh Loss</h3><p>Smooth · ≈ MSE near 0, ≈ MAE far away</p></a>
+        <a class="card" href="ml-kl-divergence.html"><span class="cat loss">Loss</span><h3>KL Divergence</h3><p>Distribution distance · information-theoretic · non-symmetric</p></a>
+        <a class="card" href="ml-cosine-similarity.html"><span class="cat loss">Loss</span><h3>Cosine Similarity</h3><p>Directional alignment · magnitude-invariant</p></a>
+        <a class="card" href="ml-binary-cross-entropy.html"><span class="cat loss">Loss</span><h3>Binary Cross-Entropy</h3><p>Binary classification · goes to ∞ for confident wrong predictions</p></a>
+        <a class="card" href="ml-categorical-cross-entropy.html"><span class="cat loss">Loss</span><h3>Categorical Cross-Entropy</h3><p>Multi-class classification · used with softmax</p></a>
+        <a class="card" href="ml-hinge-loss.html"><span class="cat loss">Loss</span><h3>Hinge Loss</h3><p>SVM loss · penalises margin violations only</p></a>
+      </div>
+
+      <div class="section-title">⚡ Activations (3)</div>
+      <div class="grid">
+        <a class="card" href="ml-relu.html"><span class="cat act">Activation</span><h3>ReLU</h3><p>max(0, x) · sweep x → watch f(x) + f'(x)</p></a>
+        <a class="card" href="ml-gelu.html"><span class="cat act">Activation</span><h3>GELU</h3><p>x·Φ(x) · smoother than ReLU · used in GPT + BERT</p></a>
+        <a class="card" href="ml-swiglu.html"><span class="cat act">Activation</span><h3>SwiGLU</h3><p>x·σ(βx) · gated activation · used in PaLM + LLaMA</p></a>
+      </div>
+
+      <div class="section-title">🌀 Optimisers (3)</div>
+      <div class="grid">
+        <a class="card" href="ml-sgd.html"><span class="cat opt">Optimiser</span><h3>SGD</h3><p>Vanilla GD · oscillates in ravines · trajectory animation</p></a>
+        <a class="card" href="ml-adam.html"><span class="cat opt">Optimiser</span><h3>Adam</h3><p>Adaptive learning rates · converges faster</p></a>
+        <a class="card" href="ml-adamw.html"><span class="cat opt">Optimiser</span><h3>AdamW</h3><p>Adam + decoupled weight decay · transformer training</p></a>
+      </div>
+
+      <div class="section-title">📐 Normalisation (5)</div>
+      <div class="grid">
+        <a class="card" href="ml-batchnorm.html"><span class="cat norm">Norm</span><h3>Batch Normalisation</h3><p>Normalise across batch dimension · stabilises training</p></a>
+        <a class="card" href="ml-layernorm.html"><span class="cat norm">Norm</span><h3>Layer Normalisation</h3><p>Normalise across features · used in transformers</p></a>
+        <a class="card" href="ml-rmsnorm.html"><span class="cat norm">Norm</span><h3>RMS Normalisation</h3><p>No mean subtraction · simpler than LayerNorm · LLaMA</p></a>
+        <a class="card" href="ml-groupnorm.html"><span class="cat norm">Norm</span><h3>Group Normalisation</h3><p>Normalise across channel groups · small batches</p></a>
+        <a class="card" href="ml-instancenorm.html"><span class="cat norm">Norm</span><h3>Instance Normalisation</h3><p>Per-sample per-channel · style transfer + GANs</p></a>
+      </div>
+
+      <div class="section-title">🔍 Attention (3)</div>
+      <div class="grid">
+        <a class="card" href="ml-scaled-dot-product-attention.html"><span class="cat attn">Attention</span><h3>Scaled Dot-Product</h3><p>softmax(Q·Kᵀ/√d_k)·V · √d_k scaling · heatmap</p></a>
+        <a class="card" href="ml-multi-head-attention.html"><span class="cat attn">Attention</span><h3>Multi-Head Attention</h3><p>h parallel heads · captures different relationships</p></a>
+        <a class="card" href="ml-flash-attention.html"><span class="cat attn">Attention</span><h3>Flash Attention</h3><p>IO-aware tiling · 2-4× faster · 5-20× less memory</p></a>
+      </div>
+
+      <div class="section-title">🎲 Regularisation (2)</div>
+      <div class="grid">
+        <a class="card" href="ml-dropout.html"><span class="cat reg">Regularisation</span><h3>Dropout</h3><p>Random zeroing · prevents co-adaptation · network diagram</p></a>
+        <a class="card" href="ml-l1-l2-regularisation.html"><span class="cat reg">Regularisation</span><h3>L1 / L2 Regularisation</h3><p>L1 → sparse weights · L2 → small weights</p></a>
+      </div>
+
       <div class="foot">
-        <a href="../concepts.html">📖 Full text concept cards (v1)</a> · <a href="../science-ml.html">🔬 ML demos page</a> · v2 cards generated by <code>scripts/gen-concept-cards-v2.py</code>
+        <a href="../concepts.html">📖 Full text concept cards (v1)</a> · <a href="../science-ml.html">🔬 ML demos page</a> · Generated by <code>scripts/gen-concept-cards-v2.py</code>
       </div>
     </div>
-    <script>
-      var CARDS = [
-        { id: 'ml-mse', title: 'Mean Squared Error', cat: 'loss', catLabel: 'Loss', desc: 'Quadratic error penalty · drag slope → watch MSE change · gradient descent animation' },
-        { id: 'ml-mae', title: 'Mean Absolute Error', cat: 'loss', catLabel: 'Loss', desc: 'Linear error · robust to outliers · compare with MSE' },
-        { id: 'ml-huber-loss', title: 'Huber Loss', cat: 'loss', catLabel: 'Loss', desc: 'Quadratic near 0, linear beyond δ · MSE + MAE hybrid' },
-        { id: 'ml-log-cosh', title: 'Log-Cosh Loss', cat: 'loss', catLabel: 'Loss', desc: 'Smooth + differentiable · ≈ MSE near 0, ≈ MAE far away' },
-        { id: 'ml-relu', title: 'ReLU Activation', cat: 'act', catLabel: 'Activation', desc: 'max(0, x) · sweep x → watch f(x) + f\'(x) update · see the "dying ReLU" problem' },
-        { id: 'ml-gelu', title: 'GELU Activation', cat: 'act', catLabel: 'Activation', desc: 'x·Φ(x) · smoother than ReLU · used in GPT + BERT' },
-        { id: 'ml-sgd', title: 'SGD Optimiser', cat: 'opt', catLabel: 'Optimiser', desc: 'Vanilla gradient descent · watch the trajectory oscillate in the ravine' },
-        { id: 'ml-adam', title: 'Adam Optimiser', cat: 'opt', catLabel: 'Optimiser', desc: 'Adaptive learning rates · converges faster than SGD' },
-        { id: 'ml-adamw', title: 'AdamW Optimiser', cat: 'opt', catLabel: 'Optimiser', desc: 'Adam + decoupled weight decay · used in transformer training' },
-      ];
-      document.getElementById('grid').innerHTML = CARDS.map(function (c) {
-        return '<a class="card" href="' + c.id + '.html">'
-          + '<span class="cat ' + c.cat + '">' + c.catLabel + '</span>'
-          + '<h3>' + c.title + '</h3>'
-          + '<p>' + c.desc + '</p>'
-          + '</a>';
-      }).join('');
-    </script>
   </body>
 </html>

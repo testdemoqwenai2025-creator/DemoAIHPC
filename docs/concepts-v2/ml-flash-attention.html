@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Flash Attention — visual-first concept card. Interactive canvas, real-time sliders, code with Math→Code annotations." />
+    <title>Flash Attention — Visual Concept Card · AIHPC</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", sans-serif; min-height: 100vh; overflow-x: hidden; }
+      body::before { content:""; position:fixed; inset:0; background: radial-gradient(1000px 500px at 50% 0%, rgba(6,182,212,0.10), transparent 70%); pointer-events:none; z-index:0; }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; position: relative; z-index: 1; }
+      .head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+      .head .tag { font-size: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.4); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .head h1 { font-size: 24px; font-weight: 800; }
+      .back { font-size: 12px; color: var(--accent); text-decoration: none; margin-bottom: 12px; display: inline-block; }
+      .eq-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; background: rgba(11,15,26,0.85); border: 1px solid rgba(6,182,212,0.3); font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent); margin-bottom: 12px; }
+      .desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; max-width: 600px; }
+      .canvas-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+      canvas { display: block; width: 100%; height: auto; }
+      .loss-overlay { position: absolute; top: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; text-align: right; }
+      .loss-overlay .lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+      .loss-overlay .val { font-size: 28px; font-weight: 800; font-family: ui-monospace, monospace; color: var(--accent); }
+      .loss-overlay .val.bad { color: var(--danger); } .loss-overlay .val.ok { color: var(--warn); } .loss-overlay .val.good { color: var(--success); }
+      .eq-overlay { position: absolute; bottom: 12px; left: 12px; background: rgba(11,15,26,0.9); border: 1px solid rgba(6,182,212,0.3); border-radius: 6px; padding: 4px 12px; font-family: "Cambria Math", Georgia, serif; font-size: 13px; color: var(--accent); pointer-events: none; }
+      .phase-indicator { position: absolute; bottom: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 10px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .phase-indicator.active { color: var(--accent); border-color: rgba(6,182,212,0.4); }
+      .controls { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: flex-end; }
+      .ctrl { flex: 1; min-width: 180px; background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+      .ctrl label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; }
+      .ctrl .val { font-size: 14px; font-weight: 700; font-family: ui-monospace, monospace; color: var(--accent); }
+      .ctrl input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--border); outline: none; }
+      .ctrl input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid var(--bg); }
+      .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white; } .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); } .btn.ghost:hover { border-color: var(--accent); color: var(--text); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      /* Code panel — always visible with Math→Code annotations */
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section h3 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+      .code-section .eq-line { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent); padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; border-left: 3px solid var(--accent); margin-bottom: 10px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .foot { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 24px; font-family: ui-monospace, monospace; }
+      .foot a { color: var(--accent); text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <a href="../index.html" class="back">← Home</a>
+      <div class="head">
+        <span class="tag">ML · Attention</span>
+        <h1>Flash Attention</h1>
+      </div>
+      <p class="desc">IO-aware attention that <b>tiles the computation</b> to fit in GPU SRAM. Same math, 2-4× faster, 5-20× less memory.</p>
+      <div class="eq-badge">📐 Same as scaled dot-product, but computed in tiles: O(N²) → O(N²·d/M) HBM accesses</div>
+      <div class="canvas-wrap">
+        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <div class="loss-overlay"><div class="lbl" id="loss-lbl">Loss</div><div class="val" id="loss-val">0.0000</div></div>
+        <div class="eq-overlay">Same as scaled dot-product, but computed in tiles: O(N²) → O(N²·d/M) HBM accesses</div>
+        <div class="phase-indicator" id="phase-ind">idle</div>
+      </div>
+      <div class="controls">
+        <div class="ctrl" id="b1-ctrl"><label>√d_k (scale) <span class="val" id="b1-val">1.00</span></label><input type="range" id="b1-slider" min="-4" max="4" step="0.01" value="1.0" /></div>
+        <div class="ctrl" id="b0-ctrl"><label>Intercept β₀ <span class="val" id="b0-val">0.00</span></label><input type="range" id="b0-slider" min="-5" max="10" step="0.01" value="0.0" /></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
+          <button class="btn primary" id="btn-gd">▶ Compute attention</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+        </div>
+      </div>
+      <div class="code-section">
+        <h3>💻 Math → Code — how symbols become variables</h3>
+        <div class="eq-line">Same as scaled dot-product, but computed in tiles: O(N²) → O(N²·d/M) HBM accesses</div>
+        <pre><span class="cm"># Same math as standard attention, but computed in tiles</span>
+<span class="cm"># to minimize GPU HBM (global memory) reads/writes.</span>
+<span class="cm"># Result is mathematically identical — just faster.</span>
+<span class="kw">def</span> <span class="fn">flash_attention</span>(Q, K, V, block_size=<span class="num">64</span>):
+    N = Q.shape[<span class="num">0</span>]
+    O = np.zeros_like(Q)
+    <span class="kw">for</span> i <span class="kw">in range</span>(<span class="num">0</span>, N, block_size):
+        Qi = Q[i:i+block_size]
+        <span class="kw">for</span> j <span class="kw">in range</span>(<span class="num">0</span>, N, block_size):
+            Kj, Vj = K[j:j+block_size], V[j:j+block_size]
+            S = Qi @ Kj.T / np.sqrt(Qi.shape[-<span class="num">1</span>])
+            P = np.exp(S - np.max(S, axis=-<span class="num">1</span>, keepdims=<span class="kw">True</span>))
+            O[i:i+block_size] += P @ Vj / np.sum(P, axis=-<span class="num">1</span>, keepdims=<span class="kw">True</span>)</pre>
+      </div>
+      <div class="foot">
+        <a href="../ai-lab.html?context=Flash Attention">🤖 Ask AI</a> · <a href="../concepts/ml-flash-attention.html">📖 Full text version</a> · Visual concept card v2
+      </div>
+    </div>
+    <script>
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      
+      var W = canvas.width, H = canvas.height;
+      var dScale = 1, isAnim = false;
+      var TOKENS = ['The', 'cat', 'sat', 'on', 'the', 'mat', '.', 'It', 'was', 'warm'];
+      var Q = [], K = [], V = [];
+      var rng = { s: 42, next: function() { this.s = (this.s*9301+49297)%233280; return this.s/233280; } };
+      for (var i = 0; i < TOKENS.length; i++) { Q.push([rng.next(), rng.next()]); K.push([rng.next(), rng.next()]); V.push([rng.next(), rng.next()]); }
+
+      function computeAttn() {
+        var n = Q.length, dk = 2;
+        var scores = [];
+        for (var i = 0; i < n; i++) { scores.push([]); for (var j = 0; j < n; j++) { var s = 0; for (var d = 0; d < dk; d++) s += Q[i][d] * K[j][d]; scores[i].push(s / (Math.sqrt(dk) * dScale)); } }
+        var weights = [];
+        for (var i = 0; i < n; i++) { var mx = Math.max.apply(null, scores[i]); var exps = scores[i].map(function(s) { return Math.exp(s - mx); }); var sum = exps.reduce(function(a,b){return a+b;},0); weights.push(exps.map(function(e) { return e / sum; })); }
+        return weights;
+      }
+
+      function render() {
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        var w = computeAttn(), n = TOKENS.length;
+        var cellW = (W-120) / n, cellH = (H-60) / n;
+        // Heatmap
+        for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) {
+          var v = w[i][j];
+          var r = Math.floor(v * 255), g = Math.floor(v * 100), b = Math.floor(255 - v * 100);
+          ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + (0.3 + v * 0.7).toFixed(2) + ')';
+          ctx.fillRect(60 + j * cellW, 20 + i * cellH, cellW - 1, cellH - 1);
+        }
+        // Grid
+        ctx.strokeStyle = 'rgba(148,163,184,0.15)'; ctx.lineWidth = 0.5;
+        for (var i = 0; i <= n; i++) { ctx.beginPath(); ctx.moveTo(60 + i * cellW, 20); ctx.lineTo(60 + i * cellW, 20 + n * cellH); ctx.stroke(); ctx.beginPath(); ctx.moveTo(60, 20 + i * cellH); ctx.lineTo(60 + n * cellW, 20 + i * cellH); ctx.stroke(); }
+        // Labels
+        ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
+        for (var j = 0; j < n; j++) ctx.fillText(TOKENS[j], 60 + (j+0.5) * cellW, 15);
+        ctx.textAlign = 'right';
+        for (var i = 0; i < n; i++) ctx.fillText(TOKENS[i], 55, 20 + (i+0.5) * cellH);
+        ctx.textAlign = 'left';
+        // Diagonal emphasis
+        ctx.strokeStyle = 'rgba(6,182,212,0.3)'; ctx.lineWidth = 1; ctx.setLineDash([2,2]);
+        ctx.beginPath(); ctx.moveTo(60, 20); ctx.lineTo(60 + n * cellW, 20 + n * cellH); ctx.stroke(); ctx.setLineDash([]);
+        // Title
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace'; ctx.textAlign = 'right';
+        ctx.fillText('Q·Kᵀ/√d_k (softmax)', W-65, 35);
+        ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+        ctx.fillText('d_scale=' + dScale.toFixed(2), W-65, 50);
+        ctx.textAlign = 'left';
+        // Max weight value
+        var maxW = 0;
+        for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) if (w[i][j] > maxW) maxW = w[i][j];
+        document.getElementById('loss-val').textContent = maxW.toFixed(3);
+        document.getElementById('loss-val').className = 'val ' + (maxW < 0.3 ? 'ok' : 'good');
+        document.getElementById('loss-val').previousElementSibling.textContent = 'Max weight';
+      }
+
+      document.getElementById('b1-slider').addEventListener('input', function(e) { dScale = parseFloat(e.target.value); document.getElementById('b1-val').textContent = dScale.toFixed(2); render(); });
+      document.getElementById('b0-slider').parentElement.style.display = 'none';
+      document.getElementById('btn-gd').addEventListener('click', function() {
+        if (isAnim) return; isAnim = true; document.getElementById('btn-gd').disabled = true;
+        var d = 0.1;
+        function sweep() { if (d >= 3) { isAnim = false; document.getElementById('btn-gd').disabled = false; return; }
+          dScale = d; document.getElementById('b1-slider').value = d; document.getElementById('b1-val').textContent = d.toFixed(2);
+          render(); d += 0.03; requestAnimationFrame(sweep);
+        } sweep();
+      });
+      document.getElementById('btn-reset').addEventListener('click', function() { dScale = 1; document.getElementById('b1-slider').value = 1; document.getElementById('b1-val').textContent = '1.00'; render(); });
+      render();
+
+    </script>
+  </body>
+</html>

@@ -198,6 +198,291 @@ CARDS = [
         "canvas_type": "optimiser",
         "canvas_config": {"optimiser": "adamw"},
     },
+    # ── MORE LOSS FUNCTIONS (loss-vs-error curve template) ──
+    {
+        "id": "ml-kl-divergence",
+        "title": "KL Divergence",
+        "tag": "ML · Distribution Loss",
+        "desc": "D_KL(p‖q) = Σ p·log(p/q) — measures the <b>information-theoretic distance</b> between two distributions. Non-symmetric.",
+        "eq": "D_KL(p‖q) = Σᵢ pᵢ · log(pᵢ/qᵢ)",
+        "code": '''<span class="cm"># D_KL(p‖q) = Σ p · log(p/q)</span>
+<span class="cm"># p → y_true (normalized)  q → y_pred (normalized)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">kl_div</span>(y_true, y_pred):
+    p = np.abs(y_true) / np.sum(np.abs(y_true))
+    q = np.abs(y_pred) / np.sum(np.abs(y_pred))
+    <span class="kw">return</span> np.sum(p * np.log(p / (q + <span class="num">1e-12</span>)))''',
+        "canvas_type": "loss_curve",
+        "canvas_config": {"loss_fn": "kl", "loss_label": "KL"},
+    },
+    {
+        "id": "ml-cosine-similarity",
+        "title": "Cosine Similarity Loss",
+        "tag": "ML · Directional Loss",
+        "desc": "1 − cos(θ) — measures <b>directional alignment</b>, not magnitude. 0 = parallel, 2 = anti-parallel.",
+        "eq": "L = 1 − (y·ŷ) / (|y|·|ŷ|)",
+        "code": '''<span class="cm"># L = 1 − (y · ŷ) / (|y| · |ŷ|)</span>
+<span class="cm"># cos(θ) → dot product / (norm · norm)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">cosine_loss</span>(y_true, y_pred):
+    <span class="kw">return</span> <span class="num">1</span> - np.dot(y_true, y_pred) / (
+        np.linalg.norm(y_true) * np.linalg.norm(y_pred) + <span class="num">1e-12</span>
+    )''',
+        "canvas_type": "loss_curve",
+        "canvas_config": {"loss_fn": "cosine", "loss_label": "Cosine"},
+    },
+    {
+        "id": "ml-binary-cross-entropy",
+        "title": "Binary Cross-Entropy",
+        "tag": "ML · Classification Loss",
+        "desc": "−[y·log(ŷ) + (1−y)·log(1−ŷ)] — the standard loss for <b>binary classification</b>. Goes to ∞ for confident wrong predictions.",
+        "eq": "L = −[y·log(ŷ) + (1−y)·log(1−ŷ)]",
+        "code": '''<span class="cm"># L = −[y·log(ŷ) + (1−y)·log(1−ŷ)]</span>
+<span class="cm"># y → y_true (0 or 1)  ŷ → y_pred (probability 0..1)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">bce</span>(y_true, y_pred):
+    eps = <span class="num">1e-12</span>
+    <span class="kw">return</span> -np.mean(y_true * np.log(y_pred + eps) +
+                        (<span class="num">1</span> - y_true) * np.log(<span class="num">1</span> - y_pred + eps))''',
+        "canvas_type": "loss_curve",
+        "canvas_config": {"loss_fn": "bce", "loss_label": "BCE"},
+    },
+    {
+        "id": "ml-categorical-cross-entropy",
+        "title": "Categorical Cross-Entropy",
+        "tag": "ML · Classification Loss",
+        "desc": "−Σ y·log(ŷ) — the standard loss for <b>multi-class classification</b>. Used with softmax output layer.",
+        "eq": "L = −Σᵢ yᵢ · log(ŷᵢ)",
+        "code": '''<span class="cm"># L = −Σ y_i · log(ŷ_i)</span>
+<span class="cm"># y → one-hot true label  ŷ → softmax prediction</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">cce</span>(y_true, y_pred):
+    <span class="kw">return</span> -np.sum(y_true * np.log(y_pred + <span class="num">1e-12</span>)) / len(y_true)''',
+        "canvas_type": "loss_curve",
+        "canvas_config": {"loss_fn": "cce", "loss_label": "CCE"},
+    },
+    {
+        "id": "ml-hinge-loss",
+        "title": "Hinge Loss",
+        "tag": "ML · Classification Loss",
+        "desc": "max(0, 1 − y·ŷ) — used in <b>SVMs</b>. Penalises only margin violations (errors within the margin).",
+        "eq": "L = max(0, 1 − y·ŷ)",
+        "code": '''<span class="cm"># L = max(0, 1 − y · ŷ)</span>
+<span class="cm"># y ∈ {−1, +1}  ŷ → raw model output (not probability)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">hinge</span>(y_true, y_pred):
+    <span class="kw">return</span> np.mean(np.maximum(<span class="num">0</span>, <span class="num">1</span> - y_true * y_pred))''',
+        "canvas_type": "loss_curve",
+        "canvas_config": {"loss_fn": "hinge", "loss_label": "Hinge"},
+    },
+    # ── MORE ACTIVATIONS ──
+    {
+        "id": "ml-swiglu",
+        "title": "SwiGLU Activation",
+        "tag": "ML · Activation",
+        "desc": "x · Swish(β·x) — gated activation used in <b>PaLM, LLaMA</b>. Combines gating + smoothing.",
+        "eq": "f(x) = x · σ(βx)  where σ = sigmoid",
+        "code": '''<span class="cm"># f(x) = x · σ(βx)  where σ = 1/(1+e^(-x))</span>
+<span class="cm"># β → beta (typically 1.0)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">swiglu</span>(x, beta=<span class="num">1.0</span>):
+    <span class="kw">return</span> x * (<span class="num">1</span> / (<span class="num">1</span> + np.exp(-beta * x)))''',
+        "canvas_type": "activation",
+        "canvas_config": {"fn": "swiglu"},
+    },
+    # ── NORMALISATION ──
+    {
+        "id": "ml-batchnorm",
+        "title": "Batch Normalisation",
+        "tag": "ML · Normalisation",
+        "desc": "Normalise across the <b>batch dimension</b> — for each feature, subtract batch mean, divide by batch std. Stabilises training.",
+        "eq": "x̂ = (x − μ_B) / √(σ²_B + ε)   y = γ·x̂ + β",
+        "code": '''<span class="cm"># x̂ = (x − μ_B) / √(σ²_B + ε)  then  y = γ·x̂ + β</span>
+<span class="cm"># μ_B → batch mean  σ²_B → batch variance</span>
+<span class="cm"># γ, β → learnable scale + shift  ε → small constant (1e-5)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">batchnorm</span>(x, gamma=<span class="num">1.0</span>, beta=<span class="num">0.0</span>, eps=<span class="num">1e-5</span>):
+    mu = np.mean(x, axis=<span class="num">0</span>)
+    var = np.var(x, axis=<span class="num">0</span>)
+    x_hat = (x - mu) / np.sqrt(var + eps)
+    <span class="kw">return</span> gamma * x_hat + beta''',
+        "canvas_type": "norm",
+        "canvas_config": {"norm_type": "batch"},
+    },
+    {
+        "id": "ml-layernorm",
+        "title": "Layer Normalisation",
+        "tag": "ML · Normalisation",
+        "desc": "Normalise across the <b>feature dimension</b> for each sample. Used in transformers. Independent of batch size.",
+        "eq": "x̂ = (x − μ_L) / √(σ²_L + ε)   y = γ·x̂ + β",
+        "code": '''<span class="cm"># Same formula as BatchNorm, but μ/σ computed per-sample</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">layernorm</span>(x, gamma=<span class="num">1.0</span>, beta=<span class="num">0.0</span>, eps=<span class="num">1e-5</span>):
+    mu = np.mean(x, axis=-<span class="num">1</span>, keepdims=<span class="kw">True</span>)
+    var = np.var(x, axis=-<span class="num">1</span>, keepdims=<span class="kw">True</span>)
+    <span class="kw">return</span> gamma * (x - mu) / np.sqrt(var + eps) + beta''',
+        "canvas_type": "norm",
+        "canvas_config": {"norm_type": "layer"},
+    },
+    {
+        "id": "ml-rmsnorm",
+        "title": "RMS Normalisation",
+        "tag": "ML · Normalisation",
+        "desc": "x / √(mean(x²) + ε) · γ — <b>no mean subtraction</b>, no β. Simpler + faster than LayerNorm. Used in LLaMA.",
+        "eq": "x̂ = x / √(mean(x²) + ε)   y = γ·x̂",
+        "code": '''<span class="cm"># x̂ = x / √(mean(x²) + ε)  then  y = γ·x̂</span>
+<span class="cm"># No mean subtraction, no β shift. Simpler than LayerNorm.</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">rmsnorm</span>(x, gamma=<span class="num">1.0</span>, eps=<span class="num">1e-6</span>):
+    rms = np.sqrt(np.mean(x**<span class="num">2</span>, axis=-<span class="num">1</span>, keepdims=<span class="kw">True</span>) + eps)
+    <span class="kw">return</span> gamma * x / rms''',
+        "canvas_type": "norm",
+        "canvas_config": {"norm_type": "rms"},
+    },
+    {
+        "id": "ml-groupnorm",
+        "title": "Group Normalisation",
+        "tag": "ML · Normalisation",
+        "desc": "Normalise across <b>groups of channels</b> — between BatchNorm (batch dim) and LayerNorm (feature dim). Works for small batches.",
+        "eq": "x̂ = (x − μ_G) / √(σ²_G + ε)   y = γ·x̂ + β",
+        "code": '''<span class="cm"># Split channels into G groups, normalise each group</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">groupnorm</span>(x, G=<span class="num">4</span>, gamma=<span class="num">1.0</span>, beta=<span class="num">0.0</span>, eps=<span class="num">1e-5</span>):
+    N, C = x.shape[<span class="num">0</span>], x.shape[<span class="num">1</span>]
+    x = x.reshape(N, G, C//G, -<span class="num">1</span>)
+    mu = np.mean(x, axis=(<span class="num">2</span>,<span class="num">3</span>), keepdims=<span class="kw">True</span>)
+    var = np.var(x, axis=(<span class="num">2</span>,<span class="num">3</span>), keepdims=<span class="kw">True</span>)
+    x_hat = (x - mu) / np.sqrt(var + eps)
+    <span class="kw">return</span> (gamma * x_hat + beta).reshape(N, C, -<span class="num">1</span>)''',
+        "canvas_type": "norm",
+        "canvas_config": {"norm_type": "group"},
+    },
+    {
+        "id": "ml-instancenorm",
+        "title": "Instance Normalisation",
+        "tag": "ML · Normalisation",
+        "desc": "Normalise per <b>sample per channel</b> — like LayerNorm but per-channel. Used in style transfer + GANs.",
+        "eq": "x̂ = (x − μ_I) / √(σ²_I + ε)   y = γ·x̂ + β",
+        "code": '''<span class="cm"># Normalise per-sample, per-channel (no batch dim)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">instancenorm</span>(x, gamma=<span class="num">1.0</span>, beta=<span class="num">0.0</span>, eps=<span class="num">1e-5</span>):
+    mu = np.mean(x, axis=-<span class="num">1</span>, keepdims=<span class="kw">True</span>)
+    var = np.var(x, axis=-<span class="num">1</span>, keepdims=<span class="kw">True</span>)
+    <span class="kw">return</span> gamma * (x - mu) / np.sqrt(var + eps) + beta''',
+        "canvas_type": "norm",
+        "canvas_config": {"norm_type": "instance"},
+    },
+    # ── ATTENTION ──
+    {
+        "id": "ml-scaled-dot-product-attention",
+        "title": "Scaled Dot-Product Attention",
+        "tag": "ML · Attention",
+        "desc": "softmax(Q·Kᵀ/√d_k)·V — the core attention mechanism. <b>√d_k scaling</b> prevents large dot products from pushing softmax into saturation.",
+        "eq": "Attn(Q,K,V) = softmax(Q·Kᵀ / √d_k) · V",
+        "code": '''<span class="cm"># Attn(Q,K,V) = softmax(Q·Kᵀ / √d_k) · V</span>
+<span class="cm"># d_k → key dimension (for scaling)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">attention</span>(Q, K, V):
+    d_k = K.shape[-<span class="num">1</span>]
+    scores = Q @ K.T / np.sqrt(d_k)  <span class="cm"># Q·Kᵀ/√d_k</span>
+    weights = np.exp(scores) / np.sum(np.exp(scores), axis=-<span class="num">1</span>, keepdims=<span class="kw">True</span>)
+    <span class="kw">return</span> weights @ V  <span class="cm"># weighted sum of V</span>''',
+        "canvas_type": "attention",
+        "canvas_config": {"attn_type": "scaled"},
+    },
+    {
+        "id": "ml-multi-head-attention",
+        "title": "Multi-Head Attention",
+        "tag": "ML · Attention",
+        "desc": "Run h attention heads in parallel on different projections, then concatenate. <b>Captures different relationships simultaneously</b>.",
+        "eq": "MHA = Concat(head₁, ..., headₕ)·W_O  where headᵢ = Attn(QWᵢQ, KWᵢK, VWᵢV)",
+        "code": '''<span class="cm"># h parallel attention heads, each with own W matrices</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">multi_head_attention</span>(Q, K, V, W_q, W_k, W_v, W_o, h=<span class="num">8</span>):
+    d_k = K.shape[-<span class="num">1</span>] // h
+    heads = []
+    <span class="kw">for</span> i <span class="kw">in range</span>(h):
+        Qi, Ki, Vi = Q@W_q[i], K@W_k[i], V@W_v[i]
+        scores = Qi @ Ki.T / np.sqrt(d_k)
+        weights = np.exp(scores) / np.sum(np.exp(scores), axis=-<span class="num">1</span>, keepdims=<span class="kw">True</span>)
+        heads.append(weights @ Vi)
+    <span class="kw">return</span> np.concatenate(heads, axis=-<span class="num">1</span>) @ W_o''',
+        "canvas_type": "attention",
+        "canvas_config": {"attn_type": "multi"},
+    },
+    {
+        "id": "ml-flash-attention",
+        "title": "Flash Attention",
+        "tag": "ML · Attention",
+        "desc": "IO-aware attention that <b>tiles the computation</b> to fit in GPU SRAM. Same math, 2-4× faster, 5-20× less memory.",
+        "eq": "Same as scaled dot-product, but computed in tiles: O(N²) → O(N²·d/M) HBM accesses",
+        "code": '''<span class="cm"># Same math as standard attention, but computed in tiles</span>
+<span class="cm"># to minimize GPU HBM (global memory) reads/writes.</span>
+<span class="cm"># Result is mathematically identical — just faster.</span>
+<span class="kw">def</span> <span class="fn">flash_attention</span>(Q, K, V, block_size=<span class="num">64</span>):
+    N = Q.shape[<span class="num">0</span>]
+    O = np.zeros_like(Q)
+    <span class="kw">for</span> i <span class="kw">in range</span>(<span class="num">0</span>, N, block_size):
+        Qi = Q[i:i+block_size]
+        <span class="kw">for</span> j <span class="kw">in range</span>(<span class="num">0</span>, N, block_size):
+            Kj, Vj = K[j:j+block_size], V[j:j+block_size]
+            S = Qi @ Kj.T / np.sqrt(Qi.shape[-<span class="num">1</span>])
+            P = np.exp(S - np.max(S, axis=-<span class="num">1</span>, keepdims=<span class="kw">True</span>))
+            O[i:i+block_size] += P @ Vj / np.sum(P, axis=-<span class="num">1</span>, keepdims=<span class="kw">True</span>)''',
+        "canvas_type": "attention",
+        "canvas_config": {"attn_type": "flash"},
+    },
+    # ── DROPOUT / REGULARISATION ──
+    {
+        "id": "ml-dropout",
+        "title": "Dropout",
+        "tag": "ML · Regularisation",
+        "desc": "Randomly zero out p fraction of activations during training. <b>Prevents co-adaptation</b> — forces the network to be redundant. Probability p is the dropout rate.",
+        "eq": "y = x · m  where mᵢ ~ Bernoulli(1−p) / (1−p)",
+        "code": '''<span class="cm"># y = x · m  where m_i ~ Bernoulli(1-p) / (1-p)</span>
+<span class="cm"># p → dropout rate (typically 0.1-0.5)</span>
+<span class="cm"># Inverted scaling: divide by (1-p) to maintain expected value</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">dropout</span>(x, p=<span class="num">0.3</span>, training=<span class="kw">True</span>):
+    <span class="kw">if not</span> training: <span class="kw">return</span> x
+    mask = (np.random.rand(*x.shape) > p) / (<span class="num">1</span> - p)
+    <span class="kw">return</span> x * mask''',
+        "canvas_type": "dropout",
+        "canvas_config": {"reg_type": "dropout"},
+    },
+    {
+        "id": "ml-l1-l2-regularisation",
+        "title": "L1 / L2 Regularisation",
+        "tag": "ML · Regularisation",
+        "desc": "L1: λ|w| (sparse weights → feature selection). L2: λw² (small weights → smooth). <b>Both prevent overfitting</b> by penalising large weights.",
+        "eq": "L1: + λΣ|wᵢ|    L2: + λΣwᵢ²",
+        "code": '''<span class="cm"># L1: + λΣ|w|  →  sparse weights (feature selection)</span>
+<span class="cm"># L2: + λΣw²  →  small weights (smooth)</span>
+<span class="cm"># λ → regularization strength (typically 1e-4 to 1e-2)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">l1_reg</span>(w, lam=<span class="num">1e-3</span>):
+    <span class="kw">return</span> lam * np.sum(np.abs(w))
+
+<span class="kw">def</span> <span class="fn">l2_reg</span>(w, lam=<span class="num">1e-3</span>):
+    <span class="kw">return</span> lam * np.sum(w ** <span class="num">2</span>)''',
+        "canvas_type": "dropout",
+        "canvas_config": {"reg_type": "l1l2"},
+    },
 ]
 
 
@@ -485,6 +770,291 @@ OPTIMISER_CANVAS_JS = '''
 
 
 # ──────────────────────────────────────────────────────────────────────
+# CANVAS JS TEMPLATES
+# ──────────────────────────────────────────────────────────────────────
+
+LOSS_CURVE_CANVAS_JS = '''
+      var W = canvas.width, H = canvas.height;
+      var eVal = 0;
+
+      function lossFn(e) {
+        var fn = "{loss_fn}";
+        if (fn === "kl") { var p = 0.5, q = Math.max(0.01, Math.min(0.99, 0.5 + e*0.05)); return p * Math.log(p/q) + (1-p) * Math.log((1-p)/(1-q)); }
+        if (fn === "cosine") return 1 - Math.cos(e * 0.3);
+        if (fn === "bce") { var y = 1, yhat = Math.max(0.001, Math.min(0.999, 1/(1+Math.exp(-e)))); return -(y * Math.log(yhat) + (1-y) * Math.log(1-yhat)); }
+        if (fn === "cce") { return -Math.log(Math.max(0.001, Math.min(0.999, 1/(1+Math.exp(-e))))); }
+        if (fn === "hinge") return Math.max(0, 1 - 1 * e);
+        return e * e;
+      }
+      function toCX(e) { return 60 + (e+5)/10 * (W-120); }
+      function toCY(l) { return H-40 - Math.min(l, 10)/10 * (H-60); }
+
+      function render() {
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        ctx.strokeStyle = 'rgba(148,163,184,0.06)'; ctx.lineWidth = 0.5;
+        for (var g = 0; g <= 10; g++) { var px = 60+g*(W-120)/10; ctx.beginPath(); ctx.moveTo(px,20); ctx.lineTo(px,H-40); ctx.stroke(); }
+        for (var g2 = 0; g2 <= 5; g2++) { var py = 20+g2*(H-60)/5; ctx.beginPath(); ctx.moveTo(60,py); ctx.lineTo(W-60,py); ctx.stroke(); }
+        ctx.strokeStyle = 'rgba(148,163,184,0.25)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(60,20); ctx.lineTo(60,H-40); ctx.lineTo(W-60,H-40); ctx.stroke();
+        ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '10px ui-monospace';
+        ctx.fillText('error e', W-50, H-25); ctx.fillText('loss', 45, 30);
+        // MSE reference curve (always shown as comparison)
+        ctx.strokeStyle = 'rgba(148,163,184,0.2)'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+        ctx.beginPath();
+        for (var e = -5; e <= 5; e += 0.1) { var px = toCX(e), py = toCY(e*e); if (e === -5) ctx.moveTo(px,py); else ctx.lineTo(px,py); }
+        ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(148,163,184,0.4)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'right';
+        ctx.fillText('MSE (ref)', W-65, 35);
+        ctx.textAlign = 'left';
+        // Current loss function curve
+        ctx.strokeStyle = '#06b6d4'; ctx.lineWidth = 2.5; ctx.shadowColor = '#06b6d4'; ctx.shadowBlur = 6;
+        ctx.beginPath();
+        for (var e = -5; e <= 5; e += 0.05) { var px = toCX(e), py = toCY(lossFn(e)); if (e === -5) ctx.moveTo(px,py); else ctx.lineTo(px,py); }
+        ctx.stroke(); ctx.shadowBlur = 0;
+        // Current error point
+        var lv = lossFn(eVal);
+        var ipx = toCX(eVal), ipy = toCY(lv);
+        ctx.strokeStyle = 'rgba(245,158,11,0.4)'; ctx.lineWidth = 1; ctx.setLineDash([2,4]);
+        ctx.beginPath(); ctx.moveTo(ipx, H-40); ctx.lineTo(ipx, ipy); ctx.lineTo(60, ipy); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = '#f59e0b'; ctx.beginPath(); ctx.arc(ipx, ipy, 5, 0, 6.28); ctx.fill();
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace'; ctx.textAlign = 'right';
+        ctx.fillText('{loss_label}', W-65, 50);
+        ctx.fillStyle = '#f59e0b'; ctx.fillText('e=' + eVal.toFixed(2), W-65, 65);
+        ctx.fillStyle = '#10b981'; ctx.fillText('L=' + lv.toFixed(3), W-65, 80);
+        ctx.textAlign = 'left';
+        document.getElementById('loss-val').textContent = lv.toFixed(4);
+        document.getElementById('loss-val').className = 'val ' + (lv < 1 ? 'good' : (lv < 5 ? 'ok' : 'bad'));
+      }
+
+      document.getElementById('b1-slider').addEventListener('input', function(e) { eVal = parseFloat(e.target.value); document.getElementById('b1-val').textContent = eVal.toFixed(2); render(); });
+      document.getElementById('b0-slider').parentElement.style.display = 'none';
+      var isAnim = false;
+      document.getElementById('btn-gd').addEventListener('click', function() {
+        if (isAnim) return; isAnim = true; document.getElementById('btn-gd').disabled = true;
+        var e = -5;
+        function sweep() { if (e >= 5) { isAnim = false; document.getElementById('btn-gd').disabled = false; return; }
+          eVal = e; document.getElementById('b1-slider').value = e; document.getElementById('b1-val').textContent = e.toFixed(2);
+          render(); e += 0.08; requestAnimationFrame(sweep);
+        } sweep();
+      });
+      document.getElementById('btn-reset').addEventListener('click', function() { eVal = 0; document.getElementById('b1-slider').value = 0; document.getElementById('b1-val').textContent = '0.00'; render(); });
+      render();
+'''
+
+NORM_CANVAS_JS = '''
+      var W = canvas.width, H = canvas.height;
+      var gamma = 1, isAnim = false, normProgress = 0;
+      var DATA = [];
+      var rng = { s: 42, next: function() { this.s = (this.s*9301+49297)%233280; return this.s/233280; } };
+      for (var i = 0; i < 60; i++) DATA.push(rng.next() * 8 - 4);
+
+      function toCX(i) { return 60 + i/60 * (W-120); }
+      function toCY(v) { return H-40 - (v+6)/14 * (H-60); }
+
+      function render() {
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        // Two side-by-side histograms: before (left) and after (right)
+        var halfW = (W-120) / 2;
+        // BEFORE histogram (left half)
+        ctx.fillStyle = 'rgba(239,68,68,0.5)'; ctx.font = 'bold 11px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('BEFORE', 60 + halfW/2, 35);
+        var bins1 = new Array(14).fill(0);
+        for (var i = 0; i < DATA.length; i++) { var b = Math.floor((DATA[i]+4) * 14/8); if (b >= 0 && b < 14) bins1[b]++; }
+        var maxB = Math.max.apply(null, bins1) || 1;
+        for (var b = 0; b < 14; b++) {
+          var bw = halfW / 14, bh = bins1[b] / maxB * (H-80);
+          ctx.fillStyle = 'rgba(239,68,68,0.4)';
+          ctx.fillRect(60 + b * bw, H - 40 - bh, bw - 2, bh);
+          ctx.strokeStyle = '#ef444488'; ctx.lineWidth = 0.5; ctx.strokeRect(60 + b * bw, H - 40 - bh, bw - 2, bh);
+        }
+        // AFTER histogram (right half) — normalised
+        var mu = DATA.reduce(function(s,v){return s+v;},0) / DATA.length;
+        var sigma = Math.sqrt(DATA.reduce(function(s,v){return s+(v-mu)*(v-mu);},0) / DATA.length) || 1;
+        var normData = DATA.map(function(v) { return (v - mu) / (sigma + 1e-5) * gamma; });
+        var bins2 = new Array(14).fill(0);
+        for (var i = 0; i < normData.length; i++) { var b = Math.floor((normData[i]+4) * 14/8); if (b >= 0 && b < 14) bins2[b]++; }
+        ctx.fillText('AFTER', 60 + halfW + halfW/2, 35);
+        ctx.fillStyle = 'rgba(6,182,212,0.4)';
+        for (var b = 0; b < 14; b++) {
+          var bw = halfW / 14, bh = bins2[b] / maxB * (H-80);
+          ctx.fillStyle = 'rgba(6,182,212,0.4)';
+          ctx.fillRect(60 + halfW + b * bw, H - 40 - bh, bw - 2, bh);
+          ctx.strokeStyle = '#06b6d488'; ctx.lineWidth = 0.5; ctx.strokeRect(60 + halfW + b * bw, H - 40 - bh, bw - 2, bh);
+        }
+        // Divider
+        ctx.strokeStyle = 'rgba(148,163,184,0.3)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(60 + halfW, 20); ctx.lineTo(60 + halfW, H-40); ctx.stroke();
+        // Stats
+        ctx.fillStyle = '#ef4444'; ctx.font = '10px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('μ=' + mu.toFixed(2) + ' σ=' + sigma.toFixed(2), 60 + halfW/2, H-20);
+        var nmu = normData.reduce(function(s,v){return s+v;},0) / normData.length;
+        var nsig = Math.sqrt(normData.reduce(function(s,v){return s+(v-nmu)*(v-nmu);},0) / normData.length) || 1;
+        ctx.fillStyle = '#06b6d4';
+        ctx.fillText('μ=' + nmu.toFixed(2) + ' σ=' + nsig.toFixed(2), 60 + halfW + halfW/2, H-20);
+        ctx.textAlign = 'left';
+        // Arrow
+        ctx.strokeStyle = '#8b5cf6'; ctx.lineWidth = 2; ctx.setLineDash([4,4]);
+        ctx.beginPath(); ctx.moveTo(60 + halfW - 10, H/2); ctx.lineTo(60 + halfW + 10, H/2); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = '#8b5cf6'; ctx.font = '12px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('→', 60 + halfW, H/2 - 5);
+        ctx.textAlign = 'left';
+        document.getElementById('loss-val').textContent = nsig.toFixed(3);
+        document.getElementById('loss-val').className = 'val good';
+        document.getElementById('loss-val').previousElementSibling.textContent = 'σ_after';
+      }
+
+      document.getElementById('b1-slider').addEventListener('input', function(e) { gamma = parseFloat(e.target.value); document.getElementById('b1-val').textContent = gamma.toFixed(2); render(); });
+      document.getElementById('b0-slider').parentElement.style.display = 'none';
+      document.getElementById('btn-gd').addEventListener('click', function() {
+        if (isAnim) return; isAnim = true; document.getElementById('btn-gd').disabled = true;
+        var g = 0;
+        function anim() { if (g >= 1) { isAnim = false; document.getElementById('btn-gd').disabled = false; return; }
+          gamma = g; document.getElementById('b1-slider').value = g; document.getElementById('b1-val').textContent = g.toFixed(2);
+          render(); g += 0.02; requestAnimationFrame(anim);
+        } anim();
+      });
+      document.getElementById('btn-reset').addEventListener('click', function() { gamma = 1; document.getElementById('b1-slider').value = 1; document.getElementById('b1-val').textContent = '1.00'; render(); });
+      render();
+'''
+
+ATTN_CANVAS_JS = '''
+      var W = canvas.width, H = canvas.height;
+      var dScale = 1, isAnim = false;
+      var TOKENS = ['The', 'cat', 'sat', 'on', 'the', 'mat', '.', 'It', 'was', 'warm'];
+      var Q = [], K = [], V = [];
+      var rng = { s: 42, next: function() { this.s = (this.s*9301+49297)%233280; return this.s/233280; } };
+      for (var i = 0; i < TOKENS.length; i++) { Q.push([rng.next(), rng.next()]); K.push([rng.next(), rng.next()]); V.push([rng.next(), rng.next()]); }
+
+      function computeAttn() {
+        var n = Q.length, dk = 2;
+        var scores = [];
+        for (var i = 0; i < n; i++) { scores.push([]); for (var j = 0; j < n; j++) { var s = 0; for (var d = 0; d < dk; d++) s += Q[i][d] * K[j][d]; scores[i].push(s / (Math.sqrt(dk) * dScale)); } }
+        var weights = [];
+        for (var i = 0; i < n; i++) { var mx = Math.max.apply(null, scores[i]); var exps = scores[i].map(function(s) { return Math.exp(s - mx); }); var sum = exps.reduce(function(a,b){return a+b;},0); weights.push(exps.map(function(e) { return e / sum; })); }
+        return weights;
+      }
+
+      function render() {
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        var w = computeAttn(), n = TOKENS.length;
+        var cellW = (W-120) / n, cellH = (H-60) / n;
+        // Heatmap
+        for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) {
+          var v = w[i][j];
+          var r = Math.floor(v * 255), g = Math.floor(v * 100), b = Math.floor(255 - v * 100);
+          ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + (0.3 + v * 0.7).toFixed(2) + ')';
+          ctx.fillRect(60 + j * cellW, 20 + i * cellH, cellW - 1, cellH - 1);
+        }
+        // Grid
+        ctx.strokeStyle = 'rgba(148,163,184,0.15)'; ctx.lineWidth = 0.5;
+        for (var i = 0; i <= n; i++) { ctx.beginPath(); ctx.moveTo(60 + i * cellW, 20); ctx.lineTo(60 + i * cellW, 20 + n * cellH); ctx.stroke(); ctx.beginPath(); ctx.moveTo(60, 20 + i * cellH); ctx.lineTo(60 + n * cellW, 20 + i * cellH); ctx.stroke(); }
+        // Labels
+        ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
+        for (var j = 0; j < n; j++) ctx.fillText(TOKENS[j], 60 + (j+0.5) * cellW, 15);
+        ctx.textAlign = 'right';
+        for (var i = 0; i < n; i++) ctx.fillText(TOKENS[i], 55, 20 + (i+0.5) * cellH);
+        ctx.textAlign = 'left';
+        // Diagonal emphasis
+        ctx.strokeStyle = 'rgba(6,182,212,0.3)'; ctx.lineWidth = 1; ctx.setLineDash([2,2]);
+        ctx.beginPath(); ctx.moveTo(60, 20); ctx.lineTo(60 + n * cellW, 20 + n * cellH); ctx.stroke(); ctx.setLineDash([]);
+        // Title
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace'; ctx.textAlign = 'right';
+        ctx.fillText('Q·Kᵀ/√d_k (softmax)', W-65, 35);
+        ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+        ctx.fillText('d_scale=' + dScale.toFixed(2), W-65, 50);
+        ctx.textAlign = 'left';
+        // Max weight value
+        var maxW = 0;
+        for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) if (w[i][j] > maxW) maxW = w[i][j];
+        document.getElementById('loss-val').textContent = maxW.toFixed(3);
+        document.getElementById('loss-val').className = 'val ' + (maxW < 0.3 ? 'ok' : 'good');
+        document.getElementById('loss-val').previousElementSibling.textContent = 'Max weight';
+      }
+
+      document.getElementById('b1-slider').addEventListener('input', function(e) { dScale = parseFloat(e.target.value); document.getElementById('b1-val').textContent = dScale.toFixed(2); render(); });
+      document.getElementById('b0-slider').parentElement.style.display = 'none';
+      document.getElementById('btn-gd').addEventListener('click', function() {
+        if (isAnim) return; isAnim = true; document.getElementById('btn-gd').disabled = true;
+        var d = 0.1;
+        function sweep() { if (d >= 3) { isAnim = false; document.getElementById('btn-gd').disabled = false; return; }
+          dScale = d; document.getElementById('b1-slider').value = d; document.getElementById('b1-val').textContent = d.toFixed(2);
+          render(); d += 0.03; requestAnimationFrame(sweep);
+        } sweep();
+      });
+      document.getElementById('btn-reset').addEventListener('click', function() { dScale = 1; document.getElementById('b1-slider').value = 1; document.getElementById('b1-val').textContent = '1.00'; render(); });
+      render();
+'''
+
+DROPOUT_CANVAS_JS = '''
+      var W = canvas.width, H = canvas.height;
+      var dropRate = 0.3, isAnim = false;
+      var NEURONS = [];
+      var layers = [4, 6, 6, 4];
+      var rng = { s: 42, next: function() { this.s = (this.s*9301+49297)%233280; return this.s/233280; } };
+      function initNeurons() { NEURONS = []; for (var l = 0; l < layers.length; l++) for (var n = 0; n < layers[l]; n++) NEURONS.push({ layer: l, idx: n, dropped: false }); }
+      initNeurons();
+
+      function applyDropout() { NEURONS.forEach(function(nr) { nr.dropped = rng.next() < dropRate; }); }
+
+      function render() {
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        var layerSpacing = (W-120) / (layers.length + 1);
+        function neuronPos(nr) { var x = 60 + (nr.layer + 1) * layerSpacing; var ySpacing = (H-60) / (layers[nr.layer] + 1); var y = 30 + (nr.idx + 1) * ySpacing; return { x: x, y: y }; }
+        // Connections
+        for (var l = 0; l < layers.length - 1; l++) {
+          for (var i = 0; i < NEURONS.length; i++) for (var j = 0; j < NEURONS.length; j++) {
+            var a = NEURONS[i], b = NEURONS[j];
+            if (a.layer === l && b.layer === l+1 && !a.dropped && !b.dropped) {
+              var pa = neuronPos(a), pb = neuronPos(b);
+              ctx.strokeStyle = 'rgba(6,182,212,0.08)'; ctx.lineWidth = 0.5;
+              ctx.beginPath(); ctx.moveTo(pa.x, pa.y); ctx.lineTo(pb.x, pb.y); ctx.stroke();
+            }
+          }
+        }
+        // Neurons
+        for (var i = 0; i < NEURONS.length; i++) {
+          var nr = NEURONS[i], p = neuronPos(nr);
+          if (nr.dropped) { ctx.fillStyle = 'rgba(239,68,68,0.15)'; ctx.strokeStyle = 'rgba(239,68,68,0.3)'; }
+          else { ctx.fillStyle = 'rgba(6,182,212,0.3)'; ctx.strokeStyle = '#06b6d4'; }
+          ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, 6.28); ctx.fill(); ctx.stroke();
+          if (nr.dropped) { ctx.fillStyle = '#ef444488'; ctx.font = '10px ui-monospace'; ctx.textAlign = 'center'; ctx.fillText('×', p.x, p.y + 4); ctx.textAlign = 'left'; }
+        }
+        // Labels
+        ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
+        for (var l = 0; l < layers.length; l++) ctx.fillText('Layer ' + (l+1), 60 + (l+1) * layerSpacing, H - 20);
+        ctx.textAlign = 'left';
+        var active = NEURONS.filter(function(n) { return !n.dropped; }).length;
+        var dropped = NEURONS.length - active;
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace'; ctx.textAlign = 'right';
+        ctx.fillText('Active: ' + active, W-65, 35);
+        ctx.fillStyle = '#ef4444'; ctx.fillText('Dropped: ' + dropped, W-65, 50);
+        ctx.fillStyle = '#8b5cf6'; ctx.fillText('p=' + dropRate.toFixed(2), W-65, 65);
+        ctx.textAlign = 'left';
+        document.getElementById('loss-val').textContent = (active / NEURONS.length).toFixed(3);
+        document.getElementById('loss-val').className = 'val ' + (active / NEURONS.length > 0.6 ? 'good' : 'ok');
+        document.getElementById('loss-val').previousElementSibling.textContent = 'Active ratio';
+      }
+
+      document.getElementById('b1-slider').addEventListener('input', function(e) { dropRate = parseFloat(e.target.value); document.getElementById('b1-val').textContent = dropRate.toFixed(2); initNeurons(); applyDropout(); render(); });
+      document.getElementById('b0-slider').parentElement.style.display = 'none';
+      document.getElementById('btn-gd').addEventListener('click', function() {
+        if (isAnim) return; isAnim = true; document.getElementById('btn-gd').disabled = true;
+        var steps = 0, maxSteps = 10;
+        function step() { if (steps >= maxSteps) { isAnim = false; document.getElementById('btn-gd').disabled = false; return; }
+          initNeurons(); applyDropout(); render(); steps++; document.getElementById('phase-ind').textContent = 'sample ' + steps + '/' + maxSteps;
+          setTimeout(step, 300);
+        } step();
+      });
+      document.getElementById('btn-reset').addEventListener('click', function() { dropRate = 0.3; document.getElementById('b1-slider').value = 0.3; document.getElementById('b1-val').textContent = '0.30'; initNeurons(); document.getElementById('phase-ind').textContent='idle'; render(); });
+      applyDropout();
+      render();
+'''
+
+# ──────────────────────────────────────────────────────────────────────
 # HTML TEMPLATE
 # ──────────────────────────────────────────────────────────────────────
 
@@ -493,27 +1063,61 @@ def get_canvas_js(card):
     cc = card["canvas_config"]
     if ct == "loss":
         return LOSS_CANVAS_JS.replace("{loss_fn}", cc.get("loss_fn", "mse"))
+    elif ct == "loss_curve":
+        return LOSS_CURVE_CANVAS_JS.replace("{loss_fn}", cc.get("loss_fn", "mse")).replace("{loss_label}", cc.get("loss_label", "Loss"))
     elif ct == "activation":
         fn = cc.get("fn", "relu")
         return ACTIVATION_CANVAS_JS.replace("{fn}", fn)
     elif ct == "optimiser":
         return OPTIMISER_CANVAS_JS.replace("{optimiser}", cc.get("optimiser", "sgd"))
+    elif ct == "norm":
+        return NORM_CANVAS_JS
+    elif ct == "attention":
+        return ATTN_CANVAS_JS
+    elif ct == "dropout":
+        return DROPOUT_CANVAS_JS
     return ""
 
 def get_slider_labels(card):
     ct = card["canvas_type"]
     if ct == "loss":
         return '<label>Slope β₁ <span class="val" id="b1-val">1.00</span></label>'
+    elif ct == "loss_curve":
+        return '<label>Error e = y−ŷ <span class="val" id="b1-val">0.00</span></label>'
     elif ct == "activation":
         return '<label>Input x <span class="val" id="b1-val">0.50</span></label>'
     elif ct == "optimiser":
         return '<label>Optimiser: ' + card["canvas_config"]["optimiser"].upper() + '</label>'
+    elif ct == "norm":
+        return '<label>γ (scale) <span class="val" id="b1-val">1.00</span></label>'
+    elif ct == "attention":
+        return '<label>√d_k (scale) <span class="val" id="b1-val">1.00</span></label>'
+    elif ct == "dropout":
+        return '<label>Dropout rate p <span class="val" id="b1-val">0.30</span></label>'
     return ""
+
+def get_gd_btn_label(card):
+    ct = card["canvas_type"]
+    if ct == "loss":
+        return "▶ Run gradient descent"
+    elif ct == "loss_curve":
+        return "▶ Sweep error e"
+    elif ct == "activation":
+        return "▶ Sweep x"
+    elif ct == "optimiser":
+        return "▶ Run optimiser"
+    elif ct == "norm":
+        return "▶ Apply normalisation"
+    elif ct == "attention":
+        return "▶ Compute attention"
+    elif ct == "dropout":
+        return "▶ Apply dropout"
+    return "▶ Run"
 
 def generate_card(card):
     canvas_js = get_canvas_js(card)
     slider_label = get_slider_labels(card)
-    gd_btn_label = "▶ Run gradient descent" if card["canvas_type"] == "loss" else ("▶ Sweep x" if card["canvas_type"] == "activation" else "▶ Run optimiser")
+    gd_btn_label = get_gd_btn_label(card)
 
     return f'''<!doctype html>
 <html lang="en">

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="L1 / L2 Regularisation — visual-first concept card. Interactive canvas, real-time sliders, code with Math→Code annotations." />
+    <title>L1 / L2 Regularisation — Visual Concept Card · AIHPC</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", sans-serif; min-height: 100vh; overflow-x: hidden; }
+      body::before { content:""; position:fixed; inset:0; background: radial-gradient(1000px 500px at 50% 0%, rgba(6,182,212,0.10), transparent 70%); pointer-events:none; z-index:0; }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; position: relative; z-index: 1; }
+      .head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+      .head .tag { font-size: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.4); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .head h1 { font-size: 24px; font-weight: 800; }
+      .back { font-size: 12px; color: var(--accent); text-decoration: none; margin-bottom: 12px; display: inline-block; }
+      .eq-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; background: rgba(11,15,26,0.85); border: 1px solid rgba(6,182,212,0.3); font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent); margin-bottom: 12px; }
+      .desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; max-width: 600px; }
+      .canvas-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+      canvas { display: block; width: 100%; height: auto; }
+      .loss-overlay { position: absolute; top: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; text-align: right; }
+      .loss-overlay .lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+      .loss-overlay .val { font-size: 28px; font-weight: 800; font-family: ui-monospace, monospace; color: var(--accent); }
+      .loss-overlay .val.bad { color: var(--danger); } .loss-overlay .val.ok { color: var(--warn); } .loss-overlay .val.good { color: var(--success); }
+      .eq-overlay { position: absolute; bottom: 12px; left: 12px; background: rgba(11,15,26,0.9); border: 1px solid rgba(6,182,212,0.3); border-radius: 6px; padding: 4px 12px; font-family: "Cambria Math", Georgia, serif; font-size: 13px; color: var(--accent); pointer-events: none; }
+      .phase-indicator { position: absolute; bottom: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 10px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .phase-indicator.active { color: var(--accent); border-color: rgba(6,182,212,0.4); }
+      .controls { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: flex-end; }
+      .ctrl { flex: 1; min-width: 180px; background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+      .ctrl label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; }
+      .ctrl .val { font-size: 14px; font-weight: 700; font-family: ui-monospace, monospace; color: var(--accent); }
+      .ctrl input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--border); outline: none; }
+      .ctrl input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid var(--bg); }
+      .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white; } .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); } .btn.ghost:hover { border-color: var(--accent); color: var(--text); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      /* Code panel — always visible with Math→Code annotations */
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section h3 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+      .code-section .eq-line { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent); padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; border-left: 3px solid var(--accent); margin-bottom: 10px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .foot { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 24px; font-family: ui-monospace, monospace; }
+      .foot a { color: var(--accent); text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <a href="../index.html" class="back">← Home</a>
+      <div class="head">
+        <span class="tag">ML · Regularisation</span>
+        <h1>L1 / L2 Regularisation</h1>
+      </div>
+      <p class="desc">L1: λ|w| (sparse weights → feature selection). L2: λw² (small weights → smooth). <b>Both prevent overfitting</b> by penalising large weights.</p>
+      <div class="eq-badge">📐 L1: + λΣ|wᵢ|    L2: + λΣwᵢ²</div>
+      <div class="canvas-wrap">
+        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <div class="loss-overlay"><div class="lbl" id="loss-lbl">Loss</div><div class="val" id="loss-val">0.0000</div></div>
+        <div class="eq-overlay">L1: + λΣ|wᵢ|    L2: + λΣwᵢ²</div>
+        <div class="phase-indicator" id="phase-ind">idle</div>
+      </div>
+      <div class="controls">
+        <div class="ctrl" id="b1-ctrl"><label>Dropout rate p <span class="val" id="b1-val">0.30</span></label><input type="range" id="b1-slider" min="-4" max="4" step="0.01" value="1.0" /></div>
+        <div class="ctrl" id="b0-ctrl"><label>Intercept β₀ <span class="val" id="b0-val">0.00</span></label><input type="range" id="b0-slider" min="-5" max="10" step="0.01" value="0.0" /></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
+          <button class="btn primary" id="btn-gd">▶ Apply dropout</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+        </div>
+      </div>
+      <div class="code-section">
+        <h3>💻 Math → Code — how symbols become variables</h3>
+        <div class="eq-line">L1: + λΣ|wᵢ|    L2: + λΣwᵢ²</div>
+        <pre><span class="cm"># L1: + λΣ|w|  →  sparse weights (feature selection)</span>
+<span class="cm"># L2: + λΣw²  →  small weights (smooth)</span>
+<span class="cm"># λ → regularization strength (typically 1e-4 to 1e-2)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">l1_reg</span>(w, lam=<span class="num">1e-3</span>):
+    <span class="kw">return</span> lam * np.sum(np.abs(w))
+
+<span class="kw">def</span> <span class="fn">l2_reg</span>(w, lam=<span class="num">1e-3</span>):
+    <span class="kw">return</span> lam * np.sum(w ** <span class="num">2</span>)</pre>
+      </div>
+      <div class="foot">
+        <a href="../ai-lab.html?context=L1 / L2 Regularisation">🤖 Ask AI</a> · <a href="../concepts/ml-l1-l2-regularisation.html">📖 Full text version</a> · Visual concept card v2
+      </div>
+    </div>
+    <script>
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      
+      var W = canvas.width, H = canvas.height;
+      var dropRate = 0.3, isAnim = false;
+      var NEURONS = [];
+      var layers = [4, 6, 6, 4];
+      var rng = { s: 42, next: function() { this.s = (this.s*9301+49297)%233280; return this.s/233280; } };
+      function initNeurons() { NEURONS = []; for (var l = 0; l < layers.length; l++) for (var n = 0; n < layers[l]; n++) NEURONS.push({ layer: l, idx: n, dropped: false }); }
+      initNeurons();
+
+      function applyDropout() { NEURONS.forEach(function(nr) { nr.dropped = rng.next() < dropRate; }); }
+
+      function render() {
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        var layerSpacing = (W-120) / (layers.length + 1);
+        function neuronPos(nr) { var x = 60 + (nr.layer + 1) * layerSpacing; var ySpacing = (H-60) / (layers[nr.layer] + 1); var y = 30 + (nr.idx + 1) * ySpacing; return { x: x, y: y }; }
+        // Connections
+        for (var l = 0; l < layers.length - 1; l++) {
+          for (var i = 0; i < NEURONS.length; i++) for (var j = 0; j < NEURONS.length; j++) {
+            var a = NEURONS[i], b = NEURONS[j];
+            if (a.layer === l && b.layer === l+1 && !a.dropped && !b.dropped) {
+              var pa = neuronPos(a), pb = neuronPos(b);
+              ctx.strokeStyle = 'rgba(6,182,212,0.08)'; ctx.lineWidth = 0.5;
+              ctx.beginPath(); ctx.moveTo(pa.x, pa.y); ctx.lineTo(pb.x, pb.y); ctx.stroke();
+            }
+          }
+        }
+        // Neurons
+        for (var i = 0; i < NEURONS.length; i++) {
+          var nr = NEURONS[i], p = neuronPos(nr);
+          if (nr.dropped) { ctx.fillStyle = 'rgba(239,68,68,0.15)'; ctx.strokeStyle = 'rgba(239,68,68,0.3)'; }
+          else { ctx.fillStyle = 'rgba(6,182,212,0.3)'; ctx.strokeStyle = '#06b6d4'; }
+          ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, 6.28); ctx.fill(); ctx.stroke();
+          if (nr.dropped) { ctx.fillStyle = '#ef444488'; ctx.font = '10px ui-monospace'; ctx.textAlign = 'center'; ctx.fillText('×', p.x, p.y + 4); ctx.textAlign = 'left'; }
+        }
+        // Labels
+        ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
+        for (var l = 0; l < layers.length; l++) ctx.fillText('Layer ' + (l+1), 60 + (l+1) * layerSpacing, H - 20);
+        ctx.textAlign = 'left';
+        var active = NEURONS.filter(function(n) { return !n.dropped; }).length;
+        var dropped = NEURONS.length - active;
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace'; ctx.textAlign = 'right';
+        ctx.fillText('Active: ' + active, W-65, 35);
+        ctx.fillStyle = '#ef4444'; ctx.fillText('Dropped: ' + dropped, W-65, 50);
+        ctx.fillStyle = '#8b5cf6'; ctx.fillText('p=' + dropRate.toFixed(2), W-65, 65);
+        ctx.textAlign = 'left';
+        document.getElementById('loss-val').textContent = (active / NEURONS.length).toFixed(3);
+        document.getElementById('loss-val').className = 'val ' + (active / NEURONS.length > 0.6 ? 'good' : 'ok');
+        document.getElementById('loss-val').previousElementSibling.textContent = 'Active ratio';
+      }
+
+      document.getElementById('b1-slider').addEventListener('input', function(e) { dropRate = parseFloat(e.target.value); document.getElementById('b1-val').textContent = dropRate.toFixed(2); initNeurons(); applyDropout(); render(); });
+      document.getElementById('b0-slider').parentElement.style.display = 'none';
+      document.getElementById('btn-gd').addEventListener('click', function() {
+        if (isAnim) return; isAnim = true; document.getElementById('btn-gd').disabled = true;
+        var steps = 0, maxSteps = 10;
+        function step() { if (steps >= maxSteps) { isAnim = false; document.getElementById('btn-gd').disabled = false; return; }
+          initNeurons(); applyDropout(); render(); steps++; document.getElementById('phase-ind').textContent = 'sample ' + steps + '/' + maxSteps;
+          setTimeout(step, 300);
+        } step();
+      });
+      document.getElementById('btn-reset').addEventListener('click', function() { dropRate = 0.3; document.getElementById('b1-slider').value = 0.3; document.getElementById('b1-val').textContent = '0.30'; initNeurons(); document.getElementById('phase-ind').textContent='idle'; render(); });
+      applyDropout();
+      render();
+
+    </script>
+  </body>
+</html>

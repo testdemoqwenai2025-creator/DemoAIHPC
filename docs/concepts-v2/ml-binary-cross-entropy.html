@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Binary Cross-Entropy — visual-first concept card. Interactive canvas, real-time sliders, code with Math→Code annotations." />
+    <title>Binary Cross-Entropy — Visual Concept Card · AIHPC</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", sans-serif; min-height: 100vh; overflow-x: hidden; }
+      body::before { content:""; position:fixed; inset:0; background: radial-gradient(1000px 500px at 50% 0%, rgba(6,182,212,0.10), transparent 70%); pointer-events:none; z-index:0; }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; position: relative; z-index: 1; }
+      .head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+      .head .tag { font-size: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.4); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .head h1 { font-size: 24px; font-weight: 800; }
+      .back { font-size: 12px; color: var(--accent); text-decoration: none; margin-bottom: 12px; display: inline-block; }
+      .eq-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; background: rgba(11,15,26,0.85); border: 1px solid rgba(6,182,212,0.3); font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent); margin-bottom: 12px; }
+      .desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; max-width: 600px; }
+      .canvas-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+      canvas { display: block; width: 100%; height: auto; }
+      .loss-overlay { position: absolute; top: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; text-align: right; }
+      .loss-overlay .lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+      .loss-overlay .val { font-size: 28px; font-weight: 800; font-family: ui-monospace, monospace; color: var(--accent); }
+      .loss-overlay .val.bad { color: var(--danger); } .loss-overlay .val.ok { color: var(--warn); } .loss-overlay .val.good { color: var(--success); }
+      .eq-overlay { position: absolute; bottom: 12px; left: 12px; background: rgba(11,15,26,0.9); border: 1px solid rgba(6,182,212,0.3); border-radius: 6px; padding: 4px 12px; font-family: "Cambria Math", Georgia, serif; font-size: 13px; color: var(--accent); pointer-events: none; }
+      .phase-indicator { position: absolute; bottom: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 10px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .phase-indicator.active { color: var(--accent); border-color: rgba(6,182,212,0.4); }
+      .controls { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: flex-end; }
+      .ctrl { flex: 1; min-width: 180px; background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+      .ctrl label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; }
+      .ctrl .val { font-size: 14px; font-weight: 700; font-family: ui-monospace, monospace; color: var(--accent); }
+      .ctrl input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--border); outline: none; }
+      .ctrl input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid var(--bg); }
+      .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white; } .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); } .btn.ghost:hover { border-color: var(--accent); color: var(--text); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      /* Code panel — always visible with Math→Code annotations */
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section h3 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+      .code-section .eq-line { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent); padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; border-left: 3px solid var(--accent); margin-bottom: 10px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .foot { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 24px; font-family: ui-monospace, monospace; }
+      .foot a { color: var(--accent); text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <a href="../index.html" class="back">← Home</a>
+      <div class="head">
+        <span class="tag">ML · Classification Loss</span>
+        <h1>Binary Cross-Entropy</h1>
+      </div>
+      <p class="desc">−[y·log(ŷ) + (1−y)·log(1−ŷ)] — the standard loss for <b>binary classification</b>. Goes to ∞ for confident wrong predictions.</p>
+      <div class="eq-badge">📐 L = −[y·log(ŷ) + (1−y)·log(1−ŷ)]</div>
+      <div class="canvas-wrap">
+        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <div class="loss-overlay"><div class="lbl" id="loss-lbl">Loss</div><div class="val" id="loss-val">0.0000</div></div>
+        <div class="eq-overlay">L = −[y·log(ŷ) + (1−y)·log(1−ŷ)]</div>
+        <div class="phase-indicator" id="phase-ind">idle</div>
+      </div>
+      <div class="controls">
+        <div class="ctrl" id="b1-ctrl"><label>Error e = y−ŷ <span class="val" id="b1-val">0.00</span></label><input type="range" id="b1-slider" min="-4" max="4" step="0.01" value="1.0" /></div>
+        <div class="ctrl" id="b0-ctrl"><label>Intercept β₀ <span class="val" id="b0-val">0.00</span></label><input type="range" id="b0-slider" min="-5" max="10" step="0.01" value="0.0" /></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
+          <button class="btn primary" id="btn-gd">▶ Sweep error e</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+        </div>
+      </div>
+      <div class="code-section">
+        <h3>💻 Math → Code — how symbols become variables</h3>
+        <div class="eq-line">L = −[y·log(ŷ) + (1−y)·log(1−ŷ)]</div>
+        <pre><span class="cm"># L = −[y·log(ŷ) + (1−y)·log(1−ŷ)]</span>
+<span class="cm"># y → y_true (0 or 1)  ŷ → y_pred (probability 0..1)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">bce</span>(y_true, y_pred):
+    eps = <span class="num">1e-12</span>
+    <span class="kw">return</span> -np.mean(y_true * np.log(y_pred + eps) +
+                        (<span class="num">1</span> - y_true) * np.log(<span class="num">1</span> - y_pred + eps))</pre>
+      </div>
+      <div class="foot">
+        <a href="../ai-lab.html?context=Binary Cross-Entropy">🤖 Ask AI</a> · <a href="../concepts/ml-binary-cross-entropy.html">📖 Full text version</a> · Visual concept card v2
+      </div>
+    </div>
+    <script>
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      
+      var W = canvas.width, H = canvas.height;
+      var eVal = 0;
+
+      function lossFn(e) {
+        var fn = "bce";
+        if (fn === "kl") { var p = 0.5, q = Math.max(0.01, Math.min(0.99, 0.5 + e*0.05)); return p * Math.log(p/q) + (1-p) * Math.log((1-p)/(1-q)); }
+        if (fn === "cosine") return 1 - Math.cos(e * 0.3);
+        if (fn === "bce") { var y = 1, yhat = Math.max(0.001, Math.min(0.999, 1/(1+Math.exp(-e)))); return -(y * Math.log(yhat) + (1-y) * Math.log(1-yhat)); }
+        if (fn === "cce") { return -Math.log(Math.max(0.001, Math.min(0.999, 1/(1+Math.exp(-e))))); }
+        if (fn === "hinge") return Math.max(0, 1 - 1 * e);
+        return e * e;
+      }
+      function toCX(e) { return 60 + (e+5)/10 * (W-120); }
+      function toCY(l) { return H-40 - Math.min(l, 10)/10 * (H-60); }
+
+      function render() {
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        ctx.strokeStyle = 'rgba(148,163,184,0.06)'; ctx.lineWidth = 0.5;
+        for (var g = 0; g <= 10; g++) { var px = 60+g*(W-120)/10; ctx.beginPath(); ctx.moveTo(px,20); ctx.lineTo(px,H-40); ctx.stroke(); }
+        for (var g2 = 0; g2 <= 5; g2++) { var py = 20+g2*(H-60)/5; ctx.beginPath(); ctx.moveTo(60,py); ctx.lineTo(W-60,py); ctx.stroke(); }
+        ctx.strokeStyle = 'rgba(148,163,184,0.25)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(60,20); ctx.lineTo(60,H-40); ctx.lineTo(W-60,H-40); ctx.stroke();
+        ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '10px ui-monospace';
+        ctx.fillText('error e', W-50, H-25); ctx.fillText('loss', 45, 30);
+        // MSE reference curve (always shown as comparison)
+        ctx.strokeStyle = 'rgba(148,163,184,0.2)'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+        ctx.beginPath();
+        for (var e = -5; e <= 5; e += 0.1) { var px = toCX(e), py = toCY(e*e); if (e === -5) ctx.moveTo(px,py); else ctx.lineTo(px,py); }
+        ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(148,163,184,0.4)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'right';
+        ctx.fillText('MSE (ref)', W-65, 35);
+        ctx.textAlign = 'left';
+        // Current loss function curve
+        ctx.strokeStyle = '#06b6d4'; ctx.lineWidth = 2.5; ctx.shadowColor = '#06b6d4'; ctx.shadowBlur = 6;
+        ctx.beginPath();
+        for (var e = -5; e <= 5; e += 0.05) { var px = toCX(e), py = toCY(lossFn(e)); if (e === -5) ctx.moveTo(px,py); else ctx.lineTo(px,py); }
+        ctx.stroke(); ctx.shadowBlur = 0;
+        // Current error point
+        var lv = lossFn(eVal);
+        var ipx = toCX(eVal), ipy = toCY(lv);
+        ctx.strokeStyle = 'rgba(245,158,11,0.4)'; ctx.lineWidth = 1; ctx.setLineDash([2,4]);
+        ctx.beginPath(); ctx.moveTo(ipx, H-40); ctx.lineTo(ipx, ipy); ctx.lineTo(60, ipy); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = '#f59e0b'; ctx.beginPath(); ctx.arc(ipx, ipy, 5, 0, 6.28); ctx.fill();
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace'; ctx.textAlign = 'right';
+        ctx.fillText('BCE', W-65, 50);
+        ctx.fillStyle = '#f59e0b'; ctx.fillText('e=' + eVal.toFixed(2), W-65, 65);
+        ctx.fillStyle = '#10b981'; ctx.fillText('L=' + lv.toFixed(3), W-65, 80);
+        ctx.textAlign = 'left';
+        document.getElementById('loss-val').textContent = lv.toFixed(4);
+        document.getElementById('loss-val').className = 'val ' + (lv < 1 ? 'good' : (lv < 5 ? 'ok' : 'bad'));
+      }
+
+      document.getElementById('b1-slider').addEventListener('input', function(e) { eVal = parseFloat(e.target.value); document.getElementById('b1-val').textContent = eVal.toFixed(2); render(); });
+      document.getElementById('b0-slider').parentElement.style.display = 'none';
+      var isAnim = false;
+      document.getElementById('btn-gd').addEventListener('click', function() {
+        if (isAnim) return; isAnim = true; document.getElementById('btn-gd').disabled = true;
+        var e = -5;
+        function sweep() { if (e >= 5) { isAnim = false; document.getElementById('btn-gd').disabled = false; return; }
+          eVal = e; document.getElementById('b1-slider').value = e; document.getElementById('b1-val').textContent = e.toFixed(2);
+          render(); e += 0.08; requestAnimationFrame(sweep);
+        } sweep();
+      });
+      document.getElementById('btn-reset').addEventListener('click', function() { eVal = 0; document.getElementById('b1-slider').value = 0; document.getElementById('b1-val').textContent = '0.00'; render(); });
+      render();
+
+    </script>
+  </body>
+</html>

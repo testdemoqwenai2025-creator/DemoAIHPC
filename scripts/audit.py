@@ -177,6 +177,22 @@ def check_ribbon(html_files):
         os.path.join(DOCS, "concepts-v2", "ml-adam.html"),
         os.path.join(DOCS, "concepts-v2", "ml-adamw.html"),
         os.path.join(DOCS, "concepts-v2", "index.html"),  # v2 concepts index
+        os.path.join(DOCS, "concepts-v2", "ml-kl-divergence.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-cosine-similarity.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-binary-cross-entropy.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-categorical-cross-entropy.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-hinge-loss.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-swiglu.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-batchnorm.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-layernorm.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-rmsnorm.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-groupnorm.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-instancenorm.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-scaled-dot-product-attention.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-multi-head-attention.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-flash-attention.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-dropout.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-l1-l2-regularisation.html"),
     }
     failures = []
     required = ["Platform", "AETHEL Suite", "Science", "Insights"]
