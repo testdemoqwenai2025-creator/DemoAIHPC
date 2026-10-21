@@ -201,6 +201,7 @@ def check_ribbon(html_files):
         os.path.join(DOCS, "lab-in-the-loop.html"),  # Phase 39.1 Lab in the Loop
         os.path.join(DOCS, "how-cnns-see-images.html"),  # Phase 39 CNN cheat sheet
         os.path.join(DOCS, "editjumps.html"),  # Phase 39.4 EditJumps
+        os.path.join(DOCS, "geoworld.html"),  # Phase 39.8 GeoWorld
     }
     # Phase 38 (NN architecture cards + CoCoNet paper card): auto-include
     # ALL files in concepts-v2/ so the audit picks up new cards automatically.
