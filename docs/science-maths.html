@@ -67,9 +67,15 @@
     #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.25; }
       body.light #particle-canvas { opacity: 0.1; }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-label="Mathematics: animated particle background"></canvas>
     
     <header class="ribbon">
       <div class="ribbon-inner">
@@ -183,5 +189,6 @@
 
     </script>
   <script src="header-banner.js"></script>
+    <script src="accessibility.js"></script>
   </body>
 </html>

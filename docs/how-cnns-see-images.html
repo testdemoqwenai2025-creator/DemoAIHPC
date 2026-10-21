@@ -49,9 +49,15 @@
       .meta { border-top: 1px solid var(--border); margin-top: 40px; padding-top: 16px; font-size: 12px; color: var(--text-muted); }
       .meta a { color: var(--accent-2); text-decoration: none; }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-label="How CNNs See Images: animated particle background"></canvas>
     <main class="container">
       <p class="crumbs"><a href="index.html">Home</a> / <a href="bio-nn.html">Bioinformatics × NN</a> / How CNNs See Images</p>
       <span class="tag">📖 Teaching guide · Beginner-friendly · CNN intuition</span>
@@ -61,7 +67,7 @@
       <div class="viz-card">
         <h3>4-stage interactive visualiser</h3>
         <div class="viz-wrap">
-          <canvas id="main-canvas" width="728" height="500"></canvas>
+          <canvas id="main-canvas" width="728" height="500" aria-label="How CNNs See Images: main interactive visualisation"></canvas>
           <div class="zoom-controls">
             <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
             <div class="zoom-label" id="zoom-label">100%</div>
@@ -491,5 +497,6 @@ feature_map = conv2d(image, sobel_x)
     </script>
     <script src="zoom-loader.js"></script>
   <script src="header-banner.js"></script>
+    <script src="accessibility.js"></script>
   </body>
 </html>

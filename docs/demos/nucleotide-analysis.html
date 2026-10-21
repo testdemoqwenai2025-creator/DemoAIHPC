@@ -142,7 +142,13 @@
       body.light pre.code-block { color: #18181b; }
     </style>
     <script src="../subscribe-gate.js"></script>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <header class="ribbon">
       <div class="ribbon-inner">
@@ -1180,5 +1186,6 @@ result = reverse_complement(${JSON.stringify(seq)})
     </script>
   <script src="../ask-ai-button.js"></script>
   <script src="header-banner.js"></script>
+    <script src="../accessibility.js"></script>
   </body>
 </html>

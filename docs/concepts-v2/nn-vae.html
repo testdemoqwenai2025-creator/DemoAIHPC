@@ -61,7 +61,13 @@
       .deep-thoughts .dt-row .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
       .deep-thoughts .dt-row .text { color: var(--text-muted); }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <div class="wrap">
       <a href="../index.html" class="back">← Home</a>
@@ -72,7 +78,7 @@
       <p class="desc">Autoencoder with a structured latent space (Gaussian). <b>Generative — can sample new data by sampling z ~ N(0, I)</b>.</p>
       <div class="eq-badge">📐 L = E_q[log p(x|z)] − KL(q(z|x) ‖ p(z))</div>
       <div class="canvas-wrap">
-        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <canvas id="main-canvas" width="728" height="360" aria-label="Variational Autoencoder (VAE): main interactive visualisation"></canvas>
         <div class="loss-overlay"><div class="lbl" id="loss-lbl">state</div><div class="val" id="loss-val">0.0000</div></div>
         <div class="eq-overlay">L = E_q[log p(x|z)] − KL(q(z|x) ‖ p(z))</div>
         <div class="phase-indicator" id="phase-ind">idle</div>
@@ -162,6 +168,7 @@ x = np.<span class="fn">array</span>([<span class="num">1</span>, <span class="n
 
 
       // ===== VAE: encoder → (μ, σ) → sample z → decoder =====
+            var vaeLoss = [];  // Phase 42a: loss curve data
       var animStep = 0;
       function render() {
         var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
@@ -218,6 +225,33 @@ x = np.<span class="fn">array</span>([<span class="num">1</span>, <span class="n
         ctx.fillText('Decoder', x4 + boxW/2, y + boxH/2 - 5);
         ctx.fillText('g_dec(z)', x4 + boxW/2, y + boxH/2 + 10);
         ctx.textAlign = 'left';
+        // === Loss curve + inflection (Phase 42a) ===
+var panelX = W - 115, panelW = 105;
+ctx.strokeStyle = 'rgba(148,163,184,0.15)'; ctx.lineWidth = 0.5;
+ctx.strokeRect(panelX, 35, panelW, 70);
+ctx.fillStyle = '#10b981'; ctx.font = 'bold 8px ui-monospace'; ctx.textAlign = 'center';
+ctx.fillText('ELBO Loss', panelX + panelW/2, 45); ctx.textAlign = 'left';
+ctx.strokeStyle = '#10b981'; ctx.lineWidth = 1.2;
+ctx.beginPath();
+var lossArr = (typeof vaeLoss !== 'undefined') ? vaeLoss : [];
+var curEp = (typeof animStep !== 'undefined') ? Math.floor(animStep / numSteps * 100) : 0;
+for (var ei = 0; ei <= curEp && ei < lossArr.length; ei++) {
+  var px = panelX + 3 + (ei / 100) * (panelW - 6);
+  var py = 100 - (lossArr[ei] / 3.5) * 60;
+  if (ei === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+        ctx.strokeStyle = 'rgba(245,158,11,0.15)'; ctx.lineWidth = 0.5;
+        ctx.strokeRect(panelX, 115, panelW, 80);
+        ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 7px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('Inflection', panelX + panelW/2, 123); ctx.textAlign = 'left';
+        ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '7px ui-monospace';
+        var yLine = 132;
+        ctx.fillText('L = E[log p(x|z)] - KL(q‖p)', panelX + 5, yLine); yLine += 11;
+        ctx.fillText('reparam: z = μ + σ·ε', panelX + 5, yLine); yLine += 11;
+        ctx.fillText('KL ≈ 0.5·Σ(μ²+σ²-1-ln σ²)', panelX + 5, yLine); yLine += 11;
+        ctx.fillText('β>1: disentangle (β-VAE)', panelX + 5, yLine); yLine += 11;
+
         document.getElementById('loss-val').textContent = 'kl+recon';
         document.getElementById('loss-val').className = 'val good';
       }
@@ -225,7 +259,18 @@ x = np.<span class="fn">array</span>([<span class="num">1</span>, <span class="n
         animStep = 0;
         function step() {
           if (animStep >= 6) {
-            isAnim = false; document.getElementById('btn-gd').disabled = false;
+            isAnim = false; // === Phase 42a: compute loss curve once at script init ===
+      // VAE loss = recon + KL(N(μ,σ²) || N(0,1))
+// KL term regularises latent; loss drops from ~3.2 to ~0.6
+var lossArr = [];
+for (var e = 0; e <= 100; e++) {
+  var recon = 2.4 * Math.exp(-e * 0.04) + 0.4;
+  var kl = 0.8 * Math.exp(-e * 0.02) + 0.2 + 0.04 * Math.sin(e * 0.5);
+  lossArr.push(recon + kl);
+}
+vaeLoss = lossArr;
+
+      document.getElementById('btn-gd').disabled = false;
             document.getElementById('phase-ind').textContent = 'done ✓';
             document.getElementById('phase-ind').classList.remove('active');
             return;
@@ -290,5 +335,6 @@ x = np.<span class="fn">array</span>([<span class="num">1</span>, <span class="n
     </div>
     <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
+    <script src="../accessibility.js"></script>
   </body>
 </html>

@@ -8,6 +8,15 @@
 [![Public Mirror](https://img.shields.io/badge/repo-public%20mirror-success.svg)](https://github.com/testdemoqwenai2025-creator/DemoAIHPC)
 [![Source of Truth](https://img.shields.io/badge/source-private%20repo-important.svg)](https://github.com/testdemoqwenai2025-creator/AIHPC-Advanced)
 [![License](https://img.shields.io/badge/license-proprietary-lightgrey.svg)](#license)
+[![Web-only Files](https://img.shields.io/badge/public%20repo-web%20files%20only-blue.svg)](#dual-repository-workflow)
+
+> **⚠️ Phase 42 file-type rule** (enforced from 2026-10-22 onward):
+> This public mirror contains **only web files** — `.html`, `.css`, `.js`,
+> `.json` (runtime data), and image formats (`.png`, `.svg`, `.gif`, `.jpg`).
+> All source code (Python scripts, TypeScript, package configs, internal docs,
+> worklogs, preview images) lives exclusively in the private source-of-truth
+> repository. The `.gitignore` in this repo enforces the rule — see
+> [Dual-repository workflow](#dual-repository-workflow) for details.
 
 ---
 

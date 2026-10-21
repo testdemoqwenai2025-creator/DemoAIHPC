@@ -61,7 +61,13 @@
       .deep-thoughts .dt-row .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
       .deep-thoughts .dt-row .text { color: var(--text-muted); }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <div class="wrap">
       <a href="../index.html" class="back">← Home</a>
@@ -72,7 +78,7 @@
       <p class="desc">Reuses weights across time steps. <b>The original sequence model</b> — suffers from vanishing gradients on long sequences.</p>
       <div class="eq-badge">📐 h_t = tanh(W_hh · h_{t-1} + W_xh · x_t + b)</div>
       <div class="canvas-wrap">
-        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <canvas id="main-canvas" width="728" height="360" aria-label="Recurrent Neural Network (RNN): main interactive visualisation"></canvas>
         <div class="loss-overlay"><div class="lbl" id="loss-lbl">state</div><div class="val" id="loss-val">0.0000</div></div>
         <div class="eq-overlay">h_t = tanh(W_hh · h_{t-1} + W_xh · x_t + b)</div>
         <div class="phase-indicator" id="phase-ind">idle</div>
@@ -284,5 +290,6 @@ seq = [np.random.<span class="fn">randn</span>(<span class="num">3</span>) <span
     </div>
     <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
+    <script src="../accessibility.js"></script>
   </body>
 </html>

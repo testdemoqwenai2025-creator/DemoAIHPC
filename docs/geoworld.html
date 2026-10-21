@@ -51,9 +51,15 @@
       .callout .lbl.futur { background: rgba(245,158,11,0.15); color: #fcd34d; }
       .callout .text { color: var(--text-muted); }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-label="GeoWorld — Geometric World Models: animated particle background"></canvas>
     <main class="container">
       <p class="crumbs"><a href="index.html">Home</a> / <a href="bio-nn.html">Bioinformatics × NN</a> / GeoWorld</p>
       <span class="tag">🔬 arXiv:2602.23058 · Zhang et al. · 2026 · Geometric world models</span>
@@ -63,7 +69,7 @@
       <div class="viz-card">
         <h3>5-stage pipeline visualiser</h3>
         <div class="viz-wrap">
-          <canvas id="main-canvas" width="728" height="480"></canvas>
+          <canvas id="main-canvas" width="728" height="480" aria-label="GeoWorld — Geometric World Models: main interactive visualisation"></canvas>
           <div class="zoom-controls">
             <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
             <div class="zoom-label" id="zoom-label">100%</div>
@@ -852,5 +858,6 @@ plan, energy = world.plan(current_state, goal, n_steps=<span class="num">10</spa
     </script>
     <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
+    <script src="accessibility.js"></script>
   </body>
 </html>

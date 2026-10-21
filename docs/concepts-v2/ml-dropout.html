@@ -44,7 +44,13 @@
       .foot { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 24px; font-family: ui-monospace, monospace; }
       .foot a { color: var(--accent); text-decoration: none; }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <div class="wrap">
       <a href="../index.html" class="back">← Home</a>
@@ -55,7 +61,7 @@
       <p class="desc">Random zeroing during training. <b>Prevents co-adaptation</b>, acts as an implicit ensemble. From Hinton 2012.</p>
       <div class="eq-badge">📐 y = (x · m) / (1 − p)   where mᵢ ~ Bernoulli(1 − p)</div>
       <div class="canvas-wrap">
-        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <canvas id="main-canvas" width="728" height="360" aria-label="Dropout: main interactive visualisation"></canvas>
         <div class="loss-overlay"><div class="lbl" id="loss-lbl">penalty</div><div class="val" id="loss-val">0.0000</div></div>
         <div class="eq-overlay">y = (x · m) / (1 − p)   where mᵢ ~ Bernoulli(1 − p)</div>
         <div class="phase-indicator" id="phase-ind">idle</div>
@@ -236,5 +242,6 @@ x = np.<span class="fn">ones</span>(<span class="num">10</span>)
     </div>
     <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
+    <script src="../accessibility.js"></script>
   </body>
 </html>

@@ -61,7 +61,13 @@
       .deep-thoughts .dt-row .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
       .deep-thoughts .dt-row .text { color: var(--text-muted); }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <div class="wrap">
       <a href="../index.html" class="back">← Home</a>
@@ -72,7 +78,7 @@
       <p class="desc">Adds the input to the output of each block. <b>Solves the degradation problem — enables 100+ layer networks</b>.</p>
       <div class="eq-badge">📐 y = F(x, {W_l}) + x    (skip connection)</div>
       <div class="canvas-wrap">
-        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <canvas id="main-canvas" width="728" height="360" aria-label="Residual Network (ResNet): main interactive visualisation"></canvas>
         <div class="loss-overlay"><div class="lbl" id="loss-lbl">state</div><div class="val" id="loss-val">0.0000</div></div>
         <div class="eq-overlay">y = F(x, {W_l}) + x    (skip connection)</div>
         <div class="phase-indicator" id="phase-ind">idle</div>
@@ -154,6 +160,7 @@ out = resnet.<span class="fn">forward</span>(x)
 
       // ===== ResNet: stacked blocks with skip connections =====
       var numBlocks = 6;
+            var resnetLoss = [];  // Phase 42a: loss curve data
       var animStep = 0;
       function render() {
         var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
@@ -194,6 +201,33 @@ out = resnet.<span class="fn">forward</span>(x)
         ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '10px ui-monospace';
         ctx.fillText('Purple curves = identity skip (y = F(x) + x)', 60, H - 25);
         ctx.fillText('Gradient always has path of 1s → no vanishing in deep nets', 60, H - 10);
+        // === Loss curve + inflection (Phase 42a) ===
+var panelX = W - 115, panelW = 105;
+ctx.strokeStyle = 'rgba(148,163,184,0.15)'; ctx.lineWidth = 0.5;
+ctx.strokeRect(panelX, 35, panelW, 70);
+ctx.fillStyle = '#10b981'; ctx.font = 'bold 8px ui-monospace'; ctx.textAlign = 'center';
+ctx.fillText('CE Loss', panelX + panelW/2, 45); ctx.textAlign = 'left';
+ctx.strokeStyle = '#10b981'; ctx.lineWidth = 1.2;
+ctx.beginPath();
+var lossArr = (typeof resnetLoss !== 'undefined') ? resnetLoss : [];
+var curEp = (typeof animStep !== 'undefined') ? Math.floor(animStep / numSteps * 100) : 0;
+for (var ei = 0; ei <= curEp && ei < lossArr.length; ei++) {
+  var px = panelX + 3 + (ei / 100) * (panelW - 6);
+  var py = 100 - (lossArr[ei] / 3.5) * 60;
+  if (ei === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+        ctx.strokeStyle = 'rgba(245,158,11,0.15)'; ctx.lineWidth = 0.5;
+        ctx.strokeRect(panelX, 115, panelW, 80);
+        ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 7px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('Inflection', panelX + panelW/2, 123); ctx.textAlign = 'left';
+        ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '7px ui-monospace';
+        var yLine = 132;
+        ctx.fillText('y = F(x) + x (skip)', panelX + 5, yLine); yLine += 11;
+        ctx.fillText('grad: ∂y/∂x = 1 + ∂F/∂x', panelX + 5, yLine); yLine += 11;
+        ctx.fillText('no vanishing gradient', panelX + 5, yLine); yLine += 11;
+        ctx.fillText('deep: 50/101/152 layers', panelX + 5, yLine); yLine += 11;
+
         document.getElementById('loss-val').textContent = animStep + '/' + (numBlocks + 1);
         document.getElementById('loss-val').className = 'val good';
       }
@@ -201,7 +235,17 @@ out = resnet.<span class="fn">forward</span>(x)
         animStep = 0;
         function step() {
           if (animStep > numBlocks) {
-            isAnim = false; document.getElementById('btn-gd').disabled = false;
+            isAnim = false; // === Phase 42a: compute loss curve once at script init ===
+      // ResNet: residual connections enable deeper nets
+// Loss drops faster than plain CNN (no degradation problem)
+var lossArr = [];
+for (var e = 0; e <= 100; e++) {
+  var loss = 2.6 * Math.exp(-e * 0.055) + 0.15 + 0.04 * Math.sin(e * 0.4);
+  lossArr.push(loss);
+}
+resnetLoss = lossArr;
+
+      document.getElementById('btn-gd').disabled = false;
             document.getElementById('phase-ind').textContent = 'done ✓';
             document.getElementById('phase-ind').classList.remove('active');
             return;
@@ -266,5 +310,6 @@ out = resnet.<span class="fn">forward</span>(x)
     </div>
     <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
+    <script src="../accessibility.js"></script>
   </body>
 </html>

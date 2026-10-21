@@ -95,9 +95,15 @@
     <script src="graph-table-sync.js"></script>
     <script src="ml-etl.js"></script>
     <script src="attention-heatmap.js"></script>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-label="Machine Learning Loss Functions: animated particle background"></canvas>
     <header class="ribbon">
       <div class="ribbon-inner">
         <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
@@ -176,7 +182,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-mse" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-mse" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-mse)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -322,7 +328,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-mae" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-mae" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-mae)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -466,7 +472,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-binary-cross-entropy" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-binary-cross-entropy" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-binary-cross-entropy)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -611,7 +617,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-categorical-cross-entropy" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-categorical-cross-entropy" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-categorical-cross-entropy)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -755,7 +761,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-hinge-loss" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-hinge-loss" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-hinge-loss)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -899,7 +905,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-log-cosh" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-log-cosh" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-log-cosh)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -1043,7 +1049,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-huber-loss" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-huber-loss" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-huber-loss)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -1187,7 +1193,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-kl-divergence" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-kl-divergence" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-kl-divergence)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -1330,7 +1336,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-cosine-similarity" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-cosine-similarity" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-cosine-similarity)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -1474,7 +1480,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-relu" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-relu" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-relu)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -1620,7 +1626,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-gelu" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-gelu" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-gelu)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -1766,7 +1772,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-swiglu" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-swiglu" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-swiglu)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -1911,7 +1917,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-sgd" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-sgd" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-sgd)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -2056,7 +2062,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-adam" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-adam" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-adam)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -2202,7 +2208,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-adamw" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-adamw" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-adamw)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -2346,7 +2352,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-dropout" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-dropout" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-dropout)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -2490,7 +2496,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-l1-l2-regularisation" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-l1-l2-regularisation" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-l1-l2-regularisation)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -2634,7 +2640,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-batchnorm" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-batchnorm" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-batchnorm)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -2778,7 +2784,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-scaled-dot-product-attention" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-scaled-dot-product-attention" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-scaled-dot-product-attention)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -2922,7 +2928,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-multi-head-attention" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-multi-head-attention" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-multi-head-attention)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -3066,7 +3072,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-flash-attention" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-flash-attention" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-flash-attention)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -3210,7 +3216,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-layernorm" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-layernorm" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-layernorm)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -3354,7 +3360,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-rmsnorm" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-rmsnorm" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-rmsnorm)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -3498,7 +3504,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-groupnorm" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-groupnorm" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-groupnorm)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -3641,7 +3647,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-instancenorm" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-instancenorm" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-instancenorm)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -3784,7 +3790,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-loss-landscape-3d" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-loss-landscape-3d" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-loss-landscape-3d)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -3928,7 +3934,7 @@
                   <button class="anim-share" style="background: var(--bg-elevated-2); border: 1px solid var(--border-strong); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">🔗</button>
                 </div>
               </div>
-              <canvas class="anim-derivation" data-derivation-id="ml-loss-landscape-cross-section" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;"></canvas>
+              <canvas class="anim-derivation" data-derivation-id="ml-loss-landscape-cross-section" style="display: block; max-width: 100%; height: auto; border-radius: 6px; background: #0b0f1a;" aria-label="Machine Learning Loss Functions — interactive canvas (ml-loss-landscape-cross-section)"></canvas>
             </div>
           </div>
           <!-- Code tab -->
@@ -5014,5 +5020,6 @@
       })();
     </script>
   <script src="header-banner.js"></script>
+    <script src="accessibility.js"></script>
   </body>
 </html>

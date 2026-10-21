@@ -74,7 +74,13 @@
       .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
 </style>
       <script src="../../graph-table-sync.js"></script>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <header class="ribbon">
       <div class="ribbon-inner">
@@ -181,7 +187,7 @@
             <button class="anim-share" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" title="Phase 29 — captures the current frame as a PNG snapshot + copies a shareable URL with the current timestamp. Visiting the URL auto-resumes the clip at that timestamp.">🔗 Share</button>
           </div>
         </div>
-        <canvas class="anim-derivation" data-derivation-id="waves--optics" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;"></canvas>
+        <canvas class="anim-derivation" data-derivation-id="waves--optics" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;" aria-label="Waves & Optics — interactive canvas (waves--optics)"></canvas>
         <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2, #6b7280);">Press Play to watch the derivation animate. Press Record WebM to capture the clip as a downloadable .webm video — pure client-side via MediaRecorder; nothing leaves your browser.</div>
       </div>
 
@@ -203,7 +209,7 @@
       <div style="background: rgba(18,24,38,0.7); border: 1px solid rgba(6,182,212,0.3); border-radius: 12px; padding: 16px; margin-top: 20px;">
         <h3 style="color: #06b6d4; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px;">🌊 Interactive Wave Visualiser</h3>
         <div style="position: relative; background: rgba(11,15,26,0.6); border: 1px solid #1f2937; border-radius: 8px; overflow: hidden; margin-bottom: 12px;">
-          <canvas id="wave-canvas" width="680" height="200" style="display: block; width: 100%; height: auto;"></canvas>
+          <canvas id="wave-canvas" width="680" height="200" style="display: block; width: 100%; height: auto;" aria-label="Waves & Optics: wave function visualisation"></canvas>
           <div style="position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; background: rgba(11,15,26,0.85); border: 1px solid #1f2937; border-radius: 8px; padding: 4px;">
             <button id="wave-zoom-in" style="width: 30px; height: 30px; border: none; background: transparent; color: #f3f4f6; cursor: pointer; font-size: 16px; font-weight: 700; border-radius: 4px;">+</button>
             <div id="wave-zoom-label" style="font-size: 9px; color: #9ca3af; text-align: center;">100%</div>
@@ -567,5 +573,6 @@
       })();
     </script>
   <script src="../../header-banner.js"></script>
+    <script src="../../accessibility.js"></script>
   </body>
 </html>

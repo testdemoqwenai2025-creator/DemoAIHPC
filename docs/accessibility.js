@@ -103,8 +103,47 @@
     if (override === 'false') _reducedMotion = false;
   } catch (e) {}
 
+  // === Phase 42f: autoFreeze ===
+  // When reduced motion is active, monkey-patch requestAnimationFrame + setInterval
+  // so all 17+ canvas components automatically become "render once, no loop" without
+  // needing per-component patches. This is the simplest way to honour
+  // prefers-reduced-motion across the whole platform.
+  A11Y.autoFreeze = function () {
+    if (!_reducedMotion) return;  // no-op if user hasn't requested reduced motion
+    if (global._aihpc_frozen) return;  // idempotent
+    global._aihpc_frozen = true;
+
+    // Replace requestAnimationFrame with a one-shot render
+    // (calls the callback ONCE so the component gets a static frame,
+    // then never schedules another frame)
+    var origRAF = global.requestAnimationFrame;
+    global.requestAnimationFrame = function (cb) {
+      // Render once synchronously, don't schedule more
+      try { cb(performance.now()); } catch (e) {}
+      return 0;  // dummy handle
+    };
+
+    // Replace setInterval with no-op (stops particle background loops etc.)
+    global.setInterval = function () { return 0; };
+
+    // setTimeouts below 100ms become 0ms (still runs once but immediately)
+    // — actually keep setTimeout as-is so user interactions still work
+    // (button clicks, tab switches, etc. rely on setTimeout)
+
+    // Clear any existing RAF loops that components may have started
+    // (some components start their RAF loop on script load, before this
+    //  autoFreeze runs — but they call global.requestAnimationFrame which
+    //  is now the patched version, so subsequent frames are no-ops)
+  };
+
   // Expose globally
   global.AIHPC_A11Y = A11Y;
+
+  // Auto-freeze RAF loops if reduced motion is requested
+  // (call after a microtask so other scripts have loaded + started their loops)
+  Promise.resolve().then(function () {
+    A11Y.autoFreeze();
+  });
 
   // If reduced motion is active, announce it to screen readers
   if (_reducedMotion) {

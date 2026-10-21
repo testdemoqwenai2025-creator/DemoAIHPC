@@ -60,7 +60,13 @@
       /* Ribbon (consistent with the rest of the platform) */
       .ribbon { position: sticky; top: 0; z-index: 50; background: linear-gradient(180deg, rgba(11,15,26,0.95) 0%, rgba(11,15,26,0.85) 100%); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <div class="container">
       <a href="index.html" class="back-link">← Home</a>
@@ -1028,5 +1034,6 @@
       renderCards();
     </script>
   <script src="header-banner.js"></script>
+    <script src="accessibility.js"></script>
   </body>
 </html>

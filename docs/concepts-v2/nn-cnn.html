@@ -61,7 +61,13 @@
       .deep-thoughts .dt-row .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
       .deep-thoughts .dt-row .text { color: var(--text-muted); }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <div class="wrap">
       <a href="../index.html" class="back">← Home</a>
@@ -72,7 +78,7 @@
       <p class="desc">Sliding kernels over spatial input. <b>Exploits locality + translation invariance</b> — the workhorse for images since 2012.</p>
       <div class="eq-badge">📐 y[i,j] = σ( Σ_k Σ_l W[k,l] · x[i+k, j+l] + b )</div>
       <div class="canvas-wrap">
-        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <canvas id="main-canvas" width="728" height="360" aria-label="Convolutional Neural Network (CNN): main interactive visualisation"></canvas>
         <div class="loss-overlay"><div class="lbl" id="loss-lbl">state</div><div class="val" id="loss-val">0.0000</div></div>
         <div class="eq-overlay">y[i,j] = σ( Σ_k Σ_l W[k,l] · x[i+k, j+l] + b )</div>
         <div class="phase-indicator" id="phase-ind">idle</div>
@@ -380,5 +386,6 @@ image = np.random.<span class="fn">randn</span>(<span class="num">8</span>, <spa
     </div>
     <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
+    <script src="../accessibility.js"></script>
   </body>
 </html>

@@ -89,9 +89,15 @@
       .derivation-step .step-explain { font-size: 12px; color: var(--text-muted); }
 </style>
       <script src="../../graph-table-sync.js"></script>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-label="Computational Chemistry: animated particle background"></canvas>
     <header class="ribbon">
       <div class="ribbon-inner">
         <a href="../../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
@@ -180,7 +186,7 @@
             <button class="anim-share" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;" title="Phase 29 — captures the current frame as a PNG snapshot + copies a shareable URL with the current timestamp. Visiting the URL auto-resumes the clip at that timestamp.">🔗 Share</button>
           </div>
         </div>
-        <canvas class="anim-derivation" data-derivation-id="computational-chemistry" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;"></canvas>
+        <canvas class="anim-derivation" data-derivation-id="computational-chemistry" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;" aria-label="Computational Chemistry — interactive canvas (computational-chemistry)"></canvas>
         <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted-2, #6b7280);">Press Play to watch the derivation animate. Press Record WebM to capture the clip as a downloadable .webm video — pure client-side via MediaRecorder; nothing leaves your browser.</div>
       </div>
 
@@ -310,5 +316,6 @@
       })();
     </script>
   <script src="../../header-banner.js"></script>
+    <script src="../../accessibility.js"></script>
   </body>
 </html>

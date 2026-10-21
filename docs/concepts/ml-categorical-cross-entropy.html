@@ -48,9 +48,15 @@
       .meta a { color: var(--text); text-decoration: none; }
     </style>
     <script src="../animated-derivation.js"></script>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-label="Categorical Cross-Entropy (CCE): animated particle background"></canvas>
     <header class="ribbon">
       <div class="ribbon-inner">
         <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
@@ -139,7 +145,7 @@
             <button class="anim-share" style="background:#1a2133;border:1px solid #2a3548;color:#f3f4f6;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:11px;">Share</button>
           </div>
         </div>
-        <canvas class="anim-derivation" data-derivation-id="ml-cc-categorical-cross-entropy" style="display:block;max-width:100%;height:auto;border-radius:6px;background:#0b0f1a;"></canvas>
+        <canvas class="anim-derivation" data-derivation-id="ml-cc-categorical-cross-entropy" style="display:block;max-width:100%;height:auto;border-radius:6px;background:#0b0f1a;" aria-label="Categorical Cross-Entropy (CCE) — interactive canvas (ml-cc-categorical-cross-entropy)"></canvas>
       </div>
       
       <!-- Simplified footer — GDPR + HIPAA + MIT license + GitHub Pages note -->
@@ -218,5 +224,6 @@
       })();
     </script>
   <script src="header-banner.js"></script>
+    <script src="../accessibility.js"></script>
   </body>
 </html>

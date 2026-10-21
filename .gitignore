@@ -1,8 +1,91 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# =============================================================================
+# DemoAIHPC public mirror — .gitignore
+#
+# PUBLIC-REPO RULE (Phase 42c):
+# This repo is the public mirror. It should contain ONLY web files:
+#   - .html, .css, .js (web code)
+#   - .json (runtime data, e.g. feeds/, search-index.json)
+#   - .png, .jpg, .jpeg, .gif, .svg, .webp (visual assets)
+#   - .md ONLY for README.md (repo landing page on GitHub)
+#
+# All source code (.py, .md docs, package*.json, etc.) lives in the
+# private source-of-truth repo: github.com/testdemoqwenai2025-creator/AIHPC-Advanced
+# =============================================================================
 
-# dependencies
-node_modules
-/.pnp
+# --- Python source code (lives in private repo) ---
+*.py
+scripts/
+__pycache__/
+*.pyc
+
+# --- Node/Next.js source code (lives in private repo) ---
+package.json
+package-lock.json
+bun.lock
+next.config.ts
+next.config.js
+next.config.mjs
+tsconfig.json
+eslint.config.mjs
+eslint.config.js
+postcss.config.mjs
+postcss.config.js
+tailwind.config.ts
+tailwind.config.js
+components.json
+Caddyfile
+
+# --- Internal docs (only README.md is allowed) ---
+*.md
+!README.md
+
+# --- Source dirs (live in private repo) ---
+db/
+prisma/
+mini-services/
+examples/
+download/
+public/
+src/
+tests/
+tool-results/
+.devcontainer/
+.zscripts/
+.z-ai-config/
+.claude/
+skills/
+
+# --- Env files (never committed) ---
+.env
+.env*
+!.env.example
+
+# --- Developer preview images at root (not referenced by HTML) ---
+/preview*.png
+/preview*.jpg
+/screenshot*.png
+
+# --- Build artifacts (never committed) ---
+node_modules/
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# --- Env files (never committed) ---
+.env*
+!.env.example
+
+# --- Misc ---
+.DS_Store
+*.pem
+*.log
+npm-debug.log*
+yarn-debug.log*
+.pnpm-debug.log*
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -10,45 +93,11 @@ node_modules
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# --- Local dev ---
 local-*
-.claude
-.z-ai-config
-*.log
-dev.log
-dev.out.log
 test
 prompt
-
 server.log
-# Skills directory
-/skills/
+
+# --- Vercel ---
+.vercel

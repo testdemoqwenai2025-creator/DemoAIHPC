@@ -56,9 +56,15 @@
       .links-row a { color: var(--accent-2); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-strong); background: rgba(6,182,212,0.05); }
       .links-row a:hover { border-color: var(--accent-2); background: rgba(6,182,212,0.12); }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-label="Cross-Domain Playground: animated particle background"></canvas>
     <header class="ribbon">
       <div class="ribbon-inner">
         <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
@@ -1165,5 +1171,6 @@
     <script src="attention-heatmap.js"></script>
     <script src="ml-etl.js"></script>
   <script src="header-banner.js"></script>
+    <script src="accessibility.js"></script>
   </body>
 </html>

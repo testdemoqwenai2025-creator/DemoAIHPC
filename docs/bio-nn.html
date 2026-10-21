@@ -101,7 +101,13 @@
       .meta a { color: var(--accent-2); text-decoration: none; }
       .meta code { background: var(--bg-elevated); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <header class="ribbon">
       <div class="ribbon-inner">
@@ -119,7 +125,7 @@
       </div>
     </header>
 
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-label="🧬 Bioinformatics × Neural Networks: animated particle background"></canvas>
 
     <main class="container">
       <p class="crumbs"><a href="index.html">Home</a> / Science / Bioinformatics × Neural Networks</p>
@@ -452,5 +458,6 @@
     </script>
     <script src="zoom-loader.js"></script>
   <script src="header-banner.js"></script>
+    <script src="accessibility.js"></script>
   </body>
 </html>

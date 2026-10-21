@@ -67,7 +67,13 @@
       /* Footer */
       .footer { font-size: 11px; color: var(--text-muted-2); margin-top: 32px; padding: 16px; background: rgba(11,15,26,0.5); border-radius: 8px; border-left: 3px solid var(--accent-2); font-family: ui-monospace, monospace; }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <div class="container">
       <a href="index.html" class="back-link">← Home</a>
@@ -360,5 +366,6 @@
       </div>
     </div>
   <script src="header-banner.js"></script>
+    <script src="accessibility.js"></script>
   </body>
 </html>

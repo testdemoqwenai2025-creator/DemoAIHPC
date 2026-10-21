@@ -49,9 +49,15 @@
       body.light #particle-canvas { opacity: 0.1; }
       body.light .ribbon-btn-primary { color: white; }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-label="AETHEL Connector: animated particle background"></canvas>
     <header class="ribbon">
       <div class="ribbon-inner">
         <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
@@ -109,5 +115,6 @@
       (function(){var K='aihpc-theme';var b=document.body,r=document.querySelector('.ribbon'),i=document.getElementById('ribbon-theme-icon');function a(t){if(t==='light'){b.classList.add('light');r&&r.classList.add('light');i.textContent='☀'}else{b.classList.remove('light');r&&r.classList.remove('light');i.textContent='🌙'}}var d='dark';try{var s=localStorage.getItem(K);if(s==='light'||s==='dark')d=s;else if(matchMedia('(prefers-color-scheme:light)').matches)d='light'}catch(e){}a(d);document.getElementById('ribbon-theme-toggle').addEventListener('click',function(){var n=b.classList.contains('light')?'dark':'light';a(n);try{localStorage.setItem(K,n)}catch(e){}})})();
     </script>
   <script src="header-banner.js"></script>
+    <script src="accessibility.js"></script>
   </body>
 </html>

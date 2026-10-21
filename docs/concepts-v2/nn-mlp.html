@@ -61,7 +61,13 @@
       .deep-thoughts .dt-row .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
       .deep-thoughts .dt-row .text { color: var(--text-muted); }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <div class="wrap">
       <a href="../index.html" class="back">← Home</a>
@@ -72,7 +78,7 @@
       <p class="desc">Stacked linear layers with non-linearities. <b>The foundational architecture</b> — every other NN is a variation.</p>
       <div class="eq-badge">📐 h_l = σ(W_l · h_{l-1} + b_l)    for l = 1, …, L</div>
       <div class="canvas-wrap">
-        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <canvas id="main-canvas" width="728" height="360" aria-label="Multi-Layer Perceptron (MLP): main interactive visualisation"></canvas>
         <div class="loss-overlay"><div class="lbl" id="loss-lbl">state</div><div class="val" id="loss-val">0.0000</div></div>
         <div class="eq-overlay">h_l = σ(W_l · h_{l-1} + b_l)    for l = 1, …, L</div>
         <div class="phase-indicator" id="phase-ind">idle</div>
@@ -410,5 +416,6 @@ x = np.<span class="fn">array</span>([<span class="num">0.5</span>, -<span class
     </div>
     <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
+    <script src="../accessibility.js"></script>
   </body>
 </html>

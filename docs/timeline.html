@@ -29,7 +29,13 @@
       .links-row a { color: var(--accent-2); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); }
       .links-row a:hover { border-color: var(--accent-2); }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <div class="container">
       <p style="font-size: 13px; color: var(--text-muted);"><a href="index.html" style="color: var(--accent-2); text-decoration: none;">← Home</a></p>
@@ -95,5 +101,6 @@
       });
     </script>
   <script src="header-banner.js"></script>
+    <script src="accessibility.js"></script>
   </body>
 </html>

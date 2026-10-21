@@ -61,7 +61,13 @@
       .deep-thoughts .dt-row .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
       .deep-thoughts .dt-row .text { color: var(--text-muted); }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <div class="wrap">
       <a href="../index.html" class="back">← Home</a>
@@ -72,7 +78,7 @@
       <p class="desc">Gated memory cell that <b>preserves gradients across 1000+ time steps</b>. Solved the vanishing gradient problem in 1997.</p>
       <div class="eq-badge">📐 c_t = f_t ⊙ c_{t-1} + i_t ⊙ g_t    h_t = o_t ⊙ tanh(c_t)</div>
       <div class="canvas-wrap">
-        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <canvas id="main-canvas" width="728" height="360" aria-label="Long Short-Term Memory (LSTM): main interactive visualisation"></canvas>
         <div class="loss-overlay"><div class="lbl" id="loss-lbl">state</div><div class="val" id="loss-val">0.0000</div></div>
         <div class="eq-overlay">c_t = f_t ⊙ c_{t-1} + i_t ⊙ g_t    h_t = o_t ⊙ tanh(c_t)</div>
         <div class="phase-indicator" id="phase-ind">idle</div>
@@ -299,5 +305,6 @@ h, c = lstm.<span class="fn">step</span>(x, h_prev, c_prev)
     </div>
     <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
+    <script src="../accessibility.js"></script>
   </body>
 </html>

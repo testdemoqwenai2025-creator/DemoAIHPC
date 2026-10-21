@@ -61,7 +61,13 @@
       .deep-thoughts .dt-row .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
       .deep-thoughts .dt-row .text { color: var(--text-muted); }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <div class="wrap">
       <a href="../index.html" class="back">← Home</a>
@@ -72,7 +78,7 @@
       <p class="desc">Compresses input to a low-dim latent code, then reconstructs. <b>Self-supervised dimensionality reduction + denoising</b>.</p>
       <div class="eq-badge">📐 z = f_enc(x)    x̂ = g_dec(z)    L = ‖x − x̂‖²</div>
       <div class="canvas-wrap">
-        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <canvas id="main-canvas" width="728" height="360" aria-label="Autoencoder: main interactive visualisation"></canvas>
         <div class="loss-overlay"><div class="lbl" id="loss-lbl">state</div><div class="val" id="loss-val">0.0000</div></div>
         <div class="eq-overlay">z = f_enc(x)    x̂ = g_dec(z)    L = ‖x − x̂‖²</div>
         <div class="phase-indicator" id="phase-ind">idle</div>
@@ -155,6 +161,7 @@ x_hat, z = ae.<span class="fn">forward</span>(x)
 
       // ===== Autoencoder: encoder-decoder diagram =====
       var layers = [8, 5, 3, 5, 8];
+            var aeLoss = [];  // Phase 42a: loss curve data
       var animStep = 0;
       function render() {
         var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
@@ -192,6 +199,33 @@ x_hat, z = ae.<span class="fn">forward</span>(x)
         ctx.fillText('Encoder →', startX + 1.5 * (cellW + 25), 90);
         ctx.fillText('← Decoder', startX + 3.5 * (cellW + 25), 90);
         ctx.textAlign = 'left';
+        // === Loss curve + inflection (Phase 42a) ===
+var panelX = W - 115, panelW = 105;
+ctx.strokeStyle = 'rgba(148,163,184,0.15)'; ctx.lineWidth = 0.5;
+ctx.strokeRect(panelX, 35, panelW, 70);
+ctx.fillStyle = '#10b981'; ctx.font = 'bold 8px ui-monospace'; ctx.textAlign = 'center';
+ctx.fillText('Recon Loss', panelX + panelW/2, 45); ctx.textAlign = 'left';
+ctx.strokeStyle = '#10b981'; ctx.lineWidth = 1.2;
+ctx.beginPath();
+var lossArr = (typeof aeLoss !== 'undefined') ? aeLoss : [];
+var curEp = (typeof animStep !== 'undefined') ? Math.floor(animStep / numSteps * 100) : 0;
+for (var ei = 0; ei <= curEp && ei < lossArr.length; ei++) {
+  var px = panelX + 3 + (ei / 100) * (panelW - 6);
+  var py = 100 - (lossArr[ei] / 3.5) * 60;
+  if (ei === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+        ctx.strokeStyle = 'rgba(245,158,11,0.15)'; ctx.lineWidth = 0.5;
+        ctx.strokeRect(panelX, 115, panelW, 80);
+        ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 7px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('Inflection', panelX + panelW/2, 123); ctx.textAlign = 'left';
+        ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '7px ui-monospace';
+        var yLine = 132;
+        ctx.fillText('L = ||x - x̂||²', panelX + 5, yLine); yLine += 11;
+        ctx.fillText('latent z ∈ R^d (d≪input)', panelX + 5, yLine); yLine += 11;
+        ctx.fillText('encoder: z = g(W_e·x+b)', panelX + 5, yLine); yLine += 11;
+        ctx.fillText('decoder: x̂ = W_d·z+b', panelX + 5, yLine); yLine += 11;
+
         document.getElementById('loss-val').textContent = 'recon';
         document.getElementById('loss-val').className = 'val good';
       }
@@ -199,7 +233,17 @@ x_hat, z = ae.<span class="fn">forward</span>(x)
         animStep = 0;
         function step() {
           if (animStep >= layers.length) {
-            isAnim = false; document.getElementById('btn-gd').disabled = false;
+            isAnim = false; // === Phase 42a: compute loss curve once at script init ===
+      // Recon loss: L = ||x - dec(enc(x))||^2
+// Starts ~2.8 (high recon error), drops to ~0.3 once latent codes form
+var lossArr = [];
+for (var e = 0; e <= 100; e++) {
+  var loss = 2.8 * Math.exp(-e * 0.045) + 0.3 + 0.05 * Math.sin(e * 0.3);
+  lossArr.push(loss);
+}
+aeLoss = lossArr;  // stash on global for render()
+
+      document.getElementById('btn-gd').disabled = false;
             document.getElementById('phase-ind').textContent = 'done ✓';
             document.getElementById('phase-ind').classList.remove('active');
             return;
@@ -264,5 +308,6 @@ x_hat, z = ae.<span class="fn">forward</span>(x)
     </div>
     <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
+    <script src="../accessibility.js"></script>
   </body>
 </html>

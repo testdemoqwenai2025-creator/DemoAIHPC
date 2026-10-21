@@ -89,7 +89,13 @@
         background: white; border-color: #e5e7eb;
       }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
     <div class="container">
       <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">
@@ -900,5 +906,6 @@
       </div>
     </div>
   <script src="header-banner.js"></script>
+    <script src="accessibility.js"></script>
   </body>
 </html>

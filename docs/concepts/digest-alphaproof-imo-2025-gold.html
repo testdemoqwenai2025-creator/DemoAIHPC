@@ -75,9 +75,15 @@
     <script src="../subscribe-gate.js"></script>
     <script src="../digest-parsers.js"></script>
     <script src="../animated-derivation.js"></script>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-label="AlphaProof achieves IMO 2025 gold medal - first AI…: animated particle background"></canvas>
     <header class="ribbon">
       <div class="ribbon-inner">
         <a href="../index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
@@ -235,7 +241,7 @@
             <button class="anim-share" style="background: var(--bg-elevated-2, #1a2133); border: 1px solid var(--border-strong, #2a3548); color: var(--text, #f3f4f6); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">🔗 Share</button>
           </div>
         </div>
-        <canvas class="anim-derivation" data-derivation-id="concept-alphaproof-imo-2025-gold" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;"></canvas>
+        <canvas class="anim-derivation" data-derivation-id="concept-alphaproof-imo-2025-gold" style="display: block; max-width: 100%; height: auto; border-radius: 8px; background: #0b0f1a;" aria-label="AlphaProof achieves IMO 2025 gold medal - first AI… — interactive canvas (concept-alphaproof-imo-2025-gold)"></canvas>
       </div>
       <script>
         // Register the derivation for this concept card
@@ -350,5 +356,6 @@
     </script>
   <script src="../ask-ai-button.js"></script>
   <script src="header-banner.js"></script>
+    <script src="../accessibility.js"></script>
   </body>
 </html>

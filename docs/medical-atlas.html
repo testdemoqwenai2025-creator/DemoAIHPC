@@ -60,9 +60,15 @@
       .links-row a { color: var(--accent-2); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-strong); background: rgba(6,182,212,0.05); }
       .links-row a:hover { border-color: var(--accent-2); background: rgba(6,182,212,0.12); }
     </style>
-  </head>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
   <body>
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-label="AI Medical Imaging Atlas: animated particle background"></canvas>
     <header class="ribbon">
       <div class="ribbon-inner">
         <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
@@ -275,7 +281,7 @@
         card.className = 'case-card';
         card.dataset.caseId = cs.id;
         card.innerHTML = ''
-          + '<div class="preview"><canvas data-case-preview="' + cs.id + '" width="320" height="240"></canvas></div>'
+          + '<div class="preview"><canvas data-case-preview="' + cs.id + '" width="320" height="240" aria-label="AI Medical Imaging Atlas — interactive visualisation"></canvas></div>'
           + '<div class="body">'
           + '  <h3>' + cs.title + '</h3>'
           + '  <div class="meta"><span class="pill" style="color:' + cs.color + '; border-color:' + cs.color + '; background:' + cs.color + '22;">' + cs.modality + '</span> <span>Phase 41 case study</span></div>'
@@ -407,5 +413,6 @@
     <script src="medical-imaging.js"></script>
     <script src="scientific-uploader.js"></script>
   <script src="header-banner.js"></script>
+    <script src="accessibility.js"></script>
   </body>
 </html>
