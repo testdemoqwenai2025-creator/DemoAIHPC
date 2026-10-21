@@ -199,6 +199,34 @@ h, c = lstm.<span class="fn">step</span>(x, h_prev, c_prev)
         ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '10px ui-monospace';
         ctx.fillText('■ cell state c_t (additive — no vanishing!)', 60, H - 25);
         ctx.fillText('■ hidden state h_t', 60, H - 10);
+
+        // === Loss curve + inflection (Phase 39.4) ===
+        var panelX = W - 115, panelW = 105;
+        ctx.strokeStyle = "rgba(148,163,184,0.15)"; ctx.lineWidth = 0.5;
+        ctx.strokeRect(panelX, 35, panelW, 70);
+        ctx.fillStyle = "#10b981"; ctx.font = "bold 8px ui-monospace"; ctx.textAlign = "center";
+        ctx.fillText("Loss", panelX + panelW/2, 45); ctx.textAlign = "left";
+        ctx.strokeStyle = "#10b981"; ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        var lossArr = lstmLoss || [];
+        var curEp = lstmEpoch || 0;
+        for (var ei = 0; ei <= curEp && ei < lossArr.length; ei++) {
+          var px = panelX + 3 + (ei / 100) * (panelW - 6);
+          var py = 100 - (lossArr[ei] / 3.5) * 60;
+          if (ei === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(245,158,11,0.15)"; ctx.lineWidth = 0.5;
+        ctx.strokeRect(panelX, 115, panelW, 80);
+        ctx.fillStyle = "#f59e0b"; ctx.font = "bold 7px ui-monospace"; ctx.textAlign = "center";
+        ctx.fillText("Inflection", panelX + panelW/2, 123); ctx.textAlign = "left";
+        ctx.fillStyle = "rgba(148,163,184,0.6)"; ctx.font = "7px ui-monospace";
+        var yLine = 132;
+        ctx.fillText("tanh: saturation |x|>3", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("sigmoid: plateau |x|>5", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("Cell: c=f*c'+i*g", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("forget: f in (0,1)", panelX + 5, yLine); yLine += 11;
+
         document.getElementById('loss-val').textContent = animStep + '/' + numSteps;
         document.getElementById('loss-val').className = 'val good';
       }

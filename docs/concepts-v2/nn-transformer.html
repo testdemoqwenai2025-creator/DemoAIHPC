@@ -217,6 +217,34 @@ out, w = <span class="fn">self_attention</span>(X, W_Q, W_K, W_V)
         ctx.fillText('Head: ' + (headIdx + 1) + '/' + numHeads, 60, H - 20);
         ctx.fillText('Patterns: diagonal | next | first-token | local', 200, H - 20);
         ctx.textAlign = 'left';
+
+        // === Loss curve + inflection (Phase 39.4) ===
+        var panelX = W - 115, panelW = 105;
+        ctx.strokeStyle = "rgba(148,163,184,0.15)"; ctx.lineWidth = 0.5;
+        ctx.strokeRect(panelX, 35, panelW, 70);
+        ctx.fillStyle = "#10b981"; ctx.font = "bold 8px ui-monospace"; ctx.textAlign = "center";
+        ctx.fillText("Loss", panelX + panelW/2, 45); ctx.textAlign = "left";
+        ctx.strokeStyle = "#10b981"; ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        var lossArr = tfLoss || [];
+        var curEp = tfEpoch || 0;
+        for (var ei = 0; ei <= curEp && ei < lossArr.length; ei++) {
+          var px = panelX + 3 + (ei / 100) * (panelW - 6);
+          var py = 100 - (lossArr[ei] / 3.5) * 60;
+          if (ei === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(245,158,11,0.15)"; ctx.lineWidth = 0.5;
+        ctx.strokeRect(panelX, 115, panelW, 80);
+        ctx.fillStyle = "#f59e0b"; ctx.font = "bold 7px ui-monospace"; ctx.textAlign = "center";
+        ctx.fillText("Inflection", panelX + panelW/2, 123); ctx.textAlign = "left";
+        ctx.fillStyle = "rgba(148,163,184,0.6)"; ctx.font = "7px ui-monospace";
+        var yLine = 132;
+        ctx.fillText("softmax: T->0=greedy", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("softmax: T->inf=uniform", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("attn: sparsity=1-H", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("sqrt(d_k): prevents sat", panelX + 5, yLine); yLine += 11;
+
         document.getElementById('loss-val').textContent = 'h' + headIdx;
         document.getElementById('loss-val').className = 'val good';
       }
