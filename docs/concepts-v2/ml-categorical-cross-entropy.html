@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Categorical Cross-Entropy — visual-first concept card. Drag slope/intercept, run gradient descent, watch the loss change." />
-    <title>Categorical Cross-Entropy — Visual Concept Card · AIHPC</title>
+    <title>Categorical Cross-Entropy — Concept Card · AIHPC</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
       * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -91,7 +91,7 @@ y_pred = np.<span class="fn">array</span>([[<span class="num">0.7</span>, <span 
 <span class="fn">print</span>(<span class="fn">categorical_cross_entropy</span>(y_true, y_pred))  <span class="cm"># ~0.36</span></pre>
       </div>
       <div class="foot">
-        <a href="../concepts/ml-categorical-cross-entropy.html">📖 Full text version</a>  ·  Visual concept card v2
+        <a href="../concepts/ml-categorical-cross-entropy.html">📖 Full text version</a>  ·  Concept card v2
       </div>
     </div>
     <script>
@@ -117,7 +117,8 @@ y_pred = np.<span class="fn">array</span>([[<span class="num">0.7</span>, <span 
       function lossNow() {
         var yT = data.map(function(d){ return d[1]; });
         var yP = data.map(function(d){ return yPred(d[0]); });
-        return function lossFn(yTrue, yPred) { var s=0, eps=1e-15; for (var i=0;i<yTrue.length;i++){ for (var c=0;c<yTrue[i].length;c++){ var p=Math.max(yPred[i][c],eps); s += -yTrue[i][c]*Math.log(p); } } return s/yTrue.length; };
+        function lossFn(yTrue, yPred) { var s=0, eps=1e-15; for (var i=0;i<yTrue.length;i++){ for (var c=0;c<yTrue[i].length;c++){ var p=Math.max(yPred[i][c],eps); s += -yTrue[i][c]*Math.log(p); } } return s/yTrue.length; }
+        return lossFn(yT, yP);
       }
 
       function toCX(x) { return 60 + (x+4)/8 * (W-120); }

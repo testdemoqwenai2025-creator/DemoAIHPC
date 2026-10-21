@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="KL Divergence — visual-first concept card. Drag slope/intercept, run gradient descent, watch the loss change." />
-    <title>KL Divergence — Visual Concept Card · AIHPC</title>
+    <title>KL Divergence — Concept Card · AIHPC</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
       * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -89,7 +89,7 @@ q = np.<span class="fn">array</span>([<span class="num">0.4</span>, <span class=
 <span class="fn">print</span>(<span class="fn">kl_divergence</span>(q, p))  <span class="cm"># ~0.0281 — non-symmetric!</span></pre>
       </div>
       <div class="foot">
-        <a href="../concepts/ml-kl-divergence.html">📖 Full text version</a>  ·  Visual concept card v2
+        <a href="../concepts/ml-kl-divergence.html">📖 Full text version</a>  ·  Concept card v2
       </div>
     </div>
     <script>
@@ -115,7 +115,8 @@ q = np.<span class="fn">array</span>([<span class="num">0.4</span>, <span class=
       function lossNow() {
         var yT = data.map(function(d){ return d[1]; });
         var yP = data.map(function(d){ return yPred(d[0]); });
-        return function lossFn(p, q) { var s=0, eps=1e-15; for (var i=0;i<p.length;i++){ s += Math.max(p[i],eps)*Math.log(Math.max(p[i],eps)/Math.max(q[i],eps)); } return s; };
+        function lossFn(p, q) { var s=0, eps=1e-15; for (var i=0;i<p.length;i++){ s += Math.max(p[i],eps)*Math.log(Math.max(p[i],eps)/Math.max(q[i],eps)); } return s; }
+        return lossFn(yT, yP);
       }
 
       function toCX(x) { return 60 + (x+4)/8 * (W-120); }

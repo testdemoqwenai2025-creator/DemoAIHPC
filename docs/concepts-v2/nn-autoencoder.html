@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Autoencoder — visual-first neural network architecture card. Animated diagram, math, code with Math→Code annotations, when-to-use deep thoughts." />
-    <title>Autoencoder — Visual NN Card · AIHPC</title>
+    <title>Autoencoder — NN Concept Card · AIHPC</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
       * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -132,7 +132,7 @@ x_hat, z = ae.<span class="fn">forward</span>(x)
         <div class="dt-row"><span class="lbl why">WHY:</span><span class="text">the autoencoder's self-supervised objective (reconstruct input) requires no labels — every dataset is a training set. This makes AEs ideal for pretraining when labels are scarce. But the latent space is poorly structured: two nearby latent codes can produce very different reconstructions, so you can't sample new points by interpolating. VAEs and GANs fix this with explicit generative objectives.</span></div>
       </div>
       <div class="foot">
-        Visual concept card v2
+        Concept card v2
       </div>
     </div>
     <script>

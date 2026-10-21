@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="CoCoNet — Conformal Conditional Network — visual-first neural network architecture card. Animated diagram, math, code with Math→Code annotations, when-to-use deep thoughts." />
-    <title>CoCoNet — Conformal Conditional Network — Visual NN Card · AIHPC</title>
+    <title>CoCoNet — Conformal Conditional Network — NN Concept Card · AIHPC</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
       * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -149,7 +149,7 @@ lower, upper, q = <span class="fn">split_conformal_predict</span>(model, X_cal, 
         <div class="dt-row"><span class="lbl why">WHY:</span><span class="text">CoCoNet's contribution over standard split conformal is learning the score function s_θ(x, y) CONDITIONAL on the input x. Standard split conformal gives marginal coverage (P(Y ∈ C(X)) ≥ 1-α averaged over X) but conditional coverage can be much worse for subpopulations. CoCoNet-ICNN (Input-Convex Neural Network) learns a convex score function — useful when the score should be monotonic in y. The paper's result — CoCoNet-ICNN #1 in 22/30 multivariate regression tasks for region efficiency prediction — suggests that input-conditional scores give meaningfully tighter intervals in practice, especially when the data has heteroscedastic noise (different variances for different x).</span></div>
       </div>
       <div class="foot">
-        Visual concept card v2
+        Concept card v2
       </div>
     </div>
     <script>

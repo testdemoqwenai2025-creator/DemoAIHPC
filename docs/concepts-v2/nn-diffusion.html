@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Diffusion Model — visual-first neural network architecture card. Animated diagram, math, code with Math→Code annotations, when-to-use deep thoughts." />
-    <title>Diffusion Model — Visual NN Card · AIHPC</title>
+    <title>Diffusion Model — NN Concept Card · AIHPC</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
       * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -136,7 +136,7 @@ x_t, eps = diff.<span class="fn">forward_noise</span>(x_0, t=<span class="num">4
         <div class="dt-row"><span class="lbl why">WHY:</span><span class="text">Diffusion Models won because they solved the GAN training stability problem while keeping quality. Instead of an adversarial minimax game, they use a simple denoising objective: predict the noise added to the input. This objective is stable, parallel-friendly, and gives diverse samples because each reverse step adds fresh noise. The cost is slow sampling (many steps), which is being actively addressed by distillation (Consistency Models) and fast samplers (DPM-Solver, DDIM).</span></div>
       </div>
       <div class="foot">
-        Visual concept card v2
+        Concept card v2
       </div>
     </div>
     <script>

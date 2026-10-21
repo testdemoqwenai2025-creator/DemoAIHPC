@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Cosine Similarity — visual-first concept card. Drag slope/intercept, run gradient descent, watch the loss change." />
-    <title>Cosine Similarity — Visual Concept Card · AIHPC</title>
+    <title>Cosine Similarity — Concept Card · AIHPC</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
       * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -91,7 +91,7 @@ b = np.<span class="fn">array</span>([<span class="num">2.0</span>, <span class=
 <span class="fn">print</span>(<span class="fn">cosine_loss</span>(a, b))        <span class="cm"># 0.0</span></pre>
       </div>
       <div class="foot">
-        <a href="../concepts/ml-cosine-similarity.html">📖 Full text version</a>  ·  Visual concept card v2
+        <a href="../concepts/ml-cosine-similarity.html">📖 Full text version</a>  ·  Concept card v2
       </div>
     </div>
     <script>
@@ -117,7 +117,8 @@ b = np.<span class="fn">array</span>([<span class="num">2.0</span>, <span class=
       function lossNow() {
         var yT = data.map(function(d){ return d[1]; });
         var yP = data.map(function(d){ return yPred(d[0]); });
-        return function lossFn(a, b) { var dot=0, na=0, nb=0; for (var i=0;i<a.length;i++){ dot+=a[i]*b[i]; na+=a[i]*a[i]; nb+=b[i]*b[i]; } return 1 - dot/(Math.sqrt(na)*Math.sqrt(nb)+1e-8); };
+        function lossFn(a, b) { var dot=0, na=0, nb=0; for (var i=0;i<a.length;i++){ dot+=a[i]*b[i]; na+=a[i]*a[i]; nb+=b[i]*b[i]; } return 1 - dot/(Math.sqrt(na)*Math.sqrt(nb)+1e-8); }
+        return lossFn(yT, yP);
       }
 
       function toCX(x) { return 60 + (x+4)/8 * (W-120); }

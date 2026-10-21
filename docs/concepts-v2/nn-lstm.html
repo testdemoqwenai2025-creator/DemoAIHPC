@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Long Short-Term Memory (LSTM) — visual-first neural network architecture card. Animated diagram, math, code with Math→Code annotations, when-to-use deep thoughts." />
-    <title>Long Short-Term Memory (LSTM) — Visual NN Card · AIHPC</title>
+    <title>Long Short-Term Memory (LSTM) — NN Concept Card · AIHPC</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
       * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -131,7 +131,7 @@ h, c = lstm.<span class="fn">step</span>(x, h_prev, c_prev)
         <div class="dt-row"><span class="lbl why">WHY:</span><span class="text">LSTMs solved the vanishing gradient problem by using an additive cell state update (c_t = f_t ⊙ c_{t-1} + i_t ⊙ g_t) instead of multiplicative. When the forget gate is near 1, gradients flow back through time unimpeded. This single architectural change unlocked sequence-to-sequence translation and speech recognition for a decade (1997-2017) until Transformers took over.</span></div>
       </div>
       <div class="foot">
-        Visual concept card v2
+        Concept card v2
       </div>
     </div>
     <script>

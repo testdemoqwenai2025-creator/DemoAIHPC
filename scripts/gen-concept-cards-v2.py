@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-AIHPC Advanced — Visual Concept Cards v2 generator
+AIHPC Advanced — Concept Cards v2 generator
 =================================================
-Generates 27 visual-first concept cards + 1 index.html into
+Generates 27 concept cards + 1 index.html into
 ``docs/concepts-v2/``.
 
 Design contract
@@ -636,7 +636,7 @@ def make_foot(slug: str, title: str) -> str:
         parts.append(
             f'<a href="../concepts/{slug}.html">📖 Full text version</a>'
         )
-    parts.append("Visual concept card v2")
+    parts.append("Concept card v2")
     return '  ·  '.join(parts)
 
 
@@ -690,7 +690,7 @@ def gen_activation(card):
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{title} — visual-first concept card. Interactive canvas, real-time sliders, code with Math→Code annotations." />
-    <title>{title} — Visual Concept Card · AIHPC</title>
+    <title>{title} — Concept Card · AIHPC</title>
     <style>
 {CSS}
     </style>
@@ -844,7 +844,7 @@ def gen_loss(card):
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{title} — visual-first concept card. Drag slope/intercept, run gradient descent, watch the loss change." />
-    <title>{title} — Visual Concept Card · AIHPC</title>
+    <title>{title} — Concept Card · AIHPC</title>
     <style>
 {CSS}
     </style>
@@ -904,7 +904,8 @@ def gen_loss(card):
       function lossNow() {{
         var yT = data.map(function(d){{ return d[1]; }});
         var yP = data.map(function(d){{ return yPred(d[0]); }});
-        return {js_loss};
+        {js_loss}
+        return lossFn(yT, yP);
       }}
 
       function toCX(x) {{ return 60 + (x+4)/8 * (W-120); }}
@@ -1004,7 +1005,7 @@ def gen_optimiser(card):
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{title} — visual-first concept card. 2D loss landscape + trajectory animation." />
-    <title>{title} — Visual Concept Card · AIHPC</title>
+    <title>{title} — Concept Card · AIHPC</title>
     <style>
 {CSS}
     </style>
@@ -1183,7 +1184,7 @@ def gen_normalisation(card):
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{title} — visual-first concept card. Histogram before vs after normalisation." />
-    <title>{title} — Visual Concept Card · AIHPC</title>
+    <title>{title} — Concept Card · AIHPC</title>
     <style>
 {CSS}
     </style>
@@ -1369,7 +1370,7 @@ def gen_attention(card):
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{title} — visual-first concept card. Q·Kᵀ heatmap + softmax weighting." />
-    <title>{title} — Visual Concept Card · AIHPC</title>
+    <title>{title} — Concept Card · AIHPC</title>
     <style>
 {CSS}
     </style>
@@ -1560,7 +1561,7 @@ def gen_regularisation(card):
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{title} — visual-first concept card. Network diagram with dropped/regularised neurons." />
-    <title>{title} — Visual Concept Card · AIHPC</title>
+    <title>{title} — Concept Card · AIHPC</title>
     <style>
 {CSS}
     </style>
@@ -1736,7 +1737,7 @@ def gen_neural_network(card):
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{title} — visual-first neural network architecture card. Animated diagram, math, code with Math→Code annotations, when-to-use deep thoughts." />
-    <title>{title} — Visual NN Card · AIHPC</title>
+    <title>{title} — NN Concept Card · AIHPC</title>
     <style>
 {CSS}
       .deep-thoughts {{
@@ -2821,8 +2822,8 @@ def gen_index(cards):
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="AIHPC Advanced — Visual Concept Cards (v2). {total} interactive, visual-first concept cards with animated canvases, real-time sliders, and Math→Code annotations." />
-    <title>🎨 Visual Concept Cards — AIHPC Advanced</title>
+    <meta name="description" content="AIHPC Advanced — Concept Cards (v2). {total} interactive concept cards with animated canvases, real-time sliders, and Math→Code annotations." />
+    <title>🎨 Concept Cards — AIHPC Advanced</title>
     <style>
       :root {{ --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; }}
       * {{ box-sizing: border-box; margin: 0; padding: 0; }}
@@ -2858,8 +2859,8 @@ def gen_index(cards):
   <body>
     <div class="container">
       <a href="../index.html" class="back-link">← Home</a>
-      <h1>🎨 Visual Concept Cards (v2)</h1>
-      <p class="lead">{total} visual-first concept cards — animated canvas as the hero, minimal text, real-time sliders, and code with Math→Code annotations. Less reading, more fascination. Drag the sliders, hit the action button, watch the math happen.</p>
+      <h1>🎨 Concept Cards (v2)</h1>
+      <p class="lead">{total} concept cards — animated canvas as the hero, minimal text, real-time sliders, and code with Math→Code annotations. Less reading, more fascination. Drag the sliders, hit the action button, watch the math happen.</p>
 
       <div class="try-yourself">
         <h2>🎯 Try it yourself — quick demos</h2>
