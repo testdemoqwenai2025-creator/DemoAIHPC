@@ -830,7 +830,7 @@ def gen_activation(card):
       }});
       render();
     </script>
-        <!-- Simplified footer — GDPR + HIPAA + MIT license -->
+    <!-- Simplified footer -->
     <div style="margin-top: 40px; padding: 16px 20px; background: rgba(11,15,26,0.6); border: 1px solid #1f2937; border-radius: 10px; font-size: 11px; color: #9ca3af; line-height: 1.6;">
       <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px;">
         <span style="color: #10b981;">📜 MIT License</span>
@@ -838,8 +838,8 @@ def gen_activation(card):
         <span style="color: #06b6d4;">🏥 HIPAA Ready</span>
         <span style="color: #10b981;">📊 SOC 2 Aligned</span>
       </div>
-      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · This page is the static landing page served by GitHub Pages from the /docs folder of the DemoAIHPC repository. The interactive Next.js application lives in the repository root and can be run locally with <code style="background: rgba(18,24,38,0.8); padding: 2px 6px; border-radius: 4px; font-size: 10px;">npm install && npm run dev</code>. External hosting (Vercel / GCP / Azure) will be added in a later phase when the team is ready; for now everything is confined to GitHub.</p>
-      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) · Comments to <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
+      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
+      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data · no cookies · no tracking · all computations client-side (lazy evaluation)</p>
     </div>
     <script src="zoom-loader.js"></script>
   </body>
@@ -1040,8 +1040,8 @@ def gen_loss(card):
         <span style="color: #06b6d4;">🏥 HIPAA Ready</span>
         <span style="color: #10b981;">📊 SOC 2 Aligned</span>
       </div>
-      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · This page is the static landing page served by GitHub Pages from the /docs folder of the DemoAIHPC repository. The interactive Next.js application lives in the repository root and can be run locally with <code style="background: rgba(18,24,38,0.8); padding: 2px 6px; border-radius: 4px; font-size: 10px;">npm install && npm run dev</code>. External hosting (Vercel / GCP / Azure) will be added in a later phase when the team is ready; for now everything is confined to GitHub.</p>
-      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) · Comments to <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
+      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. ·  </p>
+      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) </p>
     </div>
     <script src="zoom-loader.js"></script>
   </body>
@@ -1253,8 +1253,8 @@ def gen_optimiser(card):
         <span style="color: #06b6d4;">🏥 HIPAA Ready</span>
         <span style="color: #10b981;">📊 SOC 2 Aligned</span>
       </div>
-      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · This page is the static landing page served by GitHub Pages from the /docs folder of the DemoAIHPC repository. The interactive Next.js application lives in the repository root and can be run locally with <code style="background: rgba(18,24,38,0.8); padding: 2px 6px; border-radius: 4px; font-size: 10px;">npm install && npm run dev</code>. External hosting (Vercel / GCP / Azure) will be added in a later phase when the team is ready; for now everything is confined to GitHub.</p>
-      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) · Comments to <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
+      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. ·  </p>
+      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) </p>
     </div>
     <script src="zoom-loader.js"></script>
   </body>
@@ -1471,8 +1471,8 @@ def gen_normalisation(card):
         <span style="color: #06b6d4;">🏥 HIPAA Ready</span>
         <span style="color: #10b981;">📊 SOC 2 Aligned</span>
       </div>
-      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · This page is the static landing page served by GitHub Pages from the /docs folder of the DemoAIHPC repository. The interactive Next.js application lives in the repository root and can be run locally with <code style="background: rgba(18,24,38,0.8); padding: 2px 6px; border-radius: 4px; font-size: 10px;">npm install && npm run dev</code>. External hosting (Vercel / GCP / Azure) will be added in a later phase when the team is ready; for now everything is confined to GitHub.</p>
-      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) · Comments to <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
+      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. ·  </p>
+      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) </p>
     </div>
     <script src="zoom-loader.js"></script>
   </body>
@@ -1694,8 +1694,8 @@ def gen_attention(card):
         <span style="color: #06b6d4;">🏥 HIPAA Ready</span>
         <span style="color: #10b981;">📊 SOC 2 Aligned</span>
       </div>
-      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · This page is the static landing page served by GitHub Pages from the /docs folder of the DemoAIHPC repository. The interactive Next.js application lives in the repository root and can be run locally with <code style="background: rgba(18,24,38,0.8); padding: 2px 6px; border-radius: 4px; font-size: 10px;">npm install && npm run dev</code>. External hosting (Vercel / GCP / Azure) will be added in a later phase when the team is ready; for now everything is confined to GitHub.</p>
-      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) · Comments to <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
+      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. ·  </p>
+      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) </p>
     </div>
     <script src="zoom-loader.js"></script>
   </body>
@@ -1897,8 +1897,8 @@ def gen_regularisation(card):
         <span style="color: #06b6d4;">🏥 HIPAA Ready</span>
         <span style="color: #10b981;">📊 SOC 2 Aligned</span>
       </div>
-      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · This page is the static landing page served by GitHub Pages from the /docs folder of the DemoAIHPC repository. The interactive Next.js application lives in the repository root and can be run locally with <code style="background: rgba(18,24,38,0.8); padding: 2px 6px; border-radius: 4px; font-size: 10px;">npm install && npm run dev</code>. External hosting (Vercel / GCP / Azure) will be added in a later phase when the team is ready; for now everything is confined to GitHub.</p>
-      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) · Comments to <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
+      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. ·  </p>
+      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) </p>
     </div>
     <script src="zoom-loader.js"></script>
   </body>
@@ -2055,8 +2055,8 @@ def gen_neural_network(card):
         <span style="color: #06b6d4;">🏥 HIPAA Ready</span>
         <span style="color: #10b981;">📊 SOC 2 Aligned</span>
       </div>
-      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · This page is the static landing page served by GitHub Pages from the /docs folder of the DemoAIHPC repository. The interactive Next.js application lives in the repository root and can be run locally with <code style="background: rgba(18,24,38,0.8); padding: 2px 6px; border-radius: 4px; font-size: 10px;">npm install && npm run dev</code>. External hosting (Vercel / GCP / Azure) will be added in a later phase when the team is ready; for now everything is confined to GitHub.</p>
-      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) · Comments to <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
+      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. ·  </p>
+      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) </p>
     </div>
     <script src="zoom-loader.js"></script>
   </body>
@@ -3428,8 +3428,8 @@ def gen_index(cards):
         <span style="color: #06b6d4;">🏥 HIPAA Ready</span>
         <span style="color: #10b981;">📊 SOC 2 Aligned</span>
       </div>
-      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · This page is the static landing page served by GitHub Pages from the /docs folder of the DemoAIHPC repository. The interactive Next.js application lives in the repository root and can be run locally with <code style="background: rgba(18,24,38,0.8); padding: 2px 6px; border-radius: 4px; font-size: 10px;">npm install && npm run dev</code>. External hosting (Vercel / GCP / Azure) will be added in a later phase when the team is ready; for now everything is confined to GitHub.</p>
-      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) · Comments to <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
+      <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. ·  </p>
+      <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations run client-side (lazy evaluation) </p>
     </div>
     <script src="zoom-loader.js"></script>
   </body>
