@@ -64,7 +64,10 @@
         <div class="ctrl" id="b1-ctrl"><label>Regularisation λ <span class="val" id="b1-val">0.10</span></label><input type="range" id="b1-slider" min="0" max="1" step="0.01" value="0.1" /></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Resample</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -194,6 +197,23 @@ x = np.<span class="fn">ones</span>(<span class="num">10</span>)
         setTimeout(function() {
           document.getElementById('phase-ind').textContent = 'idle'; document.getElementById('phase-ind').classList.remove('active');
         }, 800);
+      });
+      // Phase 38.8: Step button — single-step mode
+      document.getElementById('btn-step').addEventListener('click', function() {
+        if (isAnim) return;
+        if (typeof animate !== 'function') return;
+        var origST = window.setTimeout;
+        var stepTaken = false;
+        window.setTimeout = function(fn, delay) {
+          if (stepTaken) return;
+          stepTaken = true;
+          window.setTimeout = origST;
+          origST(fn, 0);
+        };
+        document.getElementById('phase-ind').textContent = 'step (manual)';
+        document.getElementById('phase-ind').classList.add('active');
+        animate();
+        origST(function() { window.setTimeout = origST; }, 200);
       });
       document.getElementById('btn-reset').addEventListener('click', function() {
         lam = 0.1; document.getElementById('b1-slider').value = 0.1; document.getElementById('b1-val').textContent = '0.10';

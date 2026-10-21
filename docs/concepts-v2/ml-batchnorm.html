@@ -65,7 +65,10 @@
         <div class="ctrl" id="b0-ctrl"><label>Input mean μ₀ <span class="val" id="b0-val">2.00</span></label><input type="range" id="b0-slider" min="-5" max="5" step="0.05" value="2.0" /></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Apply normalisation</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -213,6 +216,23 @@ beta = np.<span class="fn">array</span>([<span class="num">0.0</span>, <span cla
           render(); step++; requestAnimationFrame(anim);
         }
         anim();
+      });
+      // Phase 38.8: Step button — single-step mode
+      document.getElementById('btn-step').addEventListener('click', function() {
+        if (isAnim) return;
+        if (typeof animate !== 'function') return;
+        var origST = window.setTimeout;
+        var stepTaken = false;
+        window.setTimeout = function(fn, delay) {
+          if (stepTaken) return;
+          stepTaken = true;
+          window.setTimeout = origST;
+          origST(fn, 0);
+        };
+        document.getElementById('phase-ind').textContent = 'step (manual)';
+        document.getElementById('phase-ind').classList.add('active');
+        animate();
+        origST(function() { window.setTimeout = origST; }, 200);
       });
       document.getElementById('btn-reset').addEventListener('click', function() {
         normProgress = 0; document.getElementById('phase-ind').textContent = 'idle';

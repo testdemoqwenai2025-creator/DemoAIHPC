@@ -64,7 +64,10 @@
         <div class="ctrl" id="b1-ctrl"><label>Query focus (sharpness) <span class="val" id="b1-val">1.00</span></label><input type="range" id="b1-slider" min="0.1" max="3" step="0.05" value="1.0" /></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Animate attention</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -232,6 +235,23 @@ V = np.<span class="fn">array</span>([[<span class="num">1.0</span>], [<span cla
           render(row); row++; setTimeout(scan, 350);  // slow enough to see
         }
         scan();
+      });
+      // Phase 38.8: Step button — single-step mode
+      document.getElementById('btn-step').addEventListener('click', function() {
+        if (isAnim) return;
+        if (typeof animate !== 'function') return;
+        var origST = window.setTimeout;
+        var stepTaken = false;
+        window.setTimeout = function(fn, delay) {
+          if (stepTaken) return;
+          stepTaken = true;
+          window.setTimeout = origST;
+          origST(fn, 0);
+        };
+        document.getElementById('phase-ind').textContent = 'step (manual)';
+        document.getElementById('phase-ind').classList.add('active');
+        animate();
+        origST(function() { window.setTimeout = origST; }, 200);
       });
       document.getElementById('btn-reset').addEventListener('click', function() {
         sharpness = 1.0; document.getElementById('b1-slider').value = 1.0;

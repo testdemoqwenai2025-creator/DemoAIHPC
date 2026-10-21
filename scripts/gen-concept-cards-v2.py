@@ -1275,7 +1275,10 @@ def gen_normalisation(card):
         <div class="ctrl" id="b0-ctrl"><label>Input mean μ₀ <span class="val" id="b0-val">2.00</span></label><input type="range" id="b0-slider" min="-5" max="5" step="0.05" value="2.0" /></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Apply normalisation</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -1403,6 +1406,23 @@ def gen_normalisation(card):
         }}
         anim();
       }});
+      // Phase 38.8: Step button — single-step mode
+      document.getElementById('btn-step').addEventListener('click', function() {{
+        if (isAnim) return;
+        if (typeof animate !== 'function') return;
+        var origST = window.setTimeout;
+        var stepTaken = false;
+        window.setTimeout = function(fn, delay) {{
+          if (stepTaken) return;
+          stepTaken = true;
+          window.setTimeout = origST;
+          origST(fn, 0);
+        }};
+        document.getElementById('phase-ind').textContent = 'step (manual)';
+        document.getElementById('phase-ind').classList.add('active');
+        animate();
+        origST(function() {{ window.setTimeout = origST; }}, 200);
+      }});
       document.getElementById('btn-reset').addEventListener('click', function() {{
         normProgress = 0; document.getElementById('phase-ind').textContent = 'idle';
         document.getElementById('phase-ind').classList.remove('active');
@@ -1461,7 +1481,10 @@ def gen_attention(card):
         <div class="ctrl" id="b1-ctrl"><label>Query focus (sharpness) <span class="val" id="b1-val">1.00</span></label><input type="range" id="b1-slider" min="0.1" max="3" step="0.05" value="1.0" /></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Animate attention</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -1593,6 +1616,23 @@ def gen_attention(card):
         }}
         scan();
       }});
+      // Phase 38.8: Step button — single-step mode
+      document.getElementById('btn-step').addEventListener('click', function() {{
+        if (isAnim) return;
+        if (typeof animate !== 'function') return;
+        var origST = window.setTimeout;
+        var stepTaken = false;
+        window.setTimeout = function(fn, delay) {{
+          if (stepTaken) return;
+          stepTaken = true;
+          window.setTimeout = origST;
+          origST(fn, 0);
+        }};
+        document.getElementById('phase-ind').textContent = 'step (manual)';
+        document.getElementById('phase-ind').classList.add('active');
+        animate();
+        origST(function() {{ window.setTimeout = origST; }}, 200);
+      }});
       document.getElementById('btn-reset').addEventListener('click', function() {{
         sharpness = 1.0; document.getElementById('b1-slider').value = 1.0;
         document.getElementById('b1-val').textContent = '1.00';
@@ -1653,7 +1693,10 @@ def gen_regularisation(card):
         <div class="ctrl" id="b1-ctrl"><label>Regularisation λ <span class="val" id="b1-val">0.10</span></label><input type="range" id="b1-slider" min="0" max="1" step="0.01" value="0.1" /></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Resample</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -1765,6 +1808,23 @@ def gen_regularisation(card):
         setTimeout(function() {{
           document.getElementById('phase-ind').textContent = 'idle'; document.getElementById('phase-ind').classList.remove('active');
         }}, 800);
+      }});
+      // Phase 38.8: Step button — single-step mode
+      document.getElementById('btn-step').addEventListener('click', function() {{
+        if (isAnim) return;
+        if (typeof animate !== 'function') return;
+        var origST = window.setTimeout;
+        var stepTaken = false;
+        window.setTimeout = function(fn, delay) {{
+          if (stepTaken) return;
+          stepTaken = true;
+          window.setTimeout = origST;
+          origST(fn, 0);
+        }};
+        document.getElementById('phase-ind').textContent = 'step (manual)';
+        document.getElementById('phase-ind').classList.add('active');
+        animate();
+        origST(function() {{ window.setTimeout = origST; }}, 200);
       }});
       document.getElementById('btn-reset').addEventListener('click', function() {{
         lam = 0.1; document.getElementById('b1-slider').value = 0.1; document.getElementById('b1-val').textContent = '0.10';
@@ -2169,10 +2229,20 @@ _NN_CANVAS_JS = {
 """,
 
 "cnn": """
-      // ===== CNN: sliding kernel over 2D input =====
-      var inputSize = 8, kernelSize = 3;
-      var kernelX = 0, kernelY = 0;
-      var animStep = 0;
+      // ===== CNN ENRICHED: 4-stage mini-pipeline + loss curve + inflection math =====
+      // Stage 1: Image = tensor (28x28 image decomposed into 3D tensor)
+      // Stage 2: FC layer limitations (parameter explosion vs weight sharing)
+      // Stage 3: CNN inductive biases (kernel sliding across image)
+      // Stage 4: Filters + feature maps (multiple kernels → different features)
+      // Plus: loss-curve + inflection-math (ReLU dead-zone, stride formula, padding)
+
+      var inputSize = 8; // 8x8 toy image (scaled down from 28x28)
+      var kernelSize = 3;
+      var animStep = 0; // 0=idle, 1-4 = stages, 5+ = loss curve
+      var currentEpoch = 0;
+      var lossHistory = [];
+      for (var e = 0; e < 100; e++) lossHistory.push(2.5 * Math.exp(-0.04 * e) + 0.05 + Math.random() * 0.1);
+
       function makeInput() {
         var arr = [];
         for (var i = 0; i < inputSize; i++) {
@@ -2184,68 +2254,168 @@ _NN_CANVAS_JS = {
       }
       var inputGrid = makeInput();
       var sobelX = [[-1,0,1],[-2,0,2],[-1,0,1]];
+      var sobelY = [[1,2,1],[0,0,0],[-1,-2,-1]];
+      var blur = [[1/9,1/9,1/9],[1/9,1/9,1/9],[1/9,1/9,1/9]];
+
       function render() {
         var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
         ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
         ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 12px ui-monospace'; ctx.textAlign = 'center';
-        ctx.fillText('CNN — 3×3 kernel sliding over 8×8 input', W/2, 30);
+        var titles = ['idle', 'image=tensor', 'FC limitations', 'kernel sliding', 'feature maps', 'training loss'];
+        ctx.fillText('CNN — stage ' + animStep + '/5: ' + (titles[animStep] || ''), W/2, 25);
         ctx.textAlign = 'left';
-        var cellSize = 22;
-        var gridStartX = 60, gridStartY = 60;
-        for (var i = 0; i < inputSize; i++) {
-          for (var j = 0; j < inputSize; j++) {
-            var v = inputGrid[i][j];
-            ctx.fillStyle = 'rgba(6,182,212,' + v + ')';
-            ctx.fillRect(gridStartX + j*cellSize, gridStartY + i*cellSize, cellSize-1, cellSize-1);
+
+        var cellSize = 18;
+        var baseY = 50;
+
+        // === Stage 1: Image = tensor (show input as colored grid) ===
+        if (animStep >= 1) {
+          var s1Y = baseY + 10;
+          ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 10px ui-monospace';
+          ctx.fillText('1. Image = tensor (8x8x1 = 64 values)', 30, s1Y);
+          for (var i = 0; i < inputSize; i++) {
+            for (var j = 0; j < inputSize; j++) {
+              var v = inputGrid[i][j];
+              ctx.fillStyle = 'rgba(6,182,212,' + v + ')';
+              ctx.fillRect(30 + j * cellSize, s1Y + 10 + i * cellSize, cellSize - 1, cellSize - 1);
+            }
           }
+          // Show tensor dimensions
+          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillText('tensor shape: (8, 8, 1)', 30 + inputSize * cellSize + 10, s1Y + 20);
+          ctx.fillText('flattened: 64 values', 30 + inputSize * cellSize + 10, s1Y + 35);
         }
-        var outStartX = gridStartX + inputSize*cellSize + 60;
-        for (var oi = 0; oi < 6; oi++) {
-          for (var oj = 0; oj < 6; oj++) {
-            if (oi < kernelY || (oi === kernelY && oj < kernelX)) {
-              var conv = 0;
-              for (var ki = 0; ki < kernelSize; ki++) {
-                for (var kj = 0; kj < kernelSize; kj++) {
-                  conv += inputGrid[oi+ki][oj+kj] * sobelX[ki][kj];
-                }
+
+        // === Stage 2: FC layer limitations ===
+        if (animStep >= 2) {
+          var s2Y = baseY + 10 + inputSize * cellSize + 20;
+          ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 10px ui-monospace';
+          ctx.fillText('2. FC layer: 64→128 params = 64*128 + 128 = 8320 weights', 30, s2Y);
+          ctx.fillStyle = '#10b981';
+          ctx.fillText('CNN: 3*3*1*8 + 8 = 80 weights (100x fewer!)', 30, s2Y + 15);
+          // Draw bar chart comparison
+          var fcW = Math.min(300, 8320 / 30);
+          var cnnW = Math.min(300, 80 / 30);
+          ctx.fillStyle = 'rgba(239,68,68,0.7)'; ctx.fillRect(30, s2Y + 25, fcW, 12);
+          ctx.fillStyle = 'rgba(16,185,129,0.7)'; ctx.fillRect(30, s2Y + 40, cnnW, 12);
+          ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '8px ui-monospace';
+          ctx.fillText('FC: 8320 weights', 30 + fcW + 5, s2Y + 34);
+          ctx.fillText('CNN: 80 weights', 30 + cnnW + 5, s2Y + 49);
+        }
+
+        // === Stage 3: Kernel sliding (inductive biases) ===
+        if (animStep >= 3) {
+          var s3Y = baseY + 10 + inputSize * cellSize + 100;
+          ctx.fillStyle = '#8b5cf6'; ctx.font = 'bold 10px ui-monospace';
+          ctx.fillText('3. Kernel sliding (locality + translation invariance)', 30, s3Y);
+          // Draw input + kernel window + output
+          var kx = animStep > 3 ? Math.min(inputSize - kernelSize, 3) : 0;
+          var ky = animStep > 3 ? Math.min(inputSize - kernelSize, 2) : 0;
+          for (var i = 0; i < inputSize; i++) {
+            for (var j = 0; j < inputSize; j++) {
+              var v = inputGrid[i][j];
+              ctx.fillStyle = 'rgba(6,182,212,' + v + ')';
+              ctx.fillRect(30 + j * 14, s3Y + 10 + i * 14, 13, 13);
+            }
+          }
+          // Kernel window (yellow box)
+          ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2;
+          ctx.strokeRect(30 + kx * 14, s3Y + 10 + ky * 14, kernelSize * 14, kernelSize * 14);
+          // Output feature map (6x6)
+          var outX = 30 + inputSize * 14 + 20;
+          for (var oi = 0; oi < 6; oi++) {
+            for (var oj = 0; oj < 6; oj++) {
+              if (oi < ky || (oi === ky && oj < kx)) {
+                var conv = 0;
+                for (var ki = 0; ki < kernelSize; ki++)
+                  for (var kj = 0; kj < kernelSize; kj++)
+                    conv += inputGrid[oi+ki][oj+kj] * sobelX[ki][kj];
+                ctx.fillStyle = 'rgba(16,185,129,' + Math.max(0, conv) + ')';
+                ctx.fillRect(outX + oj * 14, s3Y + 10 + oi * 14, 13, 13);
               }
-              conv = Math.max(0, conv);
-              ctx.fillStyle = 'rgba(16,185,129,' + conv + ')';
-              ctx.fillRect(outStartX + oj*cellSize, gridStartY + oi*cellSize, cellSize-1, cellSize-1);
-            } else {
-              ctx.strokeStyle = 'rgba(148,163,184,0.15)'; ctx.lineWidth = 0.5;
-              ctx.strokeRect(outStartX + oj*cellSize, gridStartY + oi*cellSize, cellSize-1, cellSize-1);
             }
           }
         }
-        ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2.5;
-        ctx.strokeRect(gridStartX + kernelX*cellSize, gridStartY + kernelY*cellSize, kernelSize*cellSize, kernelSize*cellSize);
-        ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '10px ui-monospace'; ctx.textAlign = 'center';
-        ctx.fillText('Input 8×8', gridStartX + inputSize*cellSize/2, gridStartY + inputSize*cellSize + 20);
-        ctx.fillText('Feature map 6×6', outStartX + 6*cellSize/2, gridStartY + 6*cellSize + 20);
-        ctx.fillText('Kernel (Sobel X)', gridStartX + inputSize*cellSize/2, gridStartY - 15);
-        ctx.textAlign = 'left';
-        document.getElementById('loss-val').textContent = kernelY * 6 + kernelX + '/36';
-        document.getElementById('loss-val').className = 'val good';
+
+        // === Stage 4: Multiple filters → different feature maps ===
+        if (animStep >= 4) {
+          var s4Y = baseY + 10 + inputSize * cellSize + 200;
+          ctx.fillStyle = '#ec4899'; ctx.font = 'bold 10px ui-monospace';
+          ctx.fillText('4. Multiple filters → different feature maps', 30, s4Y);
+          var filters = [
+            {name: 'Sobel-X', kernel: sobelX, color: 'rgba(16,185,129,'},
+            {name: 'Sobel-Y', kernel: sobelY, color: 'rgba(6,182,212,'},
+            {name: 'Blur', kernel: blur, color: 'rgba(139,92,246,'},
+          ];
+          for (var f = 0; f < 3; f++) {
+            var fx = 30 + f * 180;
+            ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '8px ui-monospace'; ctx.textAlign = 'center';
+            ctx.fillText(filters[f].name, fx + 70, s4Y + 8); ctx.textAlign = 'left';
+            for (var oi = 0; oi < 6; oi++) {
+              for (var oj = 0; oj < 6; oj++) {
+                var conv = 0;
+                for (var ki = 0; ki < kernelSize; ki++)
+                  for (var kj = 0; kj < kernelSize; kj++)
+                    conv += inputGrid[oi+ki][oj+kj] * filters[f].kernel[ki][kj];
+                var v = Math.max(0, Math.min(1, Math.abs(conv)));
+                ctx.fillStyle = filters[f].color + v + ')';
+                ctx.fillRect(fx + oj * 11, s4Y + 12 + oi * 11, 10, 10);
+              }
+            }
+          }
+        }
+
+        // === Stage 5: Loss curve + inflection math ===
+        if (animStep >= 5) {
+          var s5Y = H - 100;
+          ctx.strokeStyle = 'rgba(148,163,184,0.2)'; ctx.lineWidth = 0.5;
+          ctx.strokeRect(30, s5Y, W - 60, 80);
+          ctx.fillStyle = '#10b981'; ctx.font = 'bold 9px ui-monospace'; ctx.textAlign = 'left';
+          ctx.fillText('Training loss (MSE) — ReLU dead-zone: f'(x)=0 for x<0', 35, s5Y + 12);
+          ctx.strokeStyle = '#10b981'; ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          for (var ei = 0; ei <= currentEpoch && ei < lossHistory.length; ei++) {
+            var px = 35 + (ei / 100) * (W - 70);
+            var py = s5Y + 75 - (lossHistory[ei] / 3.0) * 70;
+            if (ei === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+          }
+          ctx.stroke();
+          if (currentEpoch > 0) {
+            ctx.fillStyle = '#10b981'; ctx.font = '8px ui-monospace';
+            ctx.fillText('epoch ' + currentEpoch + '/100 loss=' + lossHistory[Math.min(currentEpoch,99)].toFixed(3), 35, s5Y + 25);
+          }
+          // Inflection math
+          ctx.fillStyle = 'rgba(245,158,11,0.7)'; ctx.font = '8px ui-monospace';
+          ctx.fillText('stride=1 pad=0 → output = (W - K + 1) = (8-3+1) = 6', 35, s5Y + 40);
+          ctx.fillText('stride=2 pad=1 → output = floor((W + 2P - K) / S + 1) = floor((8+2-3)/2+1) = 4', 35, s5Y + 52);
+        }
+
+        // Update loss overlay
+        var l = currentEpoch > 0 ? lossHistory[Math.min(currentEpoch, 99)] : 0;
+        document.getElementById('loss-val').textContent = l.toFixed(3);
+        document.getElementById('loss-val').className = 'val ' + (l < 0.5 ? 'good' : (l < 1.5 ? 'ok' : 'bad'));
       }
       function animate() {
-        kernelX = 0; kernelY = 0; animStep = 0;
+        animStep = 0; currentEpoch = 0;
         function step() {
-          if (kernelY >= 6) {
+          if (animStep > 5 && currentEpoch >= 100) {
             isAnim = false; document.getElementById('btn-gd').disabled = false;
             document.getElementById('phase-ind').textContent = 'done ✓';
             document.getElementById('phase-ind').classList.remove('active');
             return;
           }
-          document.getElementById('phase-ind').textContent = 'kernel (' + kernelX + ',' + kernelY + ')';
-          render();
-          kernelX++;
-          if (kernelX >= 6) { kernelX = 0; kernelY++; }
-          setTimeout(step, 80);
+          if (animStep <= 5) {
+            document.getElementById('phase-ind').textContent = 'stage ' + animStep + '/5';
+          } else {
+            currentEpoch = Math.min(100, currentEpoch + 5);
+            document.getElementById('phase-ind').textContent = 'epoch ' + currentEpoch + '/100';
+          }
+          render(); animStep++;
+          setTimeout(step, 600);
         }
         step();
       }
-      function reset() { kernelX = 0; kernelY = 0; render(); }
+      function reset() { animStep = 0; currentEpoch = 0; render(); }
 """,
 
 "rnn": """
