@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Lab in the Loop — AI-driven drug discovery closed-loop pipeline. Complex Space → Models → Self-improving Search → Agents → Digital Twins → Lab Hardware. Agentic RSI gauge. Animated, interactive, with math + code." />
+    <title>Lab in the Loop — AI Drug Discovery Closed Loop · AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#10b981; --accent-2:#06b6d4; --accent-3:#f59e0b; --purple:#8b5cf6; --pink:#ec4899; --danger:#ef4444; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(139,92,246,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.3; }
+      .container { max-width: 1000px; margin: 0 auto; padding: 24px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(16,185,129,0.35); background: rgba(16,185,129,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; }
+      h1 { font-size: 36px; margin: 0 0 12px; background: linear-gradient(90deg,#fff,#6ee7b7 60%,#c4b5fd); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      h2 { font-size: 22px; margin: 32px 0 12px; color: var(--accent-2); }
+      h3 { color: var(--accent); font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 860px; margin: 0 0 24px; }
+      .lead b { color: var(--text); }
+      .lead a { color: var(--accent-2); text-decoration: none; }
+      .viz-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 16px; margin-top: 16px; }
+      .viz-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+      canvas { display: block; width: 100%; height: auto; }
+      .controls-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+      .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: white; }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); }
+      .btn:disabled { opacity: 0.5; }
+      .zoom-controls { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 8px; padding: 4px; }
+      .zoom-btn { width: 30px; height: 30px; border: none; background: transparent; color: var(--text); cursor: pointer; font-size: 16px; font-weight: 700; border-radius: 4px; }
+      .zoom-btn:hover { background: rgba(16,185,129,0.2); }
+      .zoom-label { font-size: 9px; color: var(--text-muted); text-align: center; padding: 2px 0; }
+      .math-block { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-family: "Cambria Math", Georgia, serif; }
+      .math-block .eq { font-size: 16px; color: var(--accent); margin: 6px 0; }
+      .math-block .explain { font-size: 13px; color: var(--text-muted); margin-top: 4px; font-family: -apple-system, sans-serif; }
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .callout { background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+      .callout.green { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.3); }
+      .callout.amber { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.3); }
+      .callout.pink { background: rgba(236,72,153,0.06); border-color: rgba(236,72,153,0.3); }
+      .callout h3 { margin: 0 0 10px; }
+      .callout .row { margin: 8px 0; font-size: 13px; line-height: 1.55; color: var(--text); }
+      .callout .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
+      .callout .lbl.use { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .callout .lbl.avoid { background: rgba(239,68,68,0.15); color: #fca5a5; }
+      .callout .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+      .callout .lbl.futur { background: rgba(245,158,11,0.15); color: #fcd34d; }
+      .callout .text { color: var(--text-muted); }
+      .meta { border-top: 1px solid var(--border); margin-top: 40px; padding-top: 16px; font-size: 12px; color: var(--text-muted); }
+      .meta a { color: var(--accent-2); text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <main class="container">
+      <p class="crumbs"><a href="index.html">Home</a> / <a href="bio-nn.html">Bioinformatics × NN</a> / Lab in the Loop</p>
+      <span class="tag">🔬 Closed-loop AI drug discovery · Agentic workflows · Active learning</span>
+      <h1>Lab in the Loop — AI Drug Discovery</h1>
+      <p class="lead">The <b>closed-loop pipeline</b> for AI-driven drug discovery. Six stages cycle endlessly: <b>Complex Space</b> (the universe of possible molecules) → <b>Models</b> (ML predictors) → <b>Self-improving Search</b> (active learning + Bayesian optimisation) → <b>Agents</b> (autonomous design + prioritisation) → <b>Digital Twins</b> (virtual wet-lab simulation) → <b>Lab Hardware</b> (automated synthesis + assay). The <b>Agentic RSI</b> gauge in the center measures workflow momentum — when RSI > 70, the loop is converging fast; when RSI < 30, the search is stuck. Inspired by <a href="https://www.linkedin.com/feed/" target="_blank" rel="noopener">Google Research's "Lab in the Loop" post</a> by Avinatan Hassidim.</p>
+
+      <div class="viz-card">
+        <h3>Interactive closed-loop visualiser</h3>
+        <div class="viz-wrap">
+          <canvas id="main-canvas" width="728" height="560"></canvas>
+          <div class="zoom-controls">
+            <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+            <div class="zoom-label" id="zoom-label">100%</div>
+            <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+            <button class="zoom-btn" id="zoom-reset" title="Reset">↺</button>
+          </div>
+        </div>
+        <div class="controls-row">
+          <button class="btn primary" id="btn-play">▶ Start the loop</button>
+          <button class="btn ghost" id="btn-step">⏭ Step (one cycle)</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="margin-left: auto; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace;" id="state-display">idle — click Start</div>
+        </div>
+      </div>
+
+      <h2>📐 Mathematical formulation</h2>
+
+      <div class="math-block">
+        <div class="eq">Stage 1 — Complex Space: Ω = {ω₁, ω₂, ..., ωₙ} where |Ω| ~ 10⁶⁰ possible molecules</div>
+        <div class="explain">The chemical space of drug-like molecules is estimated at 10⁶⁰ — more than atoms in the universe. The loop's job is to find the ω* that maximises a multi-objective score (binding affinity + selectivity + ADMET) within a practical budget of wet-lab experiments.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 2 — Models: f(ω) → ŷ = (binding, toxicity, solubility, ...)
+Trained on prior experimental data D = {(ωᵢ, yᵢ)}ᵢ₌₁ᴺ</div>
+        <div class="explain">ML models predict experimental outcomes from molecular structure. Each model has uncertainty — quantified via ensemble disagreement or Bayesian posterior. The loop queries the model for predictions + uncertainty on candidate molecules.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 3 — Self-improving Search (Active Learning):
+ω* = argmax_ω [ EI(ω) ] where EI(ω) = (μ(ω) - f_best) · Φ(z) + σ(ω) · φ(z)
+z = (μ(ω) - f_best) / σ(ω)</div>
+        <div class="explain">Expected Improvement (EI) — the acquisition function for Bayesian optimisation. Balances <b>exploitation</b> (high predicted score μ) and <b>exploration</b> (high uncertainty σ). The loop selects molecules that maximise EI — neither greedy nor random, but information-optimal.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 4 — Agents: Agent(ω*, context) → {design, prioritise, validate}
+LLM-orchestrated: Claude/GPT decides which experiments to run, interprets results, adjusts strategy</div>
+        <div class="explain">Autonomous agents (LLMs + tool-use) orchestrate the loop. The agent: (1) proposes candidate molecules, (2) prioritises which to synthesise, (3) interprets wet-lab results, (4) adjusts the search strategy. Like Claude's scorpion toxin binder design — the agent is the orchestrator, not a single tool.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 5 — Digital Twins: T(ω) → ŷ_simulated
+Virtual wet-lab: molecular dynamics + docking + ADMET simulation</div>
+        <div class="explain">Before spending wet-lab resources, the digital twin simulates the experiment computationally. If T(ω) predicts failure, the molecule is filtered out. The twin is calibrated against real experiments — its predictions improve over time.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 6 — Lab Hardware: ω → synthesis → assay → y_measured
+Feedback: D' = D ∪ {(ω*, y_measured)} → retrain models → repeat</div>
+        <div class="explain">Automated synthesis + assay platforms (e.g., Strateos, Emerald Cloud Bio) run the experiment. The measured result y_measured is added to the training data D, models are retrained, and the loop repeats. Each cycle improves the models' accuracy.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Agentic RSI: RSI(t) = 100 · (1 - Δbest/Δbest_max) · (1 + log(1 + N_validated(t)))
+RSI > 70 = converging fast | RSI 30-70 = steady progress | RSI < 30 = stuck (change strategy)</div>
+        <div class="explain">The <b>Agentic Relative Strength Index</b> measures the loop's momentum. Δbest = improvement in best score this cycle. N_validated = number of validated hits. High RSI = the loop is finding better molecules fast. Low RSI = diminishing returns — the agent should change strategy (explore a new region of chemical space, try a different model, or relax constraints).</div>
+      </div>
+
+      <h2>💻 Runnable code — closed-loop active learning</h2>
+      <div class="code-section">
+        <pre><span class="cm"># Lab in the Loop — simplified active learning pipeline</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">class</span> <span class="fn">LabInTheLoop</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, n_molecules=<span class="num">10000</span>, budget=<span class="num">50</span>):
+        <span class="cm"># Ω: complex space of candidate molecules</span>
+        self.space = np.random.randn(n_molecules, <span class="num">8</span>)  <span class="cm"># 8-dim features</span>
+        self.budget = budget  <span class="cm"># max wet-lab experiments</span>
+        self.measured = {}  <span class="cm"># D = {(ω_i, y_i)}</span>
+        self.best_score = -np.inf
+        self.rsi_history = []
+
+    <span class="kw">def</span> <span class="fn">model_predict</span>(self, omega):
+        <span class="cm"># f(ω) → ŷ (simplified: linear + noise)</span>
+        <span class="kw">return</span> np.dot(omega, np.random.randn(<span class="num">8</span>)) + np.random.randn() * <span class="num">0.5</span>
+
+    <span class="kw">def</span> <span class="fn">model_uncertainty</span>(self, omega):
+        <span class="cm"># σ(ω) — ensemble disagreement (simplified)</span>
+        <span class="kw">return</span> np.abs(np.random.randn()) * <span class="num">0.3</span> + <span class="num">0.1</span>
+
+    <span class="kw">def</span> <span class="fn">expected_improvement</span>(self, omega):
+        <span class="cm"># EI(ω) = (μ - f_best) * Φ(z) + σ * φ(z)</span>
+        mu = self.model_predict(omega)
+        sigma = self.model_uncertainty(omega)
+        z = (mu - self.best_score) / (sigma + <span class="num">1e-8</span>)
+        <span class="cm"># Φ(z) = normal CDF, φ(z) = normal PDF (simplified)</span>
+        <span class="kw">from</span> scipy.stats <span class="kw">import</span> norm
+        ei = (mu - self.best_score) * norm.cdf(z) + sigma * norm.pdf(z)
+        <span class="kw">return</span> ei
+
+    <span class="kw">def</span> <span class="fn">agent_select</span>(self):
+        <span class="cm"># Stage 3+4: select ω* = argmax EI(ω)</span>
+        scores = [self.expected_improvement(o) <span class="kw">for</span> o <span class="kw">in</span> self.space]
+        <span class="kw">return</span> np.argmax(scores)
+
+    <span class="kw">def</span> <span class="fn">digital_twin</span>(self, omega):
+        <span class="cm"># Stage 5: virtual wet-lab (simplified simulation)</span>
+        <span class="kw">return</span> self.model_predict(omega) + np.random.randn() * <span class="num">0.2</span>
+
+    <span class="kw">def</span> <span class="fn">lab_experiment</span>(self, omega):
+        <span class="cm"># Stage 6: real wet-lab (ground truth)</span>
+        <span class="kw">return</span> self.model_predict(omega) + np.random.randn() * <span class="num">0.1</span>
+
+    <span class="kw">def</span> <span class="fn">agentic_rsi</span>(self, delta_best):
+        <span class="cm"># RSI = momentum indicator (0-100)</span>
+        delta_max = <span class="num">1.0</span>  <span class="cm"># normalisation</span>
+        n_validated = len(self.measured)
+        rsi = <span class="num">100</span> * (<span class="num">1</span> - delta_best / delta_max) * (<span class="num">1</span> + np.log(<span class="num">1</span> + n_validated))
+        <span class="kw">return</span> min(<span class="num">100</span>, max(<span class="num">0</span>, rsi))
+
+    <span class="kw">def</span> <span class="fn">run_cycle</span>(self):
+        <span class="cm"># One loop iteration: select → simulate → experiment → update</span>
+        idx = self.agent_select()  <span class="cm"># Stage 3+4</span>
+        omega = self.space[idx]
+        sim = self.digital_twin(omega)  <span class="cm"># Stage 5</span>
+        <span class="kw">if</span> sim &lt; -<span class="num">0.5</span>:  <span class="cm"># filter — digital twin says "skip"</span>
+            <span class="kw">return</span> {<span class="num">'status'</span>: <span class="num">'filtered'</span>, <span class="num">'rsi'</span>: <span class="num">0</span>}
+        y = self.lab_experiment(omega)  <span class="cm"># Stage 6</span>
+        delta_best = max(<span class="num">0</span>, y - self.best_score)
+        self.best_score = max(self.best_score, y)
+        self.measured[idx] = y  <span class="cm"># D' = D ∪ {(ω*, y)}</span>
+        rsi = self.agentic_rsi(delta_best)
+        self.rsi_history.append(rsi)
+        <span class="kw">return</span> {<span class="num">'status'</span>: <span class="num">'measured'</span>, <span class="num">'score'</span>: y, <span class="num">'best'</span>: self.best_score, <span class="num">'rsi'</span>: rsi}
+
+<span class="cm"># === Run 10 cycles ===</span>
+np.random.seed(<span class="num">0</span>)
+lab = LabInTheLoop(n_molecules=<span class="num">1000</span>, budget=<span class="num">10</span>)
+<span class="kw">print</span>(<span class="num">"Lab in the Loop — 10 cycles:"</span>)
+<span class="kw">for</span> cycle <span class="kw">in range</span>(<span class="num">10</span>):
+    result = lab.run_cycle()
+    <span class="kw">print</span>(<span class="num">f"  Cycle {cycle+1}: {result['status']}, best={lab.best_score:.3f}, RSI={result.get('rsi',0):.1f}"</span>)
+<span class="kw">print</span>(<span class="num">f"\nFinal: best_score={lab.best_score:.3f}, molecules_measured={len(lab.measured)}"</span>)
+<span class="kw">print</span>(<span class="num">f"RSI trend: {lab.rsi_history}"</span>)</pre>
+      </div>
+
+      <h2>🧠 Deep thoughts — when to use closed-loop AI drug discovery</h2>
+      <div class="callout">
+        <h3>Strategic guidance</h3>
+        <div class="row"><span class="lbl use">USE WHEN</span><span class="text">You have access to automated synthesis + assay (Strateos, Emerald Cloud, in-house robotics). The search space is too large for brute-force (10⁶⁰ molecules). You need multi-objective optimisation (binding + toxicity + ADMET + synthesizability). The agent can interpret results + adjust strategy autonomously.</span></div>
+        <div class="row"><span class="lbl avoid">AVOID WHEN</span><span class="text">Wet-lab is manual (slow + expensive — each experiment costs $1000s + weeks). The target is well-characterised (brute-force screening of known libraries is cheaper). You need FDA approval (closed-loop discovers novel chemistries that need full safety studies). The models have high uncertainty (the loop wastes budget on bad predictions).</span></div>
+        <div class="row"><span class="lbl why">WHY</span><span class="text">The key insight is <b>information-optimal exploration</b>. Instead of screening 100K molecules randomly, the loop screens 50-100 molecules selected by Expected Improvement — each experiment maximally reduces uncertainty about the best molecule. This is 1000× more efficient than brute-force. The Agentic RSI tells you when to <em>change strategy</em> (RSI < 30 = diminishing returns, try a different chemical scaffold or relax constraints).</span></div>
+      </div>
+
+      <h2>🚀 Futuristic possibilities</h2>
+      <div class="callout amber">
+        <h3>Where this leads (2026-2035)</h3>
+        <div class="row"><span class="lbl futur">2026-27</span><span class="text"><b>Autonomous drug discovery labs.</b> Closed-loop systems running 24/7 with zero human intervention. Each cycle: 4 hours (synthesis + assay + retrain). 1000 cycles/year = 1000 validated molecules — more than a traditional pharma pipeline screens in a decade.</span></div>
+        <div class="row"><span class="lbl futur">2028-30</span><span class="text"><b>Disease-specific closed loops.</b> A different loop for each disease (cancer, Alzheimer's, antibiotic resistance). Each loop has disease-specific models + assay panels. Loops share learned chemistry across diseases (transfer learning).</span></div>
+        <div class="row"><span class="lbl futur">2030-33</span><span class="text"><b>Patient-specific loops.</b> Sequence the patient's genome → instantiate a personalised loop targeting their specific disease mutation. The loop designs a drug that works for <em>this</em> patient, not the average. Personalised medicine at the molecular level.</span></div>
+        <div class="row"><span class="lbl futur">2033+</span><span class="text"><b>The self-improving drug cabinet.</b> A hospital has a closed-loop system that continuously discovers + synthesises new drugs in response to emerging resistance (antibiotics), new variants (viruses), or individual patient responses. The pharmacy <em>generates</em> drugs, not dispenses them.</span></div>
+      </div>
+
+      <h2>🔬 Comparison with traditional drug discovery</h2>
+      <div class="callout pink">
+        <h3>Closed-loop vs traditional approaches</h3>
+        <div class="row"><span class="lbl why">vs HTS (High-Throughput Screening)</span><span class="text">HTS screens 100K-1M compounds blindly — cost ~$10M, 2 years, ~0.01% hit rate. Closed-loop screens 50-100 compounds selected by EI — cost ~$50K, 2 weeks, ~20% hit rate. 200× cheaper, 50× faster, 2000× more efficient. But needs reliable models + automated wet-lab.</span></div>
+        <div class="row"><span class="lbl why">vs Virtual screening</span><span class="text">Virtual screening uses models to rank compounds but doesn't <em>close the loop</em> — no wet-lab feedback, no model improvement. Closed-loop = virtual screening + real experiments + model retraining. Each cycle makes the next cycle smarter.</span></div>
+        <div class="row"><span class="lbl why">vs AlphaFold + manual design</span><span class="text">AlphaFold predicts structures but doesn't <em>design</em> binders. Claude's toxin binder design <em>is</em> a single iteration of the loop (design → screen → validate). The full loop repeats this 100s of times with model retraining between cycles.</span></div>
+        <div class="row"><span class="lbl why">vs Clinical trials</span><span class="text">Clinical trials are the <em>final</em> stage — they test whether a drug works in humans. Closed-loop is the <em>pre-clinical</em> stage — it discovers the drug. They're complementary: closed-loop finds candidates faster + cheaper, clinical trials validate them.</span></div>
+      </div>
+
+      <!-- arXiv-style footer -->
+      <div style="margin-top: 40px; padding: 20px 24px; background: rgba(11,15,26,0.8); border: 1px solid var(--border); border-radius: 12px;">
+        <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+          <a href="https://www.nature.com/articles/s41586-023-06139-9" target="_blank" rel="noopener" style="display: inline-block; background: linear-gradient(90deg, #10b981, #06b6d4); color: white; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700;">📄 Full text version →</a>
+          <span style="margin-left: 12px; font-size: 11px; color: var(--text-muted);">Related: Google Research "Lab in the Loop" post + Nature papers on closed-loop drug discovery</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px;">
+          <div>
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">📚 Bibliographic</div>
+            <a href="https://www.semanticscholar.org/search?q=closed+loop+drug+discovery+active+learning" target="_blank" rel="noopener" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none; margin-bottom: 4px;">Semantic Scholar</a>
+            <a href="https://www.connectedpapers.com/search?q=closed+loop+drug+discovery" target="_blank" rel="noopener" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none;">Connected Papers</a>
+          </div>
+          <div>
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">📐 Maths</div>
+            <a href="concepts-v2/ml-kl-divergence.html" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none; margin-bottom: 4px;">KL Divergence</a>
+            <a href="concepts-v2/nn-transformer.html" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none;">Transformer</a>
+            <a href="concepts-v2/ml-sgd.html" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none;">SGD</a>
+          </div>
+          <div>
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">💻 Code</div>
+            <a href="https://github.com/testdemoqwenai2025-creator/AIHPC-Advanced" target="_blank" rel="noopener" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none; margin-bottom: 4px;">GitHub Source</a>
+            <a href="https://huggingface.co/models?search=drug+discovery" target="_blank" rel="noopener" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none;">🤗 Hugging Face</a>
+            <a href="https://www.strateos.com/" target="_blank" rel="noopener" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none;">Strateos (wet-lab)</a>
+          </div>
+          <div>
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">📊 Data</div>
+            <a href="https://pubchem.ncbi.nlm.nih.gov/" target="_blank" rel="noopener" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none; margin-bottom: 4px;">PubChem</a>
+            <a href="https://www.ebi.ac.uk/chembl/" target="_blank" rel="noopener" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none; margin-bottom: 4px;">ChEMBL</a>
+            <a href="https://www.bindingdb.org/" target="_blank" rel="noopener" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none;">BindingDB</a>
+          </div>
+          <div>
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">🧪 Demos</div>
+            <a href="claude-toxin.html" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none; margin-bottom: 4px;">Claude Toxin Binder</a>
+            <a href="concepts-v2/nn-cnn.html" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none; margin-bottom: 4px;">CNN (enriched)</a>
+            <a href="how-cnns-see-images.html" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none;">How CNNs See</a>
+          </div>
+          <div>
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">📄 Related</div>
+            <a href="bolero.html" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none; margin-bottom: 4px;">BOLERO</a>
+            <a href="scgpt.html" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none; margin-bottom: 4px;">scGPT</a>
+            <a href="alphafold3.html" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none;">AlphaFold 3</a>
+          </div>
+          <div>
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">ℹ️ About</div>
+            <a href="index.html" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none; margin-bottom: 4px;">AIHPC Advanced</a>
+            <a href="bio-nn.html" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none; margin-bottom: 4px;">Bio-NN Hub</a>
+            <a href="audit.html" style="display: block; font-size: 11px; color: var(--accent-2); text-decoration: none;">Audit Dashboard</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="meta">
+        <p>Page: <code>docs/lab-in-the-loop.html</code> · Phase 39.1 · Inspired by Google Research "Lab in the Loop" post by Avinatan Hassidim. Links: <a href="scgpt.html">→ scGPT</a> · <a href="claude-toxin.html">→ Claude Toxin Binder</a> · <a href="bio-nn.html">→ Bio-NN Hub</a> · Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></p>
+      </div>
+    </main>
+
+    <script>
+      // Particle background
+      (function(){var c=document.getElementById('particle-canvas');var x=c.getContext('2d');function r(){c.width=innerWidth;c.height=innerHeight;}r();addEventListener('resize',r);var N=50,P=[];var cols=['#10b981','#06b6d4','#8b5cf6'];for(var i=0;i<N;i++)P.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.15,vy:(Math.random()-.5)*.15,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,c.width,c.height);for(var i=0;i<N;i++)for(var j=i+1;j<N;j++){var d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<100){x.strokeStyle='rgba(139,92,246,'+(.1*(1-d/100))+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke();}}for(var p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;x.fillStyle=p.c;x.globalAlpha=.3;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill();}x.globalAlpha=1;requestAnimationFrame(s);}s();})();
+
+      // Lab in the Loop canvas
+      var canvas=document.getElementById('main-canvas');var ctx=canvas.getContext('2d');
+      var W=canvas.width,H=canvas.height;var zoom=1.0;var isAnim=false;
+      var cycleStep=0;var maxSteps=6;var loopAngle=0;var rsi=50;
+      var particles=[];
+
+      // 6 nodes in a circle
+      var nodes=[
+        {name:'Complex Space',color:'#06b6d4',angle:0},
+        {name:'Models',color:'#10b981',angle:Math.PI/3},
+        {name:'Self-improving\nSearch',color:'#f59e0b',angle:2*Math.PI/3},
+        {name:'Agents',color:'#8b5cf6',angle:Math.PI},
+        {name:'Digital Twins',color:'#ec4899',angle:4*Math.PI/3},
+        {name:'Lab Hardware',color:'#ef4444',angle:5*Math.PI/3}
+      ];
+      var centerX=W/2,centerY=H/2-20,radius=180;
+
+      function getNodePos(i){
+        return{x:centerX+Math.cos(nodes[i].angle-Math.PI/2)*radius,y:centerY+Math.sin(nodes[i].angle-Math.PI/2)*radius};
+      }
+
+      function render(){
+        ctx.save();ctx.fillStyle='#0a0e1a';ctx.fillRect(0,0,W,H);
+        ctx.translate(W/2,H/2);ctx.scale(zoom,zoom);ctx.translate(-W/2,-H/2);
+        var bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#0a0e1a');bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+        ctx.fillStyle='#10b981';ctx.font='bold 14px ui-monospace';ctx.textAlign='center';
+        ctx.fillText('Lab in the Loop — cycle '+cycleStep+'/'+maxSteps,W/2,25);
+        ctx.textAlign='left';
+
+        // Draw circular connections
+        ctx.strokeStyle='rgba(148,163,184,0.15)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+        ctx.beginPath();ctx.arc(centerX,centerY,radius,0,6.28);ctx.stroke();ctx.setLineDash([]);
+
+        // Draw flowing particles along the circle
+        for(var i=0;i<particles.length;i++){
+          var p=particles[i];
+          p.angle+=0.01;
+          var px=centerX+Math.cos(p.angle-Math.PI/2)*radius;
+          var py=centerY+Math.sin(p.angle-Math.PI/2)*radius;
+          ctx.fillStyle=p.color;ctx.globalAlpha=0.6;
+          ctx.beginPath();ctx.arc(px,py,2,0,6.28);ctx.fill();
+        }
+        ctx.globalAlpha=1;
+
+        // Draw 6 nodes
+        for(var i=0;i<nodes.length;i++){
+          var pos=getNodePos(i);
+          var isActive=cycleStep>0&&((cycleStep-1)%6===i);
+          // Node circle
+          ctx.beginPath();ctx.arc(pos.x,pos.y,isActive?32:24,0,6.28);
+          ctx.fillStyle=isActive?nodes[i].color+'40':'rgba(18,24,38,0.8)';
+          ctx.fill();
+          ctx.strokeStyle=isActive?nodes[i].color:'rgba(148,163,184,0.3)';
+          ctx.lineWidth=isActive?3:1.5;ctx.stroke();
+          if(isActive){ctx.shadowColor=nodes[i].color;ctx.shadowBlur=15;ctx.stroke();ctx.shadowBlur=0;}
+          // Node label
+          ctx.fillStyle=isActive?nodes[i].color:'rgba(148,163,184,0.7)';
+          ctx.font=isActive?'bold 10px ui-monospace':'9px ui-monospace';ctx.textAlign='center';
+          var lines=nodes[i].name.split('\\n');
+          for(var l=0;l<lines.length;l++)ctx.fillText(lines[l],pos.x,pos.y+40+l*11);
+          ctx.textAlign='left';
+        }
+
+        // Draw Agentic RSI gauge in center
+        var gaugeR=55;
+        // Background arc
+        ctx.strokeStyle='rgba(148,163,184,0.15)';ctx.lineWidth=8;
+        ctx.beginPath();ctx.arc(centerX,centerY,gaugeR,0,6.28);ctx.stroke();
+        // RSI arc (colored by value)
+        var rsiColor=rsi>70?'#10b981':rsi>30?'#f59e0b':'#ef4444';
+        ctx.strokeStyle=rsiColor;ctx.lineWidth=8;ctx.lineCap='round';
+        ctx.beginPath();ctx.arc(centerX,centerY,gaugeR,-Math.PI/2,-Math.PI/2+(rsi/100)*6.28);ctx.stroke();
+        ctx.lineCap='butt';
+        // RSI value
+        ctx.fillStyle=rsiColor;ctx.font='bold 22px ui-monospace';ctx.textAlign='center';
+        ctx.fillText(Math.round(rsi),centerX,centerY+8);
+        ctx.fillStyle='rgba(148,163,184,0.6)';ctx.font='9px ui-monospace';
+        ctx.fillText('Agentic RSI',centerX,centerY-15);
+        ctx.fillText(rsi>70?'converging':rsi>30?'steady':'stuck',centerX,centerY+25);
+        ctx.textAlign='left';
+
+        // Stage labels
+        if(cycleStep>0){
+          var stageNames=['','Complex Space\n(10^60 molecules)','Models\n(f(ω)→ŷ)','Self-improving\n(EI acquisition)','Agents\n(orchestrate)','Digital Twins\n(simulate)','Lab Hardware\n(measure y)'];
+          ctx.fillStyle='#10b981';ctx.font='bold 10px ui-monospace';ctx.textAlign='center';
+          ctx.fillText('Stage '+cycleStep+': '+(stageNames[cycleStep]||'').split('\\n')[0],W/2,H-15);
+          ctx.textAlign='left';
+        }
+
+        ctx.restore();
+        document.getElementById('state-display').textContent=cycleStep===0?'idle — click Start':'cycle '+cycleStep+'/6 · RSI='+Math.round(rsi);
+      }
+
+      function animate(){
+        cycleStep=0;rsi=50;particles=[];
+        for(var i=0;i<20;i++)particles.push({angle:Math.random()*6.28,color:['#10b981','#06b6d4','#8b5cf6','#f59e0b','#ec4899','#ef4444'][i%6]});
+        function step(){
+          if(cycleStep>maxSteps){
+            isAnim=false;document.getElementById('btn-play').disabled=false;
+            document.getElementById('state-display').textContent='loop complete — RSI='+Math.round(rsi);
+            return;
+          }
+          // Update RSI based on cycle
+          if(cycleStep>0){
+            var delta=Math.random();
+            rsi=Math.max(5,Math.min(95,rsi+(delta-0.3)*30));
+          }
+          render();cycleStep++;setTimeout(step,800);
+        }
+        // Start particle animation loop
+        var particleLoop=setInterval(function(){if(!isAnim){clearInterval(particleLoop);return;}render();},50);
+        step();
+      }
+
+      document.getElementById('btn-play').addEventListener('click',function(){
+        if(isAnim)return;isAnim=true;document.getElementById('btn-play').disabled=true;animate();
+      });
+      document.getElementById('btn-step').addEventListener('click',function(){
+        if(isAnim)return;
+        if(cycleStep>maxSteps){cycleStep=0;rsi=50;}
+        cycleStep++;
+        var delta=Math.random();rsi=Math.max(5,Math.min(95,rsi+(delta-0.3)*30));
+        render();
+      });
+      document.getElementById('btn-reset').addEventListener('click',function(){
+        cycleStep=0;rsi=50;isAnim=false;document.getElementById('btn-play').disabled=false;
+        particles=[];render();
+      });
+      document.getElementById('zoom-in').addEventListener('click',function(){zoom=Math.min(3,zoom+0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';render();});
+      document.getElementById('zoom-out').addEventListener('click',function(){zoom=Math.max(0.5,zoom-0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';render();});
+      document.getElementById('zoom-reset').addEventListener('click',function(){zoom=1;document.getElementById('zoom-label').textContent='100%';render();});
+      render();
+    </script>
+    <script src="zoom-loader.js"></script>
+  </body>
+</html>
