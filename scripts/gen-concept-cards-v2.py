@@ -714,7 +714,10 @@ def gen_activation(card):
         <div class="ctrl" id="b1-ctrl"><label>Input x <span class="val" id="b1-val">0.50</span></label><input type="range" id="b1-slider" min="-4" max="4" step="0.01" value="1.0" /></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Sweep x</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -808,6 +811,16 @@ def gen_activation(card):
           render(); x += 0.08; requestAnimationFrame(sweep);
         }}
         sweep();
+      }});
+      // Phase 38.7: Step button — single-step sweep (advance x by 0.08)
+      document.getElementById('btn-step').addEventListener('click', function() {{
+        if (isAnim) return;
+        xInput = Math.min(4, xInput + 0.08);
+        document.getElementById('b1-slider').value = xInput;
+        document.getElementById('b1-val').textContent = xInput.toFixed(2);
+        document.getElementById('phase-ind').textContent = 'x=' + xInput.toFixed(2) + ' (manual)';
+        document.getElementById('phase-ind').classList.add('active');
+        render();
       }});
       document.getElementById('btn-reset').addEventListener('click', function() {{
         xInput = 0.5; document.getElementById('b1-slider').value = 0.5;
@@ -1059,7 +1072,10 @@ def gen_optimiser(card):
         <div class="ctrl"><label>Optimiser: {title.replace(' Optimiser', '')}</label></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Run optimiser</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -1181,6 +1197,25 @@ def gen_optimiser(card):
       }}
 
       document.getElementById('btn-gd').addEventListener('click', runOpt);
+      // Phase 38.7: Step button — single optimisation step
+      document.getElementById('btn-step').addEventListener('click', function() {{
+        if (isAnim) return;
+        if (typeof runOpt !== 'function') return;
+        // Run one step of the optimiser
+        var origRAF = window.requestAnimationFrame;
+        var stepTaken = false;
+        window.requestAnimationFrame = function(fn) {{
+          if (stepTaken) return;
+          stepTaken = true;
+          window.requestAnimationFrame = origRAF;
+          origRAF(fn);
+        }};
+        isAnim = true;
+        document.getElementById('phase-ind').textContent = 'step (manual)';
+        document.getElementById('phase-ind').classList.add('active');
+        runOpt();
+        setTimeout(function() {{ isAnim = false; }}, 300);
+      }});
       document.getElementById('btn-reset').addEventListener('click', function() {{
         document.getElementById('phase-ind').textContent = 'idle';
         document.getElementById('phase-ind').classList.remove('active');

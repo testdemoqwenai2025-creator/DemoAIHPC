@@ -66,7 +66,10 @@
         <div class="ctrl"><label>Optimiser: AdamW</label></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Run optimiser</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -224,6 +227,25 @@ opt = <span class="fn">AdamW</span>(params, lr=<span class="num">0.1</span>, wei
       }
 
       document.getElementById('btn-gd').addEventListener('click', runOpt);
+      // Phase 38.7: Step button — single optimisation step
+      document.getElementById('btn-step').addEventListener('click', function() {
+        if (isAnim) return;
+        if (typeof runOpt !== 'function') return;
+        // Run one step of the optimiser
+        var origRAF = window.requestAnimationFrame;
+        var stepTaken = false;
+        window.requestAnimationFrame = function(fn) {
+          if (stepTaken) return;
+          stepTaken = true;
+          window.requestAnimationFrame = origRAF;
+          origRAF(fn);
+        };
+        isAnim = true;
+        document.getElementById('phase-ind').textContent = 'step (manual)';
+        document.getElementById('phase-ind').classList.add('active');
+        runOpt();
+        setTimeout(function() { isAnim = false; }, 300);
+      });
       document.getElementById('btn-reset').addEventListener('click', function() {
         document.getElementById('phase-ind').textContent = 'idle';
         document.getElementById('phase-ind').classList.remove('active');
