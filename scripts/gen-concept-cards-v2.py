@@ -2371,7 +2371,7 @@ _NN_CANVAS_JS = {
           ctx.strokeStyle = 'rgba(148,163,184,0.2)'; ctx.lineWidth = 0.5;
           ctx.strokeRect(30, s5Y, W - 60, 80);
           ctx.fillStyle = '#10b981'; ctx.font = 'bold 9px ui-monospace'; ctx.textAlign = 'left';
-          ctx.fillText('Training loss (MSE) — ReLU dead-zone: f'(x)=0 for x<0', 35, s5Y + 12);
+          ctx.fillText("Training loss (MSE) — ReLU dead-zone: f'(x)=0 for x<0", 35, s5Y + 12);
           ctx.strokeStyle = '#10b981'; ctx.lineWidth = 1.5;
           ctx.beginPath();
           for (var ei = 0; ei <= currentEpoch && ei < lossHistory.length; ei++) {
