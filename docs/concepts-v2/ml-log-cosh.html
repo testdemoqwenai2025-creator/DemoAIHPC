@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Log-Cosh Loss — visual-first concept card. Interactive canvas, real-time sliders, code with Math→Code annotations." />
+    <title>Log-Cosh Loss — Visual Concept Card · AIHPC</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", sans-serif; min-height: 100vh; overflow-x: hidden; }
+      body::before { content:""; position:fixed; inset:0; background: radial-gradient(1000px 500px at 50% 0%, rgba(6,182,212,0.10), transparent 70%); pointer-events:none; z-index:0; }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; position: relative; z-index: 1; }
+      .head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+      .head .tag { font-size: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.4); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .head h1 { font-size: 24px; font-weight: 800; }
+      .back { font-size: 12px; color: var(--accent); text-decoration: none; margin-bottom: 12px; display: inline-block; }
+      .eq-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; background: rgba(11,15,26,0.85); border: 1px solid rgba(6,182,212,0.3); font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent); margin-bottom: 12px; }
+      .desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; max-width: 600px; }
+      .canvas-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+      canvas { display: block; width: 100%; height: auto; }
+      .loss-overlay { position: absolute; top: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; text-align: right; }
+      .loss-overlay .lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+      .loss-overlay .val { font-size: 28px; font-weight: 800; font-family: ui-monospace, monospace; color: var(--accent); }
+      .loss-overlay .val.bad { color: var(--danger); } .loss-overlay .val.ok { color: var(--warn); } .loss-overlay .val.good { color: var(--success); }
+      .eq-overlay { position: absolute; bottom: 12px; left: 12px; background: rgba(11,15,26,0.9); border: 1px solid rgba(6,182,212,0.3); border-radius: 6px; padding: 4px 12px; font-family: "Cambria Math", Georgia, serif; font-size: 13px; color: var(--accent); pointer-events: none; }
+      .phase-indicator { position: absolute; bottom: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 10px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .phase-indicator.active { color: var(--accent); border-color: rgba(6,182,212,0.4); }
+      .controls { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: flex-end; }
+      .ctrl { flex: 1; min-width: 180px; background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+      .ctrl label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; }
+      .ctrl .val { font-size: 14px; font-weight: 700; font-family: ui-monospace, monospace; color: var(--accent); }
+      .ctrl input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--border); outline: none; }
+      .ctrl input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid var(--bg); }
+      .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white; } .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); } .btn.ghost:hover { border-color: var(--accent); color: var(--text); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      /* Code panel — always visible with Math→Code annotations */
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section h3 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+      .code-section .eq-line { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent); padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; border-left: 3px solid var(--accent); margin-bottom: 10px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .foot { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 24px; font-family: ui-monospace, monospace; }
+      .foot a { color: var(--accent); text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <a href="../index.html" class="back">← Home</a>
+      <div class="head">
+        <span class="tag">ML · Regression Loss</span>
+        <h1>Log-Cosh Loss</h1>
+      </div>
+      <p class="desc">log(cosh(e)) — smooth + differentiable everywhere. <b>Like MSE near 0, like MAE far away</b>.</p>
+      <div class="eq-badge">📐 L = (1/n) Σ log(cosh(ŷᵢ − yᵢ))</div>
+      <div class="canvas-wrap">
+        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <div class="loss-overlay"><div class="lbl" id="loss-lbl">Loss</div><div class="val" id="loss-val">0.0000</div></div>
+        <div class="eq-overlay">L = (1/n) Σ log(cosh(ŷᵢ − yᵢ))</div>
+        <div class="phase-indicator" id="phase-ind">idle</div>
+      </div>
+      <div class="controls">
+        <div class="ctrl" id="b1-ctrl"><label>Slope β₁ <span class="val" id="b1-val">1.00</span></label><input type="range" id="b1-slider" min="-4" max="4" step="0.01" value="1.0" /></div>
+        <div class="ctrl" id="b0-ctrl"><label>Intercept β₀ <span class="val" id="b0-val">0.00</span></label><input type="range" id="b0-slider" min="-5" max="10" step="0.01" value="0.0" /></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
+          <button class="btn primary" id="btn-gd">▶ Run gradient descent</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+        </div>
+      </div>
+      <div class="code-section">
+        <h3>💻 Math → Code — how symbols become variables</h3>
+        <div class="eq-line">L = (1/n) Σ log(cosh(ŷᵢ − yᵢ))</div>
+        <pre><span class="cm"># L = (1/n) Σ log(cosh(ŷ_i − y_i))</span>
+<span class="cm"># log(cosh(e)) ≈ e²/2 for small e, ≈ |e| − log(2) for large e</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">log_cosh</span>(y_true, y_pred):
+    e = y_pred - y_true
+    <span class="kw">return</span> np.mean(np.log(np.cosh(e)))</pre>
+      </div>
+      <div class="foot">
+        <a href="../ai-lab.html?context=Log-Cosh Loss">🤖 Ask AI</a> · <a href="../concepts/ml-log-cosh.html">📖 Full text version</a> · Visual concept card v2
+      </div>
+    </div>
+    <script>
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      
+      // ===== LOSS FUNCTION VISUAL =====
+      var DATA = [];
+      var rng = { s: 42, next: function() { this.s = (this.s*9301+49297)%233280; return this.s/233280; } };
+      for (var i = 0; i < 20; i++) { var x = i*0.5; var y = 2*x + 3 + (rng.next()-0.5)*4; DATA.push({x:x, y:y}); }
+      var b0 = 0, b1 = 1, isAnim = false;
+      var W = canvas.width, H = canvas.height;
+
+      function predict(x) { return b0 + b1*x; }
+      function toCX(x) { return 60 + (x/10) * (W-120); }
+      function toCY(y) { return H-40 - (y+5)/25 * (H-60); }
+
+      var LOSS_FN = logcosh;
+      function computeLoss() {
+        var s = 0;
+        for (var i = 0; i < DATA.length; i++) {
+          var e = DATA[i].y - predict(DATA[i].x);
+          if (LOSS_FN === 'mse') s += e*e;
+          else if (LOSS_FN === 'mae') s += Math.abs(e);
+          else if (LOSS_FN === 'huber') { var d = 1.0; var a = Math.abs(e); s += a <= d ? 0.5*a*a : d*(a-0.5*d); }
+          else if (LOSS_FN === 'logcosh') s += Math.log(Math.cosh(e));
+        }
+        return s / DATA.length;
+      }
+
+      function render() {
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        // Grid
+        ctx.strokeStyle = 'rgba(148,163,184,0.06)'; ctx.lineWidth = 0.5;
+        for (var g = 0; g <= 10; g++) { var px = 60+g*(W-120)/10; ctx.beginPath(); ctx.moveTo(px,20); ctx.lineTo(px,H-40); ctx.stroke(); }
+        for (var g2 = 0; g2 <= 5; g2++) { var py = 20+g2*(H-60)/5; ctx.beginPath(); ctx.moveTo(60,py); ctx.lineTo(W-60,py); ctx.stroke(); }
+        // Axes
+        ctx.strokeStyle = 'rgba(148,163,184,0.25)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(60,20); ctx.lineTo(60,H-40); ctx.lineTo(W-60,H-40); ctx.stroke();
+        ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '10px ui-monospace';
+        ctx.fillText('x', W-50, H-25); ctx.fillText('y', 45, 30);
+        // Error lines + data points
+        for (var i = 0; i < DATA.length; i++) {
+          var d = DATA[i], px = toCX(d.x), py = toCY(d.y), pp = toCY(predict(d.x));
+          var em = Math.abs(d.y - predict(d.x));
+          ctx.strokeStyle = 'rgba(239,68,68,' + Math.min(0.7, em/8).toFixed(2) + ')'; ctx.lineWidth = 1.5; ctx.setLineDash([3,3]);
+          ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px,pp); ctx.stroke(); ctx.setLineDash([]);
+          ctx.fillStyle = em < 2 ? '#10b981' : (em < 5 ? '#f59e0b' : '#ef4444');
+          ctx.beginPath(); ctx.arc(px,py,4,0,6.28); ctx.fill();
+        }
+        // Fitted line
+        var lc = isAnim ? '#8b5cf6' : '#06b6d4';
+        ctx.strokeStyle = lc; ctx.lineWidth = 2.5; ctx.shadowColor = lc; ctx.shadowBlur = 8;
+        ctx.beginPath(); ctx.moveTo(toCX(0), toCY(predict(0))); ctx.lineTo(toCX(10), toCY(predict(10))); ctx.stroke(); ctx.shadowBlur = 0;
+        // Predicted dots
+        for (var i = 0; i < DATA.length; i++) { var px = toCX(DATA[i].x), pp = toCY(predict(DATA[i].x)); ctx.fillStyle = lc+'88'; ctx.beginPath(); ctx.arc(px,pp,2.5,0,6.28); ctx.fill(); }
+        // Loss value
+        var loss = computeLoss();
+        document.getElementById('loss-val').textContent = loss.toFixed(4);
+        document.getElementById('loss-val').className = 'val ' + (loss < 2 ? 'good' : (loss < 8 ? 'ok' : 'bad'));
+      }
+
+      function runGD() {
+        if (isAnim) return; isAnim = true;
+        document.getElementById('phase-ind').textContent = 'running'; document.getElementById('phase-ind').classList.add('active');
+        document.getElementById('btn-gd').disabled = true;
+        b0 = 8; b1 = -0.5; var lr = 0.02, step = 0, steps = 80;
+        function loop() {
+          if (step >= steps) { isAnim = false; document.getElementById('phase-ind').textContent = 'converged ✓'; document.getElementById('btn-gd').disabled = false; document.getElementById('b0-slider').value = b0; document.getElementById('b1-slider').value = b1; document.getElementById('b0-val').textContent = b0.toFixed(2); document.getElementById('b1-val').textContent = b1.toFixed(2); return; }
+          var g0 = 0, g1 = 0;
+          for (var i = 0; i < DATA.length; i++) { var err = predict(DATA[i].x) - DATA[i].y; g0 += err; g1 += err * DATA[i].x; }
+          g0 = 2*g0/DATA.length; g1 = 2*g1/DATA.length;
+          b0 -= lr*g0; b1 -= lr*g1;
+          document.getElementById('b0-val').textContent = b0.toFixed(2); document.getElementById('b1-val').textContent = b1.toFixed(2);
+          document.getElementById('phase-ind').textContent = 'step '+(step+1)+'/'+steps;
+          render(); step++; requestAnimationFrame(loop);
+        }
+        loop();
+      }
+
+      document.getElementById('b1-slider').addEventListener('input', function(e) { b1 = parseFloat(e.target.value); document.getElementById('b1-val').textContent = b1.toFixed(2); render(); });
+      document.getElementById('b0-slider').addEventListener('input', function(e) { b0 = parseFloat(e.target.value); document.getElementById('b0-val').textContent = b0.toFixed(2); render(); });
+      document.getElementById('btn-gd').addEventListener('click', runGD);
+      document.getElementById('btn-reset').addEventListener('click', function() { b0=0; b1=1; document.getElementById('b0-slider').value=0; document.getElementById('b1-slider').value=1; document.getElementById('b0-val').textContent='0.00'; document.getElementById('b1-val').textContent='1.00'; document.getElementById('phase-ind').textContent='idle'; document.getElementById('phase-ind').classList.remove('active'); render(); });
+      render();
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="GELU Activation — visual-first concept card. Interactive canvas, real-time sliders, code with Math→Code annotations." />
+    <title>GELU Activation — Visual Concept Card · AIHPC</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", sans-serif; min-height: 100vh; overflow-x: hidden; }
+      body::before { content:""; position:fixed; inset:0; background: radial-gradient(1000px 500px at 50% 0%, rgba(6,182,212,0.10), transparent 70%); pointer-events:none; z-index:0; }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; position: relative; z-index: 1; }
+      .head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+      .head .tag { font-size: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.4); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .head h1 { font-size: 24px; font-weight: 800; }
+      .back { font-size: 12px; color: var(--accent); text-decoration: none; margin-bottom: 12px; display: inline-block; }
+      .eq-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; background: rgba(11,15,26,0.85); border: 1px solid rgba(6,182,212,0.3); font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent); margin-bottom: 12px; }
+      .desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; max-width: 600px; }
+      .canvas-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+      canvas { display: block; width: 100%; height: auto; }
+      .loss-overlay { position: absolute; top: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; text-align: right; }
+      .loss-overlay .lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+      .loss-overlay .val { font-size: 28px; font-weight: 800; font-family: ui-monospace, monospace; color: var(--accent); }
+      .loss-overlay .val.bad { color: var(--danger); } .loss-overlay .val.ok { color: var(--warn); } .loss-overlay .val.good { color: var(--success); }
+      .eq-overlay { position: absolute; bottom: 12px; left: 12px; background: rgba(11,15,26,0.9); border: 1px solid rgba(6,182,212,0.3); border-radius: 6px; padding: 4px 12px; font-family: "Cambria Math", Georgia, serif; font-size: 13px; color: var(--accent); pointer-events: none; }
+      .phase-indicator { position: absolute; bottom: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 10px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .phase-indicator.active { color: var(--accent); border-color: rgba(6,182,212,0.4); }
+      .controls { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: flex-end; }
+      .ctrl { flex: 1; min-width: 180px; background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+      .ctrl label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; }
+      .ctrl .val { font-size: 14px; font-weight: 700; font-family: ui-monospace, monospace; color: var(--accent); }
+      .ctrl input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--border); outline: none; }
+      .ctrl input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid var(--bg); }
+      .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white; } .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); } .btn.ghost:hover { border-color: var(--accent); color: var(--text); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      /* Code panel — always visible with Math→Code annotations */
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section h3 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+      .code-section .eq-line { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent); padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; border-left: 3px solid var(--accent); margin-bottom: 10px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .foot { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 24px; font-family: ui-monospace, monospace; }
+      .foot a { color: var(--accent); text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <a href="../index.html" class="back">← Home</a>
+      <div class="head">
+        <span class="tag">ML · Activation</span>
+        <h1>GELU Activation</h1>
+      </div>
+      <p class="desc">x · Φ(x) — smoother than ReLU. <b>Used in GPT, BERT, and most transformers</b>. Non-zero gradient for x < 0.</p>
+      <div class="eq-badge">📐 f(x) = x · Φ(x) ≈ 0.5x(1 + tanh(√(2/π)(x + 0.044715x³)))</div>
+      <div class="canvas-wrap">
+        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <div class="loss-overlay"><div class="lbl" id="loss-lbl">Loss</div><div class="val" id="loss-val">0.0000</div></div>
+        <div class="eq-overlay">f(x) = x · Φ(x) ≈ 0.5x(1 + tanh(√(2/π)(x + 0.044715x³)))</div>
+        <div class="phase-indicator" id="phase-ind">idle</div>
+      </div>
+      <div class="controls">
+        <div class="ctrl" id="b1-ctrl"><label>Input x <span class="val" id="b1-val">0.50</span></label><input type="range" id="b1-slider" min="-4" max="4" step="0.01" value="1.0" /></div>
+        <div class="ctrl" id="b0-ctrl"><label>Intercept β₀ <span class="val" id="b0-val">0.00</span></label><input type="range" id="b0-slider" min="-5" max="10" step="0.01" value="0.0" /></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
+          <button class="btn primary" id="btn-gd">▶ Sweep x</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+        </div>
+      </div>
+      <div class="code-section">
+        <h3>💻 Math → Code — how symbols become variables</h3>
+        <div class="eq-line">f(x) = x · Φ(x) ≈ 0.5x(1 + tanh(√(2/π)(x + 0.044715x³)))</div>
+        <pre><span class="cm"># f(x) = x · Φ(x)  where Φ = standard normal CDF</span>
+<span class="cm"># ≈ 0.5x(1 + tanh(√(2/π)(x + 0.044715x³)))</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">gelu</span>(x):
+    <span class="kw">return</span> <span class="num">0.5</span> * x * (<span class="num">1</span> + np.tanh(
+        np.sqrt(<span class="num">2</span>/np.pi) * (x + <span class="num">0.044715</span> * x**<span class="num">3</span>)
+    ))</pre>
+      </div>
+      <div class="foot">
+        <a href="../ai-lab.html?context=GELU Activation">🤖 Ask AI</a> · <a href="../concepts/ml-gelu.html">📖 Full text version</a> · Visual concept card v2
+      </div>
+    </div>
+    <script>
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      
+      // ===== ACTIVATION FUNCTION VISUAL =====
+      var W = canvas.width, H = canvas.height;
+      var xInput = 0.5;
+
+      function actFn(x) {
+        if ('gelu' === 'relu') return Math.max(0, x);
+        if ('gelu' === 'gelu') return 0.5 * x * (1 + Math.tanh(Math.sqrt(2/Math.PI) * (x + 0.044715 * x*x*x)));
+        return x;
+      }
+      function actGrad(x) {
+        if ('gelu' === 'relu') return x > 0 ? 1 : 0;
+        if ('gelu' === 'gelu') {
+          var s = Math.tanh(Math.sqrt(2/Math.PI) * (x + 0.044715*x*x*x));
+          return 0.5 * (1 + s) + 0.5 * x * (1 - s*s) * Math.sqrt(2/Math.PI) * (1 + 3*0.044715*x*x);
+        }
+        return 1;
+      }
+      function toCX(x) { return 60 + (x+4)/8 * (W-120); }
+      function toCY(y) { return H-40 - (y+1)/5 * (H-60); }
+
+      function render() {
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        // Grid + axes
+        ctx.strokeStyle = 'rgba(148,163,184,0.06)'; ctx.lineWidth = 0.5;
+        for (var g = -4; g <= 4; g++) { var px = toCX(g); ctx.beginPath(); ctx.moveTo(px,20); ctx.lineTo(px,H-40); ctx.stroke(); }
+        for (var g2 = -1; g2 <= 4; g2++) { var py = toCY(g2); ctx.beginPath(); ctx.moveTo(60,py); ctx.lineTo(W-60,py); ctx.stroke(); }
+        ctx.strokeStyle = 'rgba(148,163,184,0.25)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(60,toCY(0)); ctx.lineTo(W-60,toCY(0)); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(toCX(0),20); ctx.lineTo(toCX(0),H-40); ctx.stroke();
+        // Function curve
+        ctx.strokeStyle = '#06b6d4'; ctx.lineWidth = 2.5; ctx.shadowColor = '#06b6d4'; ctx.shadowBlur = 6;
+        ctx.beginPath();
+        for (var x = -4; x <= 4; x += 0.05) { var px = toCX(x), py = toCY(actFn(x)); if (x === -4) ctx.moveTo(px,py); else ctx.lineTo(px,py); }
+        ctx.stroke(); ctx.shadowBlur = 0;
+        // Gradient curve (lighter)
+        ctx.strokeStyle = '#8b5cf688'; ctx.lineWidth = 1.5; ctx.setLineDash([4,4]);
+        ctx.beginPath();
+        for (var x = -4; x <= 4; x += 0.05) { var px = toCX(x), py = toCY(actGrad(x)); if (x === -4) ctx.moveTo(px,py); else ctx.lineTo(px,py); }
+        ctx.stroke(); ctx.setLineDash([]);
+        // Current input point
+        var cv = actFn(xInput), gv = actGrad(xInput);
+        var ipx = toCX(xInput), ipy = toCY(cv);
+        // Vertical line from x-axis to function
+        ctx.strokeStyle = 'rgba(245,158,11,0.4)'; ctx.lineWidth = 1; ctx.setLineDash([2,4]);
+        ctx.beginPath(); ctx.moveTo(ipx, toCY(0)); ctx.lineTo(ipx, ipy); ctx.stroke(); ctx.setLineDash([]);
+        // Point on function
+        ctx.fillStyle = '#f59e0b'; ctx.beginPath(); ctx.arc(ipx, ipy, 5, 0, 6.28); ctx.fill();
+        // Point on x-axis
+        ctx.fillStyle = '#f59e0baa'; ctx.beginPath(); ctx.arc(ipx, toCY(0), 3, 0, 6.28); ctx.fill();
+        // Labels
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace'; ctx.textAlign = 'right';
+        ctx.fillText('f(x)', W-65, 35);
+        ctx.fillStyle = '#8b5cf688'; ctx.fillText("f'(x)", W-65, 50);
+        ctx.fillStyle = '#f59e0b'; ctx.fillText('x=' + xInput.toFixed(2), W-65, 65);
+        ctx.fillStyle = '#10b981'; ctx.fillText('f=' + cv.toFixed(3), W-65, 80);
+        ctx.fillStyle = '#ec4899'; ctx.fillText("f'=" + gv.toFixed(3), W-65, 95);
+        ctx.textAlign = 'left';
+        // Loss value overlay
+        document.getElementById('loss-val').textContent = cv.toFixed(3);
+        document.getElementById('loss-val').className = 'val good';
+        document.getElementById('loss-val').previousElementSibling.textContent = 'f(' + xInput.toFixed(2) + ')';
+      }
+
+      document.getElementById('b1-slider').addEventListener('input', function(e) { xInput = parseFloat(e.target.value); document.getElementById('b1-val').textContent = xInput.toFixed(2); render(); });
+      document.getElementById('b0-slider').style.display = 'none';
+      document.getElementById('b0-val').parentElement.style.display = 'none';
+      document.getElementById('btn-gd').addEventListener('click', function() {
+        // Animate x sweeping from -4 to 4
+        if (isAnim) return; isAnim = true; document.getElementById('btn-gd').disabled = true;
+        var x = -4;
+        function sweep() {
+          if (x >= 4) { isAnim = false; document.getElementById('btn-gd').disabled = false; return; }
+          xInput = x; document.getElementById('b1-slider').value = x; document.getElementById('b1-val').textContent = x.toFixed(2);
+          render(); x += 0.08; requestAnimationFrame(sweep);
+        }
+        sweep();
+      });
+      document.getElementById('btn-reset').addEventListener('click', function() { xInput = 0.5; document.getElementById('b1-slider').value = 0.5; document.getElementById('b1-val').textContent = '0.50'; render(); });
+      var isAnim = false;
+      render();
+
+    </script>
+  </body>
+</html>

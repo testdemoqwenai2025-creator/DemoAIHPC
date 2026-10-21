@@ -167,6 +167,16 @@ def check_ribbon(html_files):
         os.path.join(DOCS, "roadmap.html"),  # Phase 53 enhancement roadmap
         os.path.join(DOCS, "search.html"),  # Phase 54 unified search
         os.path.join(DOCS, "paths.html"),  # Phase 55 learning paths
+        os.path.join(DOCS, "concepts-v2", "ml-mse.html"),  # Phase 60 visual-first concept cards
+        os.path.join(DOCS, "concepts-v2", "ml-mae.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-huber-loss.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-log-cosh.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-relu.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-gelu.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-sgd.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-adam.html"),
+        os.path.join(DOCS, "concepts-v2", "ml-adamw.html"),
+        os.path.join(DOCS, "concepts-v2", "index.html"),  # v2 concepts index
     }
     failures = []
     required = ["Platform", "AETHEL Suite", "Science", "Insights"]
@@ -2465,6 +2475,7 @@ def check_no_orphan_html_pages():
     # state, not a platform regression.
     allowlist_subdirs = [
         os.path.normpath(os.path.join(DOCS, "concepts")) + os.sep,
+        os.path.normpath(os.path.join(DOCS, "concepts-v2")) + os.sep,
     ]
 
     def is_allowlisted(p):
