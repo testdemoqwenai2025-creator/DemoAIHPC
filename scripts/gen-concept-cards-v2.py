@@ -625,16 +625,22 @@ CARDS = [
 # Helpers for the foot links (conditional on v1 full-text card existing)
 # ============================================================================
 def make_foot(slug: str, title: str) -> str:
-    """Build the foot link block. Only emit links that point to existing pages.
+    """Build the foot link block. ALWAYS include a Full text version link.
 
-    - ai-lab.html does not exist (planned future feature) — drop the link
-    - concepts/<slug>.html is the v1 full-text card — only emit if it exists
+    - If v1 card exists → link to it
+    - If no v1 → link to Semantic Scholar search for the title
     """
     parts = []
     v1_path = os.path.join(ROOT, "docs", "concepts", slug + ".html")
     if os.path.exists(v1_path):
         parts.append(
             f'<a href="../concepts/{slug}.html">📖 Full text version</a>'
+        )
+    else:
+        # No v1 card — link to Semantic Scholar search
+        search_query = title.replace(' ', '+').replace('—', '').strip()
+        parts.append(
+            f'<a href="https://www.semanticscholar.org/search?q={search_query}" target="_blank" rel="noopener">📄 Full text version</a>'
         )
     parts.append("Concept card v2")
     return '  ·  '.join(parts)

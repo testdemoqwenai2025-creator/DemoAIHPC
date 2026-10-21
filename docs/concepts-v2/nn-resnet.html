@@ -134,7 +134,7 @@ out = resnet.<span class="fn">forward</span>(x)
         <div class="dt-row"><span class="lbl why">WHY:</span><span class="text">in 2015, He et al. observed that deeper plain networks train WORSE than shallower ones — not because of overfitting, but because of the degradation problem (gradients vanish/explode even with careful init). Adding identity skip connections (y = F(x) + x) solves this elegantly: if the optimal mapping is identity, F just needs to learn to output 0 (trivially easy). The backward pass always has a path of 1s (the identity gradient) that prevents vanishing. This single architectural change took image classification from VGG-16 (16 layers) to ResNet-152 (152 layers) overnight.</span></div>
       </div>
       <div class="foot">
-        Concept card v2
+        <a href="https://www.semanticscholar.org/search?q=Residual+Network+(ResNet)" target="_blank" rel="noopener">📄 Full text version</a>  ·  Concept card v2
       </div>
     </div>
     <script>

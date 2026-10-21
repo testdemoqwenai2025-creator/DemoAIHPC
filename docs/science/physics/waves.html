@@ -198,7 +198,113 @@
         AIHPC_ANIM.init();
       </script>
 
-      <h2>Math &rarr; Code derivation</h2>
+      
+      <!-- Phase 39.6: Interactive wave visualiser (v2-concept-card-style) -->
+      <div style="background: rgba(18,24,38,0.7); border: 1px solid rgba(6,182,212,0.3); border-radius: 12px; padding: 16px; margin-top: 20px;">
+        <h3 style="color: #06b6d4; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px;">🌊 Interactive Wave Visualiser</h3>
+        <div style="position: relative; background: rgba(11,15,26,0.6); border: 1px solid #1f2937; border-radius: 8px; overflow: hidden; margin-bottom: 12px;">
+          <canvas id="wave-canvas" width="680" height="200" style="display: block; width: 100%; height: auto;"></canvas>
+          <div style="position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; background: rgba(11,15,26,0.85); border: 1px solid #1f2937; border-radius: 8px; padding: 4px;">
+            <button id="wave-zoom-in" style="width: 30px; height: 30px; border: none; background: transparent; color: #f3f4f6; cursor: pointer; font-size: 16px; font-weight: 700; border-radius: 4px;">+</button>
+            <div id="wave-zoom-label" style="font-size: 9px; color: #9ca3af; text-align: center;">100%</div>
+            <button id="wave-zoom-out" style="width: 30px; height: 30px; border: none; background: transparent; color: #f3f4f6; cursor: pointer; font-size: 16px; font-weight: 700; border-radius: 4px;">−</button>
+            <button id="wave-zoom-reset" style="width: 30px; height: 30px; border: none; background: transparent; color: #f3f4f6; cursor: pointer; font-size: 14px; border-radius: 4px;">↺</button>
+          </div>
+          <div id="wave-phase-ind" style="position: absolute; bottom: 10px; left: 12px; background: rgba(11,15,26,0.85); border: 1px solid #1f2937; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #9ca3af; font-family: ui-monospace, monospace;">idle</div>
+        </div>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+          <div style="flex: 1; min-width: 140px; background: rgba(18,24,38,0.7); border: 1px solid #1f2937; border-radius: 8px; padding: 10px 14px;">
+            <label style="font-size: 11px; color: #9ca3af; display: block; margin-bottom: 4px;">Frequency f <span style="color: #06b6d4; font-weight: 700; font-family: ui-monospace, monospace;" id="wave-freq-val">1.00 Hz</span></label>
+            <input type="range" id="wave-freq" min="0.5" max="5" step="0.1" value="1.0" style="width: 100%; -webkit-appearance: none; height: 4px; border-radius: 2px; background: #1f2937; outline: none;" />
+          </div>
+          <div style="flex: 1; min-width: 140px; background: rgba(18,24,38,0.7); border: 1px solid #1f2937; border-radius: 8px; padding: 10px 14px;">
+            <label style="font-size: 11px; color: #9ca3af; display: block; margin-bottom: 4px;">Amplitude A <span style="color: #06b6d4; font-weight: 700; font-family: ui-monospace, monospace;" id="wave-amp-val">0.80</span></label>
+            <input type="range" id="wave-amp" min="0.1" max="1.0" step="0.05" value="0.8" style="width: 100%; -webkit-appearance: none; height: 4px; border-radius: 2px; background: #1f2937; outline: none;" />
+          </div>
+          <div style="flex: 1; min-width: 140px; background: rgba(18,24,38,0.7); border: 1px solid #1f2937; border-radius: 8px; padding: 10px 14px;">
+            <label style="font-size: 11px; color: #9ca3af; display: block; margin-bottom: 4px;">Wavelength λ <span style="color: #06b6d4; font-weight: 700; font-family: ui-monospace, monospace;" id="wave-wl-val">200px</span></label>
+            <input type="range" id="wave-wl" min="50" max="400" step="10" value="200" style="width: 100%; -webkit-appearance: none; height: 4px; border-radius: 2px; background: #1f2937; outline: none;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
+            <button id="wave-run" style="padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; background: linear-gradient(90deg, #06b6d4, #8b5cf6); color: white;">▶ Run</button>
+            <div style="display: flex; gap: 6px;">
+              <button id="wave-step" style="flex: 1; padding: 6px 10px; border-radius: 6px; border: 1px solid #1f2937; background: rgba(18,24,38,0.7); color: #9ca3af; cursor: pointer; font-size: 12px; font-weight: 700;">⏭ Step</button>
+              <button id="wave-reset" style="flex: 1; padding: 6px 10px; border-radius: 6px; border: 1px solid #1f2937; background: rgba(18,24,38,0.7); color: #9ca3af; cursor: pointer; font-size: 12px; font-weight: 700;">↺ Reset</button>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 8px; font-size: 11px; color: #9ca3af; font-family: ui-monospace, monospace;">y = A · sin(2π · f · x / λ + φ) — drag sliders, hit Run to animate wave propagation, Step to advance one frame</div>
+      </div>
+      <script>
+        // Interactive wave visualiser
+        (function() {
+          var c = document.getElementById('wave-canvas');
+          if (!c) return;
+          var x = c.getContext('2d');
+          var W = c.width, H = c.height;
+          var freq = 1.0, amp = 0.8, wl = 200, phase = 0, zoom = 1.0, isAnim = false;
+          var sliderStyle = '::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #06b6d4; cursor: pointer; border: 2px solid #0b0f1a; }';
+
+          function render() {
+            x.save();
+            x.fillStyle = '#0a0e1a'; x.fillRect(0, 0, W, H);
+            x.translate(W/2, H/2); x.scale(zoom, zoom); x.translate(-W/2, -H/2);
+            // Grid
+            x.strokeStyle = 'rgba(148,163,184,0.06)'; x.lineWidth = 0.5;
+            for (var gx = 0; gx <= W; gx += 40) { x.beginPath(); x.moveTo(gx, 0); x.lineTo(gx, H); x.stroke(); }
+            for (var gy = 0; gy <= H; gy += 40) { x.beginPath(); x.moveTo(0, gy); x.lineTo(W, gy); x.stroke(); }
+            // Axes
+            x.strokeStyle = 'rgba(148,163,184,0.2)'; x.lineWidth = 1;
+            x.beginPath(); x.moveTo(0, H/2); x.lineTo(W, H/2); x.stroke();
+            // Wave
+            x.strokeStyle = '#06b6d4'; x.lineWidth = 2.5; x.shadowColor = '#06b6d4'; x.shadowBlur = 6;
+            x.beginPath();
+            for (var px = 0; px <= W; px += 2) {
+              var py = H/2 - amp * (H/2 - 20) * Math.sin(2 * Math.PI * freq * px / wl + phase);
+              if (px === 0) x.moveTo(px, py); else x.lineTo(px, py);
+            }
+            x.stroke(); x.shadowBlur = 0;
+            // Second harmonic (lighter)
+            x.strokeStyle = 'rgba(139,92,246,0.4)'; x.lineWidth = 1.5; x.setLineDash([4,4]);
+            x.beginPath();
+            for (var px2 = 0; px2 <= W; px2 += 2) {
+              var py2 = H/2 - amp * 0.3 * (H/2 - 20) * Math.sin(2 * Math.PI * freq * 2 * px2 / wl + phase);
+              if (px2 === 0) x.moveTo(px2, py2); else x.lineTo(px2, py2);
+            }
+            x.stroke(); x.setLineDash([]);
+            // Phase indicator
+            x.fillStyle = 'rgba(245,158,11,0.8)'; x.beginPath(); x.arc(W/4, H/2 - amp * (H/2-20) * Math.sin(2*Math.PI*freq*(W/4)/wl + phase), 5, 0, 6.28); x.fill();
+            // Labels
+            x.fillStyle = '#06b6d4'; x.font = 'bold 11px ui-monospace'; x.textAlign = 'right';
+            x.fillText('f=' + freq.toFixed(1) + 'Hz A=' + amp.toFixed(2) + ' λ=' + wl + 'px', W - 10, 20);
+            x.fillText('φ=' + (phase % 6.28).toFixed(2), W - 10, 35);
+            x.textAlign = 'left';
+            x.restore();
+            document.getElementById('wave-phase-ind').textContent = isAnim ? 'animating φ=' + (phase % 6.28).toFixed(2) : 'idle φ=' + (phase % 6.28).toFixed(2);
+          }
+          function animate() {
+            if (!isAnim) return;
+            phase += 0.05 * freq;
+            render();
+            requestAnimationFrame(animate);
+          }
+          document.getElementById('wave-freq').addEventListener('input', function(e) { freq = parseFloat(e.target.value); document.getElementById('wave-freq-val').textContent = freq.toFixed(2) + ' Hz'; render(); });
+          document.getElementById('wave-amp').addEventListener('input', function(e) { amp = parseFloat(e.target.value); document.getElementById('wave-amp-val').textContent = amp.toFixed(2); render(); });
+          document.getElementById('wave-wl').addEventListener('input', function(e) { wl = parseInt(e.target.value); document.getElementById('wave-wl-val').textContent = wl + 'px'; render(); });
+          document.getElementById('wave-run').addEventListener('click', function() {
+            if (isAnim) { isAnim = false; this.textContent = '▶ Run'; } else { isAnim = true; this.textContent = '⏸ Pause'; animate(); }
+          });
+          document.getElementById('wave-step').addEventListener('click', function() { if (isAnim) return; phase += 0.1; render(); });
+          document.getElementById('wave-reset').addEventListener('click', function() { phase = 0; freq = 1.0; amp = 0.8; wl = 200; isAnim = false; document.getElementById('wave-run').textContent = '▶ Run'; document.getElementById('wave-freq').value = 1.0; document.getElementById('wave-amp').value = 0.8; document.getElementById('wave-wl').value = 200; document.getElementById('wave-freq-val').textContent = '1.00 Hz'; document.getElementById('wave-amp-val').textContent = '0.80'; document.getElementById('wave-wl-val').textContent = '200px'; render(); });
+          document.getElementById('wave-zoom-in').addEventListener('click', function() { zoom = Math.min(3, zoom + 0.2); document.getElementById('wave-zoom-label').textContent = Math.round(zoom*100)+'%'; render(); });
+          document.getElementById('wave-zoom-out').addEventListener('click', function() { zoom = Math.max(0.5, zoom - 0.2); document.getElementById('wave-zoom-label').textContent = Math.round(zoom*100)+'%'; render(); });
+          document.getElementById('wave-zoom-reset').addEventListener('click', function() { zoom = 1; document.getElementById('wave-zoom-label').textContent = '100%'; render(); });
+          render();
+        })();
+      </script>
+
+
+<h2>Math &rarr; Code derivation</h2>
       <div class="derivation-step">
         <strong>Step 1: The discrete Fourier transform (DFT)</strong>
         <div class="step-math">X[k] = Σ_{n=0}^{N−1} x[n] · exp(−i·2π·k·n / N),  k = 0, …, N−1</div>

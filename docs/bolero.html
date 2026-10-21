@@ -476,14 +476,49 @@ x = encode_dna(seq)
         }
 
         function computeAtac(seq) {
-          // Simple model: each base contributes to accessibility based on its type + position
+          // Phase 39.6: Position-specific regulatory motif model
+          // Based on known genomic regulatory grammar:
+          //   pos 0-5:   TATA box (A/T-rich → high accessibility)
+          //   pos 6-12:  GC-rich promoter (C/G → lower accessibility)
+          //   pos 13-18: TF binding motifs (specific sequences → spikes)
+          //   pos 19-25: Enhancer region (A/T → moderate accessibility)
+          //   pos 26-31: Insulator/boundary (C/G → lower accessibility)
           var profile = [];
+          // Known TF motif: AP-1 (TGACTCA) at positions 13-19
+          var ap1Motif = 'TGACTCA';
+          // Known TF motif: FOX (RTAAACA) at positions 20-25
+          var foxMotif = 'GTAAACA';
           for (var i = 0; i < 32; i++) {
             var base = seq[i];
-            var baseEffect = base === 'A' ? 0.1 : base === 'C' ? -0.05 : base === 'G' ? 0.05 : -0.1;
-            var posEffect = Math.sin(i * 0.3) * 0.15;
-            var noise = (Math.sin(i * 1.7 + seq.charCodeAt(i % 32)) * 0.1);
-            profile.push(Math.max(0.05, Math.min(0.95, 0.5 + baseEffect + posEffect + noise)));
+            var baseEffect = base === 'A' ? 0.08 : base === 'T' ? 0.06 : base === 'C' ? -0.06 : base === 'G' ? -0.04 : 0;
+            var regionEffect = 0;
+            if (i <= 5) regionEffect = 0.15; // TATA box: A/T-rich = accessible
+            else if (i <= 12) regionEffect = -0.08; // GC-rich promoter
+            else if (i <= 18) {
+              // TF binding region — check for AP-1 motif match
+              var matchAP1 = true;
+              for (var m = 0; m < 7 && (i + m) < 32; m++) {
+                if (seq[i + m] !== ap1Motif[m]) { matchAP1 = false; break; }
+              }
+              regionEffect = matchAP1 ? 0.35 : 0.05; // AP-1 match = strong spike
+            }
+            else if (i <= 25) {
+              // Enhancer — check for FOX motif
+              var matchFOX = true;
+              for (var m2 = 0; m2 < 6 && (i + m2) < 32; m2++) {
+                if (seq[i + m2] !== foxMotif[m2]) { matchFOX = false; break; }
+              }
+              regionEffect = matchFOX ? 0.25 : 0.1;
+            }
+            else regionEffect = -0.05; // Insulator
+            // Position-specific perturbation: editing at TF sites has outsized effect
+            var editEffect = 0;
+            if (i >= 13 && i <= 25) {
+              // TF binding region — changes here have large effects
+              editEffect = (base === 'A' || base === 'T') ? 0.12 : -0.08;
+            }
+            var val = 0.45 + baseEffect + regionEffect + editEffect;
+            profile.push(Math.max(0.05, Math.min(0.95, val)));
           }
           return profile;
         }
