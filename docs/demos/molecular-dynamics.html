@@ -483,5 +483,6 @@ for (const p of particles) {
       (function(){var K='aihpc-theme';var b=document.body,r=document.querySelector('.ribbon'),i=document.getElementById('ribbon-theme-icon');function a(t){if(t==='light'){b.classList.add('light');r&&r.classList.add('light');i.textContent='☀'}else{b.classList.remove('light');r&&r.classList.remove('light');i.textContent='🌙'}}var d='dark';try{var s=localStorage.getItem(K);if(s==='light'||s==='dark')d=s;else if(matchMedia('(prefers-color-scheme:light)').matches)d='light'}catch(e){}a(d);document.getElementById('ribbon-theme-toggle').addEventListener('click',function(){var n=b.classList.contains('light')?'dark':'light';a(n);try{localStorage.setItem(K,n)}catch(e){}})})();
     </script>
   <script src="../ask-ai-button.js"></script>
+  <script src="header-banner.js"></script>
   </body>
 </html>

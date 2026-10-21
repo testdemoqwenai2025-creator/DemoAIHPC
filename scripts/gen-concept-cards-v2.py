@@ -841,6 +841,7 @@ def gen_activation(card):
       <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
       <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data · no cookies · no tracking · all computations client-side (lazy evaluation)</p>
     </div>
+    <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
   </body>
 </html>"""
@@ -1043,6 +1044,7 @@ def gen_loss(card):
       <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
       <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations client-side (lazy evaluation)</p>
     </div>
+    <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
   </body>
 </html>"""
@@ -1256,6 +1258,7 @@ def gen_optimiser(card):
       <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
       <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations client-side (lazy evaluation)</p>
     </div>
+    <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
   </body>
 </html>"""
@@ -1474,6 +1477,7 @@ def gen_normalisation(card):
       <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
       <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations client-side (lazy evaluation)</p>
     </div>
+    <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
   </body>
 </html>"""
@@ -1697,6 +1701,7 @@ def gen_attention(card):
       <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
       <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations client-side (lazy evaluation)</p>
     </div>
+    <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
   </body>
 </html>"""
@@ -1900,6 +1905,7 @@ def gen_regularisation(card):
       <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
       <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations client-side (lazy evaluation)</p>
     </div>
+    <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
   </body>
 </html>"""
@@ -2058,6 +2064,7 @@ def gen_neural_network(card):
       <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
       <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations client-side (lazy evaluation)</p>
     </div>
+    <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
   </body>
 </html>"""
@@ -3514,6 +3521,7 @@ def gen_index(cards):
       <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
       <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data collected · no cookies · no tracking · no external API calls · all computations client-side (lazy evaluation)</p>
     </div>
+    <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
   </body>
 </html>"""
