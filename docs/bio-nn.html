@@ -103,6 +103,22 @@
     </style>
   </head>
   <body>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="index.html">Home</a><a href="demos.html">Demos</a><a href="dashboard.html">Dashboard</a><a href="graph.html">Knowledge Graph</a><a href="benchmark.html">Agentic Benchmark</a><a href="subscribe.html">Subscribe</a><a href="timeline.html">Platform Timeline (50 Phases)</a><a href="retrospective.html">50-Phase Retrospective</a><a href="component-registry.html">Component Registry</a></div></details><details class="ribbon-dropdown"><summary>Visualisers</summary><div class="ribbon-menu"><a href="playground.html">Cross-Domain Playground</a><a href="quantum-shorts.html">Quantum Shorts Channel</a><a href="bloch.html">Bloch Sphere Shorts</a><a href="medical-atlas.html">Medical Imaging Atlas</a><a href="bio-nn.html">Bioinformatics × NN Hub</a><a href="science/physics/quantum.html">Quantum Mechanics Hub</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="aethel.html">AETHEL Connector</a><a href="connectors.html">Scientific Connectors Hub</a><a href="query.html">Query Executor</a><a href="graph.html">Knowledge Graph</a><a href="workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="science-biology.html">Biology Hub</a><a href="science-chemistry.html">Chemistry Hub</a><a href="science-physics.html">Physics Hub</a><a href="science-maths.html">Mathematics Hub</a><a href="science-ml.html">🤖 Machine Learning</a><a href="science-bioinformatics.html">Bioinformatics</a><a href="science-cheminformatics.html">Cheminformatics</a><a href="bloch.html">⚛️ Bloch Sphere Shorts</a><a href="bio-nn.html">🧬 Bioinformatics × NN</a><a href="bolero.html">🧬 BOLERO Sequence Model</a><a href="scgpt.html">🔬 scGPT</a><a href="geneformer.html">🔬 Geneformer</a><a href="alphafold3.html">🔬 AlphaFold 3</a><a href="claude-toxin.html">🔬 Claude Toxin Binder</a><a href="science/physics/quantum.html">Quantum Mechanics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="feeds.html">📡 Live Journal Feeds</a><a href="digest.html">Weekly Science Digest</a><a href="audit.html">📊 Audit Dashboard</a><a href="404.html">🚧 404 page</a><a href="lab.html">🔬 Lab</a><a href="dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="concepts.html">Concept Cards</a><a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="concepts/provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+
     <canvas id="particle-canvas"></canvas>
 
     <main class="container">
@@ -286,6 +302,20 @@
           <div class="authors">Institute for AI in Biology — 2024</div>
           <div class="desc">DNA language models from 1000 to 2.5B params trained on 3200 genomes. Outputs generalisable representations of genomic sequences.</div>
         </div>
+      </div>
+
+      
+      <div class="section-divider">
+        <h2>📤 Submit a paper for a concept card</h2>
+      </div>
+      <div style="background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px; padding: 20px 24px;">
+        <p style="font-size: 14px; color: var(--text-muted); margin: 0 0 16px;">Know a bioinformatics + neural network paper that deserves a concept card? Submit it via GitHub Issues — our agents will convert it into a 6-section page (pipeline animation + math + code + deep thoughts + futuristic + comparison).</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="https://github.com/testdemoqwenai2025-creator/AIHPC-Advanced/issues/new?labels=paper-card-request&title=Paper+card+request:+[paper+title]&body=Paper+title:+%0D%0AAuthors:+%0D%0ALink+(arXiv/Nature/LinkedIn):+%0D%0AKey+ML+technique:+%0D%0AHeadline+result:+%0D%0AWhy+it+matters:" target="_blank" rel="noopener" style="display: inline-block; background: linear-gradient(90deg, #8b5cf6, #06b6d4); color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700;">📋 Submit via GitHub Issue →</a>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfFakeFormKeyplaceholder/viewform" target="_blank" rel="noopener" style="display: inline-block; background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text); padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700;">📝 Submit via Google Form →</a>
+          <a href="mailto:testdemoqwenai2025@gmail.com?subject=Paper card request&body=Paper title:%0D%0AAuthors:%0D%0ALink (arXiv/Nature/LinkedIn):%0D%0AKey ML technique:%0D%0AHeadline result:%0D%0AWhy it matters:" style="display: inline-block; background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text); padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700;">✉️ Email us →</a>
+        </div>
+        <p style="font-size: 11px; color: var(--text-muted-2); margin: 12px 0 0; font-style: italic;">Send us: paper title, authors, link (arXiv / Nature / LinkedIn screenshot), key ML technique, headline result, why it matters. We'll convert it into a concept card within 1-2 business days.</p>
       </div>
 
       <div class="meta">
