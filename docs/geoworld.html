@@ -228,115 +228,559 @@ plan, energy = world.plan(current_state, goal, n_steps=<span class="num">10</spa
       </div>
     </main>
     <script>
-      // Particle background
-      (function(){var c=document.getElementById('particle-canvas');var x=c.getContext('2d');function r(){c.width=innerWidth;c.height=innerHeight;}r();addEventListener('resize',r);var N=50,P=[];var cols=['#8b5cf6','#06b6d4','#10b981'];for(var i=0;i<N;i++)P.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.15,vy:(Math.random()-.5)*.15,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,c.width,c.height);for(var i=0;i<N;i++)for(var j=i+1;j<N;j++){var d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<100){x.strokeStyle='rgba(139,92,246,'+(.1*(1-d/100))+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke();}}for(var p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;x.fillStyle=p.c;x.globalAlpha=.3;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill();}x.globalAlpha=1;requestAnimationFrame(s);}s();})();
+      // Particle background — upgraded with depth + parallax
+      (function(){
+        var c=document.getElementById('particle-canvas');
+        var x=c.getContext('2d');
+        function r(){c.width=innerWidth;c.height=innerHeight;}
+        r();addEventListener('resize',r);
+        var N=60,P=[];
+        var cols=['#8b5cf6','#06b6d4','#10b981'];
+        for(var i=0;i<N;i++){
+          var depth=Math.random();
+          P.push({
+            x:Math.random()*c.width,
+            y:Math.random()*c.height,
+            vx:(Math.random()-.5)*.15*(0.4+depth),
+            vy:(Math.random()-.5)*.15*(0.4+depth),
+            r:Math.random()*2+.6+depth*1.2,
+            c:cols[i%3],
+            d:depth  // depth 0..1, larger=closer
+          });
+        }
+        function s(){
+          x.clearRect(0,0,c.width,c.height);
+          // Constellation lines (depth-weighted)
+          for(var i=0;i<N;i++)for(var j=i+1;j<N;j++){
+            var d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);
+            if(d<140){
+              var alpha=.18*(1-d/140)*Math.min(P[i].d+P[j].d,1.4);
+              x.strokeStyle='rgba(139,92,246,'+alpha+')';
+              x.lineWidth=.5+Math.min(P[i].d,P[j].d);
+              x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke();
+            }
+          }
+          // Glowing particles (radial gradient halos)
+          for(var p of P){
+            p.x+=p.vx;p.y+=p.vy;
+            if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;
+            if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;
+            // Radial halo
+            var g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*3.5);
+            g.addColorStop(0,p.c);
+            g.addColorStop(0.4,p.c+'aa');
+            g.addColorStop(1,p.c+'00');
+            x.fillStyle=g;
+            x.globalAlpha=.45*p.d;
+            x.beginPath();x.arc(p.x,p.y,p.r*3.5,0,6.28);x.fill();
+            // Solid core
+            x.fillStyle=p.c;x.globalAlpha=.85*p.d;
+            x.beginPath();x.arc(p.x,p.y,p.r*0.6,0,6.28);x.fill();
+          }
+          x.globalAlpha=1;
+          requestAnimationFrame(s);
+        }
+        s();
+      })();
 
-      // GeoWorld pipeline canvas
-      var canvas=document.getElementById('main-canvas');var ctx=canvas.getContext('2d');
-      var W=canvas.width,H=canvas.height;var stage=0,maxStage=5,zoom=1.0,isAnim=false;
+      // ========================================================================
+      // GeoWorld — high-quality 5-stage pipeline canvas
+      // Improvements: gradient fills, glow shadows, animated particles,
+      // smooth stage transitions, 3D-projected point cloud, articulated
+      // robot arm with multiple joints, isolines on energy landscape,
+      // flowing action arrows, real-time feedback loop.
+      // ========================================================================
+      var canvas=document.getElementById('main-canvas');
+      var ctx=canvas.getContext('2d');
+      var W=canvas.width,H=canvas.height;
+      var stage=0,maxStage=5,zoom=1.0,isAnim=false;
+      var stageProgress=0;          // 0..1 within current stage for smooth transition
+      var lastStageTime=0;
+      var particleSeed=[];          // persistent point-cloud positions for stability
+      var energyParticles=[];        // flowing energy particles for stage 3
+      var robotJointAngle=0;        // animate robot arm in stage 5
+
+      // Build stable point cloud (sphere of points in 3D, projected to 2D)
+      for(var i=0;i<140;i++){
+        var theta=Math.acos(2*Math.random()-1);var phi=Math.random()*6.283;
+        var r=22+Math.random()*4;
+        particleSeed.push({
+          x:r*Math.sin(theta)*Math.cos(phi),
+          y:r*Math.sin(theta)*Math.sin(phi),
+          z:r*Math.cos(theta),
+          base:Math.random()
+        });
+      }
+
+      // Init energy particles
+      for(var j=0;j<24;j++){
+        energyParticles.push({
+          x:Math.random()*W,y:Math.random()*60+200,
+          vx:0.4+Math.random()*0.7,vy:(Math.random()-.5)*0.2,
+          life:Math.random()
+        });
+      }
+
+      function lerp(a,b,t){return a+(b-a)*t;}
+      function ease(t){return t<.5?2*t*t:-1+(4-2*t)*t;}
+
+      function drawGlowCircle(x,y,r,color,alpha){
+        if(alpha===undefined)alpha=1;
+        // Outer halo
+        var g=ctx.createRadialGradient(x,y,0,x,y,r*3);
+        g.addColorStop(0,color);
+        g.addColorStop(0.3,color.replace(/[\d.]+\)$/,(0.6*alpha)+')'));
+        g.addColorStop(1,color.replace(/[\d.]+\)$/,'0)'));
+        ctx.fillStyle=g;
+        ctx.beginPath();ctx.arc(x,y,r*3,0,6.28);ctx.fill();
+        // Solid core
+        ctx.fillStyle=color;
+        ctx.globalAlpha=alpha;
+        ctx.beginPath();ctx.arc(x,y,r,0,6.28);ctx.fill();
+        ctx.globalAlpha=1;
+      }
+
+      function drawStageHeader(){
+        // Background gradient — top to bottom
+        var bg=ctx.createLinearGradient(0,0,0,H);
+        bg.addColorStop(0,'#0a0e1a');
+        bg.addColorStop(0.5,'#0f1422');
+        bg.addColorStop(1,'#0a0e1a');
+        ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+        // Subtle grid backdrop
+        ctx.strokeStyle='rgba(139,92,246,0.05)';
+        ctx.lineWidth=1;
+        for(var gx=0;gx<W;gx+=40){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+        for(var gy=0;gy<H;gy+=40){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+
+        // Stage title with glow
+        ctx.save();
+        ctx.shadowColor='#8b5cf6';ctx.shadowBlur=12;
+        ctx.fillStyle='#c4b5fd';ctx.font='bold 14px ui-monospace,monospace';ctx.textAlign='center';
+        ctx.fillText('GeoWorld — stage '+stage+'/'+maxStage,W/2,25);
+        ctx.restore();
+        ctx.textAlign='left';
+
+        // Progress dots
+        var dotsX=W/2-(maxStage+1)*7;
+        for(var s=0;s<=maxStage;s++){
+          ctx.fillStyle=s<=stage?'#10b981':'rgba(148,163,184,0.2)';
+          ctx.beginPath();ctx.arc(dotsX+s*14,42,4,0,6.28);ctx.fill();
+          if(s>0&&s<=stage){
+            ctx.strokeStyle='rgba(16,185,129,0.4)';ctx.lineWidth=1;
+            ctx.beginPath();ctx.moveTo(dotsX+(s-1)*14+4,42);ctx.lineTo(dotsX+s*14-4,42);ctx.stroke();
+          }
+        }
+      }
+
+      function drawPointCloud(cx,cy,alpha){
+        // Rotating 3D point cloud (sphere) projected to 2D
+        var t=performance.now()*0.0006;
+        // Sort by depth for proper painter's algorithm
+        var projected=particleSeed.map(function(p){
+          // Rotate around Y axis
+          var cs=Math.cos(t),sn=Math.sin(t);
+          var x1=p.x*cs-p.z*sn;
+          var z1=p.x*sn+p.z*cs;
+          // Rotate around X axis (tilt)
+          var cs2=Math.cos(0.4),sn2=Math.sin(0.4);
+          var y2=p.y*cs2-z1*sn2;
+          var z2=p.y*sn2+z1*cs2;
+          return {x:cx+x1,y:cy+y2,z:z2,base:p.base};
+        });
+        projected.sort(function(a,b){return a.z-b.z;});
+
+        // Draw axis indicator first (back)
+        ctx.strokeStyle='rgba(148,163,184,0.2)';
+        ctx.lineWidth=1;
+        ctx.setLineDash([2,3]);
+        ctx.beginPath();
+        ctx.moveTo(cx,cy-30);ctx.lineTo(cx,cy+30);
+        ctx.moveTo(cx-30,cy);ctx.lineTo(cx+30,cy);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Draw each point as a small glowing dot
+        for(var i=0;i<projected.length;i++){
+          var pt=projected[i];
+          // Depth-weighted size and alpha
+          var depthN=(pt.z+30)/60;  // 0..1
+          var r=1.0+depthN*1.6;
+          var a=alpha*(0.3+depthN*0.7);
+
+          // Halo
+          var g=ctx.createRadialGradient(pt.x,pt.y,0,pt.x,pt.y,r*4);
+          g.addColorStop(0,'rgba(6,182,212,'+(a*0.6)+')');
+          g.addColorStop(1,'rgba(6,182,212,0)');
+          ctx.fillStyle=g;
+          ctx.beginPath();ctx.arc(pt.x,pt.y,r*4,0,6.28);ctx.fill();
+
+          // Core
+          ctx.fillStyle='rgba(6,182,212,'+a+')';
+          ctx.beginPath();ctx.arc(pt.x,pt.y,r,0,6.28);ctx.fill();
+        }
+      }
+
+      function drawLatentBars(x,y,alpha){
+        // 16-dim latent bar visualization with gradient + glow
+        var bars=16,bw=22,gap=4,startX=x;
+        for(var i=0;i<bars;i++){
+          var phase=performance.now()*0.0015+i*0.4;
+          var v=Math.sin(phase)*0.5+0.5;
+          var h=4+v*22;
+
+          // Vertical gradient bar
+          var g=ctx.createLinearGradient(0,y,0,y+h);
+          g.addColorStop(0,'rgba(139,92,246,'+(0.2*alpha)+')');
+          g.addColorStop(0.5,'rgba(139,92,246,'+(0.9*alpha*v)+')');
+          g.addColorStop(1,'rgba(6,182,212,'+(0.4*alpha*v)+')');
+          ctx.fillStyle=g;
+          ctx.fillRect(startX+i*(bw+gap),y,bw,h);
+
+          // Top highlight
+          ctx.fillStyle='rgba(196,181,253,'+alpha+')';
+          ctx.fillRect(startX+i*(bw+gap),y,bw,1);
+        }
+      }
+
+      function drawEnergyLandscape(x,y,w,h,alpha){
+        // Smooth energy landscape rendered as pixel grid with bilinear interpolation
+        var cols=24,rows=10;
+        var cw=w/cols,ch=h/rows;
+        var t=performance.now()*0.0008;
+
+        for(var cx=0;cx<cols;cx++){
+          for(var cy=0;cy<rows;cy++){
+            // Energy value: combination of two Gaussians
+            var nx=(cx+0.5)/cols-0.5;
+            var ny=(cy+0.5)/rows-0.5;
+            // Basin 1 (deep, near center)
+            var d1=Math.hypot(nx+0.1,ny-0.05);
+            var e1=Math.exp(-d1*d1*8);
+            // Basin 2 (shallower)
+            var d2=Math.hypot(nx-0.25,ny+0.15);
+            var e2=Math.exp(-d2*d2*14)*0.5;
+            // Slight ripple
+            var ripple=Math.sin(cx*0.5+cy*0.7+t)*0.04;
+            var energy=1-(e1+e2+ripple);
+            energy=Math.max(0,Math.min(1,energy));
+
+            // Color: low energy = green, mid = amber, high = red
+            var r,g,b;
+            if(energy<0.3){
+              var t2=energy/0.3;
+              r=lerp(16,245,t2);g=lerp(185,158,t2);b=lerp(129,11,t2);
+            }else if(energy<0.7){
+              var t2=(energy-0.3)/0.4;
+              r=lerp(245,239,t2);g=lerp(158,68,t2);b=lerp(11,68,t2);
+            }else{
+              var t2=(energy-0.7)/0.3;
+              r=lerp(239,167,t2);g=lerp(68,24,t2);b=lerp(68,3,t2);
+            }
+            ctx.fillStyle='rgba('+Math.round(r)+','+Math.round(g)+','+Math.round(b)+','+(0.85*alpha)+')';
+            ctx.fillRect(x+cx*cw,y+cy*ch,cw-0.5,ch-0.5);
+          }
+        }
+
+        // Min energy point — glowing green dot at basin 1
+        var minPx=x+cols*cw*(0.5-0.1);
+        var minPy=y+rows*ch*(0.5+0.05);
+        drawGlowCircle(minPx,minPy,4,'rgba(110,231,183,1)',alpha);
+        // Pulsing ring around min
+        var pulse=(Math.sin(performance.now()*0.004)+1)*0.5;
+        ctx.strokeStyle='rgba(16,185,129,'+(0.5*alpha)+')';
+        ctx.lineWidth=1.5;
+        ctx.beginPath();ctx.arc(minPx,minPy,8+pulse*4,0,6.28);ctx.stroke();
+
+        return {x:minPx,y:minPy};
+      }
+
+      function drawActionSequence(y,alpha){
+        // 4-step action plan: reach → grip → lift → place
+        var actions=[
+          {label:'reach',c:'#06b6d4',x:80},
+          {label:'grip',c:'#8b5cf6',x:220},
+          {label:'lift',c:'#f59e0b',x:360},
+          {label:'place',c:'#10b981',x:500}
+        ];
+
+        // Path between actions — flowing dashed line with animated dashes
+        var t=performance.now()*0.05;
+        ctx.strokeStyle='rgba(148,163,184,'+(0.4*alpha)+')';
+        ctx.lineWidth=2;
+        ctx.setLineDash([8,6]);
+        ctx.lineDashOffset=-t;
+        ctx.beginPath();
+        for(var i=0;i<actions.length;i++){
+          var yI=y+10+Math.sin(i*1.3)*4;
+          if(i===0)ctx.moveTo(actions[i].x,yI);
+          else{
+            // Bezier curve between consecutive actions
+            var prev=actions[i-1];
+            var prevY=y+10+Math.sin((i-1)*1.3)*4;
+            var midX=(prev.x+actions[i].x)/2;
+            ctx.bezierCurveTo(midX,prevY-12,midX,yI-12,actions[i].x,yI);
+          }
+        }
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Each action as glowing circle
+        for(var i=0;i<actions.length;i++){
+          var a=actions[i];
+          var yI=y+10+Math.sin(i*1.3)*4;
+          // Outer glow
+          var g=ctx.createRadialGradient(a.x,yI,0,a.x,yI,28);
+          g.addColorStop(0,a.c+'cc');
+          g.addColorStop(0.5,a.c+'44');
+          g.addColorStop(1,a.c+'00');
+          ctx.fillStyle=g;
+          ctx.globalAlpha=alpha;
+          ctx.beginPath();ctx.arc(a.x,yI,28,0,6.28);ctx.fill();
+          ctx.globalAlpha=1;
+
+          // Solid circle
+          ctx.fillStyle=a.c;
+          ctx.globalAlpha=alpha*0.85;
+          ctx.beginPath();ctx.arc(a.x,yI,15,0,6.28);ctx.fill();
+          ctx.globalAlpha=1;
+
+          // Border ring
+          ctx.strokeStyle=a.c;ctx.lineWidth=2;
+          ctx.beginPath();ctx.arc(a.x,yI,15,0,6.28);ctx.stroke();
+
+          // Label
+          ctx.fillStyle='rgba(255,255,255,'+alpha+')';
+          ctx.font='bold 9px ui-monospace,monospace';ctx.textAlign='center';
+          ctx.fillText(a.label,a.x,yI+3);
+          ctx.textAlign='left';
+
+          // Action number badge above
+          ctx.fillStyle='rgba(11,15,26,'+alpha+')';
+          ctx.strokeStyle=a.c;ctx.lineWidth=1;
+          ctx.beginPath();ctx.arc(a.x,yI-25,7,0,6.28);ctx.fill();ctx.stroke();
+          ctx.fillStyle=a.c;ctx.font='bold 8px ui-monospace';
+          ctx.textAlign='center';ctx.fillText(i+1,a.x,yI-22);ctx.textAlign='left';
+        }
+      }
+
+      function drawRobotArm(y,alpha){
+        // Articulated robot arm with base, joint1, link1, joint2, link2, end-effector
+        var baseX=140;
+        var baseY=y+50;
+        var t=performance.now()*0.0015;
+        var theta1=Math.sin(t)*0.4-0.3;     // base joint rotation
+        var theta2=Math.sin(t*1.4+1)*0.6;  // elbow joint rotation
+        var theta3=Math.sin(t*0.8+2)*0.3;  // wrist
+
+        // Base — gradient-filled rectangle
+        var baseG=ctx.createLinearGradient(baseX-30,baseY,baseX+30,baseY+20);
+        baseG.addColorStop(0,'rgba(55,65,81,'+alpha+')');
+        baseG.addColorStop(0.5,'rgba(107,114,128,'+alpha+')');
+        baseG.addColorStop(1,'rgba(31,41,55,'+alpha+')');
+        ctx.fillStyle=baseG;
+        ctx.fillRect(baseX-30,baseY,60,20);
+        ctx.strokeStyle='rgba(148,163,184,'+alpha+')';ctx.lineWidth=1;
+        ctx.strokeRect(baseX-30,baseY,60,20);
+
+        // Base label
+        ctx.fillStyle='rgba(148,163,184,'+(0.8*alpha)+')';ctx.font='8px ui-monospace';
+        ctx.textAlign='center';ctx.fillText('base',baseX,baseY+14);ctx.textAlign='left';
+
+        // Link 1 (shoulder → elbow)
+        var l1Len=55;
+        var x1=baseX,y1=baseY;
+        var x2=x1+l1Len*Math.sin(theta1);
+        var y2=y1-l1Len*Math.cos(theta1);
+        // Link as gradient stroke with shadow
+        ctx.save();
+        ctx.shadowColor='rgba(16,185,129,0.6)';ctx.shadowBlur=8;
+        var linkG=ctx.createLinearGradient(x1,y1,x2,y2);
+        linkG.addColorStop(0,'rgba(16,185,129,'+alpha+')');
+        linkG.addColorStop(1,'rgba(6,182,212,'+alpha+')');
+        ctx.strokeStyle=linkG;ctx.lineWidth=6;ctx.lineCap='round';
+        ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+        ctx.restore();
+
+        // Joint 1 (shoulder) — glowing circle
+        drawGlowCircle(x1,y1,5,'rgba(16,185,129,1)',alpha);
+
+        // Link 2 (elbow → wrist)
+        var l2Len=48;
+        var x3=x2+l2Len*Math.sin(theta1+theta2);
+        var y3=y2-l2Len*Math.cos(theta1+theta2);
+        ctx.save();
+        ctx.shadowColor='rgba(139,92,246,0.6)';ctx.shadowBlur=8;
+        var linkG2=ctx.createLinearGradient(x2,y2,x3,y3);
+        linkG2.addColorStop(0,'rgba(139,92,246,'+alpha+')');
+        linkG2.addColorStop(1,'rgba(245,158,11,'+alpha+')');
+        ctx.strokeStyle=linkG2;ctx.lineWidth=5;ctx.lineCap='round';
+        ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x3,y3);ctx.stroke();
+        ctx.restore();
+
+        // Joint 2 (elbow)
+        drawGlowCircle(x2,y2,4,'rgba(139,92,246,1)',alpha);
+
+        // Link 3 (wrist → end-effector)
+        var l3Len=24;
+        var x4=x3+l3Len*Math.sin(theta1+theta2+theta3);
+        var y4=y3-l3Len*Math.cos(theta1+theta2+theta3);
+        ctx.save();
+        ctx.shadowColor='rgba(245,158,11,0.6)';ctx.shadowBlur=6;
+        ctx.strokeStyle='rgba(245,158,11,'+alpha+')';ctx.lineWidth=3;ctx.lineCap='round';
+        ctx.beginPath();ctx.moveTo(x3,y3);ctx.lineTo(x4,y4);ctx.stroke();
+        ctx.restore();
+
+        // Joint 3 (wrist)
+        drawGlowCircle(x3,y3,3,'rgba(245,158,11,1)',alpha);
+
+        // End-effector (gripper) — two fingers
+        var gripAngle=0.3+Math.sin(t*2)*0.15;
+        var fingerLen=10;
+        // Left finger
+        ctx.strokeStyle='rgba(16,185,129,'+alpha+')';ctx.lineWidth=2;
+        ctx.beginPath();
+        ctx.moveTo(x4,y4);
+        ctx.lineTo(x4-fingerLen*Math.sin(gripAngle),y4+fingerLen*Math.cos(gripAngle));
+        ctx.stroke();
+        // Right finger
+        ctx.beginPath();
+        ctx.moveTo(x4,y4);
+        ctx.lineTo(x4+fingerLen*Math.sin(gripAngle),y4+fingerLen*Math.cos(gripAngle));
+        ctx.stroke();
+        // Glow at end-effector
+        drawGlowCircle(x4,y4,3,'rgba(16,185,129,1)',alpha);
+
+        // Target object (cube to grasp)
+        var targetX=baseX+90,targetY=baseY+10;
+        ctx.save();
+        ctx.shadowColor='rgba(245,158,11,0.5)';ctx.shadowBlur=10;
+        var cubeG=ctx.createLinearGradient(targetX-6,targetY-6,targetX+6,targetY+6);
+        cubeG.addColorStop(0,'rgba(245,158,11,'+alpha+')');
+        cubeG.addColorStop(1,'rgba(180,100,8,'+alpha+')');
+        ctx.fillStyle=cubeG;
+        ctx.fillRect(targetX-6,targetY-6,12,12);
+        ctx.strokeStyle='rgba(252,211,77,'+alpha+')';ctx.lineWidth=1;
+        ctx.strokeRect(targetX-6,targetY-6,12,12);
+        ctx.restore();
+
+        // Feedback loop — curved dashed arrow back to energy landscape
+        if(stage>=5){
+          ctx.save();
+          ctx.strokeStyle='rgba(245,158,11,'+(0.6*alpha)+')';ctx.lineWidth=1.5;
+          ctx.setLineDash([5,4]);
+          ctx.lineDashOffset=-performance.now()*0.05;
+          ctx.beginPath();
+          ctx.moveTo(x4,y4);
+          ctx.bezierCurveTo(x4+80,y4-30,W-40,y4-10,W-30,y-30);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          // Arrowhead
+          ctx.fillStyle='rgba(245,158,11,'+(0.7*alpha)+')';
+          ctx.beginPath();
+          ctx.moveTo(W-30,y-30);
+          ctx.lineTo(W-36,y-23);
+          ctx.lineTo(W-24,y-23);
+          ctx.closePath();ctx.fill();
+          ctx.restore();
+
+          // Label
+          ctx.fillStyle='rgba(245,158,11,'+(0.8*alpha)+')';
+          ctx.font='9px ui-monospace';
+          ctx.fillText('feedback: E(s,a,s\') → update',W-260,y-50);
+        }
+      }
+
+      function drawStageBadge(x,y,num,color,alpha){
+        if(alpha===undefined)alpha=1;
+        ctx.save();
+        ctx.shadowColor=color;ctx.shadowBlur=10;
+        ctx.fillStyle='rgba(11,15,26,'+alpha+')';
+        ctx.strokeStyle=color;ctx.lineWidth=2;
+        ctx.beginPath();ctx.arc(x,y,12,0,6.28);ctx.fill();ctx.stroke();
+        ctx.fillStyle=color;ctx.font='bold 11px ui-monospace';
+        ctx.textAlign='center';ctx.fillText(num,x,y+4);ctx.textAlign='left';
+        ctx.restore();
+      }
 
       function render(){
-        ctx.save();ctx.fillStyle='#0a0e1a';ctx.fillRect(0,0,W,H);
+        ctx.save();
+        ctx.fillStyle='#0a0e1a';ctx.fillRect(0,0,W,H);
         ctx.translate(W/2,H/2);ctx.scale(zoom,zoom);ctx.translate(-W/2,-H/2);
-        var bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#0a0e1a');bg.addColorStop(1,'#0f1422');
-        ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
-        ctx.fillStyle='#8b5cf6';ctx.font='bold 14px ui-monospace';ctx.textAlign='center';
-        ctx.fillText('GeoWorld — stage '+stage+'/'+maxStage,W/2,25);ctx.textAlign='left';
-        var baseY=55;
+        drawStageHeader();
 
-        // Stage 1: Sensor input → geometric features
+        var baseY=70;
+
+        // ===== Stage 1: Sensor input → geometric features (point cloud) =====
         if(stage>=1){
+          var s1Alpha=stage===1?stageProgress:(stage>1?1:0);
           ctx.fillStyle='#06b6d4';ctx.font='bold 11px ui-monospace';
+          ctx.globalAlpha=s1Alpha;
           ctx.fillText('1. Sensor input → geometric features (point cloud)',30,baseY);
-          // Draw point cloud
-          for(var i=0;i<60;i++){
-            var angle=i*0.1,r=20+Math.sin(i*0.3)*15;
-            var px=120+Math.cos(angle)*r,py=baseY+25+Math.sin(angle)*r*0.7;
-            ctx.fillStyle='rgba(6,182,212,'+(0.3+Math.random()*0.5)+')';
-            ctx.beginPath();ctx.arc(px,py,1.5,0,6.28);ctx.fill();
-          }
-          ctx.fillStyle='rgba(148,163,184,0.5)';ctx.font='9px ui-monospace';
-          ctx.fillText('RGB-D camera + joints → SE(3) poses',30,baseY+65);
+          ctx.globalAlpha=1;
+          drawStageBadge(W-50,baseY-4,'1','rgba(6,182,212,1)',s1Alpha);
+          drawPointCloud(120,baseY+35,s1Alpha);
+          // Depth legend
+          ctx.fillStyle='rgba(148,163,184,'+(0.6*s1Alpha)+')';
+          ctx.font='9px ui-monospace';
+          ctx.fillText('RGB-D camera + joints → SE(3) poses',30,baseY+90);
         }
 
-        // Stage 2: JEPA encoder
+        // ===== Stage 2: JEPA encoder → latent space =====
         if(stage>=2){
-          var eY=baseY+90;
+          var eY=baseY+110;
+          var s2Alpha=stage===2?stageProgress:(stage>2?1:0);
           ctx.fillStyle='#8b5cf6';ctx.font='bold 11px ui-monospace';
+          ctx.globalAlpha=s2Alpha;
           ctx.fillText('2. JEPA encoder: φ(s) ∈ ℝᵈ — compact geometric latent',30,eY);
-          // Draw latent space as colored embedding bars
-          for(var i=0;i<16;i++){
-            var v=Math.sin(i*0.5)*0.5+0.5;
-            ctx.fillStyle='rgba(139,92,246,'+v+')';
-            ctx.fillRect(30+i*38,eY+10,34,16);
-          }
-          ctx.fillStyle='rgba(148,163,184,0.5)';ctx.font='9px ui-monospace';
-          ctx.fillText('16-dim latent (no pixels — geometric abstraction)',30,eY+38);
+          ctx.globalAlpha=1;
+          drawStageBadge(W-50,eY-4,'2','rgba(139,92,246,1)',s2Alpha);
+          drawLatentBars(30,eY+10,s2Alpha);
+          ctx.fillStyle='rgba(148,163,184,'+(0.6*s2Alpha)+')';ctx.font='9px ui-monospace';
+          ctx.fillText('16-dim latent (no pixels — geometric abstraction)',30,eY+50);
         }
 
-        // Stage 3: Energy-based world model
+        // ===== Stage 3: Energy-based world model =====
         if(stage>=3){
-          var wY=baseY+170;
+          var wY=baseY+200;
+          var s3Alpha=stage===3?stageProgress:(stage>3?1:0);
           ctx.fillStyle='#f59e0b';ctx.font='bold 11px ui-monospace';
+          ctx.globalAlpha=s3Alpha;
           ctx.fillText('3. World model: E(s,a,s\') = ‖φ(s\')−g(φ(s),a)‖²',30,wY);
-          // Draw energy landscape as contour
-          for(var cx=0;cx<10;cx++){
-            for(var cy=0;cy<4;cy++){
-              var val=Math.sin(cx*0.5+cy*0.7)*0.5+0.5;
-              ctx.fillStyle='rgba(245,158,11,'+val*0.6+')';
-              ctx.fillRect(30+cx*60,wY+10+cy*16,56,12);
-            }
-          }
-          // Min energy point
-          ctx.fillStyle='#10b981';ctx.beginPath();ctx.arc(180,wY+20,6,0,6.28);ctx.fill();
-          ctx.fillStyle='#10b981';ctx.font='8px ui-monospace';
-          ctx.fillText('min E (predicted)',175,wY+5);
-          ctx.fillStyle='rgba(148,163,184,0.5)';ctx.font='9px ui-monospace';
-          ctx.fillText('low energy = consistent prediction (green = min)',30,wY+85);
+          ctx.globalAlpha=1;
+          drawStageBadge(W-50,wY-4,'3','rgba(245,158,11,1)',s3Alpha);
+          var minPt=drawEnergyLandscape(30,wY+10,500,80,s3Alpha);
+          ctx.fillStyle='rgba(110,231,183,'+(0.9*s3Alpha)+')';ctx.font='8px ui-monospace';
+          ctx.fillText('min E — predicted (green)',minPt.x-30,minPt.y-12);
+          ctx.fillStyle='rgba(148,163,184,'+(0.6*s3Alpha)+')';ctx.font='9px ui-monospace';
+          ctx.fillText('energy landscape (red=high, green=low) — low E = consistent prediction',30,wY+105);
         }
 
-        // Stage 4: Planning (energy minimisation)
+        // ===== Stage 4: Planning (energy minimisation) =====
         if(stage>=4){
-          var pY=baseY+290;
+          var pY=baseY+320;
+          var s4Alpha=stage===4?stageProgress:(stage>4?1:0);
           ctx.fillStyle='#ec4899';ctx.font='bold 11px ui-monospace';
+          ctx.globalAlpha=s4Alpha;
           ctx.fillText('4. Planning: a* = argmin_a Σ E(sₜ,aₜ,sₜ₊₁)',30,pY);
-          // Draw action sequence (arrows)
-          var actions=[
-            {x:80,y:pY+20,label:'reach',c:'#06b6d4'},
-            {x:200,y:pY+15,label:'grip',c:'#8b5cf6'},
-            {x:320,y:pY+25,label:'lift',c:'#f59e0b'},
-            {x:440,y:pY+18,label:'place',c:'#10b981'}
-          ];
-          for(var ai=0;ai<actions.length;ai++){
-            var a=actions[ai];
-            ctx.fillStyle=a.c+'40';ctx.beginPath();ctx.arc(a.x,a.y,18,0,6.28);ctx.fill();
-            ctx.strokeStyle=a.c;ctx.lineWidth=2;ctx.stroke();
-            ctx.fillStyle=a.c;ctx.font='bold 9px ui-monospace';ctx.textAlign='center';
-            ctx.fillText(a.label,a.x,a.y+3);ctx.textAlign='left';
-            if(ai<actions.length-1){
-              ctx.strokeStyle='rgba(148,163,184,0.3)';ctx.lineWidth=1;
-              ctx.beginPath();ctx.moveTo(a.x+18,a.y);ctx.lineTo(actions[ai+1].x-18,actions[ai+1].y);ctx.stroke();
-            }
-          }
-          ctx.fillStyle='rgba(148,163,184,0.5)';ctx.font='9px ui-monospace';
-          ctx.fillText('minimise total energy → optimal action sequence',30,pY+50);
+          ctx.globalAlpha=1;
+          drawStageBadge(W-50,pY-4,'4','rgba(236,72,153,1)',s4Alpha);
+          drawActionSequence(pY+10,s4Alpha);
+          ctx.fillStyle='rgba(148,163,184,'+(0.6*s4Alpha)+')';ctx.font='9px ui-monospace';
+          ctx.fillText('minimise total energy → optimal action sequence',30,pY+65);
         }
 
-        // Stage 5: Robotic execution
+        // ===== Stage 5: Robotic execution =====
         if(stage>=5){
-          var rY=baseY+370;
+          var rY=baseY+400;
+          var s5Alpha=stage===5?stageProgress:(stage>5?1:0);
           ctx.fillStyle='#10b981';ctx.font='bold 11px ui-monospace';
+          ctx.globalAlpha=s5Alpha;
           ctx.fillText('5. Execute on robot → observe → update world model',30,rY);
-          // Draw robot arm (simplified)
-          ctx.strokeStyle='#10b981';ctx.lineWidth=3;
-          ctx.beginPath();ctx.moveTo(100,rY+10);ctx.lineTo(150,rY-10);ctx.lineTo(200,rY+5);ctx.stroke();
-          ctx.fillStyle='#10b981';ctx.beginPath();ctx.arc(200,rY+5,6,0,6.28);ctx.fill();
-          // Feedback arrow
-          ctx.strokeStyle='rgba(245,158,11,0.5)';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
-          ctx.beginPath();ctx.moveTo(210,rY+5);ctx.bezierCurveTo(300,rY-20,350,rY-20,360,rY-40);ctx.stroke();
-          ctx.setLineDash([]);
-          ctx.fillStyle='rgba(245,158,11,0.7)';ctx.font='8px ui-monospace';
-          ctx.fillText('feedback: E(s,a,s\') → update',250,rY-30);
+          ctx.globalAlpha=1;
+          drawStageBadge(W-50,rY-4,'5','rgba(16,185,129,1)',s5Alpha);
+          drawRobotArm(rY,s5Alpha);
         }
 
         ctx.restore();
@@ -345,16 +789,66 @@ plan, energy = world.plan(current_state, goal, n_steps=<span class="num">10</spa
         document.getElementById('state-display').textContent='Sensor → '+(states[stage]||'');
       }
 
-      function animate(){stage=0;function step(){
-        if(stage>maxStage){isAnim=false;document.getElementById('btn-play').disabled=false;document.getElementById('stage-ind').textContent='done ✓';return;}
-        render();stage++;setTimeout(step,700);}step();}
-      document.getElementById('btn-play').addEventListener('click',function(){if(isAnim)return;isAnim=true;document.getElementById('btn-play').disabled=true;animate();});
-      document.getElementById('btn-step').addEventListener('click',function(){if(isAnim)return;if(stage>maxStage)return;stage++;render();});
-      document.getElementById('btn-reset').addEventListener('click',function(){stage=0;isAnim=false;document.getElementById('btn-play').disabled=false;render();});
-      document.getElementById('zoom-in').addEventListener('click',function(){zoom=Math.min(3,zoom+0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';render();});
-      document.getElementById('zoom-out').addEventListener('click',function(){zoom=Math.max(0.5,zoom-0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';render();});
-      document.getElementById('zoom-reset').addEventListener('click',function(){zoom=1;document.getElementById('zoom-label').textContent='100%';render();});
-      render();
+      // Smooth animation loop
+      function tick(now){
+        if(stageProgress<1){
+          var dt=Math.min(0.05,(now-lastStageTime)/600);
+          stageProgress=Math.min(1,stageProgress+dt);
+          lastStageTime=now;
+        }
+        render();
+        requestAnimationFrame(tick);
+      }
+
+      function animate(){
+        stage=0;stageProgress=1;lastStageTime=performance.now();
+        function step(){
+          if(stage>maxStage){
+            isAnim=false;
+            document.getElementById('btn-play').disabled=false;
+            document.getElementById('btn-play').textContent='▶ Animate pipeline';
+            document.getElementById('stage-ind').textContent='done ✓ · execute + update';
+            return;
+          }
+          stage++;stageProgress=0;lastStageTime=performance.now();
+          // Wait for stage to settle, then advance
+          setTimeout(step,1100);
+        }
+        step();
+      }
+
+      document.getElementById('btn-play').addEventListener('click',function(){
+        if(isAnim)return;
+        isAnim=true;
+        document.getElementById('btn-play').disabled=true;
+        document.getElementById('btn-play').textContent='▶ running…';
+        animate();
+      });
+      document.getElementById('btn-step').addEventListener('click',function(){
+        if(isAnim)return;
+        if(stage>maxStage)return;
+        stage++;stageProgress=0;lastStageTime=performance.now();
+      });
+      document.getElementById('btn-reset').addEventListener('click',function(){
+        stage=0;stageProgress=1;isAnim=false;
+        document.getElementById('btn-play').disabled=false;
+        document.getElementById('btn-play').textContent='▶ Animate pipeline';
+      });
+      document.getElementById('zoom-in').addEventListener('click',function(){
+        zoom=Math.min(3,zoom+0.2);
+        document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';
+      });
+      document.getElementById('zoom-out').addEventListener('click',function(){
+        zoom=Math.max(0.5,zoom-0.2);
+        document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';
+      });
+      document.getElementById('zoom-reset').addEventListener('click',function(){
+        zoom=1;document.getElementById('zoom-label').textContent='100%';
+      });
+
+      // Start animation loop
+      lastStageTime=performance.now();
+      requestAnimationFrame(tick);
     </script>
     <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>

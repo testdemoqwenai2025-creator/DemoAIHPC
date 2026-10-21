@@ -345,11 +345,26 @@ x_t, eps = diff.forward_noise(x_0, t=<span class="num">5</span>)
         s();
       })();
 
-      // ===== AlphaFold 3 pipeline canvas =====
+      // ===== AlphaFold 3 pipeline canvas — upgraded =====
       var canvas = document.getElementById('main-canvas');
       var ctx = canvas.getContext('2d');
       var W = canvas.width, H = canvas.height;
       var stage = 0, maxStage = 6, zoom = 1.0, isAnim = false;
+      var stageProgress = 1, lastStageTime = 0;
+
+      function drawGlowCircle(x,y,r,color,alpha){
+        if(alpha===undefined)alpha=1;
+        var g=ctx.createRadialGradient(x,y,0,x,y,r*3);
+        g.addColorStop(0,color);
+        g.addColorStop(0.3,color.replace(/[\d.]+\)$/,(0.6*alpha)+')'));
+        g.addColorStop(1,color.replace(/[\d.]+\)$/,'0)'));
+        ctx.fillStyle=g;
+        ctx.beginPath();ctx.arc(x,y,r*3,0,6.28);ctx.fill();
+        ctx.fillStyle=color;
+        ctx.globalAlpha=alpha;
+        ctx.beginPath();ctx.arc(x,y,r,0,6.28);ctx.fill();
+        ctx.globalAlpha=1;
+      }
 
       function render() {
         ctx.save();
@@ -358,108 +373,250 @@ x_t, eps = diff.forward_noise(x_0, t=<span class="num">5</span>)
         ctx.translate(W/2, H/2);
         ctx.scale(zoom, zoom);
         ctx.translate(-W/2, -H/2);
-        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        // Background gradient
+        var bg = ctx.createLinearGradient(0,0,0,H);
+        bg.addColorStop(0,'#0a0e1a');
+        bg.addColorStop(0.5,'#0f1422');
+        bg.addColorStop(1,'#0a0e1a');
         ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
-        ctx.fillStyle = '#10b981'; ctx.font = 'bold 14px ui-monospace'; ctx.textAlign = 'center';
+        // Subtle grid
+        ctx.strokeStyle='rgba(16,185,129,0.04)';
+        ctx.lineWidth=1;
+        for(var gx=0;gx<W;gx+=40){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+        for(var gy=0;gy<H;gy+=40){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+        // Title with glow
+        ctx.save();
+        ctx.shadowColor='#10b981';ctx.shadowBlur=12;
+        ctx.fillStyle = '#6ee7b7'; ctx.font = 'bold 14px ui-monospace,monospace'; ctx.textAlign = 'center';
         ctx.fillText('AlphaFold 3 pipeline — stage ' + stage + '/' + maxStage, W/2, 25);
+        ctx.restore();
         ctx.textAlign = 'left';
+        // Progress dots
+        var dotsX=W/2-(maxStage)*7;
+        for(var s=0;s<maxStage;s++){
+          ctx.fillStyle=s<stage?'#10b981':'rgba(148,163,184,0.2)';
+          ctx.beginPath();ctx.arc(dotsX+s*14,42,4,0,6.28);ctx.fill();
+          if(s>0&&s<stage){
+            ctx.strokeStyle='rgba(16,185,129,0.4)';ctx.lineWidth=1;
+            ctx.beginPath();ctx.moveTo(dotsX+(s-1)*14+4,42);ctx.lineTo(dotsX+s*14-4,42);ctx.stroke();
+          }
+        }
         var baseY = 50;
 
         // Stage 1: Multi-molecule input
         if (stage >= 1) {
+          var s1A = stage===1?stageProgress:(stage>1?1:0);
           var tY = baseY + 20;
+          ctx.globalAlpha = s1A;
           ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('1. Multi-molecule input: protein + DNA + RNA + ligand', 30, tY - 8);
+          ctx.globalAlpha = 1;
           var types = ['Protein', 'DNA', 'RNA', 'Ligand'];
-          var colors = ['#10b981', '#06b6d4', '#8b5cf6', '#f59e0b'];
+          var colors = [['#10b981','110,231,183'],['#06b6d4','103,232,249'],['#8b5cf6','196,181,253'],['#f59e0b','251,191,36']];
           for (var t = 0; t < 4; t++) {
-            ctx.fillStyle = colors[t]; ctx.fillRect(30 + t * 170, tY, 14, 14);
-            ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '10px ui-monospace';
+            // Glowing tile for each molecule type
+            ctx.save();
+            ctx.shadowColor=colors[t][0];ctx.shadowBlur=10;
+            // Gradient-filled tile
+            var hex = colors[t][0].replace('#','');
+            var rV=parseInt(hex.substr(0,2),16),gV=parseInt(hex.substr(2,2),16),bV=parseInt(hex.substr(4,2),16);
+            var g = ctx.createLinearGradient(30+t*170, tY, 30+t*170, tY+14);
+            g.addColorStop(0,'rgba('+rV+','+gV+','+bV+','+(0.95*s1A)+')');
+            g.addColorStop(1,'rgba('+Math.round(rV*0.5)+','+Math.round(gV*0.5)+','+Math.round(bV*0.5)+','+(0.95*s1A)+')');
+            ctx.fillStyle = g;
+            ctx.fillRect(30 + t * 170, tY, 14, 14);
+            ctx.restore();
+            // Top highlight
+            ctx.fillStyle='rgba(255,255,255,'+(0.4*s1A)+')';
+            ctx.fillRect(30 + t * 170, tY, 14, 1);
+            ctx.strokeStyle=colors[t][0];ctx.lineWidth=1;
+            ctx.strokeRect(30 + t * 170, tY, 14, 14);
+            ctx.fillStyle = 'rgba(255,255,255,'+(0.8*s1A)+')'; ctx.font = '10px ui-monospace';
             ctx.fillText(types[t], 30 + t * 170 + 20, tY + 11);
           }
         }
 
         // Stage 2: Single + pair representations
         if (stage >= 2) {
+          var s2A = stage===2?stageProgress:(stage>2?1:0);
           var eY = baseY + 80;
+          ctx.globalAlpha = s2A;
           ctx.fillStyle = '#8b5cf6'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('2. Single (L×d) + Pair (L×L×d) representations', 30, eY - 8);
-          // Show pair matrix as heatmap (8x8)
+          ctx.globalAlpha = 1;
+          // Show pair matrix as heatmap with gradient cells
           for (var i = 0; i < 8; i++) {
             for (var j = 0; j < 8; j++) {
               var v = (Math.sin(i*0.5 + j*0.7) + 1) / 2;
-              ctx.fillStyle = 'rgba(139,92,246,' + v + ')';
+              var g = ctx.createLinearGradient(30+j*20, eY+i*20, 30+(j+1)*20, eY+(i+1)*20);
+              g.addColorStop(0,'rgba(196,181,253,'+(v*s2A)+')');
+              g.addColorStop(1,'rgba(139,92,246,'+(v*0.5*s2A)+')');
+              ctx.fillStyle = g;
               ctx.fillRect(30 + j * 20, eY + i * 20, 18, 18);
+              if (v > 0.7) {
+                ctx.strokeStyle = 'rgba(196,181,253,'+s2A+')';
+                ctx.lineWidth = 0.5;
+                ctx.strokeRect(30 + j * 20, eY + i * 20, 18, 18);
+              }
             }
           }
-          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillStyle = 'rgba(148,163,184,'+(0.6*s2A)+')'; ctx.font = '9px ui-monospace';
           ctx.fillText('Pair repr p (8×8 shown of L×L)', 30, eY + 165);
         }
 
         // Stage 3: Pairformer — 48 blocks of triangle attention
         if (stage >= 3) {
+          var s3A = stage===3?stageProgress:(stage>3?1:0);
           var trY = baseY + 200;
+          ctx.globalAlpha = s3A;
           ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('3. Pairformer — 48 blocks of triangle attention', 30, trY - 8);
-          // Show 6 blocks as boxes connected by arrows
+          ctx.globalAlpha = 1;
           for (var b = 0; b < 6; b++) {
             var bx = 30 + b * 110;
-            ctx.fillStyle = 'rgba(245,158,11,0.4)';
+            // Gradient-filled block
+            ctx.save();
+            ctx.shadowColor='#f59e0b';ctx.shadowBlur=6;
+            var g = ctx.createLinearGradient(bx, trY, bx, trY+30);
+            g.addColorStop(0,'rgba(251,191,36,'+(0.6*s3A)+')');
+            g.addColorStop(1,'rgba(180,100,8,'+(0.6*s3A)+')');
+            ctx.fillStyle = g;
             ctx.fillRect(bx, trY, 80, 30);
-            ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5;
+            ctx.restore();
+            // Border
+            ctx.strokeStyle = 'rgba(251,191,36,'+s3A+')'; ctx.lineWidth = 1.5;
             ctx.strokeRect(bx, trY, 80, 30);
-            ctx.fillStyle = '#f59e0b'; ctx.font = '10px ui-monospace'; ctx.textAlign = 'center';
+            // Top highlight
+            ctx.fillStyle='rgba(255,255,255,'+(0.3*s3A)+')';
+            ctx.fillRect(bx, trY, 80, 1);
+            ctx.fillStyle = 'rgba(255,255,255,'+s3A+')'; ctx.font = '10px ui-monospace'; ctx.textAlign = 'center';
             ctx.fillText('Pairformer ' + (b+1), bx + 40, trY + 18);
             ctx.textAlign = 'left';
             if (b < 5) {
-              ctx.strokeStyle = 'rgba(148,163,184,0.4)'; ctx.lineWidth = 1;
+              // Animated dashed arrow
+              ctx.strokeStyle = 'rgba(148,163,184,'+(0.5*s3A)+')';
+              ctx.lineWidth = 1;
+              ctx.setLineDash([4,3]);
+              ctx.lineDashOffset = -performance.now()*0.03;
               ctx.beginPath(); ctx.moveTo(bx + 80, trY + 15); ctx.lineTo(bx + 110, trY + 15); ctx.stroke();
+              ctx.setLineDash([]);
             }
           }
-          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillStyle = 'rgba(148,163,184,'+(0.5*s3A)+')'; ctx.font = '9px ui-monospace';
           ctx.fillText('(6 of 48 blocks shown)', 30, trY + 42);
         }
 
         // Stage 4: Diffusion module
         if (stage >= 4) {
+          var s4A = stage===4?stageProgress:(stage>4?1:0);
           var dY = baseY + 290;
+          ctx.globalAlpha = s4A;
           ctx.fillStyle = '#ec4899'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('4. Diffusion — noise then denoise atomic positions', 30, dY - 8);
-          // Show 6 noise levels (increasing then decreasing)
+          ctx.globalAlpha = 1;
+          // Stable noise seed (so dots don't flicker)
+          var noiseSeeds = [];
+          for (var ns=0; ns<180; ns++) noiseSeeds.push([Math.random()-0.5, Math.random()-0.5]);
           for (var s = 0; s < 6; s++) {
             var noise = s < 3 ? s / 3 : (6 - s) / 3;
             var px = 30 + s * 100;
-            ctx.fillStyle = 'rgba(16,185,129,' + (1 - noise * 0.5) + ')';
+            // Main atom circle with glow
+            ctx.save();
+            ctx.shadowColor='#10b981';ctx.shadowBlur=10;
+            var atomG = ctx.createRadialGradient(px+30-4, dY+30-4, 0, px+30, dY+30, 18);
+            atomG.addColorStop(0,'rgba(110,231,183,'+((1 - noise*0.5)*s4A)+')');
+            atomG.addColorStop(1,'rgba(16,185,129,'+((1 - noise*0.5)*s4A)+')');
+            ctx.fillStyle = atomG;
             ctx.beginPath(); ctx.arc(px + 30, dY + 30, 18, 0, 6.28); ctx.fill();
-            // Add noise dots
+            ctx.restore();
+            // Noise dots (stable)
             for (var d = 0; d < noise * 30; d++) {
-              var dx = (Math.random() - 0.5) * 30;
-              var dy = (Math.random() - 0.5) * 30;
-              ctx.fillStyle = 'rgba(239,68,68,' + noise + ')';
-              ctx.beginPath(); ctx.arc(px + 30 + dx, dY + 30 + dy, 1, 0, 6.28); ctx.fill();
+              var ns2 = noiseSeeds[d%noiseSeeds.length];
+              var dx = ns2[0] * 30;
+              var dy = ns2[1] * 30;
+              drawGlowCircle(px + 30 + dx, dY + 30 + dy, 1, 'rgba(239,68,68,'+noise+')', s4A);
             }
+            // Step label
+            ctx.fillStyle = 'rgba(148,163,184,'+(0.6*s4A)+')'; ctx.font = '8px ui-monospace'; ctx.textAlign = 'center';
+            ctx.fillText('t=' + s, px + 30, dY + 60);
+            ctx.textAlign = 'left';
           }
-          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
-          ctx.fillText('Forward → noise  |  Reverse → denoise', 30, dY + 65);
+          ctx.fillStyle = 'rgba(148,163,184,'+(0.6*s4A)+')'; ctx.font = '9px ui-monospace';
+          ctx.fillText('Forward → noise  |  Reverse → denoise', 30, dY + 75);
         }
 
         // Stage 5: Confidence
         if (stage >= 5) {
+          var s5A = stage===5?stageProgress:(stage>5?1:0);
           var cY = baseY + 380;
+          ctx.globalAlpha = s5A;
           ctx.fillStyle = '#10b981'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('5. Confidence: pTM + pLDDT', 30, cY - 8);
-          // pTM score bar
-          ctx.fillStyle = 'rgba(16,185,129,0.7)';
+          ctx.globalAlpha = 1;
+          // pTM gradient bar with glow
+          var ptmG = ctx.createLinearGradient(30, cY, 380, cY);
+          ptmG.addColorStop(0,'rgba(110,231,183,'+(0.9*s5A)+')');
+          ptmG.addColorStop(1,'rgba(16,185,129,'+(0.95*s5A)+')');
+          ctx.fillStyle = ptmG;
+          ctx.save();
+          ctx.shadowColor='#10b981';ctx.shadowBlur=8;
           ctx.fillRect(30, cY, 350, 12);
-          ctx.fillStyle = 'rgba(148,163,184,0.8)'; ctx.font = '10px ui-monospace';
+          ctx.restore();
+          // Top highlight
+          ctx.fillStyle='rgba(255,255,255,'+(0.4*s5A)+')';
+          ctx.fillRect(30, cY, 350, 1);
+          // Border
+          ctx.strokeStyle='rgba(110,231,183,'+s5A+')';ctx.lineWidth=1;
+          ctx.strokeRect(30, cY, 350, 12);
+          ctx.fillStyle = 'rgba(255,255,255,'+(0.8*s5A)+')'; ctx.font = '10px ui-monospace';
           ctx.fillText('pTM = 0.82 (high confidence)', 30, cY + 28);
         }
 
         // Stage 6: Output structure
         if (stage >= 6) {
+          var s6A = stage===6?stageProgress:1;
           var oY = baseY + 450;
+          ctx.globalAlpha = s6A;
           ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('6. Output: 3D complex (protein + DNA + ligand)', 30, oY - 8);
+          ctx.globalAlpha = 1;
+          // Draw a small 3D complex visualization — 3 glowing atoms connected by bonds
+          var atomTypes = [
+            {x: oY-10, y: oY+15, c: '#10b981', label: 'P'},  // protein
+            {x: oY-10, y: oY+45, c: '#06b6d4', label: 'D'},  // DNA
+            {x: oY+10, y: oY+30, c: '#f59e0b', label: 'L'},  // ligand
+          ];
+          // Pulsing ring
+          var pulse = (Math.sin(performance.now()*0.003)+1)*0.5;
+          // Connecting bonds
+          ctx.strokeStyle = 'rgba(148,163,184,'+(0.4*s6A)+')';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([4,3]);
+          ctx.lineDashOffset = -performance.now()*0.04;
+          ctx.beginPath();
+          ctx.moveTo(80, oY+15); ctx.lineTo(80, oY+45);
+          ctx.moveTo(80, oY+15); ctx.lineTo(100, oY+30);
+          ctx.moveTo(80, oY+45); ctx.lineTo(100, oY+30);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          // Atoms
+          for (var a=0; a<3; a++) {
+            var at = atomTypes[a];
+            ctx.save();
+            ctx.shadowColor=at.c;ctx.shadowBlur=12+pulse*8;
+            var ag = ctx.createRadialGradient(80+(a===2?20:0)-4, at.y-4, 0, 80+(a===2?20:0), at.y, 12);
+            var hex = at.c.replace('#','');
+            var rV=parseInt(hex.substr(0,2),16),gV=parseInt(hex.substr(2,2),16),bV=parseInt(hex.substr(4,2),16);
+            ag.addColorStop(0,'rgba('+Math.min(255,rV+80)+','+Math.min(255,gV+80)+','+Math.min(255,bV+80)+','+s6A+')');
+            ag.addColorStop(1,'rgba('+rV+','+gV+','+bV+','+s6A+')');
+            ctx.fillStyle = ag;
+            ctx.beginPath(); ctx.arc(80+(a===2?20:0), at.y, 12, 0, 6.28); ctx.fill();
+            ctx.strokeStyle=at.c;ctx.lineWidth=1.5;
+            ctx.beginPath();ctx.arc(80+(a===2?20:0), at.y, 12, 0, 6.28);ctx.stroke();
+            ctx.restore();
+            ctx.fillStyle='rgba(255,255,255,'+s6A+')';ctx.font='bold 10px ui-monospace';ctx.textAlign='center';
+            ctx.fillText(at.label, 80+(a===2?20:0), at.y+3);ctx.textAlign='left';
+          }
         }
 
         ctx.restore();
@@ -468,34 +625,55 @@ x_t, eps = diff.forward_noise(x_0, t=<span class="num">5</span>)
         document.getElementById('state-display').textContent = 'Seq → ' + states[stage];
       }
 
+      function tick(now){
+        if(stageProgress<1){
+          var dt=Math.min(0.05,(now-lastStageTime)/600);
+          stageProgress=Math.min(1,stageProgress+dt);
+          lastStageTime=now;
+        }
+        render();
+        requestAnimationFrame(tick);
+      }
+
       function animate() {
-        stage = 0;
+        stage = 0; stageProgress = 1; lastStageTime = performance.now();
         function step() {
           if (stage > maxStage) {
-            isAnim = false; document.getElementById('btn-play').disabled = false;
+            isAnim = false;
+            document.getElementById('btn-play').disabled = false;
+            document.getElementById('btn-play').textContent = '▶ Animate pipeline';
             document.getElementById('stage-indicator').textContent = 'done ✓';
             return;
           }
-          render(); stage++; setTimeout(step, 600);
+          stage++; stageProgress = 0; lastStageTime = performance.now();
+          setTimeout(step, 1000);
         }
         step();
       }
 
       document.getElementById('btn-play').addEventListener('click', function() {
-        if (isAnim) return; isAnim = true;
+        if (isAnim) return;
+        isAnim = true;
         document.getElementById('btn-play').disabled = true;
+        document.getElementById('btn-play').textContent = '▶ running…';
         animate();
       });
-      document.getElementById('btn-reset').addEventListener('click', function() {
-        stage = 0; isAnim = false;
-        document.getElementById('btn-play').disabled = false;
-        document.getElementById('stage-indicator').textContent = 'stage 0/' + maxStage;
-        render();
+      document.getElementById('btn-step') && document.getElementById('btn-step').addEventListener('click', function() {
+        if (isAnim) return;
+        if (stage > maxStage) return;
+        stage++; stageProgress = 0; lastStageTime = performance.now();
       });
-      document.getElementById('zoom-in').addEventListener('click', function() { zoom = Math.min(3.0, zoom + 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; render(); });
-      document.getElementById('zoom-out').addEventListener('click', function() { zoom = Math.max(0.5, zoom - 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; render(); });
-      document.getElementById('zoom-reset').addEventListener('click', function() { zoom = 1.0; document.getElementById('zoom-label').textContent = '100%'; render(); });
-      render();
+      document.getElementById('btn-reset').addEventListener('click', function() {
+        stage = 0; isAnim = false; stageProgress = 1;
+        document.getElementById('btn-play').disabled = false;
+        document.getElementById('btn-play').textContent = '▶ Animate pipeline';
+        document.getElementById('stage-indicator').textContent = 'stage 0/' + maxStage;
+      });
+      document.getElementById('zoom-in').addEventListener('click', function() { zoom = Math.min(3.0, zoom + 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; });
+      document.getElementById('zoom-out').addEventListener('click', function() { zoom = Math.max(0.5, zoom - 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; });
+      document.getElementById('zoom-reset').addEventListener('click', function() { zoom = 1.0; document.getElementById('zoom-label').textContent = '100%'; });
+      lastStageTime = performance.now();
+      requestAnimationFrame(tick);
     </script>
     <script src="zoom-loader.js"></script>
   <script src="header-banner.js"></script>

@@ -365,6 +365,27 @@ print(<span class="num">f"Stage 5+6: {len(binders)} binders found (K_D &lt; 100 
       var ctx = canvas.getContext('2d');
       var W = canvas.width, H = canvas.height;
       var stage = 0, maxStage = 6, zoom = 1.0, isAnim = false;
+      var stageProgress = 1, lastStageTime = 0;
+      // Pre-generate stable values
+      var designCounts = []; for (var i = 0; i < 12; i++) designCounts.push(5 + Math.random() * 20);
+      var screenScores = []; for (var i = 0; i < 500; i++) screenScores.push(Math.random());
+
+      function lerp(a,b,t){return a+(b-a)*t;}
+      function ease(t){return t<.5?2*t*t:-1+(4-2*t)*t;}
+
+      function drawGlowCircle(x,y,r,color,alpha){
+        if(alpha===undefined)alpha=1;
+        var g=ctx.createRadialGradient(x,y,0,x,y,r*3);
+        g.addColorStop(0,color);
+        g.addColorStop(0.3,color.replace(/[\d.]+\)$/,(0.6*alpha)+')'));
+        g.addColorStop(1,color.replace(/[\d.]+\)$/,'0)'));
+        ctx.fillStyle=g;
+        ctx.beginPath();ctx.arc(x,y,r*3,0,6.28);ctx.fill();
+        ctx.fillStyle=color;
+        ctx.globalAlpha=alpha;
+        ctx.beginPath();ctx.arc(x,y,r,0,6.28);ctx.fill();
+        ctx.globalAlpha=1;
+      }
 
       function render() {
         ctx.save();
@@ -373,33 +394,63 @@ print(<span class="num">f"Stage 5+6: {len(binders)} binders found (K_D &lt; 100 
         ctx.translate(W/2, H/2);
         ctx.scale(zoom, zoom);
         ctx.translate(-W/2, -H/2);
-        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(0.5,'#0f1422'); bg.addColorStop(1,'#0a0e1a');
         ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
-        ctx.fillStyle = '#10b981'; ctx.font = 'bold 14px ui-monospace'; ctx.textAlign = 'center';
+        // Subtle grid
+        ctx.strokeStyle='rgba(139,92,246,0.04)';
+        ctx.lineWidth=1;
+        for(var gx=0;gx<W;gx+=40){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+        for(var gy=0;gy<H;gy+=40){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+        // Title with glow
+        ctx.save();
+        ctx.shadowColor='#10b981';ctx.shadowBlur=12;
+        ctx.fillStyle = '#6ee7b7'; ctx.font = 'bold 14px ui-monospace,monospace'; ctx.textAlign = 'center';
         ctx.fillText('Claude Toxin Binder Design — stage ' + stage + '/' + maxStage, W/2, 25);
+        ctx.restore();
         ctx.textAlign = 'left';
+        // Progress dots
+        var dotsX=W/2-(maxStage)*7;
+        for(var s=0;s<maxStage;s++){
+          ctx.fillStyle=s<stage?'#10b981':'rgba(148,163,184,0.2)';
+          ctx.beginPath();ctx.arc(dotsX+s*14,42,4,0,6.28);ctx.fill();
+          if(s>0&&s<stage){
+            ctx.strokeStyle='rgba(16,185,129,0.4)';ctx.lineWidth=1;
+            ctx.beginPath();ctx.moveTo(dotsX+(s-1)*14+4,42);ctx.lineTo(dotsX+s*14-4,42);ctx.stroke();
+          }
+        }
         var baseY = 50;
 
-        // Stage 1: Toxin structure (PDB/AlphaFold)
+        // Stage 1: Toxin structure
         if (stage >= 1) {
+          var s1A = stage===1?stageProgress:(stage>1?1:0);
           var tY = baseY + 20;
+          ctx.globalAlpha = s1A;
           ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('1. Toxin structure (PDB / AlphaFold)', 30, tY - 8);
-          // Protein cross-section grid (8×4 grid of amino acid residues)
           var gridStartX = 30, gridStartY = tY + 10;
           var gridSize = 18;
-          var aminoColors = ['#10b981','#06b6d4','#8b5cf6','#f59e0b','#ec4899','#ef4444','#06b6d4','#10b981'];
+          var aminoColors = [
+            {h:'#10b981'},{h:'#06b6d4'},{h:'#8b5cf6'},{h:'#f59e0b'},
+            {h:'#ec4899'},{h:'#ef4444'},{h:'#06b6d4'},{h:'#10b981'}
+          ];
           for (var gi = 0; gi < 4; gi++) {
             for (var gj = 0; gj < 16; gj++) {
               var gv = (Math.sin(gi*0.5 + gj*0.3) + 1) / 2;
-              ctx.fillStyle = aminoColors[(gi+gj) % 8];
-              ctx.globalAlpha = 0.3 + gv * 0.5;
+              var hex = aminoColors[(gi+gj) % 8].h.replace('#','');
+              var rV=parseInt(hex.substr(0,2),16),gV=parseInt(hex.substr(2,2),16),bV=parseInt(hex.substr(4,2),16);
+              // Gradient residue tile
+              var g = ctx.createLinearGradient(gridStartX + gj*gridSize, gridStartY+gi*gridSize, gridStartX+gj*gridSize, gridStartY+(gi+1)*gridSize);
+              g.addColorStop(0,'rgba('+rV+','+gV+','+bV+','+(0.5+gv*0.4)*s1A+')');
+              g.addColorStop(1,'rgba('+Math.round(rV*0.5)+','+Math.round(gV*0.5)+','+Math.round(bV*0.5)+','+(0.5+gv*0.4)*s1A+')');
+              ctx.fillStyle = g;
               ctx.fillRect(gridStartX + gj * gridSize, gridStartY + gi * gridSize, gridSize - 2, gridSize - 2);
             }
           }
           ctx.globalAlpha = 1;
-          // Backbone trace over the grid
-          ctx.strokeStyle = '#06b6d4'; ctx.lineWidth = 2; ctx.globalAlpha = 0.6;
+          // Backbone trace with glow
+          ctx.save();
+          ctx.shadowColor='#06b6d4';ctx.shadowBlur=8;
+          ctx.strokeStyle = '#06b6d4'; ctx.lineWidth = 2.5; ctx.globalAlpha = 0.7*s1A;
           ctx.beginPath();
           for (var i = 0; i < 16; i++) {
             var px = gridStartX + i * gridSize + gridSize/2;
@@ -407,99 +458,201 @@ print(<span class="num">f"Stage 5+6: {len(binders)} binders found (K_D &lt; 100 
             if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
           }
           ctx.stroke();
+          ctx.restore();
           ctx.globalAlpha = 1;
-          // Label
-          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillStyle = 'rgba(148,163,184,'+(0.5*s1A)+')'; ctx.font = '9px ui-monospace';
           ctx.fillText('Protein cross-section: 64 residues (4×16 grid)', 30, tY + 85);
-          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
           ctx.fillText('63-residue scorpion neurotoxin (e.g., Cn2)', 30, tY + 65);
         }
 
         // Stage 2: Hotspot identification
         if (stage >= 2) {
+          var s2A = stage===2?stageProgress:(stage>2?1:0);
           var hY = baseY + 110;
+          ctx.globalAlpha = s2A;
           ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('2. Hotspot identification — 5 conserved + accessible residues', 30, hY - 8);
-          // Highlight 5 hotspots as larger red circles on the backbone
+          // Backbone trace
+          ctx.strokeStyle = 'rgba(148,163,184,'+(0.4*s2A)+')'; ctx.lineWidth = 1.5;
+          ctx.beginPath();
           for (var i = 0; i < 20; i++) {
             var px = 30 + i * 30;
             var py = baseY + 50 + Math.sin(i * 0.5) * 15;
+            if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+          }
+          ctx.stroke();
+          // Hotspots — glowing pulsing circles
+          var pulse = (Math.sin(performance.now()*0.003)+1)*0.5;
+          for (var i = 0; i < 20; i++) {
             if (i % 4 === 0) {
-              ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.arc(px, py, 8, 0, 6.28); ctx.fill();
-              ctx.fillStyle = '#fff'; ctx.font = 'bold 9px ui-monospace'; ctx.textAlign = 'center';
+              var px = 30 + i * 30;
+              var py = baseY + 50 + Math.sin(i * 0.5) * 15;
+              // Outer halo
+              drawGlowCircle(px,py,8,'rgba(239,68,68,1)',0.8*s2A);
+              // Solid
+              ctx.fillStyle = 'rgba(239,68,68,'+(0.95*s2A)+')';
+              ctx.beginPath(); ctx.arc(px, py, 8, 0, 6.28); ctx.fill();
+              // Pulsing ring
+              ctx.strokeStyle = 'rgba(239,68,68,'+(0.6*s2A+pulse*0.4*s2A)+')';
+              ctx.lineWidth = 2;
+              ctx.beginPath(); ctx.arc(px, py, 12+pulse*4, 0, 6.28); ctx.stroke();
+              // Label
+              ctx.fillStyle = 'rgba(255,255,255,'+s2A+')'; ctx.font = 'bold 9px ui-monospace'; ctx.textAlign = 'center';
               ctx.fillText('H' + (i/4+1), px, py + 3); ctx.textAlign = 'left';
             }
           }
-          ctx.fillStyle = 'rgba(239,68,68,0.6)'; ctx.font = '9px ui-monospace';
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = 'rgba(239,68,68,'+(0.7*s2A)+')'; ctx.font = '9px ui-monospace';
           ctx.fillText('H1-H5: the "lock" — channel-binding site', 30, hY + 20);
         }
 
-        // Stage 3: Binder design (12 tools, 318K designs)
+        // Stage 3: Binder design
         if (stage >= 3) {
+          var s3A = stage===3?stageProgress:(stage>3?1:0);
           var dY = baseY + 160;
+          ctx.globalAlpha = s3A;
           ctx.fillStyle = '#8b5cf6'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('3. Binder design — 12 tools → 318,484 candidates', 30, dY - 8);
-          // Draw 12 tool bars with increasing count
           for (var t = 0; t < 12; t++) {
-            var bh = 5 + Math.random() * 20;
-            ctx.fillStyle = 'rgba(139,92,246,0.7)';
+            var bh = designCounts[t];
+            // Bar with gradient
+            var g = ctx.createLinearGradient(0, dY+25-bh, 0, dY+25);
+            g.addColorStop(0,'rgba(196,181,253,'+(0.95*s3A)+')');
+            g.addColorStop(0.5,'rgba(139,92,246,'+(0.85*s3A)+')');
+            g.addColorStop(1,'rgba(76,29,149,'+(0.85*s3A)+')');
+            ctx.fillStyle = g;
+            ctx.save();
+            ctx.shadowColor='#8b5cf6';ctx.shadowBlur=6;
             ctx.fillRect(30 + t * 55, dY + 25 - bh, 45, bh);
+            ctx.restore();
+            // Top highlight
+            ctx.fillStyle='rgba(255,255,255,'+(0.4*s3A)+')';
+            ctx.fillRect(30 + t * 55, dY + 25 - bh, 45, 1);
           }
-          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = 'rgba(148,163,184,'+(0.5*s3A)+')'; ctx.font = '9px ui-monospace';
           ctx.fillText('12 design tools (RFdiffusion, ProteinMPNN, ESM-IF, ...)', 30, dY + 40);
         }
 
-        // Stage 4: Co-folding + screening (553K pairs)
+        // Stage 4: Co-folding + screening
         if (stage >= 4) {
+          var s4A = stage===4?stageProgress:(stage>4?1:0);
           var sY = baseY + 230;
+          ctx.globalAlpha = s4A;
           ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('4. Co-folding + screening — 553,052 pairs', 30, sY - 8);
-          // Draw a grid of dots (design × toxin pairs)
           for (var i = 0; i < 50; i++) {
             for (var j = 0; j < 10; j++) {
-              var v = Math.random();
-              ctx.fillStyle = v > 0.7 ? 'rgba(16,185,129,0.8)' : 'rgba(148,163,184,0.2)';
-              ctx.fillRect(30 + i * 12, sY + 5 + j * 5, 10, 3);
+              var v = screenScores[(i*10+j)%screenScores.length];
+              if (v > 0.7) {
+                ctx.save();
+                ctx.shadowColor='#10b981';ctx.shadowBlur=4;
+                ctx.fillStyle = 'rgba(16,185,129,'+(0.8*s4A)+')';
+                ctx.fillRect(30 + i * 12, sY + 5 + j * 5, 10, 3);
+                ctx.restore();
+              } else {
+                ctx.fillStyle = 'rgba(148,163,184,'+(0.2*s4A)+')';
+                ctx.fillRect(30 + i * 12, sY + 5 + j * 5, 10, 3);
+              }
             }
           }
-          ctx.fillStyle = '#10b981'; ctx.font = '9px ui-monospace';
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = 'rgba(16,185,129,'+s4A+')'; ctx.font = '9px ui-monospace';
           ctx.fillText('green = promising (low pAE + good ΔΔG)', 30, sY + 65);
         }
 
         // Stage 5: SPR measurement (K_D)
         if (stage >= 5) {
+          var s5A = stage===5?stageProgress:(stage>6?1:0);
           var kY = baseY + 320;
+          ctx.globalAlpha = s5A;
           ctx.fillStyle = '#10b981'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('5. SPR measurement — K_D (binding affinity)', 30, kY - 8);
-          // Draw K_D values as bars
           var binderNames = ['Cn2-B1', 'Cn2-B2', 'Cn2-B3', 'Cn2-B4'];
           var kdValues = [5.2, 8.1, 45, 120]; // nM
           for (var i = 0; i < 4; i++) {
             var bw = Math.max(5, (1 - kdValues[i] / 200) * 300);
-            ctx.fillStyle = kdValues[i] < 10 ? 'rgba(16,185,129,0.9)' : (kdValues[i] < 100 ? 'rgba(245,158,11,0.7)' : 'rgba(239,68,68,0.5)');
+            var color = kdValues[i] < 10 ? '#10b981' : (kdValues[i] < 100 ? '#f59e0b' : '#ef4444');
+            var hex = color.replace('#','');
+            var rV=parseInt(hex.substr(0,2),16),gV=parseInt(hex.substr(2,2),16),bV=parseInt(hex.substr(4,2),16);
+            // Gradient bar
+            var g = ctx.createLinearGradient(30, kY + i*18, 30+bw, kY + i*18);
+            g.addColorStop(0,'rgba('+rV+','+gV+','+bV+','+(0.9*s5A)+')');
+            g.addColorStop(1,'rgba('+Math.round(rV*0.6)+','+Math.round(gV*0.6)+','+Math.round(bV*0.6)+','+(0.9*s5A)+')');
+            ctx.fillStyle = g;
+            ctx.save();
+            ctx.shadowColor=color;ctx.shadowBlur=6;
             ctx.fillRect(30, kY + i * 18, bw, 12);
-            ctx.fillStyle = 'rgba(148,163,184,0.8)'; ctx.font = '10px ui-monospace';
+            ctx.restore();
+            // Top highlight
+            ctx.fillStyle='rgba(255,255,255,'+(0.3*s5A)+')';
+            ctx.fillRect(30, kY + i * 18, bw, 1);
+            ctx.fillStyle = 'rgba(255,255,255,'+(0.8*s5A)+')'; ctx.font = '10px ui-monospace';
             ctx.fillText(binderNames[i] + ' K_D=' + kdValues[i] + ' nM', 30 + bw + 8, kY + i * 18 + 10);
           }
+          ctx.globalAlpha = 1;
         }
 
         // Stage 6: Key-and-lock concept
         if (stage >= 6) {
+          var s6A = stage===6?stageProgress:1;
           var klY = baseY + 400;
+          ctx.globalAlpha = s6A;
           ctx.fillStyle = '#ec4899'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('6. Key-and-lock: binder blocks toxin channel-binding site', 30, klY - 8);
-          // Draw key (binder) + lock (toxin site)
-          ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(250, klY, 12, 0, 6.28); ctx.fill();
-          ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.arc(350, klY, 12, 0, 6.28); ctx.fill();
-          ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.setLineDash([3,3]);
-          ctx.beginPath(); ctx.moveTo(262, klY); ctx.lineTo(338, klY); ctx.stroke();
+          // Animated binding — key moves toward lock
+          var bindT = (Math.sin(performance.now()*0.0015)+1)*0.5;  // 0..1, oscillates
+          var keyX = 200 + bindT*60;  // moves toward lock at 350
+          var lockX = 350;
+          // Key (binder) — green glowing circle with shape
+          ctx.save();
+          ctx.shadowColor='#10b981';ctx.shadowBlur=15;
+          // Outer halo
+          var keyG = ctx.createRadialGradient(keyX, klY, 0, keyX, klY, 25);
+          keyG.addColorStop(0,'rgba(16,185,129,0.5)');
+          keyG.addColorStop(1,'rgba(16,185,129,0)');
+          ctx.fillStyle = keyG;
+          ctx.beginPath();ctx.arc(keyX, klY, 25, 0, 6.28);ctx.fill();
+          // Solid
+          var keySolid = ctx.createRadialGradient(keyX-4, klY-4, 0, keyX, klY, 12);
+          keySolid.addColorStop(0,'rgba(110,231,183,1)');
+          keySolid.addColorStop(1,'rgba(16,185,129,1)');
+          ctx.fillStyle = keySolid;
+          ctx.beginPath(); ctx.arc(keyX, klY, 12, 0, 6.28); ctx.fill();
+          ctx.strokeStyle='rgba(110,231,183,1)';ctx.lineWidth=1.5;
+          ctx.beginPath();ctx.arc(keyX, klY, 12, 0, 6.28);ctx.stroke();
+          ctx.restore();
+          // Lock (toxin site) — red glowing circle
+          ctx.save();
+          ctx.shadowColor='#ef4444';ctx.shadowBlur=15;
+          var lockG = ctx.createRadialGradient(lockX, klY, 0, lockX, klY, 25);
+          lockG.addColorStop(0,'rgba(239,68,68,0.5)');
+          lockG.addColorStop(1,'rgba(239,68,68,0)');
+          ctx.fillStyle = lockG;
+          ctx.beginPath();ctx.arc(lockX, klY, 25, 0, 6.28);ctx.fill();
+          var lockSolid = ctx.createRadialGradient(lockX-4, klY-4, 0, lockX, klY, 12);
+          lockSolid.addColorStop(0,'rgba(252,165,165,1)');
+          lockSolid.addColorStop(1,'rgba(239,68,68,1)');
+          ctx.fillStyle = lockSolid;
+          ctx.beginPath(); ctx.arc(lockX, klY, 12, 0, 6.28); ctx.fill();
+          ctx.strokeStyle='rgba(252,165,165,1)';ctx.lineWidth=1.5;
+          ctx.beginPath();ctx.arc(lockX, klY, 12, 0, 6.28);ctx.stroke();
+          ctx.restore();
+          // Connection line (animated dashed)
+          var connected = bindT > 0.7;
+          ctx.strokeStyle = connected ? 'rgba(16,185,129,'+s6A+')' : 'rgba(255,255,255,'+(0.4*s6A)+')';
+          ctx.lineWidth = connected ? 2 : 1.5;
+          ctx.setLineDash([4,4]);
+          ctx.lineDashOffset = -performance.now()*0.04;
+          ctx.beginPath(); ctx.moveTo(keyX+12, klY); ctx.lineTo(lockX-12, klY); ctx.stroke();
           ctx.setLineDash([]);
-          ctx.fillStyle = '#10b981'; ctx.font = '9px ui-monospace';
-          ctx.fillText('binder (key)', 220, klY + 25);
-          ctx.fillStyle = '#ef4444';
-          ctx.fillText('toxin site (lock)', 320, klY + 25);
-          ctx.fillStyle = 'rgba(148,163,184,0.6)';
+          ctx.fillStyle = 'rgba(110,231,183,'+s6A+')'; ctx.font = '9px ui-monospace';
+          ctx.fillText('binder (key)', keyX-25, klY + 25);
+          ctx.fillStyle = 'rgba(252,165,165,'+s6A+')';
+          ctx.fillText('toxin site (lock)', lockX-30, klY + 25);
+          ctx.fillStyle = 'rgba(148,163,184,'+(0.6*s6A)+')';
           ctx.fillText('ΔG = −RT ln(1/K_D) ≈ −46 kJ/mol', 200, klY + 40);
+          ctx.globalAlpha = 1;
         }
 
 
@@ -507,11 +660,14 @@ print(<span class="num">f"Stage 5+6: {len(binders)} binders found (K_D &lt; 100 
 
         // === Per-stage heatmap (bottom 120px of canvas) ===
         var hmY = H - 130;
-        ctx.fillStyle = 'rgba(11,15,26,0.8)';
+        var hmG = ctx.createLinearGradient(0,hmY-5,0,hmY+120);
+        hmG.addColorStop(0,'rgba(18,24,38,0.85)');
+        hmG.addColorStop(1,'rgba(11,15,26,0.95)');
+        ctx.fillStyle = hmG;
         ctx.fillRect(10, hmY - 5, W - 20, 125);
         ctx.strokeStyle = 'rgba(148,163,184,0.2)'; ctx.lineWidth = 0.5;
         ctx.strokeRect(10, hmY - 5, W - 20, 125);
-        ctx.fillStyle = '#10b981'; ctx.font = 'bold 10px ui-monospace'; ctx.textAlign = 'left';
+        ctx.fillStyle = '#6ee7b7'; ctx.font = 'bold 10px ui-monospace'; ctx.textAlign = 'left';
         var hmTitle = stage === 1 ? 'Per-residue accessibility heatmap' :
                      stage === 2 ? 'Hotspot score: accessibility × conservation' :
                      stage === 3 ? 'Design count per tool (12 tools)' :
@@ -526,37 +682,45 @@ print(<span class="num">f"Stage 5+6: {len(binders)} binders found (K_D &lt; 100 
         var hmStartY = hmY + 18;
         
         if (stage === 1) {
-          // Per-residue accessibility (20 residues × 8 rows)
           for (var r = 0; r < 8; r++) {
             for (var c = 0; c < 20; c++) {
               var v = (Math.sin(c * 0.3 + r * 0.5) + 1) / 2;
-              ctx.fillStyle = 'rgba(6,182,212,' + v + ')';
+              var hg = ctx.createLinearGradient(20 + c*cellW, hmStartY+r*cellH, 20 + c*cellW, hmStartY+(r+1)*cellH);
+              hg.addColorStop(0,'rgba(6,182,212,' + v + ')');
+              hg.addColorStop(1,'rgba(6,182,212,' + (v*0.5) + ')');
+              ctx.fillStyle = hg;
               ctx.fillRect(20 + c * cellW, hmStartY + r * cellH, cellW - 1, cellH - 1);
             }
           }
         } else if (stage === 2) {
-          // Hotspot score bar (5 hotspots highlighted)
           for (var c = 0; c < 20; c++) {
             var isHot = (c % 4 === 0);
             var v = isHot ? 0.9 : 0.15;
-            var color = isHot ? 'rgba(239,68,68,' + v + ')' : 'rgba(148,163,184,' + v + ')';
             for (var r = 0; r < 8; r++) {
-              ctx.fillStyle = color;
+              if (isHot) {
+                var hg = ctx.createLinearGradient(20 + c*cellW, hmStartY+r*cellH, 20 + c*cellW, hmStartY+(r+1)*cellH);
+                hg.addColorStop(0,'rgba(239,68,68,' + v + ')');
+                hg.addColorStop(1,'rgba(180,30,30,' + v + ')');
+                ctx.fillStyle = hg;
+              } else {
+                ctx.fillStyle = 'rgba(148,163,184,' + v + ')';
+              }
               ctx.fillRect(20 + c * cellW, hmStartY + r * cellH, cellW - 1, cellH - 1);
             }
           }
         } else if (stage === 3) {
-          // Design count per tool (12 tools × 8 bins)
           for (var r = 0; r < 8; r++) {
             for (var c = 0; c < 12; c++) {
-              var v = Math.random() * 0.7 + 0.1;
-              ctx.fillStyle = 'rgba(139,92,246,' + v + ')';
+              var v = designCounts[c] / 25 * (0.5 + r*0.05);
+              var hg = ctx.createLinearGradient(20+c*((W-40)/12), hmStartY+r*cellH, 20+c*((W-40)/12), hmStartY+(r+1)*cellH);
+              hg.addColorStop(0,'rgba(196,181,253,' + v + ')');
+              hg.addColorStop(1,'rgba(139,92,246,' + v + ')');
+              ctx.fillStyle = hg;
               var cw = (W - 40) / 12;
               ctx.fillRect(20 + c * cw, hmStartY + r * cellH, cw - 1, cellH - 1);
             }
           }
         } else if (stage === 4) {
-          // Screening scatter heatmap (pAE vs ΔΔG)
           for (var r = 0; r < 8; r++) {
             for (var c = 0; c < 20; c++) {
               var pae = c / 20;
@@ -570,10 +734,9 @@ print(<span class="num">f"Stage 5+6: {len(binders)} binders found (K_D &lt; 100 
             }
           }
         } else if (stage === 5) {
-          // K_D matrix (binder designs × toxins)
           for (var r = 0; r < 8; r++) {
             for (var c = 0; c < 20; c++) {
-              var kd = Math.random();
+              var kd = screenScores[(r*20+c)%screenScores.length];
               var color = kd > 0.7 ? 'rgba(16,185,129,' + kd + ')' :
                           kd > 0.4 ? 'rgba(245,158,11,' + kd + ')' :
                           'rgba(239,68,68,' + (kd + 0.1) + ')';
@@ -582,7 +745,6 @@ print(<span class="num">f"Stage 5+6: {len(binders)} binders found (K_D &lt; 100 
             }
           }
         } else if (stage === 6) {
-          // Interface contact map (binder × toxin residues)
           for (var r = 0; r < 8; r++) {
             for (var c = 0; c < 20; c++) {
               var isContact = Math.abs(r - c) < 3 || Math.abs(r + c - 10) < 3;
@@ -594,40 +756,61 @@ print(<span class="num">f"Stage 5+6: {len(binders)} binders found (K_D &lt; 100 
         }
         ctx.textAlign = 'left';
 
-
         var states = ['idle', 'toxin structure', 'hotspots identified', '318K designs', '553K screened', 'K_D measured', 'key-and-lock ✓'];
         document.getElementById('stage-indicator').textContent = 'stage ' + stage + '/' + maxStage + ' · ' + states[stage];
         document.getElementById('state-display').textContent = 'Toxin → ' + states[stage];
       }
 
+      // Continuous animation loop
+      function tick(now){
+        if(stageProgress<1){
+          var dt=Math.min(0.05,(now-lastStageTime)/600);
+          stageProgress=Math.min(1,stageProgress+dt);
+          lastStageTime=now;
+        }
+        render();
+        requestAnimationFrame(tick);
+      }
+
       function animate() {
-        stage = 0;
+        stage = 0; stageProgress = 1; lastStageTime = performance.now();
         function step() {
           if (stage > maxStage) {
-            isAnim = false; document.getElementById('btn-play').disabled = false;
+            isAnim = false;
+            document.getElementById('btn-play').disabled = false;
+            document.getElementById('btn-play').textContent='▶ Animate pipeline';
             document.getElementById('stage-indicator').textContent = 'done ✓';
             return;
           }
-          render(); stage++; setTimeout(step, 700);
+          stage++; stageProgress = 0; lastStageTime = performance.now();
+          setTimeout(step, 1000);
         }
         step();
       }
 
       document.getElementById('btn-play').addEventListener('click', function() {
-        if (isAnim) return; isAnim = true;
+        if (isAnim) return;
+        isAnim = true;
         document.getElementById('btn-play').disabled = true;
+        document.getElementById('btn-play').textContent='▶ running…';
         animate();
       });
-      document.getElementById('btn-reset').addEventListener('click', function() {
-        stage = 0; isAnim = false;
-        document.getElementById('btn-play').disabled = false;
-        document.getElementById('stage-indicator').textContent = 'stage 0/' + maxStage;
-        render();
+      document.getElementById('btn-step') && document.getElementById('btn-step').addEventListener('click', function() {
+        if (isAnim) return;
+        if (stage > maxStage) return;
+        stage++; stageProgress = 0; lastStageTime = performance.now();
       });
-      document.getElementById('zoom-in').addEventListener('click', function() { zoom = Math.min(3.0, zoom + 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; render(); });
-      document.getElementById('zoom-out').addEventListener('click', function() { zoom = Math.max(0.5, zoom - 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; render(); });
-      document.getElementById('zoom-reset').addEventListener('click', function() { zoom = 1.0; document.getElementById('zoom-label').textContent = '100%'; render(); });
-      render();
+      document.getElementById('btn-reset').addEventListener('click', function() {
+        stage = 0; isAnim = false; stageProgress = 1;
+        document.getElementById('btn-play').disabled = false;
+        document.getElementById('btn-play').textContent='▶ Animate pipeline';
+        document.getElementById('stage-indicator').textContent = 'stage 0/' + maxStage;
+      });
+      document.getElementById('zoom-in').addEventListener('click', function() { zoom = Math.min(3.0, zoom + 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; });
+      document.getElementById('zoom-out').addEventListener('click', function() { zoom = Math.max(0.5, zoom - 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; });
+      document.getElementById('zoom-reset').addEventListener('click', function() { zoom = 1.0; document.getElementById('zoom-label').textContent = '100%'; });
+      lastStageTime = performance.now();
+      requestAnimationFrame(tick);
     </script>
     <script src="zoom-loader.js"></script>
   <script src="header-banner.js"></script>

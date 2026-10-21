@@ -318,11 +318,26 @@ x = embed(tokens, np.arange(<span class="num">64</span>))
         s();
       })();
 
-      // ===== Geneformer pipeline canvas =====
+      // ===== Geneformer pipeline canvas — upgraded =====
       var canvas = document.getElementById('main-canvas');
       var ctx = canvas.getContext('2d');
       var W = canvas.width, H = canvas.height;
       var stage = 0, maxStage = 5, zoom = 1.0, isAnim = false;
+      var stageProgress = 1, lastStageTime = 0;
+
+      function drawGlowCircle(x,y,r,color,alpha){
+        if(alpha===undefined)alpha=1;
+        var g=ctx.createRadialGradient(x,y,0,x,y,r*3);
+        g.addColorStop(0,color);
+        g.addColorStop(0.3,color.replace(/[\d.]+\)$/,(0.6*alpha)+')'));
+        g.addColorStop(1,color.replace(/[\d.]+\)$/,'0)'));
+        ctx.fillStyle=g;
+        ctx.beginPath();ctx.arc(x,y,r*3,0,6.28);ctx.fill();
+        ctx.fillStyle=color;
+        ctx.globalAlpha=alpha;
+        ctx.beginPath();ctx.arc(x,y,r,0,6.28);ctx.fill();
+        ctx.globalAlpha=1;
+      }
 
       function render() {
         ctx.save();
@@ -331,113 +346,212 @@ x = embed(tokens, np.arange(<span class="num">64</span>))
         ctx.translate(W/2, H/2);
         ctx.scale(zoom, zoom);
         ctx.translate(-W/2, -H/2);
-        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        // Background gradient
+        var bg = ctx.createLinearGradient(0,0,0,H);
+        bg.addColorStop(0,'#0a0e1a');
+        bg.addColorStop(0.5,'#0f1422');
+        bg.addColorStop(1,'#0a0e1a');
         ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
-        ctx.fillStyle = '#10b981'; ctx.font = 'bold 14px ui-monospace'; ctx.textAlign = 'center';
+        // Subtle grid
+        ctx.strokeStyle='rgba(16,185,129,0.04)';
+        ctx.lineWidth=1;
+        for(var gx=0;gx<W;gx+=40){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+        for(var gy=0;gy<H;gy+=40){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+        // Title with glow
+        ctx.save();
+        ctx.shadowColor='#10b981';ctx.shadowBlur=12;
+        ctx.fillStyle = '#6ee7b7'; ctx.font = 'bold 14px ui-monospace,monospace'; ctx.textAlign = 'center';
         ctx.fillText('Geneformer pipeline — stage ' + stage + '/' + maxStage, W/2, 25);
+        ctx.restore();
         ctx.textAlign = 'left';
+        // Progress dots
+        var dotsX=W/2-(maxStage)*7;
+        for(var s=0;s<maxStage;s++){
+          ctx.fillStyle=s<stage?'#10b981':'rgba(148,163,184,0.2)';
+          ctx.beginPath();ctx.arc(dotsX+s*14,42,4,0,6.28);ctx.fill();
+          if(s>0&&s<stage){
+            ctx.strokeStyle='rgba(16,185,129,0.4)';ctx.lineWidth=1;
+            ctx.beginPath();ctx.moveTo(dotsX+(s-1)*14+4,42);ctx.lineTo(dotsX+s*14-4,42);ctx.stroke();
+          }
+        }
         var baseY = 60;
 
         // Stage 1: Rank-based tokenisation
         if (stage >= 1) {
+          var s1A = stage===1?stageProgress:(stage>1?1:0);
           var tY = baseY + 20;
+          ctx.globalAlpha = s1A;
           ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('1. Cell → rank-based gene tokens (no magnitudes)', 30, tY - 8);
-          // Show 12 gene tokens ranked by expression
+          ctx.globalAlpha = 1;
           var geneLabels = ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10', 'G11', 'G12'];
           for (var i = 0; i < 12; i++) {
             var v = Math.max(0.1, Math.exp(-i * 0.2));
-            ctx.fillStyle = 'rgba(16,185,129,' + v + ')';
+            // Gradient-filled token tile with glow
+            ctx.save();
+            ctx.shadowColor='#10b981';ctx.shadowBlur=4+v*8;
+            var g = ctx.createLinearGradient(30+i*50, tY, 30+i*50, tY+18);
+            g.addColorStop(0,'rgba(110,231,183,'+(0.9*v*s1A)+')');
+            g.addColorStop(0.5,'rgba(16,185,129,'+(0.85*v*s1A)+')');
+            g.addColorStop(1,'rgba(6,95,70,'+(0.85*v*s1A)+')');
+            ctx.fillStyle = g;
             ctx.fillRect(30 + i * 50, tY, 40, 18);
-            ctx.fillStyle = '#000'; ctx.font = 'bold 9px ui-monospace'; ctx.textAlign = 'center';
+            ctx.restore();
+            // Top highlight
+            ctx.fillStyle='rgba(255,255,255,'+(0.3*s1A)+')';
+            ctx.fillRect(30 + i * 50, tY, 40, 1);
+            // Border
+            ctx.strokeStyle='rgba(110,231,183,'+(0.6*s1A)+')';ctx.lineWidth=1;
+            ctx.strokeRect(30+i*50, tY, 40, 18);
+            ctx.fillStyle = 'rgba(255,255,255,'+s1A+')'; ctx.font = 'bold 9px ui-monospace'; ctx.textAlign = 'center';
             ctx.fillText(geneLabels[i], 30 + i * 50 + 20, tY + 12);
             ctx.textAlign = 'left';
-            // Arrow showing rank order
             if (i < 11) {
-              ctx.strokeStyle = 'rgba(245,158,11,0.4)'; ctx.lineWidth = 1;
+              // Animated dashed arrow
+              ctx.strokeStyle = 'rgba(245,158,11,'+(0.5*s1A)+')';
+              ctx.lineWidth = 1;
+              ctx.setLineDash([3,3]);
+              ctx.lineDashOffset = -performance.now()*0.03;
               ctx.beginPath(); ctx.moveTo(30 + i * 50 + 40, tY + 9); ctx.lineTo(30 + (i+1) * 50, tY + 9); ctx.stroke();
+              ctx.setLineDash([]);
             }
           }
-          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillStyle = 'rgba(148,163,184,'+(0.6*s1A)+')'; ctx.font = '9px ui-monospace';
           ctx.fillText('Sorted by expression (rank only — magnitudes discarded)', 30, tY + 32);
         }
 
         // Stage 2: Embeddings
         if (stage >= 2) {
+          var s2A = stage===2?stageProgress:(stage>2?1:0);
           var eY = baseY + 100;
+          ctx.globalAlpha = s2A;
           ctx.fillStyle = '#8b5cf6'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('2. Token embeddings: gene_id + position', 30, eY - 8);
+          ctx.globalAlpha = 1;
           var embW = 8;
           for (var idx = 0; idx < 2; idx++) {
             var rowY = eY + idx * 18;
             for (var i = 0; i < 32; i++) {
               var v = (Math.sin(i*0.3 + idx) + Math.cos(i*0.5 + idx*0.7)) * 0.5 + 0.5;
-              ctx.fillStyle = ['rgba(6,182,212,', 'rgba(236,72,153,'][idx] + v + ')';
+              // Use gradient for embeddings
+              var colors = [['6,182,212','3,105,140'],['236,72,153','150,30,90']];
+              var c = colors[idx];
+              var g = ctx.createLinearGradient(30+i*embW, rowY, 30+i*embW, rowY+14);
+              g.addColorStop(0,'rgba('+c[0]+','+(0.9*v*s2A)+')');
+              g.addColorStop(1,'rgba('+c[1]+','+(0.85*v*s2A)+')');
+              ctx.fillStyle = g;
               ctx.fillRect(30 + i * embW, rowY, embW - 1, 14);
             }
-            ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '9px ui-monospace';
+            ctx.fillStyle = 'rgba(148,163,184,'+(0.7*s2A)+')'; ctx.font = '9px ui-monospace';
             ctx.fillText(['gene_emb', 'pos_emb'][idx], 30 + 32 * embW + 8, rowY + 11);
           }
         }
 
         // Stage 3: Transformer encoder
         if (stage >= 3) {
+          var s3A = stage===3?stageProgress:(stage>3?1:0);
           var trY = baseY + 180;
+          ctx.globalAlpha = s3A;
           ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('3. Transformer encoder — bidirectional attention', 30, trY - 8);
+          ctx.globalAlpha = 1;
+          // Animated attention weight (rotates over time)
+          var attnT = performance.now()*0.001;
           for (var h = 0; h < 4; h++) {
             var hx = 30 + h * 90;
-            ctx.fillStyle = 'rgba(148,163,184,0.4)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
+            ctx.fillStyle = 'rgba(148,163,184,'+(0.5*s3A)+')'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
             ctx.fillText('head ' + h, hx + 35, trY - 2);
             ctx.textAlign = 'left';
             for (var i = 0; i < 4; i++) for (var j = 0; j < 4; j++) {
-              var v = (Math.sin(i + j + h) + 1) / 2;
-              ctx.fillStyle = 'rgba(16,185,129,' + v + ')';
+              // Animated attention pattern
+              var v = (Math.sin(i + j + h + attnT) + 1) / 2;
+              // Color: green for high attention, dim for low
+              var g = ctx.createLinearGradient(hx+j*16, trY+i*16, hx+(j+1)*16, trY+(i+1)*16);
+              g.addColorStop(0,'rgba(110,231,183,'+(v*s3A)+')');
+              g.addColorStop(1,'rgba(16,185,129,'+(v*0.5*s3A)+')');
+              ctx.fillStyle = g;
               ctx.fillRect(hx + j * 16, trY + i * 16, 14, 14);
+              if (v > 0.7) {
+                // Highlight high-attention cells
+                ctx.strokeStyle = 'rgba(110,231,183,'+(s3A)+')';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(hx+j*16, trY+i*16, 14, 14);
+              }
             }
           }
         }
 
         // Stage 4: MLM — predict masked gene
         if (stage >= 4) {
+          var s4A = stage===4?stageProgress:(stage>4?1:0);
           var mY = baseY + 260;
+          ctx.globalAlpha = s4A;
           ctx.fillStyle = '#ec4899'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('4. MLM — predict masked gene tokens', 30, mY - 8);
+          ctx.globalAlpha = 1;
+          // Pulse for masked tokens
+          var pulse = (Math.sin(performance.now()*0.003)+1)*0.5;
           for (var i = 0; i < 12; i++) {
             var isMasked = (i === 2 || i === 6 || i === 9);
             if (isMasked) {
-              ctx.fillStyle = 'rgba(236,72,153,0.5)';
+              // Masked token — pink with pulsing glow
+              ctx.save();
+              ctx.shadowColor='#ec4899';ctx.shadowBlur=10+pulse*6;
+              var mg = ctx.createLinearGradient(30+i*50, mY, 30+i*50, mY+18);
+              mg.addColorStop(0,'rgba(252,165,165,'+(0.85*s4A)+')');
+              mg.addColorStop(1,'rgba(236,72,153,'+(0.85*s4A)+')');
+              ctx.fillStyle = mg;
               ctx.fillRect(30 + i * 50, mY, 40, 18);
-              ctx.strokeStyle = '#ec4899'; ctx.lineWidth = 2;
+              ctx.restore();
+              // Pulsing border
+              ctx.strokeStyle = 'rgba(236,72,153,'+(0.7*s4A+pulse*0.3*s4A)+')';
+              ctx.lineWidth = 2;
               ctx.strokeRect(30 + i * 50, mY, 40, 18);
-              ctx.fillStyle = '#fff'; ctx.font = 'bold 12px ui-monospace'; ctx.textAlign = 'center';
+              ctx.fillStyle = 'rgba(255,255,255,'+s4A+')';
+              ctx.font = 'bold 12px ui-monospace'; ctx.textAlign = 'center';
               ctx.fillText('?', 30 + i * 50 + 20, mY + 13);
               ctx.textAlign = 'left';
             } else {
-              ctx.fillStyle = 'rgba(16,185,129,0.7)';
+              // Normal token — green gradient
+              var g = ctx.createLinearGradient(30+i*50, mY, 30+i*50, mY+18);
+              g.addColorStop(0,'rgba(110,231,183,'+(0.8*s4A)+')');
+              g.addColorStop(1,'rgba(16,185,129,'+(0.8*s4A)+')');
+              ctx.fillStyle = g;
               ctx.fillRect(30 + i * 50, mY, 40, 18);
-              ctx.fillStyle = '#000'; ctx.font = 'bold 9px ui-monospace'; ctx.textAlign = 'center';
+              ctx.fillStyle = 'rgba(255,255,255,'+s4A+')'; ctx.font = 'bold 9px ui-monospace'; ctx.textAlign = 'center';
               ctx.fillText('G' + (i+1), 30 + i * 50 + 20, mY + 12);
               ctx.textAlign = 'left';
             }
           }
-          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillStyle = 'rgba(148,163,184,'+(0.6*s4A)+')'; ctx.font = '9px ui-monospace';
           ctx.fillText('3 masked → predict which gene belongs there', 30, mY + 30);
         }
 
         // Stage 5: In-silico perturbation
         if (stage >= 5) {
+          var s5A = stage===5?stageProgress:1;
           var pY = baseY + 340;
+          ctx.globalAlpha = s5A;
           ctx.fillStyle = '#10b981'; ctx.font = 'bold 11px ui-monospace';
           ctx.fillText('5. In-silico perturbation — predict gene importance', 30, pY - 8);
-          // Show ΔCOS shift for 6 genes
+          ctx.globalAlpha = 1;
           var genes = ['TP53', 'MYC', 'BRCA1', 'EGFR', 'KRAS', 'CDK4'];
           var shifts = [0.45, 0.32, 0.18, 0.28, 0.22, 0.15];
           for (var i = 0; i < genes.length; i++) {
             var bw = shifts[i] * 400;
-            ctx.fillStyle = 'rgba(16,185,129,0.8)';
+            // Gradient bar
+            var g = ctx.createLinearGradient(30, pY+i*14, 30+bw, pY+i*14);
+            g.addColorStop(0,'rgba(110,231,183,'+(0.95*s5A)+')');
+            g.addColorStop(1,'rgba(16,185,129,'+(0.95*s5A)+')');
+            ctx.fillStyle = g;
+            ctx.save();
+            ctx.shadowColor='#10b981';ctx.shadowBlur=4;
             ctx.fillRect(30, pY + i * 14, bw, 10);
-            ctx.fillStyle = 'rgba(148,163,184,0.8)'; ctx.font = '10px ui-monospace';
+            ctx.restore();
+            // Top highlight
+            ctx.fillStyle='rgba(255,255,255,'+(0.3*s5A)+')';
+            ctx.fillRect(30, pY + i * 14, bw, 1);
+            ctx.fillStyle = 'rgba(255,255,255,'+(0.8*s5A)+')'; ctx.font = '10px ui-monospace';
             ctx.fillText(genes[i] + ' (ΔCOS=' + shifts[i].toFixed(2) + ')', 30 + bw + 8, pY + i * 14 + 8);
           }
         }
@@ -448,34 +562,55 @@ x = embed(tokens, np.arange(<span class="num">64</span>))
         document.getElementById('state-display').textContent = 'Cell → ' + states[stage];
       }
 
+      function tick(now){
+        if(stageProgress<1){
+          var dt=Math.min(0.05,(now-lastStageTime)/600);
+          stageProgress=Math.min(1,stageProgress+dt);
+          lastStageTime=now;
+        }
+        render();
+        requestAnimationFrame(tick);
+      }
+
       function animate() {
-        stage = 0;
+        stage = 0; stageProgress = 1; lastStageTime = performance.now();
         function step() {
           if (stage > maxStage) {
-            isAnim = false; document.getElementById('btn-play').disabled = false;
+            isAnim = false;
+            document.getElementById('btn-play').disabled = false;
+            document.getElementById('btn-play').textContent = '▶ Animate pipeline';
             document.getElementById('stage-indicator').textContent = 'done ✓';
             return;
           }
-          render(); stage++; setTimeout(step, 700);
+          stage++; stageProgress = 0; lastStageTime = performance.now();
+          setTimeout(step, 1000);
         }
         step();
       }
 
       document.getElementById('btn-play').addEventListener('click', function() {
-        if (isAnim) return; isAnim = true;
+        if (isAnim) return;
+        isAnim = true;
         document.getElementById('btn-play').disabled = true;
+        document.getElementById('btn-play').textContent = '▶ running…';
         animate();
       });
-      document.getElementById('btn-reset').addEventListener('click', function() {
-        stage = 0; isAnim = false;
-        document.getElementById('btn-play').disabled = false;
-        document.getElementById('stage-indicator').textContent = 'stage 0/' + maxStage;
-        render();
+      document.getElementById('btn-step') && document.getElementById('btn-step').addEventListener('click', function() {
+        if (isAnim) return;
+        if (stage > maxStage) return;
+        stage++; stageProgress = 0; lastStageTime = performance.now();
       });
-      document.getElementById('zoom-in').addEventListener('click', function() { zoom = Math.min(3.0, zoom + 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; render(); });
-      document.getElementById('zoom-out').addEventListener('click', function() { zoom = Math.max(0.5, zoom - 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; render(); });
-      document.getElementById('zoom-reset').addEventListener('click', function() { zoom = 1.0; document.getElementById('zoom-label').textContent = '100%'; render(); });
-      render();
+      document.getElementById('btn-reset').addEventListener('click', function() {
+        stage = 0; isAnim = false; stageProgress = 1;
+        document.getElementById('btn-play').disabled = false;
+        document.getElementById('btn-play').textContent = '▶ Animate pipeline';
+        document.getElementById('stage-indicator').textContent = 'stage 0/' + maxStage;
+      });
+      document.getElementById('zoom-in').addEventListener('click', function() { zoom = Math.min(3.0, zoom + 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; });
+      document.getElementById('zoom-out').addEventListener('click', function() { zoom = Math.max(0.5, zoom - 0.2); document.getElementById('zoom-label').textContent = Math.round(zoom*100) + '%'; });
+      document.getElementById('zoom-reset').addEventListener('click', function() { zoom = 1.0; document.getElementById('zoom-label').textContent = '100%'; });
+      lastStageTime = performance.now();
+      requestAnimationFrame(tick);
     </script>
     <script src="zoom-loader.js"></script>
   <script src="header-banner.js"></script>

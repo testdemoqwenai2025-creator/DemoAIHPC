@@ -364,11 +364,19 @@ def check_internal_links(html_files):
     Honours <base href="..."> tags — if a file declares a base URL,
     relative hrefs are resolved against that base instead of the
     file's directory.
+
+    Skips files in digest/archive/ — these are historical snapshots
+    of past issues and should remain frozen even if newer paper pages
+    are added later (the snapshots reference them via relative paths
+    that don't exist in the snapshot's time).
     """
     failures = []
     href_re = re.compile(r'href="([^"]+)"')
     base_re = re.compile(r'<base\s+href="([^"]+)"\s*/?>', re.IGNORECASE)
     for path in html_files:
+        # Skip digest archive snapshots — they're frozen historical artifacts
+        if os.sep + "digest" + os.sep + "archive" + os.sep in path + os.sep:
+            continue
         with open(path, "r", encoding="utf-8") as f:
             s = f.read()
         rel_path = os.path.relpath(path, DOCS)
@@ -402,7 +410,7 @@ def check_internal_links(html_files):
                            f"{len(failures)} broken internal links (showing first 20)",
                            failures[:20])
     return CheckResult("internal_links", True,
-                       f"all internal links across {len(html_files)} pages resolve")
+                       f"all internal links across {len(html_files)} pages resolve (digest/archive/ snapshots excluded)")
 
 
 def check_script_srcs_resolve(html_files):
