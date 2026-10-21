@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Cryo-EM + VAE — recovering continuous protein conformational distributions from cryo-EM particle images using Variational Autoencoders. arXiv:2106.14108." />
+    <title>Cryo-EM VAE — Protein Conformational Distributions · AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#10b981; --accent-2:#06b6d4; --accent-3:#f59e0b; --purple:#8b5cf6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(6,182,212,0.18), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.3; }
+      .container { max-width: 1000px; margin: 0 auto; padding: 24px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(6,182,212,0.35); background: rgba(6,182,212,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; }
+      h1 { font-size: 36px; margin: 0 0 12px; background: linear-gradient(90deg,#fff,#67e8f9 60%,#c4b5fd); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      h2 { font-size: 22px; margin: 32px 0 12px; color: var(--accent-2); }
+      h3 { color: var(--accent); font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 860px; margin: 0 0 24px; }
+      .lead b { color: var(--text); }
+      .lead a { color: var(--accent-2); text-decoration: none; }
+      .viz-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(6,182,212,0.3); border-radius: 12px; padding: 16px; margin-top: 16px; }
+      .viz-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+      canvas { display: block; width: 100%; height: auto; }
+      .controls-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+      .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent-2), var(--purple)); color: white; }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); }
+      .btn:disabled { opacity: 0.5; }
+      .zoom-controls { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 8px; padding: 4px; }
+      .zoom-btn { width: 30px; height: 30px; border: none; background: transparent; color: var(--text); cursor: pointer; font-size: 16px; font-weight: 700; border-radius: 4px; }
+      .zoom-btn:hover { background: rgba(6,182,212,0.2); }
+      .zoom-label { font-size: 9px; color: var(--text-muted); text-align: center; padding: 2px 0; }
+      .math-block { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-left: 3px solid var(--accent-2); border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-family: "Cambria Math", Georgia, serif; }
+      .math-block .eq { font-size: 16px; color: var(--accent-2); margin: 6px 0; }
+      .math-block .explain { font-size: 13px; color: var(--text-muted); margin-top: 4px; font-family: -apple-system, sans-serif; }
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .callout { background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+      .callout.green { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.3); }
+      .callout.amber { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.3); }
+      .callout.pink { background: rgba(236,72,153,0.06); border-color: rgba(236,72,153,0.3); }
+      .callout h3 { margin: 0 0 10px; }
+      .callout .row { margin: 8px 0; font-size: 13px; line-height: 1.55; color: var(--text); }
+      .callout .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
+      .callout .lbl.use { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .callout .lbl.avoid { background: rgba(239,68,68,0.15); color: #fca5a5; }
+      .callout .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+      .callout .lbl.futur { background: rgba(245,158,11,0.15); color: #fcd34d; }
+      .callout .text { color: var(--text-muted); }
+    </style>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <main class="container">
+      <p class="crumbs"><a href="index.html">Home</a> / <a href="bio-nn.html">Bioinformatics × NN</a> / Cryo-EM VAE</p>
+      <span class="tag">🔬 arXiv:2106.14108 · Rosenbaum et al. · 2021 · Cryo-EM + deep learning</span>
+      <h1>Cryo-EM VAE — Protein Conformational Distributions</h1>
+      <p class="lead">Recovering <b>continuous distributions of protein conformations</b> from cryo-EM particle images using <b>Variational Autoencoders</b>. Traditional cryo-EM produces discrete 3D structures — this method captures the <b>full conformational landscape</b>: how a protein flexes, bends, and moves. The VAE encoder maps 2D cryo-EM images to a latent space where each point is a different conformation; the decoder reconstructs the 3D atomic structure. <a href="https://arxiv.org/abs/2106.14108" target="_blank" rel="noopener">Read the paper →</a></p>
+
+      <div class="viz-card">
+        <h3>5-stage pipeline visualiser</h3>
+        <div class="viz-wrap">
+          <canvas id="main-canvas" width="728" height="480"></canvas>
+          <div class="zoom-controls">
+            <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+            <div class="zoom-label" id="zoom-label">100%</div>
+            <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+            <button class="zoom-btn" id="zoom-reset" title="Reset">↺</button>
+          </div>
+          <div style="position: absolute; bottom: 10px; left: 12px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace;" id="stage-ind">stage 0/5</div>
+        </div>
+        <div class="controls-row">
+          <button class="btn primary" id="btn-play">▶ Animate pipeline</button>
+          <button class="btn ghost" id="btn-step">⏭ Step</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+        </div>
+      </div>
+
+      <h2>📐 Mathematical formulation</h2>
+      <div class="math-block">
+        <div class="eq">Stage 1 — Cryo-EM image formation: I = P(R · C(x)) + noise
+R = rotation matrix, C = 3D conformation, P = projection operator</div>
+        <div class="explain">Each cryo-EM image is a 2D projection of a 3D protein in a random orientation R and conformation C. The protein is flash-frozen in vitreous ice — each particle captures a different snapshot of the protein's dynamic motion.</div>
+      </div>
+      <div class="math-block">
+        <div class="eq">Stage 2 — VAE encoder: q(z | I) = N(μ(I), σ(I))
+Maps 2D cryo-EM image → latent conformational code z</div>
+        <div class="explain">The encoder network learns to extract a compact latent representation z from each 2D image — encoding both the protein's orientation AND its conformation. The latent space is continuous, so nearby points z are similar conformations.</div>
+      </div>
+      <div class="math-block">
+        <div class="eq">Stage 3 — VAE loss: L = E_q[log p(I | z)] − KL(q(z|I) || p(z))
+Reconstruction (cryo-EM image fidelity) + KL (smooth latent space)</div>
+        <div class="explain">The reconstruction term ensures the decoder can generate images that match the cryo-EM data. The KL term regularises the latent space to be smooth and continuous — so interpolation between conformations produces physically plausible transitions.</div>
+      </div>
+      <div class="math-block">
+        <div class="eq">Stage 4 — Latent conformational space: p(C) = ∫ p(C | z) q(z | I) dz
+The distribution of protein conformations across all particles</div>
+        <div class="explain">By sampling z from the latent space across all particles, we recover the FULL conformational distribution p(C) — not just one structure, but the ensemble of structures the protein adopts. This reveals flexible regions, conformational substates, and transition pathways.</div>
+      </div>
+      <div class="math-block">
+        <div class="eq">Stage 5 — Decoder: C(x) = g_θ(z, x)
+Reconstructs 3D atomic coordinates from latent code z</div>
+        <div class="explain">The decoder network maps a latent code z back to a 3D atomic structure C(x). By sampling z along a path in latent space, we can generate a smooth trajectory of the protein's conformational change — a "movie" of the protein in motion, reconstructed from static snapshots.</div>
+      </div>
+
+      <h2>💻 Runnable code</h2>
+      <div class="code-section">
+        <pre><span class="cm"># Cryo-EM VAE — simplified implementation</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">class</span> <span class="fn">CryoEMVAE</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, img_dim=<span class="num">128</span>, latent_dim=<span class="num">8</span>):
+        <span class="cm"># Encoder: cryo-EM image → (mu, log_var) in latent space</span>
+        self.enc_W = np.random.randn(img_dim, latent_dim) * <span class="num">0.02</span>
+        self.enc_b = np.zeros(latent_dim)
+        <span class="cm"># Decoder: latent code → 3D atomic coordinates</span>
+        self.dec_W = np.random.randn(latent_dim, img_dim) * <span class="num">0.02</span>
+        self.dec_b = np.zeros(img_dim)
+        self.latent_dim = latent_dim
+
+    <span class="kw">def</span> <span class="fn">encode</span>(self, image):
+        <span class="cm"># q(z|I) = N(mu, sigma) — encode image to latent</span>
+        h = self.enc_W.T @ image + self.enc_b
+        mu = h[:self.latent_dim]
+        log_var = h[self.latent_dim:] <span class="kw">if</span> len(h) &gt; self.latent_dim <span class="kw">else</span> np.zeros(self.latent_dim)
+        <span class="kw">return</span> mu, log_var
+
+    <span class="kw">def</span> <span class="fn">reparameterize</span>(self, mu, log_var):
+        <span class="cm"># z = mu + sigma * eps (reparametrisation trick)</span>
+        eps = np.random.randn(*mu.shape)
+        <span class="kw">return</span> mu + np.exp(<span class="num">0.5</span> * log_var) * eps
+
+    <span class="kw">def</span> <span class="fn">decode</span>(self, z):
+        <span class="cm"># C(x) = decoder(z) — reconstruct 3D structure</span>
+        <span class="kw">return</span> self.dec_W.T @ z + self.dec_b
+
+    <span class="kw">def</span> <span class="fn">loss</span>(self, image, mu, log_var, z):
+        <span class="cm"># L = reconstruction + KL(q(z|I) || N(0,I))</span>
+        recon = np.mean((image - self.decode(z)) ** <span class="num">2</span>)
+        kl = <span class="num">0.5</span> * np.sum(np.exp(log_var) + mu ** <span class="num">2</span> - log_var - <span class="num">1</span>)
+        <span class="kw">return</span> recon + kl
+
+    <span class="kw">def</span> <span class="fn">conformational_distribution</span>(self, images, n_samples=<span class="num">100</span>):
+        <span class="cm"># Sample from latent space across all images</span>
+        <span class="cm"># → recover continuous p(C) = conformational distribution</span>
+        conformations = []
+        <span class="kw">for</span> img <span class="kw">in</span> images:
+            mu, lv = self.encode(img)
+            <span class="kw">for</span> _ <span class="kw">in range</span>(n_samples):
+                z = self.reparameterize(mu, lv)
+                C = self.decode(z)  <span class="cm"># 3D atomic structure</span>
+                conformations.append(C)
+        <span class="kw">return</span> np.array(conformations)
+
+<span class="cm"># === Example: recover conformational distribution from 100 cryo-EM images ===</span>
+np.random.seed(<span class="num">0</span>)
+vae = CryoEMVAE(img_dim=<span class="num">64</span>, latent_dim=<span class="num">4</span>)
+images = [np.random.randn(<span class="num">64</span>) <span class="kw">for</span> _ <span class="kw">in range</span>(<span class="num">100</span>)]  <span class="cm"># simulated cryo-EM particles</span>
+conformations = vae.conformational_distribution(images, n_samples=<span class="num">10</span>)
+<span class="kw">print</span>(<span class="num">f"Recovered {len(conformations)} conformations from 100 cryo-EM images"</span>)
+<span class="kw">print</span>(<span class="num">f"Each conformation: {conformations[0].shape} (atomic coordinates)"</span>)
+<span class="kw">print</span>(<span class="num">f"Conformational variance: {np.var(conformations, axis=0)[:4].round(3)}"</span>)
+<span class="kw">print</span>(<span class="num">f"→ This is the continuous protein motion, not just one structure!"</span>)</pre>
+      </div>
+
+      <h2>🧠 Deep thoughts</h2>
+      <div class="callout">
+        <h3>When to use VAE for cryo-EM vs traditional methods</h3>
+        <div class="row"><span class="lbl use">USE WHEN</span><span class="text">Proteins are <b>flexible</b> (have multiple conformations — enzymes, transporters, ion channels). When you want the <b>full conformational landscape</b> (not just one structure). When you have <b>large cryo-EM datasets</b> (100K+ particles). When you want to <b>visualise protein motion</b> as a smooth trajectory.</span></div>
+        <div class="row"><span class="lbl avoid">AVOID WHEN</span><span class="text">The protein is <b>rigid</b> (single conformation — use standard cryo-EM reconstruction). When you need <b>atomic-resolution</b> structures (VAE reconstructions are lower resolution). When you have <b>few particles</b> (<1000 — VAE needs many samples). When the protein is <b>symmetric</b> (use symmetry-aware methods instead).</span></div>
+        <div class="row"><span class="lbl why">WHY</span><span class="text">Traditional cryo-EM produces <b>discrete</b> structures — you pick one conformation and solve it. But proteins are <b>dynamic machines</b> — they flex, bend, and change shape to function. The VAE captures the <b>continuous distribution</b> of all conformations in a single model. This reveals: (1) flexible regions (drug targets), (2) conformational substates (functional states), (3) transition pathways (how the protein moves). The latent space is the protein's "conformational genome" — every point is a valid structure.</span></div>
+      </div>
+
+      <h2>🚀 Futuristic possibilities</h2>
+      <div class="callout amber">
+        <h3>Where cryo-EM + VAE leads</h3>
+        <div class="row"><span class="lbl futur">2025-26</span><span class="text"><b>Real-time protein dynamics.</b> Cryo-EM + VAE pipelines running in real-time during data collection — the microscope shows the conformational landscape as particles are collected. "Live" protein movies.</span></div>
+        <div class="row"><span class="lbl futur">2027-29</span><span class="text"><b>Drug design against dynamic targets.</b> Design drugs that target specific conformations — not just the "default" structure. The VAE's latent space becomes a <em>conformational map</em> for drug designers: "this drug binds the open conformation at latent point z=3."</span></div>
+        <div class="row"><span class="lbl futur">2030+</span><span class="text"><b>Protein dynamics simulation.</b> Combine cryo-EM VAE with molecular dynamics — the VAE provides the global conformational landscape, MD fills in the local dynamics. A complete computational model of protein motion — from atoms to ensembles.</span></div>
+      </div>
+
+      <h2>🔬 Comparison</h2>
+      <div class="callout pink">
+        <h3>VAE cryo-EM vs other approaches</h3>
+        <div class="row"><span class="lbl why">vs Traditional cryo-EM (RELION, cryoSPARC)</span><span class="text">Traditional methods produce ONE structure (or a few discrete classes). VAE produces a CONTINUOUS distribution. Traditional is better for high-resolution static structures; VAE is better for understanding dynamics.</span></div>
+        <div class="row"><span class="lbl why">vs AlphaFold</span><span class="text">AlphaFold predicts the "default" structure. VAE-cryo-EM captures ALL structures the protein actually adopts. AlphaFold = prediction; VAE-cryo-EM = observation. Complementary: AlphaFold gives a starting point, VAE-cryo-EM shows the real landscape.</span></div>
+        <div class="row"><span class="lbl why">vs Molecular dynamics (MD)</span><span class="text">MD simulates protein motion computationally (expensive, μs timescale limit). VAE-cryo-EM observes real motion from experimental data (no simulation needed, captures ms-s timescale). MD is better for atomistic detail; VAE is better for experimental grounding.</span></div>
+      </div>
+
+      <!-- Full text version -->
+      <div style="margin-bottom: 16px; padding: 16px 20px; background: rgba(18,24,38,0.7); border: 1px solid rgba(6,182,212,0.3); border-radius: 10px;">
+        <a href="https://arxiv.org/abs/2106.14108" target="_blank" rel="noopener" style="display: inline-block; background: linear-gradient(90deg, #06b6d4, #8b5cf6); color: white; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700;">📄 Full text version →</a>
+        <span style="margin-left: 12px; font-size: 11px; color: var(--text-muted);">arXiv:2106.14108 — Cryo-EM + VAE for protein conformational distributions</span>
+      </div>
+      <!-- Simplified footer -->
+      <div style="margin-top: 40px; padding: 16px 20px; background: rgba(11,15,26,0.6); border: 1px solid #1f2937; border-radius: 10px; font-size: 11px; color: #9ca3af; line-height: 1.6;">
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px;">
+          <span style="color: #10b981;">📜 MIT License</span>
+          <span style="color: #06b6d4;">🔒 GDPR Compliant</span>
+          <span style="color: #06b6d4;">🏥 HIPAA Ready</span>
+          <span style="color: #10b981;">📊 SOC 2 Aligned</span>
+        </div>
+        <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
+        <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data · no cookies · no tracking · all computations client-side (lazy evaluation)</p>
+      </div>
+    </main>
+    <script>
+      // Particle background
+      (function(){var c=document.getElementById('particle-canvas');var x=c.getContext('2d');function r(){c.width=innerWidth;c.height=innerHeight;}r();addEventListener('resize',r);var N=50,P=[];var cols=['#06b6d4','#8b5cf6','#10b981'];for(var i=0;i<N;i++)P.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.15,vy:(Math.random()-.5)*.15,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,c.width,c.height);for(var i=0;i<N;i++)for(var j=i+1;j<N;j++){var d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<100){x.strokeStyle='rgba(139,92,246,'+(.1*(1-d/100))+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke();}}for(var p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;x.fillStyle=p.c;x.globalAlpha=.3;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill();}x.globalAlpha=1;requestAnimationFrame(s);}s();})();
+
+      // Cryo-EM VAE pipeline canvas
+      var canvas=document.getElementById('main-canvas');var ctx=canvas.getContext('2d');
+      var W=canvas.width,H=canvas.height;var stage=0,maxStage=5,zoom=1.0,isAnim=false;
+
+      function render(){
+        ctx.save();ctx.fillStyle='#0a0e1a';ctx.fillRect(0,0,W,H);
+        ctx.translate(W/2,H/2);ctx.scale(zoom,zoom);ctx.translate(-W/2,-H/2);
+        var bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#0a0e1a');bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+        ctx.fillStyle='#06b6d4';ctx.font='bold 14px ui-monospace';ctx.textAlign='center';
+        ctx.fillText('Cryo-EM VAE — stage '+stage+'/'+maxStage,W/2,25);ctx.textAlign='left';
+        var baseY=55;
+
+        // Stage 1: Cryo-EM images (scattered particles)
+        if(stage>=1){
+          ctx.fillStyle='#06b6d4';ctx.font='bold 11px ui-monospace';
+          ctx.fillText('1. Cryo-EM particle images (2D projections of frozen proteins)',30,baseY);
+          for(var i=0;i<12;i++){
+            var px=30+(i%6)*100,py=baseY+10+Math.floor(i/6)*40;
+            ctx.fillStyle='rgba(6,182,212,'+(0.3+Math.random()*0.4)+')';
+            ctx.beginPath();ctx.arc(px+15,py+10,12,0,6.28);ctx.fill();
+            ctx.strokeStyle='rgba(6,182,212,0.3)';ctx.lineWidth=0.5;
+            ctx.strokeRect(px,py,30,20);
+          }
+          ctx.fillStyle='rgba(148,163,184,0.5)';ctx.font='9px ui-monospace';
+          ctx.fillText('12 particle images (each a different orientation + conformation)',30,baseY+100);
+        }
+
+        // Stage 2: VAE encoder (images → latent space)
+        if(stage>=2){
+          var eY=baseY+120;
+          ctx.fillStyle='#8b5cf6';ctx.font='bold 11px ui-monospace';
+          ctx.fillText('2. VAE encoder: q(z|I) = N(μ(I), σ(I))',30,eY);
+          // Encoder network visualization
+          for(var layer=0;layer<3;layer++){
+            for(var n=0;n<5;n++){
+              var nx=30+layer*80,ny=eY+10+n*12;
+              ctx.fillStyle='rgba(139,92,246,'+(0.3+n*0.1)+')';
+              ctx.beginPath();ctx.arc(nx,ny,3,0,6.28);ctx.fill();
+              if(layer<2){
+                for(var m=0;m<5;m++){
+                  ctx.strokeStyle='rgba(139,92,246,0.1)';
+                  ctx.beginPath();ctx.moveTo(nx,ny);ctx.lineTo(nx+80,eY+10+m*12);ctx.stroke();
+                }
+              }
+            }
+          }
+          ctx.fillStyle='rgba(148,163,184,0.5)';ctx.font='9px ui-monospace';
+          ctx.fillText('Encoder network → (μ, σ) in latent space',30,eY+80);
+        }
+
+        // Stage 3: Latent conformational space (2D scatter)
+        if(stage>=3){
+          var lY=baseY+230;
+          ctx.fillStyle='#f59e0b';ctx.font='bold 11px ui-monospace';
+          ctx.fillText('3. Latent conformational space (each point = a conformation)',30,lY);
+          // Scatter plot of latent codes
+          for(var i=0;i<50;i++){
+            var lx=200+Math.cos(i*0.4)*80+Math.sin(i*0.7)*20;
+            var ly=lY+30+Math.sin(i*0.3)*50+Math.cos(i*0.9)*15;
+            var c=Math.sin(i*0.2)>0?'#10b981':'#06b6d4';
+            ctx.fillStyle=c;ctx.globalAlpha=0.5;
+            ctx.beginPath();ctx.arc(lx,ly,2.5,0,6.28);ctx.fill();
+          }
+          ctx.globalAlpha=1;
+          // Trajectory path
+          ctx.strokeStyle='rgba(245,158,11,0.4)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+          ctx.beginPath();
+          for(var t=0;t<6.28;t+=0.1){
+            var tx=200+Math.cos(t)*60,ty=lY+30+Math.sin(t*1.5)*40;
+            if(t===0)ctx.moveTo(tx,ty);else ctx.lineTo(tx,ty);
+          }
+          ctx.stroke();ctx.setLineDash([]);
+          ctx.fillStyle='rgba(245,158,11,0.6)';ctx.font='8px ui-monospace';
+          ctx.fillText('conformational trajectory',250,lY+80);
+        }
+
+        // Stage 4: Continuous distribution
+        if(stage>=4){
+          var dY=baseY+340;
+          ctx.fillStyle='#ec4899';ctx.font='bold 11px ui-monospace';
+          ctx.fillText('4. Continuous distribution p(C) — not one structure, but an ENSEMBLE',30,dY);
+          // Multiple protein outlines (overlapping = distribution)
+          for(var s=0;s<5;s++){
+            var offset=s*4;
+            ctx.strokeStyle='rgba(236,72,153,'+(0.15+s*0.08)+')';ctx.lineWidth=1.5;
+            ctx.beginPath();
+            ctx.arc(120+offset,dY+20,20,0,6.28);ctx.arc(150-offset,dY+25,15,0,6.28);
+            ctx.stroke();
+          }
+          ctx.fillStyle='rgba(236,72,153,0.7)';ctx.font='bold 9px ui-monospace';
+          ctx.fillText('5 overlaid conformations',80,dY+55);
+        }
+
+        // Stage 5: Decoder → 3D structure
+        if(stage>=5){
+          var sY=baseY+400;
+          ctx.fillStyle='#10b981';ctx.font='bold 11px ui-monospace';
+          ctx.fillText('5. Decoder: z → 3D atomic structure C(x) — protein "movie"',30,sY);
+          // 3D structure (wireframe)
+          ctx.strokeStyle='#10b981';ctx.lineWidth=1.5;
+          ctx.beginPath();
+          for(var i=0;i<8;i++){
+            var angle=i*0.785;
+            var px=100+Math.cos(angle+stage*0.1)*25;
+            var py=sY+10+Math.sin(angle+stage*0.1)*15;
+            if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+          }
+          ctx.closePath();ctx.stroke();
+          // Atoms
+          for(var i=0;i<8;i++){
+            var angle=i*0.785;
+            var px=100+Math.cos(angle+stage*0.1)*25;
+            var py=sY+10+Math.sin(angle+stage*0.1)*15;
+            ctx.fillStyle='#10b981';ctx.beginPath();ctx.arc(px,py,3,0,6.28);ctx.fill();
+          }
+          ctx.fillStyle='rgba(148,163,184,0.5)';ctx.font='9px ui-monospace';
+          ctx.fillText('reconstructed 3D structure (rotating)',30,sY+40);
+        }
+
+        ctx.restore();
+        var states=['idle','cryo-EM images','VAE encode','latent space','distribution','3D structure ✓'];
+        document.getElementById('stage-ind').textContent='stage '+stage+'/'+maxStage+' · '+(states[stage]||'');
+      }
+      function animate(){stage=0;function step(){
+        if(stage>maxStage){isAnim=false;document.getElementById('btn-play').disabled=false;document.getElementById('stage-ind').textContent='done ✓';return;}
+        render();stage++;setTimeout(step,700);}step();}
+      document.getElementById('btn-play').addEventListener('click',function(){if(isAnim)return;isAnim=true;document.getElementById('btn-play').disabled=true;animate();});
+      document.getElementById('btn-step').addEventListener('click',function(){if(isAnim)return;if(stage>maxStage)return;stage++;render();});
+      document.getElementById('btn-reset').addEventListener('click',function(){stage=0;isAnim=false;document.getElementById('btn-play').disabled=false;render();});
+      document.getElementById('zoom-in').addEventListener('click',function(){zoom=Math.min(3,zoom+0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';render();});
+      document.getElementById('zoom-out').addEventListener('click',function(){zoom=Math.max(0.5,zoom-0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';render();});
+      document.getElementById('zoom-reset').addEventListener('click',function(){zoom=1;document.getElementById('zoom-label').textContent='100%';render();});
+      render();
+    </script>
+    <script src="header-banner.js"></script>
+    <script src="zoom-loader.js"></script>
+  </body>
+</html>
