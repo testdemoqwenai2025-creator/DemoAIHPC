@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="How CNNs See Images — a beginner-friendly teaching page explaining the intuition behind Convolutional Neural Networks. Image as tensor, FC layer limitations, CNN inductive biases, filters and feature maps. Animated, interactive, with math + code." />
+    <title>How CNNs See Images — Teaching Guide · AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#10b981; --accent-2:#06b6d4; --accent-3:#f59e0b; --purple:#8b5cf6; --pink:#ec4899; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.18), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.3; }
+      .container { max-width: 900px; margin: 0 auto; padding: 24px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(16,185,129,0.35); background: rgba(16,185,129,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; }
+      h1 { font-size: 36px; margin: 0 0 12px; background: linear-gradient(90deg,#fff,#6ee7b7 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      h2 { font-size: 22px; margin: 32px 0 12px; color: var(--accent-2); }
+      h3 { color: var(--accent); font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 820px; margin: 0 0 24px; }
+      .lead b { color: var(--text); }
+      .viz-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 16px; margin-top: 16px; }
+      .viz-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+      canvas { display: block; width: 100%; height: auto; }
+      .controls-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+      .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: white; }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); }
+      .btn:disabled { opacity: 0.5; }
+      .zoom-controls { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 8px; padding: 4px; }
+      .zoom-btn { width: 30px; height: 30px; border: none; background: transparent; color: var(--text); cursor: pointer; font-size: 16px; font-weight: 700; border-radius: 4px; }
+      .zoom-btn:hover { background: rgba(16,185,129,0.2); }
+      .zoom-label { font-size: 9px; color: var(--text-muted); text-align: center; padding: 2px 0; }
+      .math-block { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-family: "Cambria Math", Georgia, serif; }
+      .math-block .eq { font-size: 16px; color: var(--accent); margin: 6px 0; }
+      .math-block .explain { font-size: 13px; color: var(--text-muted); margin-top: 4px; font-family: -apple-system, sans-serif; }
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .callout { background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+      .callout.green { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.3); }
+      .callout h3 { margin: 0 0 10px; }
+      .callout .row { margin: 8px 0; font-size: 13px; line-height: 1.55; color: var(--text); }
+      .callout .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
+      .callout .lbl.use { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .callout .lbl.avoid { background: rgba(239,68,68,0.15); color: #fca5a5; }
+      .callout .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+      .callout .text { color: var(--text-muted); }
+      .meta { border-top: 1px solid var(--border); margin-top: 40px; padding-top: 16px; font-size: 12px; color: var(--text-muted); }
+      .meta a { color: var(--accent-2); text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <canvas id="particle-canvas"></canvas>
+    <main class="container">
+      <p class="crumbs"><a href="index.html">Home</a> / <a href="bio-nn.html">Bioinformatics × NN</a> / How CNNs See Images</p>
+      <span class="tag">📖 Teaching guide · Beginner-friendly · CNN intuition</span>
+      <h1>How CNNs See Images</h1>
+      <p class="lead">A <b>beginner-friendly</b> guide to why Convolutional Neural Networks work for images. We answer four questions: <b>(1) What is an image to a computer?</b> <b>(2) Why don't regular neural networks work?</b> <b>(3) What makes CNNs special?</b> <b>(4) How do filters find features?</b> Interactive animations, math, and runnable code — no PhD required. Inspired by the LinkedIn cheat sheet "A CNN isn't just another neural network." <a href="concepts-v2/nn-cnn.html">→ Full architecture card</a></p>
+
+      <div class="viz-card">
+        <h3>4-stage interactive visualiser</h3>
+        <div class="viz-wrap">
+          <canvas id="main-canvas" width="728" height="500"></canvas>
+          <div class="zoom-controls">
+            <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+            <div class="zoom-label" id="zoom-label">100%</div>
+            <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+            <button class="zoom-btn" id="zoom-reset" title="Reset">↺</button>
+          </div>
+          <div style="position: absolute; bottom: 10px; left: 12px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace;" id="stage-ind">stage 0/4</div>
+        </div>
+        <div class="controls-row">
+          <button class="btn primary" id="btn-play">▶ Animate all 4 stages</button>
+          <button class="btn ghost" id="btn-step">⏭ Step</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+        </div>
+      </div>
+
+      <h2>📐 The math behind each stage</h2>
+
+      <div class="math-block">
+        <div class="eq">Stage 1 — Image as tensor: x ∈ ℝ^(H × W × C)</div>
+        <div class="explain">A 28×28 grayscale image = tensor of shape (28, 28, 1). A color image = (28, 28, 3) for RGB. Each value is a pixel intensity 0-255 (normalized to 0-1). The computer doesn't "see" an image — it sees a 3D array of numbers.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 2 — FC layer parameters: 784 × 128 + 128 = 100,480 weights
+CNN layer parameters: (3 × 3 × 1 × 8) + 8 = 80 weights (1,256× fewer!)</div>
+        <div class="explain">A fully-connected (FC) layer connecting 784 inputs (28×28) to 128 neurons needs 784×128 + 128 = 100,480 weights. A CNN layer with 8 filters of size 3×3 needs only 3×3×1×8 + 8 = 80 weights. This is because CNN <b>shares weights</b> across all spatial positions — the same filter slides across the entire image.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 3 — Convolution: y[i,j] = σ( Σ_{k=0}^{K-1} Σ_{l=0}^{L-1} W[k,l] · x[i+k, j+l] + b )</div>
+        <div class="explain">The filter W (size K×L) slides across the image. At each position, it computes the element-wise multiplication + sum (dot product). The result is a single number in the output feature map. σ is the activation function (usually ReLU). Two key inductive biases: <b>locality</b> (each output only depends on a small neighborhood) and <b>translation invariance</b> (the same filter detects the same feature everywhere).</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 4 — Multiple filters: F₁ detects edges, F₂ detects textures, F₃ detects shapes...
+Output: stack of feature maps → x' ∈ ℝ^(H' × W' × N_filters)</div>
+        <div class="explain">Each filter learns a different feature. Edge detectors (Sobel), texture detectors, shape detectors — all from the same input image. Deep CNNs stack layers: early layers detect simple edges, later layers detect complex objects. This hierarchical feature learning is why CNNs work so well for images.</div>
+      </div>
+
+      <h2>💻 Runnable code — 2D convolution in numpy</h2>
+      <div class="code-section">
+        <pre><span class="cm"># 2D convolution — the core operation of CNNs</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">conv2d</span>(image, kernel, stride=<span class="num">1</span>, pad=<span class="num">0</span>):
+    <span class="cm"># image: (H, W) input — e.g., a 28x28 grayscale image</span>
+    <span class="cm"># kernel: (K, L) filter — e.g., a 3x3 edge detector</span>
+    <span class="cm"># stride: how many pixels to skip each step</span>
+    <span class="cm"># pad: zeros added around the border</span>
+    H, W = image.shape
+    K, L = kernel.shape
+    <span class="cm"># Pad the image</span>
+    <span class="kw">if</span> pad &gt; <span class="num">0</span>:
+        image = np.pad(image, pad)
+    <span class="cm"># Output dimensions</span>
+    out_h = (H + <span class="num">2</span> * pad - K) // stride + <span class="num">1</span>
+    out_w = (W + <span class="num">2</span> * pad - L) // stride + <span class="num">1</span>
+    out = np.zeros((out_h, out_w))
+    <span class="kw">for</span> i <span class="kw">in range</span>(out_h):
+        <span class="kw">for</span> j <span class="kw">in range</span>(out_w):
+            <span class="cm"># Extract the receptive field</span>
+            receptive = image[i*stride:i*stride+K, j*stride:j*stride+L]
+            <span class="cm"># Dot product + bias + ReLU</span>
+            out[i, j] = np.maximum(<span class="num">0</span>, np.sum(receptive * kernel))
+    <span class="kw">return</span> out
+
+<span class="cm"># Example: detect edges in a 8x8 image</span>
+np.random.seed(<span class="num">0</span>)
+image = np.random.rand(<span class="num">8</span>, <span class="num">8</span>)
+sobel_x = np.array([[-<span class="num">1</span>, <span class="num">0</span>, <span class="num">1</span>], [-<span class="num">2</span>, <span class="num">0</span>, <span class="num">2</span>], [-<span class="num">1</span>, <span class="num">0</span>, <span class="num">1</span>]])
+feature_map = conv2d(image, sobel_x)
+<span class="kw">print</span>(<span class="num">f"Input: {image.shape} → Output: {feature_map.shape}"</span>)
+<span class="kw">print</span>(<span class="num">f"Feature map (edges detected):\n{feature_map.round(2)}"</span>)</pre>
+      </div>
+
+      <h2>🧠 Deep thoughts — when to use CNNs vs MLPs</h2>
+      <div class="callout green">
+        <h3>CNN vs MLP — the right tool for the right job</h3>
+        <div class="row"><span class="lbl use">USE CNN</span><span class="text">When your data has <b>spatial structure</b> (images, spectrograms, seismic grids). When nearby pixels are correlated (locality). When the same feature can appear anywhere in the image (translation invariance). When you have limited training data (weight sharing = fewer parameters = less overfitting).</span></div>
+        <div class="row"><span class="lbl avoid">USE MLP</span><span class="text">When your data is <b>tabular</b> (each feature is independent — no spatial structure). When you need a simple classification head on top of CNN/Transformer features. When the input is small and fixed-size. MLPs are universal approximators but waste parameters on images.</span></div>
+        <div class="row"><span class="lbl why">WHY</span><span class="text">CNNs encode two <b>inductive biases</b> that match the structure of images: (1) <b>Locality</b> — a pixel's neighbors matter more than distant pixels, so a 3×3 filter captures useful patterns. (2) <b>Translation invariance</b> — a cat is a cat regardless of where it appears in the image, so the same filter slides everywhere. MLPs have neither bias — they treat every pixel independently and need to learn each position separately. This is why a CNN with 80 weights can outperform an MLP with 100,000 weights on image tasks.</span></div>
+      </div>
+
+      <div class="meta">
+        <p>Page: <code>docs/how-cnns-see-images.html</code> · Phase 39 · Teaching guide inspired by LinkedIn cheat sheet "A CNN isn't just another neural network". Links: <a href="concepts-v2/nn-cnn.html">→ Full CNN architecture card</a> · <a href="concepts-v2/ml-relu.html">→ ReLU activation card</a> · <a href="bio-nn.html">→ Bio-NN Hub</a> · Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></p>
+      </div>
+    </main>
+    <script>
+      // Particle background
+      (function(){var c=document.getElementById('particle-canvas');var x=c.getContext('2d');function r(){c.width=innerWidth;c.height=innerHeight;}r();addEventListener('resize',r);var N=50,P=[];var cols=['#10b981','#06b6d4','#8b5cf6'];for(var i=0;i<N;i++)P.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.15,vy:(Math.random()-.5)*.15,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,c.width,c.height);for(var i=0;i<N;i++)for(var j=i+1;j<N;j++){var d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<100){x.strokeStyle='rgba(139,92,246,'+(.1*(1-d/100))+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke();}}for(var p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;x.fillStyle=p.c;x.globalAlpha=.3;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill();}x.globalAlpha=1;requestAnimationFrame(s);}s();})();
+
+      // CNN teaching canvas
+      var canvas=document.getElementById('main-canvas');var ctx=canvas.getContext('2d');
+      var W=canvas.width,H=canvas.height;var stage=0,maxStage=4,zoom=1.0,isAnim=false;
+      var imgSize=8;var cellSize=22;
+      var img=[];for(var i=0;i<imgSize;i++){var row=[];for(var j=0;j<imgSize;j++)row.push(Math.sin(i*0.7)*Math.cos(j*0.5)*0.5+0.5);img.push(row);}
+      var sobelX=[[-1,0,1],[-2,0,2],[-1,0,1]];var sobelY=[[1,2,1],[0,0,0],[-1,-2,-1]];var blur=[[0.11,0.11,0.11],[0.11,0.11,0.11],[0.11,0.11,0.11]];
+
+      function render(){
+        ctx.save();ctx.fillStyle='#0a0e1a';ctx.fillRect(0,0,W,H);
+        ctx.translate(W/2,H/2);ctx.scale(zoom,zoom);ctx.translate(-W/2,-H/2);
+        var bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#0a0e1a');bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+        ctx.fillStyle='#10b981';ctx.font='bold 14px ui-monospace';ctx.textAlign='center';
+        var titles=['idle','image = tensor','FC limitations','kernel sliding','feature maps'];
+        ctx.fillText('How CNNs See Images — stage '+stage+'/'+maxStage+': '+(titles[stage]||''),W/2,25);
+        ctx.textAlign='left';
+
+        if(stage>=1){
+          var y1=50;ctx.fillStyle='#06b6d4';ctx.font='bold 11px ui-monospace';
+          ctx.fillText('1. Image = tensor (8x8 grid of numbers)',30,y1);
+          for(var i=0;i<imgSize;i++)for(var j=0;j<imgSize;j++){
+            ctx.fillStyle='rgba(6,182,212,'+img[i][j]+')';
+            ctx.fillRect(30+j*cellSize,y1+10+i*cellSize,cellSize-1,cellSize-1);
+          }
+          ctx.fillStyle='rgba(148,163,184,0.5)';ctx.font='9px ui-monospace';
+          ctx.fillText('tensor shape: (8, 8, 1) = 64 values',30+imgSize*cellSize+10,y1+30);
+        }
+        if(stage>=2){
+          var y2=50+imgSize*cellSize+30;ctx.fillStyle='#f59e0b';ctx.font='bold 11px ui-monospace';
+          ctx.fillText('2. FC layer: 64×128 = 8320 weights. CNN: 3×3×8 = 72 weights (115× fewer!)',30,y2);
+          ctx.fillStyle='rgba(239,68,68,0.7)';ctx.fillRect(30,y2+12,300,10);
+          ctx.fillStyle='rgba(16,185,129,0.7)';ctx.fillRect(30,y2+25,30,10);
+          ctx.fillStyle='rgba(148,163,184,0.6)';ctx.font='8px ui-monospace';
+          ctx.fillText('FC: 8320 weights',335,y2+20);ctx.fillText('CNN: 72 weights',65,y2+33);
+        }
+        if(stage>=3){
+          var y3=50+imgSize*cellSize+80;ctx.fillStyle='#8b5cf6';ctx.font='bold 11px ui-monospace';
+          ctx.fillText('3. Kernel sliding — locality + translation invariance',30,y3);
+          for(var i=0;i<imgSize;i++)for(var j=0;j<imgSize;j++){
+            ctx.fillStyle='rgba(6,182,212,'+img[i][j]+')';
+            ctx.fillRect(30+j*14,y3+10+i*14,13,13);
+          }
+          var kx=stage>3?3:0,ky=stage>3?2:0;
+          ctx.strokeStyle='#f59e0b';ctx.lineWidth=2;
+          ctx.strokeRect(30+kx*14,y3+10+ky*14,42,42);
+          var outX=30+imgSize*14+20;
+          for(var oi=0;oi<6;oi++)for(var oj=0;oj<6;oj++){
+            if(oi<ky||(oi===ky&&oj<kx)){
+              var conv=0;for(var ki=0;ki<3;ki++)for(var kj=0;kj<3;kj++)conv+=img[oi+ki][oj+kj]*sobelX[ki][kj];
+              ctx.fillStyle='rgba(16,185,129,'+Math.max(0,conv)+')';
+              ctx.fillRect(outX+oj*14,y3+10+oi*14,13,13);
+            }
+          }
+          ctx.fillStyle='rgba(148,163,184,0.5)';ctx.font='8px ui-monospace';
+          ctx.fillText('input 8×8',30,y3+10+imgSize*14+12);
+          ctx.fillText('feature map 6×6',outX,y3+10+imgSize*14+12);
+        }
+        if(stage>=4){
+          var y4=50+imgSize*cellSize+180;ctx.fillStyle='#ec4899';ctx.font='bold 11px ui-monospace';
+          ctx.fillText('4. Multiple filters → different feature maps',30,y4);
+          var filters=[{n:'Sobel-X',k:sobelX,c:'rgba(16,185,129,'},{n:'Sobel-Y',k:sobelY,c:'rgba(6,182,212,'},{n:'Blur',k:blur,c:'rgba(139,92,246,'}];
+          for(var f=0;f<3;f++){
+            var fx=30+f*180;ctx.fillStyle='rgba(148,163,184,0.6)';ctx.font='8px ui-monospace';ctx.textAlign='center';
+            ctx.fillText(filters[f].n,fx+70,y4+8);ctx.textAlign='left';
+            for(var oi=0;oi<6;oi++)for(var oj=0;oj<6;oj++){
+              var conv=0;for(var ki=0;ki<3;ki++)for(var kj=0;kj<3;kj++)conv+=img[oi+ki][oj+kj]*filters[f].k[ki][kj];
+              var v=Math.max(0,Math.min(1,Math.abs(conv)));
+              ctx.fillStyle=filters[f].c+v+')';
+              ctx.fillRect(fx+oj*11,y4+12+oi*11,10,10);
+            }
+          }
+        }
+        ctx.restore();
+        document.getElementById('stage-ind').textContent='stage '+stage+'/'+maxStage;
+      }
+      function animate(){stage=0;function step(){
+        if(stage>maxStage){isAnim=false;document.getElementById('btn-play').disabled=false;document.getElementById('stage-ind').textContent='done ✓';return;}
+        render();stage++;setTimeout(step,800);}step();}
+      document.getElementById('btn-play').addEventListener('click',function(){if(isAnim)return;isAnim=true;document.getElementById('btn-play').disabled=true;animate();});
+      document.getElementById('btn-step').addEventListener('click',function(){if(isAnim)return;if(stage>maxStage)return;stage++;render();document.getElementById('stage-ind').textContent='stage '+stage+'/'+maxStage+' (manual)';});
+      document.getElementById('btn-reset').addEventListener('click',function(){stage=0;isAnim=false;document.getElementById('btn-play').disabled=false;render();});
+      document.getElementById('zoom-in').addEventListener('click',function(){zoom=Math.min(3,zoom+0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';render();});
+      document.getElementById('zoom-out').addEventListener('click',function(){zoom=Math.max(0.5,zoom-0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';render();});
+      document.getElementById('zoom-reset').addEventListener('click',function(){zoom=1;document.getElementById('zoom-label').textContent='100%';render();});
+      render();
+    </script>
+    <script src="zoom-loader.js"></script>
+  </body>
+</html>
