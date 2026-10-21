@@ -166,7 +166,7 @@
         if (remaining > 0) btn.textContent = 'Show more (' + remaining + ' hidden)';
         else { btn.textContent = 'All ' + total + ' rows shown'; btn.disabled = true; btn.style.opacity = '0.5'; }
       }
-      document.addEventListener('DOMContentLoaded', function () {
+      var __onReady = function () {
         var block = document.getElementById('code-block-mse');
         if (block) block.textContent = CODE_BANK.python || '';
         document.querySelectorAll('.code-panel .lang-toggle button').forEach(function (btn) {
@@ -185,7 +185,12 @@
           });
         });
         AIHPC_ANIM.init();
-      });
+      };
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', __onReady);
+      } else {
+        __onReady();
+      }
       (function () {
         var c = document.getElementById('particle-canvas');
         if (!c) return;
