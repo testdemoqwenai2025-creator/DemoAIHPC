@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="AdamW Optimiser — visual-first concept card. Interactive canvas, real-time sliders, code with Math→Code annotations." />
+    <meta name="description" content="AdamW Optimiser — visual-first concept card. 2D loss landscape + trajectory animation." />
     <title>AdamW Optimiser — Visual Concept Card · AIHPC</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
@@ -36,7 +36,6 @@
       .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white; } .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
       .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); } .btn.ghost:hover { border-color: var(--accent); color: var(--text); }
       .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-      /* Code panel — always visible with Math→Code annotations */
       .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
       .code-section h3 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
       .code-section .eq-line { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent); padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; border-left: 3px solid var(--accent); margin-bottom: 10px; }
@@ -53,17 +52,18 @@
         <span class="tag">ML · Optimiser</span>
         <h1>AdamW Optimiser</h1>
       </div>
-      <p class="desc">Adam with <b>decoupled weight decay</b> — fixes the L2-regularisation interaction in Adam. Used in transformer training.</p>
-      <div class="eq-badge">📐 θ ← θ − η·m̂/(√v̂+ε) − η·wd·θ</div>
+      <p class="desc">Adam + decoupled weight decay. <b>Standard for transformer training</b> (GPT, BERT, LLaMA). L2-regularised Adam ≠ AdamW.</p>
+      <div class="eq-badge">📐 Same as Adam, but weight decay is decoupled:
+θₜ₊₁ = θₜ − η·(m̂ₜ/(√v̂ₜ+ε) + λ·θₜ)</div>
       <div class="canvas-wrap">
         <canvas id="main-canvas" width="728" height="360"></canvas>
         <div class="loss-overlay"><div class="lbl" id="loss-lbl">Loss</div><div class="val" id="loss-val">0.0000</div></div>
-        <div class="eq-overlay">θ ← θ − η·m̂/(√v̂+ε) − η·wd·θ</div>
+        <div class="eq-overlay">Same as Adam, but weight decay is decoupled:
+θₜ₊₁ = θₜ − η·(m̂ₜ/(√v̂ₜ+ε) + λ·θₜ)</div>
         <div class="phase-indicator" id="phase-ind">idle</div>
       </div>
       <div class="controls">
-        <div class="ctrl" id="b1-ctrl"><label>Optimiser: ADAMW</label><input type="range" id="b1-slider" min="-4" max="4" step="0.01" value="1.0" /></div>
-        <div class="ctrl" id="b0-ctrl"><label>Intercept β₀ <span class="val" id="b0-val">0.00</span></label><input type="range" id="b0-slider" min="-5" max="10" step="0.01" value="0.0" /></div>
+        <div class="ctrl"><label>Optimiser: AdamW</label></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Run optimiser</button>
           <button class="btn ghost" id="btn-reset">↺ Reset</button>
@@ -71,36 +71,60 @@
       </div>
       <div class="code-section">
         <h3>💻 Math → Code — how symbols become variables</h3>
-        <div class="eq-line">θ ← θ − η·m̂/(√v̂+ε) − η·wd·θ</div>
-        <pre><span class="cm"># Same as Adam, but weight decay applied directly:</span>
-<span class="cm"># θ ← θ − η·m̂/(√v̂+ε) − η·wd·θ</span>
-<span class="cm"># wd → weight_decay (typically 0.01)</span>
-<span class="kw">def</span> <span class="fn">adamw_step</span>(params, grads, m, v, t,
-                lr=<span class="num">0.001</span>, wd=<span class="num">0.01</span>,
-                b1=<span class="num">0.9</span>, b2=<span class="num">0.999</span>, eps=<span class="num">1e-8</span>):
-    <span class="kw">for</span> i <span class="kw">in range</span>(len(params)):
-        m[i] = b1*m[i] + (<span class="num">1</span>-b1)*grads[i]
-        v[i] = b2*v[i] + (<span class="num">1</span>-b2)*grads[i]**<span class="num">2</span>
-        m_hat = m[i] / (<span class="num">1</span> - b1**t)
-        v_hat = v[i] / (<span class="num">1</span> - b2**t)
-        params[i] -= lr * m_hat / (np.sqrt(v_hat) + eps) + lr * wd * params[i]
-    <span class="kw">return</span> params, m, v</pre>
+        <div class="eq-line">Same as Adam, but weight decay is decoupled:
+θₜ₊₁ = θₜ − η·(m̂ₜ/(√v̂ₜ+ε) + λ·θₜ)</div>
+        <pre><span class="cm"># AdamW = Adam with weight decay applied directly to params</span>
+<span class="cm"># θ −= η · (m̂ / (√v̂ + ε)  +  λ · θ)</span>
+<span class="cm"># λ → weight_decay (e.g. 0.01)</span>
+<span class="cm"># (Adam with L2 puts λ·θ inside grad — not equivalent)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">class</span> AdamW:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, params, lr=<span class="num">0.001</span>, beta1=<span class="num">0.9</span>, beta2=<span class="num">0.999</span>,
+                 eps=<span class="num">1e-8</span>, weight_decay=<span class="num">0.01</span>):
+        self.params = params
+        self.lr = lr; self.b1 = beta1; self.b2 = beta2
+        self.eps = eps; self.wd = weight_decay
+        self.m = [np.<span class="fn">zeros_like</span>(p) <span class="kw">for</span> p <span class="kw">in</span> params]
+        self.v = [np.<span class="fn">zeros_like</span>(p) <span class="kw">for</span> p <span class="kw">in</span> params]
+        self.t = <span class="num">0</span>
+
+    <span class="kw">def</span> <span class="fn">step</span>(self, grads):
+        self.t += <span class="num">1</span>
+        <span class="kw">for</span> i, g <span class="kw">in</span> <span class="fn">enumerate</span>(grads):
+            self.m[i] = self.b1 * self.m[i] + (<span class="num">1</span> - self.b1) * g
+            self.v[i] = self.b2 * self.v[i] + (<span class="num">1</span> - self.b2) * g * g
+            m_hat = self.m[i] / (<span class="num">1</span> - self.b1 ** self.t)
+            v_hat = self.v[i] / (<span class="num">1</span> - self.b2 ** self.t)
+            <span class="cm"># Decoupled weight decay — applied to params, not grads</span>
+            self.params[i] -= self.lr * (
+                m_hat / (np.<span class="fn">sqrt</span>(v_hat) + self.eps)
+                + self.wd * self.params[i]
+            )
+
+<span class="cm"># Example: minimise (x-3)^2 + (y+2)^2 with regularisation</span>
+params = [np.<span class="fn">array</span>(<span class="num">0.0</span>), np.<span class="fn">array</span>(<span class="num">0.0</span>)]
+opt = <span class="fn">AdamW</span>(params, lr=<span class="num">0.1</span>, weight_decay=<span class="num">0.001</span>)
+<span class="kw">for</span> step <span class="kw">in</span> <span class="fn">range</span>(<span class="num">200</span>):
+    grads = [<span class="num">2</span> * (params[<span class="num">0</span>] - <span class="num">3</span>), <span class="num">2</span> * (params[<span class="num">1</span>] + <span class="num">2</span>)]
+    opt.<span class="fn">step</span>(grads)
+<span class="fn">print</span>(params)  <span class="cm"># ~[3.0, -2.0]</span></pre>
       </div>
       <div class="foot">
-        <a href="../ai-lab.html?context=AdamW Optimiser">🤖 Ask AI</a> · <a href="../concepts/ml-adamw.html">📖 Full text version</a> · Visual concept card v2
+        <a href="../concepts/ml-adamw.html">📖 Full text version</a>  ·  Visual concept card v2
       </div>
     </div>
     <script>
       var canvas = document.getElementById('main-canvas');
       var ctx = canvas.getContext('2d');
-      
+
       // ===== OPTIMISER TRAJECTORY VISUAL =====
       var W = canvas.width, H = canvas.height;
       var isAnim = false;
       var OPT = 'adamw';
 
       function lossSurface(x, y) {
-        // Perturbed quadratic with a ravine
+        // Perturbed quadratic with a ravine (high curvature in y direction)
         return 0.5*(x-1)*(x-1) + 5*(y-1)*(y-1) + 0.3*Math.sin(3*x)*Math.cos(3*y);
       }
       function gradX(x, y) { return (x-1) + 0.9*Math.cos(3*x)*Math.cos(3*y); }
@@ -112,23 +136,22 @@
       function render(traj) {
         var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
         ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
-        // Contour lines
-        ctx.strokeStyle = 'rgba(6,182,212,0.08)'; ctx.lineWidth = 0.5;
+        // Background contour heat-map
         for (var cx = -2; cx <= 4; cx += 0.15) { for (var cy = -2; cy <= 4; cy += 0.15) {
           var lv = lossSurface(cx, cy);
           if (lv < 0.5) { ctx.fillStyle = 'rgba(16,185,129,0.04)'; ctx.fillRect(toCX(cx)-2, toCY(cy)-2, 4, 4); }
           else if (lv < 2) { ctx.fillStyle = 'rgba(6,182,212,0.03)'; ctx.fillRect(toCX(cx)-2, toCY(cy)-2, 4, 4); }
           else if (lv < 8) { ctx.fillStyle = 'rgba(139,92,246,0.02)'; ctx.fillRect(toCX(cx)-2, toCY(cy)-2, 4, 4); }
-        }}
+        } }
         // Contour outlines
-        ctx.strokeStyle = 'rgba(148,163,184,0.08)';
+        ctx.strokeStyle = 'rgba(148,163,184,0.08)'; ctx.lineWidth = 0.5;
         for (var level = 0.5; level <= 20; level += 1.5) {
           ctx.beginPath();
           var first = true;
-          for (var cx = -2; cx <= 4; cx += 0.1) {
-            for (var cy = -2; cy <= 4; cy += 0.1) {
-              if (Math.abs(lossSurface(cx, cy) - level) < 0.3) {
-                var px = toCX(cx), py = toCY(cy);
+          for (var cx2 = -2; cx2 <= 4; cx2 += 0.1) {
+            for (var cy2 = -2; cy2 <= 4; cy2 += 0.1) {
+              if (Math.abs(lossSurface(cx2, cy2) - level) < 0.3) {
+                var px = toCX(cx2), py = toCY(cy2);
                 if (first) { ctx.moveTo(px, py); first = false; } else { ctx.lineTo(px, py); }
               }
             }
@@ -141,23 +164,21 @@
         // Trajectory
         if (traj && traj.length > 1) {
           var colors = {sgd: '#ef4444', adam: '#06b6d4', adamw: '#8b5cf6'};
-          ctx.strokeStyle = colors[OPT] || '#06b6d4'; ctx.lineWidth = 2; ctx.shadowColor = colors[OPT] || '#06b6d4'; ctx.shadowBlur = 4;
+          var names = {sgd: 'SGD', adam: 'Adam', adamw: 'AdamW'};
+          ctx.strokeStyle = colors[OPT] || '#06b6d4'; ctx.lineWidth = 2;
+          ctx.shadowColor = colors[OPT] || '#06b6d4'; ctx.shadowBlur = 4;
           ctx.beginPath();
           for (var i = 0; i < traj.length; i++) {
             var px = toCX(traj[i][0]), py = toCY(traj[i][1]);
             if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
           }
           ctx.stroke(); ctx.shadowBlur = 0;
-          // Current position
           var last = traj[traj.length-1];
           ctx.fillStyle = colors[OPT] || '#06b6d4'; ctx.beginPath(); ctx.arc(toCX(last[0]), toCY(last[1]), 4, 0, 6.28); ctx.fill();
+          ctx.fillStyle = colors[OPT] || '#06b6d4'; ctx.font = 'bold 11px ui-monospace'; ctx.textAlign = 'right';
+          ctx.fillText(names[OPT] || OPT, W-65, 35);
+          ctx.textAlign = 'left';
         }
-        // Labels
-        ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '10px ui-monospace'; ctx.textAlign = 'right';
-        var names = {sgd: 'SGD', adam: 'Adam', adamw: 'AdamW'};
-        ctx.fillStyle = ({sgd:'#ef4444', adam:'#06b6d4', adamw:'#8b5cf6'})[OPT];
-        ctx.fillText(names[OPT], W-65, 35);
-        ctx.textAlign = 'left';
         var loss = traj && traj.length > 0 ? lossSurface(traj[traj.length-1][0], traj[traj.length-1][1]) : 0;
         document.getElementById('loss-val').textContent = loss.toFixed(3);
         document.getElementById('loss-val').className = 'val ' + (loss < 1 ? 'good' : (loss < 5 ? 'ok' : 'bad'));
@@ -176,11 +197,16 @@
         var step = 0, steps = 100;
 
         function loop() {
-          if (step >= steps) { isAnim = false; document.getElementById('phase-ind').textContent = 'converged ✓'; document.getElementById('btn-gd').disabled = false; return; }
+          if (step >= steps) {
+            isAnim = false; document.getElementById('btn-gd').disabled = false;
+            document.getElementById('phase-ind').textContent = 'converged ✓'; document.getElementById('phase-ind').classList.remove('active');
+            return;
+          }
           var gx = gradX(x, y), gy = gradY(x, y);
           if (OPT === 'sgd') {
             x -= lr * gx; y -= lr * gy;
           } else {
+            // Adam / AdamW
             mx = b1*mx + (1-b1)*gx; my = b1*my + (1-b1)*gy;
             vx = b2*vx + (1-b2)*gx*gx; vy = b2*vy + (1-b2)*gy*gy;
             var mhx = mx/(1-Math.pow(b1, step+1)), mhy = my/(1-Math.pow(b1, step+1));
@@ -197,12 +223,13 @@
         loop();
       }
 
-      document.getElementById('b1-slider').parentElement.style.display = 'none';
-      document.getElementById('b0-slider').parentElement.style.display = 'none';
       document.getElementById('btn-gd').addEventListener('click', runOpt);
-      document.getElementById('btn-reset').addEventListener('click', function() { document.getElementById('phase-ind').textContent='idle'; document.getElementById('phase-ind').classList.remove('active'); render([]); });
+      document.getElementById('btn-reset').addEventListener('click', function() {
+        document.getElementById('phase-ind').textContent = 'idle';
+        document.getElementById('phase-ind').classList.remove('active');
+        render([]);
+      });
       render([]);
-
     </script>
   </body>
 </html>

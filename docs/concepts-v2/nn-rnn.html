@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Recurrent Neural Network (RNN) — visual-first neural network architecture card. Animated diagram, math, code with Math→Code annotations, when-to-use deep thoughts." />
+    <title>Recurrent Neural Network (RNN) — Visual NN Card · AIHPC</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", sans-serif; min-height: 100vh; overflow-x: hidden; }
+      body::before { content:""; position:fixed; inset:0; background: radial-gradient(1000px 500px at 50% 0%, rgba(6,182,212,0.10), transparent 70%); pointer-events:none; z-index:0; }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; position: relative; z-index: 1; }
+      .head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+      .head .tag { font-size: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.4); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .head h1 { font-size: 24px; font-weight: 800; }
+      .back { font-size: 12px; color: var(--accent); text-decoration: none; margin-bottom: 12px; display: inline-block; }
+      .eq-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; background: rgba(11,15,26,0.85); border: 1px solid rgba(6,182,212,0.3); font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent); margin-bottom: 12px; }
+      .desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; max-width: 600px; }
+      .canvas-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+      canvas { display: block; width: 100%; height: auto; }
+      .loss-overlay { position: absolute; top: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; text-align: right; }
+      .loss-overlay .lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+      .loss-overlay .val { font-size: 28px; font-weight: 800; font-family: ui-monospace, monospace; color: var(--accent); }
+      .loss-overlay .val.bad { color: var(--danger); } .loss-overlay .val.ok { color: var(--warn); } .loss-overlay .val.good { color: var(--success); }
+      .eq-overlay { position: absolute; bottom: 12px; left: 12px; background: rgba(11,15,26,0.9); border: 1px solid rgba(6,182,212,0.3); border-radius: 6px; padding: 4px 12px; font-family: "Cambria Math", Georgia, serif; font-size: 13px; color: var(--accent); pointer-events: none; }
+      .phase-indicator { position: absolute; bottom: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 10px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .phase-indicator.active { color: var(--accent); border-color: rgba(6,182,212,0.4); }
+      .controls { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: flex-end; }
+      .ctrl { flex: 1; min-width: 180px; background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+      .ctrl label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; }
+      .ctrl .val { font-size: 14px; font-weight: 700; font-family: ui-monospace, monospace; color: var(--accent); }
+      .ctrl input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--border); outline: none; }
+      .ctrl input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid var(--bg); }
+      .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white; } .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); } .btn.ghost:hover { border-color: var(--accent); color: var(--text); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section h3 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+      .code-section .eq-line { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent); padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; border-left: 3px solid var(--accent); margin-bottom: 10px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .foot { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 24px; font-family: ui-monospace, monospace; }
+      .foot a { color: var(--accent); text-decoration: none; }
+      .deep-thoughts {
+        background: rgba(139,92,246,0.06);
+        border: 1px solid rgba(139,92,246,0.25);
+        border-radius: 10px;
+        padding: 14px 18px;
+        margin-top: 16px;
+      }
+      .deep-thoughts h3 {
+        font-size: 11px; font-weight: 700; color: var(--accent2);
+        text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;
+      }
+      .deep-thoughts .dt-row { margin: 8px 0; font-size: 13px; line-height: 1.55; color: var(--text); }
+      .deep-thoughts .dt-row .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
+      .deep-thoughts .dt-row .lbl.use { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .deep-thoughts .dt-row .lbl.avoid { background: rgba(239,68,68,0.15); color: #fca5a5; }
+      .deep-thoughts .dt-row .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+      .deep-thoughts .dt-row .text { color: var(--text-muted); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <a href="../index.html" class="back">← Home</a>
+      <div class="head">
+        <span class="tag">NN · Architecture</span>
+        <h1>Recurrent Neural Network (RNN)</h1>
+      </div>
+      <p class="desc">Reuses weights across time steps. <b>The original sequence model</b> — suffers from vanishing gradients on long sequences.</p>
+      <div class="eq-badge">📐 h_t = tanh(W_hh · h_{t-1} + W_xh · x_t + b)</div>
+      <div class="canvas-wrap">
+        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <div class="loss-overlay"><div class="lbl" id="loss-lbl">state</div><div class="val" id="loss-val">0.0000</div></div>
+        <div class="eq-overlay">h_t = tanh(W_hh · h_{t-1} + W_xh · x_t + b)</div>
+        <div class="phase-indicator" id="phase-ind">idle</div>
+      </div>
+      <div class="controls">
+        <div class="ctrl" id="b1-ctrl"><label>Parameter <span class="val" id="b1-val">1.00</span></label><input type="range" id="b1-slider" min="0.1" max="3" step="0.05" value="1.0" /></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
+          <button class="btn primary" id="btn-gd">▶ Animate forward pass</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+        </div>
+      </div>
+      <div class="code-section">
+        <h3>💻 Math → Code — how symbols become variables</h3>
+        <div class="eq-line">h_t = tanh(W_hh · h_{t-1} + W_xh · x_t + b)</div>
+        <pre><span class="cm"># At each time step t:</span>
+<span class="cm"># h_t = tanh(W_hh · h_{t-1} + W_xh · x_t + b)</span>
+<span class="cm"># y_t = W_hy · h_t + b_y</span>
+<span class="cm"># W_hh → hidden-to-hidden weights (shared across all t)</span>
+<span class="cm"># W_xh → input-to-hidden weights (shared across all t)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">class</span> RNN:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, input_dim, hidden_dim, output_dim):
+        scale = <span class="num">1.0</span> / np.<span class="fn">sqrt</span>(hidden_dim)
+        self.W_xh = np.random.<span class="fn">randn</span>(hidden_dim, input_dim) * scale
+        self.W_hh = np.random.<span class="fn">randn</span>(hidden_dim, hidden_dim) * scale
+        self.W_hy = np.random.<span class="fn">randn</span>(output_dim, hidden_dim) * scale
+        self.h = np.<span class="fn">zeros</span>(hidden_dim)  <span class="cm"># initial hidden state</span>
+
+    <span class="kw">def</span> <span class="fn">step</span>(self, x):
+        <span class="cm"># h_t = tanh(W_hh · h_{t-1} + W_xh · x_t)</span>
+        self.h = np.<span class="fn">tanh</span>(self.W_hh @ self.h + self.W_xh @ x)
+        y = self.W_hy @ self.h
+        <span class="kw">return</span> y
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, sequence):
+        outputs = []
+        <span class="kw">for</span> x <span class="kw">in</span> sequence:
+            outputs.<span class="fn">append</span>(self.<span class="fn">step</span>(x))
+        <span class="kw">return</span> outputs
+
+<span class="cm"># Example: process a 5-step sequence with 3-dim input</span>
+np.random.<span class="fn">seed</span>(<span class="num">0</span>)
+rnn = <span class="fn">RNN</span>(input_dim=<span class="num">3</span>, hidden_dim=<span class="num">4</span>, output_dim=<span class="num">2</span>)
+seq = [np.random.<span class="fn">randn</span>(<span class="num">3</span>) <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>)]
+<span class="fn">print</span>(rnn.<span class="fn">forward</span>(seq)[-<span class="num">1</span>])  <span class="cm"># final output (2-dim)</span></pre>
+      </div>
+      <div class="deep-thoughts">
+        <h3>🧠 Deep thoughts — when (and when not) to reach for this architecture</h3>
+        <div class="dt-row"><span class="lbl use">USE WHEN:</span><span class="text">short sequences (<50 time steps), small datasets where LSTM/Transformer would overfit, real-time low-latency streaming, character-level language models (RNN can still produce charming toy demos), simple time-series prediction.</span></div>
+        <div class="dt-row"><span class="lbl avoid">AVOID WHEN:</span><span class="text">long sequences (>50 steps — vanishing gradients make RNN forget early inputs; use LSTM/GRU/Transformer), machine translation quality matters (use Transformer), you need parallel training (RNN is sequential — can't parallelise across time), you need to inspect attention to debug (use attention-based model).</span></div>
+        <div class="dt-row"><span class="lbl why">WHY:</span><span class="text">vanilla RNNs suffer from vanishing/exploding gradients because backpropagation through time multiplies the same recurrent matrix many times. Eigenvalues <1 → vanish, >1 → explode. LSTMs/GRUs solve this with gating; Transformers sidestep it entirely by removing recurrence. Vanilla RNN is now mostly of pedagogical interest — use it to understand the lineage of modern sequence models.</span></div>
+      </div>
+      <div class="foot">
+        Visual concept card v2
+      </div>
+    </div>
+    <script>
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      var W = canvas.width, H = canvas.height;
+      var param = 1.0;
+      var isAnim = false;
+      var MODE = 'rnn';
+
+      document.getElementById('b1-slider').addEventListener('input', function(e) {
+        param = parseFloat(e.target.value);
+        document.getElementById('b1-val').textContent = param.toFixed(2);
+        if (typeof render === 'function') render();
+      });
+
+
+      // ===== RNN: unrolled time sequence =====
+      var numSteps = 5;
+      var animStep = 0;
+      function render() {
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 12px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('RNN unrolled through time — h_t = tanh(W_hh·h_{t-1} + W_xh·x_t)', W/2, 30);
+        ctx.textAlign = 'left';
+        var cellW = 90, cellH = 60;
+        var startX = 60, cellY = 140;
+        for (var t = 0; t < numSteps; t++) {
+          var x = startX + t * (cellW + 30);
+          var active = animStep > t;
+          ctx.fillStyle = active ? 'rgba(6,182,212,0.3)' : 'rgba(148,163,184,0.1)';
+          ctx.strokeStyle = active ? '#06b6d4' : 'rgba(148,163,184,0.3)';
+          ctx.lineWidth = 2;
+          ctx.fillRect(x, cellY, cellW, cellH); ctx.strokeRect(x, cellY, cellW, cellH);
+          ctx.fillStyle = active ? '#06b6d4' : 'rgba(148,163,184,0.5)';
+          ctx.font = 'bold 11px ui-monospace'; ctx.textAlign = 'center';
+          ctx.fillText('h_' + t, x + cellW/2, cellY + cellH/2 + 4);
+          ctx.textAlign = 'left';
+          ctx.strokeStyle = active ? '#f59e0b' : 'rgba(148,163,184,0.3)';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.moveTo(x + cellW/2, cellY + cellH + 30);
+          ctx.lineTo(x + cellW/2, cellY + cellH); ctx.stroke();
+          ctx.fillStyle = active ? '#f59e0b' : 'rgba(148,163,184,0.5)';
+          ctx.font = '10px ui-monospace'; ctx.textAlign = 'center';
+          ctx.fillText('x_' + t, x + cellW/2, cellY + cellH + 45);
+          ctx.textAlign = 'left';
+          if (t < numSteps - 1) {
+            ctx.strokeStyle = active ? '#06b6d4' : 'rgba(148,163,184,0.2)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(x + cellW, cellY + cellH/2);
+            ctx.lineTo(x + cellW + 30, cellY + cellH/2); ctx.stroke();
+          }
+        }
+        document.getElementById('loss-val').textContent = animStep + '/' + numSteps;
+        document.getElementById('loss-val').className = 'val good';
+      }
+      function animate() {
+        animStep = 0;
+        function step() {
+          if (animStep >= numSteps) {
+            isAnim = false; document.getElementById('btn-gd').disabled = false;
+            document.getElementById('phase-ind').textContent = 'done ✓';
+            document.getElementById('phase-ind').classList.remove('active');
+            return;
+          }
+          document.getElementById('phase-ind').textContent = 'step t=' + animStep;
+          render(); animStep++; setTimeout(step, 400);
+        }
+        step();
+      }
+      function reset() { animStep = 0; render(); }
+
+
+      document.getElementById('btn-gd').addEventListener('click', function() {
+        if (isAnim) return; isAnim = true;
+        document.getElementById('btn-gd').disabled = true;
+        document.getElementById('phase-ind').textContent = 'animating...';
+        document.getElementById('phase-ind').classList.add('active');
+        if (typeof animate === 'function') animate();
+      });
+      document.getElementById('btn-reset').addEventListener('click', function() {
+        document.getElementById('phase-ind').textContent = 'idle';
+        document.getElementById('phase-ind').classList.remove('active');
+        if (typeof reset === 'function') reset(); else render();
+      });
+      if (typeof render === 'function') render();
+    </script>
+  </body>
+</html>

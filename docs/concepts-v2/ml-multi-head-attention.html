@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Multi-Head Attention — visual-first concept card. Interactive canvas, real-time sliders, code with Math→Code annotations." />
+    <meta name="description" content="Multi-Head Attention — visual-first concept card. Q·Kᵀ heatmap + softmax weighting." />
     <title>Multi-Head Attention — Visual Concept Card · AIHPC</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
@@ -36,7 +36,6 @@
       .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white; } .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
       .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); } .btn.ghost:hover { border-color: var(--accent); color: var(--text); }
       .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-      /* Code panel — always visible with Math→Code annotations */
       .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
       .code-section h3 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
       .code-section .eq-line { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent); padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; border-left: 3px solid var(--accent); margin-bottom: 10px; }
@@ -53,113 +52,205 @@
         <span class="tag">ML · Attention</span>
         <h1>Multi-Head Attention</h1>
       </div>
-      <p class="desc">Run h attention heads in parallel on different projections, then concatenate. <b>Captures different relationships simultaneously</b>.</p>
-      <div class="eq-badge">📐 MHA = Concat(head₁, ..., headₕ)·W_O  where headᵢ = Attn(QWᵢQ, KWᵢK, VWᵢV)</div>
+      <p class="desc">h parallel attention heads. <b>Captures different relationships</b> (syntax, coreference, semantics in different heads).</p>
+      <div class="eq-badge">📐 MHA(Q,K,V) = Concat(head₁,...,head_h)·W_O
+where headᵢ = Attn(Q·WᵢQ, K·WᵢK, V·WᵢV)</div>
       <div class="canvas-wrap">
         <canvas id="main-canvas" width="728" height="360"></canvas>
-        <div class="loss-overlay"><div class="lbl" id="loss-lbl">Loss</div><div class="val" id="loss-val">0.0000</div></div>
-        <div class="eq-overlay">MHA = Concat(head₁, ..., headₕ)·W_O  where headᵢ = Attn(QWᵢQ, KWᵢK, VWᵢV)</div>
+        <div class="loss-overlay"><div class="lbl" id="loss-lbl">max attn</div><div class="val" id="loss-val">0.0000</div></div>
+        <div class="eq-overlay">MHA(Q,K,V) = Concat(head₁,...,head_h)·W_O
+where headᵢ = Attn(Q·WᵢQ, K·WᵢK, V·WᵢV)</div>
         <div class="phase-indicator" id="phase-ind">idle</div>
       </div>
       <div class="controls">
-        <div class="ctrl" id="b1-ctrl"><label>√d_k (scale) <span class="val" id="b1-val">1.00</span></label><input type="range" id="b1-slider" min="-4" max="4" step="0.01" value="1.0" /></div>
-        <div class="ctrl" id="b0-ctrl"><label>Intercept β₀ <span class="val" id="b0-val">0.00</span></label><input type="range" id="b0-slider" min="-5" max="10" step="0.01" value="0.0" /></div>
+        <div class="ctrl" id="b1-ctrl"><label>Query focus (sharpness) <span class="val" id="b1-val">1.00</span></label><input type="range" id="b1-slider" min="0.1" max="3" step="0.05" value="1.0" /></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
-          <button class="btn primary" id="btn-gd">▶ Compute attention</button>
+          <button class="btn primary" id="btn-gd">▶ Animate attention</button>
           <button class="btn ghost" id="btn-reset">↺ Reset</button>
         </div>
       </div>
       <div class="code-section">
         <h3>💻 Math → Code — how symbols become variables</h3>
-        <div class="eq-line">MHA = Concat(head₁, ..., headₕ)·W_O  where headᵢ = Attn(QWᵢQ, KWᵢK, VWᵢV)</div>
-        <pre><span class="cm"># h parallel attention heads, each with own W matrices</span>
+        <div class="eq-line">MHA(Q,K,V) = Concat(head₁,...,head_h)·W_O
+where headᵢ = Attn(Q·WᵢQ, K·WᵢK, V·WᵢV)</div>
+        <pre><span class="cm"># MHA(Q, K, V) = Concat(head_1, …, head_h) · W_O</span>
+<span class="cm"># head_i = Attn(Q·W_i^Q, K·W_i^K, V·W_i^V)</span>
+<span class="cm"># h → num_heads (e.g. 8)</span>
+<span class="cm"># d_k = d_model / h</span>
 <span class="kw">import</span> numpy <span class="kw">as</span> np
 
-<span class="kw">def</span> <span class="fn">multi_head_attention</span>(Q, K, V, W_q, W_k, W_v, W_o, h=<span class="num">8</span>):
-    d_k = K.shape[-<span class="num">1</span>] // h
-    heads = []
-    <span class="kw">for</span> i <span class="kw">in range</span>(h):
-        Qi, Ki, Vi = Q@W_q[i], K@W_k[i], V@W_v[i]
-        scores = Qi @ Ki.T / np.sqrt(d_k)
-        weights = np.exp(scores) / np.sum(np.exp(scores), axis=-<span class="num">1</span>, keepdims=<span class="kw">True</span>)
-        heads.append(weights @ Vi)
-    <span class="kw">return</span> np.concatenate(heads, axis=-<span class="num">1</span>) @ W_o</pre>
+<span class="kw">def</span> <span class="fn">softmax</span>(x, axis=-<span class="num">1</span>):
+    x = x - x.<span class="fn">max</span>(axis=axis, keepdims=<span class="kw">True</span>)
+    e = np.<span class="fn">exp</span>(x)
+    <span class="kw">return</span> e / e.<span class="fn">sum</span>(axis=axis, keepdims=<span class="kw">True</span>)
+
+<span class="kw">def</span> <span class="fn">scaled_dot_product_attention</span>(Q, K, V):
+    d_k = Q.shape[-<span class="num">1</span>]
+    scores = Q @ K.T / np.<span class="fn">sqrt</span>(d_k)
+    <span class="kw">return</span> <span class="fn">softmax</span>(scores, axis=-<span class="num">1</span>) @ V
+
+<span class="kw">def</span> <span class="fn">multi_head_attention</span>(Q, K, V, W_Q, W_K, W_V, W_O):
+    <span class="cm"># Q, K, V: (seq_len, d_model)</span>
+    <span class="cm"># W_*: (d_model, d_model); split into h heads internally</span>
+    h = W_Q.shape[<span class="num">1</span>] // (W_Q.shape[<span class="num">0</span>] // W_Q.shape[<span class="num">1</span>]) <span class="kw">if</span> <span class="kw">False</span> <span class="kw">else</span> <span class="num">8</span>  <span class="cm"># set heads here</span>
+    d_model = Q.shape[-<span class="num">1</span>]
+    d_k = d_model // h
+    Q_proj = Q @ W_Q  <span class="cm"># (seq, d_model) — reshape to (h, seq, d_k)</span>
+    K_proj = K @ W_K
+    V_proj = V @ W_V
+    seq_len = Q.shape[<span class="num">0</span>]
+    Q_heads = Q_proj.<span class="fn">reshape</span>(seq_len, h, d_k).<span class="fn">transpose</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">2</span>)  <span class="cm"># (h, seq, d_k)</span>
+    K_heads = K_proj.<span class="fn">reshape</span>(seq_len, h, d_k).<span class="fn">transpose</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">2</span>)
+    V_heads = V_proj.<span class="fn">reshape</span>(seq_len, h, d_k).<span class="fn">transpose</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">2</span>)
+    heads = [<span class="fn">scaled_dot_product_attention</span>(Q_heads[i], K_heads[i], V_heads[i])
+             <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(h)]
+    concat = np.<span class="fn">concatenate</span>(heads, axis=-<span class="num">1</span>)  <span class="cm"># (seq, d_model)</span>
+    <span class="kw">return</span> concat @ W_O
+
+<span class="cm"># Example with random weights</span>
+np.random.<span class="fn">seed</span>(<span class="num">0</span>)
+d_model = <span class="num">16</span>; h = <span class="num">8</span>; seq = <span class="num">4</span>
+Q = np.random.<span class="fn">randn</span>(seq, d_model)
+K = np.random.<span class="fn">randn</span>(seq, d_model)
+V = np.random.<span class="fn">randn</span>(seq, d_model)
+W_Q = np.random.<span class="fn">randn</span>(d_model, d_model) * <span class="num">0.1</span>
+W_K = np.random.<span class="fn">randn</span>(d_model, d_model) * <span class="num">0.1</span>
+W_V = np.random.<span class="fn">randn</span>(d_model, d_model) * <span class="num">0.1</span>
+W_O = np.random.<span class="fn">randn</span>(d_model, d_model) * <span class="num">0.1</span>
+<span class="fn">print</span>(<span class="fn">multi_head_attention</span>(Q, K, V, W_Q, W_K, W_V, W_O).shape)  <span class="cm"># (4, 16)</span></pre>
       </div>
       <div class="foot">
-        <a href="../ai-lab.html?context=Multi-Head Attention">🤖 Ask AI</a> · <a href="../concepts/ml-multi-head-attention.html">📖 Full text version</a> · Visual concept card v2
+        <a href="../concepts/ml-multi-head-attention.html">📖 Full text version</a>  ·  Visual concept card v2
       </div>
     </div>
     <script>
       var canvas = document.getElementById('main-canvas');
       var ctx = canvas.getContext('2d');
-      
+
+      // ===== ATTENTION HEATMAP =====
       var W = canvas.width, H = canvas.height;
-      var dScale = 1, isAnim = false;
-      var TOKENS = ['The', 'cat', 'sat', 'on', 'the', 'mat', '.', 'It', 'was', 'warm'];
-      var Q = [], K = [], V = [];
-      var rng = { s: 42, next: function() { this.s = (this.s*9301+49297)%233280; return this.s/233280; } };
-      for (var i = 0; i < TOKENS.length; i++) { Q.push([rng.next(), rng.next()]); K.push([rng.next(), rng.next()]); V.push([rng.next(), rng.next()]); }
+      var sharpness = 1.0;
+      var isAnim = false;
+      var ATTN = 'multihead';
+
+      // Synthetic Q (6 queries) and K (6 keys) — each 4-dim
+      var Q = [
+        [1.0, 0.2, 0.0, -0.5],
+        [0.0, 1.0, 0.3, 0.1],
+        [-0.3, 0.0, 1.0, 0.4],
+        [0.2, -0.4, 0.0, 1.0],
+        [0.5, 0.5, -0.2, 0.0],
+        [0.1, 0.0, 0.4, 0.7]
+      ];
+      var V = [
+        [1.0, 0.0], [0.0, 1.0], [0.5, 0.5],
+        [-0.5, 0.5], [0.3, 0.7], [0.8, -0.2]
+      ];
+      var K = Q; // self-attention: K = Q
+
+      function softmax(arr) {
+        var mx = Math.max.apply(null, arr);
+        var exps = arr.map(function(v){ return Math.exp(v - mx); });
+        var sum = exps.reduce(function(a,b){ return a+b; }, 0);
+        return exps.map(function(e){ return e / sum; });
+      }
 
       function computeAttn() {
-        var n = Q.length, dk = 2;
+        var d_k = Q[0].length;
+        var scale = Math.sqrt(d_k);
+        // For Multi-Head and Flash we display the same heatmap but indicate
+        // the multi-head structure / tiling in the animation.
         var scores = [];
-        for (var i = 0; i < n; i++) { scores.push([]); for (var j = 0; j < n; j++) { var s = 0; for (var d = 0; d < dk; d++) s += Q[i][d] * K[j][d]; scores[i].push(s / (Math.sqrt(dk) * dScale)); } }
-        var weights = [];
-        for (var i = 0; i < n; i++) { var mx = Math.max.apply(null, scores[i]); var exps = scores[i].map(function(s) { return Math.exp(s - mx); }); var sum = exps.reduce(function(a,b){return a+b;},0); weights.push(exps.map(function(e) { return e / sum; })); }
+        for (var i = 0; i < Q.length; i++) {
+          var row = [];
+          for (var j = 0; j < K.length; j++) {
+            var dot = 0;
+            for (var d = 0; d < d_k; d++) dot += Q[i][d] * K[j][d];
+            row.push(dot / scale * sharpness);
+          }
+          scores.push(row);
+        }
+        var weights = scores.map(function(r){ return softmax(r); });
         return weights;
       }
 
-      function render() {
-        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
-        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
-        var w = computeAttn(), n = TOKENS.length;
-        var cellW = (W-120) / n, cellH = (H-60) / n;
-        // Heatmap
-        for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) {
-          var v = w[i][j];
-          var r = Math.floor(v * 255), g = Math.floor(v * 100), b = Math.floor(255 - v * 100);
-          ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + (0.3 + v * 0.7).toFixed(2) + ')';
-          ctx.fillRect(60 + j * cellW, 20 + i * cellH, cellW - 1, cellH - 1);
-        }
-        // Grid
-        ctx.strokeStyle = 'rgba(148,163,184,0.15)'; ctx.lineWidth = 0.5;
-        for (var i = 0; i <= n; i++) { ctx.beginPath(); ctx.moveTo(60 + i * cellW, 20); ctx.lineTo(60 + i * cellW, 20 + n * cellH); ctx.stroke(); ctx.beginPath(); ctx.moveTo(60, 20 + i * cellH); ctx.lineTo(60 + n * cellW, 20 + i * cellH); ctx.stroke(); }
-        // Labels
-        ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
-        for (var j = 0; j < n; j++) ctx.fillText(TOKENS[j], 60 + (j+0.5) * cellW, 15);
-        ctx.textAlign = 'right';
-        for (var i = 0; i < n; i++) ctx.fillText(TOKENS[i], 55, 20 + (i+0.5) * cellH);
-        ctx.textAlign = 'left';
-        // Diagonal emphasis
-        ctx.strokeStyle = 'rgba(6,182,212,0.3)'; ctx.lineWidth = 1; ctx.setLineDash([2,2]);
-        ctx.beginPath(); ctx.moveTo(60, 20); ctx.lineTo(60 + n * cellW, 20 + n * cellH); ctx.stroke(); ctx.setLineDash([]);
-        // Title
-        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace'; ctx.textAlign = 'right';
-        ctx.fillText('Q·Kᵀ/√d_k (softmax)', W-65, 35);
-        ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
-        ctx.fillText('d_scale=' + dScale.toFixed(2), W-65, 50);
-        ctx.textAlign = 'left';
-        // Max weight value
-        var maxW = 0;
-        for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) if (w[i][j] > maxW) maxW = w[i][j];
-        document.getElementById('loss-val').textContent = maxW.toFixed(3);
-        document.getElementById('loss-val').className = 'val ' + (maxW < 0.3 ? 'ok' : 'good');
-        document.getElementById('loss-val').previousElementSibling.textContent = 'Max weight';
+      function colorForWeight(w) {
+        // 0 → dark blue, 1 → bright cyan
+        var r = Math.round(6 + w * 240);
+        var g = Math.round(30 + w * 200);
+        var b = Math.round(80 + w * 130);
+        return 'rgb(' + r + ',' + g + ',' + b + ')';
       }
 
-      document.getElementById('b1-slider').addEventListener('input', function(e) { dScale = parseFloat(e.target.value); document.getElementById('b1-val').textContent = dScale.toFixed(2); render(); });
-      document.getElementById('b0-slider').parentElement.style.display = 'none';
+      function render(focusRow) {
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        var weights = computeAttn();
+        var cellW = 40, cellH = 40;
+        var gridX = (W - cellW * Q.length) / 2;
+        var gridY = 60;
+        // Title
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 12px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('Attention weights (softmax(Q·Kᵀ/√d_k))', W/2, 30);
+        ctx.textAlign = 'left';
+        // Heatmap
+        for (var i = 0; i < weights.length; i++) {
+          for (var j = 0; j < weights[i].length; j++) {
+            var w = weights[i][j];
+            ctx.fillStyle = colorForWeight(w);
+            ctx.fillRect(gridX + j*cellW, gridY + i*cellH, cellW-2, cellH-2);
+            ctx.fillStyle = w > 0.3 ? '#000' : '#fff';
+            ctx.font = '10px ui-monospace'; ctx.textAlign = 'center';
+            ctx.fillText(w.toFixed(2), gridX + j*cellW + cellW/2, gridY + i*cellH + cellH/2 + 4);
+            ctx.textAlign = 'left';
+          }
+        }
+        // Axis labels
+        ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '10px ui-monospace'; ctx.textAlign = 'center';
+        for (var k = 0; k < K.length; k++) { ctx.fillText('K'+k, gridX + k*cellW + cellW/2, gridY - 8); }
+        for (var qi = 0; qi < Q.length; qi++) { ctx.fillText('Q'+qi, gridX - 20, gridY + qi*cellH + cellH/2 + 4); }
+        ctx.textAlign = 'left';
+        // Focus row highlight
+        if (focusRow !== undefined && focusRow >= 0) {
+          ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2;
+          ctx.strokeRect(gridX - 2, gridY + focusRow*cellH - 2, cellW * Q.length + 2, cellH + 2);
+        }
+        // Stats
+        var maxAttn = 0;
+        for (var mi = 0; mi < weights.length; mi++) {
+          for (var mj = 0; mj < weights[mi].length; mj++) {
+            if (weights[mi][mj] > maxAttn) maxAttn = weights[mi][mj];
+          }
+        }
+        document.getElementById('loss-val').textContent = maxAttn.toFixed(3);
+        document.getElementById('loss-val').className = 'val ' + (maxAttn > 0.5 ? 'good' : 'ok');
+      }
+
+      document.getElementById('b1-slider').addEventListener('input', function(e) { sharpness = parseFloat(e.target.value); document.getElementById('b1-val').textContent = sharpness.toFixed(2); render(); });
+
       document.getElementById('btn-gd').addEventListener('click', function() {
         if (isAnim) return; isAnim = true; document.getElementById('btn-gd').disabled = true;
-        var d = 0.1;
-        function sweep() { if (d >= 3) { isAnim = false; document.getElementById('btn-gd').disabled = false; return; }
-          dScale = d; document.getElementById('b1-slider').value = d; document.getElementById('b1-val').textContent = d.toFixed(2);
-          render(); d += 0.03; requestAnimationFrame(sweep);
-        } sweep();
+        document.getElementById('phase-ind').textContent = 'scanning...'; document.getElementById('phase-ind').classList.add('active');
+        var row = 0;
+        function scan() {
+          if (row >= Q.length) {
+            isAnim = false; document.getElementById('btn-gd').disabled = false;
+            document.getElementById('phase-ind').textContent = 'done ✓'; document.getElementById('phase-ind').classList.remove('active');
+            render(undefined); return;
+          }
+          document.getElementById('phase-ind').textContent = 'row Q'+row;
+          render(row); row++; setTimeout(scan, 350);  // slow enough to see
+        }
+        scan();
       });
-      document.getElementById('btn-reset').addEventListener('click', function() { dScale = 1; document.getElementById('b1-slider').value = 1; document.getElementById('b1-val').textContent = '1.00'; render(); });
-      render();
-
+      document.getElementById('btn-reset').addEventListener('click', function() {
+        sharpness = 1.0; document.getElementById('b1-slider').value = 1.0;
+        document.getElementById('b1-val').textContent = '1.00';
+        document.getElementById('phase-ind').textContent = 'idle';
+        document.getElementById('phase-ind').classList.remove('active');
+        render(undefined);
+      });
+      render(undefined);
     </script>
   </body>
 </html>

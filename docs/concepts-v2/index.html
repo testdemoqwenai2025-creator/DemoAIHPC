@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="AIHPC Advanced — Visual Concept Cards (v2). 27 interactive, visual-first concept cards with animated canvases, real-time sliders, and Math→Code annotations." />
+    <meta name="description" content="AIHPC Advanced — Visual Concept Cards (v2). 39 interactive, visual-first concept cards with animated canvases, real-time sliders, and Math→Code annotations." />
     <title>🎨 Visual Concept Cards — AIHPC Advanced</title>
     <style>
       :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; }
@@ -29,13 +29,35 @@
       .card p { font-size: 12px; color: var(--text-muted); margin: 0; line-height: 1.4; }
       .foot { font-size: 11px; color: var(--text-muted); margin-top: 24px; text-align: center; }
       .foot a { color: var(--accent); text-decoration: none; }
+      .try-yourself { background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.25); border-radius: 10px; padding: 16px 20px; margin: 0 0 24px; }
+      .try-yourself h2 { font-size: 14px; font-weight: 700; color: var(--accent); margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+      .try-yourself ul { margin: 0; padding-left: 20px; }
+      .try-yourself li { font-size: 12px; color: var(--text-muted); margin: 4px 0; line-height: 1.5; }
+      .try-yourself li b { color: var(--text); }
+      .try-yourself a { color: var(--accent); text-decoration: none; font-family: ui-monospace, monospace; font-size: 11px; }
     </style>
   </head>
   <body>
     <div class="container">
       <a href="../index.html" class="back-link">← Home</a>
       <h1>🎨 Visual Concept Cards (v2)</h1>
-      <p class="lead">27 visual-first concept cards — animated canvas as the hero, minimal text, real-time sliders, and code with Math→Code annotations. Less reading, more fascination. Drag the sliders, hit the action button, watch the math happen.</p>
+      <p class="lead">39 visual-first concept cards — animated canvas as the hero, minimal text, real-time sliders, and code with Math→Code annotations. Less reading, more fascination. Drag the sliders, hit the action button, watch the math happen.</p>
+
+      <div class="try-yourself">
+        <h2>🎯 Try it yourself — quick demos</h2>
+        <ul>
+          <li><b>MSE card</b> — drag the slope slider, hit "Run gradient descent", watch 80 steps of GD converge: <a href="ml-mse.html">ml-mse.html</a></li>
+          <li><b>ReLU card</b> — drag the x slider, hit "Sweep x", watch f(x) + f'(x) update in real time: <a href="ml-relu.html">ml-relu.html</a></li>
+          <li><b>Sigmoid card</b> — drag x from -4 to +4, watch the S-curve and its bell-shaped gradient: <a href="ml-sigmoid.html">ml-sigmoid.html</a></li>
+          <li><b>Tanh card</b> — drag x, compare the zero-centred (-1, 1) squasher with sigmoid: <a href="ml-tanh.html">ml-tanh.html</a></li>
+          <li><b>SGD card</b> — hit "Run optimiser", watch the trajectory oscillate in the ravine: <a href="ml-sgd.html">ml-sgd.html</a></li>
+          <li><b>Adam card</b> — compare the trajectory with SGD (smoother, converges faster): <a href="ml-adam.html">ml-adam.html</a></li>
+          <li><b>BatchNorm card</b> — drag spread, hit "Apply normalisation", watch the histogram recenter: <a href="ml-batchnorm.html">ml-batchnorm.html</a></li>
+          <li><b>Attention card</b> — hit "Animate attention", watch each query row's softmax heat up: <a href="ml-scaled-dot-product-attention.html">ml-scaled-dot-product-attention.html</a></li>
+          <li><b>Dropout card</b> — drag λ, hit "Resample", watch neurons drop stochastically: <a href="ml-dropout.html">ml-dropout.html</a></li>
+          <li><b>All 39 cards</b> — every card below is interactive: scroll down ↓</li>
+        </ul>
+      </div>
 
       <div class="section-title">📊 Loss Functions (9)</div>
       <div class="grid">
@@ -43,25 +65,27 @@
         <a class="card" href="ml-mae.html"><span class="cat loss">Loss</span><h3>Mean Absolute Error</h3><p>Linear error · robust to outliers · compare with MSE</p></a>
         <a class="card" href="ml-huber-loss.html"><span class="cat loss">Loss</span><h3>Huber Loss</h3><p>Quadratic near 0, linear beyond δ · MSE + MAE hybrid</p></a>
         <a class="card" href="ml-log-cosh.html"><span class="cat loss">Loss</span><h3>Log-Cosh Loss</h3><p>Smooth · ≈ MSE near 0, ≈ MAE far away</p></a>
-        <a class="card" href="ml-kl-divergence.html"><span class="cat loss">Loss</span><h3>KL Divergence</h3><p>Distribution distance · information-theoretic · non-symmetric</p></a>
-        <a class="card" href="ml-cosine-similarity.html"><span class="cat loss">Loss</span><h3>Cosine Similarity</h3><p>Directional alignment · magnitude-invariant</p></a>
         <a class="card" href="ml-binary-cross-entropy.html"><span class="cat loss">Loss</span><h3>Binary Cross-Entropy</h3><p>Binary classification · goes to ∞ for confident wrong predictions</p></a>
         <a class="card" href="ml-categorical-cross-entropy.html"><span class="cat loss">Loss</span><h3>Categorical Cross-Entropy</h3><p>Multi-class classification · used with softmax</p></a>
         <a class="card" href="ml-hinge-loss.html"><span class="cat loss">Loss</span><h3>Hinge Loss</h3><p>SVM loss · penalises margin violations only</p></a>
+        <a class="card" href="ml-kl-divergence.html"><span class="cat loss">Loss</span><h3>KL Divergence</h3><p>Distribution distance · information-theoretic · non-symmetric</p></a>
+        <a class="card" href="ml-cosine-similarity.html"><span class="cat loss">Loss</span><h3>Cosine Similarity</h3><p>Directional alignment · magnitude-invariant</p></a>
       </div>
 
-      <div class="section-title">⚡ Activations (3)</div>
+      <div class="section-title">⚡ Activations (5)</div>
       <div class="grid">
-        <a class="card" href="ml-relu.html"><span class="cat act">Activation</span><h3>ReLU</h3><p>max(0, x) · sweep x → watch f(x) + f'(x)</p></a>
-        <a class="card" href="ml-gelu.html"><span class="cat act">Activation</span><h3>GELU</h3><p>x·Φ(x) · smoother than ReLU · used in GPT + BERT</p></a>
-        <a class="card" href="ml-swiglu.html"><span class="cat act">Activation</span><h3>SwiGLU</h3><p>x·σ(βx) · gated activation · used in PaLM + LLaMA</p></a>
+        <a class="card" href="ml-relu.html"><span class="cat act">Activation</span><h3>ReLU Activation</h3><p>max(0, x) · sweep x → watch f(x) + f'(x)</p></a>
+        <a class="card" href="ml-gelu.html"><span class="cat act">Activation</span><h3>GELU Activation</h3><p>x·Φ(x) · smoother than ReLU · used in GPT + BERT</p></a>
+        <a class="card" href="ml-swiglu.html"><span class="cat act">Activation</span><h3>SwiGLU Activation</h3><p>x·σ(βx) · gated activation · used in PaLM + LLaMA</p></a>
+        <a class="card" href="ml-sigmoid.html"><span class="cat act">Activation</span><h3>Sigmoid Activation</h3><p>1/(1+e^−x) · squashes to (0,1) · used as gate</p></a>
+        <a class="card" href="ml-tanh.html"><span class="cat act">Activation</span><h3>Tanh Activation</h3><p>(e^x − e^−x)/(e^x + e^−x) · zero-centred · LSTMs</p></a>
       </div>
 
       <div class="section-title">🌀 Optimisers (3)</div>
       <div class="grid">
-        <a class="card" href="ml-sgd.html"><span class="cat opt">Optimiser</span><h3>SGD</h3><p>Vanilla GD · oscillates in ravines · trajectory animation</p></a>
-        <a class="card" href="ml-adam.html"><span class="cat opt">Optimiser</span><h3>Adam</h3><p>Adaptive learning rates · converges faster</p></a>
-        <a class="card" href="ml-adamw.html"><span class="cat opt">Optimiser</span><h3>AdamW</h3><p>Adam + decoupled weight decay · transformer training</p></a>
+        <a class="card" href="ml-sgd.html"><span class="cat opt">Optimiser</span><h3>SGD Optimiser</h3><p>Vanilla GD · oscillates in ravines · trajectory animation</p></a>
+        <a class="card" href="ml-adam.html"><span class="cat opt">Optimiser</span><h3>Adam Optimiser</h3><p>Adaptive learning rates · converges faster</p></a>
+        <a class="card" href="ml-adamw.html"><span class="cat opt">Optimiser</span><h3>AdamW Optimiser</h3><p>Adam + decoupled weight decay · transformer training</p></a>
       </div>
 
       <div class="section-title">📐 Normalisation (5)</div>
@@ -75,7 +99,7 @@
 
       <div class="section-title">🔍 Attention (3)</div>
       <div class="grid">
-        <a class="card" href="ml-scaled-dot-product-attention.html"><span class="cat attn">Attention</span><h3>Scaled Dot-Product</h3><p>softmax(Q·Kᵀ/√d_k)·V · √d_k scaling · heatmap</p></a>
+        <a class="card" href="ml-scaled-dot-product-attention.html"><span class="cat attn">Attention</span><h3>Scaled Dot-Product Attention</h3><p>softmax(Q·Kᵀ/√d_k)·V · √d_k scaling · heatmap</p></a>
         <a class="card" href="ml-multi-head-attention.html"><span class="cat attn">Attention</span><h3>Multi-Head Attention</h3><p>h parallel heads · captures different relationships</p></a>
         <a class="card" href="ml-flash-attention.html"><span class="cat attn">Attention</span><h3>Flash Attention</h3><p>IO-aware tiling · 2-4× faster · 5-20× less memory</p></a>
       </div>
@@ -84,6 +108,22 @@
       <div class="grid">
         <a class="card" href="ml-dropout.html"><span class="cat reg">Regularisation</span><h3>Dropout</h3><p>Random zeroing · prevents co-adaptation · network diagram</p></a>
         <a class="card" href="ml-l1-l2-regularisation.html"><span class="cat reg">Regularisation</span><h3>L1 / L2 Regularisation</h3><p>L1 → sparse weights · L2 → small weights</p></a>
+      </div>
+
+      <div class="section-title">🧠 Neural Network Architectures (12)</div>
+      <div class="grid">
+        <a class="card" href="nn-mlp.html"><span class="cat nn">Architecture</span><h3>Multi-Layer Perceptron (MLP)</h3><p>Stacked linear layers + nonlinearity · universal approximator</p></a>
+        <a class="card" href="nn-cnn.html"><span class="cat nn">Architecture</span><h3>Convolutional Neural Network (CNN)</h3><p>Sliding kernels over spatial input · exploits locality</p></a>
+        <a class="card" href="nn-rnn.html"><span class="cat nn">Architecture</span><h3>Recurrent Neural Network (RNN)</h3><p>Hidden state reused across time · vanishing gradient on long seqs</p></a>
+        <a class="card" href="nn-lstm.html"><span class="cat nn">Architecture</span><h3>Long Short-Term Memory (LSTM)</h3><p>Gated memory cell · solves vanishing gradient · long sequences</p></a>
+        <a class="card" href="nn-gru.html"><span class="cat nn">Architecture</span><h3>Gated Recurrent Unit (GRU)</h3><p>Simpler than LSTM · 2 gates vs 3 · matches LSTM quality</p></a>
+        <a class="card" href="nn-transformer.html"><span class="cat nn">Architecture</span><h3>Transformer</h3><p>Self-attention · parallel training · scales to billions</p></a>
+        <a class="card" href="nn-autoencoder.html"><span class="cat nn">Architecture</span><h3>Autoencoder</h3><p>Compress → reconstruct · self-supervised · denoising</p></a>
+        <a class="card" href="nn-vae.html"><span class="cat nn">Architecture</span><h3>Variational Autoencoder (VAE)</h3><p>Latent space is Gaussian · generative · smooth interpolation</p></a>
+        <a class="card" href="nn-gan.html"><span class="cat nn">Architecture</span><h3>Generative Adversarial Network (GAN)</h3><p>Generator vs discriminator · photorealistic · unstable training</p></a>
+        <a class="card" href="nn-resnet.html"><span class="cat nn">Architecture</span><h3>Residual Network (ResNet)</h3><p>Skip connections · enables 100+ layer nets · solves degradation</p></a>
+        <a class="card" href="nn-diffusion.html"><span class="cat nn">Architecture</span><h3>Diffusion Model</h3><p>Add noise → learn to denoise · SOTA image gen · stable training</p></a>
+        <a class="card" href="paper-coconet.html"><span class="cat nn">Architecture</span><h3>CoCoNet — Conformal Conditional Network</h3><p>Conformal prediction + conditional score · 22/30 tasks #1 · GT+AI4OPT 2024</p></a>
       </div>
 
       <div class="foot">

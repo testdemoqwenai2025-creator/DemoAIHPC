@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="CoCoNet — Conformal Conditional Network — visual-first neural network architecture card. Animated diagram, math, code with Math→Code annotations, when-to-use deep thoughts." />
+    <title>CoCoNet — Conformal Conditional Network — Visual NN Card · AIHPC</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", sans-serif; min-height: 100vh; overflow-x: hidden; }
+      body::before { content:""; position:fixed; inset:0; background: radial-gradient(1000px 500px at 50% 0%, rgba(6,182,212,0.10), transparent 70%); pointer-events:none; z-index:0; }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; position: relative; z-index: 1; }
+      .head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+      .head .tag { font-size: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.4); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .head h1 { font-size: 24px; font-weight: 800; }
+      .back { font-size: 12px; color: var(--accent); text-decoration: none; margin-bottom: 12px; display: inline-block; }
+      .eq-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; background: rgba(11,15,26,0.85); border: 1px solid rgba(6,182,212,0.3); font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent); margin-bottom: 12px; }
+      .desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; max-width: 600px; }
+      .canvas-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+      canvas { display: block; width: 100%; height: auto; }
+      .loss-overlay { position: absolute; top: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; text-align: right; }
+      .loss-overlay .lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+      .loss-overlay .val { font-size: 28px; font-weight: 800; font-family: ui-monospace, monospace; color: var(--accent); }
+      .loss-overlay .val.bad { color: var(--danger); } .loss-overlay .val.ok { color: var(--warn); } .loss-overlay .val.good { color: var(--success); }
+      .eq-overlay { position: absolute; bottom: 12px; left: 12px; background: rgba(11,15,26,0.9); border: 1px solid rgba(6,182,212,0.3); border-radius: 6px; padding: 4px 12px; font-family: "Cambria Math", Georgia, serif; font-size: 13px; color: var(--accent); pointer-events: none; }
+      .phase-indicator { position: absolute; bottom: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 10px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .phase-indicator.active { color: var(--accent); border-color: rgba(6,182,212,0.4); }
+      .controls { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: flex-end; }
+      .ctrl { flex: 1; min-width: 180px; background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+      .ctrl label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; }
+      .ctrl .val { font-size: 14px; font-weight: 700; font-family: ui-monospace, monospace; color: var(--accent); }
+      .ctrl input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--border); outline: none; }
+      .ctrl input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid var(--bg); }
+      .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white; } .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); } .btn.ghost:hover { border-color: var(--accent); color: var(--text); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section h3 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+      .code-section .eq-line { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent); padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; border-left: 3px solid var(--accent); margin-bottom: 10px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .foot { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 24px; font-family: ui-monospace, monospace; }
+      .foot a { color: var(--accent); text-decoration: none; }
+      .deep-thoughts {
+        background: rgba(139,92,246,0.06);
+        border: 1px solid rgba(139,92,246,0.25);
+        border-radius: 10px;
+        padding: 14px 18px;
+        margin-top: 16px;
+      }
+      .deep-thoughts h3 {
+        font-size: 11px; font-weight: 700; color: var(--accent2);
+        text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;
+      }
+      .deep-thoughts .dt-row { margin: 8px 0; font-size: 13px; line-height: 1.55; color: var(--text); }
+      .deep-thoughts .dt-row .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
+      .deep-thoughts .dt-row .lbl.use { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .deep-thoughts .dt-row .lbl.avoid { background: rgba(239,68,68,0.15); color: #fca5a5; }
+      .deep-thoughts .dt-row .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+      .deep-thoughts .dt-row .text { color: var(--text-muted); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <a href="../index.html" class="back">← Home</a>
+      <div class="head">
+        <span class="tag">PAPER · Conformal Prediction</span>
+        <h1>CoCoNet — Conformal Conditional Network</h1>
+      </div>
+      <p class="desc">Georgia Tech + AI4OPT 2024 paper. <b>CoCoNet-ICNN ranked #1 in 22/30 multivariate regression tasks</b> for region efficiency prediction. Learns a conditional non-conformity score s_θ(x, y) → tighter intervals than fixed-score conformal.</p>
+      <div class="eq-badge">📐 P(Y ∈ [L(X), U(X)] | X) ≥ 1 − α    (with conditional coverage)</div>
+      <div class="canvas-wrap">
+        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <div class="loss-overlay"><div class="lbl" id="loss-lbl">state</div><div class="val" id="loss-val">0.0000</div></div>
+        <div class="eq-overlay">P(Y ∈ [L(X), U(X)] | X) ≥ 1 − α    (with conditional coverage)</div>
+        <div class="phase-indicator" id="phase-ind">idle</div>
+      </div>
+      <div class="controls">
+        <div class="ctrl" id="b1-ctrl"><label>Parameter <span class="val" id="b1-val">1.00</span></label><input type="range" id="b1-slider" min="0.1" max="3" step="0.05" value="1.0" /></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
+          <button class="btn primary" id="btn-gd">▶ Animate forward pass</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+        </div>
+      </div>
+      <div class="code-section">
+        <h3>💻 Math → Code — how symbols become variables</h3>
+        <div class="eq-line">P(Y ∈ [L(X), U(X)] | X) ≥ 1 − α    (with conditional coverage)</div>
+        <pre><span class="cm"># Split conformal prediction (Vovk 2005):</span>
+<span class="cm"># 1. Score: s_i = |y_i - ŷ(x_i)|   (non-conformity)</span>
+<span class="cm"># 2. Quantile: q_α = ⌈(n+1)(1-α)/n⌉-th order statistic</span>
+<span class="cm"># 3. Interval: [ŷ(x) - q_α, ŷ(x) + q_α]</span>
+<span class="cm"># Guarantees: P(Y ∈ [L(X), U(X)]) ≥ 1 - α (marginal coverage)</span>
+<span class="cm">#</span>
+<span class="cm"># CoCoNet extension (conditional coverage):</span>
+<span class="cm"># Score network s_θ(x, y) learns input-dependent non-conformity</span>
+<span class="cm"># Calibration network adjusts scores to maintain (1-α) coverage</span>
+<span class="cm"># Two variants: CoCoNet-ICNN (input-convex NN) + CoCoNet-Spline</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">split_conformal_predict</span>(model, X_cal, y_cal, X_test, alpha=<span class="num">0.1</span>):
+    <span class="num">&quot;&quot;</span><span class="num">&quot;Split conformal prediction — distribution-free coverage guarantee.
+
+    Returns intervals [L, U] such that P(Y_test ∈ [L, U]) &gt;= 1 - alpha,
+    assuming (X_cal, y_cal) and (X_test, y_test) are exchangeable.
+    &quot;</span><span class="num">&quot;&quot;</span>
+    <span class="cm"># Step 1: compute non-conformity scores on calibration set</span>
+    y_cal_pred = model.<span class="fn">predict</span>(X_cal)
+    scores = np.<span class="fn">abs</span>(y_cal - y_cal_pred)  <span class="cm"># s_i = |y_i - ŷ(x_i)|</span>
+
+    <span class="cm"># Step 2: find alpha-quantile with finite-sample correction</span>
+    n = <span class="fn">len</span>(scores)
+    <span class="cm"># ⌈(n+1)(1-α)/n⌉-th order statistic (Vovk&#x27;s correction)</span>
+    q_alpha_idx = <span class="fn">int</span>(np.<span class="fn">ceil</span>((n + <span class="num">1</span>) * (<span class="num">1</span> - alpha)))
+    q_alpha_idx = <span class="fn">min</span>(q_alpha_idx, n)  <span class="cm"># clamp to last index</span>
+    q_alpha = np.<span class="fn">sort</span>(scores)[q_alpha_idx - <span class="num">1</span>]  <span class="cm"># 1-indexed → 0-indexed</span>
+
+    <span class="cm"># Step 3: output prediction intervals</span>
+    y_test_pred = model.<span class="fn">predict</span>(X_test)
+    lower = y_test_pred - q_alpha
+    upper = y_test_pred + q_alpha
+    <span class="kw">return</span> lower, upper, q_alpha
+
+<span class="cm"># Simple linear model for the demo</span>
+<span class="kw">class</span> LinearModel:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, slope, intercept):
+        self.slope, self.intercept = slope, intercept
+    <span class="kw">def</span> <span class="fn">predict</span>(self, X):
+        <span class="kw">return</span> self.slope * np.<span class="fn">asarray</span>(X) + self.intercept
+
+<span class="cm"># Example: 6 calibration points, 2 test points, 90% coverage</span>
+np.random.<span class="fn">seed</span>(<span class="num">0</span>)
+model = <span class="fn">LinearModel</span>(slope=<span class="num">2.0</span>, intercept=<span class="num">1.0</span>)
+X_cal = np.<span class="fn">array</span>([<span class="num">0.5</span>, <span class="num">1.0</span>, <span class="num">1.5</span>, <span class="num">2.0</span>, <span class="num">2.5</span>, <span class="num">3.0</span>])
+y_cal = model.<span class="fn">predict</span>(X_cal) + np.random.<span class="fn">randn</span>(<span class="num">6</span>) * <span class="num">0.5</span>
+X_test = np.<span class="fn">array</span>([<span class="num">4.0</span>, <span class="num">5.0</span>])
+
+lower, upper, q = <span class="fn">split_conformal_predict</span>(model, X_cal, y_cal, X_test, alpha=<span class="num">0.1</span>)
+<span class="fn">print</span>(f<span class="num">&#x27;q_alpha (90% quantile): {q:.3f}&#x27;</span>)
+<span class="fn">print</span>(f<span class="num">&#x27;Test predictions: {model.predict(X_test)}&#x27;</span>)
+<span class="kw">for</span> i, (l, u) <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="fn">zip</span>(lower, upper)):
+    <span class="fn">print</span>(f<span class="num">&#x27;  x={X_test[i]}: [{l:.2f}, {u:.2f}]  (width={u-l:.2f})&#x27;</span>)</pre>
+      </div>
+      <div class="deep-thoughts">
+        <h3>🧠 Deep thoughts — when (and when not) to reach for this architecture</h3>
+        <div class="dt-row"><span class="lbl use">USE WHEN:</span><span class="text">you need uncertainty quantification on regression/classification predictions with distribution-free coverage guarantees (medical risk scoring, financial VaR, autonomous-system safety bounds, scientific reproducibility), you want to wrap any pre-trained model with valid prediction intervals, you need to compare different models' uncertainty (tighter intervals at the same coverage = better model), multivariate regression where input-dependent interval widths matter (high-variance regions need wider intervals).</span></div>
+        <div class="dt-row"><span class="lbl avoid">AVOID WHEN:</span><span class="text">you only need point predictions (conformal adds calibration overhead), real-time streaming data without periodic recalibration (calibration set must be exchangeable with test data), very small calibration sets (<30 samples — the quantile estimate is too noisy), strict adversarial settings (conformal assumes exchangeability, which an adversary can break).</span></div>
+        <div class="dt-row"><span class="lbl why">WHY:</span><span class="text">CoCoNet's contribution over standard split conformal is learning the score function s_θ(x, y) CONDITIONAL on the input x. Standard split conformal gives marginal coverage (P(Y ∈ C(X)) ≥ 1-α averaged over X) but conditional coverage can be much worse for subpopulations. CoCoNet-ICNN (Input-Convex Neural Network) learns a convex score function — useful when the score should be monotonic in y. The paper's result — CoCoNet-ICNN #1 in 22/30 multivariate regression tasks for region efficiency prediction — suggests that input-conditional scores give meaningfully tighter intervals in practice, especially when the data has heteroscedastic noise (different variances for different x).</span></div>
+      </div>
+      <div class="foot">
+        Visual concept card v2
+      </div>
+    </div>
+    <script>
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      var W = canvas.width, H = canvas.height;
+      var param = 1.0;
+      var isAnim = false;
+      var MODE = 'coconet';
+
+      document.getElementById('b1-slider').addEventListener('input', function(e) {
+        param = parseFloat(e.target.value);
+        document.getElementById('b1-val').textContent = param.toFixed(2);
+        if (typeof render === 'function') render();
+      });
+
+
+      // ===== CoCoNet — conformal prediction pipeline =====
+      // Multi-stage animation:
+      //   Stage 1: scatter plot of calibration data + fitted line
+      //   Stage 2: residuals shown as vertical error bars (non-conformity scores)
+      //   Stage 3: histogram of calibration scores
+      //   Stage 4: alpha-quantile q_alpha highlighted on histogram
+      //   Stage 5: prediction intervals for new test points (with the true y check)
+      var stage = 0; var maxStage = 5;
+      var alphaLevel = 0.1;  // 1-alpha = 90% coverage
+      // Synthetic calibration data: y = 2x + 1 + noise
+      var data = [
+        [0.5, 1.85], [1.0, 3.4], [1.5, 3.7], [2.0, 5.5],
+        [2.5, 5.8], [3.0, 7.3], [0.8, 2.6], [1.7, 4.2],
+        [2.3, 5.6], [2.8, 6.4]
+      ];
+      function predict(x) { return 2 * x + 1; }  // true underlying
+      function scores() {
+        return data.map(function(d) { return Math.abs(d[1] - predict(d[0])); });
+      }
+      function quantile(arr, q) {
+        var sorted = arr.slice().sort(function(a,b){ return a - b; });
+        var n = sorted.length;
+        var idx = Math.min(n - 1, Math.max(0, Math.ceil((n + 1) * q) - 1));
+        return sorted[idx];
+      }
+      function toCX(x) { return 50 + (x) / 6 * 250; }     // x in [0,6] → canvas [50, 300]
+      function toCY(y) { return H - 40 - (y) / 12 * (H - 80); }  // y in [0,12] → canvas [H-40, 40]
+      function render() {
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 12px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('CoCoNet — conformal prediction pipeline (coverage ≥ ' + ((1 - alphaLevel) * 100).toFixed(0) + '%)', W/2, 25);
+        ctx.textAlign = 'left';
+        // Left half: scatter plot
+        var leftW = 380;
+        // Grid + axes
+        ctx.strokeStyle = 'rgba(148,163,184,0.06)'; ctx.lineWidth = 0.5;
+        for (var g = 0; g <= 6; g++) { var px = toCX(g); ctx.beginPath(); ctx.moveTo(px, 30); ctx.lineTo(px, H - 60); ctx.stroke(); }
+        for (var gy = 0; gy <= 12; gy += 2) { var py = toCY(gy); ctx.beginPath(); ctx.moveTo(50, py); ctx.lineTo(leftW, py); ctx.stroke(); }
+        ctx.strokeStyle = 'rgba(148,163,184,0.25)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(50, toCY(0)); ctx.lineTo(leftW, toCY(0)); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(toCX(0), 30); ctx.lineTo(toCX(0), H - 60); ctx.stroke();
+        ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('x', leftW - 5, H - 45); ctx.fillText('y', 35, 40);
+        // Fitted line (always shown)
+        ctx.strokeStyle = '#06b6d4'; ctx.lineWidth = 2.5; ctx.shadowColor = '#06b6d4'; ctx.shadowBlur = 4;
+        ctx.beginPath(); ctx.moveTo(toCX(0), toCY(predict(0))); ctx.lineTo(toCX(6), toCY(predict(6))); ctx.stroke();
+        ctx.shadowBlur = 0;
+        // Calibration data points (Stage 1+)
+        if (stage >= 1) {
+          for (var i = 0; i < data.length; i++) {
+            var px = toCX(data[i][0]), py = toCY(data[i][1]);
+            ctx.fillStyle = '#f59e0b'; ctx.beginPath(); ctx.arc(px, py, 4, 0, 6.28); ctx.fill();
+          }
+          ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
+          ctx.fillText('Calibration points', leftW / 2, H - 50);
+        }
+        // Residuals (Stage 2+)
+        if (stage >= 2) {
+          ctx.strokeStyle = 'rgba(239,68,68,0.7)'; ctx.lineWidth = 1.5;
+          for (var r = 0; r < data.length; r++) {
+            var px = toCX(data[r][0]);
+            var py_data = toCY(data[r][1]);
+            var py_fit = toCY(predict(data[r][0]));
+            ctx.beginPath(); ctx.moveTo(px, py_data); ctx.lineTo(px, py_fit); ctx.stroke();
+          }
+          ctx.fillStyle = 'rgba(239,68,68,0.7)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
+          ctx.fillText('Residuals s_i = |y_i − ŷ(x_i)|', leftW / 2, H - 35);
+        }
+        // Prediction intervals for new test points (Stage 5)
+        if (stage >= 5) {
+          var q = quantile(scores(), 1 - alphaLevel);
+          var testX = [4.0, 5.0];
+          for (var t = 0; t < testX.length; t++) {
+            var tx = toCX(testX[t]);
+            var tpred = predict(testX[t]);
+            var tlow = tpred - q, thigh = tpred + q;
+            // Interval box
+            ctx.fillStyle = 'rgba(16,185,129,0.25)';
+            ctx.fillRect(tx - 8, toCY(thigh), 16, toCY(tlow) - toCY(thigh));
+            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2;
+            ctx.strokeRect(tx - 8, toCY(thigh), 16, toCY(tlow) - toCY(thigh));
+            // Prediction point
+            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(tx, toCY(tpred), 5, 0, 6.28); ctx.fill();
+          }
+          ctx.fillStyle = '#10b981'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
+          ctx.fillText('Test intervals [ŷ ± q_α]', leftW / 2, H - 20);
+        }
+        // Right half: histogram of scores + q_alpha
+        var histX = leftW + 30;
+        var histW = W - histX - 30;
+        var histY = 50, histH = H - 100;
+        ctx.strokeStyle = 'rgba(148,163,184,0.25)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(histX, histY + histH); ctx.lineTo(histX + histW, histY + histH); ctx.stroke();
+        ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '10px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('Score histogram', histX + histW / 2, histY - 8);
+        if (stage >= 3) {
+          var s = scores();
+          var maxS = Math.max.apply(null, s) * 1.1;
+          var numBins = 8;
+          var bins = new Array(numBins).fill(0);
+          for (var b = 0; b < s.length; b++) {
+            var bi = Math.min(numBins - 1, Math.floor(s[b] / maxS * numBins));
+            bins[bi]++;
+          }
+          var maxBin = Math.max.apply(null, bins);
+          var binW = histW / numBins;
+          for (var bb = 0; bb < numBins; bb++) {
+            var bh = bins[bb] / maxBin * histH;
+            ctx.fillStyle = 'rgba(245,158,11,0.7)';
+            ctx.fillRect(histX + bb * binW, histY + histH - bh, binW - 2, bh);
+          }
+        }
+        if (stage >= 4) {
+          var q = quantile(scores(), 1 - alphaLevel);
+          var qFrac = q / Math.max.apply(null, scores()) / 1.1;
+          var qx = histX + qFrac * histW;
+          ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.setLineDash([5, 3]);
+          ctx.beginPath(); ctx.moveTo(qx, histY); ctx.lineTo(qx, histY + histH); ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = '#10b981'; ctx.font = 'bold 10px ui-monospace'; ctx.textAlign = 'center';
+          ctx.fillText('q_α = ' + q.toFixed(3), qx, histY - 10);
+        }
+        // Stage indicator
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 10px ui-monospace'; ctx.textAlign = 'left';
+        var stages = ['(idle)', '1: scatter + line', '2: residuals s_i', '3: histogram', '4: q_α quantile', '5: intervals ✓'];
+        ctx.fillText('Stage ' + stage + '/' + maxStage + ' ' + (stages[stage] || ''), 50, 45);
+        // Coverage indicator
+        if (stage >= 5) {
+          var q = quantile(scores(), 1 - alphaLevel);
+          document.getElementById('loss-val').textContent = q.toFixed(3);
+          document.getElementById('loss-val').className = 'val good';
+          document.getElementById('loss-lbl').textContent = 'q_α';
+        } else {
+          document.getElementById('loss-val').textContent = ((1 - alphaLevel) * 100).toFixed(0) + '%';
+          document.getElementById('loss-val').className = 'val ok';
+          document.getElementById('loss-lbl').textContent = 'coverage';
+        }
+      }
+      function animate() {
+        stage = 0;
+        function step() {
+          if (stage > maxStage) {
+            isAnim = false; document.getElementById('btn-gd').disabled = false;
+            document.getElementById('phase-ind').textContent = 'coverage ✓';
+            document.getElementById('phase-ind').classList.remove('active');
+            return;
+          }
+          document.getElementById('phase-ind').textContent = 'stage ' + stage + '/' + maxStage;
+          render(); stage++; setTimeout(step, 700);
+        }
+        step();
+      }
+      function reset() {
+        stage = 0; alphaLevel = 0.1;
+        document.getElementById('b1-slider').value = 0.1;
+        document.getElementById('b1-val').textContent = '0.10';
+        render();
+      }
+      // Slider controls alpha (coverage level)
+      document.getElementById('b1-slider').min = '0.01';
+      document.getElementById('b1-slider').max = '0.5';
+      document.getElementById('b1-slider').step = '0.01';
+      document.getElementById('b1-slider').value = '0.1';
+      document.getElementById('b1-val').textContent = '0.10';
+      document.querySelector('label[for="b1-slider"], #b1-ctrl label').firstChild.textContent = 'α (1-coverage) ';
+      document.getElementById('b1-slider').oninput = function(e) {
+        alphaLevel = parseFloat(e.target.value);
+        document.getElementById('b1-val').textContent = alphaLevel.toFixed(2);
+        if (stage >= 4) render();
+      };
+
+
+      document.getElementById('btn-gd').addEventListener('click', function() {
+        if (isAnim) return; isAnim = true;
+        document.getElementById('btn-gd').disabled = true;
+        document.getElementById('phase-ind').textContent = 'animating...';
+        document.getElementById('phase-ind').classList.add('active');
+        if (typeof animate === 'function') animate();
+      });
+      document.getElementById('btn-reset').addEventListener('click', function() {
+        document.getElementById('phase-ind').textContent = 'idle';
+        document.getElementById('phase-ind').classList.remove('active');
+        if (typeof reset === 'function') reset(); else render();
+      });
+      if (typeof render === 'function') render();
+    </script>
+  </body>
+</html>

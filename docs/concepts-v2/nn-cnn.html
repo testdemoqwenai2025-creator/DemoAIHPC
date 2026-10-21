@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Convolutional Neural Network (CNN) — visual-first neural network architecture card. Animated diagram, math, code with Math→Code annotations, when-to-use deep thoughts." />
+    <title>Convolutional Neural Network (CNN) — Visual NN Card · AIHPC</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", sans-serif; min-height: 100vh; overflow-x: hidden; }
+      body::before { content:""; position:fixed; inset:0; background: radial-gradient(1000px 500px at 50% 0%, rgba(6,182,212,0.10), transparent 70%); pointer-events:none; z-index:0; }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; position: relative; z-index: 1; }
+      .head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+      .head .tag { font-size: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.4); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .head h1 { font-size: 24px; font-weight: 800; }
+      .back { font-size: 12px; color: var(--accent); text-decoration: none; margin-bottom: 12px; display: inline-block; }
+      .eq-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; background: rgba(11,15,26,0.85); border: 1px solid rgba(6,182,212,0.3); font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent); margin-bottom: 12px; }
+      .desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; max-width: 600px; }
+      .canvas-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+      canvas { display: block; width: 100%; height: auto; }
+      .loss-overlay { position: absolute; top: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; text-align: right; }
+      .loss-overlay .lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+      .loss-overlay .val { font-size: 28px; font-weight: 800; font-family: ui-monospace, monospace; color: var(--accent); }
+      .loss-overlay .val.bad { color: var(--danger); } .loss-overlay .val.ok { color: var(--warn); } .loss-overlay .val.good { color: var(--success); }
+      .eq-overlay { position: absolute; bottom: 12px; left: 12px; background: rgba(11,15,26,0.9); border: 1px solid rgba(6,182,212,0.3); border-radius: 6px; padding: 4px 12px; font-family: "Cambria Math", Georgia, serif; font-size: 13px; color: var(--accent); pointer-events: none; }
+      .phase-indicator { position: absolute; bottom: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 10px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .phase-indicator.active { color: var(--accent); border-color: rgba(6,182,212,0.4); }
+      .controls { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: flex-end; }
+      .ctrl { flex: 1; min-width: 180px; background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+      .ctrl label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; }
+      .ctrl .val { font-size: 14px; font-weight: 700; font-family: ui-monospace, monospace; color: var(--accent); }
+      .ctrl input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--border); outline: none; }
+      .ctrl input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid var(--bg); }
+      .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white; } .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); } .btn.ghost:hover { border-color: var(--accent); color: var(--text); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section h3 { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+      .code-section .eq-line { font-family: "Cambria Math", Georgia, serif; font-size: 14px; color: var(--accent); padding: 6px 10px; background: rgba(6,182,212,0.05); border-radius: 6px; border-left: 3px solid var(--accent); margin-bottom: 10px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .foot { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 24px; font-family: ui-monospace, monospace; }
+      .foot a { color: var(--accent); text-decoration: none; }
+      .deep-thoughts {
+        background: rgba(139,92,246,0.06);
+        border: 1px solid rgba(139,92,246,0.25);
+        border-radius: 10px;
+        padding: 14px 18px;
+        margin-top: 16px;
+      }
+      .deep-thoughts h3 {
+        font-size: 11px; font-weight: 700; color: var(--accent2);
+        text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;
+      }
+      .deep-thoughts .dt-row { margin: 8px 0; font-size: 13px; line-height: 1.55; color: var(--text); }
+      .deep-thoughts .dt-row .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
+      .deep-thoughts .dt-row .lbl.use { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .deep-thoughts .dt-row .lbl.avoid { background: rgba(239,68,68,0.15); color: #fca5a5; }
+      .deep-thoughts .dt-row .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+      .deep-thoughts .dt-row .text { color: var(--text-muted); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <a href="../index.html" class="back">← Home</a>
+      <div class="head">
+        <span class="tag">NN · Architecture</span>
+        <h1>Convolutional Neural Network (CNN)</h1>
+      </div>
+      <p class="desc">Sliding kernels over spatial input. <b>Exploits locality + translation invariance</b> — the workhorse for images since 2012.</p>
+      <div class="eq-badge">📐 y[i,j] = σ( Σ_k Σ_l W[k,l] · x[i+k, j+l] + b )</div>
+      <div class="canvas-wrap">
+        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <div class="loss-overlay"><div class="lbl" id="loss-lbl">state</div><div class="val" id="loss-val">0.0000</div></div>
+        <div class="eq-overlay">y[i,j] = σ( Σ_k Σ_l W[k,l] · x[i+k, j+l] + b )</div>
+        <div class="phase-indicator" id="phase-ind">idle</div>
+      </div>
+      <div class="controls">
+        <div class="ctrl" id="b1-ctrl"><label>Parameter <span class="val" id="b1-val">1.00</span></label><input type="range" id="b1-slider" min="0.1" max="3" step="0.05" value="1.0" /></div>
+        <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
+          <button class="btn primary" id="btn-gd">▶ Animate forward pass</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+        </div>
+      </div>
+      <div class="code-section">
+        <h3>💻 Math → Code — how symbols become variables</h3>
+        <div class="eq-line">y[i,j] = σ( Σ_k Σ_l W[k,l] · x[i+k, j+l] + b )</div>
+        <pre><span class="cm"># 2D convolution (no padding, stride 1):</span>
+<span class="cm"># y[i,j] = σ( Σ_{k=0}^{K-1} Σ_{l=0}^{L-1} W[k,l] · x[i+k, j+l] + b )</span>
+<span class="cm"># W → kernel (K, L) — shared across all spatial positions</span>
+<span class="cm"># σ → activation (ReLU standard)</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">conv2d</span>(x, kernel, bias=<span class="num">0.0</span>, activation=np.maximum):
+    <span class="cm"># x: (H, W) input feature map</span>
+    <span class="cm"># kernel: (K, L) convolutional kernel</span>
+    H, W = x.shape
+    K, L = kernel.shape
+    out_h, out_w = H - K + <span class="num">1</span>, W - L + <span class="num">1</span>
+    out = np.<span class="fn">zeros</span>((out_h, out_w))
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(out_h):
+        <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(out_w):
+            <span class="cm"># Element-wise multiply + sum + bias + activation</span>
+            out[i, j] = np.<span class="fn">sum</span>(x[i:i+K, j:j+L] * kernel) + bias
+    <span class="kw">return</span> np.<span class="fn">maximum</span>(<span class="num">0</span>, out)  <span class="cm"># ReLU activation</span>
+
+<span class="cm"># Edge-detection kernel (Sobel X)</span>
+sobel_x = np.<span class="fn">array</span>([[-<span class="num">1</span>, <span class="num">0</span>, <span class="num">1</span>], [-<span class="num">2</span>, <span class="num">0</span>, <span class="num">2</span>], [-<span class="num">1</span>, <span class="num">0</span>, <span class="num">1</span>]], dtype=<span class="fn">float</span>)
+image = np.random.<span class="fn">randn</span>(<span class="num">8</span>, <span class="num">8</span>)  <span class="cm"># 8x8 &#x27;image&#x27;</span>
+<span class="fn">print</span>(<span class="fn">conv2d</span>(image, sobel_x).shape)  <span class="cm"># (6, 6) — output smaller due to no padding</span></pre>
+      </div>
+      <div class="deep-thoughts">
+        <h3>🧠 Deep thoughts — when (and when not) to reach for this architecture</h3>
+        <div class="dt-row"><span class="lbl use">USE WHEN:</span><span class="text">images (RGB, satellite, medical, microscopy), 2D/3D grid data (audio spectrograms, seismic surveys, climate grids), video frames (treat time as channel dim or use 3D conv), point cloud data after voxelisation.</span></div>
+        <div class="dt-row"><span class="lbl avoid">AVOID WHEN:</span><span class="text">unordered set data (use PointNet or Transformer), 1D sequences with long-range dependencies (use RNN/Transformer — CNN context window is limited by kernel × depth), graph data (use GNN).</span></div>
+        <div class="dt-row"><span class="lbl why">WHY:</span><span class="text">CNNs exploit two key inductive biases — locality (nearby pixels are correlated) and translation invariance (a cat is a cat regardless of position). These biases let CNNs learn visual features with 100× fewer parameters than an equivalent MLP. For small datasets, CNNs still beat attention-based architectures because of these strong priors.</span></div>
+      </div>
+      <div class="foot">
+        Visual concept card v2
+      </div>
+    </div>
+    <script>
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      var W = canvas.width, H = canvas.height;
+      var param = 1.0;
+      var isAnim = false;
+      var MODE = 'cnn';
+
+      document.getElementById('b1-slider').addEventListener('input', function(e) {
+        param = parseFloat(e.target.value);
+        document.getElementById('b1-val').textContent = param.toFixed(2);
+        if (typeof render === 'function') render();
+      });
+
+
+      // ===== CNN: sliding kernel over 2D input =====
+      var inputSize = 8, kernelSize = 3;
+      var kernelX = 0, kernelY = 0;
+      var animStep = 0;
+      function makeInput() {
+        var arr = [];
+        for (var i = 0; i < inputSize; i++) {
+          var row = [];
+          for (var j = 0; j < inputSize; j++) row.push((Math.sin(i*0.7) + Math.cos(j*0.5)) * 0.5 + 0.5);
+          arr.push(row);
+        }
+        return arr;
+      }
+      var inputGrid = makeInput();
+      var sobelX = [[-1,0,1],[-2,0,2],[-1,0,1]];
+      function render() {
+        var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 12px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('CNN — 3×3 kernel sliding over 8×8 input', W/2, 30);
+        ctx.textAlign = 'left';
+        var cellSize = 22;
+        var gridStartX = 60, gridStartY = 60;
+        for (var i = 0; i < inputSize; i++) {
+          for (var j = 0; j < inputSize; j++) {
+            var v = inputGrid[i][j];
+            ctx.fillStyle = 'rgba(6,182,212,' + v + ')';
+            ctx.fillRect(gridStartX + j*cellSize, gridStartY + i*cellSize, cellSize-1, cellSize-1);
+          }
+        }
+        var outStartX = gridStartX + inputSize*cellSize + 60;
+        for (var oi = 0; oi < 6; oi++) {
+          for (var oj = 0; oj < 6; oj++) {
+            if (oi < kernelY || (oi === kernelY && oj < kernelX)) {
+              var conv = 0;
+              for (var ki = 0; ki < kernelSize; ki++) {
+                for (var kj = 0; kj < kernelSize; kj++) {
+                  conv += inputGrid[oi+ki][oj+kj] * sobelX[ki][kj];
+                }
+              }
+              conv = Math.max(0, conv);
+              ctx.fillStyle = 'rgba(16,185,129,' + conv + ')';
+              ctx.fillRect(outStartX + oj*cellSize, gridStartY + oi*cellSize, cellSize-1, cellSize-1);
+            } else {
+              ctx.strokeStyle = 'rgba(148,163,184,0.15)'; ctx.lineWidth = 0.5;
+              ctx.strokeRect(outStartX + oj*cellSize, gridStartY + oi*cellSize, cellSize-1, cellSize-1);
+            }
+          }
+        }
+        ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2.5;
+        ctx.strokeRect(gridStartX + kernelX*cellSize, gridStartY + kernelY*cellSize, kernelSize*cellSize, kernelSize*cellSize);
+        ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '10px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('Input 8×8', gridStartX + inputSize*cellSize/2, gridStartY + inputSize*cellSize + 20);
+        ctx.fillText('Feature map 6×6', outStartX + 6*cellSize/2, gridStartY + 6*cellSize + 20);
+        ctx.fillText('Kernel (Sobel X)', gridStartX + inputSize*cellSize/2, gridStartY - 15);
+        ctx.textAlign = 'left';
+        document.getElementById('loss-val').textContent = kernelY * 6 + kernelX + '/36';
+        document.getElementById('loss-val').className = 'val good';
+      }
+      function animate() {
+        kernelX = 0; kernelY = 0; animStep = 0;
+        function step() {
+          if (kernelY >= 6) {
+            isAnim = false; document.getElementById('btn-gd').disabled = false;
+            document.getElementById('phase-ind').textContent = 'done ✓';
+            document.getElementById('phase-ind').classList.remove('active');
+            return;
+          }
+          document.getElementById('phase-ind').textContent = 'kernel (' + kernelX + ',' + kernelY + ')';
+          render();
+          kernelX++;
+          if (kernelX >= 6) { kernelX = 0; kernelY++; }
+          setTimeout(step, 80);
+        }
+        step();
+      }
+      function reset() { kernelX = 0; kernelY = 0; render(); }
+
+
+      document.getElementById('btn-gd').addEventListener('click', function() {
+        if (isAnim) return; isAnim = true;
+        document.getElementById('btn-gd').disabled = true;
+        document.getElementById('phase-ind').textContent = 'animating...';
+        document.getElementById('phase-ind').classList.add('active');
+        if (typeof animate === 'function') animate();
+      });
+      document.getElementById('btn-reset').addEventListener('click', function() {
+        document.getElementById('phase-ind').textContent = 'idle';
+        document.getElementById('phase-ind').classList.remove('active');
+        if (typeof reset === 'function') reset(); else render();
+      });
+      if (typeof render === 'function') render();
+    </script>
+  </body>
+</html>
