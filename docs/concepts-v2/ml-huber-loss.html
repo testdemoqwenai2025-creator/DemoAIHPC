@@ -67,7 +67,10 @@
         <div class="ctrl" id="b0-ctrl"><label>Intercept β₀ <span class="val" id="b0-val">0.00</span></label><input type="range" id="b0-slider" min="-5" max="10" step="0.01" value="0.0" /></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Run gradient descent</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -104,6 +107,7 @@ y_pred = np.<span class="fn">array</span>([<span class="num">1.5</span>, <span c
       var W = canvas.width, H = canvas.height;
       var slope = 0.5, intercept = 0.0;
       var isAnim = false;
+      var stepCount = 0, maxSteps = 80;  // exposed for Step button
 
       // Synthetic data: y = 1.0*x + 0.5 + noise
       var data = [
@@ -116,8 +120,7 @@ y_pred = np.<span class="fn">array</span>([<span class="num">1.5</span>, <span c
       function lossNow() {
         var yT = data.map(function(d){ return d[1]; });
         var yP = data.map(function(d){ return yPred(d[0]); });
-        function lossFn(yTrue, yPred) { var s=0, delta=1.0; for (var i=0;i<yTrue.length;i++){ var d=Math.abs(yTrue[i]-yPred[i]); s += d<=delta ? 0.5*d*d : delta*(d-0.5*delta); } return s/yTrue.length; }
-        return lossFn(yT, yP);
+        return (function(yT, yP) { var s=0, delta=1.0; for (var i=0;i<yT.length;i++){ var d=Math.abs(yT[i]-yP[i]); s += d<=delta ? 0.5*d*d : delta*(d-0.5*delta); } return s/yT.length; })(yT, yP);
       }
 
       function toCX(x) { return 60 + (x+4)/8 * (W-120); }
@@ -152,38 +155,63 @@ y_pred = np.<span class="fn">array</span>([<span class="num">1.5</span>, <span c
         document.getElementById('loss-val').className = 'val ' + (L < 0.5 ? 'good' : (L < 2 ? 'ok' : 'bad'));
       }
 
+      // Single-step function — callable from both Run + Step buttons
+      function gdStep() {
+        if (stepCount >= maxSteps) {
+          isAnim = false; document.getElementById('btn-gd').disabled = false;
+          document.getElementById('phase-ind').textContent = 'converged ✓'; document.getElementById('phase-ind').classList.remove('active');
+          return;
+        }
+        // dL/dslope = (2/n) * sum((y_pred - y_true) * x)
+        // dL/dintercept = (2/n) * sum(y_pred - y_true)
+        var n = data.length, ds = 0, di = 0;
+        for (var i = 0; i < n; i++) {
+          var err = yPred(data[i][0]) - data[i][1];
+          ds += err * data[i][0];
+          di += err;
+        }
+        ds = (2/n) * ds; di = (2/n) * di;
+        var lr = 0.02;
+        slope -= lr * ds; intercept -= lr * di;
+        document.getElementById('b1-slider').value = slope; document.getElementById('b1-val').textContent = slope.toFixed(2);
+        document.getElementById('b0-slider').value = intercept; document.getElementById('b0-val').textContent = intercept.toFixed(2);
+        document.getElementById('phase-ind').textContent = 'step '+(stepCount+1)+'/'+maxSteps;
+        render(); stepCount++;
+      }
+
       document.getElementById('b1-slider').addEventListener('input', function(e) { slope = parseFloat(e.target.value); document.getElementById('b1-val').textContent = slope.toFixed(2); render(); });
       document.getElementById('b0-slider').addEventListener('input', function(e) { intercept = parseFloat(e.target.value); document.getElementById('b0-val').textContent = intercept.toFixed(2); render(); });
 
       document.getElementById('btn-gd').addEventListener('click', function() {
         if (isAnim) return; isAnim = true; document.getElementById('btn-gd').disabled = true;
         document.getElementById('phase-ind').textContent = 'running'; document.getElementById('phase-ind').classList.add('active');
-        var step = 0, maxSteps = 80, lr = 0.02;
-        function gdStep() {
-          if (step >= maxSteps) {
+        stepCount = 0;
+        function loop() {
+          if (stepCount >= maxSteps) {
             isAnim = false; document.getElementById('btn-gd').disabled = false;
             document.getElementById('phase-ind').textContent = 'converged ✓'; document.getElementById('phase-ind').classList.remove('active');
             return;
           }
-          // dL/dslope = (2/n) * sum((y_pred - y_true) * x)
-          // dL/dintercept = (2/n) * sum(y_pred - y_true)
-          var n = data.length, ds = 0, di = 0;
-          for (var i = 0; i < n; i++) {
-            var err = yPred(data[i][0]) - data[i][1];
-            ds += err * data[i][0];
-            di += err;
-          }
-          ds = (2/n) * ds; di = (2/n) * di;
-          slope -= lr * ds; intercept -= lr * di;
-          document.getElementById('b1-slider').value = slope; document.getElementById('b1-val').textContent = slope.toFixed(2);
-          document.getElementById('b0-slider').value = intercept; document.getElementById('b0-val').textContent = intercept.toFixed(2);
-          document.getElementById('phase-ind').textContent = 'step '+(step+1)+'/'+maxSteps;
-          render(); step++; requestAnimationFrame(gdStep);
+          gdStep();
+          requestAnimationFrame(loop);
         }
+        loop();
+      });
+
+      // Phase 38.3: Step button — single-step mode (one GD step per click)
+      document.getElementById('btn-step').addEventListener('click', function() {
+        if (isAnim) return;  // don't allow Step while Run is animating
+        if (stepCount >= maxSteps) {
+          document.getElementById('phase-ind').textContent = 'converged ✓';
+          return;
+        }
+        document.getElementById('phase-ind').textContent = 'step '+stepCount+'/'+maxSteps+' (manual)';
+        document.getElementById('phase-ind').classList.add('active');
         gdStep();
       });
+
       document.getElementById('btn-reset').addEventListener('click', function() {
-        slope = 0.5; intercept = 0.0;
+        slope = 0.5; intercept = 0.0; stepCount = 0;
         document.getElementById('b1-slider').value = 0.5; document.getElementById('b1-val').textContent = '0.50';
         document.getElementById('b0-slider').value = 0.0; document.getElementById('b0-val').textContent = '0.00';
         document.getElementById('phase-ind').textContent = 'idle'; document.getElementById('phase-ind').classList.remove('active');

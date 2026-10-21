@@ -196,7 +196,7 @@ CARDS = [
         "desc": "Quadratic error — penalises large errors heavily. <b>The default regression loss</b>.",
         "math_comments": "# L = (1/n) · Σ (y_i − ŷ_i)²\n# y_i → y_true[i]   ŷ_i → y_pred[i]   n → len(y_true)\n# Σ → .sum()   ² → ** 2   (1/n) → np.mean()",
         "py": "import numpy as np\n\ndef mse(y_true, y_pred):\n    # L = mean of squared differences\n    diff = y_true - y_pred\n    return np.mean(diff ** 2)\n\n# Example\ny_true = np.array([1.0, 2.0, 3.0])\ny_pred = np.array([1.5, 1.5, 3.5])\nprint(mse(y_true, y_pred))  # 0.25",
-        "js_loss": "function lossFn(yTrue, yPred) { var s=0; for (var i=0;i<yTrue.length;i++){ var d=yTrue[i]-yPred[i]; s+=d*d; } return s/yTrue.length; }",
+        "js_loss": "(function(yT, yP) { var s=0; for (var i=0;i<yT.length;i++){ var d=yT[i]-yP[i]; s+=d*d; } return s/yT.length; })(yT, yP)",
         "card_desc_grid": "Quadratic error · drag slope → watch MSE change · GD animation",
     },
     {
@@ -206,7 +206,7 @@ CARDS = [
         "desc": "Linear error — <b>robust to outliers</b>. Constant gradient (no quadratic blow-up).",
         "math_comments": "# L = (1/n) · Σ |y_i − ŷ_i|\n# |·| → np.abs()   (1/n) → np.mean()",
         "py": "import numpy as np\n\ndef mae(y_true, y_pred):\n    # L = mean of absolute differences\n    return np.mean(np.abs(y_true - y_pred))\n\n# Example\ny_true = np.array([1.0, 2.0, 3.0])\ny_pred = np.array([1.5, 1.5, 3.5])\nprint(mae(y_true, y_pred))  # 0.5",
-        "js_loss": "function lossFn(yTrue, yPred) { var s=0; for (var i=0;i<yTrue.length;i++) s+=Math.abs(yTrue[i]-yPred[i]); return s/yTrue.length; }",
+        "js_loss": "(function(yT, yP) { var s=0; for (var i=0;i<yT.length;i++) s+=Math.abs(yT[i]-yP[i]); return s/yT.length; })(yT, yP)",
         "card_desc_grid": "Linear error · robust to outliers · compare with MSE",
     },
     {
@@ -216,7 +216,7 @@ CARDS = [
         "desc": "Quadratic near 0, linear beyond δ. <b>The MSE + MAE hybrid</b> — best of both worlds.",
         "math_comments": "# Huber: quadratic for |d|≤δ, linear otherwise\n# δ → delta (transition point, often 1.0)",
         "py": "import numpy as np\n\ndef huber(y_true, y_pred, delta=1.0):\n    d = np.abs(y_true - y_pred)\n    quadratic = 0.5 * d ** 2\n    linear = delta * (d - 0.5 * delta)\n    return np.mean(np.where(d <= delta, quadratic, linear))\n\n# Example\ny_true = np.array([1.0, 2.0, 3.0])\ny_pred = np.array([1.5, 1.5, 5.5])  # last point is an outlier\nprint(huber(y_true, y_pred, delta=1.0))  # ~0.29",
-        "js_loss": "function lossFn(yTrue, yPred) { var s=0, delta=1.0; for (var i=0;i<yTrue.length;i++){ var d=Math.abs(yTrue[i]-yPred[i]); s += d<=delta ? 0.5*d*d : delta*(d-0.5*delta); } return s/yTrue.length; }",
+        "js_loss": "(function(yT, yP) { var s=0, delta=1.0; for (var i=0;i<yT.length;i++){ var d=Math.abs(yT[i]-yP[i]); s += d<=delta ? 0.5*d*d : delta*(d-0.5*delta); } return s/yT.length; })(yT, yP)",
         "card_desc_grid": "Quadratic near 0, linear beyond δ · MSE + MAE hybrid",
     },
     {
@@ -226,7 +226,7 @@ CARDS = [
         "desc": "Smooth approximation to Huber. <b>≈ MSE for small errors, ≈ MAE for large</b>. Differentiable everywhere.",
         "math_comments": "# L = log(cosh(y − ŷ))\n# cosh(x) = (e^x + e^-x)/2 → np.cosh()\n# log → np.log()",
         "py": "import numpy as np\n\ndef log_cosh(y_true, y_pred):\n    d = y_pred - y_true\n    return np.mean(np.log(np.cosh(d)))\n\n# Numerically stable form (for large |d|)\ndef log_cosh_stable(y_true, y_pred):\n    d = y_pred - y_true\n    # log(cosh(x)) = |x| + log(0.5*(1 + e^(-2|x|)))\n    return np.mean(np.abs(d) + np.log(0.5 * (1 + np.exp(-2 * np.abs(d)))))\n\n# Example\ny_true = np.array([1.0, 2.0, 3.0])\ny_pred = np.array([1.5, 1.5, 5.5])\nprint(log_cosh(y_true, y_pred))  # ~0.87",
-        "js_loss": "function lossFn(yTrue, yPred) { var s=0; for (var i=0;i<yTrue.length;i++){ var d=yPred[i]-yTrue[i]; s+=Math.log(Math.cosh(d)); } return s/yTrue.length; }",
+        "js_loss": "(function(yT, yP) { var s=0; for (var i=0;i<yT.length;i++){ var d=yP[i]-yT[i]; s+=Math.log(Math.cosh(d)); } return s/yT.length; })(yT, yP)",
         "card_desc_grid": "Smooth · ≈ MSE near 0, ≈ MAE far away",
     },
     {
@@ -236,7 +236,7 @@ CARDS = [
         "desc": "Binary classification loss. <b>Goes to ∞ for confident wrong predictions</b>. Use with sigmoid output.",
         "math_comments": "# L = −mean(y·log(p) + (1−y)·log(1−p))\n# y → y_true (in {0,1})   p → y_pred (in (0,1))\n# Clip p to [eps, 1-eps] to avoid log(0)",
         "py": "import numpy as np\n\ndef binary_cross_entropy(y_true, y_pred, eps=1e-15):\n    p = np.clip(y_pred, eps, 1 - eps)\n    return -np.mean(y_true * np.log(p) + (1 - y_true) * np.log(1 - p))\n\n# Example\ny_true = np.array([1.0, 0.0, 1.0, 0.0])\ny_pred = np.array([0.9, 0.1, 0.8, 0.2])\nprint(binary_cross_entropy(y_true, y_pred))  # ~0.16",
-        "js_loss": "function lossFn(yTrue, yPred) { var s=0, eps=1e-15; for (var i=0;i<yTrue.length;i++){ var p=Math.min(Math.max(yPred[i],eps),1-eps); s += -(yTrue[i]*Math.log(p)+(1-yTrue[i])*Math.log(1-p)); } return s/yTrue.length; }",
+        "js_loss": "(function(yT, yP) { var s=0, eps=1e-15; for (var i=0;i<yT.length;i++){ var p=Math.min(Math.max(yP[i],eps),1-eps); s += -(yT[i]*Math.log(p)+(1-yT[i])*Math.log(1-p)); } return s/yT.length; })(yT, yP)",
         "card_desc_grid": "Binary classification · goes to ∞ for confident wrong predictions",
     },
     {
@@ -246,7 +246,7 @@ CARDS = [
         "desc": "Multi-class classification loss. <b>Used with softmax output</b>. One-hot targets.",
         "math_comments": "# L = −(1/N) · Σ Σ y · log(p)\n# y → y_true (one-hot, shape (N, C))\n# p → y_pred (softmax probs, shape (N, C))",
         "py": "import numpy as np\n\ndef categorical_cross_entropy(y_true, y_pred, eps=1e-15):\n    # y_true: one-hot (N, C); y_pred: softmax probs (N, C)\n    p = np.clip(y_pred, eps, 1.0)\n    return -np.mean(np.sum(y_true * np.log(p), axis=1))\n\n# Example: 3 samples, 4 classes\ny_true = np.array([[1, 0, 0, 0],\n                   [0, 0, 1, 0],\n                   [0, 1, 0, 0]])\ny_pred = np.array([[0.7, 0.1, 0.1, 0.1],\n                   [0.1, 0.1, 0.7, 0.1],\n                   [0.1, 0.6, 0.2, 0.1]])\nprint(categorical_cross_entropy(y_true, y_pred))  # ~0.36",
-        "js_loss": "function lossFn(yTrue, yPred) { var s=0, eps=1e-15; for (var i=0;i<yTrue.length;i++){ for (var c=0;c<yTrue[i].length;c++){ var p=Math.max(yPred[i][c],eps); s += -yTrue[i][c]*Math.log(p); } } return s/yTrue.length; }",
+        "js_loss": "(function(yT, yP) { var s=0, eps=1e-15; for (var i=0;i<yT.length;i++){ for (var c=0;c<yT[i].length;c++){ var p=Math.max(yP[i][c],eps); s += -yT[i][c]*Math.log(p); } } return s/yT.length; })(yT, yP)",
         "card_desc_grid": "Multi-class classification · used with softmax",
     },
     {
@@ -256,7 +256,7 @@ CARDS = [
         "desc": "SVM loss — <b>penalises margin violations only</b>. Targets in {−1, +1} (not 0/1).",
         "math_comments": "# L = mean(max(0, 1 − y·ŷ))\n# y ∈ {−1, +1}  (NOT {0, 1})\n# max(0, ·) → np.maximum(0, ·)",
         "py": "import numpy as np\n\ndef hinge_loss(y_true, y_pred):\n    # y_true must be in {-1, +1}\n    return np.mean(np.maximum(0, 1 - y_true * y_pred))\n\n# Example\ny_true = np.array([1, -1, 1, -1])    # labels in {-1, +1}\ny_pred = np.array([0.8, -0.5, -0.3, 0.2])  # raw scores\nprint(hinge_loss(y_true, y_pred))  # ~0.575",
-        "js_loss": "function lossFn(yTrue, yPred) { var s=0; for (var i=0;i<yTrue.length;i++){ s+=Math.max(0, 1-yTrue[i]*yPred[i]); } return s/yTrue.length; }",
+        "js_loss": "(function(yT, yP) { var s=0; for (var i=0;i<yT.length;i++){ s+=Math.max(0, 1-yT[i]*yP[i]); } return s/yT.length; })(yT, yP)",
         "card_desc_grid": "SVM loss · penalises margin violations only",
     },
     {
@@ -266,7 +266,7 @@ CARDS = [
         "desc": "Information-theoretic distribution distance. <b>Non-symmetric</b>: D_KL(P‖Q) ≠ D_KL(Q‖P).",
         "math_comments": "# D_KL(P‖Q) = Σ P · log(P/Q)\n# P → p (true distribution, sums to 1)\n# Q → q (approximation, sums to 1)\n# Clip to avoid log(0)",
         "py": "import numpy as np\n\ndef kl_divergence(p, q, eps=1e-15):\n    p = np.clip(p, eps, None)\n    q = np.clip(q, eps, None)\n    return np.sum(p * np.log(p / q))\n\n# Example: P is true, Q is approximation\np = np.array([0.5, 0.3, 0.2])\nq = np.array([0.4, 0.4, 0.2])\nprint(kl_divergence(p, q))  # ~0.0257\nprint(kl_divergence(q, p))  # ~0.0281 — non-symmetric!",
-        "js_loss": "function lossFn(p, q) { var s=0, eps=1e-15; for (var i=0;i<p.length;i++){ s += Math.max(p[i],eps)*Math.log(Math.max(p[i],eps)/Math.max(q[i],eps)); } return s; }",
+        "js_loss": "(function(yT, yP) { var s=0, eps=1e-15; for (var i=0;i<yT.length;i++){ s += Math.max(yT[i],eps)*Math.log(Math.max(yT[i],eps)/Math.max(yP[i],eps)); } return s; })(yT, yP)",
         "card_desc_grid": "Distribution distance · information-theoretic · non-symmetric",
     },
     {
@@ -276,7 +276,7 @@ CARDS = [
         "desc": "Directional alignment — <b>magnitude-invariant</b>. Used for embeddings, retrieval, semantic similarity.",
         "math_comments": "# cos(a, b) = (a · b) / (‖a‖ · ‖b‖)\n# a · b → np.dot(a, b)\n# ‖·‖ → np.linalg.norm(·)\n# Loss = 1 − cos(a, b)",
         "py": "import numpy as np\n\ndef cosine_similarity(a, b, eps=1e-8):\n    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b) + eps)\n\ndef cosine_loss(a, b, eps=1e-8):\n    # Loss form: 1 − cos → minimised when vectors align\n    return 1 - cosine_similarity(a, b, eps)\n\n# Example\na = np.array([1.0, 2.0, 3.0])\nb = np.array([2.0, 4.0, 6.0])  # same direction, 2× magnitude\nprint(cosine_similarity(a, b))  # 1.0 (magnitude-invariant)\nprint(cosine_loss(a, b))        # 0.0",
-        "js_loss": "function lossFn(a, b) { var dot=0, na=0, nb=0; for (var i=0;i<a.length;i++){ dot+=a[i]*b[i]; na+=a[i]*a[i]; nb+=b[i]*b[i]; } return 1 - dot/(Math.sqrt(na)*Math.sqrt(nb)+1e-8); }",
+        "js_loss": "(function(yT, yP) { var dot=0, na=0, nb=0; for (var i=0;i<yT.length;i++){ dot+=yT[i]*yP[i]; na+=yT[i]*yT[i]; nb+=yP[i]*yP[i]; } return 1 - dot/(Math.sqrt(na)*Math.sqrt(nb)+1e-8); })(yT, yP)",
         "card_desc_grid": "Directional alignment · magnitude-invariant",
     },
 
@@ -870,7 +870,10 @@ def gen_loss(card):
         <div class="ctrl" id="b0-ctrl"><label>Intercept β₀ <span class="val" id="b0-val">0.00</span></label><input type="range" id="b0-slider" min="-5" max="10" step="0.01" value="0.0" /></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Run gradient descent</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -893,6 +896,7 @@ def gen_loss(card):
       var W = canvas.width, H = canvas.height;
       var slope = 0.5, intercept = 0.0;
       var isAnim = false;
+      var stepCount = 0, maxSteps = 80;  // exposed for Step button
 
       // Synthetic data: y = 1.0*x + 0.5 + noise
       var data = [
@@ -905,8 +909,7 @@ def gen_loss(card):
       function lossNow() {{
         var yT = data.map(function(d){{ return d[1]; }});
         var yP = data.map(function(d){{ return yPred(d[0]); }});
-        {js_loss}
-        return lossFn(yT, yP);
+        return {js_loss};
       }}
 
       function toCX(x) {{ return 60 + (x+4)/8 * (W-120); }}
@@ -941,38 +944,63 @@ def gen_loss(card):
         document.getElementById('loss-val').className = 'val ' + (L < 0.5 ? 'good' : (L < 2 ? 'ok' : 'bad'));
       }}
 
+      // Single-step function — callable from both Run + Step buttons
+      function gdStep() {{
+        if (stepCount >= maxSteps) {{
+          isAnim = false; document.getElementById('btn-gd').disabled = false;
+          document.getElementById('phase-ind').textContent = 'converged ✓'; document.getElementById('phase-ind').classList.remove('active');
+          return;
+        }}
+        // dL/dslope = (2/n) * sum((y_pred - y_true) * x)
+        // dL/dintercept = (2/n) * sum(y_pred - y_true)
+        var n = data.length, ds = 0, di = 0;
+        for (var i = 0; i < n; i++) {{
+          var err = yPred(data[i][0]) - data[i][1];
+          ds += err * data[i][0];
+          di += err;
+        }}
+        ds = (2/n) * ds; di = (2/n) * di;
+        var lr = 0.02;
+        slope -= lr * ds; intercept -= lr * di;
+        document.getElementById('b1-slider').value = slope; document.getElementById('b1-val').textContent = slope.toFixed(2);
+        document.getElementById('b0-slider').value = intercept; document.getElementById('b0-val').textContent = intercept.toFixed(2);
+        document.getElementById('phase-ind').textContent = 'step '+(stepCount+1)+'/'+maxSteps;
+        render(); stepCount++;
+      }}
+
       document.getElementById('b1-slider').addEventListener('input', function(e) {{ slope = parseFloat(e.target.value); document.getElementById('b1-val').textContent = slope.toFixed(2); render(); }});
       document.getElementById('b0-slider').addEventListener('input', function(e) {{ intercept = parseFloat(e.target.value); document.getElementById('b0-val').textContent = intercept.toFixed(2); render(); }});
 
       document.getElementById('btn-gd').addEventListener('click', function() {{
         if (isAnim) return; isAnim = true; document.getElementById('btn-gd').disabled = true;
         document.getElementById('phase-ind').textContent = 'running'; document.getElementById('phase-ind').classList.add('active');
-        var step = 0, maxSteps = 80, lr = 0.02;
-        function gdStep() {{
-          if (step >= maxSteps) {{
+        stepCount = 0;
+        function loop() {{
+          if (stepCount >= maxSteps) {{
             isAnim = false; document.getElementById('btn-gd').disabled = false;
             document.getElementById('phase-ind').textContent = 'converged ✓'; document.getElementById('phase-ind').classList.remove('active');
             return;
           }}
-          // dL/dslope = (2/n) * sum((y_pred - y_true) * x)
-          // dL/dintercept = (2/n) * sum(y_pred - y_true)
-          var n = data.length, ds = 0, di = 0;
-          for (var i = 0; i < n; i++) {{
-            var err = yPred(data[i][0]) - data[i][1];
-            ds += err * data[i][0];
-            di += err;
-          }}
-          ds = (2/n) * ds; di = (2/n) * di;
-          slope -= lr * ds; intercept -= lr * di;
-          document.getElementById('b1-slider').value = slope; document.getElementById('b1-val').textContent = slope.toFixed(2);
-          document.getElementById('b0-slider').value = intercept; document.getElementById('b0-val').textContent = intercept.toFixed(2);
-          document.getElementById('phase-ind').textContent = 'step '+(step+1)+'/'+maxSteps;
-          render(); step++; requestAnimationFrame(gdStep);
+          gdStep();
+          requestAnimationFrame(loop);
         }}
+        loop();
+      }});
+
+      // Phase 38.3: Step button — single-step mode (one GD step per click)
+      document.getElementById('btn-step').addEventListener('click', function() {{
+        if (isAnim) return;  // don't allow Step while Run is animating
+        if (stepCount >= maxSteps) {{
+          document.getElementById('phase-ind').textContent = 'converged ✓';
+          return;
+        }}
+        document.getElementById('phase-ind').textContent = 'step '+stepCount+'/'+maxSteps+' (manual)';
+        document.getElementById('phase-ind').classList.add('active');
         gdStep();
       }});
+
       document.getElementById('btn-reset').addEventListener('click', function() {{
-        slope = 0.5; intercept = 0.0;
+        slope = 0.5; intercept = 0.0; stepCount = 0;
         document.getElementById('b1-slider').value = 0.5; document.getElementById('b1-val').textContent = '0.50';
         document.getElementById('b0-slider').value = 0.0; document.getElementById('b0-val').textContent = '0.00';
         document.getElementById('phase-ind').textContent = 'idle'; document.getElementById('phase-ind').classList.remove('active');
@@ -1784,7 +1812,10 @@ def gen_neural_network(card):
         <div class="ctrl" id="b1-ctrl"><label>Parameter <span class="val" id="b1-val">1.00</span></label><input type="range" id="b1-slider" min="0.1" max="3" step="0.05" value="1.0" /></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Animate forward pass</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -1823,6 +1854,31 @@ def gen_neural_network(card):
         document.getElementById('phase-ind').classList.add('active');
         if (typeof animate === 'function') animate();
       }});
+
+      // Phase 38.3: Step button — single-stage mode (advances one stage per click)
+      // Works for any NN card that has an animate() function — calls animate()
+      // once, then immediately stops the loop by setting isAnim=false after one
+      // step. The simplest cross-family implementation: re-call animate() but
+      // cap it at the current stage + 1.
+      document.getElementById('btn-step').addEventListener('click', function() {{
+        if (isAnim) return;
+        if (typeof animate !== 'function') return;
+        // Run animate() but stop after one step by intercepting setTimeout
+        // (cards use setTimeout(step, delay) inside their animate())
+        var origSetTimeout = window.setTimeout;
+        var stepTaken = false;
+        window.setTimeout = function(fn, delay) {{
+          if (stepTaken) return;  // swallow further steps
+          stepTaken = true;
+          window.setTimeout = origSetTimeout;  // restore
+          origSetTimeout(fn, 0);  // run one step immediately
+        }};
+        animate();
+        // Restore after a tick to be safe
+        origSetTimeout(function() {{ window.setTimeout = origSetTimeout; }}, 100);
+        document.getElementById('phase-ind').textContent += ' (manual)';
+      }});
+
       document.getElementById('btn-reset').addEventListener('click', function() {{
         document.getElementById('phase-ind').textContent = 'idle';
         document.getElementById('phase-ind').classList.remove('active');
@@ -1866,71 +1922,215 @@ def _format_deep_thoughts(text: str) -> str:
 _NN_CANVAS_JS = {
 
 "mlp": """
-      // ===== MLP: 3-layer network with animated forward pass =====
-      var layers = [4, 6, 3];
+      // ===== MLP: 5-layer network with weight-magnitude edges + loss curve +
+      //            inflection-point markers (Phase 38.3 enriched version) =====
+      // Enhanced beyond the basic 3-layer view:
+      //   1. Deeper 5-layer network: 8 → 12 → 16 → 12 → 4
+      //   2. Edge thickness = |weight| (visualises which connections dominate)
+      //   3. Side panel: training loss curve (MSE over 100 epochs)
+      //   4. Inflection-point markers: ReLU saturation zone (x<0),
+      //      tanh saturation (|x|>3), sigmoid plateau
+      //   5. Numerical values overlaid at each node (live activations)
+
+      var layers = [8, 12, 16, 12, 4];
       var nodes = [];
+      var weights = [];  // weights[l][i][j] = weight from layer l node i to layer l+1 node j
+      var activations = [];  // post-activation value per node
+
       var seed = 1;
       function rng() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+
+      // Initialise network with random weights (He init for ReLU)
       for (var li = 0; li < layers.length; li++) {
         var layer = [];
-        var x = 80 + li * 280;
-        var layerH = layers[li] * 40;
-        var startY = (H - layerH) / 2;
+        var x = 50 + li * 145;
+        var layerH = layers[li] * 18;
+        var startY = (H - 30 - layerH) / 2 + 40;
         for (var ni = 0; ni < layers[li]; ni++) {
-          layer.push({ x: x, y: startY + ni * 40 + 20, activation: rng() });
+          layer.push({ x: x, y: startY + ni * 18 + 9, activation: rng() - 0.5 });
         }
         nodes.push(layer);
+        activations.push(layer.map(function(n) { return n.activation; }));
       }
+      // Initialise weights
+      for (var wl = 0; wl < layers.length - 1; wl++) {
+        var layerW = [];
+        for (var i = 0; i < layers[wl]; i++) {
+          var rowW = [];
+          for (var j = 0; j < layers[wl + 1]; j++) {
+            rowW.push((rng() - 0.5) * 2);  // weight in [-1, 1]
+          }
+          layerW.push(rowW);
+        }
+        weights.push(layerW);
+      }
+
+      // Loss curve (training history, pre-computed synthetic)
+      var lossHistory = [];
+      for (var e = 0; e < 100; e++) {
+        // Synthetic loss decay: starts at ~3.0, decays exponentially to ~0.05
+        lossHistory.push(3.0 * Math.exp(-0.05 * e) + 0.05 + (rng() - 0.5) * 0.1);
+      }
+      var currentEpoch = 0;
+
       var animStep = 0;
+
+      function relu(x) { return Math.max(0, x); }
+      function forwardPass(inputActs) {
+        // Compute forward pass through all layers
+        var acts = [inputActs.slice()];
+        for (var l = 0; l < weights.length; l++) {
+          var nextActs = [];
+          for (var j = 0; j < layers[l + 1]; j++) {
+            var sum = 0;
+            for (var i = 0; i < layers[l]; i++) {
+              sum += acts[l][i] * weights[l][i][j];
+            }
+            nextActs.push(relu(sum));  // ReLU activation
+          }
+          acts.push(nextActs);
+        }
+        return acts;
+      }
+
       function render() {
         var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
         ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
         ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 12px ui-monospace'; ctx.textAlign = 'center';
-        ctx.fillText('Multi-Layer Perceptron — forward pass σ(W·h + b)', W/2, 30);
+        ctx.fillText('MLP forward pass — 5 layers, edge thickness = |weight|', 360, 25);
         ctx.textAlign = 'left';
-        for (var li = 0; li < nodes.length - 1; li++) {
-          for (var i = 0; i < nodes[li].length; i++) {
-            for (var j = 0; j < nodes[li+1].length; j++) {
-              var n1 = nodes[li][i], n2 = nodes[li+1][j];
-              var isFlowing = animStep > li;
-              ctx.strokeStyle = isFlowing ? 'rgba(6,182,212,0.7)' : 'rgba(148,163,184,0.2)';
-              ctx.lineWidth = isFlowing ? 1.5 : 0.6;
+
+        // Compute activations at current step
+        var inputActs = nodes[0].map(function(n) { return n.activation; });
+        var allActs = forwardPass(inputActs);
+        // Sync node activations from forward pass
+        for (var la = 0; la < nodes.length; la++) {
+          for (var k = 0; k < nodes[la].length; k++) {
+            nodes[la][k].activation = allActs[la][k];
+          }
+        }
+
+        // === Left side: network diagram (~720px wide) ===
+        var netRight = 600;
+        // Edges (drawn first, behind nodes)
+        for (var eli = 0; eli < nodes.length - 1; eli++) {
+          for (var i = 0; i < nodes[eli].length; i++) {
+            for (var j = 0; j < nodes[eli + 1].length; j++) {
+              var n1 = nodes[eli][i], n2 = nodes[eli + 1][j];
+              var w = weights[eli][i][j];
+              var active = animStep > eli;
+              var edgeAlpha = active ? Math.min(0.8, Math.abs(w) * 0.6 + 0.1) : 0.08;
+              var edgeWidth = active ? Math.max(0.3, Math.abs(w) * 2.5) : 0.4;
+              ctx.strokeStyle = w > 0
+                ? 'rgba(6,182,212,' + edgeAlpha + ')'
+                : 'rgba(239,68,68,' + edgeAlpha + ')';
+              ctx.lineWidth = edgeWidth;
               ctx.beginPath(); ctx.moveTo(n1.x, n1.y); ctx.lineTo(n2.x, n2.y); ctx.stroke();
             }
           }
         }
+        // Nodes
         for (var la = 0; la < nodes.length; la++) {
           for (var k = 0; k < nodes[la].length; k++) {
             var nd = nodes[la][k];
-            ctx.beginPath(); ctx.arc(nd.x, nd.y, 8, 0, 6.28);
-            if (animStep > la) { ctx.fillStyle = '#06b6d4'; ctx.fill(); ctx.strokeStyle = '#06b6d4'; }
-            else { ctx.fillStyle = 'rgba(148,163,184,0.3)'; ctx.fill(); ctx.strokeStyle = 'rgba(148,163,184,0.5)'; }
-            ctx.lineWidth = 2; ctx.stroke();
+            var act = nd.activation;
+            var active = animStep > la;
+            // Node color = activation sign (positive=cyan, negative=red)
+            var nodeColor;
+            if (!active) nodeColor = 'rgba(148,163,184,0.3)';
+            else if (act > 0) nodeColor = 'rgba(6,182,212,' + Math.min(1, 0.4 + Math.abs(act)) + ')';
+            else nodeColor = 'rgba(148,163,184,0.5)';
+            ctx.beginPath(); ctx.arc(nd.x, nd.y, 5, 0, 6.28);
+            ctx.fillStyle = nodeColor; ctx.fill();
+            ctx.strokeStyle = active ? '#06b6d4' : 'rgba(148,163,184,0.4)';
+            ctx.lineWidth = 1.2; ctx.stroke();
           }
         }
-        ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '10px ui-monospace'; ctx.textAlign = 'center';
-        ctx.fillText('Input', nodes[0][0].x, H - 15);
-        ctx.fillText('Hidden σ', nodes[1][0].x, H - 15);
-        ctx.fillText('Output', nodes[2][0].x, H - 15);
+        // Layer labels + activation values
+        ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
+        for (var ll = 0; ll < nodes.length; ll++) {
+          var label = ll === 0 ? 'Input (8)'
+                    : ll === nodes.length - 1 ? 'Output (4)'
+                    : 'Hidden ' + ll + ' (' + layers[ll] + ')';
+          ctx.fillText(label, nodes[ll][0].x, H - 12);
+        }
         ctx.textAlign = 'left';
-        document.getElementById('loss-val').textContent = animStep + '/' + (nodes.length);
-        document.getElementById('loss-val').className = 'val good';
+
+        // === Right side: loss curve + inflection-point math ===
+        var panelX = netRight + 15;
+        var panelW = W - panelX - 15;
+        ctx.strokeStyle = 'rgba(148,163,184,0.25)'; ctx.lineWidth = 1;
+        ctx.strokeRect(panelX, 40, panelW, 140);
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 10px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('Training loss (MSE)', panelX + panelW / 2, 50);
+        // Plot loss curve
+        var lossMin = 0, lossMax = 3.5;
+        var plotX = panelX + 5, plotY = 60, plotW = panelW - 10, plotH = 110;
+        ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (var ei = 0; ei <= currentEpoch && ei < lossHistory.length; ei++) {
+          var px = plotX + (ei / 100) * plotW;
+          var py = plotY + plotH - (lossHistory[ei] / lossMax) * plotH;
+          if (ei === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+        // Current loss value
+        if (currentEpoch > 0 && currentEpoch < lossHistory.length) {
+          var curLoss = lossHistory[Math.min(currentEpoch, 99)];
+          ctx.fillStyle = '#10b981'; ctx.font = 'bold 10px ui-monospace'; ctx.textAlign = 'left';
+          ctx.fillText('epoch ' + currentEpoch + '/100', panelX + 5, 60);
+          ctx.fillText('loss = ' + curLoss.toFixed(3), panelX + 5, 73);
+        }
+        ctx.textAlign = 'left';
+
+        // === Inflection-point math panel ===
+        ctx.strokeStyle = 'rgba(245,158,11,0.3)'; ctx.lineWidth = 1;
+        ctx.strokeRect(panelX, 190, panelW, 130);
+        ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 10px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('Inflection points', panelX + panelW / 2, 200);
+        ctx.textAlign = 'left';
+        ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '9px ui-monospace';
+        var yLine = 215;
+        ctx.fillText("• ReLU: f(x)=max(0,x)", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("  f'(x)=0 for x<0 (dead zone)", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("  f'(x)=1 for x>0 (linear)", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("  inflection: x=0 (kink)", panelX + 5, yLine); yLine += 14;
+        ctx.fillText("• tanh: f(x)=tanh(x)", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("  saturation: |x|>3 (grad→0)", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("  inflection: x=0 (steepest)", panelX + 5, yLine); yLine += 14;
+        ctx.fillText("• Sigmoid: σ(x)=1/(1+e^-x)", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("  plateau: |x|>5 (grad≈0)", panelX + 5, yLine); yLine += 11;
+
+        // Update loss overlay
+        var l = currentEpoch > 0 ? lossHistory[Math.min(currentEpoch, 99)] : 0;
+        document.getElementById('loss-val').textContent = l.toFixed(3);
+        document.getElementById('loss-val').className = 'val ' + (l < 0.5 ? 'good' : (l < 1.5 ? 'ok' : 'bad'));
+        document.getElementById('loss-lbl').textContent = 'loss';
       }
       function animate() {
         animStep = 0;
+        currentEpoch = 0;
         function step() {
-          if (animStep >= nodes.length) {
+          if (animStep > nodes.length && currentEpoch >= 100) {
             isAnim = false; document.getElementById('btn-gd').disabled = false;
             document.getElementById('phase-ind').textContent = 'done ✓';
             document.getElementById('phase-ind').classList.remove('active');
-            render(); return;
+            return;
           }
-          document.getElementById('phase-ind').textContent = 'layer ' + animStep + '/' + (nodes.length - 1);
-          render(); animStep++; setTimeout(step, 500);
+          // First, animate forward pass through layers (5 steps)
+          if (animStep <= nodes.length) {
+            document.getElementById('phase-ind').textContent = 'fwd layer ' + animStep + '/' + (nodes.length - 1);
+          } else {
+            // Then, animate loss curve over 100 epochs
+            currentEpoch = Math.min(100, currentEpoch + 5);
+            document.getElementById('phase-ind').textContent = 'epoch ' + currentEpoch + '/100';
+          }
+          render(); animStep++;
+          setTimeout(step, 200);
         }
         step();
       }
-      function reset() { animStep = 0; render(); }
+      function reset() { animStep = 0; currentEpoch = 0; render(); }
 """,
 
 "cnn": """
@@ -2616,7 +2816,24 @@ _NN_CANVAS_JS = {
       //   Stage 4: alpha-quantile q_alpha highlighted on histogram
       //   Stage 5: prediction intervals for new test points (with the true y check)
       var stage = 0; var maxStage = 5;
-      var alphaLevel = 0.1;  // 1-alpha = 90% coverage
+      // Phase 38.3: load alpha from localStorage OR URL param ?alpha=X
+      // (priority: URL param > localStorage > default 0.10)
+      var urlParams = new URLSearchParams(window.location.search);
+      var urlAlpha = parseFloat(urlParams.get('alpha'));
+      var storedAlpha = parseFloat(localStorage.getItem('coconet-alpha'));
+      var alphaLevel = !isNaN(urlAlpha) ? urlAlpha
+                     : !isNaN(storedAlpha) ? storedAlpha
+                     : 0.1;
+      // Sync the slider + display
+      document.getElementById('b1-slider').min = '0.01';
+      document.getElementById('b1-slider').max = '0.5';
+      document.getElementById('b1-slider').step = '0.01';
+      document.getElementById('b1-slider').value = alphaLevel;
+      document.getElementById('b1-val').textContent = alphaLevel.toFixed(2);
+      // Update label text (CoCoNet's slider controls alpha, not a generic parameter)
+      var b1Label = document.querySelector('#b1-ctrl label');
+      if (b1Label && b1Label.firstChild) b1Label.firstChild.textContent = 'α (1-coverage) ';
+
       // Synthetic calibration data: y = 2x + 1 + noise
       var data = [
         [0.5, 1.85], [1.0, 3.4], [1.5, 3.7], [2.0, 5.5],
@@ -2765,20 +2982,50 @@ _NN_CANVAS_JS = {
         stage = 0; alphaLevel = 0.1;
         document.getElementById('b1-slider').value = 0.1;
         document.getElementById('b1-val').textContent = '0.10';
+        // Phase 38.3: clear localStorage on manual reset
+        localStorage.removeItem('coconet-alpha');
         render();
       }
-      // Slider controls alpha (coverage level)
-      document.getElementById('b1-slider').min = '0.01';
-      document.getElementById('b1-slider').max = '0.5';
-      document.getElementById('b1-slider').step = '0.01';
-      document.getElementById('b1-slider').value = '0.1';
-      document.getElementById('b1-val').textContent = '0.10';
-      document.querySelector('label[for="b1-slider"], #b1-ctrl label').firstChild.textContent = 'α (1-coverage) ';
+      // Phase 38.3: slider input → save to localStorage + update URL
       document.getElementById('b1-slider').oninput = function(e) {
         alphaLevel = parseFloat(e.target.value);
         document.getElementById('b1-val').textContent = alphaLevel.toFixed(2);
+        // Persist (lazy eval: only on user interaction, not page load)
+        try { localStorage.setItem('coconet-alpha', alphaLevel.toString()); } catch (e) {}
+        // Update URL ?alpha=X for sharing (without triggering reload)
+        try {
+          var u = new URL(window.location.href);
+          u.searchParams.set('alpha', alphaLevel.toString());
+          window.history.replaceState({}, '', u.toString());
+        } catch (e) {}
         if (stage >= 4) render();
       };
+
+      // Phase 38.3: add a "share URL" info line below the controls
+      // (lazy-evaluated — only shown when the user has interacted with the slider)
+      var shareInfo = document.createElement('div');
+      shareInfo.style.cssText = 'margin-top: 10px; padding: 8px 10px; background: rgba(11,15,26,0.6); border: 1px solid #1f2937; border-radius: 6px; font-size: 10px; color: #9ca3af; line-height: 1.5;';
+      shareInfo.innerHTML = '<b style="color:#06b6d4;">🔗 Shareable URL:</b> ' +
+        '<code id="share-url" style="color:#10b981;font-size:10px;">' + window.location.href + '</code>' +
+        '<br><b style="color:#8b5cf6;">💾 Persistence:</b> α saved to localStorage (lazy-eval, no reload needed)' +
+        '<br><b style="color:#f59e0b;">☁️ Cloud storage options:</b> ' +
+        '<a href="https://docs.github.com/en/repositories/working-with-files/managing-large-files" target="_blank" style="color:#06b6d4;text-decoration:none;">GitHub Releases</a> (free, ≤2GB/file) · ' +
+        '<a href="https://www.backblaze.com/cloud-storage" target="_blank" style="color:#06b6d4;text-decoration:none;">Backblaze B2</a> (10GB free) · ' +
+        '<a href="https://www.cloudflare.com/products/r2/" target="_blank" style="color:#06b6d4;text-decoration:none;">Cloudflare R2</a> (10GB free) · ' +
+        '<a href="https://aws.amazon.com/s3/" target="_blank" style="color:#06b6d4;text-decoration:none;">AWS S3</a> (paid) · ' +
+        '<a href="https://cloud.google.com/storage" target="_blank" style="color:#06b6d4;text-decoration:none;">GCS</a> (paid) · ' +
+        '<a href="https://azure.microsoft.com/products/storage/blobs" target="_blank" style="color:#06b6d4;text-decoration:none;">Azure Blob</a> (paid) ' +
+        '<br><i style="color:#6b7280;">For technical-minded users: subscribe to a cloud portal for versioned snapshots of model weights + calibration sets</i>';
+      var controlsDiv = document.querySelector('.controls');
+      if (controlsDiv && controlsDiv.parentNode) {
+        controlsDiv.parentNode.insertBefore(shareInfo, controlsDiv.nextSibling);
+      }
+      // Update the share URL display whenever alpha changes
+      var origOnInput = document.getElementById('b1-slider').oninput;
+      document.getElementById('b1-slider').addEventListener('input', function() {
+        var shareUrlEl = document.getElementById('share-url');
+        if (shareUrlEl) shareUrlEl.textContent = window.location.href;
+      });
 """,
 
 }

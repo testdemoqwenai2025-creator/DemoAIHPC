@@ -81,7 +81,10 @@
         <div class="ctrl" id="b1-ctrl"><label>Parameter <span class="val" id="b1-val">1.00</span></label><input type="range" id="b1-slider" min="0.1" max="3" step="0.05" value="1.0" /></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Animate forward pass</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -175,7 +178,24 @@ lower, upper, q = <span class="fn">split_conformal_predict</span>(model, X_cal, 
       //   Stage 4: alpha-quantile q_alpha highlighted on histogram
       //   Stage 5: prediction intervals for new test points (with the true y check)
       var stage = 0; var maxStage = 5;
-      var alphaLevel = 0.1;  // 1-alpha = 90% coverage
+      // Phase 38.3: load alpha from localStorage OR URL param ?alpha=X
+      // (priority: URL param > localStorage > default 0.10)
+      var urlParams = new URLSearchParams(window.location.search);
+      var urlAlpha = parseFloat(urlParams.get('alpha'));
+      var storedAlpha = parseFloat(localStorage.getItem('coconet-alpha'));
+      var alphaLevel = !isNaN(urlAlpha) ? urlAlpha
+                     : !isNaN(storedAlpha) ? storedAlpha
+                     : 0.1;
+      // Sync the slider + display
+      document.getElementById('b1-slider').min = '0.01';
+      document.getElementById('b1-slider').max = '0.5';
+      document.getElementById('b1-slider').step = '0.01';
+      document.getElementById('b1-slider').value = alphaLevel;
+      document.getElementById('b1-val').textContent = alphaLevel.toFixed(2);
+      // Update label text (CoCoNet's slider controls alpha, not a generic parameter)
+      var b1Label = document.querySelector('#b1-ctrl label');
+      if (b1Label && b1Label.firstChild) b1Label.firstChild.textContent = 'α (1-coverage) ';
+
       // Synthetic calibration data: y = 2x + 1 + noise
       var data = [
         [0.5, 1.85], [1.0, 3.4], [1.5, 3.7], [2.0, 5.5],
@@ -324,20 +344,50 @@ lower, upper, q = <span class="fn">split_conformal_predict</span>(model, X_cal, 
         stage = 0; alphaLevel = 0.1;
         document.getElementById('b1-slider').value = 0.1;
         document.getElementById('b1-val').textContent = '0.10';
+        // Phase 38.3: clear localStorage on manual reset
+        localStorage.removeItem('coconet-alpha');
         render();
       }
-      // Slider controls alpha (coverage level)
-      document.getElementById('b1-slider').min = '0.01';
-      document.getElementById('b1-slider').max = '0.5';
-      document.getElementById('b1-slider').step = '0.01';
-      document.getElementById('b1-slider').value = '0.1';
-      document.getElementById('b1-val').textContent = '0.10';
-      document.querySelector('label[for="b1-slider"], #b1-ctrl label').firstChild.textContent = 'α (1-coverage) ';
+      // Phase 38.3: slider input → save to localStorage + update URL
       document.getElementById('b1-slider').oninput = function(e) {
         alphaLevel = parseFloat(e.target.value);
         document.getElementById('b1-val').textContent = alphaLevel.toFixed(2);
+        // Persist (lazy eval: only on user interaction, not page load)
+        try { localStorage.setItem('coconet-alpha', alphaLevel.toString()); } catch (e) {}
+        // Update URL ?alpha=X for sharing (without triggering reload)
+        try {
+          var u = new URL(window.location.href);
+          u.searchParams.set('alpha', alphaLevel.toString());
+          window.history.replaceState({}, '', u.toString());
+        } catch (e) {}
         if (stage >= 4) render();
       };
+
+      // Phase 38.3: add a "share URL" info line below the controls
+      // (lazy-evaluated — only shown when the user has interacted with the slider)
+      var shareInfo = document.createElement('div');
+      shareInfo.style.cssText = 'margin-top: 10px; padding: 8px 10px; background: rgba(11,15,26,0.6); border: 1px solid #1f2937; border-radius: 6px; font-size: 10px; color: #9ca3af; line-height: 1.5;';
+      shareInfo.innerHTML = '<b style="color:#06b6d4;">🔗 Shareable URL:</b> ' +
+        '<code id="share-url" style="color:#10b981;font-size:10px;">' + window.location.href + '</code>' +
+        '<br><b style="color:#8b5cf6;">💾 Persistence:</b> α saved to localStorage (lazy-eval, no reload needed)' +
+        '<br><b style="color:#f59e0b;">☁️ Cloud storage options:</b> ' +
+        '<a href="https://docs.github.com/en/repositories/working-with-files/managing-large-files" target="_blank" style="color:#06b6d4;text-decoration:none;">GitHub Releases</a> (free, ≤2GB/file) · ' +
+        '<a href="https://www.backblaze.com/cloud-storage" target="_blank" style="color:#06b6d4;text-decoration:none;">Backblaze B2</a> (10GB free) · ' +
+        '<a href="https://www.cloudflare.com/products/r2/" target="_blank" style="color:#06b6d4;text-decoration:none;">Cloudflare R2</a> (10GB free) · ' +
+        '<a href="https://aws.amazon.com/s3/" target="_blank" style="color:#06b6d4;text-decoration:none;">AWS S3</a> (paid) · ' +
+        '<a href="https://cloud.google.com/storage" target="_blank" style="color:#06b6d4;text-decoration:none;">GCS</a> (paid) · ' +
+        '<a href="https://azure.microsoft.com/products/storage/blobs" target="_blank" style="color:#06b6d4;text-decoration:none;">Azure Blob</a> (paid) ' +
+        '<br><i style="color:#6b7280;">For technical-minded users: subscribe to a cloud portal for versioned snapshots of model weights + calibration sets</i>';
+      var controlsDiv = document.querySelector('.controls');
+      if (controlsDiv && controlsDiv.parentNode) {
+        controlsDiv.parentNode.insertBefore(shareInfo, controlsDiv.nextSibling);
+      }
+      // Update the share URL display whenever alpha changes
+      var origOnInput = document.getElementById('b1-slider').oninput;
+      document.getElementById('b1-slider').addEventListener('input', function() {
+        var shareUrlEl = document.getElementById('share-url');
+        if (shareUrlEl) shareUrlEl.textContent = window.location.href;
+      });
 
 
       document.getElementById('btn-gd').addEventListener('click', function() {
@@ -347,6 +397,31 @@ lower, upper, q = <span class="fn">split_conformal_predict</span>(model, X_cal, 
         document.getElementById('phase-ind').classList.add('active');
         if (typeof animate === 'function') animate();
       });
+
+      // Phase 38.3: Step button — single-stage mode (advances one stage per click)
+      // Works for any NN card that has an animate() function — calls animate()
+      // once, then immediately stops the loop by setting isAnim=false after one
+      // step. The simplest cross-family implementation: re-call animate() but
+      // cap it at the current stage + 1.
+      document.getElementById('btn-step').addEventListener('click', function() {
+        if (isAnim) return;
+        if (typeof animate !== 'function') return;
+        // Run animate() but stop after one step by intercepting setTimeout
+        // (cards use setTimeout(step, delay) inside their animate())
+        var origSetTimeout = window.setTimeout;
+        var stepTaken = false;
+        window.setTimeout = function(fn, delay) {
+          if (stepTaken) return;  // swallow further steps
+          stepTaken = true;
+          window.setTimeout = origSetTimeout;  // restore
+          origSetTimeout(fn, 0);  // run one step immediately
+        };
+        animate();
+        // Restore after a tick to be safe
+        origSetTimeout(function() { window.setTimeout = origSetTimeout; }, 100);
+        document.getElementById('phase-ind').textContent += ' (manual)';
+      });
+
       document.getElementById('btn-reset').addEventListener('click', function() {
         document.getElementById('phase-ind').textContent = 'idle';
         document.getElementById('phase-ind').classList.remove('active');

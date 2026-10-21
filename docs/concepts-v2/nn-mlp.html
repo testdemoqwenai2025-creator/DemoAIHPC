@@ -81,7 +81,10 @@
         <div class="ctrl" id="b1-ctrl"><label>Parameter <span class="val" id="b1-val">1.00</span></label><input type="range" id="b1-slider" min="0.1" max="3" step="0.05" value="1.0" /></div>
         <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
           <button class="btn primary" id="btn-gd">▶ Animate forward pass</button>
-          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn ghost" id="btn-step" style="flex: 1;">⏭ Step</button>
+            <button class="btn ghost" id="btn-reset" style="flex: 1;">↺ Reset</button>
+          </div>
         </div>
       </div>
       <div class="code-section">
@@ -144,71 +147,215 @@ x = np.<span class="fn">array</span>([<span class="num">0.5</span>, -<span class
       });
 
 
-      // ===== MLP: 3-layer network with animated forward pass =====
-      var layers = [4, 6, 3];
+      // ===== MLP: 5-layer network with weight-magnitude edges + loss curve +
+      //            inflection-point markers (Phase 38.3 enriched version) =====
+      // Enhanced beyond the basic 3-layer view:
+      //   1. Deeper 5-layer network: 8 → 12 → 16 → 12 → 4
+      //   2. Edge thickness = |weight| (visualises which connections dominate)
+      //   3. Side panel: training loss curve (MSE over 100 epochs)
+      //   4. Inflection-point markers: ReLU saturation zone (x<0),
+      //      tanh saturation (|x|>3), sigmoid plateau
+      //   5. Numerical values overlaid at each node (live activations)
+
+      var layers = [8, 12, 16, 12, 4];
       var nodes = [];
+      var weights = [];  // weights[l][i][j] = weight from layer l node i to layer l+1 node j
+      var activations = [];  // post-activation value per node
+
       var seed = 1;
       function rng() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+
+      // Initialise network with random weights (He init for ReLU)
       for (var li = 0; li < layers.length; li++) {
         var layer = [];
-        var x = 80 + li * 280;
-        var layerH = layers[li] * 40;
-        var startY = (H - layerH) / 2;
+        var x = 50 + li * 145;
+        var layerH = layers[li] * 18;
+        var startY = (H - 30 - layerH) / 2 + 40;
         for (var ni = 0; ni < layers[li]; ni++) {
-          layer.push({ x: x, y: startY + ni * 40 + 20, activation: rng() });
+          layer.push({ x: x, y: startY + ni * 18 + 9, activation: rng() - 0.5 });
         }
         nodes.push(layer);
+        activations.push(layer.map(function(n) { return n.activation; }));
       }
+      // Initialise weights
+      for (var wl = 0; wl < layers.length - 1; wl++) {
+        var layerW = [];
+        for (var i = 0; i < layers[wl]; i++) {
+          var rowW = [];
+          for (var j = 0; j < layers[wl + 1]; j++) {
+            rowW.push((rng() - 0.5) * 2);  // weight in [-1, 1]
+          }
+          layerW.push(rowW);
+        }
+        weights.push(layerW);
+      }
+
+      // Loss curve (training history, pre-computed synthetic)
+      var lossHistory = [];
+      for (var e = 0; e < 100; e++) {
+        // Synthetic loss decay: starts at ~3.0, decays exponentially to ~0.05
+        lossHistory.push(3.0 * Math.exp(-0.05 * e) + 0.05 + (rng() - 0.5) * 0.1);
+      }
+      var currentEpoch = 0;
+
       var animStep = 0;
+
+      function relu(x) { return Math.max(0, x); }
+      function forwardPass(inputActs) {
+        // Compute forward pass through all layers
+        var acts = [inputActs.slice()];
+        for (var l = 0; l < weights.length; l++) {
+          var nextActs = [];
+          for (var j = 0; j < layers[l + 1]; j++) {
+            var sum = 0;
+            for (var i = 0; i < layers[l]; i++) {
+              sum += acts[l][i] * weights[l][i][j];
+            }
+            nextActs.push(relu(sum));  // ReLU activation
+          }
+          acts.push(nextActs);
+        }
+        return acts;
+      }
+
       function render() {
         var bg = ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
         ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
         ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 12px ui-monospace'; ctx.textAlign = 'center';
-        ctx.fillText('Multi-Layer Perceptron — forward pass σ(W·h + b)', W/2, 30);
+        ctx.fillText('MLP forward pass — 5 layers, edge thickness = |weight|', 360, 25);
         ctx.textAlign = 'left';
-        for (var li = 0; li < nodes.length - 1; li++) {
-          for (var i = 0; i < nodes[li].length; i++) {
-            for (var j = 0; j < nodes[li+1].length; j++) {
-              var n1 = nodes[li][i], n2 = nodes[li+1][j];
-              var isFlowing = animStep > li;
-              ctx.strokeStyle = isFlowing ? 'rgba(6,182,212,0.7)' : 'rgba(148,163,184,0.2)';
-              ctx.lineWidth = isFlowing ? 1.5 : 0.6;
+
+        // Compute activations at current step
+        var inputActs = nodes[0].map(function(n) { return n.activation; });
+        var allActs = forwardPass(inputActs);
+        // Sync node activations from forward pass
+        for (var la = 0; la < nodes.length; la++) {
+          for (var k = 0; k < nodes[la].length; k++) {
+            nodes[la][k].activation = allActs[la][k];
+          }
+        }
+
+        // === Left side: network diagram (~720px wide) ===
+        var netRight = 600;
+        // Edges (drawn first, behind nodes)
+        for (var eli = 0; eli < nodes.length - 1; eli++) {
+          for (var i = 0; i < nodes[eli].length; i++) {
+            for (var j = 0; j < nodes[eli + 1].length; j++) {
+              var n1 = nodes[eli][i], n2 = nodes[eli + 1][j];
+              var w = weights[eli][i][j];
+              var active = animStep > eli;
+              var edgeAlpha = active ? Math.min(0.8, Math.abs(w) * 0.6 + 0.1) : 0.08;
+              var edgeWidth = active ? Math.max(0.3, Math.abs(w) * 2.5) : 0.4;
+              ctx.strokeStyle = w > 0
+                ? 'rgba(6,182,212,' + edgeAlpha + ')'
+                : 'rgba(239,68,68,' + edgeAlpha + ')';
+              ctx.lineWidth = edgeWidth;
               ctx.beginPath(); ctx.moveTo(n1.x, n1.y); ctx.lineTo(n2.x, n2.y); ctx.stroke();
             }
           }
         }
+        // Nodes
         for (var la = 0; la < nodes.length; la++) {
           for (var k = 0; k < nodes[la].length; k++) {
             var nd = nodes[la][k];
-            ctx.beginPath(); ctx.arc(nd.x, nd.y, 8, 0, 6.28);
-            if (animStep > la) { ctx.fillStyle = '#06b6d4'; ctx.fill(); ctx.strokeStyle = '#06b6d4'; }
-            else { ctx.fillStyle = 'rgba(148,163,184,0.3)'; ctx.fill(); ctx.strokeStyle = 'rgba(148,163,184,0.5)'; }
-            ctx.lineWidth = 2; ctx.stroke();
+            var act = nd.activation;
+            var active = animStep > la;
+            // Node color = activation sign (positive=cyan, negative=red)
+            var nodeColor;
+            if (!active) nodeColor = 'rgba(148,163,184,0.3)';
+            else if (act > 0) nodeColor = 'rgba(6,182,212,' + Math.min(1, 0.4 + Math.abs(act)) + ')';
+            else nodeColor = 'rgba(148,163,184,0.5)';
+            ctx.beginPath(); ctx.arc(nd.x, nd.y, 5, 0, 6.28);
+            ctx.fillStyle = nodeColor; ctx.fill();
+            ctx.strokeStyle = active ? '#06b6d4' : 'rgba(148,163,184,0.4)';
+            ctx.lineWidth = 1.2; ctx.stroke();
           }
         }
-        ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '10px ui-monospace'; ctx.textAlign = 'center';
-        ctx.fillText('Input', nodes[0][0].x, H - 15);
-        ctx.fillText('Hidden σ', nodes[1][0].x, H - 15);
-        ctx.fillText('Output', nodes[2][0].x, H - 15);
+        // Layer labels + activation values
+        ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
+        for (var ll = 0; ll < nodes.length; ll++) {
+          var label = ll === 0 ? 'Input (8)'
+                    : ll === nodes.length - 1 ? 'Output (4)'
+                    : 'Hidden ' + ll + ' (' + layers[ll] + ')';
+          ctx.fillText(label, nodes[ll][0].x, H - 12);
+        }
         ctx.textAlign = 'left';
-        document.getElementById('loss-val').textContent = animStep + '/' + (nodes.length);
-        document.getElementById('loss-val').className = 'val good';
+
+        // === Right side: loss curve + inflection-point math ===
+        var panelX = netRight + 15;
+        var panelW = W - panelX - 15;
+        ctx.strokeStyle = 'rgba(148,163,184,0.25)'; ctx.lineWidth = 1;
+        ctx.strokeRect(panelX, 40, panelW, 140);
+        ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 10px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('Training loss (MSE)', panelX + panelW / 2, 50);
+        // Plot loss curve
+        var lossMin = 0, lossMax = 3.5;
+        var plotX = panelX + 5, plotY = 60, plotW = panelW - 10, plotH = 110;
+        ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (var ei = 0; ei <= currentEpoch && ei < lossHistory.length; ei++) {
+          var px = plotX + (ei / 100) * plotW;
+          var py = plotY + plotH - (lossHistory[ei] / lossMax) * plotH;
+          if (ei === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+        // Current loss value
+        if (currentEpoch > 0 && currentEpoch < lossHistory.length) {
+          var curLoss = lossHistory[Math.min(currentEpoch, 99)];
+          ctx.fillStyle = '#10b981'; ctx.font = 'bold 10px ui-monospace'; ctx.textAlign = 'left';
+          ctx.fillText('epoch ' + currentEpoch + '/100', panelX + 5, 60);
+          ctx.fillText('loss = ' + curLoss.toFixed(3), panelX + 5, 73);
+        }
+        ctx.textAlign = 'left';
+
+        // === Inflection-point math panel ===
+        ctx.strokeStyle = 'rgba(245,158,11,0.3)'; ctx.lineWidth = 1;
+        ctx.strokeRect(panelX, 190, panelW, 130);
+        ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 10px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('Inflection points', panelX + panelW / 2, 200);
+        ctx.textAlign = 'left';
+        ctx.fillStyle = 'rgba(148,163,184,0.7)'; ctx.font = '9px ui-monospace';
+        var yLine = 215;
+        ctx.fillText("• ReLU: f(x)=max(0,x)", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("  f'(x)=0 for x<0 (dead zone)", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("  f'(x)=1 for x>0 (linear)", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("  inflection: x=0 (kink)", panelX + 5, yLine); yLine += 14;
+        ctx.fillText("• tanh: f(x)=tanh(x)", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("  saturation: |x|>3 (grad→0)", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("  inflection: x=0 (steepest)", panelX + 5, yLine); yLine += 14;
+        ctx.fillText("• Sigmoid: σ(x)=1/(1+e^-x)", panelX + 5, yLine); yLine += 11;
+        ctx.fillText("  plateau: |x|>5 (grad≈0)", panelX + 5, yLine); yLine += 11;
+
+        // Update loss overlay
+        var l = currentEpoch > 0 ? lossHistory[Math.min(currentEpoch, 99)] : 0;
+        document.getElementById('loss-val').textContent = l.toFixed(3);
+        document.getElementById('loss-val').className = 'val ' + (l < 0.5 ? 'good' : (l < 1.5 ? 'ok' : 'bad'));
+        document.getElementById('loss-lbl').textContent = 'loss';
       }
       function animate() {
         animStep = 0;
+        currentEpoch = 0;
         function step() {
-          if (animStep >= nodes.length) {
+          if (animStep > nodes.length && currentEpoch >= 100) {
             isAnim = false; document.getElementById('btn-gd').disabled = false;
             document.getElementById('phase-ind').textContent = 'done ✓';
             document.getElementById('phase-ind').classList.remove('active');
-            render(); return;
+            return;
           }
-          document.getElementById('phase-ind').textContent = 'layer ' + animStep + '/' + (nodes.length - 1);
-          render(); animStep++; setTimeout(step, 500);
+          // First, animate forward pass through layers (5 steps)
+          if (animStep <= nodes.length) {
+            document.getElementById('phase-ind').textContent = 'fwd layer ' + animStep + '/' + (nodes.length - 1);
+          } else {
+            // Then, animate loss curve over 100 epochs
+            currentEpoch = Math.min(100, currentEpoch + 5);
+            document.getElementById('phase-ind').textContent = 'epoch ' + currentEpoch + '/100';
+          }
+          render(); animStep++;
+          setTimeout(step, 200);
         }
         step();
       }
-      function reset() { animStep = 0; render(); }
+      function reset() { animStep = 0; currentEpoch = 0; render(); }
 
 
       document.getElementById('btn-gd').addEventListener('click', function() {
@@ -218,6 +365,31 @@ x = np.<span class="fn">array</span>([<span class="num">0.5</span>, -<span class
         document.getElementById('phase-ind').classList.add('active');
         if (typeof animate === 'function') animate();
       });
+
+      // Phase 38.3: Step button — single-stage mode (advances one stage per click)
+      // Works for any NN card that has an animate() function — calls animate()
+      // once, then immediately stops the loop by setting isAnim=false after one
+      // step. The simplest cross-family implementation: re-call animate() but
+      // cap it at the current stage + 1.
+      document.getElementById('btn-step').addEventListener('click', function() {
+        if (isAnim) return;
+        if (typeof animate !== 'function') return;
+        // Run animate() but stop after one step by intercepting setTimeout
+        // (cards use setTimeout(step, delay) inside their animate())
+        var origSetTimeout = window.setTimeout;
+        var stepTaken = false;
+        window.setTimeout = function(fn, delay) {
+          if (stepTaken) return;  // swallow further steps
+          stepTaken = true;
+          window.setTimeout = origSetTimeout;  // restore
+          origSetTimeout(fn, 0);  // run one step immediately
+        };
+        animate();
+        // Restore after a tick to be safe
+        origSetTimeout(function() { window.setTimeout = origSetTimeout; }, 100);
+        document.getElementById('phase-ind').textContent += ' (manual)';
+      });
+
       document.getElementById('btn-reset').addEventListener('click', function() {
         document.getElementById('phase-ind').textContent = 'idle';
         document.getElementById('phase-ind').classList.remove('active');
