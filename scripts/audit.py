@@ -197,6 +197,7 @@ def check_ribbon(html_files):
         os.path.join(DOCS, "scgpt.html"),  # Phase 38.4 scGPT paper page
         os.path.join(DOCS, "geneformer.html"),  # Phase 38.4 Geneformer paper page
         os.path.join(DOCS, "alphafold3.html"),  # Phase 38.4 AlphaFold 3 paper page
+        os.path.join(DOCS, "claude-toxin.html"),  # Phase 38.5 Claude toxin binder page
     }
     # Phase 38 (NN architecture cards + CoCoNet paper card): auto-include
     # ALL files in concepts-v2/ so the audit picks up new cards automatically.
