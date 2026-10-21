@@ -199,7 +199,7 @@
       </script>
 
       
-      <!-- Phase 39.6: Interactive wave visualiser (v2-concept-card-style) -->
+      <!-- Phase 40: Clean wave visualiser with dimensionality dropdown -->
       <div style="background: rgba(18,24,38,0.7); border: 1px solid rgba(6,182,212,0.3); border-radius: 12px; padding: 16px; margin-top: 20px;">
         <h3 style="color: #06b6d4; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px;">🌊 Interactive Wave Visualiser</h3>
         <div style="position: relative; background: rgba(11,15,26,0.6); border: 1px solid #1f2937; border-radius: 8px; overflow: hidden; margin-bottom: 12px;">
@@ -213,17 +213,27 @@
           <div id="wave-phase-ind" style="position: absolute; bottom: 10px; left: 12px; background: rgba(11,15,26,0.85); border: 1px solid #1f2937; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #9ca3af; font-family: ui-monospace, monospace;">idle</div>
         </div>
         <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
-          <div style="flex: 1; min-width: 140px; background: rgba(18,24,38,0.7); border: 1px solid #1f2937; border-radius: 8px; padding: 10px 14px;">
+          <div style="flex: 1; min-width: 120px; background: rgba(18,24,38,0.7); border: 1px solid #1f2937; border-radius: 8px; padding: 10px 14px;">
             <label style="font-size: 11px; color: #9ca3af; display: block; margin-bottom: 4px;">Frequency f <span style="color: #06b6d4; font-weight: 700; font-family: ui-monospace, monospace;" id="wave-freq-val">1.00 Hz</span></label>
-            <input type="range" id="wave-freq" min="0.5" max="5" step="0.1" value="1.0" style="width: 100%; -webkit-appearance: none; height: 4px; border-radius: 2px; background: #1f2937; outline: none;" />
+            <input type="range" id="wave-freq" min="0.5" max="5" step="0.1" value="1.0" style="width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: #1f2937; outline: none;" />
           </div>
-          <div style="flex: 1; min-width: 140px; background: rgba(18,24,38,0.7); border: 1px solid #1f2937; border-radius: 8px; padding: 10px 14px;">
+          <div style="flex: 1; min-width: 120px; background: rgba(18,24,38,0.7); border: 1px solid #1f2937; border-radius: 8px; padding: 10px 14px;">
             <label style="font-size: 11px; color: #9ca3af; display: block; margin-bottom: 4px;">Amplitude A <span style="color: #06b6d4; font-weight: 700; font-family: ui-monospace, monospace;" id="wave-amp-val">0.80</span></label>
-            <input type="range" id="wave-amp" min="0.1" max="1.0" step="0.05" value="0.8" style="width: 100%; -webkit-appearance: none; height: 4px; border-radius: 2px; background: #1f2937; outline: none;" />
+            <input type="range" id="wave-amp" min="0.1" max="1.0" step="0.05" value="0.8" style="width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: #1f2937; outline: none;" />
           </div>
-          <div style="flex: 1; min-width: 140px; background: rgba(18,24,38,0.7); border: 1px solid #1f2937; border-radius: 8px; padding: 10px 14px;">
+          <div style="flex: 1; min-width: 120px; background: rgba(18,24,38,0.7); border: 1px solid #1f2937; border-radius: 8px; padding: 10px 14px;">
             <label style="font-size: 11px; color: #9ca3af; display: block; margin-bottom: 4px;">Wavelength λ <span style="color: #06b6d4; font-weight: 700; font-family: ui-monospace, monospace;" id="wave-wl-val">200px</span></label>
-            <input type="range" id="wave-wl" min="50" max="400" step="10" value="200" style="width: 100%; -webkit-appearance: none; height: 4px; border-radius: 2px; background: #1f2937; outline: none;" />
+            <input type="range" id="wave-wl" min="50" max="400" step="10" value="200" style="width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: #1f2937; outline: none;" />
+          </div>
+          <div style="background: rgba(18,24,38,0.7); border: 1px solid #1f2937; border-radius: 8px; padding: 10px 14px;">
+            <label style="font-size: 11px; color: #9ca3af; display: block; margin-bottom: 4px;">Dimension</label>
+            <select id="wave-dim" style="background: rgba(11,15,26,0.8); border: 1px solid #1f2937; border-radius: 4px; color: #06b6d4; font-size: 12px; font-family: ui-monospace, monospace; padding: 4px 8px; cursor: pointer;">
+              <option value="1D">1D: y=A·sin(kx−ωt)</option>
+              <option value="2D">2D: ψ=A·sin(k₁x₁+k₂x₂−ωt)</option>
+              <option value="3D">3D: ψ=A·sin(k₁x₁+k₂x₂+k₃x₃−ωt)</option>
+              <option value="4D">4D: ψ=A·sin(k·x−ωt), x∈ℝ⁴</option>
+              <option value="ND">ND: ψ=A·sin(k·x−ωt), x∈ℝᴺ</option>
+            </select>
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
             <button id="wave-run" style="padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; background: linear-gradient(90deg, #06b6d4, #8b5cf6); color: white;">▶ Run</button>
@@ -233,120 +243,171 @@
             </div>
           </div>
         </div>
-        <div style="margin-top: 8px; font-size: 11px; color: #9ca3af; font-family: ui-monospace, monospace;">y = A·sin(2π·f·x/λ + φ) — 1D wave | 3D: ψ=A·sin(k₁x₁+k₂x₂+k₃x₃−ωt) | ND: ψ=A·sin(k·x−ωt), x∈ℝᴺ | Quantum: iℏ∂ψ/∂t=Ĥψ → |ψ|²=probability → ALL possibilities encoded | 🌐 toggle for 3D mode</div>
+        <div style="margin-top: 8px; font-size: 11px; color: #9ca3af; font-family: ui-monospace, monospace;" id="wave-desc">Select dimensionality from dropdown · drag sliders · Run to animate · Step to advance</div>
       </div>
       <script>
-        // Enhanced wave visualiser with 3D/ND + math at peaks/troughs + quantum
+        // Clean wave visualiser with 1D/2D/3D/4D/ND modes
         (function() {
           var c = document.getElementById('wave-canvas');
           if (!c) return;
           var x = c.getContext('2d');
           var W = c.width, H = c.height;
           var freq = 1.0, amp = 0.8, wl = 200, phase = 0, zoom = 1.0, isAnim = false;
-          var mode3D = false;
+          var dim = '1D';
 
           function render() {
             x.save();
-            x.fillStyle = '#0a0e1a'; x.fillRect(0, 0, W, H);
-            x.translate(W/2, H/2); x.scale(zoom, zoom); x.translate(-W/2, -H/2);
+            x.fillStyle = '#0a0e1a';
+            x.fillRect(0, 0, W, H);
+            x.translate(W/2, H/2);
+            x.scale(zoom, zoom);
+            x.translate(-W/2, -H/2);
 
-            if (mode3D) {
-              // 3D wave: z = A * sin(k1*x + k2*y - wt) — rendered as colored grid
-              var gridN = 24, cellW = W / gridN, cellH = (H-40) / (gridN * 0.6);
-              for (var gi = 0; gi < gridN; gi++) {
-                for (var gj = 0; gj < gridN * 0.6; gj++) {
-                  var px = gi * cellW, py = gj * cellH + 20;
-                  var wx = (gi - gridN/2) * 0.3, wy = (gj - gridN*0.3) * 0.3;
-                  var val = amp * Math.sin(2 * Math.PI * freq * (Math.sqrt(wx*wx + wy*wy)) / (wl/10) - phase);
-                  var intensity = (val + 1) / 2;
-                  var r = Math.round(6 + intensity * 0), g = Math.round(30 + intensity * 200), b = Math.round(80 + intensity * 130);
-                  x.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
-                  x.fillRect(px, py, cellW - 0.5, cellH - 0.5);
-                }
-              }
-              // 3D label
-              x.fillStyle = '#06b6d4'; x.font = 'bold 11px ui-monospace'; x.textAlign = 'right';
-              x.fillText('3D: ψ = A·sin(k₁x₁ + k₂x₂ + k₃x₃ − ωt)', W - 10, 20);
-              x.fillText('∇²ψ = ∂²ψ/∂x₁² + ∂²ψ/∂x₂² + ∂²ψ/∂x₃²', W - 10, 35);
-              x.textAlign = 'left';
-            } else {
-              // 2D wave with math at peaks/troughs
-              x.strokeStyle = 'rgba(148,163,184,0.06)'; x.lineWidth = 0.5;
-              for (var gx = 0; gx <= W; gx += 40) { x.beginPath(); x.moveTo(gx, 0); x.lineTo(gx, H); x.stroke(); }
-              for (var gy = 0; gy <= H; gy += 40) { x.beginPath(); x.moveTo(0, gy); x.lineTo(W, gy); x.stroke(); }
-              x.strokeStyle = 'rgba(148,163,184,0.2)'; x.lineWidth = 1;
-              x.beginPath(); x.moveTo(0, H/2); x.lineTo(W, H/2); x.stroke();
-
-              // Wave
-              x.strokeStyle = '#06b6d4'; x.lineWidth = 2.5; x.shadowColor = '#06b6d4'; x.shadowBlur = 6;
-              x.beginPath();
-              for (var px = 0; px <= W; px += 2) {
-                var py = H/2 - amp * (H/2 - 20) * Math.sin(2 * Math.PI * freq * px / wl + phase);
-                if (px === 0) x.moveTo(px, py); else x.lineTo(px, py);
-              }
-              x.stroke(); x.shadowBlur = 0;
-
-              // Second harmonic
-              x.strokeStyle = 'rgba(139,92,246,0.4)'; x.lineWidth = 1.5; x.setLineDash([4,4]);
-              x.beginPath();
-              for (var px2 = 0; px2 <= W; px2 += 2) {
-                var py2 = H/2 - amp * 0.3 * (H/2 - 20) * Math.sin(2 * Math.PI * freq * 2 * px2 / wl + phase);
-                if (px2 === 0) x.moveTo(px2, py2); else x.lineTo(px2, py2);
-              }
-              x.stroke(); x.setLineDash([]);
-
-              // Find peaks and troughs and annotate with math
-              for (var pi = 0; pi < W; pi += 2) {
-                var py = H/2 - amp * (H/2 - 20) * Math.sin(2 * Math.PI * freq * pi / wl + phase);
-                var waveVal = amp * Math.sin(2 * Math.PI * freq * pi / wl + phase);
-                // Peak: y = +A (wave value near +1)
-                if (waveVal > amp * 0.95 && pi > 20 && pi < W - 20) {
-                  var prevVal = amp * Math.sin(2 * Math.PI * freq * (pi - 2) / wl + phase);
-                  if (waveVal > prevVal) { // only annotate rising-edge peaks
-                    x.fillStyle = '#10b981'; x.beginPath(); x.arc(pi, py, 5, 0, 6.28); x.fill();
-                    x.fillStyle = '#10b981'; x.font = 'bold 9px ui-monospace'; x.textAlign = 'center';
-                    x.fillText('y=+A', pi, py - 8);
-                    x.fillStyle = 'rgba(245,158,11,0.7)'; x.font = '8px ui-monospace';
-                    x.fillText('φ=π/2+2nπ', pi, py - 18);
-                    x.textAlign = 'left';
-                  }
-                }
-                // Trough: y = -A
-                if (waveVal < -amp * 0.95 && pi > 20 && pi < W - 20) {
-                  var prevVal2 = amp * Math.sin(2 * Math.PI * freq * (pi - 2) / wl + phase);
-                  if (waveVal < prevVal2) { // only annotate falling-edge troughs
-                    x.fillStyle = '#ef4444'; x.beginPath(); x.arc(pi, py, 5, 0, 6.28); x.fill();
-                    x.fillStyle = '#ef4444'; x.font = 'bold 9px ui-monospace'; x.textAlign = 'center';
-                    x.fillText('y=−A', pi, py + 15);
-                    x.fillStyle = 'rgba(245,158,11,0.7)'; x.font = '8px ui-monospace';
-                    x.fillText('φ=3π/2+2nπ', pi, py + 25);
-                    x.textAlign = 'left';
-                  }
-                }
-              }
-
-              // Phase point
-              var phasePx = W / 4;
-              var phasePy = H/2 - amp * (H/2-20) * Math.sin(2*Math.PI*freq*(phasePx)/wl + phase);
-              x.fillStyle = 'rgba(245,158,11,0.8)'; x.beginPath(); x.arc(phasePx, phasePy, 5, 0, 6.28); x.fill();
-
-              // Labels
-              x.fillStyle = '#06b6d4'; x.font = 'bold 11px ui-monospace'; x.textAlign = 'right';
-              x.fillText('f=' + freq.toFixed(1) + 'Hz A=' + amp.toFixed(2) + ' λ=' + wl + 'px', W - 10, 20);
-              x.fillText('φ=' + (phase % 6.28).toFixed(2), W - 10, 35);
-              x.fillStyle = 'rgba(139,92,246,0.6)'; x.font = '8px ui-monospace';
-              x.fillText('2nd harmonic (2f)', W - 10, 50);
-              x.textAlign = 'left';
-
-              // Wave equation + quantum connection at bottom
-              x.fillStyle = 'rgba(148,163,184,0.4)'; x.font = '9px ui-monospace';
-              x.fillText('Wave eq: ∂²ψ/∂t² = c²∇²ψ   |   1D: y=A·sin(kx−ωt)   |   ND: ψ=A·sin(k·x−ωt), x∈ℝᴺ', 10, H - 15);
-              x.fillStyle = 'rgba(139,92,246,0.5)'; x.font = '8px ui-monospace';
-              x.fillText('Quantum: iℏ∂ψ/∂t=Ĥψ → |ψ|² = probability density → ALL possibilities encoded', 10, H - 5);
+            if (dim === '1D') {
+              render1D();
+            } else if (dim === '2D') {
+              render2D();
+            } else if (dim === '3D') {
+              render3D();
+            } else if (dim === '4D' || dim === 'ND') {
+              renderND();
             }
 
             x.restore();
-            document.getElementById('wave-phase-ind').textContent = (mode3D ? '3D ' : '2D ') + (isAnim ? 'animating φ=' + (phase % 6.28).toFixed(2) : 'idle φ=' + (phase % 6.28).toFixed(2));
+            document.getElementById('wave-phase-ind').textContent = dim + ' ' + (isAnim ? 'φ=' + (phase % 6.28).toFixed(2) : 'idle');
+          }
+
+          function render1D() {
+            // Clean sine wave — ONE peak + ONE trough annotation only
+            // Grid
+            x.strokeStyle = 'rgba(148,163,184,0.06)'; x.lineWidth = 0.5;
+            for (var gx = 0; gx <= W; gx += 40) { x.beginPath(); x.moveTo(gx, 0); x.lineTo(gx, H); x.stroke(); }
+            // Axis
+            x.strokeStyle = 'rgba(148,163,184,0.2)'; x.lineWidth = 1;
+            x.beginPath(); x.moveTo(0, H/2); x.lineTo(W, H/2); x.stroke();
+
+            // Main wave (clean, no scribbles)
+            x.strokeStyle = '#06b6d4'; x.lineWidth = 2.5;
+            x.shadowColor = '#06b6d4'; x.shadowBlur = 4;
+            x.beginPath();
+            for (var px = 0; px <= W; px += 1) {
+              var py = H/2 - amp * (H/2 - 15) * Math.sin(2 * Math.PI * freq * px / wl + phase);
+              if (px === 0) x.moveTo(px, py); else x.lineTo(px, py);
+            }
+            x.stroke();
+            x.shadowBlur = 0;
+
+            // Second harmonic (subtle)
+            x.strokeStyle = 'rgba(139,92,246,0.3)'; x.lineWidth = 1.5; x.setLineDash([4, 4]);
+            x.beginPath();
+            for (var px2 = 0; px2 <= W; px2 += 2) {
+              var py2 = H/2 - amp * 0.25 * (H/2 - 15) * Math.sin(2 * Math.PI * freq * 2 * px2 / wl + phase);
+              if (px2 === 0) x.moveTo(px2, py2); else x.lineTo(px2, py2);
+            }
+            x.stroke();
+            x.setLineDash([]);
+
+            // ONE clean peak annotation (first peak after x=W*0.15)
+            var peakX = -1, troughX = -1;
+            for (var pi = Math.floor(W * 0.15); pi < W * 0.85; pi += 1) {
+              var waveVal = Math.sin(2 * Math.PI * freq * pi / wl + phase);
+              if (waveVal > amp * 0.98 && peakX < 0) peakX = pi;
+              if (waveVal < -amp * 0.98 && troughX < 0) troughX = pi;
+            }
+            if (peakX > 0) {
+              var peakY = H/2 - amp * (H/2 - 15) * Math.sin(2 * Math.PI * freq * peakX / wl + phase);
+              x.fillStyle = '#10b981'; x.beginPath(); x.arc(peakX, peakY, 4, 0, 6.28); x.fill();
+              x.strokeStyle = 'rgba(16,185,129,0.3)'; x.lineWidth = 1; x.setLineDash([2, 3]);
+              x.beginPath(); x.moveTo(peakX, peakY); x.lineTo(peakX, H/2); x.stroke();
+              x.setLineDash([]);
+              x.fillStyle = '#10b981'; x.font = 'bold 10px ui-monospace'; x.textAlign = 'center';
+              x.fillText('y=+A', peakX, peakY - 8);
+              x.fillStyle = 'rgba(245,158,11,0.6)'; x.font = '8px ui-monospace';
+              x.fillText('φ=π/2', peakX, peakY - 20);
+              x.textAlign = 'left';
+            }
+            if (troughX > 0) {
+              var troughY = H/2 - amp * (H/2 - 15) * Math.sin(2 * Math.PI * freq * troughX / wl + phase);
+              x.fillStyle = '#ef4444'; x.beginPath(); x.arc(troughX, troughY, 4, 0, 6.28); x.fill();
+              x.strokeStyle = 'rgba(239,68,68,0.3)'; x.lineWidth = 1; x.setLineDash([2, 3]);
+              x.beginPath(); x.moveTo(troughX, troughY); x.lineTo(troughX, H/2); x.stroke();
+              x.setLineDash([]);
+              x.fillStyle = '#ef4444'; x.font = 'bold 10px ui-monospace'; x.textAlign = 'center';
+              x.fillText('y=−A', troughX, troughY + 16);
+              x.fillStyle = 'rgba(245,158,11,0.6)'; x.font = '8px ui-monospace';
+              x.fillText('φ=3π/2', troughX, troughY + 26);
+              x.textAlign = 'left';
+            }
+
+            // Bottom equation
+            x.fillStyle = 'rgba(148,163,184,0.4)'; x.font = '9px ui-monospace';
+            x.fillText('y = A·sin(2π·f·x/λ + φ)   wave eq: ∂²y/∂t² = c²·∂²y/∂x²', 10, H - 5);
+          }
+
+          function render2D() {
+            // 2D wave: colored heatmap of ψ = A·sin(k₁x₁ + k₂x₂ − ωt)
+            var cols = 30, rows = 10, cw = W / cols, ch = (H - 30) / rows;
+            for (var ci = 0; ci < cols; ci++) {
+              for (var ri = 0; ri < rows; ri++) {
+                var wx = (ci - cols/2) * 0.2, wy = (ri - rows/2) * 0.3;
+                var val = amp * Math.sin(2 * Math.PI * freq * Math.sqrt(wx*wx + wy*wy) / (wl/8) - phase);
+                var intensity = (val + 1) / 2;
+                x.fillStyle = 'rgba(' + Math.round(intensity * 6) + ',' + Math.round(30 + intensity * 200) + ',' + Math.round(80 + intensity * 130) + ',' + (0.6 + intensity * 0.4) + ')';
+                x.fillRect(ci * cw, ri * ch + 15, cw - 0.5, ch - 0.5);
+              }
+            }
+            x.fillStyle = '#06b6d4'; x.font = 'bold 10px ui-monospace'; x.textAlign = 'right';
+            x.fillText('2D: ψ = A·sin(k₁x₁ + k₂x₂ − ωt)', W - 10, 12);
+            x.fillStyle = 'rgba(148,163,184,0.4)'; x.font = '9px ui-monospace'; x.textAlign = 'left';
+            x.fillText('∇²ψ = ∂²ψ/∂x₁² + ∂²ψ/∂x₂²', 10, H - 5);
+          }
+
+          function render3D() {
+            // 3D wave: nested radial wave fronts (spherical wave)
+            x.strokeStyle = 'rgba(148,163,184,0.06)'; x.lineWidth = 0.5;
+            for (var gx = 0; gx <= W; gx += 40) { x.beginPath(); x.moveTo(gx, 0); x.lineTo(gx, H); x.stroke(); }
+            var cx = W/2, cy = H/2;
+            for (var r = 10; r < W/2; r += 8) {
+              var val = amp * Math.sin(2 * Math.PI * freq * r / (wl/4) - phase);
+              var alpha = Math.max(0.05, (val + 1) / 2 * 0.7);
+              x.strokeStyle = 'rgba(6,182,212,' + alpha + ')';
+              x.lineWidth = 1.5;
+              x.beginPath(); x.arc(cx, cy, r, 0, 6.28); x.stroke();
+            }
+            // Center point
+            x.fillStyle = '#06b6d4'; x.beginPath(); x.arc(cx, cy, 3, 0, 6.28); x.fill();
+            x.fillStyle = '#06b6d4'; x.font = 'bold 10px ui-monospace'; x.textAlign = 'right';
+            x.fillText('3D: ψ = (A/r)·sin(kr − ωt) — spherical wave', W - 10, 12);
+            x.fillStyle = 'rgba(148,163,184,0.4)'; x.font = '9px ui-monospace'; x.textAlign = 'left';
+            x.fillText('∇²ψ = ∂²ψ/∂x₁² + ∂²ψ/∂x₂² + ∂²ψ/∂x₃²', 10, H - 5);
+          }
+
+          function renderND() {
+            // ND: abstract probability cloud + equation
+            var cx = W/2, cy = H/2;
+            // Draw a cloud of dots representing |ψ|² in N-dim space
+            var nDots = dim === '4D' ? 80 : 120;
+            var nDim = dim === '4D' ? 4 : 'N';
+            for (var i = 0; i < nDots; i++) {
+              var angle = i * 0.1 + phase * 0.3;
+              var radius = 30 + Math.sin(i * 0.5 + phase) * 40 + Math.cos(i * 0.7) * 30;
+              var px = cx + Math.cos(angle) * radius;
+              var py = cy + Math.sin(angle * 1.3) * radius * 0.6;
+              var val = (Math.sin(i * 0.3 + phase) + 1) / 2;
+              x.fillStyle = 'rgba(139,92,246,' + (0.2 + val * 0.5) + ')';
+              x.beginPath(); x.arc(px, py, 1.5 + val * 1.5, 0, 6.28); x.fill();
+            }
+            // Center label
+            x.fillStyle = '#8b5cf6'; x.font = 'bold 12px ui-monospace'; x.textAlign = 'center';
+            x.fillText(dim + ': ψ = A·sin(k·x − ωt)', cx, cy - 5);
+            x.fillStyle = 'rgba(148,163,184,0.5)'; x.font = '10px ui-monospace';
+            x.fillText('x ∈ ℝ' + (dim === '4D' ? '⁴' : 'ᴺ'), cx, cy + 12);
+            x.fillStyle = 'rgba(139,92,246,0.4)'; x.font = '9px ui-monospace';
+            x.fillText('|ψ|² = probability density', cx, cy + 28);
+            x.fillText('→ ALL possibilities encoded', cx, cy + 42);
+            x.textAlign = 'left';
+            x.fillStyle = 'rgba(148,163,184,0.4)'; x.font = '9px ui-monospace';
+            x.fillText('Quantum: iℏ∂ψ/∂t = Ĥψ   →   |ψ|² = P(outcome)', 10, H - 5);
           }
 
           function animate() {
@@ -356,32 +417,24 @@
             requestAnimationFrame(animate);
           }
 
-          // Wire up controls
+          // Controls
           document.getElementById('wave-freq').addEventListener('input', function(e) { freq = parseFloat(e.target.value); document.getElementById('wave-freq-val').textContent = freq.toFixed(2) + ' Hz'; render(); });
           document.getElementById('wave-amp').addEventListener('input', function(e) { amp = parseFloat(e.target.value); document.getElementById('wave-amp-val').textContent = amp.toFixed(2); render(); });
           document.getElementById('wave-wl').addEventListener('input', function(e) { wl = parseInt(e.target.value); document.getElementById('wave-wl-val').textContent = wl + 'px'; render(); });
+          document.getElementById('wave-dim').addEventListener('change', function(e) { dim = e.target.value; render(); });
           document.getElementById('wave-run').addEventListener('click', function() {
             if (isAnim) { isAnim = false; this.textContent = '▶ Run'; } else { isAnim = true; this.textContent = '⏸ Pause'; animate(); }
           });
           document.getElementById('wave-step').addEventListener('click', function() { if (isAnim) return; phase += 0.1; render(); });
-          document.getElementById('wave-reset').addEventListener('click', function() { phase = 0; freq = 1.0; amp = 0.8; wl = 200; isAnim = false; mode3D = false; document.getElementById('wave-run').textContent = '▶ Run'; document.getElementById('wave-freq').value = 1.0; document.getElementById('wave-amp').value = 0.8; document.getElementById('wave-wl').value = 200; document.getElementById('wave-freq-val').textContent = '1.00 Hz'; document.getElementById('wave-amp-val').textContent = '0.80'; document.getElementById('wave-wl-val').textContent = '200px'; render(); });
-
-          // Add 2D/3D toggle button dynamically
-          var controlsDiv = document.getElementById('wave-run').parentElement;
-          var toggle3D = document.createElement('button');
-          toggle3D.textContent = '🌐 3D';
-          toggle3D.style.cssText = 'padding: 6px 10px; border-radius: 6px; border: 1px solid #1f2937; background: rgba(18,24,38,0.7); color: #9ca3af; cursor: pointer; font-size: 12px; font-weight: 700;';
-          toggle3D.addEventListener('click', function() { mode3D = !mode3D; this.textContent = mode3D ? '📊 2D' : '🌐 3D'; this.style.borderColor = mode3D ? '#8b5cf6' : '#1f2937'; render(); });
-          controlsDiv.appendChild(toggle3D);
-
-          // Zoom
+          document.getElementById('wave-reset').addEventListener('click', function() { phase = 0; freq = 1.0; amp = 0.8; wl = 200; isAnim = false; document.getElementById('wave-run').textContent = '▶ Run'; document.getElementById('wave-freq').value = 1.0; document.getElementById('wave-amp').value = 0.8; document.getElementById('wave-wl').value = 200; document.getElementById('wave-freq-val').textContent = '1.00 Hz'; document.getElementById('wave-amp-val').textContent = '0.80'; document.getElementById('wave-wl-val').textContent = '200px'; document.getElementById('wave-dim').value = '1D'; dim = '1D'; render(); });
           document.getElementById('wave-zoom-in').addEventListener('click', function() { zoom = Math.min(3, zoom + 0.2); document.getElementById('wave-zoom-label').textContent = Math.round(zoom*100)+'%'; render(); });
           document.getElementById('wave-zoom-out').addEventListener('click', function() { zoom = Math.max(0.5, zoom - 0.2); document.getElementById('wave-zoom-label').textContent = Math.round(zoom*100)+'%'; render(); });
           document.getElementById('wave-zoom-reset').addEventListener('click', function() { zoom = 1; document.getElementById('wave-zoom-label').textContent = '100%'; render(); });
           render();
         })();
-      
       </script>
+
+
 
 
 <h2>Math &rarr; Code derivation</h2>
