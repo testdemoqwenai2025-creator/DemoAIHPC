@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Mean Squared Error — visual-first concept card. Drag the line, watch the loss change in real-time, see gradient descent animate. Minimal text, maximum fascination." />
+    <title>MSE — Visual Concept Card · AIHPC</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", sans-serif; min-height: 100vh; overflow-x: hidden; }
+      body::before { content:""; position:fixed; inset:0; background: radial-gradient(1000px 500px at 50% 0%, rgba(6,182,212,0.10), transparent 70%); pointer-events:none; z-index:0; }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; position: relative; z-index: 1; }
+
+      /* Minimal header */
+      .head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+      .head .tag { font-size: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.4); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .head h1 { font-size: 24px; font-weight: 800; }
+      .head .sub { font-size: 13px; color: var(--text-muted); margin-left: auto; }
+      .back { font-size: 12px; color: var(--accent); text-decoration: none; margin-bottom: 12px; display: inline-block; }
+
+      /* Equation badge — overlaid on the canvas, not separate */
+      .eq-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; background: rgba(11,15,26,0.85); border: 1px solid rgba(6,182,212,0.3); font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent); margin-bottom: 12px; }
+
+      /* Hero canvas container */
+      .canvas-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+      canvas { display: block; width: 100%; height: auto; }
+
+      /* Loss value overlay */
+      .loss-overlay { position: absolute; top: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; text-align: right; }
+      .loss-overlay .lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+      .loss-overlay .val { font-size: 28px; font-weight: 800; font-family: ui-monospace, monospace; color: var(--accent); transition: color 0.3s; }
+      .loss-overlay .val.bad { color: var(--danger); }
+      .loss-overlay .val.ok { color: var(--warn); }
+      .loss-overlay .val.good { color: var(--success); }
+
+      /* Equation overlay on canvas */
+      .eq-overlay { position: absolute; bottom: 12px; left: 12px; background: rgba(11,15,26,0.9); border: 1px solid rgba(6,182,212,0.3); border-radius: 6px; padding: 4px 12px; font-family: "Cambria Math", Georgia, serif; font-size: 13px; color: var(--accent); pointer-events: none; }
+
+      /* Controls */
+      .controls { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+      .ctrl { flex: 1; min-width: 180px; background: rgba(18,24,38,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+      .ctrl label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; }
+      .ctrl .val { font-size: 14px; font-weight: 700; font-family: ui-monospace, monospace; color: var(--accent); }
+      .ctrl input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--border); outline: none; }
+      .ctrl input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid var(--bg); }
+      .ctrl input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid var(--bg); }
+
+      .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; transition: all 0.2s; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white; }
+      .btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); }
+      .btn.ghost:hover { border-color: var(--accent); color: var(--text); }
+
+      /* Code panel — collapsible, Python only */
+      .code-panel { margin-top: 16px; }
+      .code-panel summary { font-size: 12px; color: var(--text-muted); cursor: pointer; padding: 8px 0; user-select: none; }
+      .code-panel summary:hover { color: var(--text); }
+      .code-panel pre { background: #06080f; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; margin-top: 8px; }
+      .code-panel .kw { color: #c4b5fd; }
+      .code-panel .fn { color: #06b6d4; }
+      .code-panel .num { color: #f59e0b; }
+      .code-panel .cm { color: #6b7280; }
+
+      /* Mini description */
+      .desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; max-width: 600px; }
+
+      /* Phase indicator */
+      .phase-indicator { position: absolute; bottom: 12px; right: 12px; background: rgba(11,15,26,0.9); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 10px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .phase-indicator.active { color: var(--accent); border-color: rgba(6,182,212,0.4); }
+
+      /* Footer */
+      .foot { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 24px; font-family: ui-monospace, monospace; }
+      .foot a { color: var(--accent); text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <a href="../index.html" class="back">← Home</a>
+      <div class="head">
+        <span class="tag">ML · Regression</span>
+        <h1>Mean Squared Error</h1>
+      </div>
+      <p class="desc">The default regression loss — penalises large errors <strong>quadratically</strong>. A 2× error gives 4× the loss. Drag the sliders to fit the line; watch the loss change in real-time. Hit <strong>Run gradient descent</strong> to see the optimiser find the minimum.</p>
+
+      <div class="eq-badge">📐 L = (1/n) Σ (yᵢ − ŷᵢ)²</div>
+
+      <!-- Hero canvas -->
+      <div class="canvas-wrap">
+        <canvas id="main-canvas" width="728" height="360"></canvas>
+        <div class="loss-overlay">
+          <div class="lbl">Current MSE</div>
+          <div class="val" id="loss-val">0.0000</div>
+        </div>
+        <div class="eq-overlay">ŷ = β₀ + β₁x</div>
+        <div class="phase-indicator" id="phase-ind">idle</div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <div class="ctrl">
+          <label>Slope β₁ <span class="val" id="b1-val">1.00</span></label>
+          <input type="range" id="b1-slider" min="-2" max="4" step="0.01" value="1.0" />
+        </div>
+        <div class="ctrl">
+          <label>Intercept β₀ <span class="val" id="b0-val">0.00</span></label>
+          <input type="range" id="b0-slider" min="-5" max="10" step="0.01" value="0.0" />
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px; justify-content: flex-end;">
+          <button class="btn primary" id="btn-gd">▶ Run gradient descent</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+        </div>
+      </div>
+
+      <!-- Collapsible code — Python only, 5 lines -->
+      <details class="code-panel">
+        <summary>💻 Python implementation (click to expand)</summary>
+        <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">mse</span>(y_true, y_pred):
+    <span class="cm">"""Average squared error. 2× error → 4× loss."""</span>
+    <span class="kw">return</span> np.mean((y_true - y_pred) ** <span class="num">2</span>)</pre>
+      </details>
+
+      <div class="foot">
+        <a href="../ai-lab.html?context=MSE%20concept%20card">🤖 Ask AI about this</a> · <a href="../concepts/ml-mse.html">📖 Full text version</a> · Visual concept card v2
+      </div>
+    </div>
+
+    <script>
+      // ===== State =====
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      var W = canvas.width, H = canvas.height;
+      var b0 = 0, b1 = 1;
+      var isAnimating = false;
+      var gdPhase = 0;
+
+      // Synthetic data: y = 2x + 3 + noise
+      var np = { seed: 42, rand: function() { this.seed = (this.seed * 9301 + 49297) % 233280; return this.seed / 233280; } };
+      var DATA = [];
+      var nPoints = 20;
+      for (var i = 0; i < nPoints; i++) {
+        var x = i * 0.5;
+        var y = 2 * x + 3 + (np.rand() - 0.5) * 4;
+        DATA.push({ x: x, y: y });
+      }
+      var xMin = 0, xMax = nPoints * 0.5;
+      var yMin = -5, yMax = 20;
+
+      // ===== Helpers =====
+      function toCanvasX(x) { return 60 + (x - xMin) / (xMax - xMin) * (W - 120); }
+      function toCanvasY(y) { return H - 40 - (y - yMin) / (yMax - yMin) * (H - 80); }
+      function predict(x) { return b0 + b1 * x; }
+      function computeMSE() {
+        var sum = 0;
+        for (var i = 0; i < DATA.length; i++) {
+          var e = DATA[i].y - predict(DATA[i].x);
+          sum += e * e;
+        }
+        return sum / DATA.length;
+      }
+
+      // ===== Render =====
+      function render() {
+        // Clear with gradient bg
+        var bg = ctx.createLinearGradient(0, 0, 0, H);
+        bg.addColorStop(0, '#0a0e1a');
+        bg.addColorStop(1, '#0f1422');
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, W, H);
+
+        // Grid
+        ctx.strokeStyle = 'rgba(148,163,184,0.08)';
+        ctx.lineWidth = 0.5;
+        for (var gx = 0; gx <= 10; gx++) {
+          var px = 60 + gx * (W - 120) / 10;
+          ctx.beginPath(); ctx.moveTo(px, 20); ctx.lineTo(px, H - 40); ctx.stroke();
+        }
+        for (var gy = 0; gy <= 5; gy++) {
+          var py = 20 + gy * (H - 60) / 5;
+          ctx.beginPath(); ctx.moveTo(60, py); ctx.lineTo(W - 60, py); ctx.stroke();
+        }
+
+        // Axes
+        ctx.strokeStyle = 'rgba(148,163,184,0.3)';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(60, 20); ctx.lineTo(60, H - 40); ctx.lineTo(W - 60, H - 40); ctx.stroke();
+
+        // Axis labels
+        ctx.fillStyle = 'rgba(148,163,184,0.5)';
+        ctx.font = '10px ui-monospace';
+        ctx.fillText('x', W - 50, H - 25);
+        ctx.fillText('y', 45, 30);
+
+        // Data points + error lines
+        for (var i = 0; i < DATA.length; i++) {
+          var d = DATA[i];
+          var px = toCanvasX(d.x);
+          var py = toCanvasY(d.y);
+          var pyPred = toCanvasY(predict(d.x));
+
+          // Error line (vertical, red)
+          var errMag = Math.abs(d.y - predict(d.x));
+          var errAlpha = Math.min(0.8, errMag / 10);
+          ctx.strokeStyle = 'rgba(239,68,68,' + errAlpha.toFixed(2) + ')';
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, pyPred); ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Data point
+          ctx.fillStyle = errMag < 2 ? '#10b981' : (errMag < 5 ? '#f59e0b' : '#ef4444');
+          ctx.beginPath(); ctx.arc(px, py, 4, 0, 2 * Math.PI); ctx.fill();
+        }
+
+        // Fitted line
+        var lineColor = isAnimating ? '#8b5cf6' : '#06b6d4';
+        ctx.strokeStyle = lineColor;
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = lineColor;
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.moveTo(toCanvasX(xMin), toCanvasY(predict(xMin)));
+        ctx.lineTo(toCanvasX(xMax), toCanvasY(predict(xMax)));
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Predicted points (on the line)
+        for (var i = 0; i < DATA.length; i++) {
+          var px = toCanvasX(DATA[i].x);
+          var py = toCanvasY(predict(DATA[i].x));
+          ctx.fillStyle = lineColor + '88';
+          ctx.beginPath(); ctx.arc(px, py, 2.5, 0, 2 * Math.PI); ctx.fill();
+        }
+
+        // Update loss display
+        var loss = computeMSE();
+        var lossEl = document.getElementById('loss-val');
+        lossEl.textContent = loss.toFixed(4);
+        lossEl.className = 'val ' + (loss < 2 ? 'good' : (loss < 8 ? 'ok' : 'bad'));
+      }
+
+      // ===== Gradient descent animation =====
+      function runGradientDescent() {
+        if (isAnimating) return;
+        isAnimating = true;
+        gdPhase = 0;
+        document.getElementById('phase-ind').textContent = 'running';
+        document.getElementById('phase-ind').classList.add('active');
+        document.getElementById('btn-gd').disabled = true;
+
+        // Start from a random-ish position
+        b0 = 8;
+        b1 = -0.5;
+        var lr = 0.02; // learning rate
+        var steps = 80;
+        var step = 0;
+
+        function animateGD() {
+          if (step >= steps) {
+            isAnimating = false;
+            document.getElementById('phase-ind').textContent = 'converged ✓';
+            document.getElementById('btn-gd').disabled = false;
+            // Update sliders to final position
+            document.getElementById('b0-slider').value = b0;
+            document.getElementById('b1-slider').value = b1;
+            document.getElementById('b0-val').textContent = b0.toFixed(2);
+            document.getElementById('b1-val').textContent = b1.toFixed(2);
+            return;
+          }
+
+          // Compute gradients
+          var gradB0 = 0, gradB1 = 0;
+          for (var i = 0; i < DATA.length; i++) {
+            var err = predict(DATA[i].x) - DATA[i].y;
+            gradB0 += err;
+            gradB1 += err * DATA[i].x;
+          }
+          gradB0 = 2 * gradB0 / DATA.length;
+          gradB1 = 2 * gradB1 / DATA.length;
+
+          // Update parameters
+          b0 -= lr * gradB0;
+          b1 -= lr * gradB1;
+
+          // Update UI
+          document.getElementById('b0-val').textContent = b0.toFixed(2);
+          document.getElementById('b1-val').textContent = b1.toFixed(2);
+          document.getElementById('phase-ind').textContent = 'step ' + (step+1) + '/' + steps;
+
+          render();
+          step++;
+          requestAnimationFrame(animateGD);
+        }
+        animateGD();
+      }
+
+      // ===== Wire up controls =====
+      document.getElementById('b1-slider').addEventListener('input', function(e) {
+        b1 = parseFloat(e.target.value);
+        document.getElementById('b1-val').textContent = b1.toFixed(2);
+        render();
+      });
+      document.getElementById('b0-slider').addEventListener('input', function(e) {
+        b0 = parseFloat(e.target.value);
+        document.getElementById('b0-val').textContent = b0.toFixed(2);
+        render();
+      });
+      document.getElementById('btn-gd').addEventListener('click', runGradientDescent);
+      document.getElementById('btn-reset').addEventListener('click', function() {
+        b0 = 0; b1 = 1;
+        document.getElementById('b0-slider').value = 0;
+        document.getElementById('b1-slider').value = 1;
+        document.getElementById('b0-val').textContent = '0.00';
+        document.getElementById('b1-val').textContent = '1.00';
+        document.getElementById('phase-ind').textContent = 'idle';
+        document.getElementById('phase-ind').classList.remove('active');
+        render();
+      });
+
+      // ===== Initial render =====
+      render();
+    </script>
+  </body>
+</html>
