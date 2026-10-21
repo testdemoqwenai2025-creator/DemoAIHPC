@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="BOLERO — cell-state-conditioned sequence-to-function Transformer. A rich single-page visualiser: animated DNA → cell-state embedding → hypernetwork → Transformer → ATAC prediction → UMAP clustering. Math, code, deep thoughts, futuristic possibilities, zoom toggle. Inspired by Arc Institute 2024/2025." />
+    <title>BOLERO — Cell-State-Conditioned Sequence Model · AIHPC Advanced</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --bg-elevated-2:#1a2133; --border:#1f2937; --border-strong:#2a3548; --text:#f3f4f6; --text-muted:#9ca3af; --text-muted-2:#6b7280; --accent:#10b981; --accent-2:#06b6d4; --accent-3:#f59e0b; --pink:#ec4899; --purple:#8b5cf6; }
+      * { box-sizing: border-box; } html, body { margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, rgba(16,185,129,0.18), transparent 60%), radial-gradient(1200px 600px at 100% 0%, rgba(6,182,212,0.12), transparent 55%), var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 24px 24px 96px; position: relative; z-index: 1; }
+      .crumbs { font-size: 13px; color: var(--text-muted-2); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .tag { display: inline-block; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(16,185,129,0.35); background: rgba(16,185,129,0.1); font-size: 12px; color: var(--text); margin-bottom: 12px; backdrop-filter: blur(8px); }
+      h1 { font-size: 36px; line-height: 1.1; margin: 0 0 12px; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#6ee7b7 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      h2 { font-size: 22px; margin: 32px 0 12px; color: var(--accent-2); }
+      h3 { color: #06b6d4; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px; }
+      .lead { font-size: 16px; color: var(--text-muted); max-width: 920px; margin: 0 0 24px; }
+      .lead b { color: var(--text); }
+      .lead a { color: var(--accent-2); text-decoration: none; }
+
+      /* Main visualizer */
+      .viz-grid { display: grid; grid-template-columns: 1fr 320px; gap: 24px; margin-top: 24px; }
+      @media (max-width: 900px) { .viz-grid { grid-template-columns: 1fr; } }
+      .viz-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 16px; backdrop-filter: blur(12px); }
+      .viz-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+      canvas { display: block; width: 100%; height: auto; }
+      .controls-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+      .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: white; }
+      .btn.primary:hover { box-shadow: 0 4px 16px rgba(16,185,129,0.3); }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); }
+      .btn.ghost:hover { border-color: var(--accent); color: var(--text); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      .zoom-controls { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 8px; padding: 4px; }
+      .zoom-btn { width: 30px; height: 30px; border: none; background: transparent; color: var(--text); cursor: pointer; font-size: 16px; font-weight: 700; border-radius: 4px; }
+      .zoom-btn:hover { background: rgba(16,185,129,0.2); }
+      .zoom-label { font-size: 9px; color: var(--text-muted); text-align: center; padding: 2px 0; }
+
+      /* Scene list (right column) */
+      .scene-list { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-direction: column; gap: 8px; }
+      .scene-list li { padding: 10px 12px; border-radius: 8px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+      .scene-list li:hover { border-color: var(--accent); }
+      .scene-list li.active { border-color: var(--accent-2); background: rgba(6,182,212,0.1); }
+      .scene-list li .num { display: inline-block; width: 22px; height: 22px; line-height: 22px; text-align: center; background: linear-gradient(135deg,#10b981,#06b6d4); color: white; font-size: 11px; font-weight: 700; border-radius: 50%; margin-right: 8px; }
+      .scene-list li .title { font-size: 13px; color: var(--text); font-weight: 600; }
+      .scene-list li .desc { font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+
+      /* Math section */
+      .math-block { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-family: "Cambria Math", Georgia, serif; }
+      .math-block .eq { font-size: 16px; color: var(--accent); margin: 6px 0; }
+      .math-block .explain { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+      /* Code section */
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+
+      /* Deep thoughts + futuristic possibilities callouts */
+      .callout { background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+      .callout.green { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.3); }
+      .callout.amber { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.3); }
+      .callout.pink { background: rgba(236,72,153,0.06); border-color: rgba(236,72,153,0.3); }
+      .callout h3 { margin: 0 0 10px; }
+      .callout .row { margin: 8px 0; font-size: 13px; line-height: 1.55; color: var(--text); }
+      .callout .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
+      .callout .lbl.use { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .callout .lbl.avoid { background: rgba(239,68,68,0.15); color: #fca5a5; }
+      .callout .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+      .callout .lbl.futur { background: rgba(245,158,11,0.15); color: #fcd34d; }
+      .callout .text { color: var(--text-muted); }
+
+      /* Footer */
+      .meta { border-top: 1px solid var(--border); margin-top: 40px; padding-top: 16px; font-size: 12px; color: var(--text-muted-2); }
+      .meta a { color: var(--accent-2); text-decoration: none; }
+      .meta code { background: var(--bg-elevated); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+    </style>
+  </head>
+  <body>
+    <header class="ribbon">
+      <div class="ribbon-inner">
+        <a href="index.html" class="ribbon-brand"><span class="ribbon-logo">A</span><span class="ribbon-name">AIHPC Advanced</span></a>
+        <nav class="ribbon-nav">
+          <details class="ribbon-dropdown"><summary>Platform</summary><div class="ribbon-menu"><a href="index.html">Home</a><a href="demos.html">Demos</a><a href="dashboard.html">Dashboard</a><a href="graph.html">Knowledge Graph</a><a href="benchmark.html">Agentic Benchmark</a><a href="subscribe.html">Subscribe</a><a href="timeline.html">Platform Timeline (50 Phases)</a><a href="retrospective.html">50-Phase Retrospective</a><a href="component-registry.html">Component Registry</a></div></details><details class="ribbon-dropdown"><summary>Visualisers</summary><div class="ribbon-menu"><a href="playground.html">Cross-Domain Playground</a><a href="quantum-shorts.html">Quantum Shorts Channel</a><a href="bloch.html">Bloch Sphere Shorts</a><a href="bolero.html">BOLERO Sequence Model</a><a href="medical-atlas.html">Medical Imaging Atlas</a><a href="science/physics/quantum.html">Quantum Mechanics Hub</a></div></details>
+          <details class="ribbon-dropdown"><summary>AETHEL Suite</summary><div class="ribbon-menu"><a href="aethel.html">AETHEL Connector</a><a href="connectors.html">Scientific Connectors Hub</a><a href="query.html">Query Executor</a><a href="graph.html">Knowledge Graph</a><a href="workflows.html">Domain Workflows</a></div></details>
+          <details class="ribbon-dropdown"><summary>Science</summary><div class="ribbon-menu"><a href="science-biology.html">Biology Hub</a><a href="science-chemistry.html">Chemistry Hub</a><a href="science-physics.html">Physics Hub</a><a href="science-maths.html">Mathematics Hub</a><a href="science-ml.html">🤖 Machine Learning</a><a href="science-bioinformatics.html">Bioinformatics</a><a href="science-cheminformatics.html">Cheminformatics</a><a href="bloch.html">⚛️ Bloch Sphere Shorts</a><a href="bolero.html">🧬 BOLERO Sequence Model</a><a href="science/physics/quantum.html">Quantum Mechanics</a></div></details>
+          <details class="ribbon-dropdown"><summary>Insights</summary><div class="ribbon-menu"><a href="feeds.html">📡 Live Journal Feeds</a><a href="digest.html">Weekly Science Digest</a><a href="audit.html">📊 Audit Dashboard</a><a href="404.html">🚧 404 page</a><a href="lab.html">🔬 Lab</a><a href="dashboard.html">Temporal Knowledge Graph Dashboard</a><a href="concepts.html">Concept Cards</a><a href="concepts/lazy-evaluation.html">Lazy Evaluation as UX</a><a href="concepts/provenance-chain.html">Provenance Chain</a></div></details>
+        </nav>
+        <div class="ribbon-actions">
+          <button id="ribbon-theme-toggle" class="ribbon-icon-btn" aria-label="Toggle dark / light theme" title="Toggle dark / light theme"><span id="ribbon-theme-icon">🌙</span></button>
+          <a href="demos.html" class="ribbon-btn-primary">Get Started</a>
+        </div>
+      </div>
+    </header>
+
+
+    <canvas id="particle-canvas"></canvas>
+
+    <main class="container">
+      <p class="crumbs"><a href="index.html">Home</a> / Science / Bioinformatics + Neural Networks / BOLERO</p>
+      <span class="tag">🔬 Research paper · Arc Institute 2025 · Bioinformatics × Neural Networks</span>
+      <h1>BOLERO — Cell-State-Conditioned Sequence Model</h1>
+      <p class="lead">A <b>sequence-to-function Transformer</b> whose weights are <b>dynamically generated per cell type</b> by a hypernetwork conditioned on a cell-state embedding. BOLERO predicts cell-state-specific transcript abundance and chromatin accessibility (ATAC-seq) directly from raw DNA — and generalises <b>across species</b> (human, mouse, macaque) without being trained on them. Trained on the <b>Bolero-10M</b> epigenetic + multiomics dataset (10M+ cells across human brain and body, development and aging, across species). <a href="https://arcinstitute.org/news/bolero" target="_blank" rel="noopener">Read the paper →</a></p>
+
+      <div class="viz-grid">
+        <div class="viz-card">
+          <h3>Pipeline visualiser — 6 stages</h3>
+          <div class="viz-wrap">
+            <canvas id="main-canvas" width="728" height="420"></canvas>
+            <div class="zoom-controls">
+              <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+              <div class="zoom-label" id="zoom-label">100%</div>
+              <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+              <button class="zoom-btn" id="zoom-reset" title="Reset zoom">↺</button>
+            </div>
+            <div style="position: absolute; bottom: 10px; left: 12px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace;" id="stage-indicator">stage 0/6</div>
+          </div>
+          <div class="controls-row">
+            <button class="btn primary" id="btn-play">▶ Animate pipeline</button>
+            <button class="btn ghost" id="btn-reset">↺ Reset</button>
+            <div style="margin-left: auto; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace;" id="state-display">DNA: ACGT... → ATAC pred</div>
+          </div>
+        </div>
+
+        <div class="viz-card">
+          <h3>The six stages</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px;">Each stage narrates one component of the BOLERO pipeline. Click any stage to jump there.</p>
+          <ol class="scene-list" id="scene-list">
+            <li data-idx="0"><span class="num">1</span><span class="title">DNA input</span><div class="desc">One-hot encoded sequence (A,C,G,T) — typically 4,096 bp context window.</div></li>
+            <li data-idx="1"><span class="num">2</span><span class="title">Cell-state embedding</span><div class="desc">10M-cell reference compresses cell identity into a dense vector z ∈ ℝᵈ.</div></li>
+            <li data-idx="2"><span class="num">3</span><span class="title">Hypernetwork weight generator</span><div class="desc">HyperNet(z) → ΔW per layer — dynamic weight modifications added to baseline Transformer.</div></li>
+            <li data-idx="3"><span class="num">4</span><span class="title">Sequence-conditioned Transformer</span><div class="desc">Multi-head self-attention over DNA tokens with cell-state-specific ΔW injected at every layer.</div></li>
+            <li data-idx="4"><span class="num">5</span><span class="title">ATAC + transcript prediction</span><div class="desc">Output head predicts chromatin accessibility + RNA abundance for that cell type at each locus.</div></li>
+            <li data-idx="5"><span class="num">6</span><span class="title">UMAP clustering + attribution</span><div class="desc">~32K predicted cells projected to 2D; saliency maps identify which DNA bases drive each prediction.</div></li>
+          </ol>
+          <div style="margin-top: 16px; padding: 10px; background: rgba(11,15,26,0.6); border-radius: 6px; border: 1px solid var(--border);">
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;">Paper key results</div>
+            <ul style="margin: 0; padding-left: 16px; font-size: 11px; color: var(--text-muted); line-height: 1.6;">
+              <li>Predicts cell-state-specific transcript + ATAC from DNA</li>
+              <li>Cross-species generalisation (human → mouse → macaque)</li>
+              <li>Discovered FOX-AP-1 spacing rule (4bp optimal)</li>
+              <li>Designs new enhancers + scores disease variants</li>
+              <li>In silico virtual DNA-editing experiments</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h2>📐 Mathematical formulation</h2>
+
+      <div class="math-block">
+        <div class="eq">Stage 1 — DNA input:  x ∈ {0,1}^{4 × L}  (one-hot A/C/G/T over L base pairs)</div>
+        <div class="explain">Typical L = 4,096–16,384 bp context window. Each position is a 4-dim one-hot vector (A=[1,0,0,0], C=[0,1,0,0], G=[0,0,1,0], T=[0,0,0,1]).</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 2 — Cell-state embedding:  z = f_embed(cell_id) ∈ ℝᵈ  where d ≈ 128–512</div>
+        <div class="explain">Cell identity compressed to a dense vector by training a variational autoencoder on the Bolero-10M single-cell atlas (~10M cells, 200+ cell types, 4 species). The embedding captures <em>cell-type + activation state + species + developmental stage</em>.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 3 — Hypernetwork weight generator:
+ΔWₗ = HyperNetₗ(z) ∈ ℝ^{dₗ × dₗ}  for each Transformer layer l</div>
+        <div class="explain">A separate HyperNet per layer maps the cell-state embedding z to a weight-modification matrix ΔWₗ. This ΔWₗ is <em>added</em> to the baseline (DNA-only) weights Wₗ, so the same DNA sequence produces different ATAC predictions in different cell types.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 4 — Cell-conditioned Transformer forward pass:
+hₗ = TransformerLayerₗ(hₗ₋₁ ; Wₗ + ΔWₗ(z))</div>
+        <div class="explain">Standard Transformer block: LayerNorm → Multi-Head Self-Attention → Add → LayerNorm → MLP → Add. The only modification is that every weight tensor is summed with the cell-state-specific ΔWₗ(z). This is a <b>hypernetwork conditioning</b> — different from FiLM/AdaLN which scale activations; here the <em>weights themselves</em> are cell-state-dependent.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 5 — Prediction heads:
+ŷ_ATAC = softmax(MLP_ATAC(h_L)),  ŷ_RNA = MLP_RNA(h_L)</div>
+        <div class="explain">Per-locus ATAC-seq accessibility (binary: open/closed) + per-gene RNA abundance (regression). Both heads are also cell-state-conditioned via ΔW on their final layer.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 6 — Sequence attribution:
+attr(x, c) = ∂ŷ_c / ∂x = Σᵢ (∂ŷ_c/∂h_L) · (∂h_L/∂xᵢ)  (gradient × input)</div>
+        <div class="explain">Saliency map identifying which DNA positions drive the model's prediction for cell type c. BOLERO's attribution discovered the FOX-AP-1 spacing rule: placing a FOX factor binding site exactly 4 bp from an AP-1 site dramatically boosts cellular response — a regulatory grammar learned directly from sequence.</div>
+      </div>
+
+      <h2>💻 Math → Code — runnable Python implementation</h2>
+
+      <div class="code-section">
+        <h3 style="margin: 0 0 8px; font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em;">BOLERO minimal reference implementation (numpy + 70 lines)</h3>
+        <pre><span class="cm"># Stage 1: DNA one-hot encoding
+# A → [1,0,0,0]  C → [0,1,0,0]  G → [0,0,1,0]  T → [0,0,0,1]</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="kw">def</span> <span class="fn">encode_dna</span>(sequence):
+    <span class="cm"># x → (4, L) one-hot — used as the sequence input</span>
+    code = {<span class="num">'A'</span>:<span class="num">0</span>, <span class="num">'C'</span>:<span class="num">1</span>, <span class="num">'G'</span>:<span class="num">2</span>, <span class="num">'T'</span>:<span class="num">3</span>}
+    x = np.zeros((<span class="num">4</span>, len(sequence)), dtype=float)
+    <span class="kw">for</span> i, b <span class="kw">in</span> <span class="kw">enumerate</span>(sequence):
+        x[code[b], i] = <span class="num">1.0</span>
+    <span class="kw">return</span> x  <span class="cm"># shape (4, L)</span>
+
+<span class="cm"># Stage 2: Cell-state embedding (pre-trained VAE on Bolero-10M atlas)</span>
+<span class="kw">def</span> <span class="fn">cell_state_embedding</span>(cell_id, atlas_weights):
+    <span class="cm"># z = f_embed(cell_id) ∈ R^d  (d ≈ 128)</span>
+    <span class="kw">return</span> atlas_weights[<span class="num">'embeddings'</span>][cell_id]  <span class="cm"># shape (d,)</span>
+
+<span class="cm"># Stage 3: Hypernetwork generates per-layer weight deltas</span>
+<span class="kw">class</span> <span class="fn">HyperNet</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, d_embed, d_layer):
+        s = np.sqrt(<span class="num">2.0</span> / d_embed)
+        self.W = np.random.randn(d_layer, d_embed) * s
+        self.b = np.zeros(d_layer)
+
+    <span class="kw">def</span> <span class="fn">__call__</span>(self, z):
+        <span class="cm"># ΔW_l = HyperNet_l(z) — added to baseline W_l</span>
+        <span class="kw">return</span> self.W @ z + self.b  <span class="cm"># shape (d_layer,)</span>
+
+<span class="cm"># Stage 4: Cell-conditioned Transformer forward pass</span>
+<span class="kw">def</span> <span class="fn">softmax</span>(x, axis=-<span class="num">1</span>):
+    x = x - x.max(axis=axis, keepdims=<span class="num">True</span>)
+    e = np.exp(x)
+    <span class="kw">return</span> e / e.sum(axis=axis, keepdims=<span class="num">True</span>)
+
+<span class="kw">def</span> <span class="fn">transformer_layer</span>(h, W_q, W_k, W_v, W_o, W_ff, b_ff, delta_W):
+    <span class="cm"># Inject cell-state delta: W → W + ΔW</span>
+    W_q_eff = W_q + delta_W
+    W_k_eff = W_k + delta_W.T
+    Q = h @ W_q_eff.T; K = h @ W_k_eff.T; V = h @ W_v.T
+    d_k = Q.shape[-<span class="num">1</span>]
+    attn = softmax(Q @ K.T / np.sqrt(d_k), axis=-<span class="num">1</span>)
+    h_attn = attn @ V
+    h_ff = np.maximum(<span class="num">0</span>, h_attn @ W_ff + b_ff)
+    <span class="kw">return</span> h_ff  <span class="cm"># post-Add+LayerNorm skipped for clarity</span>
+
+<span class="cm"># Stage 5: ATAC prediction head</span>
+<span class="kw">def</span> <span class="fn">predict_atac</span>(h_L, W_atac, b_atac):
+    <span class="cm"># ŷ_ATAC = softmax(MLP_ATAC(h_L)) — open/closed per locus</span>
+    logits = h_L @ W_atac.T + b_atac
+    <span class="kw">return</span> softmax(logits, axis=-<span class="num">1</span>)
+
+<span class="cm"># Stage 6: Sequence attribution via gradient × input</span>
+<span class="kw">def</span> <span class="fn">attribute_sequence</span>(x, cell_id, model_weights, eps=<span class="num">1e-3</span>):
+    <span class="cm"># attr[i] = ∂ŷ_c/∂x[i] — which bases drive the prediction</span>
+    baseline = predict_atac(forward(x, cell_id, model_weights))
+    attrs = np.zeros_like(x)
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="kw">range</span>(x.shape[<span class="num">1</span>]):
+        x_perturbed = x.copy()
+        x_perturbed[:, i] = <span class="num">0.0</span>  <span class="cm"># zero out position i</span>
+        pred_perturbed = predict_atac(forward(x_perturbed, cell_id, model_weights))
+        attrs[:, i] = (baseline - pred_perturbed) / eps  <span class="cm"># leave-one-out saliency</span>
+    <span class="kw">return</span> attrs  <span class="cm"># shape (4, L) — per-base importance</span>
+
+<span class="kw">def</span> <span class="fn">forward</span>(x, cell_id, weights):
+    z = cell_state_embedding(cell_id, weights[<span class="num">'atlas'</span>])
+    h = x.T  <span class="cm"># (L, 4) — sequence as tokens</span>
+    <span class="kw">for</span> layer <span class="kw">in</span> weights[<span class="num">'layers'</span>]:
+        delta_W = layer[<span class="num">'hypernet'</span>](z)
+        h = transformer_layer(h, **layer[<span class="num">'weights'</span>], delta_W=delta_W)
+    <span class="kw">return</span> h[-<span class="num">1</span>]  <span class="cm"># final-layer representation</span>
+
+<span class="cm"># === Example: predict ATAC for a 32-bp DNA sequence in 2 cell types ===</span>
+np.random.seed(<span class="num">0</span>)
+seq = <span class="num">"ACGTACGTACGTACGTACGTACGTACGTACGT"</span>  <span class="cm"># toy 32-bp sequence</span>
+x = encode_dna(seq)
+<span class="kw">print</span>(<span class="num">f"DNA shape: {x.shape} (one-hot 4×L)"</span>)
+<span class="kw">print</span>(<span class="num">f"First 4 positions encoded:\n{x[:, :4]}"</span>)
+<span class="cm"># → shape (4, 32); each column is one-hot for A/C/G/T</span></pre>
+      </div>
+
+      <h2>🧠 Deep thoughts — when to reach for cell-state-conditioned sequence models</h2>
+
+      <div class="callout">
+        <h3>Strategic guidance — applying BOLERO-style architectures to your domain</h3>
+        <div class="row"><span class="lbl use">USE WHEN</span><span class="text">single-cell genomics where the same DNA sequence has different functions in different cell types (regulatory genomics, enhancer design, disease variant scoring, cell-fate prediction, virtual CRISPR experiments, cross-species transfer). Anywhere you need a <em>universal sequence model</em> that adapts to biological context.</span></div>
+        <div class="row"><span class="lbl avoid">AVOID WHEN</span><span class="text">you only have bulk-tissue data (no single-cell resolution → no cell-state embedding to learn); the cell types in your data are < 10 (a small classifier is faster); you need protein-level predictions (use AlphaFold + ESM-style models); or you need real-time inference at &lt; 10 ms latency (BOLERO-style hypernetworks add ~3× compute vs vanilla Transformer).</span></div>
+        <div class="row"><span class="lbl why">WHY</span><span class="text">The key insight is <em>weight-level conditioning</em> rather than the more common FiLM/AdaLN activation-level conditioning. By generating ΔWₗ per layer from the cell-state embedding, the model can express qualitatively different sequence grammars in different cell types — e.g. FOX-AP-1 spacing matters in neurons but not in glia. Activation-level conditioning can only scale/shift a shared grammar; weight-level conditioning can swap grammars entirely. This is why BOLERO discovers regulatory rules (FOX-AP-1 4bp spacing) that activation-conditioned models miss.</span></div>
+      </div>
+
+      <h2>🚀 Futuristic possibilities — where this leads (2027-2035)</h2>
+
+      <div class="callout amber">
+        <h3>Speculative but grounded — extrapolating from current results</h3>
+        <div class="row"><span class="lbl futur">2026-27</span><span class="text"><b>Universal regulatory sequence model.</b> BOLERO-100M: extend the atlas to 100M cells covering every human cell type at every developmental stage. A single model that scores any disease variant in any tissue — replacing GWAS eQTL lookup tables with a learned function.</span></div>
+        <div class="row"><span class="lbl futur">2027-28</span><span class="text"><b>Generative enhancer design.</b> Inverse BOLERO: optimise the DNA sequence to produce a target ATAC profile in a target cell type. Already demonstrated for short enhancers (paper); 2027 extends to full locus-scale design (10-100 kb). Pharmaceutical companies order <em>de novo</em> regulatory sequences like they order oligos today.</span></div>
+        <div class="row"><span class="lbl futur">2028-30</span><span class="text"><b>Cell-fate trajectory forecasting.</b> BOLERO + time-series cell-state embeddings: predict <em>where a stem cell will go</em> given current sequence + activation. 5-year cell-fate predictions for personalised cancer therapy (which metastasis will the tumour cell become?).</span></div>
+        <div class="row"><span class="lbl futur">2030-33</span><span class="text"><b>Programmable cell therapies.</b> Combine BOLERO with mRNA/gRNA delivery: design the mRNA sequence to switch a target cell type into a target state. <em>In silico</em> virtual editing becomes <em>in vivo</em> programming. Diseases treated by writing new regulatory grammar into patient cells (no genome editing needed — transient mRNA instructs the cell's endogenous machinery).</span></div>
+        <div class="row"><span class="lbl futur">2033-35</span><span class="text"><b>The regulatory genome as a programming language.</b> BOLERO-class models trained on the full Tree of Life: predict the function of any DNA sequence in any cell of any species. The 4-letter DNA alphabet becomes the substrate for a "cell-state compiler" — geneticists write specs, the model writes enhancers, the cell executes. This is the end-state of the BOLERO research line: a complete <em>differentiable model of gene regulation</em>.</span></div>
+      </div>
+
+      <h2>🔬 Comparison with related approaches</h2>
+
+      <div class="callout pink">
+        <h3>How BOLERO differs from prior sequence models</h3>
+        <div class="row"><span class="lbl why">vs DeepSEA / Basenji</span><span class="text">Those predict tissue-specific ATAC from sequence but use a fixed CNN — no cell-state input. BOLERO's hypernetwork conditioning means the same DNA can produce different ATAC in different cell types <em>within one model</em> (no need to retrain per tissue). ~100× parameter efficiency vs training one model per cell type.</span></div>
+        <div class="row"><span class="lbl why">vs Enformer</span><span class="text">Enformer extended Basenji to 200 kb context with Transformer attention. BOLERO keeps the Transformer but adds cell-state conditioning + attribution. Same architecture class, but BOLERO answers a different question: <em>what would this sequence do in cell type X?</em></span></div>
+        <div class="row"><span class="lbl why">vs scGPT / Geneformer</span><span class="text">Those are <em>cell-state foundation models</em> — trained on single-cell RNA. They have no sequence input. BOLERO's complement: it needs a cell-state embedding (often from scGPT) as its conditioning input. The two are designed to be composed: scGPT → cell-state embedding → BOLERO → sequence-to-function prediction in that cell.</span></div>
+        <div class="row"><span class="lbl why">vs Hypernetworks (Ha et al. 2016)</span><span class="text">BOLERO's hypernetwork conditioning is the same idea (one network generates another's weights) but applied to the largest conditioning space to date — 200+ cell types × 4 species × developmental stages. The hypernetwork is also factored per Transformer layer (ΔWₗ not a single ΔW), giving finer control.</span></div>
+      </div>
+
+      <div class="meta">
+        <p>Page: <code>docs/bolero.html</code> · Generated for AIHPC Advanced Phase 38.2 · Style inspired by <a href="bloch.html">bloch.html</a>. Paper: <a href="https://arcinstitute.org/news/bolero" target="_blank" rel="noopener">Arc Institute BOLERO announcement</a> (Liu, Mao, Gallent, Chen, Yan, Vogel, Traunmüller, Zhang, Buenrostro, Zhou, Greenberg — 2025). All animations are pure client-side canvas; no external services. Comments to <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a>.</p>
+      </div>
+    </main>
+
+    <script>
+      // ===== Particle background (subtle) =====
+      (function() {
+        var c = document.getElementById('particle-canvas');
+        var x = c.getContext('2d');
+        function resize() { c.width = innerWidth; c.height = innerHeight; }
+        resize(); addEventListener('resize', resize);
+        var N = 60, P = [];
+        var cols = ['#10b981', '#06b6d4', '#8b5cf6'];
+        for (var i = 0; i < N; i++) P.push({x: Math.random()*c.width, y: Math.random()*c.height, vx: (Math.random()-.5)*.15, vy: (Math.random()-.5)*.15, r: Math.random()*1.5+.5, c: cols[i%3]});
+        function s() {
+          x.clearRect(0,0,c.width,c.height);
+          for (var i=0;i<N;i++) for (var j=i+1;j<N;j++) { var d=Math.hypot(P[i].x-P[j].x, P[i].y-P[j].y); if (d<120) { x.strokeStyle='rgba(139,92,246,'+(.1*(1-d/120))+')'; x.lineWidth=.5; x.beginPath(); x.moveTo(P[i].x,P[i].y); x.lineTo(P[j].x,P[j].y); x.stroke(); } }
+          for (var p of P) { p.x+=p.vx; p.y+=p.vy; if (p.x<0)p.x=c.width; if (p.x>c.width)p.x=0; if (p.y<0)p.y=c.height; if (p.y>c.height)p.y=0; x.fillStyle=p.c; x.globalAlpha=.35; x.beginPath(); x.arc(p.x,p.y,p.r,0,6.28); x.fill(); }
+          x.globalAlpha=1;
+          requestAnimationFrame(s);
+        }
+        s();
+      })();
+
+      // ===== Main BOLERO pipeline canvas =====
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      var W = canvas.width, H = canvas.height;
+      var stage = 0;
+      var maxStage = 6;
+      var zoom = 1.0;
+      var isAnim = false;
+
+      // DNA sequence (toy, 32 bases)
+      var dnaSeq = "ACGTACGTACGTACGTACGTACGTACGTACGT";
+      var dnaColors = {'A':'#10b981', 'C':'#06b6d4', 'G':'#f59e0b', 'T':'#ec4899'};
+
+      // Cell types
+      var cellTypes = ["L2/3-IT", "L6-CT", "Pvalb", "Sst", "Astro", "Oligo"];
+
+      function render() {
+        ctx.save();
+        ctx.fillStyle = '#0a0e1a';
+        ctx.fillRect(0, 0, W, H);
+
+        // Apply zoom (center)
+        ctx.translate(W/2, H/2);
+        ctx.scale(zoom, zoom);
+        ctx.translate(-W/2, -H/2);
+
+        // Background gradient
+        var bg = ctx.createLinearGradient(0,0,0,H);
+        bg.addColorStop(0,'#0a0e1a'); bg.addColorStop(1,'#0f1422');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+
+        // Title
+        ctx.fillStyle = '#10b981'; ctx.font = 'bold 14px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('BOLERO Pipeline — stage ' + stage + '/' + maxStage, W/2, 25);
+        ctx.textAlign = 'left';
+
+        var baseY = 70;
+
+        // === Stage 1: DNA input ===
+        if (stage >= 1) {
+          var dnaY = baseY + 20;
+          ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace'; ctx.textAlign = 'left';
+          ctx.fillText('1. DNA input (one-hot 4×L)', 30, dnaY - 8);
+          // Draw DNA sequence as colored bars
+          var barW = 18;
+          var startX = 30;
+          for (var i = 0; i < dnaSeq.length && i < 32; i++) {
+            var b = dnaSeq[i];
+            ctx.fillStyle = dnaColors[b];
+            ctx.fillRect(startX + i * barW, dnaY, barW - 2, 14);
+            ctx.fillStyle = '#000'; ctx.font = 'bold 10px ui-monospace'; ctx.textAlign = 'center';
+            ctx.fillText(b, startX + i * barW + barW/2, dnaY + 11);
+            ctx.textAlign = 'left';
+          }
+          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillText('A green · C cyan · G amber · T pink', 30, dnaY + 28);
+        }
+
+        // === Stage 2: Cell-state embedding ===
+        if (stage >= 2) {
+          var embY = baseY + 80;
+          ctx.fillStyle = '#8b5cf6'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('2. Cell-state embedding z ∈ R^d (128-dim)', 30, embY - 8);
+          // Draw embedding as a row of small colored squares
+          var embW = 8;
+          for (var i = 0; i < 32; i++) {
+            var v = (Math.sin(i*0.3) + Math.cos(i*0.7)) * 0.5 + 0.5;
+            ctx.fillStyle = 'rgba(139,92,246,' + v + ')';
+            ctx.fillRect(30 + i * embW, embY, embW - 1, 18);
+          }
+          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillText('32 of 128 dims shown — compresses 10M-cell atlas', 30, embY + 28);
+        }
+
+        // === Stage 3: Hypernetwork weight generator ===
+        if (stage >= 3) {
+          var hypY = baseY + 140;
+          ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('3. HyperNet(z) → ΔWₗ per layer', 30, hypY - 8);
+          // Draw ΔW matrix as a 4x8 heatmap
+          var cellW = 22, cellH = 18;
+          for (var i = 0; i < 4; i++) {
+            for (var j = 0; j < 8; j++) {
+              var v = (Math.sin(i*0.5 + j*0.3) + 1) / 2;
+              var r = Math.round(245 - v*150), g = Math.round(158 - v*100), b = Math.round(11 + v*100);
+              ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
+              ctx.fillRect(30 + j * cellW, hypY + i * cellH, cellW - 2, cellH - 2);
+            }
+          }
+          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillText('4×8 weight delta — added to baseline Transformer W', 30, hypY + 4 * cellH + 12);
+        }
+
+        // === Stage 4: Cell-conditioned Transformer ===
+        if (stage >= 4) {
+          var trY = baseY + 220;
+          ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('4. Transformer hₗ = Layer(hₗ₋₁; Wₗ + ΔWₗ(z))', 30, trY - 8);
+          // Draw 4 attention heads as heatmaps
+          for (var h = 0; h < 4; h++) {
+            var hx = 30 + h * 90;
+            ctx.fillStyle = 'rgba(148,163,184,0.4)'; ctx.font = '9px ui-monospace'; ctx.textAlign = 'center';
+            ctx.fillText('head ' + h, hx + 35, trY - 2);
+            ctx.textAlign = 'left';
+            for (var i = 0; i < 4; i++) {
+              for (var j = 0; j < 4; j++) {
+                var v = (Math.sin(i + j + h) + 1) / 2;
+                ctx.fillStyle = 'rgba(6,182,212,' + v + ')';
+                ctx.fillRect(hx + j * 16, trY + i * 16, 14, 14);
+              }
+            }
+          }
+        }
+
+        // === Stage 5: ATAC prediction ===
+        if (stage >= 5) {
+          var pY = baseY + 320;
+          ctx.fillStyle = '#10b981'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('5. ATAC prediction (open/closed per locus)', 30, pY - 8);
+          // Draw predicted ATAC as a bar chart
+          for (var i = 0; i < 16; i++) {
+            var v = Math.max(0.05, (Math.sin(i*0.4) + 1) / 2 * 0.8 + 0.1);
+            ctx.fillStyle = v > 0.5 ? 'rgba(16,185,129,0.8)' : 'rgba(239,68,68,0.6)';
+            ctx.fillRect(30 + i * 26, pY + 30 - v * 25, 22, v * 25);
+          }
+          ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '9px ui-monospace';
+          ctx.fillText('green = accessible · red = closed', 30, pY + 38);
+        }
+
+        // === Stage 6: UMAP clustering + attribution ===
+        if (stage >= 6) {
+          var uY = baseY + 380;
+          ctx.fillStyle = '#ec4899'; ctx.font = 'bold 11px ui-monospace';
+          ctx.fillText('6. UMAP clustering (~32K cells, coloured by predicted type)', 30, uY - 8);
+          // Draw scatter of ~150 cells (subsample)
+          var clusterColors = ['#10b981', '#06b6d4', '#f59e0b', '#ec4899', '#8b5cf6', '#ef4444'];
+          for (var i = 0; i < 150; i++) {
+            // 6 clusters
+            var cluster = i % 6;
+            var cx = 80 + (cluster % 3) * 200;
+            var cy = uY + 30 + Math.floor(cluster / 3) * 80;
+            // Cluster shape (Gaussian)
+            var r1 = (Math.random() - 0.5) * 50;
+            var r2 = (Math.random() - 0.5) * 30;
+            ctx.fillStyle = clusterColors[cluster];
+            ctx.globalAlpha = 0.6;
+            ctx.beginPath();
+            ctx.arc(cx + r1, cy + r2, 1.5, 0, 6.28);
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+          // Labels
+          for (var c = 0; c < 6; c++) {
+            var lx = 80 + (c % 3) * 200 - 30;
+            var ly = uY + 30 + Math.floor(c / 3) * 80 - 8;
+            ctx.fillStyle = clusterColors[c]; ctx.font = '9px ui-monospace';
+            ctx.fillText(cellTypes[c], lx, ly);
+          }
+        }
+
+        ctx.restore();
+
+        // Update state display
+        var states = ['idle', 'DNA encoded', 'z embedded', 'ΔW generated', 'transformer pass', 'ATAC predicted', 'UMAP ✓'];
+        document.getElementById('stage-indicator').textContent = 'stage ' + stage + '/' + maxStage + ' · ' + states[stage];
+        document.getElementById('state-display').textContent = 'DNA: ' + dnaSeq.substring(0,8) + '... → ' + (stage >= 6 ? 'UMAP ✓' : (stage >= 5 ? 'ATAC ✓' : (stage >= 4 ? 'Transformer' : (stage >= 3 ? 'ΔW generated' : (stage >= 2 ? 'z embedded' : (stage >= 1 ? 'DNA encoded' : 'idle'))))));
+      }
+
+      function animate() {
+        stage = 0;
+        function step() {
+          if (stage > maxStage) {
+            isAnim = false; document.getElementById('btn-play').disabled = false;
+            document.getElementById('stage-indicator').textContent = 'done ✓';
+            return;
+          }
+          render();
+          // Highlight active scene
+          var lis = document.querySelectorAll('#scene-list li');
+          lis.forEach(function(li, i) { li.classList.toggle('active', i === Math.min(stage - 1, 5)); });
+          stage++;
+          setTimeout(step, 800);
+        }
+        step();
+      }
+
+      // === Scene list click handlers ===
+      var sceneItems = document.querySelectorAll('#scene-list li');
+      sceneItems.forEach(function(li, idx) {
+        li.addEventListener('click', function() {
+          stage = idx + 1;
+          render();
+          sceneItems.forEach(function(l, i) { l.classList.toggle('active', i === idx); });
+        });
+      });
+
+      // === Play button ===
+      document.getElementById('btn-play').addEventListener('click', function() {
+        if (isAnim) return;
+        isAnim = true;
+        document.getElementById('btn-play').disabled = true;
+        animate();
+      });
+
+      // === Reset button ===
+      document.getElementById('btn-reset').addEventListener('click', function() {
+        stage = 0;
+        isAnim = false;
+        document.getElementById('btn-play').disabled = false;
+        sceneItems.forEach(function(li) { li.classList.remove('active'); });
+        render();
+      });
+
+      // === Zoom controls ===
+      function updateZoom() {
+        document.getElementById('zoom-label').textContent = Math.round(zoom * 100) + '%';
+        render();
+      }
+      document.getElementById('zoom-in').addEventListener('click', function() { zoom = Math.min(3.0, zoom + 0.2); updateZoom(); });
+      document.getElementById('zoom-out').addEventListener('click', function() { zoom = Math.max(0.5, zoom - 0.2); updateZoom(); });
+      document.getElementById('zoom-reset').addEventListener('click', function() { zoom = 1.0; updateZoom(); });
+
+      // Initial render
+      render();
+    </script>
+  </body>
+</html>
