@@ -1,8 +1,58 @@
 {
   "domain": "medical",
-  "generated_at": "2026-10-21T06:29:52.279120Z",
+  "generated_at": "2026-10-22T06:29:11.265764Z",
   "total_entries": 58,
   "entries": [
+    {
+      "title": "Massive study of 460,000 people challenges ultra-processed food cancer fears",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261020085014.htm",
+      "summary": "A massive study of more than 460,000 Americans found that ultra-processed foods were not associated with increased colorectal cancer risk overall, challenging a widely held assumption. While processed meat was linked to higher cancer incidence, ultra-processed whole grains and dairy products were as",
+      "published": "Wed, 21 Oct 2026 09:22:17 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261020085014.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Too much RNA can starve cells of energy, scientists discover",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261020085023.htm",
+      "summary": "Scientists have uncovered an unexpected danger lurking inside cells: too much RNA can damage the structures responsible for producing energy. A new study found that excess RNA, including the normally essential messenger RNA (mRNA), can directly disrupt mitochondria without relying on the immune syst",
+      "published": "Wed, 21 Oct 2026 09:02:34 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261020085023.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Astronauts’ hearts just passed a surprising test for Mars",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261020085016.htm",
+      "summary": "A new study tracking 13 astronauts suggests that the human heart may be surprisingly well equipped for a journey to Mars, especially with regular exercise during spaceflight. Researchers found that astronauts' hearts adapted to months of weightlessness and handled simulated Martian gravity without m",
+      "published": "Wed, 21 Oct 2026 07:59:14 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261020085016.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Rejuvenation breakthrough: Scientists reverse 60 years of aging in human cells",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261020085013.htm",
+      "summary": "Scientists have turned blood cells from an 80-year-old into neural stem cells with a molecular age of less than 20, effectively reversing more than 60 years of cellular aging in the laboratory. The discovery offers a new way to investigate how cells become younger and could help researchers better u",
+      "published": "Wed, 21 Oct 2026 07:03:52 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261020085013.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Just 4 minutes a day can dramatically improve strength after 65",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261020085025.htm",
+      "summary": "A new Penn State study suggests that just four minutes of daily strength training can significantly improve mobility and physical function in older adults. After 12 weeks, participants showed meaningful gains in balance, leg strength, and their ability to stand up from a chair, all important factors",
+      "published": "Wed, 21 Oct 2026 05:52:28 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261020085025.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
     {
       "title": "A 47-year study reveals the age when your body starts losing strength",
       "link": "https://www.sciencedaily.com/releases/2026/10/261014000912.htm",
@@ -69,6 +119,16 @@
       "summary": "A promising new treatment for knee arthritis uses tiny, dissolvable particles to block abnormal blood vessels, easing inflammation and pain without joint replacement surgery. In a study of 194 patients, 80% experienced clinically meaningful pain relief lasting at least 12 months.",
       "published": "Wed, 14 Oct 2026 00:39:11 EDT",
       "guid": "https://www.sciencedaily.com/releases/2026/10/261013234801.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists find 10 different diets linked to slower aging",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261019093439.htm",
+      "summary": "A study by DZNE finds that healthy eating is associated with slower biological aging—and that there is more than one way to eat healthily. The researchers examined ten dietary patterns considered healthy, including the Mediterranean, Nordic, and a plant-based diet, as well as the DASH diet, which is",
+      "published": "Tue, 20 Oct 2026 21:58:07 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261019093439.htm",
       "feed_id": "science-daily-med",
       "journal": "Science Daily",
       "domain": "medical"
@@ -304,36 +364,6 @@
       "domain": "medical"
     },
     {
-      "title": "New injection makes fat cells self-destruct",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261008102713.htm",
-      "summary": "Scientists have developed an experimental injection that destroys fat cells and significantly reduces dangerous belly fat, potentially opening a new path to treating obesity. Early research also suggests it could help prevent the weight regain that often follows stopping popular weight loss drugs li",
-      "published": "Sun, 11 Oct 2026 11:08:28 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261008102713.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
-      "title": "The eye has a hidden cleanup system scientists never knew existed",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261008005254.htm",
-      "summary": "Scientists have discovered a hidden cleanup system at the back of the eye that drains fluid and waste through a previously unknown pathway. The surprising finding, demonstrated in mice, could open the door to new treatments for glaucoma, macular degeneration, and other causes of blindness.",
-      "published": "Sun, 11 Oct 2026 02:01:54 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261008005254.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
-      "title": "Eating olive oil before carbs has a surprising effect on blood sugar",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261008102700.htm",
-      "summary": "A simple change in the order you eat your food could help prevent blood sugar spikes. Scientists discovered that giving mice olive oil before carbohydrates slowed digestion and activated a surprising combination of hormones and nerve signals that helped regulate blood sugar, even in mice with type 2",
-      "published": "Sun, 11 Oct 2026 00:32:03 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261008102700.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
       "title": "Scientists tested 39 sweeteners and uncovered surprising gut effects",
       "link": "https://www.sciencedaily.com/releases/2026/10/261016081103.htm",
       "summary": "Scientists have discovered that many common sweeteners can interfere with gut bacteria, with some combinations involving medications producing surprisingly strong effects. One sweetener mixed with a widely prescribed antidepressant reduced beneficial bacteria and microbial diversity in laboratory ex",
@@ -389,26 +419,6 @@
       "summary": "One of the world's most common plastics may pose a hidden threat to liver health. Texas A&M researchers discovered that polyethylene microplastics can contribute to fatty liver disease, with potentially worse effects when combined with an unhealthy diet. Even more surprising, this widely used plasti",
       "published": "Sat, 10 Oct 2026 20:47:05 EDT",
       "guid": "https://www.sciencedaily.com/releases/2026/10/261008102718.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
-      "title": "Neanderthals may have used prehistoric glue as an ancient antibiotic",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261008005256.htm",
-      "summary": "Neanderthals may have used a sticky substance made from birch bark to treat wounds thousands of years before antibiotics existed. Researchers recreated ancient birch tar production techniques and discovered that every sample could inhibit the growth of bacteria responsible for dangerous wound infect",
-      "published": "Sat, 10 Oct 2026 20:45:37 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261008005256.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
-      "title": "Scientists created a tiny device that can control your nerves to treat chronic pain",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261008005253.htm",
-      "summary": "Scientists have developed a tiny, injectable device that can control nerve activity without surgery, batteries, or wires, potentially transforming treatment for chronic pain and movement disorders. Powered wirelessly from outside the body, the seed-sized technology has shown promising results in ear",
-      "published": "Sat, 10 Oct 2026 20:23:19 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261008005253.htm",
       "feed_id": "science-daily-med",
       "journal": "Science Daily",
       "domain": "medical"
@@ -569,16 +579,6 @@
       "summary": "Scientists have discovered how to turn a protein that normally fuels cancer growth into a weapon against it. By activating PPARD in immune cells, researchers made them better at burning fat and attacking tumors, slowing or stopping cancer growth in laboratory experiments. The approach showed promise",
       "published": "Fri, 16 Oct 2026 00:51:38 EDT",
       "guid": "https://www.sciencedaily.com/releases/2026/10/261015073203.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
-      "title": "Scientists discover 5 hidden brain patterns behind depression",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261008005251.htm",
-      "summary": "Depression may not be one biological condition, but several distinct patterns of brain activity hiding under the same diagnosis. Researchers studying 263 people with depression identified five brain profiles, each showing different patterns of communication between brain regions and associations wit",
-      "published": "Fri, 09 Oct 2026 14:34:02 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261008005251.htm",
       "feed_id": "science-daily-med",
       "journal": "Science Daily",
       "domain": "medical"

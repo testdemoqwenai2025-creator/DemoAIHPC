@@ -1,6 +1,6 @@
 {
   "domain": "biology",
-  "generated_at": "2026-10-21T06:29:52.279120Z",
+  "generated_at": "2026-10-22T06:29:11.265764Z",
   "total_entries": 59,
   "entries": [
     {
@@ -94,21 +94,21 @@
       "domain": "biology"
     },
     {
-      "title": "Have we found alien life? Hundreds of scientists weigh in",
-      "link": "https://www.sciencedaily.com/releases/2026/09/260909005212.htm",
-      "summary": "Two major alien-life announcements in 2025 generated enormous excitement, but most astrobiologists remained unconvinced. Only 6.6% of surveyed experts thought possible biological molecules on K2-18b probably represented extraterrestrial life, while 15.1% said the same about intriguing mineral patter",
-      "published": "Wed, 09 Sep 2026 07:13:30 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/09/260909005212.htm",
-      "feed_id": "science-daily-bio",
-      "journal": "Science Daily",
-      "domain": "biology"
-    },
-    {
       "title": "This 245-million-year-old fossil still has its stomach and intestines",
       "link": "https://www.sciencedaily.com/releases/2026/09/260927225036.htm",
       "summary": "A 245-million-year-old marine reptile fossil preserves an astonishing amount of detail, including its stomach, liver, and intestines. The discovery reveals that Austronaga minuta was highly adapted for swimming even though its digestive system remained surprisingly simple.",
       "published": "Tue, 29 Sep 2026 07:39:27 EDT",
       "guid": "https://www.sciencedaily.com/releases/2026/09/260927225036.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists discover ghostly, eyeless creature hidden in Chinese cave",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261019093445.htm",
+      "summary": "Deep inside a high-altitude Chinese cave, scientists discovered a ghostly, eyeless freshwater snail that has evolved to live entirely in darkness, marking the first recorded discovery of its kind in China. Named after a faceless mythical creature, the rare species may already be in danger, with rese",
+      "published": "Tue, 20 Oct 2026 23:08:17 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261019093445.htm",
       "feed_id": "science-daily-bio",
       "journal": "Science Daily",
       "domain": "biology"
