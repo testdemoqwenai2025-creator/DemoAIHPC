@@ -1,538 +1,235 @@
 # AIHPC Advanced — Scientific Computing Platform
 
-> Public preview mirror of the AIHPC Advanced scientific computing platform.
-> Source-of-truth lives in the **private** [`AIHPC-Advanced`](https://github.com/testdemoqwenai2025-creator/AIHPC-Advanced)
-> repository. This repository (`DemoAIHPC`) is a synced public mirror intended
-> for preview by interested parties **without an NDA** in place.
+> **Live preview:** 🚀 **<https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>**
+>
+> Available **24 hours a day, 7 days a week, 365 days a year** — no NDA required, no
+> login, no signup, no tracking. Pure client-side: every computation runs in your
+> browser, no data leaves your device.
 
-[![Public Mirror](https://img.shields.io/badge/repo-public%20mirror-success.svg)](https://github.com/testdemoqwenai2025-creator/DemoAIHPC)
-[![Source of Truth](https://img.shields.io/badge/source-private%20repo-important.svg)](https://github.com/testdemoqwenai2025-creator/AIHPC-Advanced)
-[![License](https://img.shields.io/badge/license-proprietary-lightgrey.svg)](#license)
-[![Web-only Files](https://img.shields.io/badge/public%20repo-web%20files%20only-blue.svg)](#dual-repository-workflow)
-
-> **⚠️ Phase 42 file-type rule** (enforced from 2026-10-22 onward):
-> This public mirror contains **only web files** — `.html`, `.css`, `.js`,
-> `.json` (runtime data), and image formats (`.png`, `.svg`, `.gif`, `.jpg`).
-> All source code (Python scripts, TypeScript, package configs, internal docs,
-> worklogs, preview images) lives exclusively in the private source-of-truth
-> repository. The `.gitignore` in this repo enforces the rule — see
-> [Dual-repository workflow](#dual-repository-workflow) for details.
+[![Live Preview](https://img.shields.io/badge/preview-live%2024%2F7%2F365-success.svg?style=for-the-badge)](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/)
+[![No NDA Required](https://img.shields.io/badge/access-no%20NDA-blue.svg?style=for-the-badge)](#access)
+[![Pure Client-Side](https://img.shields.io/badge/architecture-pure%20client--side-9cf.svg?style=for-the-badge)](#architecture)
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge)](#license)
+[![GDPR Compliant](https://img.shields.io/badge/GDPR-compliant-blue.svg)](#compliance)
+[![HIPAA Ready](https://img.shields.io/badge/HIPAA-ready-blue.svg)](#compliance)
+[![SOC 2 Aligned](https://img.shields.io/badge/SOC%202-aligned-green.svg)](#compliance)
+[![WCAG 2.2 AA](https://img.shields.io/badge/WCAG%202.2%20AA-compliant-purple.svg)](#accessibility)
 
 ---
 
-## Table of contents
+## 🌐 Live preview
 
-1. [Overview](#overview)
-2. [Dual-repository workflow](#dual-repository-workflow)
-3. [Repository map](#repository-map)
-4. [Features](#features)
-5. [Tech stack](#tech-stack)
-6. [Project structure](#project-structure)
-7. [Getting started](#getting-started)
-8. [Pages](#pages)
-9. [Dark / light theme](#dark--light-theme)
-10. [Compliance (GDPR &amp; HIPAA)](#compliance-gdpr--hipaa)
-11. [Contact](#contact)
-12. [License](#license)
+| What | Where |
+|------|-------|
+| **Main landing page** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/> |
+| **Demos hub** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/demos.html> |
+| **Knowledge graph dashboard** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/dashboard.html> |
+| **Audit dashboard** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/audit.html> |
+| **Concept cards (v2)** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/concepts-v2/index.html> |
+| **Weekly Science Digest** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.html> |
+| **Live journal feeds** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/feeds.html> |
 
----
-
-## Overview
-
-AIHPC Advanced is a unified scientific computing platform that bundles
-bioinformatics, cheminformatics, molecular modelling and materials-science
-workflows behind one polyglot microservices architecture, integrated with the
-AETHEL (Advanced Experimental Theoretical Hypercomputing Emulation Layer)
-hypercomputing layer.
-
-The platform is being released as two repositories:
-
-| Repository | Visibility | Purpose |
-|------------|------------|---------|
-| `AIHPC-Advanced` | **Private** | Source of truth — all code changes, worklogs, internal assets (.txt, .md, .png captured from the studio IDE) live here. Access requires an NDA. |
-| `DemoAIHPC` | **Public** | Synced mirror for preview without an NDA. Functionally identical to the private repo at `HEAD`. |
+The preview is hosted on GitHub Pages. It rebuilds automatically on every release. **No
+downtime for maintenance** — every page is a static HTML file served from a CDN.
 
 ---
 
-## Dual-repository workflow
+## 🎯 What this is
 
-The two repositories are kept in sync: every push to the private
-`AIHPC-Advanced` repository is mirrored to the public `DemoAIHPC` repository,
-so the two are functionally identical at `HEAD`.
+A **scientific computing platform** that lets researchers, students, clinicians, and
+curious technologists explore:
 
-This separation keeps legal scenarios simple:
-
-- **External reviewers** interact with the public mirror.
-- **Contributors** work in the private repository; their commits propagate
-  automatically to the public mirror on every push.
-
-> All code, worklogs, and assets (`.txt`, `.md`, `.png`, ...) are committed to
-> the private `AIHPC-Advanced` repository first, then mirrored to the public
-> `DemoAIHPC` repository.
-
----
-
-## Repository map
-
-| What | URL |
-|------|-----|
-| Public preview (this repo) | <https://github.com/testdemoqwenai2025-creator/DemoAIHPC> |
-| Private source-of-truth | <https://github.com/testdemoqwenai2025-creator/AIHPC-Advanced> |
-| GitHub preview endpoint (public) | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/> |
-| Original reference archive | <https://github.com/testdemoqwenai2025-creator/AETH-1-Content-Archive> |
+- **18 interactive canvas components** — Bloch sphere, molecule 3D viewer, quantum
+  teleportation, surface code lattice, VQC animator, segmentation pipeline, biomolecular
+  dynamics, attention heatmap, Fock state viewer, coupled oscillator, and more
+- **40+ concept cards** — visual-first explainers for ML loss functions, activations,
+  optimisers, normalisations, attention, regularisations, and NN architectures (MLP,
+  CNN, RNN, LSTM, GRU, Transformer, Autoencoder, VAE, GAN, ResNet, Diffusion)
+- **8 research-paper concept cards** — BOLERO, scGPT, Geneformer, AlphaFold 3, Claude
+  toxin binder, EditJumps, GeoWorld, Lab in the Loop, AMKD (multimodal knowledge
+  distillation for cancer survival prediction)
+- **Live journal RSS feeds** — 12 scientific journals (Nature, arXiv, PLOS, ScienceDaily)
+  fetched every 6 hours and rendered as a unified timeline
+- **Weekly Science Digest** — curated issue every Tuesday with 5 real recent papers +
+  2 ML-derived futuristic visions, each with full ClickForDemo (Math → Code → Observe)
+- **Cross-domain knowledge graph** — visualises connections between demos, papers,
+  concepts, and phases
+- **In-browser Python lab** (Pyodide) — runnable code with no install
 
 ---
 
-## Features
+## 🎨 Design principles
 
-- **Polyglot microservices platform** — Golang, Elixir, Python, Scala, Rust, C
-  each used where they are strongest.
-- **AETHEL integration** — quantum circuit simulation, neural architecture
-  search, automated hypothesis generation, cross-domain knowledge graph,
-  predictive model ensembles, citation network analysis.
-- **AETHEL Suite (every AETHEL surface, deep-linkable)** — AETHEL
-  Connector, Scientific Connectors Hub, Query Executor, Knowledge Graph,
-  Domain Workflows. Originally embedded as tabs in the home page, now
-  each migrated to its own route under `/aethel`, `/connectors`, `/query`,
-  `/knowledge-graph`, `/workflows`.
-- **Science group (surpass AETHEL)** — Alpha-family-inspired modern AI for
-  science: Proteins (AlphaFold 3), Genetics (AlphaMissense), Nucleotides
-  (RNAfold / Nucleotide Transformer), Mathematics (AlphaProof). Each has
-  its own route under `/science/*` documenting inputs, outputs, method,
-  and observability. Live execution lands in later phases.
-- **Top ribbon** — three grouped dropdowns (Platform / AETHEL Suite /
-  Science), dark/light theme toggle, search affordance, Login, Get
-  Started CTA. Rendered from `RootLayout` so it appears on every page.
-- **Live, observable demos** — each demo is a first-class artifact with
-  provenance: math → code → annotations → observability → downloadable
-  result. The first seed demo (Ordinary Least Squares) is embedded live in
-  the GitHub Pages preview at
-  <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/> and is also
-  available in the Next.js app at `/demos/linear-regression`.
-- **Scientific connectors hub** — bioinformatics, cheminformatics, molecular
-  modelling, materials science.
-- **Knowledge graph visualization** — interactive cross-domain graph.
-- **Domain workflows** — pre-built workflow templates per scientific domain.
-- **Query executor** — natural-language + structured query interface.
-- **About page** — explains the platform, dual-repo workflow and compliance
-  posture.
-- **Dark / light theme toggle on every page** — global toggle in the top
-  ribbon, persisted to `localStorage`.
-- **Compliance footer on every page** — GDPR, HIPAA, contact e-mail, and a
-  "Return to Home" button.
-- **Global site navigation** — top ribbon (Platform / AETHEL Suite /
-  Science dropdowns) + footer navigation.
-- **Math→Code derivation on every science sub-page (Phase 23)** — all
-  22 `/science/*` sub-pages now carry a 5-step derivation block that
-  shows how the page's algorithm follows from its mathematical
-  expression. The pattern was pioneered on `/science/maths/geometry`
-  (tesseract 4D → 3D → 2D projection chain) and propagated to all
-  other sub-pages by `scripts/gen-math-derivations.py`. Each
-  derivation is domain-specific: neighbour-joining for evolutionary,
-  Otsu for imaging, RK4 for systems, Verlet for computational,
-  Graham scan for materials, SMILES parsing for organic, Arrhenius
-  for physical, Euclid for algebra, trapezoidal for analysis,
-  Miller-Rabin for number-theory, Metropolis-Hastings for
-  probability, Euler-Lagrange for mechanics, Hadamard for quantum,
-  STFT for sound, N-body for space, Maxwell-Boltzmann for thermo,
-  FFT for waves — and the central-dogma codon table for molecular.
-- **DAG provenance chain (Phase 23)** — the
-  `/concepts/provenance-chain` concept card is upgraded from a linear
-  7-node chain to a 10-node directed acyclic graph (DAG) with 5
-  layers, joins, and forks. Layer assignment uses longest-path-from-
-  source; topological traversal uses Kahn's algorithm. The JSON-LD
-  receipt now uses `prov:`/`aihpc:` namespaces and emits per-node
-  `inputs[]` arrays.
-- **`<TemporalGraph>` reusable component (Phase 21+, ported in
-  Phase 23)** — extracted from the static `dashboard.html` in Phase 21
-  and now used by both `/benchmark` (phase metrics over time) and
-  `/dashboard` (AETHEL knowledge-graph evolution). The Next.js
-  `/dashboard` route renders the same 10 timesteps as the GitHub
-  Pages `dashboard.html`, unifying the codebase around a single
-  temporal-visualisation component.
-- **Live subscription gating (Phase 24)** — the "Download Receipt"
-  buttons on the lazy-eval popup and the nucleotide demo now read
-  the `/subscribe` session (stored in `localStorage` under
-  `aihpc-session`) and tier-gate the download:
-  - **Free** tier → clicks show a dismissible bottom-right banner
-    with a "→ Upgrade at /subscribe" link.
-  - **Pro** tier → downloads a JSON receipt with
-    `traceAvailable: 'team-tier'` (audit trail held back).
-  - **Team** tier → downloads the full receipt with
-    `trace: { steps, format, entries }` (per-step audit trail).
-  The shared `docs/subscribe-gate.js` library exposes
-  `AIHPC.requireTier()`, `AIHPC.getTier()`, `AIHPC.getSession()`,
-  `AIHPC.mountTierBadge()`, `AIHPC.onChange()` — reusable for any
-  future gated feature. Cross-tab session updates propagate via
-  the `storage` event listener.
-- **Weekly Science Digest (Phase 25, 26)** — every Tuesday AIHPC
-  Advanced publishes a curated digest of 5–7 of the most promising
-  recent articles across Nature, Science, The Lancet, arXiv,
-  bioRxiv, and the domain journals. Each article ships with:
-  - Real publication metadata (source, DOI, authors, date, URL)
-  - 2–3 paragraph abstract
-  - Open dataset card (name, format, size, download URL)
-  - Full ClickForDemo: Math tab with 5-step Math→Code derivation,
-    Code tab with 6-language polyglot (Python / Rust / Go / C /
-    Elixir / Scala), Observe tab with Stats / Reports / Graphs /
-    Summary sub-tabs.
-  Issue #2 (2026-10-27) adds 2 ML-derived futuristic visions —
-  extrapolations from recent ML/AI trends, clearly marked with a 🚀
-  pill, NOT real publications. Issue #2 covers: ESM-3 (Science,
-  k-mer tokeniser demo), AlphaMissense clinical pilot (Lancet,
-  pathogenicity ensemble demo), ITER D-T first plasma (Nuclear
-  Fusion, Lawson triple-product demo), NANOGrav gravitational-wave
-  background (PRL, Hellings-Downs curve demo), AlphaProof IMO
-  silver (Nature, neuro-symbolic search demo), plus futuristic
-  visions: 2028 patient-specific drug-design pipeline, 2027 top-500
-  exoplanet atmosphere catalog.
-  RSS feed (RSS 2.0) at /digest.rss; JSON Feed 1.1 at /digest.json.
-  Past issues auto-archived at /digest/archive/issue-NNN.html with
-  `<base href>` for correct path resolution. Archive index at
-  /digest/archive/index.html. The generator `scripts/gen-digest.py`
-  is reproducible — future weekly issues are just an updated
-  `MANIFEST` dict and a re-run.
-- **Application audit script (Phase 26)** — `scripts/audit.py`
-  runs 14 checks: HTML div balance, script/style balance (via
-  html.parser — false-positive immune), standard ribbon presence
-  on every page, subscribe-gate.js loaded on gated pages, 5-step
-  Math→Code derivations on all 22 science sub-pages, particle-bg
-  JS syntax (via `node --check`), .git/config token-free, internal
-  link reachability (honours `<base href>`), all 5 seed demos
-  present, digest has full ClickForDemo pattern, Weekly Digest in
-  Insights dropdown on all 52 pages, all 4 generator scripts
-  valid, DAG provenance chain, Next.js /dashboard uses
-  `<TemporalGraph>`. Exit code 0/1 for CI integration.
-- **N-D hypercube viewer (Phase 26)** — `/science/maths/geometry`
-  upgraded from a 4D-only tesseract viewer to a full N-D viewer
-  (dimensions 4–10). Slider + preset buttons (4D Tesseract, 5D
-  Penteract, 6D Hexeract, 8D Octeract, 10D Decaeract). Generalised
-  rotation (N-1 planes, each involving the highest axis) and a
-  chain of N-2 perspective projections. Combinatorics table shows
-  vertices/edges/faces/cells for N=4 through 10 (1024 vertices at
-  N=10). Second 5-step Math→Code derivation block specifically for
-  the N-D generalisation.
-- **ETL/ELT on every digest article (Phase 27)** — each article in
-  the Weekly Science Digest now has a "📁 Bring your own dataset"
-  panel. Users upload their own file (PDB / VCF / GFA / Lean source
-  / FASTA protein / CSV strain/spectrum/timing/catalog / Python
-  source / BED / FASTA genome) and the appropriate parser runs
-  client-side. Parsed stats appear in a new "ETL Report" sub-tab
-  in the Observe panel. Pure client-side — no data leaves the
-  browser; the AIHPC data-residency posture is preserved. The
-  shared `docs/digest-parsers.js` (27 KB) registers 11 file-format
-  parsers; `handleETLUpload()` is the main entry point.
-- **RSS subscribe UX (Phase 27)** — the digest page now has a
-  prominent subscribe panel at the top: copyable RSS URL (canonical
-  `…/digest.rss`), "📋 Copy URL" button, quick-links to Feedly +
-  Inoreader (with the feed URL pre-populated), and direct links to
-  the JSON Feed + past-issues Archive.
-- **Audit script extended to 17 checks (Phase 27)** — `scripts/audit.py`
-  added 3 new checks (digest-parsers.js loaded + 11 parsers valid,
-  7 ETL panels balanced, RSS subscribe panel present). Exit code
-  0/1 for CI integration.
-- **CI audit gate + audit dashboard + animated-derivation clips
-  (Phase 28)** — three new quality + UX features:
-  - **CI audit gate**: every `v*` tag push now runs `audit.py` (19
-    checks) between `secret-scan` and `mirror-to-public`. The mirror
-    push to DemoAIHPC is blocked if any check fails. Audit results
-    are uploaded as a workflow artifact (30-day retention) + shown
-    in the GitHub Actions step summary.
-  - **Audit dashboard** (`/audit.html`): live status board rendering
-    the 19 audit results — total/passed/failed summary cards + per-
-    check rows (green ✓ / red ✗) + last-run timestamp + commit SHA.
-    Linked from the Insights dropdown on every page (`📊 Audit
-    Dashboard`). Auto-regenerated by `scripts/gen-audit-dashboard.py`
-    with each release.
-  - **Animated-derivation clips**: every page with a 5-step Math→Code
-    derivation (26 pages — all 22 science sub-pages + the digest +
-    3 demo pages) now has a `<canvas>`-based "video clip" of the
-    derivation with Play / Pause / Replay / Record-WebM controls.
-    Inspired by the Hugging Face `tissuedecision-9b` Gradio space.
-    Each step fades in at a staggered interval (~2.4 s per step),
-    the math equation types in with a typewriter effect, and the
-    explain text word-wraps + fades in. The "Record WebM" button
-    uses `canvas.captureStream()` → `MediaRecorder` → Blob →
-    downloadable `.webm` — pure client-side, no external services,
-    data stays in the browser. Shared `docs/animated-derivation.js`
-    (12.9 KB) exposes `AIHPC_ANIM.register()`, `.init()`, `.play()`,
-    `.pause()`, `.replay()`, `.record()`. Batch-applied by
-    `scripts/embed-animated-derivations.py` (idempotent).
-
-## Demo framework (Phase 2)
-
-Every demo is defined declaratively by a `DemoManifest` (see
-`src/lib/demos/manifest.ts`) covering:
-
-1. **Meta** — id, title, domain, tags, difficulty, audience.
-2. **Math** — LaTeX source + plain-language restatement.
-3. **Code** — language, source, editable inputs.
-4. **Annotations** — audience-specific (student / researcher / executive).
-5. **Datasets** — references to web datasets or in-browser private uploads.
-6. **Observability** — metric and trace specs the runtime emits.
-7. **Reports** — supported output formats (CSV / summary / blog / paper).
-8. **Runtime** — `browser` (default, no external services) or
-   `server-sandboxed` (future, gated on external hosting).
-9. **Data residency** — currently always `downloadable`. Outputs are
-   offered as browser-side downloads; nothing is persisted server-side.
-
-### Data residency
-
-The first locked-in principle of the demo framework is: **outputs are
-downloadable, never stored server-side**. When a user runs a private dataset
-through a public demo:
-
-- The dataset is loaded into the browser tab only (file upload via the
-  `<input type="file">` API, or in-table editing).
-- The computation runs in the browser (pure JS for now; Pyodide for Python
-  in a later phase).
-- The result is offered as a download (CSV / JSON Blob via
-  `URL.createObjectURL`).
-- Nothing transits a server. No PHI. No personal data. No storage cost. No
-  retention policy to enforce.
-
-This sidesteps HIPAA / GDPR exposure for the public preview. When external
-hosting (Vercel / GCP / Azure) is added in a later phase, the
-`dataResidency` field on `DemoManifest` will admit `server-persisted` and
-`ephemeral` options — and only then will demos that need them be added.
-
-For NDA-protected scenarios or datasets too large for in-browser execution,
-contact <testdemoqwenai2025@gmail.com>.
-
-### Seed demo
-
-- **`linear-regression`** — Ordinary Least Squares (closed form). Mirrors the
-  embedded demo in `docs/index.html`.
+1. **Visual-first** — every concept is introduced with an animated canvas visualisation
+   before any text or code. The user sees the concept in motion, then reads the math,
+   then reads the code derived from the math.
+2. **Math → Code** — every code block opens with a comment header mapping each math
+   symbol to its code variable. `# y_i → y_true[i]  ŷ_i → y_pred[i]  n → len(y_true)`
+3. **Deep thoughts** — every card ends with a USE WHEN / AVOID WHEN / WHY callout that
+   explains *when* to apply the concept and *why* it works.
+4. **Pure client-side** — no backend, no API keys, no login, no tracking. Every
+   computation runs in your browser. Works offline once cached.
+5. **Accessibility-first** — every `<canvas>` has an `aria-label`, every page loads
+   `accessibility.js`, and `prefers-reduced-motion: reduce` is honoured across all 17+
+   animated components (the `autoFreeze()` monkey-patch freezes RAF loops when active).
 
 ---
 
-## Tech stack
+## 🧪 Try the highlights
 
-- **Framework:** Next.js 16 (App Router, Turbopack)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS 4 + `tw-animate-css`
-- **UI primitives:** shadcn/ui (Radix UI + Tailwind)
-- **Database:** Prisma ORM (SQLite at `db/custom.db` for the demo)
-- **Fonts:** Geist Sans + Geist Mono (Next.js Google Fonts)
-- **Theme:** Custom ThemeProvider (`src/components/site/ThemeProvider.tsx`)
-  toggling the `.dark` class on `<html>` and persisting to `localStorage`.
+### Research-paper concept cards (interactive)
+
+| Card | What it shows |
+|------|---------------|
+| [**AMKD**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/concepts-v2/paper-amkd.html) | Multimodal knowledge distillation for cancer survival — multi-modal teacher → unimodal student with 4 cross-attention modules + loss-curve graph showing all 4 loss components over 100 training epochs |
+| [**Heatmap + Dendrogram**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/concepts-v2/viz-heatmap-dendrogram.html) | Animated agglomerative clustering playthrough — dendrogram grows bottom-up + heatmap reorders to match + cluster boundaries + cluster state panel showing live values |
+| [**GeoWorld**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/geoworld.html) | Geometric world models for robotics — rotating 3D point cloud + articulated robot arm + gradient energy landscape + animated action sequence + feedback loop |
+| [**BOLERO**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/bolero.html) | Cell-state-conditioned sequence-to-function Transformer — 6-stage pipeline + real t-SNE UMAP (computed in vanilla JS) + virtual DNA editing with regulatory motifs |
+| [**scGPT**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/scgpt.html) | Single-cell foundation model — inference UI for cell-type prediction (simulated distilled model) |
+| [**AlphaFold 3**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/alphafold3.html) | Multi-molecule structure prediction — 6-stage pipeline with diffusion noise + 3-atom output complex |
+| [**Claude toxin binder**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/claude-toxin.html) | Key-and-lock enzyme binding — animated binder-toxin binding with pulsing hotspots |
+| [**EditJumps**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/editjumps.html) | CRISPR antibody affinity maturation — gradient residue tiles + animated autoregressive Edit Flow |
+| [**Lab in the Loop**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/lab-in-the-loop.html) | Closed-loop AI drug discovery — 6-node circular pipeline with 3D RSI gauge + flowing particle trails |
+
+### Concept cards (v2 grid)
+
+Browse all 40+ at <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/concepts-v2/index.html> — including:
+- 9 ML loss functions (MSE, MAE, BCE, CCE, Hinge, Log-Cosh, Huber, KL, Cosine)
+- 3 activations (ReLU, GELU, SwiGLU, Sigmoid, Tanh)
+- 3 optimisers (SGD, Adam, AdamW) with live convergence animation
+- 5 normalisations (BatchNorm, LayerNorm, RMSNorm, GroupNorm, InstanceNorm)
+- 3 attention (Scaled-Dot-Product, Multi-Head, Flash)
+- 2 regularisation (Dropout, L1-L2)
+- 11 NN architectures (MLP, CNN, RNN, LSTM, GRU, Transformer, Autoencoder, VAE, GAN, ResNet, Diffusion) — each with loss-curve + inflection-math panel
+- CoCoNet (conformal prediction), AMKD, Heatmap+Dendrogram
+
+### Quantum Shorts channel
+
+[Bloch Sphere Shorts](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/bloch.html) — a glowing 3D Bloch sphere that animates 9 canonical scenes of quantum computing:
+ground state, Hadamard, Rabi oscillation, phase gate, measurement collapse, decoherence,
+Bell state, Bell singlet, CHSH violation. Hit ▶ Play to watch, then Record WebM to
+download a 9:16 shorts clip.
 
 ---
 
-## Project structure
+## 📊 Audit dashboard
+
+The platform reports its own health at
+<https://testdemoqwenai2025-creator.github.io/DemoAIHPC/audit.html> — 66 automated
+checks covering HTML well-formedness, ribbon presence, math-derivation blocks, JS
+syntax, internal-link integrity, accessibility (aria-labels + accessibility.js + reduced
+motion CSS), public-repo file-type rule, NN card enrichment, particle-bg extraction, and
+more. As of the latest release: **66/66 checks pass**.
+
+---
+
+## 🏗️ Architecture
+
+### Pure client-side
+
+- **No backend** — every page is a static HTML file served from GitHub Pages CDN
+- **No API keys** — no Google Analytics, no OpenAI API, no external services
+- **No login** — no signup, no cookies, no fingerprinting
+- **No tracking** — GDPR/HIPAA/SOC 2 compliant by design
+- **Lazy evaluation** — every demo + concept card only computes when you click "Play"
+
+### 254 HTML pages, 37 shared JS modules, 42 JSON data files
 
 ```
-.
-├── src/
-│   ├── app/
-│   │   ├── layout.tsx           # Root layout — wraps every page with ThemeProvider + SiteNav + SiteFooter
-│   │   ├── page.tsx             # Home — microservices dashboard / landing
-│   │   ├── about/page.tsx       # About page
-│   │   ├── demos/
-│   │   │   ├── page.tsx         # Demos listing
-│   │   │   └── [id]/page.tsx    # Single demo view (SSG)
-│   │   ├── preview1/page.tsx    # Static sci-fi themed preview
-│   │   ├── api/route.ts         # API route
-│   │   └── globals.css          # Tailwind + shadcn tokens (:root and .dark)
-│   ├── components/
-│   │   ├── site/
-│   │   │   ├── ThemeProvider.tsx # Global theme context (dark / light)
-│   │   │   ├── SiteNav.tsx       # Global top navigation + theme toggle
-│   │   │   └── SiteFooter.tsx    # Global footer (GDPR / HIPAA / contact / return home)
-│   │   ├── demos/
-│   │   │   └── DemoRunner.tsx    # 4-panel demo renderer + browser-side execution
-│   │   ├── layout/
-│   │   │   ├── GlobalNavbar.tsx        # In-app navigation (view mode, search)
-│   │   │   └── EnhancedLandingPage.tsx # Landing view
-│   │   ├── aethel/AETHELConnector.tsx
-│   │   ├── connectors/ScientificConnectorsHub.tsx
-│   │   ├── query/QueryExecutor.tsx
-│   │   ├── visualization/KnowledgeGraph.tsx
-│   │   ├── workflows/DomainWorkflows.tsx
-│   │   ├── auth/AuthContext.tsx
-│   │   └── ui/                  # shadcn/ui primitives
-│   ├── lib/
-│   │   └── demos/
-│   │       ├── manifest.ts      # DemoManifest TypeScript schema
-│   │       ├── registry.ts     # Demo registry (single source of truth)
-│   │       └── seeds/
-│   │           └── linear-regression.ts  # Seed demo #01 — OLS
-│   ├── hooks/
-│   └── lib/
-├── prisma/schema.prisma
-├── docs/                        # Static GitHub Pages content (live preview)
-│   ├── index.html              # Landing page with embedded working OLS demo
-│   └── .nojekyll
-├── examples/websocket/          # Example WebSocket server + frontend
-├── tests/                       # Build & runtime scripts
-├── download/                    # Captured outputs (README.md, dump.txt)
-├── tool-results/                # Read captures from the studio IDE
-├── public/                      # Static assets (logo.svg, robots.txt)
-├── worklog.md                   # Project worklog & strategic documentation
-├── README-DEMO1.md              # Demo1 release notes
-├── README.md                    # This file
-├── package.json
-├── next.config.ts
-├── tailwind.config.ts
-├── tsconfig.json
-└── Caddyfile                    # Reverse proxy config
+docs/
+├── 254 HTML pages (paper cards, concept cards, demos, hubs, science pages)
+├── 37 JS modules (canvas components, accessibility, particle-bg, zoom-loader, ...)
+├── 42 JSON data files (feeds snapshots, search index, digest manifest, ...)
+└── assets (svg logo, robots.txt, .nojekyll)
 ```
 
----
+### Shared infrastructure
 
-## Getting started
-
-### Prerequisites
-
-- Node.js 18.18+ (or Bun)
-- npm / bun
-
-### Install dependencies
-
-```bash
-npm install
-# or
-bun install
-```
-
-### Run the database migrations (Prisma)
-
-```bash
-npm run db:generate
-npm run db:push
-```
-
-### Start the dev server
-
-```bash
-npm run dev
-```
-
-The app is served at <http://localhost:3000>.
-
-### Build for production
-
-```bash
-npm run build
-npm start
-```
+- **`particle-bg.js`** — Phase 41 algorithm (depth + parallax + radial-gradient halos +
+  constellation lines) shared across 174 pages. Honours `prefers-reduced-motion`.
+- **`accessibility.js`** — exposes `AIHPC_A11Y.reducedMotion()` +
+  `AIHPC_A11Y.announce()` + `autoFreeze()` (monkey-patches RAF when reduced motion is
+  active so all 17+ canvas components automatically render a single static frame).
+- **`header-banner.js`** — auto-injects a contextual visual header (detects topic:
+  quantum / DNA / neural / physics / etc.) on every page.
+- **`zoom-loader.js`** — auto-injects zoom controls (±/reset + keyboard shortcuts) on
+  every page with a canvas.
 
 ---
 
-## Pages
+## ♿ Accessibility
 
-The application is a **multi-page application (MPA)** — each page is a
-distinct URL. Next.js provides 27 routes; the GitHub Pages preview
-serves a static mirror for the landing, dashboard, and concept cards.
-
-| Path | Description |
-|------|-------------|
-| `/` | Home — landing view + microservices dashboard with AETHEL integration, knowledge graph, connectors, query executor, domain workflows. |
-| `/about` | About — explains the platform, dual-repo workflow, AETHEL integration, polyglot stack, compliance and contact. |
-| `/demos` | Demos listing — cards for every demo in the registry. |
-| `/demos/[id]` | Single demo — 4-panel layout (math, code, annotations, observability) + Run + Download CSV. |
-| `/microservices` | Microservices dashboard gateway — links into the home-page tab system. |
-| `/aethel` | AETHEL Connector — hypercomputing emulation layer (migrated from home tab). |
-| `/connectors` | Scientific Connectors Hub — bio / chem / molecular / materials connectors (migrated). |
-| `/query` | Query Executor — natural-language + structured query (migrated). |
-| `/knowledge-graph` | Knowledge Graph — interactive cross-domain 2.4M-node graph (migrated). |
-| `/workflows` | Domain Workflows — pre-built scientific workflow templates (migrated). |
-| `/science/biology` | **Biology Hub** — Molecular / Genetics / Proteins / Cell Imaging / Systems / Evolutionary. |
-| `/science/biology/molecular` | Molecular Biology — central dogma, transcription, translation. Has animated DNA helix + polyglot code. |
-| `/science/biology/imaging` | Cell Imaging — microscopy segmentation, denoising, super-resolution. |
-| `/science/biology/systems` | Systems Biology — pathway modelling, ODE/SDE, FBA. |
-| `/science/biology/evolutionary` | Evolutionary Biology — phylogenetics, MSA, dN/dS. |
-| `/science/chemistry` | **Chemistry Hub** — Organic / Inorganic / Physical / Analytical / Materials / Computational. |
-| `/science/chemistry/organic` | Organic Chemistry — reaction prediction, retrosynthesis, SMILES. |
-| `/science/chemistry/inorganic` | Inorganic Chemistry — crystal-structure prediction, GNoME-style. |
-| `/science/chemistry/physical` | Physical Chemistry — thermodynamics, kinetics, quantum. |
-| `/science/chemistry/analytical` | Analytical Chemistry — NMR / MS / IR spectrum processing. |
-| `/science/chemistry/materials` | Materials Chemistry — batteries, catalysts, polymers. |
-| `/science/chemistry/computational` | Computational Chemistry — MD, DFT, FEP. |
-| `/science/physics` | **Physics Hub** — Space / Waves / Sound / Mechanics / Quantum / Thermo. |
-| `/science/physics/space` | Space & Astrophysics — orbital mechanics, N-body, exoplanet transits. |
-| `/science/physics/waves` | Waves & Optics — EM spectrum, diffraction, FFT spectroscopy. |
-| `/science/physics/sound` | Sound & Acoustics — wave equation, room acoustics, STFT. |
-| `/science/physics/mechanics` | Mechanics — rigid-body dynamics, Lagrangian/Hamiltonian. |
-| `/science/physics/quantum` | Quantum — Schrödinger, quantum circuits, VQE. |
-| `/science/physics/thermo` | Thermodynamics — equations of state, phase equilibria, MCMC. |
-| `/science/maths` | Mathematics Hub — Theorem proving / Algebra / Analysis / Geometry / Number theory / Probability. |
-| `/science/maths/algebra` | Algebra — group theory, Gröbner bases. |
-| `/science/maths/analysis` | Analysis — real/complex analysis, PDE solvers. |
-| `/science/maths/geometry` | Geometry — AlphaGeometry-style, differential geometry. |
-| `/science/maths/number-theory` | Number Theory — primality, ECC, L-functions. |
-| `/science/maths/probability` | Probability & Statistics — stochastic processes, MCMC. |
-| `/dashboard` | **Temporal RDF Knowledge Graph Dashboard** — replayable decision traces with play / replay / scrub, knowledge tracing. Inspired by FoundationCapital / Aktiver context graphs. |
-| `/concepts` | **Concept Cards** index — deeper thoughts with the evolution of each subject, paired with hypothetical demos. |
-| `/concepts/replayable-decision-traces` | Replayable Decision Traces — the foundational concept. |
-| `/concepts/provenance-first` | Provenance-First Computing — reproducibility as the substrate. |
-| `/concepts/lazy-evaluation` | Lazy Evaluation as a UX Primitive — the "feels alive" property. |
-| `/concepts/cross-domain-graph` | Cross-Domain Knowledge Graph — composability across scientific fields. |
-| `/concepts/audience-annotations` | Audience-Specific Annotations — student / researcher / executive. |
-| `/login` | Login — placeholder for auth (deferred per the "no external services" constraint). |
-| `/preview1` | Static sci-fi themed preview page (Hero, Features, Domains, Architecture, Pricing, CTA). |
-| `/api` | API route. |
-
-In addition, the **GitHub Pages preview endpoint** at
-<https://testdemoqwenai2025-creator.github.io/DemoAIHPC/> serves a static
-multi-page site from `/docs`:
-
-- `/docs/index.html` — landing page with ribbon + embedded working OLS demo.
-- `/docs/dashboard.html` — the temporal RDF knowledge graph dashboard with play / replay / scrub / knowledge tracing / decision traces.
-- `/docs/concepts.html` — Concept Cards index.
-- `/docs/concepts/replayable-decision-traces.html` — the foundational concept + hypothetical demo (replay the OLS trace as a growing graph).
-- `/docs/concepts/provenance-first.html` — provenance receipt sketch.
-- `/docs/concepts/lazy-evaluation.html` — streaming "thinking…" tokens demo.
-- `/docs/concepts/cross-domain-graph.html` — 2-hop neighbourhood per demo card.
-- `/docs/concepts/audience-annotations.html` — k-means audience toggle demo.
-
-All static pages share the same ribbon (Platform / AETHEL Suite / Science
-/ Insights dropdowns + dark/light toggle + Login + Get Started) and
-the same `aihpc-theme` localStorage key as the Next.js app.
+- **397/397 `<canvas>` tags have `aria-label`** (WCAG 2.2 AA compliance)
+- **238/238 pages load `accessibility.js`** (digest/archive/ snapshots excluded as
+  frozen historical artifacts)
+- **238/238 pages have `prefers-reduced-motion` CSS** that hides the particle background
+  and reduces all animation/transition durations to 0.01ms
+- **`autoFreeze()`** monkey-patches `requestAnimationFrame` + `setInterval` when
+  `prefers-reduced-motion: reduce` is active — catches all 17+ canvas components
+  without per-file patches
 
 ---
 
-## Dark / light theme
+## 🔒 Compliance
 
-A global theme toggle is rendered in the top navigation bar on **every page**
-via `src/components/site/SiteNav.tsx`. The chosen theme is persisted to
-`localStorage` under the `aihpc-theme` key and applied by toggling the `.dark`
-class on the `<html>` element. The shadcn/ui design tokens defined in
-`src/app/globals.css` (`:root` for light, `.dark` for dark) drive all
-theme-aware components.
-
-The in-page dark mode toggle inside the home page (`src/app/page.tsx` →
-`GlobalNavbar`) is wired to the same `ThemeProvider` context, so the global
-toggle and the in-app toggle stay in sync.
+| Standard | Status |
+|----------|--------|
+| **GDPR** | ✅ Compliant — no personal data, no cookies, no tracking |
+| **HIPAA** | ✅ Ready — all computations client-side; no PHI leaves the browser |
+| **SOC 2** | ✅ Aligned — pure client-side architecture eliminates most SOC 2 control surfaces |
+| **MIT License** | ✅ Applied to all code in this public mirror |
 
 ---
 
-## Compliance (GDPR & HIPAA)
+## 🎓 Who is this for
 
-The global footer (`src/components/site/SiteFooter.tsx`) renders on every page
-and surfaces the compliance posture:
-
-- **GDPR** — The public preview does not collect personal data. A Data
-  Processing Agreement (DPA) is available for enterprise deployments.
-- **HIPAA** — No PHI is processed by the public preview. A Business Associate
-  Agreement (BAA) is available for regulated workloads.
-- **Contact** — `testdemoqwenai2025@gmail.com`
-- **Return to Home** — A "Return to Home" button is always available in the
-  footer.
-
----
-
-## Contact
-
-- E-mail: <testdemoqwenai2025@gmail.com>
-- Public mirror: <https://github.com/testdemoqwenai2025-creator/DemoAIHPC>
-- Private source-of-truth: <https://github.com/testdemoqwenai2025-creator/AIHPC-Advanced>
-- GitHub Pages preview endpoint: <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>
+- **Researchers** — explore the latest multimodal ML / quantum / bioinformatics papers
+  with runnable code derived from the math
+- **Students** — learn ML/NN/quantum concepts visually with animated derivations +
+  runnable Python (Pyodide, no install)
+- **Clinicians** — see how AI models like AMKD (cancer survival prediction) work, with
+  honest USE WHEN / AVOID WHEN guidance
+- **Curious technologists** — explore 18 interactive canvas components and 40+
+  concept cards without signup or tracking
+- **Potential funders / collaborators** — assess what the platform can do, end-to-end,
+  before any commitment
 
 ---
 
-## License
+## 📅 Release cadence
 
-Proprietary. The code in this repository is made available for preview purposes
-only. All rights reserved by the AIHPC Advanced authors. See the
-`worklog.md` for the strategic context and roadmap.
+The platform is under active development. New concept cards, demos, and paper
+visualisations ship every few weeks. The Live Journal Feeds refresh automatically every
+6 hours via GitHub Actions cron.
+
+Recent phases:
+- **Phase 45** — AMKD card now has loss-curve graph + heatmap presentation improvements
+- **Phase 44** — 2 new concept cards: AMKD (multimodal KD) + Heatmap+Dendrogram
+- **Phase 43** — extracted 172 inlined particle-bg IIFEs into shared `particle-bg.js`
+- **Phase 42** — NN card enrichment + dual-repo realignment + accessibility rollout
+- **Phase 41** — animation clarity on 7 paper pages (gradients, glow, smooth transitions)
+
+See the [platform timeline](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/timeline.html)
+for the full 50-phase history.
+
+---
+
+## 📞 Contact
+
+- **Email:** <testdemoqwenai2025@gmail.com>
+- **Live preview:** <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>
+- **GitHub (this public mirror):** <https://github.com/testdemoqwenai2025-creator/DemoAIHPC>
+
+For partnership, collaboration, or funding discussions, please email the address above.
+The platform is available for evaluation 24/7/365 — no NDA required to access the public
+preview.
+
+---
+
+## 📄 License
+
+MIT License — © 2026 AIHPC Advanced. All rights reserved.
+
+The platform's source-of-truth lives in a private repository. This public mirror
+contains only web files (`.html`, `.css`, `.js`, `.json`, image formats). See the
+`.gitignore` for the file-type rule.

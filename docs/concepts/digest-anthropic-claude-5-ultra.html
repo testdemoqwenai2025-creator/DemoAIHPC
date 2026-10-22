@@ -81,6 +81,24 @@
   * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 </style>
+<style>
+/* Phase 46c — mobile-responsive canvas */
+canvas {
+  display: block;
+  max-width: 100% !important;
+  height: auto !important;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+@media (max-width: 768px) {
+  canvas { max-height: 60vh; }
+  .controls-row { flex-direction: column; align-items: stretch !important; }
+  .controls-row .btn { width: 100%; }
+  .zoom-controls { transform: scale(0.85); transform-origin: top right; }
+  .stage-ind, .state-display { font-size: 10px !important; }
+}
+</style>
 </head>
   <body>
     <canvas id="particle-canvas" aria-label="Claude 5 Ultra: 3T-param reasoning model — solves …: animated particle background"></canvas>
@@ -323,5 +341,6 @@
   <script src="header-banner.js"></script>
     <script src="../accessibility.js"></script>
     <script src="../particle-bg.js"></script>
+    <script src="../mobile-touch-polyfill.js"></script>
   </body>
 </html>
