@@ -618,6 +618,52 @@ plt.show()</pre>
         apply(initial);
       })();
 
+      // Phase 47 — listen for uploaded data from upload-data.html
+      // The upload page sends a postMessage with { type: 'aihpc:upload-data', table: {...} }
+      // We replace the synthetic sample data with the user's uploaded Table.
+      window.addEventListener('message', function (event) {
+        if (!event.data || event.data.type !== 'aihpc:upload-data') return;
+        var table = event.data.table;
+        if (!table || !table.rows || !table.columns) return;
+        // Replace synthetic data with user's data (only use numeric columns)
+        var numericColIndices = [];
+        for (var c = 0; c < table.types.length; c++) {
+          if (table.types[c] === 'number') numericColIndices.push(c);
+        }
+        if (numericColIndices.length === 0) {
+          alert('Your data has no numeric columns — cannot cluster. Please upload data with at least one numeric column.');
+          return;
+        }
+        // Build new data matrix from numeric columns only
+        var newData = [];
+        for (var r = 0; r < table.rows.length; r++) {
+          var row = [];
+          for (var ci = 0; ci < numericColIndices.length; ci++) {
+            var v = table.rows[r][numericColIndices[ci]];
+            row.push(v === null ? 0 : Number(v));
+          }
+          newData.push(row);
+        }
+        // Update globals
+        data = newData;
+        N_SAMPLES = data.length;
+        N_FEATURES = numericColIndices.length;
+        // Recompute merges with the new data
+        allMerges = computeMerges();
+        finalOrder = allMerges[allMerges.length - 1].indices.slice();
+        // Reset stage to 0
+        stage = 0;
+        stageProgress = 1;
+        isAnim = false;
+        document.getElementById('btn-play').disabled = false;
+        document.getElementById('btn-play').textContent = '▶ Animate clustering';
+        // Update stage indicator
+        var stageInd = document.getElementById('stage-ind');
+        if (stageInd) stageInd.textContent = 'stage 0 · loaded ' + N_SAMPLES + ' samples × ' + N_FEATURES + ' features from your upload';
+        var stateDisplay = document.getElementById('state-display');
+        if (stateDisplay) stateDisplay.textContent = 'Linkage: average · Metric: Euclidean · ' + N_SAMPLES + ' samples × ' + N_FEATURES + ' features (uploaded)';
+      });
+
       lastStageTime=performance.now();
       requestAnimationFrame(tick);
     </script>
