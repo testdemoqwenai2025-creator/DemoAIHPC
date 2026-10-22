@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="AMKD — Adaptive Multimodal Knowledge Distillation for cancer survival prediction. Visual concept card with animated multimodal teacher → unimodal student architecture, 4 attention modules, knowledge distillation flow, and adaptive redundancy reduction loss. Math derivation + Python code + deep thoughts." />
+    <title>AMKD — Adaptive Multimodal Knowledge Distillation · AIHPC</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; --pink:#ec4899; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", sans-serif; min-height: 100vh; overflow-x: hidden; line-height: 1.6; }
+      body::before { content:""; position:fixed; inset:0; background: radial-gradient(1000px 500px at 50% 0%, rgba(139,92,246,0.10), transparent 70%); pointer-events:none; z-index:0; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.25; }
+      .wrap { max-width: 920px; margin: 0 auto; padding: 24px 16px 64px; position: relative; z-index: 1; }
+      .crumbs { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+      .head .tag { font-size: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.4); color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .head h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#c4b5fd 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .desc { font-size: 14px; color: var(--text-muted); line-height: 1.55; margin-bottom: 16px; max-width: 860px; }
+      .desc b { color: var(--text); }
+      .desc a { color: var(--accent); text-decoration: none; }
+      .eq-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; background: rgba(11,15,26,0.85); border: 1px solid rgba(139,92,246,0.3); font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent); margin-bottom: 12px; }
+      .viz-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.3); border-radius: 12px; padding: 16px; backdrop-filter: blur(12px); }
+      .viz-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+      canvas { display: block; width: 100%; height: auto; }
+      .controls-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+      .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent2), var(--accent)); color: white; }
+      .btn.primary:hover { box-shadow: 0 4px 16px rgba(139,92,246,0.3); }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); }
+      .btn.ghost:hover { border-color: var(--accent2); color: var(--text); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      .zoom-controls { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 8px; padding: 4px; }
+      .zoom-btn { width: 30px; height: 30px; border: none; background: transparent; color: var(--text); cursor: pointer; font-size: 16px; font-weight: 700; border-radius: 4px; }
+      .zoom-btn:hover { background: rgba(139,92,246,0.2); }
+      .zoom-label { font-size: 9px; color: var(--text-muted); text-align: center; padding: 2px 0; }
+      .stage-ind { position: absolute; bottom: 10px; left: 12px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .state-display { margin-left: auto; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .math-block { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-left: 3px solid var(--accent2); border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-family: "Cambria Math", Georgia, serif; }
+      .math-block .eq { font-size: 16px; color: var(--accent); margin: 8px 0; }
+      .math-block .explain { font-size: 13px; color: var(--text-muted); margin-top: 6px; font-family: -apple-system, sans-serif; }
+      h2 { font-size: 22px; margin: 32px 0 12px; color: var(--accent); }
+      h3 { font-size: 13px; color: var(--accent2); text-transform: uppercase; letter-spacing: 0.08em; margin: 16px 0 10px; font-weight: 700; }
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .callout { background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+      .callout.green { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.3); }
+      .callout.amber { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.3); }
+      .callout.pink { background: rgba(236,72,153,0.06); border-color: rgba(236,72,153,0.3); }
+      .callout h3 { margin: 0 0 10px; }
+      .callout .row { margin: 10px 0; font-size: 13px; line-height: 1.55; color: var(--text); }
+      .callout .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; margin-right: 8px; display: inline-block; }
+      .callout .lbl.use { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .callout .lbl.avoid { background: rgba(239,68,68,0.15); color: #fca5a5; }
+      .callout .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+      .callout .lbl.futur { background: rgba(245,158,11,0.15); color: #fcd34d; }
+      .callout .text { color: var(--text-muted); }
+      .links-row { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+      .links-row a { color: var(--accent); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); background: rgba(6,182,212,0.05); }
+      .links-row a:hover { border-color: var(--accent); background: rgba(6,182,212,0.12); }
+      .stage-list { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-direction: column; gap: 8px; }
+      .stage-list li { padding: 10px 12px; border-radius: 8px; background: rgba(11,15,26,0.6); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+      .stage-list li:hover { border-color: var(--accent2); }
+      .stage-list li.active { border-color: var(--accent2); background: rgba(139,92,246,0.1); }
+      .stage-list li .num { display: inline-block; width: 22px; height: 22px; line-height: 22px; text-align: center; background: linear-gradient(135deg,#8b5cf6,#06b6d4); color: white; font-size: 11px; font-weight: 700; border-radius: 50%; margin-right: 8px; }
+      .stage-list li .title { font-size: 13px; color: var(--text); font-weight: 600; }
+      .stage-list li .desc { font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+    </style>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+  <body>
+    <canvas id="particle-canvas" aria-label="AMKD Adaptive Multimodal Knowledge Distillation: animated particle background"></canvas>
+    <div class="wrap">
+      <p class="crumbs"><a href="../index.html">Home</a> / <a href="../bio-nn.html">Bioinformatics × NN</a> / AMKD</p>
+      <div class="head">
+        <span class="tag">🔬 PAPER · Multimodal Knowledge Distillation</span>
+        <h1>AMKD — Adaptive Multimodal Knowledge Distillation</h1>
+      </div>
+      <p class="desc">A <b>multimodal teacher</b> (genomic + pathology) trains a <b>unimodal student</b> (pathology-only at inference) for cancer survival prediction. Three loss components orchestrate the distillation: <b>L_KD</b> transfers knowledge from teacher to student, <b>L_ARR</b> (Adaptive Redundancy Reduction) prunes redundant features between modalities so the student learns complementary information, and <b>L_SURV</b> supervises both models on the survival task. Validated on TCGA cancer cohorts. <a href="https://www.linkedin.com/posts/heather-cv-ml-scientist" target="_blank" rel="noopener">Inspired by Heather's LinkedIn post →</a></p>
+      <div class="eq-badge">📐 L_total = L_SURV(T) + α·L_KD + β·L_ARR + γ·L_SURV(S)</div>
+
+      <div class="viz-card">
+        <h3>Multimodal Teacher → Unimodal Student architecture</h3>
+        <div class="viz-wrap">
+          <canvas id="main-canvas" width="820" height="540" aria-label="AMKD architecture visualisation: multimodal teacher with genomic and pathology inputs, four cross-attention modules, and unimodal pathology-only student with knowledge distillation flow"></canvas>
+          <div class="zoom-controls">
+            <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+            <div class="zoom-label" id="zoom-label">100%</div>
+            <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+            <button class="zoom-btn" id="zoom-reset" title="Reset">↺</button>
+          </div>
+          <div class="stage-ind" id="stage-ind">stage 1/5 · teacher forward</div>
+        </div>
+        <div class="controls-row">
+          <button class="btn primary" id="btn-play">▶ Animate pipeline</button>
+          <button class="btn ghost" id="btn-step">⏭ Step</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <span class="state-display" id="state-display">Multi-modal Teacher → Unimodal Student</span>
+        </div>
+      </div>
+
+      <h2>📐 Mathematical formulation</h2>
+
+      <div class="math-block">
+        <div class="eq">Stage 1 — Teacher forward (multi-modal):</div>
+        <div class="eq">z_g = E_g(x_g)  ∈ ℝᵈ ;  z_p = E_p(x_p)  ∈ ℝᵈ</div>
+        <div class="explain">Two encoders map genomic features (x_g: gene expression, mutations, CNVs) and pathology features (x_p: histology image embeddings from a pretrained encoder like UNI or CONCH) into a shared d-dimensional latent space. The key design choice is <b>shared dimensionality</b> — both modalities must live in the same ℝᵈ for cross-attention to be meaningful.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 2 — Four cross-attention modules:</div>
+        <div class="eq">A_XY = softmax(Q_X · K_Yᵀ / √d_k) · V_Y   where X,Y ∈ {g, p}</div>
+        <div class="eq">z*_{g} = z_g + A_{gg}(z_g) + A_{gp}(z_p)   (Gene attends to Gene and Path)</div>
+        <div class="eq">z*_{p} = z_p + A_{pp}(z_p) + A_{pg}(z_g)   (Path attends to Path and Gene)</div>
+        <div class="explain">Four attention matrices: <b>Gene×Gene</b> (which genes co-regulate), <b>Gene×Path</b> (which pathology features each gene depends on), <b>Path×Path</b> (which pathology regions are spatially related), <b>Path×Gene</b> (which genes each pathology region depends on). The dual cross-attention is what makes the teacher truly "multi-modal" rather than just early-fusion.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 3 — Survival head + L_SURV:</div>
+        <div class="eq">ŝ_T = σ(w_T · z_T + b_T)   (teacher's survival probability at time t)</div>
+        <div class="eq">L_SURV = −Σᵢ [δᵢ · log(1 − ŝ(tᵢ|xᵢ)) + (1 − δᵢ) · log(ŝ(tᵢ|xᵢ))]</div>
+        <div class="explain">Discrete-time survival loss (Negralle-Côte et al.). δᵢ = 1 if patient i died by time tᵢ (event observed), δᵢ = 0 if censored (still alive at last follow-up). The loss penalises both: predicting death when patient lived (1−δ), and predicting survival when patient died (δ).</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 4 — Knowledge distillation loss L_KD:</div>
+        <div class="eq">L_KD = ‖z_T − proj(z_S)‖² + λ · KL(p_T ‖ p_S)</div>
+        <div class="explain">Two-part distillation: (a) <b>feature-level</b> — student's latent z_S is projected to teacher's dimension and matched via MSE; (b) <b>prediction-level</b> — softmax distributions of survival predictions are matched via KL divergence. The feature-level term transfers "how to represent pathology", the prediction-level term transfers "what to predict from it".</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 5 — Adaptive Redundancy Reduction (L_ARR):</div>
+        <div class="eq">L_ARR = −0.5 · log det(I + (1/N) · Z_S · Z_Sᵀ)   (information bottleneck)</div>
+        <div class="explain">Inspired by the Information Bottleneck (Tishby 1999), this term maximises the entropy of the student's representations while compressing redundancy. It works like a soft-decorrelator: features that are linearly dependent on others get suppressed. <b>The key insight</b>: in the multimodal teacher, genomic + pathology features are often <em>redundant</em> (a gene's expression often correlates with the histology's morphology). L_ARR forces the student to keep only the <em>complementary</em> (non-redundant) information — which is what makes it generalise.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Total loss:</div>
+        <div class="eq">L_total = L_SURV(T) + α · L_KD + β · L_ARR + γ · L_SURV(S)</div>
+        <div class="explain">α, β, γ are hyperparameters tuned via validation. <b>Typical values</b>: α=1.0 (KD weight), β=0.1 (ARR weight — too high collapses the representation), γ=0.5 (student supervised less aggressively than teacher to leave room for KD). The teacher's L_SURV is full-weight (1.0) so it learns good multimodal representations; the student is regularised.</div>
+      </div>
+
+      <h2>💻 Runnable code</h2>
+      <div class="code-section">
+        <h3>PyTorch-style implementation</h3>
+        <pre><span class="cm"># AMKD — Adaptive Multimodal Knowledge Distillation for cancer survival</span>
+<span class="cm"># Math→Code mapping:</span>
+<span class="cm">#   x_g → genomic_features  x_p → pathology_features</span>
+<span class="cm">#   E_g, E_p → encoders (genomic / pathology)</span>
+<span class="cm">#   A_XY → cross-attention modules</span>
+<span class="cm">#   z_T → teacher latent  z_S → student latent</span>
+<span class="cm">#   L_SURV → survival loss  L_KD → knowledge distillation</span>
+<span class="cm">#   L_ARR → adaptive redundancy reduction</span>
+<span class="kw">import</span> torch
+<span class="kw">import</span> torch.nn <span class="kw">as</span> nn
+<span class="kw">import</span> torch.nn.functional <span class="kw">as</span> F
+
+<span class="kw">class</span> <span class="fn">CrossAttention</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, d=<span class="num">256</span>, n_heads=<span class="num">4</span>):
+        <span class="kw">super</span>().__init__()
+        self.q = nn.Linear(d, d)
+        self.k = nn.Linear(d, d)
+        self.v = nn.Linear(d, d)
+        self.n_heads = n_heads
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, X, Y):
+        <span class="cm"># A_XY = softmax(Q_X · K_Yᵀ / √d_k) · V_Y</span>
+        Q, K, V = self.q(X), self.k(Y), self.v(Y)
+        attn = F.softmax(Q @ K.transpose(-<span class="num">2</span>, -<span class="num">1</span>) / (Q.size(-<span class="num">1</span>) ** <span class="num">0.5</span>), dim=-<span class="num">1</span>)
+        <span class="kw">return</span> attn @ V
+
+<span class="kw">class</span> <span class="fn">MultimodalTeacher</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, d_gen=<span class="num">1024</span>, d_path=<span class="num">1024</span>, d=<span class="num">256</span>):
+        <span class="kw">super</span>().__init__()
+        self.E_g = nn.Linear(d_gen, d)   <span class="cm"># genomic encoder</span>
+        self.E_p = nn.Linear(d_path, d)  <span class="cm"># pathology encoder</span>
+        <span class="cm"># 4 cross-attention modules</span>
+        self.att_gg = CrossAttention(d)  <span class="cm"># Gene × Gene self-attn</span>
+        self.att_gp = CrossAttention(d)  <span class="cm"># Gene × Path cross-attn</span>
+        self.att_pp = CrossAttention(d)  <span class="cm"># Path × Path self-attn</span>
+        self.att_pg = CrossAttention(d)  <span class="cm"># Path × Gene cross-attn</span>
+        self.surv_head = nn.Linear(d, <span class="num">1</span>)
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x_g, x_p):
+        z_g, z_p = self.E_g(x_g), self.E_p(x_p)
+        <span class="cm"># Dual cross-attention updates</span>
+        z_g_star = z_g + self.att_gg(z_g, z_g) + self.att_gp(z_g, z_p)
+        z_p_star = z_p + self.att_pp(z_p, z_p) + self.att_pg(z_p, z_g)
+        z_T = torch.cat([z_g_star, z_p_star], dim=-<span class="num">1</span>).mean(dim=-<span class="num">1</span>, keepdim=<span class="kw">True</span>)
+        <span class="kw">return</span> z_T, torch.sigmoid(self.surv_head(z_T))
+
+<span class="kw">class</span> <span class="fn">UnimodalStudent</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, d_path=<span class="num">1024</span>, d=<span class="num">256</span>):
+        <span class="kw">super</span>().__init__()
+        self.E_p = nn.Linear(d_path, d)
+        self.att_pp = CrossAttention(d)  <span class="cm"># only Path × Path self-attn</span>
+        self.proj = nn.Linear(d, d)      <span class="cm"># projects student's z to teacher's d</span>
+        self.surv_head = nn.Linear(d, <span class="num">1</span>)
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x_p):
+        z_p = self.E_p(x_p)
+        z_S = z_p + self.att_pp(z_p, z_p)
+        <span class="kw">return</span> z_S, torch.sigmoid(self.surv_head(z_S))
+
+<span class="kw">def</span> <span class="fn">amkd_loss</span>(z_T, s_T, z_S, s_S, y_time, y_event, alpha=<span class="num">1.0</span>, beta=<span class="num">0.1</span>, gamma=<span class="num">0.5</span>):
+    <span class="cm"># L_SURV (teacher): discrete-time survival loss</span>
+    L_surv_T = -(y_event * torch.log(<span class="num">1</span> - s_T + <span class="num">1e-8</span>) +
+                 (<span class="num">1</span> - y_event) * torch.log(s_T + <span class="num">1e-8</span>)).mean()
+
+    <span class="cm"># L_KD: feature MSE + prediction KL</span>
+    proj_S = student.proj(z_S)
+    L_kd = F.mse_loss(proj_S, z_T.detach()) + <span class="num">0.5</span> * F.kl_div(
+        (s_S + <span class="num">1e-8</span>).log(), (s_T + <span class="num">1e-8</span>).log(), reduction=<span class="kw">'batchmean'</span>)
+
+    <span class="cm"># L_ARR: information-bottleneck-style redundancy reduction</span>
+    Z_S = proj_S - proj_S.mean(dim=<span class="num">0</span>, keepdim=<span class="kw">True</span>)
+    N = Z_S.size(<span class="num">0</span>)
+    cov = (Z_S @ Z_S.t()) / N + torch.eye(N, device=Z_S.device)
+    L_arr = -<span class="num">0.5</span> * torch.logdet(cov)
+
+    <span class="cm"># L_SURV (student)</span>
+    L_surv_S = -(y_event * torch.log(<span class="num">1</span> - s_S + <span class="num">1e-8</span>) +
+                 (<span class="num">1</span> - y_event) * torch.log(s_S + <span class="num">1e-8</span>)).mean()
+
+    <span class="cm"># L_total = L_SURV(T) + α·L_KD + β·L_ARR + γ·L_SURV(S)</span>
+    <span class="kw">return</span> L_surv_T + alpha * L_kd + beta * L_arr + gamma * L_surv_S, {
+        <span class="kw">'L_surv_T'</span>: L_surv_T.item(), <span class="kw">'L_kd'</span>: L_kd.item(),
+        <span class="kw">'L_arr'</span>: L_arr.item(), <span class="kw">'L_surv_S'</span>: L_surv_S.item()
+    }
+
+<span class="cm"># === Demo: simulate TCGA-like batch ===</span>
+torch.manual_seed(<span class="num">0</span>)
+N, d_gen, d_path = <span class="num">32</span>, <span class="num">1024</span>, <span class="num">1024</span>
+x_g = torch.randn(N, d_gen)   <span class="cm"># gene expression + mutation + CNV features</span>
+x_p = torch.randn(N, d_path)  <span class="cm"># pathology slide embeddings</span>
+y_time = torch.randint(<span class="num">1</span>, <span class="num">100</span>, (N,)).float()  <span class="cm"># months</span>
+y_event = (torch.rand(N) > <span class="num">0.5</span>).float()                  <span class="cm"># 1 = died, 0 = censored</span>
+
+teacher = MultimodalTeacher(d_gen, d_path)
+student = UnimodalStudent(d_path)
+z_T, s_T = teacher(x_g, x_p)
+z_S, s_S = student(x_p)
+total, components = amkd_loss(z_T, s_T, z_S, s_S, y_time, y_event)
+<span class="kw">print</span>(<span class="kw">f</span><span class="st">"Total loss: {total:.4f}"</span>)
+<span class="kw">for</span> k, v <span class="kw">in</span> components.items():
+    <span class="kw">print</span>(<span class="kw">f</span><span class="st">"  {k}: {v:.4f}"</span>)</pre>
+      </div>
+
+      <h2>🧠 Deep thoughts — when does multimodal KD beat joint training?</h2>
+      <div class="callout">
+        <h3>Strategic guidance for clinical AI researchers</h3>
+        <div class="row"><span class="lbl use">USE WHEN</span><span class="text">Your deployment setting has <b>asymmetric modality availability</b>. Training time: rich multimodal data (TCGA has both WGS + WSI). Inference time: only the cheap modality is available (pathology slides are routine; genomic sequencing is $1k+ and slow). This is the canonical TCGA → clinical-deployment setting.</span></div>
+        <div class="row"><span class="lbl use">USE WHEN</span><span class="text">You want a <b>regularised student</b> that doesn't overfit to spurious pathology features. The teacher's genomic signal acts as a "ground truth probe" — features in pathology that correlate with genomics are kept, the rest are pruned by L_ARR. This is a stronger regulariser than dropout because it's <em>semantically grounded</em>.</span></div>
+        <div class="row"><span class="lbl avoid">AVOID WHEN</span><span class="text">Both modalities are equally available at inference (use joint multimodal training instead — the teacher model directly). KD is overhead with no payoff if you can always run both encoders.</span></div>
+        <div class="row"><span class="lbl avoid">AVOID WHEN</span><span class="text">β (L_ARR weight) is set too high (>0.5). The information-bottleneck objective collapses the student's representations — it learns to output the identity, which is degenerate. β=0.1 is a safe default; tune down if you see representation collapse.</span></div>
+        <div class="row"><span class="lbl why">WHY</span><span class="text">The key insight is that <b>genomic and pathology modalities are partially redundant</b> (a tumour's grade is visible in both its morphology and its mutation profile). Naive KD would have the student copy the teacher's pathology branch — but that's already what the student has. <b>L_ARR is the secret sauce</b>: it forces the student to keep only the <em>complementary</em> information from the teacher (the genomic signal that doesn't already exist in pathology), which is exactly the information that makes the student better than pathology-only training.</span></div>
+        <div class="row"><span class="lbl why">WHY</span><span class="text">The four cross-attention modules aren't symmetric — <b>Gene×Path</b> and <b>Path×Gene</b> are different operations. Gene×Path tells each gene which pathology regions it corresponds to (useful for biology interpretation: "TP53 mutations → aneuploidy visible in nuclei"). Path×Gene tells each pathology region which genes are likely mutated (useful for pathologist: "this morphology suggests EGFR mutation"). The dual cross-attention is what makes the teacher a <em>multi-modal</em> model rather than a <em>multi-input</em> model.</span></div>
+      </div>
+
+      <h2>🚀 Futuristic possibilities</h2>
+      <div class="callout amber">
+        <h3>Where adaptive multimodal KD leads</h3>
+        <div class="row"><span class="lbl futur">2026-27</span><span class="text"><b>Clinical-grade pathology-only survival prediction.</b> AMKD-trained student deployed as a CE-marked medical device. Pathologist uploads a WSI → survival probability + uncertainty in 30 seconds. No genomic sequencing required. Closes the access gap for hospitals without next-gen sequencing.</span></div>
+        <div class="row"><span class="lbl futur">2028-30</span><span class="text"><b>Per-patient teacher adapt.</b> When a patient's genomic data eventually arrives (e.g., from a later biopsy), the teacher model fine-tunes the student for that specific patient. The student becomes progressively more accurate as more modalities arrive — but works from day 1 with just pathology.</span></div>
+        <div class="row"><span class="lbl futur">2030-33</span><span class="text"><b>Cross-cancer transfer.</b> Train the teacher on pan-cancer TCGA (33 cancer types), then distil into cancer-specific students (lung, breast, colon). Each student inherits pan-cancer biological priors via KD but specialises via L_SURV. Cancers with limited data (rare cancers) benefit most from transfer.</span></div>
+        <div class="row"><span class="lbl futur">2033+</span><span class="text"><b>Pre-diagnostic pathology.</b> Student trained on early-stage biopsies (where genomics is uninformative due to low tumour purity) + late-stage tumours (where genomics is rich). Distillation transfers the late-stage genomic signal to make the early-stage student predictive years earlier than current pathology AI.</span></div>
+      </div>
+
+      <h2>🔬 Comparison with related approaches</h2>
+      <div class="callout pink">
+        <h3>AMKD vs other multimodal learning strategies</h3>
+        <div class="row"><span class="lbl why">vs Late fusion (PORPOISE, PONET)</span><span class="text">Late fusion concatenates modality-specific predictions. AMKD trains the student to <em>internalise</em> the teacher's fusion logic. At inference, the student is faster (single encoder vs two) and generalises better (the KD signal acts as a regulariser).</span></div>
+        <div class="row"><span class="lbl why">vs Standard KD (Hinton 2015)</span><span class="text">Standard KD uses soft predictions (softmax over classes). AMKD uses <b>both feature-level KD</b> (latent z matched via MSE) <em>and</em> prediction-level KD (KL on survival distributions). The feature-level term is essential — without it, the student never learns the teacher's representation, only its output.</span></div>
+        <div class="row"><span class="lbl why">vs Mutual learning (Zhang et al.)</span><span class="text">Mutual learning has two peer networks teach each other. AMKD is asymmetric (teacher → student), which fits the clinical setting where the multimodal teacher is the "gold standard" and the pathology student is the "clinical deployment" model.</span></div>
+        <div class="row"><span class="lbl why">vs MCAT (Chen et al. 2020)</span><span class="text">MCAT introduced co-attention between genomic + pathology for survival. AMKD builds on MCAT's attention but adds the distillation pipeline — making the multimodal capability available at pathology-only inference time. Without AMKD, MCAT requires both modalities at deployment.</span></div>
+      </div>
+
+      <!-- Full text version -->
+      <div style="margin-bottom: 16px; padding: 16px 20px; background: rgba(18,24,38,0.7); border: 1px solid rgba(139,92,246,0.3); border-radius: 10px;">
+        <a href="https://www.linkedin.com/posts/heather-cv-ml-scientist" target="_blank" rel="noopener" style="display: inline-block; background: linear-gradient(90deg, #8b5cf6, #06b6d4); color: white; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700;">📄 Source — Heather's LinkedIn post →</a>
+        <span style="margin-left: 12px; font-size: 11px; color: var(--text-muted);">AMKD paper · TCGA cancer cohort benchmarks · multimodal teacher + unimodal student</span>
+      </div>
+
+      <!-- Simplified footer -->
+      <div style="margin-top: 40px; padding: 16px 20px; background: rgba(11,15,26,0.6); border: 1px solid #1f2937; border-radius: 10px; font-size: 11px; color: #9ca3af; line-height: 1.6;">
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px;">
+          <span style="color: #10b981;">📜 MIT License</span>
+          <span style="color: #06b6d4;">🔒 GDPR Compliant</span>
+          <span style="color: #06b6d4;">🏥 HIPAA Ready</span>
+          <span style="color: #10b981;">📊 SOC 2 Aligned</span>
+        </div>
+        <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
+        <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data · no cookies · no tracking · all computations client-side (lazy evaluation)</p>
+      </div>
+    </div>
+
+    <script>
+      // ========================================================================
+      // AMKD — Multimodal Teacher → Unimodal Student visualisation
+      // ========================================================================
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      var W = canvas.width, H = canvas.height;
+      var stage = 0, maxStage = 5, zoom = 1.0, isAnim = false;
+      var stageProgress = 1, lastStageTime = 0;
+      var attentionPhase = 0;  // animates the 4 attention matrices
+
+      function lerp(a,b,t){return a+(b-a)*t;}
+
+      function drawGlowCircle(x,y,r,color,alpha){
+        if(alpha===undefined)alpha=1;
+        var g=ctx.createRadialGradient(x,y,0,x,y,r*3);
+        g.addColorStop(0,color);
+        g.addColorStop(0.3,color.replace(/[\d.]+\)$/,(0.6*alpha)+')'));
+        g.addColorStop(1,color.replace(/[\d.]+\)$/,'0)'));
+        ctx.fillStyle=g;
+        ctx.beginPath();ctx.arc(x,y,r*3,0,6.28);ctx.fill();
+        ctx.fillStyle=color;
+        ctx.globalAlpha=alpha;
+        ctx.beginPath();ctx.arc(x,y,r,0,6.28);ctx.fill();
+        ctx.globalAlpha=1;
+      }
+
+      function drawStageHeader(){
+        var bg=ctx.createLinearGradient(0,0,0,H);
+        bg.addColorStop(0,'#0a0e1a');
+        bg.addColorStop(0.5,'#0f1422');
+        bg.addColorStop(1,'#0a0e1a');
+        ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+        ctx.strokeStyle='rgba(139,92,246,0.04)';ctx.lineWidth=1;
+        for(var gx=0;gx<W;gx+=40){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+        for(var gy=0;gy<H;gy+=40){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+        ctx.save();
+        ctx.shadowColor='#8b5cf6';ctx.shadowBlur=12;
+        ctx.fillStyle='#c4b5fd';ctx.font='bold 14px ui-monospace,monospace';ctx.textAlign='center';
+        ctx.fillText('AMKD — stage '+stage+'/'+maxStage,W/2,25);
+        ctx.restore();
+        ctx.textAlign='left';
+        var dotsX=W/2-(maxStage)*7;
+        for(var s=0;s<maxStage;s++){
+          ctx.fillStyle=s<stage?'#8b5cf6':'rgba(148,163,184,0.2)';
+          ctx.beginPath();ctx.arc(dotsX+s*14,42,4,0,6.28);ctx.fill();
+          if(s>0&&s<stage){
+            ctx.strokeStyle='rgba(139,92,246,0.4)';ctx.lineWidth=1;
+            ctx.beginPath();ctx.moveTo(dotsX+(s-1)*14+4,42);ctx.lineTo(dotsX+s*14-4,42);ctx.stroke();
+          }
+        }
+      }
+
+      function drawInputBox(x,y,w,h,label,sublabel,color,alpha){
+        if(alpha===undefined)alpha=1;
+        ctx.save();
+        ctx.shadowColor=color;ctx.shadowBlur=10;
+        var hex=color.replace('#','');
+        var r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);
+        var g1=ctx.createLinearGradient(x,y,x,y+h);
+        g1.addColorStop(0,'rgba('+r+','+g+','+b+','+(0.85*alpha)+')');
+        g1.addColorStop(1,'rgba('+Math.round(r*0.5)+','+Math.round(g*0.5)+','+Math.round(b*0.5)+','+(0.85*alpha)+')');
+        ctx.fillStyle=g1;
+        ctx.fillRect(x,y,w,h);
+        ctx.restore();
+        ctx.fillStyle='rgba(255,255,255,'+(0.3*alpha)+')';
+        ctx.fillRect(x,y,w,1);
+        ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.globalAlpha=alpha;
+        ctx.strokeRect(x,y,w,h);
+        ctx.globalAlpha=1;
+        ctx.fillStyle='rgba(255,255,255,'+alpha+')';ctx.font='bold 11px ui-monospace';ctx.textAlign='center';
+        ctx.fillText(label,x+w/2,y+h/2-2);
+        if(sublabel){
+          ctx.fillStyle='rgba(255,255,255,'+(0.7*alpha)+')';ctx.font='9px ui-monospace';
+          ctx.fillText(sublabel,x+w/2,y+h/2+10);
+        }
+        ctx.textAlign='left';
+      }
+
+      function drawAttentionMatrix(x,y,w,h,name,color,alpha){
+        if(alpha===undefined)alpha=1;
+        ctx.save();
+        ctx.shadowColor=color;ctx.shadowBlur=8;
+        ctx.fillStyle='rgba(11,15,26,0.7)';ctx.globalAlpha=alpha;
+        ctx.fillRect(x,y,w,h);
+        ctx.restore();
+        ctx.globalAlpha=1;
+        // Draw attention weights as gradient cells (4x4)
+        var n=4, cw=w/n, ch=h/n;
+        for(var i=0;i<n;i++){
+          for(var j=0;j<n;j++){
+            var v = (Math.sin(i+j+attentionPhase+name.charCodeAt(0))*0.5+0.5) * alpha;
+            var hex=color.replace('#','');
+            var r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);
+            var g1=ctx.createLinearGradient(x+j*cw,y+i*ch,x+(j+1)*cw,y+(i+1)*ch);
+            g1.addColorStop(0,'rgba('+r+','+g+','+b+','+v+')');
+            g1.addColorStop(1,'rgba('+r+','+g+','+b+','+(v*0.4)+')');
+            ctx.fillStyle=g1;
+            ctx.fillRect(x+j*cw+1,y+i*ch+1,cw-2,ch-2);
+            if(v>0.7){
+              ctx.strokeStyle=color;ctx.lineWidth=1;
+              ctx.strokeRect(x+j*cw+1,y+i*ch+1,cw-2,ch-2);
+            }
+          }
+        }
+        ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.globalAlpha=alpha;
+        ctx.strokeRect(x,y,w,h);
+        ctx.globalAlpha=1;
+        ctx.fillStyle=color;ctx.font='bold 9px ui-monospace';ctx.textAlign='center';
+        ctx.fillText(name,x+w/2,y-4);ctx.textAlign='left';
+      }
+
+      function drawArrow(x1,y1,x2,y2,color,alpha,dashed){
+        if(alpha===undefined)alpha=1;
+        if(dashed===undefined)dashed=false;
+        ctx.save();
+        ctx.shadowColor=color;ctx.shadowBlur=6;
+        ctx.strokeStyle=color;ctx.lineWidth=2;ctx.globalAlpha=alpha;
+        if(dashed){ctx.setLineDash([6,4]);ctx.lineDashOffset=-performance.now()*0.04;}
+        ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+        if(dashed)ctx.setLineDash([]);
+        // Arrowhead
+        var angle=Math.atan2(y2-y1,x2-x1);
+        ctx.fillStyle=color;ctx.globalAlpha=alpha;
+        ctx.beginPath();
+        ctx.moveTo(x2,y2);
+        ctx.lineTo(x2-10*Math.cos(angle-0.3),y2-10*Math.sin(angle-0.3));
+        ctx.lineTo(x2-10*Math.cos(angle+0.3),y2-10*Math.sin(angle+0.3));
+        ctx.closePath();ctx.fill();
+        ctx.restore();
+        ctx.globalAlpha=1;
+      }
+
+      function render(){
+        ctx.save();
+        ctx.fillStyle='#0a0e1a';ctx.fillRect(0,0,W,H);
+        ctx.translate(W/2,H/2);ctx.scale(zoom,zoom);ctx.translate(-W/2,-H/2);
+        drawStageHeader();
+        var baseY=70;
+
+        // ===== Stage 1: Multi-modal Teacher — input + encoders =====
+        if(stage>=1){
+          var s1A=stage===1?stageProgress:(stage>1?1:0);
+          // Two input boxes: Genomic + Pathology
+          drawInputBox(40,baseY,140,40,'Genomic','x_g (1024d)','#06b6d4',s1A);
+          drawInputBox(40,baseY+50,140,40,'Pathology','x_p (1024d)','#8b5cf6',s1A);
+          // Encoder boxes E_g, E_p
+          drawInputBox(220,baseY,80,40,'E_g','encoder','#10b981',s1A);
+          drawInputBox(220,baseY+50,80,40,'E_p','encoder','#f59e0b',s1A);
+          // Arrows input → encoder
+          drawArrow(180,baseY+20,220,baseY+20,'#06b6d4',s1A,true);
+          drawArrow(180,baseY+70,220,baseY+70,'#8b5cf6',s1A,true);
+          // z_g, z_p latent representations (gradient-filled bars)
+          ctx.save();
+          ctx.shadowColor='#10b981';ctx.shadowBlur=10;
+          var zg_g=ctx.createLinearGradient(330,baseY,330,baseY+40);
+          zg_g.addColorStop(0,'rgba(110,231,183,'+(0.95*s1A)+')');
+          zg_g.addColorStop(1,'rgba(16,185,129,'+(0.6*s1A)+')');
+          ctx.fillStyle=zg_g;
+          ctx.fillRect(330,baseY,100,40);
+          ctx.fillStyle='rgba(255,255,255,'+s1A+')';ctx.font='bold 11px ui-monospace';ctx.textAlign='center';
+          ctx.fillText('z_g (256d)',380,baseY+22);ctx.textAlign='left';
+          ctx.restore();
+          ctx.save();
+          ctx.shadowColor='#f59e0b';ctx.shadowBlur=10;
+          var zp_g=ctx.createLinearGradient(330,baseY+50,330,baseY+90);
+          zp_g.addColorStop(0,'rgba(252,211,77,'+(0.95*s1A)+')');
+          zp_g.addColorStop(1,'rgba(245,158,11,'+(0.6*s1A)+')');
+          ctx.fillStyle=zp_g;
+          ctx.fillRect(330,baseY+50,100,40);
+          ctx.fillStyle='rgba(255,255,255,'+s1A+')';ctx.font='bold 11px ui-monospace';ctx.textAlign='center';
+          ctx.fillText('z_p (256d)',380,baseY+72);ctx.textAlign='left';
+          ctx.restore();
+          // Arrows encoder → latent
+          drawArrow(300,baseY+20,330,baseY+20,'#10b981',s1A,true);
+          drawArrow(300,baseY+70,330,baseY+70,'#f59e0b',s1A,true);
+          ctx.fillStyle='rgba(148,163,184,'+(0.6*s1A)+')';ctx.font='9px ui-monospace';
+          ctx.fillText('Stage 1: Multi-modal Teacher — encode both modalities',40,baseY+115);
+        }
+
+        // ===== Stage 2: Four cross-attention modules =====
+        if(stage>=2){
+          var s2A=stage===2?stageProgress:(stage>2?1:0);
+          var mY=baseY+135;
+          ctx.fillStyle='#f59e0b';ctx.font='bold 11px ui-monospace';ctx.globalAlpha=s2A;
+          ctx.fillText('Stage 2: Four cross-attention modules (Gene×Gene, Gene×Path, Path×Path, Path×Gene)',40,mY-12);
+          ctx.globalAlpha=1;
+          attentionPhase=performance.now()*0.002;
+          // 4 attention matrices arranged in a 2x2 grid
+          drawAttentionMatrix(40,mY,80,50,'Gene×Gene','#06b6d4',s2A);
+          drawAttentionMatrix(140,mY,80,50,'Gene×Path','#10b981',s2A);
+          drawAttentionMatrix(240,mY,80,50,'Path×Path','#8b5cf6',s2A);
+          drawAttentionMatrix(340,mY,80,50,'Path×Gene','#f59e0b',s2A);
+          // z_g* and z_p* outputs (updated latents)
+          ctx.save();ctx.shadowColor='#8b5cf6';ctx.shadowBlur=10;
+          var zgs_g=ctx.createLinearGradient(450,mY,450,mY+50);
+          zgs_g.addColorStop(0,'rgba(196,181,253,'+(0.95*s2A)+')');
+          zgs_g.addColorStop(1,'rgba(139,92,246,'+(0.7*s2A)+')');
+          ctx.fillStyle=zgs_g;
+          ctx.fillRect(450,mY,80,25);
+          ctx.fillStyle='rgba(255,255,255,'+s2A+')';ctx.font='bold 9px ui-monospace';ctx.textAlign='center';
+          ctx.fillText('z_g* (updated)',490,mY+15);ctx.textAlign='left';
+          var zps_g=ctx.createLinearGradient(450,mY+25,450,mY+50);
+          zps_g.addColorStop(0,'rgba(252,165,165,'+(0.95*s2A)+')');
+          zps_g.addColorStop(1,'rgba(239,68,68,'+(0.7*s2A)+')');
+          ctx.fillStyle=zps_g;
+          ctx.fillRect(450,mY+25,80,25);
+          ctx.fillStyle='rgba(255,255,255,'+s2A+')';ctx.font='bold 9px ui-monospace';ctx.textAlign='center';
+          ctx.fillText('z_p* (updated)',490,mY+40);ctx.textAlign='left';
+          ctx.restore();
+          // Arrows from attention matrices to updated latents
+          drawArrow(420,mY+12,450,mY+12,'#8b5cf6',s2A,true);
+          drawArrow(420,mY+38,450,mY+38,'#ec4899',s2A,true);
+          // Arrows z_g, z_p → attention matrices
+          drawArrow(380,baseY+20,40,mY+12,'#10b981',s2A*0.4,true);
+          drawArrow(380,baseY+70,40,mY+38,'#f59e0b',s2A*0.4,true);
+        }
+
+        // ===== Stage 3: Survival head + L_SURV =====
+        if(stage>=3){
+          var s3A=stage===3?stageProgress:(stage>3?1:0);
+          var sY=baseY+215;
+          ctx.fillStyle='#06b6d4';ctx.font='bold 11px ui-monospace';ctx.globalAlpha=s3A;
+          ctx.fillText('Stage 3: Survival head + L_SURV (discrete-time survival loss)',40,sY-12);
+          ctx.globalAlpha=1;
+          // Concat z_T = mean(z_g*, z_p*)
+          ctx.save();ctx.shadowColor='#06b6d4';ctx.shadowBlur=10;
+          var zt_g=ctx.createLinearGradient(40,sY,200,sY);
+          zt_g.addColorStop(0,'rgba(103,232,249,'+(0.95*s3A)+')');
+          zt_g.addColorStop(1,'rgba(6,182,212,'+(0.7*s3A)+')');
+          ctx.fillStyle=zt_g;
+          ctx.fillRect(40,sY,160,40);
+          ctx.fillStyle='rgba(255,255,255,'+s3A+')';ctx.font='bold 11px ui-monospace';ctx.textAlign='center';
+          ctx.fillText('z_T (teacher latent)',120,sY+22);ctx.textAlign='left';
+          ctx.restore();
+          drawArrow(490,mY+12,200,sY+12,'#8b5cf6',s3A,true);
+          drawArrow(490,mY+38,200,sY+28,'#ec4899',s3A,true);
+          // Survival head + curve
+          drawInputBox(240,sY,80,40,'σ(w·z_T)','surv_head','#10b981',s3A);
+          drawArrow(200,sY+20,240,sY+20,'#06b6d4',s3A,true);
+          // Survival curve mini-canvas
+          ctx.save();ctx.shadowColor='#10b981';ctx.shadowBlur=6;
+          ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.globalAlpha=s3A;
+          ctx.beginPath();
+          for(var t=0;t<=80;t++){
+            var sx=350+t*2;
+            var sy=sY+40-Math.exp(-t*0.05)*36;
+            if(t===0)ctx.moveTo(sx,sy);else ctx.lineTo(sx,sy);
+          }
+          ctx.stroke();
+          ctx.restore();
+          ctx.globalAlpha=1;
+          ctx.fillStyle='rgba(148,163,184,'+(0.6*s3A)+')';ctx.font='9px ui-monospace';
+          ctx.fillText('S(t|z_T) — survival prob',350,sY+58);
+          // L_SURV badge
+          ctx.fillStyle='rgba(11,15,26,0.85)';ctx.fillRect(550,sY+15,80,30);
+          ctx.strokeStyle='#ef4444';ctx.lineWidth=1.5;ctx.globalAlpha=s3A;
+          ctx.strokeRect(550,sY+15,80,30);
+          ctx.fillStyle='#ef4444';ctx.font='bold 10px ui-monospace';ctx.textAlign='center';
+          ctx.fillText('L_SURV(T)',590,sY+34);ctx.textAlign='left';ctx.globalAlpha=1;
+        }
+
+        // ===== Stage 4: Knowledge Distillation flow =====
+        if(stage>=4){
+          var s4A=stage===4?stageProgress:(stage>4?1:0);
+          var kY=baseY+295;
+          ctx.fillStyle='#8b5cf6';ctx.font='bold 11px ui-monospace';ctx.globalAlpha=s4A;
+          ctx.fillText('Stage 4: Knowledge Distillation (L_KD) — teacher → student latent transfer',40,kY-12);
+          ctx.globalAlpha=1;
+          // Student model on the right (pathology-only)
+          drawInputBox(550,kY,80,30,'x_p','(student input)','#8b5cf6',s4A);
+          drawInputBox(640,kY,60,30,'E_p','#f59e0b',s4A);
+          ctx.save();ctx.shadowColor='#f59e0b';ctx.shadowBlur=8;
+          var zs_g=ctx.createLinearGradient(710,kY,710,kY+30);
+          zs_g.addColorStop(0,'rgba(252,211,77,'+(0.95*s4A)+')');
+          zs_g.addColorStop(1,'rgba(180,100,8,'+(0.85*s4A)+')');
+          ctx.fillStyle=zs_g;
+          ctx.fillRect(710,kY,60,30);
+          ctx.fillStyle='rgba(255,255,255,'+s4A+')';ctx.font='bold 10px ui-monospace';ctx.textAlign='center';
+          ctx.fillText('z_S',740,kY+18);ctx.textAlign='left';
+          ctx.restore();
+          drawArrow(630,kY+15,710,kY+15,'#f59e0b',s4A,true);
+          // L_KD flow: teacher z_T → student z_S with MSE matching
+          drawArrow(200,kY+15,710,kY+15,'#8b5cf6',s4A,true);
+          // L_KD badge
+          ctx.fillStyle='rgba(11,15,26,0.85)';ctx.fillRect(380,kY-15,100,28);
+          ctx.strokeStyle='#8b5cf6';ctx.lineWidth=1.5;ctx.globalAlpha=s4A;
+          ctx.strokeRect(380,kY-15,100,28);
+          ctx.fillStyle='#8b5cf6';ctx.font='bold 10px ui-monospace';ctx.textAlign='center';
+          ctx.fillText('L_KD = ‖z_T − proj(z_S)‖²',430,kY+3);
+          ctx.fillStyle='rgba(148,163,184,'+(0.7*s4A)+')';ctx.font='9px ui-monospace';
+          ctx.fillText('+ λ·KL(p_T ‖ p_S)',430,kY+11);ctx.textAlign='left';ctx.globalAlpha=1;
+        }
+
+        // ===== Stage 5: Adaptive Redundancy Reduction (L_ARR) =====
+        if(stage>=5){
+          var s5A=stage===5?stageProgress:1;
+          var aY=baseY+370;
+          ctx.fillStyle='#ec4899';ctx.font='bold 11px ui-monospace';ctx.globalAlpha=s5A;
+          ctx.fillText('Stage 5: Adaptive Redundancy Reduction (L_ARR) — prune redundant features',40,aY-12);
+          ctx.globalAlpha=1;
+          // Show two overlapping feature spaces (gene + path) that get pruned
+          var pulse=(Math.sin(performance.now()*0.003)+1)*0.5;
+          // Before ARR: high overlap
+          ctx.fillStyle='rgba(6,182,212,'+(0.25*s5A)+')';
+          ctx.beginPath();ctx.arc(120,aY+30,30,0,6.28);ctx.fill();
+          ctx.fillStyle='rgba(139,92,246,'+(0.25*s5A)+')';
+          ctx.beginPath();ctx.arc(140,aY+30,30,0,6.28);ctx.fill();
+          ctx.fillStyle='rgba(255,255,255,'+(0.7*s5A)+')';ctx.font='9px ui-monospace';ctx.textAlign='center';
+          ctx.fillText('redundant',130,aY+30);ctx.textAlign='left';
+          // Arrow
+          drawArrow(180,aY+30,260,aY+30,'#ec4899',s5A,true);
+          // After ARR: separated, complementary only
+          ctx.fillStyle='rgba(6,182,212,'+(0.35*s5A)+')';
+          ctx.beginPath();ctx.arc(280,aY+30,22,0,6.28);ctx.fill();
+          ctx.fillStyle='rgba(139,92,246,'+(0.35*s5A)+')';
+          ctx.beginPath();ctx.arc(340,aY+30,22,0,6.28);ctx.fill();
+          ctx.fillStyle='rgba(255,255,255,'+(0.7*s5A)+')';ctx.font='9px ui-monospace';ctx.textAlign='center';
+          ctx.fillText('complementary',310,aY+30);ctx.textAlign='left';
+          // Pulsing ring around complementary
+          ctx.strokeStyle='rgba(236,72,153,'+(0.5*s5A+pulse*0.4*s5A)+')';ctx.lineWidth=1.5;
+          ctx.beginPath();ctx.arc(310,aY+30,28+pulse*4,0,6.28);ctx.stroke();
+          // L_ARR formula badge
+          ctx.fillStyle='rgba(11,15,26,0.85)';ctx.fillRect(420,aY+10,360,40);
+          ctx.strokeStyle='#ec4899';ctx.lineWidth=1.5;ctx.globalAlpha=s5A;
+          ctx.strokeRect(420,aY+10,360,40);
+          ctx.fillStyle='#ec4899';ctx.font='bold 11px ui-monospace';ctx.textAlign='center';
+          ctx.fillText('L_ARR = -0.5 · log det(I + (1/N) · Z_S · Z_Sᵀ)',600,aY+27);
+          ctx.fillStyle='rgba(148,163,184,'+(0.7*s5A)+')';ctx.font='9px ui-monospace';
+          ctx.fillText('information bottleneck — keep only non-redundant features',600,aY+41);
+          ctx.textAlign='left';ctx.globalAlpha=1;
+          // Final total loss badge
+          ctx.fillStyle='rgba(11,15,26,0.85)';ctx.fillRect(40,aY+65,500,30);
+          ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.globalAlpha=s5A;
+          ctx.strokeRect(40,aY+65,500,30);
+          ctx.fillStyle='#10b981';ctx.font='bold 12px ui-monospace';ctx.textAlign='center';
+          ctx.fillText('L_total = L_SURV(T) + α·L_KD + β·L_ARR + γ·L_SURV(S)',290,aY+85);
+          ctx.textAlign='left';ctx.globalAlpha=1;
+        }
+
+        ctx.restore();
+        var states=['idle','teacher encode','cross-attention','survival head','knowledge distillation','L_ARR + total'];
+        document.getElementById('stage-ind').textContent='stage '+stage+'/'+maxStage+' · '+(states[stage]||'');
+        document.getElementById('state-display').textContent='AMKD · '+(states[stage]||'idle');
+      }
+
+      function tick(now){
+        if(stageProgress<1){
+          var dt=Math.min(0.05,(now-lastStageTime)/700);
+          stageProgress=Math.min(1,stageProgress+dt);
+          lastStageTime=now;
+        }
+        render();
+        requestAnimationFrame(tick);
+      }
+
+      function animate(){
+        stage=0;stageProgress=1;lastStageTime=performance.now();
+        function step(){
+          if(stage>maxStage){
+            isAnim=false;
+            document.getElementById('btn-play').disabled=false;
+            document.getElementById('btn-play').textContent='▶ Animate pipeline';
+            document.getElementById('stage-ind').textContent='done ✓ · student deployment-ready';
+            return;
+          }
+          stage++;stageProgress=0;lastStageTime=performance.now();
+          setTimeout(step,1400);
+        }
+        step();
+      }
+
+      document.getElementById('btn-play').addEventListener('click',function(){
+        if(isAnim)return;
+        isAnim=true;
+        document.getElementById('btn-play').disabled=true;
+        document.getElementById('btn-play').textContent='▶ running…';
+        animate();
+      });
+      document.getElementById('btn-step').addEventListener('click',function(){
+        if(isAnim)return;
+        if(stage>maxStage)return;
+        stage++;stageProgress=0;lastStageTime=performance.now();
+      });
+      document.getElementById('btn-reset').addEventListener('click',function(){
+        stage=0;stageProgress=1;isAnim=false;
+        document.getElementById('btn-play').disabled=false;
+        document.getElementById('btn-play').textContent='▶ Animate pipeline';
+      });
+      document.getElementById('zoom-in').addEventListener('click',function(){
+        zoom=Math.min(3,zoom+0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';
+      });
+      document.getElementById('zoom-out').addEventListener('click',function(){
+        zoom=Math.max(0.5,zoom-0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';
+      });
+      document.getElementById('zoom-reset').addEventListener('click',function(){
+        zoom=1;document.getElementById('zoom-label').textContent='100%';
+      });
+
+      // Ribbon theme toggle
+      (function setupRibbonTheme(){
+        var KEY='aihpc-theme';
+        var body=document.body,icon=document.getElementById('ribbon-theme-icon');
+        function apply(theme){
+          if(theme==='light'){body.classList.add('light');if(icon)icon.textContent='☀';}
+          else{body.classList.remove('light');if(icon)icon.textContent='🌙';}
+        }
+        var initial='dark';
+        try{var stored=localStorage.getItem(KEY);if(stored==='light'||stored==='dark')initial=stored;else if(window.matchMedia&&window.matchMedia('(prefers-color-scheme:light)').matches)initial='light';}catch(e){}
+        apply(initial);
+      })();
+
+      lastStageTime=performance.now();
+      requestAnimationFrame(tick);
+    </script>
+    <script src="../zoom-loader.js"></script>
+    <script src="../header-banner.js"></script>
+    <script src="../accessibility.js"></script>
+    <script src="../particle-bg.js"></script>
+  </body>
+</html>

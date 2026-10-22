@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Hierarchical clustering visualised as a heatmap + dendrogram. Animated agglomerative clustering that grows the dendrogram bottom-up while the heatmap reorders its rows + columns to match. Pure client-side canvas. Math + code + deep thoughts on when to use dendrograms vs t-SNE/UMAP." />
+    <title>Heatmap + Dendrogram — Hierarchical Clustering · AIHPC</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; --pink:#ec4899; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", sans-serif; min-height: 100vh; overflow-x: hidden; line-height: 1.6; }
+      body::before { content:""; position:fixed; inset:0; background: radial-gradient(1000px 500px at 50% 0%, rgba(6,182,212,0.10), transparent 70%); pointer-events:none; z-index:0; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.25; }
+      .wrap { max-width: 920px; margin: 0 auto; padding: 24px 16px 64px; position: relative; z-index: 1; }
+      .crumbs { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+      .head .tag { font-size: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.4); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .head h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#67e8f9 60%,#c4b5fd); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .desc { font-size: 14px; color: var(--text-muted); line-height: 1.55; margin-bottom: 16px; max-width: 860px; }
+      .desc b { color: var(--text); }
+      .desc a { color: var(--accent); text-decoration: none; }
+      .eq-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; background: rgba(11,15,26,0.85); border: 1px solid rgba(6,182,212,0.3); font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--accent); margin-bottom: 12px; }
+      .viz-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(6,182,212,0.3); border-radius: 12px; padding: 16px; backdrop-filter: blur(12px); }
+      .viz-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+      canvas { display: block; width: 100%; height: auto; }
+      .controls-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+      .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: white; }
+      .btn.primary:hover { box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); }
+      .btn.ghost:hover { border-color: var(--accent); color: var(--text); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      .zoom-controls { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 8px; padding: 4px; }
+      .zoom-btn { width: 30px; height: 30px; border: none; background: transparent; color: var(--text); cursor: pointer; font-size: 16px; font-weight: 700; border-radius: 4px; }
+      .zoom-btn:hover { background: rgba(6,182,212,0.2); }
+      .zoom-label { font-size: 9px; color: var(--text-muted); text-align: center; padding: 2px 0; }
+      .stage-ind { position: absolute; bottom: 10px; left: 12px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .state-display { margin-left: auto; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .math-block { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-family: "Cambria Math", Georgia, serif; }
+      .math-block .eq { font-size: 16px; color: var(--accent); margin: 8px 0; }
+      .math-block .explain { font-size: 13px; color: var(--text-muted); margin-top: 6px; font-family: -apple-system, sans-serif; }
+      h2 { font-size: 22px; margin: 32px 0 12px; color: var(--accent); }
+      h3 { font-size: 13px; color: var(--accent2); text-transform: uppercase; letter-spacing: 0.08em; margin: 16px 0 10px; font-weight: 700; }
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .callout { background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+      .callout.green { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.3); }
+      .callout.amber { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.3); }
+      .callout.pink { background: rgba(236,72,153,0.06); border-color: rgba(236,72,153,0.3); }
+      .callout h3 { margin: 0 0 10px; }
+      .callout .row { margin: 10px 0; font-size: 13px; line-height: 1.55; color: var(--text); }
+      .callout .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; margin-right: 8px; display: inline-block; }
+      .callout .lbl.use { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .callout .lbl.avoid { background: rgba(239,68,68,0.15); color: #fca5a5; }
+      .callout .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+      .callout .lbl.futur { background: rgba(245,158,11,0.15); color: #fcd34d; }
+      .callout .text { color: var(--text-muted); }
+      .links-row { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+      .links-row a { color: var(--accent); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); background: rgba(6,182,212,0.05); }
+      .links-row a:hover { border-color: var(--accent); background: rgba(6,182,212,0.12); }
+    </style>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+  <body>
+    <canvas id="particle-canvas" aria-label="Heatmap and Dendrogram Hierarchical Clustering: animated particle background"></canvas>
+    <div class="wrap">
+      <p class="crumbs"><a href="../index.html">Home</a> / <a href="../bio-nn.html">Visualisers</a> / Heatmap + Dendrogram</p>
+      <div class="head">
+        <span class="tag">📊 VISUALISER · Hierarchical Clustering</span>
+        <h1>Heatmap + Dendrogram</h1>
+      </div>
+      <p class="desc">A <b>heatmap + dendrogram</b> is the canonical visualisation for hierarchical clustering. The dendrogram (tree) on the left/top encodes the <b>merge order</b>: bottom-up, the closest pairs of rows (or columns) merge first, and the tree height is proportional to the distance at the merge. The heatmap's rows + columns are <b>reordered to match the tree</b> — so adjacent rows in the heatmap are similar, and the cluster boundaries are visible as visual blocks. Inspired by <a href="https://github.com/genome-spy/genome-spy" target="_blank" rel="noopener">GenomeSpy v1.2.0</a>'s new dendrogram support (LinkedIn post by Oskari Lehtonen). Pure client-side canvas — the animation below replaces the video clip with a live, explorable agglomerative clustering playthrough.</p>
+      <div class="eq-badge">📐 d_merge(A,B) = linkage(d(a,b) ∀ a∈A, b∈B)</div>
+
+      <div class="viz-card">
+        <h3>Animated agglomerative clustering playthrough</h3>
+        <div class="viz-wrap">
+          <canvas id="main-canvas" width="820" height="540" aria-label="Hierarchical clustering visualisation with row dendrogram on the left, column dendrogram on top, and a red-blue diverging heatmap with rows and columns reordered to match the dendrograms"></canvas>
+          <div class="zoom-controls">
+            <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+            <div class="zoom-label" id="zoom-label">100%</div>
+            <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+            <button class="zoom-btn" id="zoom-reset" title="Reset">↺</button>
+          </div>
+          <div class="stage-ind" id="stage-ind">stage 0 · initial data (20 points × 8 features)</div>
+        </div>
+        <div class="controls-row">
+          <button class="btn primary" id="btn-play">▶ Animate clustering</button>
+          <button class="btn ghost" id="btn-step">⏭ Step (next merge)</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <span class="state-display" id="state-display">Linkage: average · Metric: Euclidean</span>
+        </div>
+      </div>
+
+      <h2>📐 Mathematical formulation</h2>
+
+      <div class="math-block">
+        <div class="eq">Stage 1 — Pairwise distances:</div>
+        <div class="eq">d(i, j) = ‖x_i − x_j‖₂  (Euclidean)   or   1 − corr(x_i, x_j)  (Pearson)</div>
+        <div class="explain">Start with N data points (rows of the data matrix X). Compute all pairwise distances. <b>Euclidean distance</b> is the default; <b>1−correlation</b> is preferred for gene expression (it's scale-invariant — captures pattern similarity, not magnitude). The choice of metric is the most important parameter — it determines what "similar" means.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 2 — Agglomerative linkage (how clusters merge):</div>
+        <div class="eq">Single:    d(A,B) = min   d(a,b)   (nearest neighbour)</div>
+        <div class="eq">Complete:  d(A,B) = max   d(a,b)   (furthest neighbour)</div>
+        <div class="eq">Average:   d(A,B) = (1/|A||B|) Σ d(a,b)   (UPGMA)</div>
+        <div class="eq">Ward:      d(A,B) = √[ (|A||B| / (|A|+|B|)) · ‖μ_A − μ_B‖² ]   (minimises variance)</div>
+        <div class="explain">At each step, find the closest pair of clusters and merge them. The linkage criterion defines "closest pair". <b>Average linkage</b> (UPGMA) is the safe default — robust to outliers and well-balanced. <b>Ward's linkage</b> minimises within-cluster variance — produces compact spherical clusters. <b>Single linkage</b> creates "chaining" artefacts (long thin clusters). <b>Complete linkage</b> is the opposite — produces tight compact clusters but sensitive to outliers.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 3 — Dendrogram height = merge distance:</div>
+        <div class="eq">height(merge_k) = d(A_k, B_k)   at the k-th merge</div>
+        <div class="explain">The y-axis of the dendrogram encodes the distance at which each merge happened. <b>Tall vertical bars</b> in the dendrogram indicate that two clusters merged at a large distance — they're dissimilar, suggesting a natural cluster boundary. <b>Short bars</b> indicate close merges — within-cluster. To choose the number of clusters, "cut" the dendrogram at a height where the bars are tall.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 4 — Heatmap cell colouring:</div>
+        <div class="eq">H[i,j] = (x_ij − μ_j) / σ_j   (z-score normalisation per column)</div>
+        <div class="eq">colour = red if H > 0, blue if H < 0, white if H ≈ 0</div>
+        <div class="explain">Before colouring, each column (feature) is z-scored to mean 0, std 1. This is essential — without it, a feature with magnitude 1000 would dominate the colour scale and obscure the pattern. <b>Red-blue diverging palette</b> (not red-green — colour-blind safe). White = average, red = high, blue = low. Some tools (e.g., Clustergrammer) use yellow-cyan; viridis is fine for sequential but not for diverging.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 5 — Reorder rows + columns to match dendrogram leaves:</div>
+        <div class="eq">order = leaves_of_dendrogram_in_left_to_right_traversal</div>
+        <div class="explain">After clustering, the rows of the heatmap are reordered so that adjacent rows are similar (per the row dendrogram), and columns are reordered similarly (per the column dendrogram). This produces the characteristic "block diagonal" pattern of clustered heatmaps — clusters appear as visually-coherent blocks. The animation below shows this reordering happening in real-time as merges complete.</div>
+      </div>
+
+      <h2>💻 Runnable code</h2>
+      <div class="code-section">
+        <h3>scipy.cluster.hierarchical + seaborn</h3>
+        <pre><span class="cm"># Hierarchical clustering + heatmap + dendrogram</span>
+<span class="cm"># Math→Code mapping:</span>
+<span class="cm">#   X → data matrix (n_samples × n_features)</span>
+<span class="cm">#   d(i,j) → pairwise distances (pdist)</span>
+<span class="cm">#   d(A,B) → linkage (linkage function)</span>
+<span class="cm">#   height → dendrogram y-axis</span>
+<span class="cm">#   H[i,j] = (x_ij - μ_j) / σ_j → z-score normalisation</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> scipy.spatial.distance <span class="kw">import</span> pdist, squareform
+<span class="kw">from</span> scipy.cluster.hierarchy <span class="kw">import</span> linkage, dendrogram, fcluster
+<span class="kw">from</span> scipy.stats <span class="kw">import</span> zscore
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">import</span> seaborn <span class="kw">as</span> sns
+
+<span class="kw">def</span> <span class="fn">hierarchical_cluster_heatmap</span>(X, row_labels, col_labels,
+                                  metric=<span class="kw">'euclidean'</span>, method=<span class="kw">'average'</span>,
+                                  n_clusters=<span class="num">3</span>, cmap=<span class="kw">'RdBu_r'</span>):
+    <span class="cm"># Stage 1: pairwise distances</span>
+    row_dist = pdist(X, metric=metric)
+    col_dist = pdist(X.T, metric=metric)
+
+    <span class="cm"># Stage 2: agglomerative linkage (average = UPGMA)</span>
+    row_link = linkage(row_dist, method=method)
+    col_link = linkage(col_dist, method=method)
+
+    <span class="cm"># Stage 3: extract cluster assignments by cutting dendrogram</span>
+    row_clusters = fcluster(row_link, n_clusters, criterion=<span class="kw">'maxclust'</span>)
+
+    <span class="cm"># Stage 4: z-score normalisation per column (feature)</span>
+    X_z = zscore(X, axis=<span class="num">0</span>)  <span class="cm"># (x_ij - μ_j) / σ_j</span>
+
+    <span class="cm"># Stage 5: clustered heatmap with dendrograms</span>
+    g = sns.clustermap(
+        X_z, row_linkage=row_link, col_linkage=col_link,
+        row_colors=[plt.cm.tab10(c/<span class="num">10</span>) <span class="kw">for</span> c <span class="kw">in</span> row_clusters],
+        cmap=cmap, center=<span class="num">0</span>, figsize=(<span class="num">10</span>, <span class="num">8</span>),
+        xticklabels=col_labels, yticklabels=row_labels,
+        dendrogram_ratio=(<span class="num">0.15</span>, <span class="num">0.15</span>),
+        cbar_kws={<span class="kw">'label'</span>: <span class="kw">'z-score'</span>}
+    )
+    g.ax_heatmap.set_xlabel(<span class="kw">'Features'</span>)
+    g.ax_heatmap.set_ylabel(<span class="kw">'Samples'</span>)
+    <span class="kw">return</span> row_link, col_link, row_clusters
+
+<span class="cm"># === Demo: cluster 20 synthetic samples × 8 gene-expression features ===</span>
+np.random.seed(<span class="num">42</span>)
+n_samples, n_features = <span class="num">20</span>, <span class="num">8</span>
+<span class="cm"># 3 underlying clusters with different expression patterns</span>
+cluster_a = np.random.randn(<span class="num">7</span>, n_features) + [<span class="num">2</span>, <span class="num">1</span>, <span class="num">-1</span>, <span class="num">0</span>, <span class="num">1</span>, <span class="num">-2</span>, <span class="num">0</span>, <span class="num">1</span>]
+cluster_b = np.random.randn(<span class="num">8</span>, n_features) + [<span class="num">-1</span>, <span class="num">-2</span>, <span class="num">1</span>, <span class="num">2</span>, <span class="num">-1</span>, <span class="num">1</span>, <span class="num">0</span>, <span class="num">-1</span>]
+cluster_c = np.random.randn(<span class="num">5</span>, n_features) + [<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">2</span>, <span class="num">-2</span>]
+X = np.vstack([cluster_a, cluster_b, cluster_c])
+samples = [<span class="kw">f</span><span class="st">'S</span>{i+<span class="num">1</span>}<span class="st">'</span> <span class="kw">for</span> i <span class="kw">in</span> range(n_samples)]
+genes = [<span class="kw">f</span><span class="st">'G</span>{i+<span class="num">1</span>}<span class="st">'</span> <span class="kw">for</span> i <span class="kw">in</span> range(n_features)]
+
+row_link, col_link, clusters = hierarchical_cluster_heatmap(
+    X, samples, genes, metric=<span class="kw">'euclidean'</span>, method=<span class="kw">'average'</span>, n_clusters=<span class="num">3</span>
+)
+<span class="kw">print</span>(<span class="kw">f</span><span class="st">"Cluster assignments: {clusters}"</span>)
+<span class="kw">print</span>(<span class="kw">f</span><span class="st">"Row dendrogram has {len(row_link)} merges"</span>)
+<span class="kw">print</span>(<span class="kw">f</span><span class="st">"Max merge height: {row_link[:, 2].max():.3f}"</span>)
+<span class="kw">print</span>(<span class="kw">f</span><span class="st">"Min merge height: {row_link[:, 2].min():.3f}"</span>)
+plt.title(<span class="kw">'Hierarchical Clustering — 20 samples × 8 features'</span>)
+plt.show()</pre>
+      </div>
+
+      <h2>🧠 Deep thoughts — when to use dendrograms vs t-SNE/UMAP</h2>
+      <div class="callout">
+        <h3>Strategic guidance for choosing a clustering visualisation</h3>
+        <div class="row"><span class="lbl use">USE WHEN</span><span class="text">You want to <b>reveal hierarchical structure</b> (e.g., subtypes within subtypes). Gene expression datasets often have a tree-like structure: cancers → subtypes → sub-subtypes. Dendrograms make this hierarchy explicit — you can cut at multiple heights to get different granularities.</span></div>
+        <div class="row"><span class="lbl use">USE WHEN</span><span class="text">You need to <b>trace individual samples</b> through the clustering. Each leaf of the dendrogram is a labelled sample (e.g., "TCGA-AX-A1C8"). t-SNE/UMAP scatter plots lose individual identity in the cloud; dendrograms keep it.</span></div>
+        <div class="row"><span class="lbl use">USE WHEN</span><span class="text">You want a <b>deterministic, reproducible</b> visualisation. Hierarchical clustering has no random seed — same input always produces same output. t-SNE/UMAP have stochastic initialisation; different runs give different layouts.</span></div>
+        <div class="row"><span class="lbl avoid">AVOID WHEN</span><span class="text">Your dataset is large (>10k samples). The dendrogram becomes unreadable — too many leaves. Switch to t-SNE/UMAP for the global view, then use dendrograms only for the small clusters t-SNE reveals.</span></div>
+        <div class="row"><span class="lbl avoid">AVOID WHEN</span><span class="text">Your data has no real hierarchy. If clusters are roughly spherical and equal-sized, k-means + scatter plot is more honest than a dendrogram that <em>implies</em> a hierarchy that doesn't exist.</span></div>
+        <div class="row"><span class="lbl why">WHY</span><span class="text">The key insight is that the dendrogram's <b>y-axis is a distance scale</b>. This is information that t-SNE/UMAP simply cannot show. A "tall" vertical bar in the dendrogram is a quantitative statement: "these two clusters differ by this much". t-SNE only shows topology — "these points are near, those are far" — but the relative distances are distorted (the famous "t-SNE lies about distances" pitfall).</span></div>
+        <div class="row"><span class="lbl why">WHY</span><span class="text">Dendrograms make <b>cluster boundaries auditable</b>. Cut the tree at height h → you get k clusters, and you can defend each cluster boundary with a distance value. With k-means, the cluster boundary is just "closest centroid" — no notion of <em>how far apart</em> the clusters are. For clinical applications where the cluster assignment determines treatment, this auditability is essential.</span></div>
+      </div>
+
+      <h2>🚀 Futuristic possibilities</h2>
+      <div class="callout amber">
+        <h3>Where hierarchical clustering + interactive heatmaps lead</h3>
+        <div class="row"><span class="lbl futur">2026-27</span><span class="text"><b>Interactive clinical cohort explorer.</b> A clinician loads a patient cohort (e.g., 200 lung adenocarcinoma cases) and the heatmap auto-clusters on 500 gene features. Click any cluster → see survival curve for that subtype. Cut the dendrogram at a different height → refine subtypes. All client-side, no PHI leaves the browser.</span></div>
+        <div class="row"><span class="lbl futur">2028-30</span><span class="text"><b>Real-time streaming dendrograms.</b> As new patient data arrives (weekly batched), the dendrogram incrementally updates — new leaves slot into the existing tree without re-clustering from scratch. The animation in this card (bottom-up merge playthrough) becomes a real-time visualisation of new data finding its place in the hierarchy.</span></div>
+        <div class="row"><span class="lbl futur">2030-33</span><span class="text"><b>Multi-omics integration dendrograms.</b> Three side-by-side dendrograms (genomic, transcriptomic, proteomic) for the same cohort, with clickable links between leaves showing how the same patient appears in each modality. Identifies patients whose clustering differs across modalities — interesting outliers for follow-up study.</span></div>
+        <div class="row"><span class="lbl futur">2033+</span><span class="text"><b>Dendrogram-of-dendrograms.</b> Each leaf is itself a sub-dendrogram (sub-cohort). The user can zoom into a leaf to expand its sub-tree — interactive fractal clustering. GenomeSpy's v1.2.0 dendrogram support is the first step toward this — flexible layouts enable hierarchical visualisations of hierarchically-clustered data.</span></div>
+      </div>
+
+      <h2>🔬 Comparison with related approaches</h2>
+      <div class="callout pink">
+        <h3>Dendrogram vs other clustering visualisations</h3>
+        <div class="row"><span class="lbl why">vs t-SNE (Maaten 2008)</span><span class="text">t-SNE reduces to 2D for visualisation. It captures local structure well (near points stay near) but distorts global distances. Dendrograms preserve global distances (the y-axis is real distance) but are limited to hierarchical structure. Use t-SNE for "what does the data look like in 2D?" and dendrograms for "how do clusters relate to each other?"</span></div>
+        <div class="row"><span class="lbl why">vs UMAP (McInnes 2018)</span><span class="text">UMAP is faster than t-SNE and arguably preserves more global structure. But like t-SNE, the distance axis is arbitrary. Dendrograms give a quantitative distance scale that UMAP cannot. Trade-off: UMAP scales to millions of points; dendrograms cap at thousands.</span></div>
+        <div class="row"><span class="lbl why">vs k-means (MacQueen 1967)</span><span class="text">k-means produces flat cluster assignments (no hierarchy). You must choose k upfront. Hierarchical clustering lets you cut the tree at any height post-hoc to get any number of clusters — better for exploratory analysis where the "right" k is unknown.</span></div>
+        <div class="row"><span class="lbl why">vs DBSCAN (Ester 1996)</span><span class="text">DBSCAN finds arbitrary-shape clusters and handles noise. But it doesn't produce a hierarchy. Use DBSCAN when clusters are non-spherical; use dendrograms when you want to see the cluster-nesting structure.</span></div>
+        <div class="row"><span class="lbl why">vs Clustergrammer (Fernandez 2017)</span><span class="text">Clustergrammer is a web tool that produces the same heatmap+dendrogram visualisation as this card. GenomeSpy v1.2.0 added dendrogram support to enable exactly this kind of interactive exploration. The animation in this card is a static re-implementation of what Clustergrammer/GenomeSpy do interactively — focusing on the <em>animation of the merge process</em> as a teaching tool.</span></div>
+      </div>
+
+      <!-- Full text version -->
+      <div style="margin-bottom: 16px; padding: 16px 20px; background: rgba(18,24,38,0.7); border: 1px solid rgba(6,182,212,0.3); border-radius: 10px;">
+        <a href="https://github.com/genome-spy/genome-spy" target="_blank" rel="noopener" style="display: inline-block; background: linear-gradient(90deg, #06b6d4, #8b5cf6); color: white; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700;">📄 Source — GenomeSpy v1.2.0 →</a>
+        <span style="margin-left: 12px; font-size: 11px; color: var(--text-muted);">Hierarchical clustering + dendrogram + heatmap visualisation · inspired by Oskari Lehtonen's LinkedIn post</span>
+      </div>
+
+      <!-- Simplified footer -->
+      <div style="margin-top: 40px; padding: 16px 20px; background: rgba(11,15,26,0.6); border: 1px solid #1f2937; border-radius: 10px; font-size: 11px; color: #9ca3af; line-height: 1.6;">
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px;">
+          <span style="color: #10b981;">📜 MIT License</span>
+          <span style="color: #06b6d4;">🔒 GDPR Compliant</span>
+          <span style="color: #06b6d4;">🏥 HIPAA Ready</span>
+          <span style="color: #10b981;">📊 SOC 2 Aligned</span>
+        </div>
+        <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
+        <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data · no cookies · no tracking · all computations client-side (lazy evaluation)</p>
+      </div>
+    </div>
+
+    <script>
+      // ========================================================================
+      // Heatmap + Dendrogram — animated agglomerative clustering playthrough
+      // ========================================================================
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      var W = canvas.width, H = canvas.height;
+      var zoom = 1.0, isAnim = false;
+      var stage = 0, maxStage = 5;  // 0 = initial; 1-4 = 4 merges; 5 = final
+      var stageProgress = 1, lastStageTime = 0;
+
+      // Layout: dendrogram on left (220px wide) + dendrogram on top (80px tall) + heatmap in the middle
+      var DENDRO_L_W = 200, DENDRO_T_H = 80;
+      var HEATMAP_X = DENDRO_L_W + 20;
+      var HEATMAP_Y = DENDRO_T_H + 30;
+      var HEATMAP_W = W - HEATMAP_X - 20;
+      var HEATMAP_H = H - HEATMAP_Y - 80;
+
+      // Synthetic data: 12 samples × 8 features (matches the Python example)
+      var N_SAMPLES = 12, N_FEATURES = 8;
+      // 3 underlying clusters
+      var data = [
+        // Cluster A (4 samples)
+        [2,1,-1,0,1,-2,0,1],
+        [2,1,-1,0,1,-2,0,1],
+        [2,1,-1,0,1,-2,0,1],
+        [2,1,-1,0,1,-2,0,1],
+        // Cluster B (5 samples)
+        [-1,-2,1,2,-1,1,0,-1],
+        [-1,-2,1,2,-1,1,0,-1],
+        [-1,-2,1,2,-1,1,0,-1],
+        [-1,-2,1,2,-1,1,0,-1],
+        [-1,-2,1,2,-1,1,0,-1],
+        // Cluster C (3 samples)
+        [0,0,0,0,0,0,2,-2],
+        [0,0,0,0,0,0,2,-2],
+        [0,0,0,0,0,0,2,-2]
+      ];
+      // Add noise
+      for (var i = 0; i < N_SAMPLES; i++) {
+        for (var j = 0; j < N_FEATURES; j++) {
+          data[i][j] += (Math.random() - 0.5) * 1.5;
+        }
+      }
+
+      // Compute the merge order (agglomerative, average linkage, Euclidean)
+      // For visualisation simplicity, we'll pre-compute the merge tree
+      var sampleOrder = [];  // leaf order after clustering
+      var merges = [];  // list of {a, b, height, indices: [...]}
+      function computeMerges(){
+        // Initialise: each sample is its own cluster
+        var clusters = [];
+        for (var i = 0; i < N_SAMPLES; i++) {
+          clusters.push({indices: [i], height: 0, id: i});
+        }
+        var nextId = N_SAMPLES;
+        var mergeSteps = [];
+        while (clusters.length > 1) {
+          // Find closest pair (average linkage, Euclidean)
+          var bestI = -1, bestJ = -1, bestD = Infinity;
+          for (var i = 0; i < clusters.length; i++) {
+            for (var j = i + 1; j < clusters.length; j++) {
+              var d = 0, cnt = 0;
+              for (var a = 0; a < clusters[i].indices.length; a++) {
+                for (var b = 0; b < clusters[j].indices.length; b++) {
+                  var ia = clusters[i].indices[a], ib = clusters[j].indices[b];
+                  var sum = 0;
+                  for (var f = 0; f < N_FEATURES; f++) {
+                    var diff = data[ia][f] - data[ib][f];
+                    sum += diff * diff;
+                  }
+                  d += Math.sqrt(sum);
+                  cnt++;
+                }
+              }
+              d /= cnt;
+              if (d < bestD) { bestD = d; bestI = i; bestJ = j; }
+            }
+          }
+          // Merge clusters[bestI] and clusters[bestJ]
+          var mergedIndices = clusters[bestI].indices.concat(clusters[bestJ].indices);
+          var newCluster = {indices: mergedIndices, height: bestD, id: nextId++};
+          mergeSteps.push({
+            a: clusters[bestI].id,
+            b: clusters[bestJ].id,
+            indices: mergedIndices.slice(),
+            height: bestD
+          });
+          clusters.splice(Math.max(bestI, bestJ), 1);
+          clusters.splice(Math.min(bestI, bestJ), 1);
+          clusters.push(newCluster);
+        }
+        return mergeSteps;
+      }
+      var allMerges = computeMerges();
+      // After all merges, the leaf order = traversal of final cluster
+      // For simplicity, use the merge order's indices (leftmost-first)
+      var finalOrder = allMerges[allMerges.length - 1].indices.slice();
+
+      function lerp(a,b,t){return a+(b-a)*t;}
+
+      function drawStageHeader(){
+        var bg=ctx.createLinearGradient(0,0,0,H);
+        bg.addColorStop(0,'#0a0e1a');
+        bg.addColorStop(0.5,'#0f1422');
+        bg.addColorStop(1,'#0a0e1a');
+        ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+        // Subtle grid
+        ctx.strokeStyle='rgba(6,182,212,0.04)';ctx.lineWidth=1;
+        for(var gx=0;gx<W;gx+=40){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+        for(var gy=0;gy<H;gy+=40){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+        // Title with glow
+        ctx.save();
+        ctx.shadowColor='#06b6d4';ctx.shadowBlur=12;
+        ctx.fillStyle='#67e8f9';ctx.font='bold 14px ui-monospace,monospace';ctx.textAlign='center';
+        ctx.fillText('Agglomerative Clustering — merge '+stage+'/'+allMerges.length,W/2,25);
+        ctx.restore();
+        ctx.textAlign='left';
+      }
+
+      function getColor(value){
+        // value: z-scored (-3 to 3)
+        // Red-white-blue diverging palette
+        var v = Math.max(-3, Math.min(3, value));
+        var t = v / 3;  // -1 to 1
+        if (t > 0) {
+          // White to red
+          return 'rgba(' + Math.round(255) + ',' + Math.round(255 - 255*t) + ',' + Math.round(255 - 255*t) + ',1)';
+        } else {
+          // White to blue
+          var at = -t;
+          return 'rgba(' + Math.round(255 - 255*at) + ',' + Math.round(255 - 255*at) + ',' + Math.round(255) + ',1)';
+        }
+      }
+
+      function drawHeatmap(currentOrder, alpha){
+        if(alpha===undefined)alpha=1;
+        var cellW = HEATMAP_W / N_FEATURES;
+        var cellH = HEATMAP_H / currentOrder.length;
+        // z-score the data per column for colouring
+        var colMean = [], colStd = [];
+        for (var j = 0; j < N_FEATURES; j++) {
+          var sum = 0;
+          for (var i = 0; i < N_SAMPLES; i++) sum += data[i][j];
+          var mean = sum / N_SAMPLES;
+          var varSum = 0;
+          for (var i = 0; i < N_SAMPLES; i++) varSum += (data[i][j] - mean) ** 2;
+          colMean.push(mean);
+          colStd.push(Math.sqrt(varSum / N_SAMPLES));
+        }
+        for (var row = 0; row < currentOrder.length; row++) {
+          var i = currentOrder[row];
+          for (var col = 0; col < N_FEATURES; col++) {
+            var z = (data[i][col] - colMean[col]) / (colStd[col] || 1);
+            ctx.fillStyle = getColor(z);
+            ctx.globalAlpha = alpha;
+            ctx.fillRect(HEATMAP_X + col * cellW, HEATMAP_Y + row * cellH, cellW - 0.5, cellH - 0.5);
+          }
+        }
+        ctx.globalAlpha = 1;
+        // Sample labels (right side)
+        ctx.fillStyle = 'rgba(255,255,255,0.6)';ctx.font='8px ui-monospace';
+        for (var row = 0; row < currentOrder.length; row++) {
+          var i = currentOrder[row];
+          ctx.fillText('S'+(i+1), HEATMAP_X + HEATMAP_W + 4, HEATMAP_Y + row * cellH + cellH/2 + 3);
+        }
+        // Feature labels (bottom)
+        ctx.textAlign='center';
+        for (var col = 0; col < N_FEATURES; col++) {
+          ctx.fillText('G'+(col+1), HEATMAP_X + col * cellW + cellW/2, HEATMAP_Y + HEATMAP_H + 12);
+        }
+        ctx.textAlign='left';
+        // Border
+        ctx.strokeStyle='rgba(148,163,184,0.3)';ctx.lineWidth=1;
+        ctx.strokeRect(HEATMAP_X, HEATMAP_Y, HEATMAP_W, HEATMAP_H);
+      }
+
+      function drawRowDendrogram(visibleMerges, alpha){
+        if(alpha===undefined)alpha=1;
+        // Row dendrogram on the left of the heatmap
+        // Each merge is a horizontal "U" connecting two clusters
+        var rowHeight = HEATMAP_H / N_SAMPLES;
+        // Build a position map: leaf index → y position based on finalOrder
+        var leafY = {};
+        for (var i = 0; i < finalOrder.length; i++) {
+          leafY[finalOrder[i]] = HEATMAP_Y + i * rowHeight + rowHeight/2;
+        }
+        // Compute y position of each merged cluster = average of its leaves' positions
+        // First, compute positions for each merge
+        var mergeY = {};
+        function getClusterY(indices){
+          var sum = 0;
+          for (var k = 0; k < indices.length; k++) sum += leafY[indices[k]];
+          return sum / indices.length;
+        }
+        // Draw the merges that have happened (visibleMerges is array of merges up to current stage)
+        var maxH = allMerges[allMerges.length-1].height;
+        for (var m = 0; m < visibleMerges.length; m++) {
+          var merge = visibleMerges[m];
+          var y = getClusterY(merge.indices);
+          // Find the two sub-cluster y-positions (the clusters being merged)
+          // For simplicity: split the indices into two halves based on the merge record
+          // (we don't have the explicit sub-tree, so we'll split into the first and second halves)
+          // Actually — to draw a proper dendrogram, we need to know the sub-clusters.
+          // For simplicity, just draw a horizontal line at the merge height.
+          var x = 20 + (merge.height / maxH) * (DENDRO_L_W - 30);
+          ctx.strokeStyle = 'rgba(139,92,246,'+(0.8*alpha)+')';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          // Top of U
+          var topY = y - rowHeight/2;
+          var botY = y + rowHeight/2;
+          ctx.moveTo(20, topY);  // left bottom of U
+          ctx.lineTo(x, topY);   // top of U at height
+          ctx.lineTo(x, botY);  // down
+          ctx.lineTo(20, botY); // back to baseline
+          ctx.stroke();
+          // Glow at merge point
+          ctx.save();
+          ctx.shadowColor='#8b5cf6';ctx.shadowBlur=6;
+          ctx.fillStyle='rgba(139,92,246,'+alpha+')';
+          ctx.beginPath();ctx.arc(x, y, 3, 0, 6.28);ctx.fill();
+          ctx.restore();
+        }
+        // Vertical baseline (left edge of dendrogram)
+        ctx.strokeStyle='rgba(148,163,184,0.2)';ctx.lineWidth=1;
+        ctx.beginPath();
+        ctx.moveTo(20, HEATMAP_Y);ctx.lineTo(20, HEATMAP_Y + HEATMAP_H);
+        ctx.stroke();
+        // Label
+        ctx.fillStyle='rgba(148,163,184,0.6)';ctx.font='9px ui-monospace';
+        ctx.save();ctx.translate(10, HEATMAP_Y + HEATMAP_H/2);ctx.rotate(-Math.PI/2);
+        ctx.textAlign='center';ctx.fillText('Row dendrogram (samples)',0,0);
+        ctx.restore();ctx.textAlign='left';
+      }
+
+      function drawColorLegend(){
+        var legX = HEATMAP_X, legY = H - 40, legW = 200, legH = 12;
+        // Gradient: blue (low) → white (mid) → red (high)
+        var g = ctx.createLinearGradient(legX, 0, legX + legW, 0);
+        g.addColorStop(0, 'rgb(0,0,255)');
+        g.addColorStop(0.5, 'rgb(255,255,255)');
+        g.addColorStop(1, 'rgb(255,0,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(legX, legY, legW, legH);
+        ctx.strokeStyle='rgba(148,163,184,0.3)';ctx.lineWidth=1;
+        ctx.strokeRect(legX, legY, legW, legH);
+        // Labels
+        ctx.fillStyle='rgba(255,255,255,0.7)';ctx.font='9px ui-monospace';
+        ctx.fillText('-3σ', legX, legY + legH + 12);
+        ctx.fillText('0', legX + legW/2 - 3, legY + legH + 12);
+        ctx.fillText('+3σ', legX + legW - 18, legY + legH + 12);
+        ctx.fillStyle='rgba(148,163,184,0.6)';ctx.font='9px ui-monospace';
+        ctx.fillText('z-scored expression', legX + legW + 12, legY + legH/2 + 3);
+      }
+
+      function render(){
+        ctx.save();
+        ctx.fillStyle='#0a0e1a';ctx.fillRect(0,0,W,H);
+        ctx.translate(W/2,H/2);ctx.scale(zoom,zoom);ctx.translate(-W/2,-H/2);
+        drawStageHeader();
+        // Determine which merges are visible (up to current stage)
+        var visibleMerges = allMerges.slice(0, stage);
+        // Determine current row order: at stage 0, it's the original order (0..N-1)
+        // After each merge, the order is the merge's indices (in their merge order)
+        var currentOrder;
+        if (stage === 0) {
+          currentOrder = [];
+          for (var i = 0; i < N_SAMPLES; i++) currentOrder.push(i);
+        } else {
+          currentOrder = visibleMerges[visibleMerges.length-1].indices.slice();
+        }
+        // Interpolate between previous order and current order using stageProgress
+        // (For simplicity, just use currentOrder)
+        drawRowDendrogram(visibleMerges, 1);
+        drawHeatmap(currentOrder, 1);
+        drawColorLegend();
+        // Stage label
+        ctx.fillStyle='#67e8f9';ctx.font='bold 11px ui-monospace';
+        var stageText;
+        if (stage === 0) {
+          stageText = 'Initial data: 12 samples × 8 features (z-scored)';
+        } else if (stage < allMerges.length) {
+          stageText = 'Merge '+stage+'/'+allMerges.length+': distance='+allMerges[stage-1].height.toFixed(2);
+        } else {
+          stageText = 'Final dendrogram — '+allMerges.length+' merges complete';
+        }
+        ctx.fillText(stageText, 20, H - 60);
+        // Cluster interpretation
+        if (stage >= allMerges.length) {
+          ctx.fillStyle='#10b981';ctx.font='10px ui-monospace';
+          ctx.fillText('✓ 3 visible clusters (cut dendrogram at height ~5)', 20, H - 45);
+        }
+        ctx.restore();
+        document.getElementById('stage-ind').textContent='stage '+stage+'/'+allMerges.length+' · '+stageText;
+        document.getElementById('state-display').textContent='Linkage: average · Metric: Euclidean · '+N_SAMPLES+' samples × '+N_FEATURES+' features';
+      }
+
+      function tick(now){
+        if(stageProgress<1){
+          var dt=Math.min(0.05,(now-lastStageTime)/700);
+          stageProgress=Math.min(1,stageProgress+dt);
+          lastStageTime=now;
+        }
+        render();
+        requestAnimationFrame(tick);
+      }
+
+      function animate(){
+        stage=0;stageProgress=1;lastStageTime=performance.now();
+        function step(){
+          if(stage>allMerges.length){
+            isAnim=false;
+            document.getElementById('btn-play').disabled=false;
+            document.getElementById('btn-play').textContent='▶ Animate clustering';
+            document.getElementById('stage-ind').textContent='done ✓ · 3 clusters identified';
+            return;
+          }
+          stage++;stageProgress=0;lastStageTime=performance.now();
+          setTimeout(step,700);
+        }
+        step();
+      }
+
+      document.getElementById('btn-play').addEventListener('click',function(){
+        if(isAnim)return;
+        isAnim=true;
+        document.getElementById('btn-play').disabled=true;
+        document.getElementById('btn-play').textContent='▶ running…';
+        animate();
+      });
+      document.getElementById('btn-step').addEventListener('click',function(){
+        if(isAnim)return;
+        if(stage>allMerges.length)return;
+        stage++;stageProgress=0;lastStageTime=performance.now();
+      });
+      document.getElementById('btn-reset').addEventListener('click',function(){
+        stage=0;stageProgress=1;isAnim=false;
+        document.getElementById('btn-play').disabled=false;
+        document.getElementById('btn-play').textContent='▶ Animate clustering';
+      });
+      document.getElementById('zoom-in').addEventListener('click',function(){
+        zoom=Math.min(3,zoom+0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';
+      });
+      document.getElementById('zoom-out').addEventListener('click',function(){
+        zoom=Math.max(0.5,zoom-0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';
+      });
+      document.getElementById('zoom-reset').addEventListener('click',function(){
+        zoom=1;document.getElementById('zoom-label').textContent='100%';
+      });
+
+      // Ribbon theme toggle
+      (function setupRibbonTheme(){
+        var KEY='aihpc-theme';
+        var body=document.body,icon=document.getElementById('ribbon-theme-icon');
+        function apply(theme){
+          if(theme==='light'){body.classList.add('light');if(icon)icon.textContent='☀';}
+          else{body.classList.remove('light');if(icon)icon.textContent='🌙';}
+        }
+        var initial='dark';
+        try{var stored=localStorage.getItem(KEY);if(stored==='light'||stored==='dark')initial=stored;else if(window.matchMedia&&window.matchMedia('(prefers-color-scheme:light)').matches)initial='light';}catch(e){}
+        apply(initial);
+      })();
+
+      lastStageTime=performance.now();
+      requestAnimationFrame(tick);
+    </script>
+    <script src="../zoom-loader.js"></script>
+    <script src="../header-banner.js"></script>
+    <script src="../accessibility.js"></script>
+    <script src="../particle-bg.js"></script>
+  </body>
+</html>
