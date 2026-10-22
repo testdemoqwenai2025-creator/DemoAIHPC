@@ -115,7 +115,7 @@ canvas {
         <span class="tag">🛠 COMPUTATIONAL TOOL · Universal File Reader</span>
         <h1>Upload Your Data</h1>
       </div>
-      <p class="desc">Upload any data file (CSV, TSV, JSON, TXT, Matrix Market) and the platform reads it as a binary blob, parses to a normalized <b>Table</b> schema (columns + rows + per-column types), shows a preview, then sends it to the <b>heatmap + dendrogram</b> visualiser for live clustering. Pure client-side — <b>your data never leaves your browser</b>. No upload to a server, no API call, no tracking. The file is read into an <code>ArrayBuffer</code> (the universal binary blob), then decoded by the appropriate parser based on file extension + magic-bytes detection.</p>
+      <p class="desc">Upload any data file and the platform reads it as a binary blob, parses to a normalized <b>Table</b> schema (columns + rows + per-column types), shows a preview, then sends it to the <b>heatmap + dendrogram</b> visualiser for live clustering. <b>Text formats</b> (CSV, TSV, JSON, TXT, Matrix Market) are fully parsed. <b>Big-data binary formats</b> are detected: <b>Excel (.xlsx)</b> is fully parsed via the browser's built-in DecompressionStream + DOMParser; <b>Parquet + Arrow</b> get schema preview (column names extracted from the footer) + a warning suggesting CSV conversion for full parsing; <b>ORC + Avro</b> are detected with a clear conversion suggestion. Large files (>10 MB) are warned + capped at 1000 rows to prevent browser memory issues. Pure client-side — <b>your data never leaves your browser</b>. No upload to a server, no API call, no tracking.</p>
 
       <div class="upload-card">
         <h3>Step 1 — Upload your file</h3>
@@ -123,7 +123,8 @@ canvas {
           <div class="drop-zone-icon">📁</div>
           <div class="drop-zone-text">Drop your file here, or click to browse</div>
           <div class="drop-zone-hint">Any extension — we'll detect the format automatically</div>
-          <div class="drop-zone-formats">Supported: .csv · .tsv · .tab · .json · .txt · .dat · .mtx (Matrix Market) · any text-based format</div>
+          <div class="drop-zone-formats">Supported text formats: .csv · .tsv · .tab · .json · .txt · .dat · .mtx (Matrix Market) · any text-based format<br/>
+          Big-data formats detected: .xlsx (Excel — full parse) · .parquet (schema preview) · .arrow (schema preview) · .orc / .avro (detection + conversion suggestion)</div>
           <input type="file" id="file-input" style="display:none" />
         </div>
         <div class="progress-bar" id="progress-bar"><div class="progress-bar-fill" id="progress-fill"></div></div>
@@ -150,7 +151,11 @@ canvas {
         <div class="controls-row">
           <button class="btn primary" id="btn-cluster" disabled>▶ Send to Heatmap + Dendrogram</button>
           <button class="btn ghost" id="btn-binary">⬇ View as Binary Blob</button>
-          <button class="btn ghost" id="btn-download-bin">⬇ Download .aibin</button>
+          <button class="btn ghost" id="btn-download-csv">⬇ .csv</button>
+          <button class="btn ghost" id="btn-download-tsv">⬇ .tsv</button>
+          <button class="btn ghost" id="btn-download-json">⬇ .json</button>
+          <button class="btn ghost" id="btn-download-txt">⬇ .txt</button>
+          <button class="btn ghost" id="btn-download-bin">⬇ .aibin (binary)</button>
           <button class="btn ghost" id="btn-sample">🎲 Use Sample Data</button>
         </div>
         <div class="binary-display" id="binary-display" style="display:none"></div>
@@ -205,6 +210,10 @@ canvas {
       var btnCluster = document.getElementById('btn-cluster');
       var btnBinary = document.getElementById('btn-binary');
       var btnDownloadBin = document.getElementById('btn-download-bin');
+      var btnDownloadCSV = document.getElementById('btn-download-csv');
+      var btnDownloadTSV = document.getElementById('btn-download-tsv');
+      var btnDownloadJSON = document.getElementById('btn-download-json');
+      var btnDownloadTXT = document.getElementById('btn-download-txt');
       var btnSample = document.getElementById('btn-sample');
       var binaryDisplay = document.getElementById('binary-display');
       var binaryStats = document.getElementById('binary-stats');
@@ -342,13 +351,36 @@ canvas {
         if (!currentBinary) {
           currentBinary = AIHPC_FileReader.tableToBinary(currentTable);
         }
-        var blob = new Blob([currentBinary], { type: 'application/octet-stream' });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = (currentTable.metadata.sourceFile || 'data') + '.aibin';
-        a.click();
-        URL.revokeObjectURL(url);
+        var baseName = (currentTable.metadata.sourceFile || 'data').replace(/\.[^.]+$/, '');
+        AIHPC_FileReader.downloadBinary(baseName + '.aibin', currentBinary);
+      }
+
+      function downloadCSV() {
+        if (!currentTable) return;
+        var baseName = (currentTable.metadata.sourceFile || 'data').replace(/\.[^.]+$/, '');
+        var csv = AIHPC_FileReader.tableToCSV(currentTable);
+        AIHPC_FileReader.downloadText(baseName + '.csv', csv, 'text/csv');
+      }
+
+      function downloadTSV() {
+        if (!currentTable) return;
+        var baseName = (currentTable.metadata.sourceFile || 'data').replace(/\.[^.]+$/, '');
+        var tsv = AIHPC_FileReader.tableToTSV(currentTable);
+        AIHPC_FileReader.downloadText(baseName + '.tsv', tsv, 'text/tab-separated-values');
+      }
+
+      function downloadJSON() {
+        if (!currentTable) return;
+        var baseName = (currentTable.metadata.sourceFile || 'data').replace(/\.[^.]+$/, '');
+        var json = AIHPC_FileReader.tableToJSON(currentTable);
+        AIHPC_FileReader.downloadText(baseName + '.json', json, 'application/json');
+      }
+
+      function downloadTXT() {
+        if (!currentTable) return;
+        var baseName = (currentTable.metadata.sourceFile || 'data').replace(/\.[^.]+$/, '');
+        var txt = AIHPC_FileReader.tableToTXT(currentTable);
+        AIHPC_FileReader.downloadText(baseName + '.txt', txt, 'text/plain');
       }
 
       function sendToHeatmap() {
@@ -417,6 +449,10 @@ canvas {
       btnCluster.addEventListener('click', sendToHeatmap);
       btnBinary.addEventListener('click', showBinaryPreview);
       btnDownloadBin.addEventListener('click', downloadBinary);
+      btnDownloadCSV.addEventListener('click', downloadCSV);
+      btnDownloadTSV.addEventListener('click', downloadTSV);
+      btnDownloadJSON.addEventListener('click', downloadJSON);
+      btnDownloadTXT.addEventListener('click', downloadTXT);
       btnSample.addEventListener('click', useSampleData);
 
       // Ribbon theme toggle
