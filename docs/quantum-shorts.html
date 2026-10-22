@@ -139,38 +139,7 @@
     </main>
 
     <script>
-      // ---- Particle background ----
-      (function () {
-        var canvas = document.getElementById('particle-canvas');
-        if (!canvas) return;
-        var ctx = canvas.getContext('2d');
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        resize(); window.addEventListener('resize', resize);
-        var particles = [];
-        var colors = ['#06b6d4', '#8b5cf6', '#ec4899', '#10b981'];
-        for (var i = 0; i < 60; i++) {
-          particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25, r: Math.random() * 1.5 + 0.5, c: colors[i % colors.length] });
-        }
-        function step() {
-          ctx.fillStyle = 'rgba(11,15,26,0.2)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-          for (var i = 0; i < particles.length; i++) {
-            for (var j = i + 1; j < particles.length; j++) {
-              var d = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
-              if (d < 110) { ctx.strokeStyle = 'rgba(139,92,246,' + (0.12 * (1 - d / 110)).toFixed(3) + ')'; ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke(); }
-            }
-          }
-          for (var k = 0; k < particles.length; k++) {
-            var p = particles[k]; p.x += p.vx; p.y += p.vy;
-            if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
-            if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
-            ctx.fillStyle = p.c; ctx.globalAlpha = 0.4; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI); ctx.fill();
-          }
-          ctx.globalAlpha = 1; requestAnimationFrame(step);
-        }
-        step();
-      })();
-
-      // ---- Quantum Shorts definitions ----
+// ---- Quantum Shorts definitions ----
       var SHORTS = [
         { id: 'bloch-ground', title: 'Bloch: Ground state |0⟩', desc: 'The resting state of a qubit — the north pole of the Bloch sphere. Classical 0. Duration: 4s.', component: 'bloch', sceneIdx: 0, color: '#06b6d4', duration: '4s' },
         { id: 'bloch-hadamard', title: 'Bloch: Hadamard → |+⟩', desc: 'Applying the Hadamard gate creates an equal superposition. State rotates from |0⟩ to the +X equator. Duration: 4s.', component: 'bloch', sceneIdx: 1, color: '#8b5cf6', duration: '4s' },
@@ -409,5 +378,6 @@
     <script src="fock-state-viewer.js"></script>
   <script src="header-banner.js"></script>
     <script src="accessibility.js"></script>
+    <script src="particle-bg.js"></script>
   </body>
 </html>

@@ -279,10 +279,7 @@
     </div>
 
     <script>
-      // Particle background
-      (function(){const c=document.getElementById('particle-canvas'),x=c.getContext('2d');let W,H,P=[];const N=50,cols=['#06b6d4','#8b5cf6','#ec4899'];function r(){W=c.width=innerWidth;H=c.height=innerHeight}r();addEventListener('resize',r);for(let i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,W,H);for(let i=0;i<N;i++){for(let j=i+1;j<N;j++){const d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<90){x.strokeStyle='rgba(139,92,46,'+.1*(1-d/90)+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke()}}}for(const p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;x.fillStyle=p.c;x.globalAlpha=.4;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill()}x.globalAlpha=1;requestAnimationFrame(s)}s()})();
-
-      // ===== N-D Hypercube viewer (Phase 26) =====
+// ===== N-D Hypercube viewer (Phase 26) =====
       // Generalised from 4D tesseract to arbitrary N (4-10).
       // An N-cube has 2^N vertices: all (±1, ±1, …, ±1) ∈ R^N.
       // Two vertices are connected by an edge iff they differ in exactly one coordinate.
@@ -556,5 +553,6 @@
     </script>
   <script src="../../header-banner.js"></script>
     <script src="../../accessibility.js"></script>
+    <script src="../../particle-bg.js"></script>
   </body>
 </html>

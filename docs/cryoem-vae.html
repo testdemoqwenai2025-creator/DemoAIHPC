@@ -214,10 +214,7 @@ conformations = vae.conformational_distribution(images, n_samples=<span class="n
       </div>
     </main>
     <script>
-      // Particle background
-      (function(){var c=document.getElementById('particle-canvas');var x=c.getContext('2d');function r(){c.width=innerWidth;c.height=innerHeight;}r();addEventListener('resize',r);var N=50,P=[];var cols=['#06b6d4','#8b5cf6','#10b981'];for(var i=0;i<N;i++)P.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.15,vy:(Math.random()-.5)*.15,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,c.width,c.height);for(var i=0;i<N;i++)for(var j=i+1;j<N;j++){var d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<100){x.strokeStyle='rgba(139,92,246,'+(.1*(1-d/100))+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke();}}for(var p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;x.fillStyle=p.c;x.globalAlpha=.3;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill();}x.globalAlpha=1;requestAnimationFrame(s);}s();})();
-
-      // Cryo-EM VAE pipeline canvas
+// Cryo-EM VAE pipeline canvas
       var canvas=document.getElementById('main-canvas');var ctx=canvas.getContext('2d');
       var W=canvas.width,H=canvas.height;var stage=0,maxStage=5,zoom=1.0,isAnim=false;
 
@@ -355,5 +352,6 @@ conformations = vae.conformational_distribution(images, n_samples=<span class="n
     <script src="header-banner.js"></script>
     <script src="zoom-loader.js"></script>
     <script src="accessibility.js"></script>
+    <script src="particle-bg.js"></script>
   </body>
 </html>

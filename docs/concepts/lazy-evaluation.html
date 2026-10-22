@@ -1167,10 +1167,10 @@ print(json.dumps(result))
         var overlay = document.getElementById('nd-modal-overlay');
         if (overlay) overlay.style.display = 'none';
       }
-      var launchBtn = document.getElementById('launch-nd-viewer');
-      if (launchBtn) launchBtn.addEventListener('click', openNDModal);
-      var closeBtn = document.getElementById('nd-modal-close');
-      if (closeBtn) closeBtn.addEventListener('click', closeNDModal);
+      var ndLaunchBtn = document.getElementById('launch-nd-viewer');
+      if (ndLaunchBtn) ndLaunchBtn.addEventListener('click', openNDModal);
+      var ndCloseBtn = document.getElementById('nd-modal-close');
+      if (ndCloseBtn) ndCloseBtn.addEventListener('click', closeNDModal);
       var ndOverlay = document.getElementById('nd-modal-overlay');
       if (ndOverlay) ndOverlay.addEventListener('click', function (e) {
         if (e.target === ndOverlay) closeNDModal();

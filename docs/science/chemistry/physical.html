@@ -264,9 +264,7 @@
       </div>
     </div>
     <script>
-      // Particle background
-      (function(){const c=document.getElementById('particle-canvas'),x=c.getContext('2d');let W,H,P=[];const N=60,cols=['#06b6d4','#8b5cf6','#ec4899'];function r(){W=c.width=innerWidth;H=c.height=innerHeight}r();addEventListener('resize',r);for(let i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:Math.random()*1.5+.5,c:cols[i%3]});function s(){x.clearRect(0,0,W,H);for(let i=0;i<N;i++){for(let j=i+1;j<N;j++){const d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<100){x.strokeStyle='rgba(139,92,246,'+.12*(1-d/100)+')';x.lineWidth=.5;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke()}}}for(const p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;x.fillStyle=p.c;x.globalAlpha=.5;x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill()}x.globalAlpha=1;requestAnimationFrame(s)}s()})();
-      // ClickForDemo tabs
+// ClickForDemo tabs
       function showTab(btn,tab){const c=btn.closest('.demo-card');c.querySelectorAll('.demo-tabs button').forEach(b=>b.classList.toggle('active',b===btn));c.querySelectorAll('.demo-tab-content').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab))}
       // Polyglot code
       const CODE={"python":"<span class=\"com\"># arrhenius.py</span>\n<span class=\"kw\">import</span> math\n<span class=\"kw\">def</span> <span class=\"fn\">arrhenius_rate</span>(A, Ea, T, R=<span class=\"num\">8.314</span>):\n    <span class=\"kw\">return</span> A * math.<span class=\"fn\">exp</span>(-Ea / (R * T))","rust":"<span class=\"com\">// arrhenius.rs</span>\n<span class=\"kw\">pub fn</span> <span class=\"fn\">arrhenius_rate</span>(a: <span class=\"kw\">f64</span>, ea: <span class=\"kw\">f64</span>, t: <span class=\"kw\">f64</span>) -&gt; <span class=\"kw\">f64</span> {\n    a * (-ea / (8.314 * t)).<span class=\"fn\">exp</span>()\n}","go":"<span class=\"com\">// arrhenius.go</span>\n<span class=\"kw\">func</span> <span class=\"fn\">ArrheniusRate</span>(A, Ea, T <span class=\"ty\">float64</span>) <span class=\"ty\">float64</span> {\n    <span class=\"kw\">return</span> A * math.<span class=\"fn\">Exp</span>(-Ea / (<span class=\"num\">8.314</span> * T))\n}","c":"<span class=\"com\">/* arrhenius.c */</span>\n<span class=\"kw\">double</span> <span class=\"fn\">arrhenius_rate</span>(<span class=\"kw\">double</span> A, <span class=\"kw\">double</span> Ea, <span class=\"kw\">double</span> T) {\n    <span class=\"kw\">return</span> A * <span class=\"fn\">exp</span>(-Ea / (<span class=\"num\">8.314</span> * T));\n}","elixir":"<span class=\"com\"># arrhenius.exs</span>\n<span class=\"kw\">def</span> <span class=\"fn\">arrhenius_rate</span>(a, ea, t), <span class=\"kw\">do:</span> a * :math.<span class=\"fn\">exp</span>(-ea / (<span class=\"num\">8.314</span> * t))","scala":"<span class=\"com\">// arrhenius.sc</span>\n<span class=\"kw\">def</span> <span class=\"fn\">arrheniusRate</span>(A: <span class=\"ty\">Double</span>, Ea: <span class=\"ty\">Double</span>, T: <span class=\"ty\">Double</span>): <span class=\"ty\">Double</span> =\n  A * math.<span class=\"fn\">exp</span>(-Ea / (<span class=\"num\">8.314</span> * T))"};
@@ -317,5 +315,6 @@
     </script>
   <script src="../../header-banner.js"></script>
     <script src="../../accessibility.js"></script>
+    <script src="../../particle-bg.js"></script>
   </body>
 </html>
