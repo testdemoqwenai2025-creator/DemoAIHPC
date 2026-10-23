@@ -16,7 +16,7 @@
       .back-link { font-size: 12px; color: var(--accent); text-decoration: none; margin-bottom: 16px; display: inline-block; }
       .section-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin: 20px 0 8px; }
       .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-      .card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-decoration: none; color: var(--text); transition: all 0.2s; display: block; }
+      .card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-decoration: none; color: var(--text); transition: all 0.2s; display: flex; flex-direction: column; min-height: 150px; }
       .card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(6,182,212,0.12); }
       .card .cat { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 6px; }
       .card .cat.loss { background: rgba(6,182,212,0.15); color: #67e8f9; }
@@ -26,7 +26,7 @@
       .card .cat.attn { background: rgba(236,72,153,0.15); color: #f9a8d4; }
       .card .cat.reg { background: rgba(99,102,241,0.15); color: #a5b4fc; }
       .card h3 { font-size: 14px; font-weight: 700; margin: 0 0 4px; }
-      .card p { font-size: 12px; color: var(--text-muted); margin: 0; line-height: 1.4; }
+      .card p { font-size: 12px; color: var(--text-muted); margin: 0; line-height: 1.4; flex-grow: 1; }
       .foot { font-size: 11px; color: var(--text-muted); margin-top: 24px; text-align: center; }
       .foot a { color: var(--accent); text-decoration: none; }
       .try-yourself { background: rgba(6,182,212,0.06); border: 1px solid rgba(6,182,212,0.25); border-radius: 10px; padding: 16px 20px; margin: 0 0 24px; }

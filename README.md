@@ -1,12 +1,12 @@
-# AISciMS Hub Advanced — Scientific Computing Platform
+# AIHPC Advanced — Scientific Computing Platform
 
-> **Live preview:** 🚀 **<https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/>**
+> **Live preview:** 🚀 **<https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>**
 >
 > Available **24 hours a day, 7 days a week, 365 days a year** — no NDA required, no
 > login, no signup, no tracking. Pure client-side: every computation runs in your
 > browser, no data leaves your device.
 
-[![Live Preview](https://img.shields.io/badge/preview-live%2024%2F7%2F365-success.svg?style=for-the-badge)](https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/)
+[![Live Preview](https://img.shields.io/badge/preview-live%2024%2F7%2F365-success.svg?style=for-the-badge)](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/)
 [![No NDA Required](https://img.shields.io/badge/access-no%20NDA-blue.svg?style=for-the-badge)](#access)
 [![Pure Client-Side](https://img.shields.io/badge/architecture-pure%20client--side-9cf.svg?style=for-the-badge)](#architecture)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge)](#license)
@@ -21,13 +21,13 @@
 
 | What | Where |
 |------|-------|
-| **Main landing page** | <https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/> |
-| **Demos hub** | <https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/demos.html> |
-| **Knowledge graph dashboard** | <https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/dashboard.html> |
-| **Audit dashboard** | <https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/audit.html> |
-| **Concept cards (v2)** | <https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/concepts-v2/index.html> |
-| **Weekly Science Digest** | <https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/digest.html> |
-| **Live journal feeds** | <https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/feeds.html> |
+| **Main landing page** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/> |
+| **Demos hub** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/demos.html> |
+| **Knowledge graph dashboard** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/dashboard.html> |
+| **Audit dashboard** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/audit.html> |
+| **Concept cards (v2)** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/concepts-v2/index.html> |
+| **Weekly Science Digest** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/digest.html> |
+| **Live journal feeds** | <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/feeds.html> |
 
 The preview is hosted on GitHub Pages. It rebuilds automatically on every release. **No
 downtime for maintenance** — every page is a static HTML file served from a CDN.
@@ -81,19 +81,19 @@ curious technologists explore:
 
 | Card | What it shows |
 |------|---------------|
-| [**AMKD**](https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/concepts-v2/paper-amkd.html) | Multimodal knowledge distillation for cancer survival — multi-modal teacher → unimodal student with 4 cross-attention modules + loss-curve graph showing all 4 loss components over 100 training epochs |
-| [**Heatmap + Dendrogram**](https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/concepts-v2/viz-heatmap-dendrogram.html) | Animated agglomerative clustering playthrough — dendrogram grows bottom-up + heatmap reorders to match + cluster boundaries + cluster state panel showing live values |
-| [**GeoWorld**](https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/geoworld.html) | Geometric world models for robotics — rotating 3D point cloud + articulated robot arm + gradient energy landscape + animated action sequence + feedback loop |
-| [**BOLERO**](https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/bolero.html) | Cell-state-conditioned sequence-to-function Transformer — 6-stage pipeline + real t-SNE UMAP (computed in vanilla JS) + virtual DNA editing with regulatory motifs |
-| [**scGPT**](https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/scgpt.html) | Single-cell foundation model — inference UI for cell-type prediction (simulated distilled model) |
-| [**AlphaFold 3**](https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/alphafold3.html) | Multi-molecule structure prediction — 6-stage pipeline with diffusion noise + 3-atom output complex |
-| [**Claude toxin binder**](https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/claude-toxin.html) | Key-and-lock enzyme binding — animated binder-toxin binding with pulsing hotspots |
-| [**EditJumps**](https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/editjumps.html) | CRISPR antibody affinity maturation — gradient residue tiles + animated autoregressive Edit Flow |
-| [**Lab in the Loop**](https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/lab-in-the-loop.html) | Closed-loop AI drug discovery — 6-node circular pipeline with 3D RSI gauge + flowing particle trails |
+| [**AMKD**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/concepts-v2/paper-amkd.html) | Multimodal knowledge distillation for cancer survival — multi-modal teacher → unimodal student with 4 cross-attention modules + loss-curve graph showing all 4 loss components over 100 training epochs |
+| [**Heatmap + Dendrogram**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/concepts-v2/viz-heatmap-dendrogram.html) | Animated agglomerative clustering playthrough — dendrogram grows bottom-up + heatmap reorders to match + cluster boundaries + cluster state panel showing live values |
+| [**GeoWorld**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/geoworld.html) | Geometric world models for robotics — rotating 3D point cloud + articulated robot arm + gradient energy landscape + animated action sequence + feedback loop |
+| [**BOLERO**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/bolero.html) | Cell-state-conditioned sequence-to-function Transformer — 6-stage pipeline + real t-SNE UMAP (computed in vanilla JS) + virtual DNA editing with regulatory motifs |
+| [**scGPT**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/scgpt.html) | Single-cell foundation model — inference UI for cell-type prediction (simulated distilled model) |
+| [**AlphaFold 3**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/alphafold3.html) | Multi-molecule structure prediction — 6-stage pipeline with diffusion noise + 3-atom output complex |
+| [**Claude toxin binder**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/claude-toxin.html) | Key-and-lock enzyme binding — animated binder-toxin binding with pulsing hotspots |
+| [**EditJumps**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/editjumps.html) | CRISPR antibody affinity maturation — gradient residue tiles + animated autoregressive Edit Flow |
+| [**Lab in the Loop**](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/lab-in-the-loop.html) | Closed-loop AI drug discovery — 6-node circular pipeline with 3D RSI gauge + flowing particle trails |
 
 ### Concept cards (v2 grid)
 
-Browse all 40+ at <https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/concepts-v2/index.html> — including:
+Browse all 40+ at <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/concepts-v2/index.html> — including:
 - 9 ML loss functions (MSE, MAE, BCE, CCE, Hinge, Log-Cosh, Huber, KL, Cosine)
 - 3 activations (ReLU, GELU, SwiGLU, Sigmoid, Tanh)
 - 3 optimisers (SGD, Adam, AdamW) with live convergence animation
@@ -105,7 +105,7 @@ Browse all 40+ at <https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/c
 
 ### Quantum Shorts channel
 
-[Bloch Sphere Shorts](https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/bloch.html) — a glowing 3D Bloch sphere that animates 9 canonical scenes of quantum computing:
+[Bloch Sphere Shorts](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/bloch.html) — a glowing 3D Bloch sphere that animates 9 canonical scenes of quantum computing:
 ground state, Hadamard, Rabi oscillation, phase gate, measurement collapse, decoherence,
 Bell state, Bell singlet, CHSH violation. Hit ▶ Play to watch, then Record WebM to
 download a 9:16 shorts clip.
@@ -115,7 +115,7 @@ download a 9:16 shorts clip.
 ## 📊 Audit dashboard
 
 The platform reports its own health at
-<https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/audit.html> — 66 automated
+<https://testdemoqwenai2025-creator.github.io/DemoAIHPC/audit.html> — 66 automated
 checks covering HTML well-formedness, ribbon presence, math-derivation blocks, JS
 syntax, internal-link integrity, accessibility (aria-labels + accessibility.js + reduced
 motion CSS), public-repo file-type rule, NN card enrichment, particle-bg extraction, and
@@ -209,7 +209,7 @@ Recent phases:
 - **Phase 42** — NN card enrichment + dual-repo realignment + accessibility rollout
 - **Phase 41** — animation clarity on 7 paper pages (gradients, glow, smooth transitions)
 
-See the [platform timeline](https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/timeline.html)
+See the [platform timeline](https://testdemoqwenai2025-creator.github.io/DemoAIHPC/timeline.html)
 for the full 50-phase history.
 
 ---
@@ -217,8 +217,8 @@ for the full 50-phase history.
 ## 📞 Contact
 
 - **Email:** <testdemoqwenai2025@gmail.com>
-- **Live preview:** <https://testdemoqwenai2025-creator.github.io/DemoAISciMShub/>
-- **GitHub (this public mirror):** <https://github.com/testdemoqwenai2025-creator/DemoAISciMShub>
+- **Live preview:** <https://testdemoqwenai2025-creator.github.io/DemoAIHPC/>
+- **GitHub (this public mirror):** <https://github.com/testdemoqwenai2025-creator/DemoAIHPC>
 
 For partnership, collaboration, or funding discussions, please email the address above.
 The platform is available for evaluation 24/7/365 — no NDA required to access the public
@@ -228,7 +228,7 @@ preview.
 
 ## 📄 License
 
-MIT License — © 2026 AISciMS Hub Advanced. All rights reserved.
+MIT License — © 2026 AIHPC Advanced. All rights reserved.
 
 The platform's source-of-truth lives in a private repository. This public mirror
 contains only web files (`.html`, `.css`, `.js`, `.json`, image formats). See the
