@@ -1,8 +1,38 @@
 {
   "domain": "medical",
-  "generated_at": "2026-10-22T06:29:11.265764Z",
-  "total_entries": 58,
+  "generated_at": "2026-10-23T08:16:22.239572Z",
+  "total_entries": 56,
   "entries": [
+    {
+      "title": "Natural compound could fight rheumatoid arthritis at its source",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261020085309.htm",
+      "summary": "A natural compound extracted from a medicinal plant has shown surprising promise against rheumatoid arthritis. In rats, it reduced joint swelling, protected cartilage, and calmed the immune responses responsible for chronic inflammation. Scientists discovered that the compound works by targeting a s",
+      "published": "Wed, 21 Oct 2026 23:37:25 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261020085309.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "A simple 15-minute treatment could help patients avoid carpal tunnel surgery",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261020085020.htm",
+      "summary": "A simple, steroid-free procedure could offer lasting relief for people struggling with carpal tunnel syndrome, potentially helping them avoid surgery. In a clinical trial involving 63 patients, researchers found that ultrasound-guided hydrodissection, which uses fluid to free a compressed nerve in t",
+      "published": "Wed, 21 Oct 2026 23:03:08 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261020085020.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "People are taking an unapproved weight-loss drug. AI found something surprising",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261020085018.htm",
+      "summary": "Researchers analyzing nearly 150,000 Reddit posts uncovered unexpected symptom reports linked by users to unapproved versions of retatrutide, including increased appetite, sleep disturbances, and elevated heart rates. The findings differ from clinical trial results and highlight how AI could help id",
+      "published": "Wed, 21 Oct 2026 22:37:01 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261020085018.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
     {
       "title": "Massive study of 460,000 people challenges ultra-processed food cancer fears",
       "link": "https://www.sciencedaily.com/releases/2026/10/261020085014.htm",
@@ -204,6 +234,46 @@
       "domain": "medical"
     },
     {
+      "title": "Cambridge scientists create a $10 chip that could put a medical lab on your wrist",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261022081312.htm",
+      "summary": "Cambridge researchers have created a groundbreaking $10 optical sensor that delivers the precision of laboratory equipment in a device small enough for wearable technology. It identified foods, plastics, and medicines with 100% accuracy in tests and demonstrated the ability to monitor blood glucose,",
+      "published": "Thu, 22 Oct 2026 21:21:47 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261022081312.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Scientists discover a hidden immune weapon against deadly lung cancer",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261021231232.htm",
+      "summary": "Researchers have uncovered a hidden immune defense capable of attacking small cell lung cancer, an extremely aggressive disease that often escapes conventional treatments. The specialized immune cells can recognize and destroy cancer cells even when tumors have disguised themselves from the immune s",
+      "published": "Thu, 22 Oct 2026 20:32:37 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261021231232.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Millions take fish oil for brain health. A two-year study found no benefit",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261020085427.htm",
+      "summary": "A surprising two-year clinical trial found that fish oil supplements successfully delivered omega-3s to the brain but failed to improve memory or protect against Alzheimer's-related brain shrinkage. Researchers suspect that getting these nutrients through a healthy diet may offer benefits that suppl",
+      "published": "Thu, 22 Oct 2026 08:46:24 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261020085427.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
+      "title": "Coffee calories have jumped nearly 40%. Sugar isn't the biggest culprit",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261021231224.htm",
+      "summary": "Your morning coffee may be packing more calories than you realize, and sugar isn't the biggest reason. A study of 30,000 Americans found that non-dairy creamer has overtaken sugar and milk as the leading source of added coffee calories, helping drive a nearly 40% increase between 2003 and 2018.",
+      "published": "Thu, 22 Oct 2026 06:52:18 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261021231224.htm",
+      "feed_id": "science-daily-med",
+      "journal": "Science Daily",
+      "domain": "medical"
+    },
+    {
       "title": "Scientists discover how exercise reverses muscle aging",
       "link": "https://www.sciencedaily.com/releases/2026/10/261015003550.htm",
       "summary": "Scientists have uncovered a hidden biological mechanism that helps explain how exercise can reverse some of the damage caused by muscle aging. The key is a gene called DEAF1, which becomes overactive with age and interferes with the muscles’ ability to clear damaged proteins and repair themselves. E",
@@ -344,26 +414,6 @@
       "domain": "medical"
     },
     {
-      "title": "Just 10 minutes of daily exercise could unlock deeper sleep",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261008102721.htm",
-      "summary": "Getting better sleep might be as simple as moving a little more every day. Researchers at The University of Texas at Austin found that people who exercised more frequently experienced more deep, restorative sleep, which is essential for brain recovery, memory, and emotional well-being. Surprisingly,",
-      "published": "Sun, 11 Oct 2026 20:51:31 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261008102721.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
-      "title": "The hidden math of Alzheimer's could point to new treatments",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261008102714.htm",
-      "summary": "Mathematics may hold unexpected clues to understanding Alzheimer’s disease. Scientists have developed a model showing how common metals like copper and zinc may influence the buildup of proteins associated with the disease, while also exploring possible ways to stop the process. The findings could h",
-      "published": "Sun, 11 Oct 2026 15:24:25 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261008102714.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
       "title": "Scientists tested 39 sweeteners and uncovered surprising gut effects",
       "link": "https://www.sciencedaily.com/releases/2026/10/261016081103.htm",
       "summary": "Scientists have discovered that many common sweeteners can interfere with gut bacteria, with some combinations involving medications producing surprisingly strong effects. One sweetener mixed with a widely prescribed antidepressant reduced beneficial bacteria and microbial diversity in laboratory ex",
@@ -409,26 +459,6 @@
       "summary": "Scientists have discovered a surprising two-way relationship between sleep and growth hormone, revealing how the brain carefully balances physical recovery with wakefulness. The findings could help explain why poor sleep harms metabolism and brain health, potentially opening the door to new treatmen",
       "published": "Sat, 17 Oct 2026 01:14:50 EDT",
       "guid": "https://www.sciencedaily.com/releases/2026/10/261016081140.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
-      "title": "A plastic once thought harmless may be fueling fatty liver disease",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261008102718.htm",
-      "summary": "One of the world's most common plastics may pose a hidden threat to liver health. Texas A&M researchers discovered that polyethylene microplastics can contribute to fatty liver disease, with potentially worse effects when combined with an unhealthy diet. Even more surprising, this widely used plasti",
-      "published": "Sat, 10 Oct 2026 20:47:05 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261008102718.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
-      "title": "A surprisingly simple way to relieve knee arthritis pain without pills or surgery",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261009025434.htm",
-      "summary": "A surprisingly simple change in how you walk could help relieve knee arthritis pain and even slow joint damage. In a year-long clinical trial, researchers found that adjusting the angle of a person's foot while walking reduced osteoarthritis pain by an amount comparable to medication, without requir",
-      "published": "Sat, 10 Oct 2026 20:00:24 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261009025434.htm",
       "feed_id": "science-daily-med",
       "journal": "Science Daily",
       "domain": "medical"
@@ -499,56 +529,6 @@
       "summary": "Scientists have created a new coating for mitochondria that preserves their ability to produce energy, potentially opening the door to new treatments for diseases involving these tiny cellular powerhouses. The technology could one day help transfer healthy mitochondria into damaged cells, although i",
       "published": "Mon, 12 Oct 2026 21:33:58 EDT",
       "guid": "https://www.sciencedaily.com/releases/2026/10/261012185008.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
-      "title": "Scientists find a hidden problem with endless smartphone scrolling",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261011211611.htm",
-      "summary": "Excessive smartphone use may be taking a hidden toll on the brain and body, with heavy scrolling linked to poorer memory, reduced attention, disrupted sleep, and potential balance problems. Researchers found that weak self-control and fear of missing out, rather than personality alone, are key facto",
-      "published": "Mon, 12 Oct 2026 18:25:50 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261011211611.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
-      "title": "Your gut bacteria could be changing how many calories you absorb",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261011211613.htm",
-      "summary": "Scientists have developed a model showing that gut bacteria play a surprisingly important role in how many calories we absorb, meaning food labels may not tell the full story. In a controlled study, people eating a high-fiber diet absorbed about 116 fewer calories per day than those eating a typical",
-      "published": "Mon, 12 Oct 2026 17:44:16 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261011211613.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
-      "title": "Popular weight loss drugs linked to a surprising fingernail problem",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261011211604.htm",
-      "summary": "Popular GLP-1 weight loss drugs, such as Ozempic and Wegovy, have been linked to unexpectedly high rates of nail detachment, hair loss, and scalp inflammation, with some problems occurring several times more frequently among users. Researchers found that weight loss alone could not fully explain the",
-      "published": "Mon, 12 Oct 2026 05:34:48 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261011211604.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
-      "title": "Scientists find hidden driver of aging and a simple amino acid that fights memory loss in mice",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261009025708.htm",
-      "summary": "Scientists discovered that declining levels of a protein called Menin may help drive aging, and restoring it in older mice reversed several age-related changes in just 30 days. Even more surprisingly, supplementing with a simple amino acid called D-serine improved memory and learning, offering a pot",
-      "published": "Mon, 12 Oct 2026 05:23:55 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261009025708.htm",
-      "feed_id": "science-daily-med",
-      "journal": "Science Daily",
-      "domain": "medical"
-    },
-    {
-      "title": "Scientists discover vanilla’s hidden healing potential",
-      "link": "https://www.sciencedaily.com/releases/2026/10/261011211550.htm",
-      "summary": "Scientists have discovered that vanillin, the compound that gives vanilla its distinctive flavor, has powerful properties that could help fight infections, reduce inflammation, and promote wound healing. The inexpensive, widely available ingredient could one day become an important component of adva",
-      "published": "Mon, 12 Oct 2026 00:34:24 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/10/261011211550.htm",
       "feed_id": "science-daily-med",
       "journal": "Science Daily",
       "domain": "medical"

@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Genomic Structural Dynamics — Gaussian Network Model (GNM) analysis of Hi-C data. 3D rotating chromatin polymer, contact-map heatmap, spring-network vibration, normal mode analysis, square fluctuations, TADs + compartments. Math + code + deep thoughts." />
+    <title>Genomic GNM — Gaussian Network Analysis of Hi-C · AIHPC</title>
+    <style>
+      :root { --bg:#0b0f1a; --bg-elevated:#121826; --border:#1f2937; --text:#f3f4f6; --text-muted:#9ca3af; --accent:#06b6d4; --accent2:#8b5cf6; --danger:#ef4444; --success:#10b981; --warn:#f59e0b; --pink:#ec4899; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", sans-serif; min-height: 100vh; overflow-x: hidden; line-height: 1.6; }
+      body::before { content:""; position:fixed; inset:0; background: radial-gradient(1000px 500px at 50% 0%, rgba(16,185,129,0.10), transparent 70%); pointer-events:none; z-index:0; }
+      #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.25; }
+      .wrap { max-width: 920px; margin: 0 auto; padding: 24px 16px 64px; position: relative; z-index: 1; }
+      .crumbs { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+      .head .tag { font-size: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); color: var(--success); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .head h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; background: linear-gradient(90deg,#fff,#6ee7b7 60%,#67e8f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .desc { font-size: 14px; color: var(--text-muted); line-height: 1.55; margin-bottom: 16px; max-width: 860px; }
+      .desc b { color: var(--text); }
+      .desc a { color: var(--accent); text-decoration: none; }
+      .eq-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; background: rgba(11,15,26,0.85); border: 1px solid rgba(16,185,129,0.3); font-family: "Cambria Math", Georgia, serif; font-size: 15px; color: var(--success); margin-bottom: 12px; }
+      .viz-card { background: rgba(18,24,38,0.7); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 16px; backdrop-filter: blur(12px); }
+      .viz-wrap { position: relative; background: rgba(11,15,26,0.6); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+      canvas { display: block; width: 100%; height: auto; }
+      .controls-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+      .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; }
+      .btn.primary { background: linear-gradient(90deg, var(--success), var(--accent)); color: white; }
+      .btn.primary:hover { box-shadow: 0 4px 16px rgba(16,185,129,0.3); }
+      .btn.ghost { background: rgba(18,24,38,0.7); border: 1px solid var(--border); color: var(--text-muted); }
+      .btn.ghost:hover { border-color: var(--success); color: var(--text); }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      .zoom-controls { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 8px; padding: 4px; }
+      .zoom-btn { width: 30px; height: 30px; border: none; background: transparent; color: var(--text); cursor: pointer; font-size: 16px; font-weight: 700; border-radius: 4px; }
+      .zoom-btn:hover { background: rgba(16,185,129,0.2); }
+      .zoom-label { font-size: 9px; color: var(--text-muted); text-align: center; padding: 2px 0; }
+      .stage-ind { position: absolute; bottom: 10px; left: 12px; background: rgba(11,15,26,0.85); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .state-display { margin-left: auto; font-size: 11px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .math-block { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-left: 3px solid var(--success); border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-family: "Cambria Math", Georgia, serif; }
+      .math-block .eq { font-size: 16px; color: var(--accent); margin: 8px 0; }
+      .math-block .explain { font-size: 13px; color: var(--text-muted); margin-top: 6px; font-family: -apple-system, sans-serif; }
+      h2 { font-size: 22px; margin: 32px 0 12px; color: var(--accent); }
+      h3 { font-size: 13px; color: var(--success); text-transform: uppercase; letter-spacing: 0.08em; margin: 16px 0 10px; font-weight: 700; }
+      .code-section { background: rgba(18,24,38,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+      .code-section pre { background: #06080f; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; font-family: "SF Mono", Menlo, monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; }
+      .kw { color: #c4b5fd; } .fn { color: #06b6d4; } .num { color: #f59e0b; } .cm { color: #6b7280; font-style: italic; }
+      .callout { background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.25); border-radius: 10px; padding: 14px 18px; margin-top: 16px; }
+      .callout.green { background: rgba(16,185,129,0.06); border-color: rgba(16,185,129,0.3); }
+      .callout.amber { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.3); }
+      .callout.pink { background: rgba(236,72,153,0.06); border-color: rgba(236,72,153,0.3); }
+      .callout h3 { margin: 0 0 10px; }
+      .callout .row { margin: 10px 0; font-size: 13px; line-height: 1.55; color: var(--text); }
+      .callout .lbl { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 4px; margin-right: 8px; display: inline-block; }
+      .callout .lbl.use { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+      .callout .lbl.avoid { background: rgba(239,68,68,0.15); color: #fca5a5; }
+      .callout .lbl.why { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+      .callout .lbl.futur { background: rgba(245,158,11,0.15); color: #fcd34d; }
+      .callout .text { color: var(--text-muted); }
+      .links-row { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+      .links-row a { color: var(--accent); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); background: rgba(6,182,212,0.05); }
+      .links-row a:hover { border-color: var(--accent); background: rgba(6,182,212,0.12); }
+    </style>
+  <style>
+@media (prefers-reduced-motion: reduce) {
+  #particle-canvas { display: none !important; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+canvas {
+  display: block; max-width: 100% !important; height: auto !important;
+  touch-action: manipulation; -webkit-user-select: none; user-select: none;
+}
+@media (max-width: 768px) {
+  canvas { max-height: 60vh; }
+  .controls-row { flex-direction: column; align-items: stretch !important; }
+  .controls-row .btn { width: 100%; }
+  .zoom-controls { transform: scale(0.85); }
+  .stage-ind, .state-display { font-size: 10px !important; }
+}
+</style>
+</head>
+  <body>
+    <canvas id="particle-canvas" aria-label="Genomic GNM Gaussian Network Model: animated particle background"></canvas>
+    <div class="wrap">
+      <p class="crumbs"><a href="../index.html">Home</a> / <a href="../bio-nn.html">Bioinformatics × NN</a> / Genomic GNM</p>
+      <div class="head">
+        <span class="tag">🔬 PAPER · Genomic Structural Dynamics</span>
+        <h1>Genomic GNM — Gaussian Network Analysis of Hi-C</h1>
+      </div>
+      <p class="desc">Apply the <b>Gaussian Network Model</b> (GNM) — originally from protein dynamics — to <b>chromatin 3D structure</b> from Hi-C data. The Hi-C contact map becomes a spring network where each genomic locus is a node and each contact is a spring. Normal mode analysis reveals <b>collective chromatin motions</b>: slow modes correspond to large-scale domain movements (TADs, compartments), fast modes to local fluctuations. Square fluctuations predict chromatin accessibility (ATAC-seq/DNase-seq) and cross-correlations identify long-range regulatory interactions. Inspired by Banerjee et al. <a href="https://www.linkedin.com/posts/domenico-0_enm-elastic-network-models-genomic-structural-dynamics" target="_blank" rel="noopener">LinkedIn post →</a></p>
+      <div class="eq-badge">📐 Γ = D − A  (Kirchhoff/Laplacian matrix of the Hi-C contact network)</div>
+
+      <div class="viz-card">
+        <h3>5-stage pipeline: chromosome → Hi-C → GNM → modes → biology</h3>
+        <div class="viz-wrap">
+          <canvas id="main-canvas" width="820" height="580" aria-label="Genomic GNM visualisation: 3D rotating chromatin polymer, Hi-C contact map heatmap, Gaussian network spring model, normal mode analysis, square fluctuations, and TAD compartment identification"></canvas>
+          <div class="zoom-controls">
+            <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+            <div class="zoom-label" id="zoom-label">100%</div>
+            <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+            <button class="zoom-btn" id="zoom-reset" title="Reset">↺</button>
+          </div>
+          <div class="stage-ind" id="stage-ind">stage 1/5 · chromosome → Hi-C</div>
+        </div>
+        <div class="controls-row">
+          <button class="btn primary" id="btn-play">▶ Animate pipeline</button>
+          <button class="btn ghost" id="btn-step">⏭ Step</button>
+          <button class="btn ghost" id="btn-reset">↺ Reset</button>
+          <span class="state-display" id="state-display">Chromosome → Hi-C → GNM → Modes → Biology</span>
+        </div>
+      </div>
+
+      <h2>📐 Mathematical formulation</h2>
+
+      <div class="math-block">
+        <div class="eq">Stage 1 — Hi-C contact map:</div>
+        <div class="eq">C_ij = contact frequency between loci i and j</div>
+        <div class="eq">A_ij = 1 if C_ij > threshold, 0 otherwise  (adjacency matrix)</div>
+        <div class="explain">Hi-C produces a symmetric N×N matrix where N is the number of genomic bins (typically 1000–5000 at 50kb resolution). C_ij counts how often loci i and j are spatially close in 3D. Higher contact frequency → stronger physical proximity. The threshold converts the continuous contact map into a binary adjacency matrix for the network model.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 2 — Kirchhoff (Laplacian) matrix:</div>
+        <div class="eq">Γ = D − A</div>
+        <div class="eq">D_ii = Σ_j A_ij  (degree = total contacts for locus i)</div>
+        <div class="eq">Γ_ij = { −A_ij   if i ≠ j;  D_ii   if i = j }</div>
+        <div class="explain">The Kirchhoff matrix Γ is the Laplacian of the contact network. It encodes the connectivity structure: diagonal = how connected each locus is, off-diagonal = negative of contact strength. Γ is the central object of GNM — its eigenvalues and eigenvectors reveal the dynamical modes of the chromatin network.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 3 — Normal mode analysis:</div>
+        <div class="eq">Γ v_k = λ_k v_k  (k = 0, 1, ..., N−1)</div>
+        <div class="eq">λ_0 = 0  (zero mode — rigid-body translation, v_0 = uniform)</div>
+        <div class="eq">λ_1 < λ_2 < ... < λ_{N−1}  (slowest to fastest modes)</div>
+        <div class="explain">Eigenvalue decomposition of Γ gives N modes. The zero eigenvalue (λ_0 = 0) corresponds to uniform translation (all loci move together — irrelevant). The <b>slowest non-zero modes</b> (small λ) correspond to <b>large-scale collective motions</b> — entire chromatin domains moving coherently. The <b>fastest modes</b> (large λ) are <b>local fluctuations</b> — individual loci vibrating independently.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 4 — Square fluctuations + cross-correlations:</div>
+        <div class="eq">⟨ΔR_i²⟩ = (k_BT / γ) Σ_{k≠0} (1/λ_k) [v_k]_i²  (per-locus mobility)</div>
+        <div class="eq">⟨ΔR_i · ΔR_j⟩ = (k_BT / γ) Σ_{k≠0} (1/λ_k) [v_k]_i [v_k]_j  (cross-correlation)</div>
+        <div class="explain">The <b>square fluctuation</b> ⟨ΔR_i²⟩ tells you how much locus i moves on average — mobile loci are more accessible (correlated with ATAC-seq/DNase-seq signal). The <b>cross-correlation</b> ⟨ΔR_i · ΔR_j⟩ tells you whether two loci move together (positive = correlated, negative = anti-correlated). Loci with high cross-correlation belong to the same <b>GNM domain</b> — a dynamical unit that often coincides with TADs.</div>
+      </div>
+
+      <div class="math-block">
+        <div class="eq">Stage 5 — Biological mapping:</div>
+        <div class="eq">GNM domains = clusters of loci with high cross-correlation ↔ TADs</div>
+        <div class="eq">Slow modes (small λ) ↔ compartment-level motions (A/B compartments)</div>
+        <div class="eq">High ⟨ΔR_i²⟩ ↔ open chromatin (ATAC-seq/DNase-seq peaks)</div>
+        <div class="eq">High ⟨ΔR_i · ΔR_j⟩ for distant i,j ↔ long-range regulatory interactions</div>
+        <div class="explain">The GNM analysis maps directly to known biological annotations: <b>TADs</b> emerge as clusters of co-fluctuating loci, <b>A/B compartments</b> emerge from the slowest modes, <b>chromatin accessibility</b> is predicted by square fluctuations, and <b>long-range enhancer-promoter interactions</b> show up as high cross-correlations between distant loci. The key insight: <b>chromatin dynamics, not just structure, encodes function</b>.</div>
+      </div>
+
+      <h2>💻 Runnable code</h2>
+      <div class="code-section">
+        <h3>Python — GNM analysis of Hi-C data</h3>
+        <pre><span class="cm"># Genomic GNM — Gaussian Network Model analysis of Hi-C data</span>
+<span class="cm"># Math→Code mapping:</span>
+<span class="cm">#   C_ij → contact_matrix  (Hi-C contact map)</span>
+<span class="cm">#   A_ij → adjacency  (thresholded binary contacts)</span>
+<span class="cm">#   Γ → kirchhoff  (Laplacian matrix)</span>
+<span class="cm">#   λ_k, v_k → eigenvalues, eigenvectors of Γ</span>
+<span class="cm">#   ⟨ΔR_i²⟩ → square_fluctuations</span>
+<span class="cm">#   ⟨ΔR_i·ΔR_j⟩ → cross_correlations</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> scipy.linalg <span class="kw">import</span> eigh
+
+<span class="kw">def</span> <span class="fn">genomic_gnm</span>(contact_matrix, threshold=<span class="num">1</span>):
+    <span class="cm"># Stage 1: Hi-C contact map → adjacency matrix</span>
+    N = contact_matrix.shape[<span class="num">0</span>]
+    A = (contact_matrix &gt; threshold).astype(float)
+    np.fill_diagonal(A, <span class="num">0</span>)  <span class="cm"># no self-loops</span>
+
+    <span class="cm"># Stage 2: Kirchhoff (Laplacian) matrix Γ = D − A</span>
+    D = np.diag(A.sum(axis=<span class="num">1</span>))  <span class="cm"># degree matrix</span>
+    gamma = D - A  <span class="cm"># Γ</span>
+
+    <span class="cm"># Stage 3: Normal mode analysis — eigenvalue decomposition</span>
+    eigenvalues, eigenvectors = eigh(gamma)
+    <span class="cm"># eigh returns sorted ascending: λ_0=0, λ_1, ..., λ_{N-1}</span>
+    <span class="cm"># Skip the zero mode (k=0, rigid-body translation)</span>
+    lam = eigenvalues[<span class="num">1</span>:]  <span class="cm"># non-zero eigenvalues</span>
+    V = eigenvectors[:, <span class="num">1</span>:]  <span class="cm"># corresponding eigenvectors</span>
+
+    <span class="cm"># Stage 4: Square fluctuations + cross-correlations</span>
+    <span class="cm"># ⟨ΔR_i²⟩ = (kBT/γ) Σ_k (1/λ_k) [v_k]_i²</span>
+    inv_lam = <span class="num">1.0</span> / (lam + <span class="num">1e-10</span>)  <span class="cm"># 1/λ_k (avoid div-by-zero)</span>
+    sq_fluct = np.sum(inv_lam * V**<span class="num">2</span>, axis=<span class="num">1</span>)  <span class="cm"># per-locus mobility</span>
+
+    <span class="cm"># ⟨ΔR_i·ΔR_j⟩ = (kBT/γ) Σ_k (1/λ_k) [v_k]_i [v_k]_j</span>
+    cross_corr = V @ np.diag(inv_lam) @ V.T  <span class="cm"># N×N cross-correlation matrix</span>
+
+    <span class="cm"># Stage 5: GNM domains = clusters of high cross-correlation</span>
+    <span class="cm"># (simplified: use the slowest 3 modes to partition into domains)</span>
+    slow_modes = V[:, :<span class="num">3</span>]  <span class="cm"># 3 slowest non-zero modes</span>
+    <span class="cm"># K-means on slow-mode embeddings gives domain boundaries</span>
+    <span class="kw">from</span> sklearn.cluster <span class="kw">import</span> KMeans
+    n_domains = <span class="num">5</span>  <span class="cm"># expected number of TADs</span>
+    domains = KMeans(n_clusters=n_domains, n_init=<span class="num">10</span>).fit_predict(slow_modes)
+
+    <span class="kw">return</span> {
+        <span class="kw">'eigenvalues'</span>: eigenvalues,
+        <span class="kw">'square_fluctuations'</span>: sq_fluct,
+        <span class="kw">'cross_correlations'</span>: cross_corr,
+        <span class="kw">'domains'</span>: domains,
+        <span class="kw">'slow_modes'</span>: slow_modes
+    }
+
+<span class="cm"># === Example: synthetic Hi-C contact matrix (100 loci) ===</span>
+np.random.seed(<span class="num">42</span>)
+N = <span class="num">100</span>  <span class="cm"># 100 genomic bins (at 50kb resolution = 5Mb region)</span>
+<span class="cm"># Build a synthetic contact map with 3 TAD-like domains</span>
+contact = np.zeros((N, N))
+<span class="kw">for</span> i <span class="kw">in</span> range(N):
+    <span class="kw">for</span> j <span class="kw">in</span> range(N):
+        d = abs(i - j)
+        <span class="cm"># Distance-dependent decay + TAD structure</span>
+        tad_boost = <span class="num">3.0</span> <span class="kw">if</span> (i // <span class="num">33</span>) == (j // <span class="num">33</span>) <span class="kw">else</span> <span class="num">0</span>
+        contact[i, j] = <span class="num">10</span> * np.exp(-d / <span class="num">20</span>) + tad_boost + np.random.poisson(<span class="num">2</span>)
+
+result = genomic_gnm(contact, threshold=<span class="num">3</span>)
+<span class="kw">print</span>(<span class="kw">f</span><span class="st">"Loci: {N}"</span>)
+<span class="kw">print</span>(<span class="kw">f</span><span class="st">"Eigenvalues: λ_0={result['eigenvalues'][0]:.4f} (zero mode), λ_1={result['eigenvalues'][1]:.4f}, λ_2={result['eigenvalues'][2]:.4f}"</span>)
+<span class="kw">print</span>(<span class="kw">f</span><span class="st">"Square fluctuations (min={result['square_fluctuations'].min():.4f}, max={result['square_fluctuations'].max():.4f})"</span>)
+<span class="kw">print</span>(<span class="kw">f</span><span class="st">"GNM domains: {np.unique(result['domains'], return_counts=True)}"</span>)
+<span class="kw">print</span>(<span class="kw">f</span><span class="st">"Cross-correlation matrix shape: {result['cross_correlations'].shape}"</span>)</pre>
+      </div>
+
+      <h2>🧠 Deep thoughts — when GNM reveals what Hi-C alone cannot</h2>
+      <div class="callout">
+        <h3>Strategic guidance for genomic data scientists</h3>
+        <div class="row"><span class="lbl use">USE WHEN</span><span class="text">You want to go <b>beyond static 3D structure</b> to understand chromatin <b>dynamics</b>. Hi-C gives you a snapshot; GNM gives you a movie. The slow modes reveal collective motions that are invisible in the static contact map — domain-level breathing, compartment switching, and long-range coordination.</span></div>
+        <div class="row"><span class="lbl use">USE WHEN</span><span class="text">You want to <b>predict chromatin accessibility</b> without ATAC-seq/DNase-seq. The square fluctuation ⟨ΔR_i²⟩ is a physics-based predictor of accessibility — mobile loci are more accessible. This works because accessibility ≈ how much a locus moves, and GNM directly computes mobility from contact topology.</span></div>
+        <div class="row"><span class="lbl avoid">AVOID WHEN</span><span class="text">Your Hi-C data is sparse (<100M reads). GNM requires a well-populated contact matrix; sparse matrices produce noisy Kirchhoff matrices with unreliable eigenvalues. Use at least 500M reads or use ICE/KR normalisation first.</span></div>
+        <div class="row"><span class="lbl avoid">AVOID WHEN</span><span class="text">The resolution is too coarse (>1Mb bins). GNM modes at coarse resolution are biologically uninterpretable — they reflect binning artefacts rather than real chromatin dynamics. Stay at ≤100kb resolution.</span></div>
+        <div class="row"><span class="lbl why">WHY</span><span class="text">The key insight is that GNM borrows from <b>protein dynamics</b> (Bahar et al. 1997), where it's been validated for 25+ years. The chromatin is treated as an <b>elastic network</b> — same physics as a protein's residue network, just at a larger scale. The cross-domain transfer works because the underlying physics (spring-connected nodes, harmonic approximation) is scale-invariant. The modes reveal functional units that the static structure obscures.</span></div>
+        <div class="row"><span class="lbl why">WHY</span><span class="text">GNM domains often <b>don't perfectly match TADs</b> from insulation score or directionality index. This is <b>by design</b> — TADs are structural boundaries; GNM domains are <em>dynamical</em> boundaries. A locus can be in one TAD but dynamically coordinated with a neighbouring TAD. The mismatch is biologically informative — it reveals <b>functional coordination across structural boundaries</b>, which is where enhancers often act.</span></div>
+      </div>
+
+      <h2>🚀 Futuristic possibilities</h2>
+      <div class="callout amber">
+        <h3>Where genomic GNM leads</h3>
+        <div class="row"><span class="lbl futur">2026-27</span><span class="text"><b>Single-cell GNM.</b> Apply GNM to single-cell Hi-C (scHi-C) to get cell-type-specific chromatin dynamics. The slow modes reveal which compartments are stable vs cell-type-specific. Cancer cells' GNM modes will differ from normal — diagnostic potential.</span></div>
+        <div class="row"><span class="lbl futur">2028-30</span><span class="text"><b>Time-resolved GNM.</b> Apply GNM to time-course Hi-C (e.g., after heat shock, hormone treatment, or differentiation). Track how modes shift over time — which domains destabilise first, which compartments reorganise. Gives a temporal dimension to the "chromatin movie".</span></div>
+        <div class="row"><span class="lbl futur">2030-33</span><span class="text"><b>GNM-guided CRISPR.</b> Use GNM cross-correlations to predict which distal loci are functionally connected to a target gene. Guide CRISPRi/CRISPRa to the regulatory element most dynamically coordinated with the target — even if it's 10Mb away. Non-obvious regulatory connections revealed by physics.</span></div>
+        <div class="row"><span class="lbl futur">2033+</span><span class="text"><b>Multi-omics GNM.</b> Integrate Hi-C + RNA-seq + ATAC-seq + ChIP-seq into a unified network. The GNM modes explain not just chromatin dynamics but also gene expression variability — the slow modes predict which genes co-vary across cell types. A physics-based foundation for the 4D nucleome.</span></div>
+      </div>
+
+      <h2>🔬 Comparison with related approaches</h2>
+      <div class="callout pink">
+        <h3>GNM vs other chromatin structure analysis methods</h3>
+        <div class="row"><span class="lbl why">vs Insulation score (Crane et al. 2015)</span><span class="text">Insulation score finds TAD boundaries by sliding a window and measuring contact depletion. GNM finds <b>dynamical</b> domain boundaries via cross-correlation. Insulation score = structural; GNM = dynamical. They often agree but disagree at functionally interesting loci.</span></div>
+        <div class="row"><span class="lbl why">vs 3D structure modelling (TADbit, 3D-GNOME)</span><span class="text">3D modelling produces explicit 3D coordinates. GNM produces a <b>mode spectrum</b> (eigenvalues + eigenvectors). 3D models are more intuitive to visualise; GNM modes are more compact + directly give dynamics. GNM is faster (eigenvalue decomposition vs MCMC sampling).</span></div>
+        <div class="row"><span class="lbl why">vs ANM (Anisotropic Network Model)</span><span class="text">ANM is the 3D-vector version of GNM — each node has 3 DOF (x, y, z) instead of 1 (scalar fluctuation). ANM gives directional information (which direction does each locus move?) but is 3× more expensive. GNM is the scalar approximation — sufficient for domain identification + accessibility prediction.</span></div>
+        <div class="row"><span class="lbl why">vs Hi-C eigenvector decomposition (Lieberman-Aiden 2009)</span><span class="text">Lieberman-Aiden's eigenvector decomposition of the Hi-C matrix itself (not the Kirchhoff) reveals A/B compartments. GNM's Kirchhoff eigenvectors reveal <b>dynamical</b> modes. The compartment eigenvector from Hi-C ≈ the slowest GNM mode — they're related but not identical because the Kirchhoff normalisation (D − A) changes the mode structure.</span></div>
+      </div>
+
+      <!-- Full text version -->
+      <div style="margin-bottom: 16px; padding: 16px 20px; background: rgba(18,24,38,0.7); border: 1px solid rgba(16,185,129,0.3); border-radius: 10px;">
+        <a href="https://www.linkedin.com/posts/domenico-0_enm-elastic-network-models-genomic-structural-dynamics" target="_blank" rel="noopener" style="display: inline-block; background: linear-gradient(90deg, #10b981, #06b6d4); color: white; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700;">📄 Source — Domenico's LinkedIn post →</a>
+        <span style="margin-left: 12px; font-size: 11px; color: var(--text-muted);">Banerjee et al. — Genomic Structural Dynamics: Gaussian Network Analysis of Hi-C · ENM Series #23</span>
+      </div>
+
+      <!-- Simplified footer -->
+      <div style="margin-top: 40px; padding: 16px 20px; background: rgba(11,15,26,0.6); border: 1px solid #1f2937; border-radius: 10px; font-size: 11px; color: #9ca3af; line-height: 1.6;">
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px;">
+          <span style="color: #10b981;">📜 MIT License</span>
+          <span style="color: #06b6d4;">🔒 GDPR Compliant</span>
+          <span style="color: #06b6d4;">🏥 HIPAA Ready</span>
+          <span style="color: #10b981;">📊 SOC 2 Aligned</span>
+        </div>
+        <p style="margin: 8px 0;">© 2026 AIHPC Advanced. All rights reserved. · Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color: #06b6d4;">testdemoqwenai2025@gmail.com</a></p>
+        <p style="margin: 4px 0; font-size: 10px;">Data protection: no personal data · no cookies · no tracking · all computations client-side (lazy evaluation)</p>
+      </div>
+    </div>
+
+    <script>
+      // ========================================================================
+      // Genomic GNM — 3D rotating chromatin + Hi-C heatmap + GNM modes
+      // ========================================================================
+      var canvas = document.getElementById('main-canvas');
+      var ctx = canvas.getContext('2d');
+      var W = canvas.width, H = canvas.height;
+      var stage = 0, maxStage = 5, zoom = 1.0, isAnim = false;
+      var stageProgress = 1, lastStageTime = 0;
+      var rotAngle = 0;
+
+      function lerp(a,b,t){return a+(b-a)*t;}
+
+      function drawGlowCircle(x,y,r,color,alpha){
+        if(alpha===undefined)alpha=1;
+        var g=ctx.createRadialGradient(x,y,0,x,y,r*3);
+        g.addColorStop(0,color);
+        g.addColorStop(0.3,color.replace(/[\d.]+\)$/,(0.6*alpha)+')'));
+        g.addColorStop(1,color.replace(/[\d.]+\)$/,'0)'));
+        ctx.fillStyle=g;
+        ctx.beginPath();ctx.arc(x,y,r*3,0,6.28);ctx.fill();
+        ctx.fillStyle=color;
+        ctx.globalAlpha=alpha;
+        ctx.beginPath();ctx.arc(x,y,r,0,6.28);ctx.fill();
+        ctx.globalAlpha=1;
+      }
+
+      // Generate a synthetic 3D chromatin polymer (30 beads in a fractal-globule-like structure)
+      var polymer3D = [];
+      for (var i = 0; i < 30; i++) {
+        var angle = i * 0.5;
+        var r = 50 + Math.sin(i * 0.3) * 20;
+        polymer3D.push({
+          x: r * Math.cos(angle),
+          y: r * Math.sin(angle * 1.3) * 0.7,
+          z: r * Math.sin(angle),
+          base: i
+        });
+      }
+      // Contacts: nearby beads + some long-range (TAD-like)
+      var contacts = [];
+      for (var i = 0; i < polymer3D.length; i++) {
+        for (var j = i + 1; j < polymer3D.length; j++) {
+          var d = Math.hypot(
+            polymer3D[i].x - polymer3D[j].x,
+            polymer3D[i].y - polymer3D[j].y,
+            polymer3D[i].z - polymer3D[j].z
+          );
+          if (d < 35 || (Math.abs(i - j) < 5) || (Math.floor(i/10) === Math.floor(j/10) && Math.abs(i-j) < 12)) {
+            contacts.push({i: i, j: j, strength: 1.0 / (1 + d * 0.05)});
+          }
+        }
+      }
+
+      function drawStageHeader(){
+        var bg=ctx.createLinearGradient(0,0,0,H);
+        bg.addColorStop(0,'#0a0e1a');
+        bg.addColorStop(0.5,'#0f1422');
+        bg.addColorStop(1,'#0a0e1a');
+        ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+        ctx.strokeStyle='rgba(16,185,129,0.04)';ctx.lineWidth=1;
+        for(var gx=0;gx<W;gx+=40){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+        for(var gy=0;gy<H;gy+=40){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+        ctx.save();
+        ctx.shadowColor='#10b981';ctx.shadowBlur=12;
+        ctx.fillStyle='#6ee7b7';ctx.font='bold 14px ui-monospace,monospace';ctx.textAlign='center';
+        ctx.fillText('Genomic GNM — stage '+stage+'/'+maxStage,W/2,25);
+        ctx.restore();
+        ctx.textAlign='left';
+        var dotsX=W/2-(maxStage)*7;
+        for(var s=0;s<maxStage;s++){
+          ctx.fillStyle=s<stage?'#10b981':'rgba(148,163,184,0.2)';
+          ctx.beginPath();ctx.arc(dotsX+s*14,42,4,0,6.28);ctx.fill();
+          if(s>0&&s<stage){
+            ctx.strokeStyle='rgba(16,185,129,0.4)';ctx.lineWidth=1;
+            ctx.beginPath();ctx.moveTo(dotsX+(s-1)*14+4,42);ctx.lineTo(dotsX+s*14-4,42);ctx.stroke();
+          }
+        }
+      }
+
+      function project3D(x, y, z, cx, cy, scale){
+        // Rotate around Y axis
+        var cs = Math.cos(rotAngle), sn = Math.sin(rotAngle);
+        var x1 = x * cs - z * sn;
+        var z1 = x * sn + z * cs;
+        // Rotate around X axis (tilt)
+        var cs2 = Math.cos(0.4), sn2 = Math.sin(0.4);
+        var y2 = y * cs2 - z1 * sn2;
+        var z2 = y * sn2 + z1 * cs2;
+        // Perspective projection
+        var persp = 1.0 / (1.0 + z2 * 0.005);
+        return {x: cx + x1 * scale * persp, y: cy + y2 * scale * persp, z: z2, persp: persp};
+      }
+
+      function draw3DChromatin(cx, cy, scale, alpha, showContacts){
+        if(alpha===undefined)alpha=1;
+        if(showContacts===undefined)showContacts=false;
+        // Project all beads
+        var projected = polymer3D.map(function(p){
+          return project3D(p.x, p.y, p.z, cx, cy, scale);
+        });
+        // Sort by depth for painter's algorithm
+        var indices = projected.map(function(_, i) { return i; });
+        indices.sort(function(a, b) { return projected[a].z - projected[b].z; });
+
+        // Draw contacts (springs) first — behind beads
+        if (showContacts) {
+          for (var ci = 0; ci < contacts.length; ci++) {
+            var c = contacts[ci];
+            var p1 = projected[c.i], p2 = projected[c.j];
+            var avgZ = (p1.z + p2.z) / 2;
+            var depthN = (avgZ + 100) / 200;
+            ctx.strokeStyle = 'rgba(16,185,129,' + (0.15 + depthN * 0.25) * alpha + ')';
+            ctx.lineWidth = 0.5 + depthN * 1.5;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+
+        // Draw polymer backbone (connecting consecutive beads)
+        ctx.strokeStyle = 'rgba(110,231,183,' + (0.4 * alpha) + ')';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (var i = 0; i < projected.length; i++) {
+          if (i === 0) ctx.moveTo(projected[i].x, projected[i].y);
+          else ctx.lineTo(projected[i].x, projected[i].y);
+        }
+        ctx.stroke();
+
+        // Draw beads (loci) — sorted by depth
+        for (var di = 0; di < indices.length; di++) {
+          var i = indices[di];
+          var p = projected[i];
+          var depthN = (p.z + 100) / 200;
+          var r = 3 + depthN * 4;
+          // Color by TAD (3 TADs: beads 0-9, 10-19, 20-29)
+          var tadIdx = Math.floor(i / 10);
+          var tadColors = ['rgba(16,185,129,1)', 'rgba(6,182,212,1)', 'rgba(139,92,246,1)'];
+          var color = tadColors[tadIdx % 3];
+          // Halo
+          var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 3);
+          var hex = color.replace('rgba(','').replace(',1)','').split(',');
+          g.addColorStop(0, 'rgba(' + hex[0] + ',' + hex[1] + ',' + hex[2] + ',' + (0.6 * alpha * depthN) + ')');
+          g.addColorStop(1, 'rgba(' + hex[0] + ',' + hex[1] + ',' + hex[2] + ',0)');
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(p.x, p.y, r * 3, 0, 6.28); ctx.fill();
+          // Solid
+          ctx.fillStyle = 'rgba(' + hex[0] + ',' + hex[1] + ',' + hex[2] + ',' + (0.85 * alpha) + ')';
+          ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.28); ctx.fill();
+        }
+
+        // Axis indicator
+        ctx.strokeStyle = 'rgba(148,163,184,0.15)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([2, 3]);
+        ctx.beginPath();
+        var ax = project3D(0, 0, 0, cx, cy, scale);
+        var axX = project3D(30, 0, 0, cx, cy, scale);
+        var axY = project3D(0, 30, 0, cx, cy, scale);
+        var axZ = project3D(0, 0, 30, cx, cy, scale);
+        ctx.moveTo(ax.x, ax.y); ctx.lineTo(axX.x, axX.y);
+        ctx.moveTo(ax.x, ax.y); ctx.lineTo(axY.x, axY.y);
+        ctx.moveTo(ax.x, ax.y); ctx.lineTo(axZ.x, axZ.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      function drawHiCHeatmap(x, y, w, h, alpha){
+        if(alpha===undefined)alpha=1;
+        var N = 30; // match polymer
+        var cellW = w / N, cellH = h / N;
+        for (var i = 0; i < N; i++) {
+          for (var j = 0; j < N; j++) {
+            var d = Math.abs(i - j);
+            var tadBoost = (Math.floor(i/10) === Math.floor(j/10)) ? 2.0 : 0;
+            var val = Math.exp(-d / 8) + tadBoost * Math.exp(-d / 5);
+            val = Math.min(1, val / 3);
+            // Red-blue diverging: high contact = red, low = dark blue
+            var r, g, b;
+            if (val > 0.5) {
+              var t = (val - 0.5) * 2;
+              r = 255; g = Math.round(255 - 255 * t * 0.7); b = Math.round(255 - 255 * t);
+            } else {
+              var t = val * 2;
+              r = Math.round(t * 50); g = Math.round(t * 50); b = Math.round(50 + t * 100);
+            }
+            ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + (0.85 * alpha) + ')';
+            ctx.fillRect(x + j * cellW, y + i * cellH, cellW - 0.3, cellH - 0.3);
+          }
+        }
+        // Border + axis labels
+        ctx.strokeStyle = 'rgba(148,163,184,0.3)'; ctx.lineWidth = 1;
+        ctx.strokeRect(x, y, w, h);
+        ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '8px ui-monospace';
+        ctx.fillText('locus j →', x + w/2 - 20, y + h + 14);
+        ctx.save(); ctx.translate(x - 8, y + h/2); ctx.rotate(-Math.PI/2);
+        ctx.fillText('locus i →', -20, 0); ctx.restore();
+        // TAD boundary lines
+        ctx.strokeStyle = 'rgba(16,185,129,0.4)'; ctx.lineWidth = 1;
+        ctx.setLineDash([3, 3]);
+        for (var b = 10; b < N; b += 10) {
+          ctx.beginPath(); ctx.moveTo(x + b * cellW, y); ctx.lineTo(x + b * cellW, y + h); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(x, y + b * cellH); ctx.lineTo(x + w, y + b * cellH); ctx.stroke();
+        }
+        ctx.setLineDash([]);
+      }
+
+      function drawGNMNetwork(cx, cy, alpha){
+        if(alpha===undefined)alpha=1;
+        // Draw a small network (10 nodes) with vibrating springs
+        var nodes = [];
+        for (var i = 0; i < 10; i++) {
+          var a = i / 10 * 6.28;
+          nodes.push({x: cx + Math.cos(a) * 40, y: cy + Math.sin(a) * 30});
+        }
+        // Springs (edges)
+        var pulse = Math.sin(performance.now() * 0.003);
+        ctx.strokeStyle = 'rgba(16,185,129,' + (0.4 * alpha) + ')';
+        ctx.lineWidth = 1.5;
+        for (var i = 0; i < nodes.length; i++) {
+          for (var j = i + 1; j < nodes.length; j++) {
+            if (Math.abs(i - j) < 3 || Math.abs(i - j) > 7) {
+              var p1 = nodes[i], p2 = nodes[j];
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              // Slightly wavy line (spring vibration)
+              var midX = (p1.x + p2.x) / 2 + pulse * 3 * (j - i) * 0.3;
+              var midY = (p1.y + p2.y) / 2 + pulse * 3 * (j - i) * 0.3;
+              ctx.quadraticCurveTo(midX, midY, p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
+        }
+        // Nodes
+        for (var i = 0; i < nodes.length; i++) {
+          drawGlowCircle(nodes[i].x, nodes[i].y, 4, 'rgba(110,231,183,1)', alpha);
+        }
+        // Label
+        ctx.fillStyle = 'rgba(148,163,184,0.6)'; ctx.font = '8px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('GNM: 10 loci + springs (vibrating)', cx, cy + 55);
+        ctx.textAlign = 'left';
+      }
+
+      function drawModeSpectrum(x, y, w, h, alpha){
+        if(alpha===undefined)alpha=1;
+        // Bar chart of eigenvalues (slow to fast modes)
+        var nBars = 20;
+        var barW = w / nBars;
+        ctx.strokeStyle = 'rgba(148,163,184,0.15)'; ctx.lineWidth = 0.5;
+        ctx.strokeRect(x, y, w, h);
+        ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '8px ui-monospace';
+        ctx.fillText('eigenvalue λ_k', x, y - 4);
+        ctx.fillText('mode k →', x + w - 40, y + h + 12);
+        var pulse = (Math.sin(performance.now() * 0.002) + 1) * 0.5;
+        for (var k = 0; k < nBars; k++) {
+          var val = Math.pow((k + 1) / nBars, 1.5);
+          var barH = val * h * 0.85;
+          var isActive = k < 3; // slow modes highlighted
+          var color = isActive ? 'rgba(16,185,129,' + (0.85 * alpha + pulse * 0.15 * alpha) + ')' : 'rgba(139,92,246,' + (0.6 * alpha) + ')';
+          ctx.fillStyle = color;
+          ctx.fillRect(x + k * barW + 1, y + h - barH, barW - 2, barH);
+          // Glow on active modes
+          if (isActive) {
+            ctx.save();
+            ctx.shadowColor = '#10b981'; ctx.shadowBlur = 6;
+            ctx.fillRect(x + k * barW + 1, y + h - barH, barW - 2, barH);
+            ctx.restore();
+          }
+        }
+        // Annotation
+        ctx.fillStyle = '#10b981'; ctx.font = 'bold 8px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('slow modes (TADs/compartments)', x + barW * 1.5, y + h + 22);
+        ctx.fillStyle = '#8b5cf6';
+        ctx.fillText('fast modes (local)', x + w - barW * 5, y + h + 22);
+        ctx.textAlign = 'left';
+      }
+
+      function drawSquareFluctuations(x, y, w, h, alpha){
+        if(alpha===undefined)alpha=1;
+        var N = 30;
+        var barW = w / N;
+        ctx.strokeStyle = 'rgba(148,163,184,0.15)'; ctx.lineWidth = 0.5;
+        ctx.strokeRect(x, y, w, h);
+        ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '8px ui-monospace';
+        ctx.fillText('⟨ΔR²⟩ (mobility → accessibility)', x, y - 4);
+        // 3 TADs visible as 3 blocks of bars
+        for (var i = 0; i < N; i++) {
+          var tadIdx = Math.floor(i / 10);
+          // Mobility pattern: high at TAD boundaries, lower inside
+          var posInTad = i % 10;
+          var val = 0.3 + 0.6 * Math.exp(-Math.pow((posInTad - 5) / 3, 2));
+          val += 0.3 * Math.sin(i * 0.5 + performance.now() * 0.001) * alpha;
+          val = Math.max(0, Math.min(1, val));
+          var barH = val * h * 0.85;
+          var tadColors = ['#10b981', '#06b6d4', '#8b5cf6'];
+          var hex = tadColors[tadIdx % 3].replace('#', '');
+          var r = parseInt(hex.substr(0,2),16), g = parseInt(hex.substr(2,2),16), b = parseInt(hex.substr(4,2),16);
+          var grad = ctx.createLinearGradient(0, y + h - barH, 0, y + h);
+          grad.addColorStop(0, 'rgba(' + r + ',' + g + ',' + b + ',' + (0.9 * alpha) + ')');
+          grad.addColorStop(1, 'rgba(' + r + ',' + g + ',' + b + ',' + (0.4 * alpha) + ')');
+          ctx.fillStyle = grad;
+          ctx.fillRect(x + i * barW + 0.5, y + h - barH, barW - 1, barH);
+        }
+        // TAD boundary lines
+        ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth = 1;
+        ctx.setLineDash([3, 2]);
+        for (var b = 10; b < N; b += 10) {
+          ctx.beginPath(); ctx.moveTo(x + b * barW, y); ctx.lineTo(x + b * barW, y + h); ctx.stroke();
+        }
+        ctx.setLineDash([]);
+        // TAD labels
+        ctx.fillStyle = '#10b981'; ctx.font = 'bold 8px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('TAD1', x + 5 * barW, y + h + 14);
+        ctx.fillStyle = '#06b6d4'; ctx.fillText('TAD2', x + 15 * barW, y + h + 14);
+        ctx.fillStyle = '#8b5cf6'; ctx.fillText('TAD3', x + 25 * barW, y + h + 14);
+        ctx.textAlign = 'left';
+      }
+
+      function drawCrossCorrelation(x, y, w, h, alpha){
+        if(alpha===undefined)alpha=1;
+        var N = 30;
+        var cellW = w / N, cellH = h / N;
+        for (var i = 0; i < N; i++) {
+          for (var j = 0; j < N; j++) {
+            var tadI = Math.floor(i / 10), tadJ = Math.floor(j / 10);
+            var val;
+            if (tadI === tadJ) {
+              var d = Math.abs(i - j);
+              val = Math.exp(-d / 4) * 0.9;
+            } else {
+              val = -0.1 + 0.05 * Math.sin(i * 0.3 + j * 0.5);
+            }
+            var r, g, b;
+            if (val > 0) {
+              r = Math.round(16 + val * 100); g = Math.round(185 + val * 70); b = Math.round(129 + val * 80);
+            } else {
+              r = Math.round(239 * (-val)); g = Math.round(68 * (-val)); b = Math.round(68 * (-val));
+            }
+            ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + (0.8 * alpha) + ')';
+            ctx.fillRect(x + j * cellW, y + i * cellH, cellW - 0.3, cellH - 0.3);
+          }
+        }
+        ctx.strokeStyle = 'rgba(148,163,184,0.3)'; ctx.lineWidth = 1;
+        ctx.strokeRect(x, y, w, h);
+        ctx.fillStyle = 'rgba(148,163,184,0.5)'; ctx.font = '8px ui-monospace';
+        ctx.fillText('cross-correlation ⟨ΔR_i·ΔR_j⟩ (green = correlated, red = anti)', x, y - 4);
+        // TAD block labels
+        ctx.fillStyle = '#10b981'; ctx.font = 'bold 8px ui-monospace'; ctx.textAlign = 'center';
+        ctx.fillText('TAD1', x + 5 * cellW, y + h + 12);
+        ctx.fillStyle = '#06b6d4'; ctx.fillText('TAD2', x + 15 * cellW, y + h + 12);
+        ctx.fillStyle = '#8b5cf6'; ctx.fillText('TAD3', x + 25 * cellW, y + h + 12);
+        ctx.textAlign = 'left';
+      }
+
+      function render(){
+        ctx.save();
+        ctx.fillStyle='#0a0e1a';ctx.fillRect(0,0,W,H);
+        ctx.translate(W/2,H/2);ctx.scale(zoom,zoom);ctx.translate(-W/2,-H/2);
+        drawStageHeader();
+        rotAngle = performance.now() * 0.0005;
+        var baseY = 70;
+
+        // ===== Stage 1: Chromosome → Hi-C → Contact map =====
+        if (stage >= 1) {
+          var s1A = stage === 1 ? stageProgress : (stage > 1 ? 1 : 0);
+          ctx.fillStyle = '#10b981'; ctx.font = 'bold 11px ui-monospace'; ctx.globalAlpha = s1A;
+          ctx.fillText('1. Chromosome → Hi-C → Contact map', 30, baseY);
+          ctx.globalAlpha = 1;
+          // 3D chromatin on the left
+          draw3DChromatin(140, baseY + 90, 1.0, s1A, false);
+          // Arrow → Hi-C contact map on the right
+          drawArrow(280, baseY + 90, 360, baseY + 90, '#10b981', s1A, true);
+          // Hi-C heatmap
+          drawHiCHeatmap(380, baseY + 30, 160, 120, s1A);
+          ctx.fillStyle = 'rgba(148,163,184,' + (0.6 * s1A) + ')'; ctx.font = '9px ui-monospace';
+          ctx.fillText('3D structure → contact frequencies C_ij', 30, baseY + 170);
+        }
+
+        // ===== Stage 2: Gaussian Network Model (Kirchhoff matrix) =====
+        if (stage >= 2) {
+          var s2A = stage === 2 ? stageProgress : (stage > 2 ? 1 : 0);
+          var mY = baseY + 200;
+          ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 11px ui-monospace'; ctx.globalAlpha = s2A;
+          ctx.fillText('2. Gaussian Network Model — Γ = D − A (Kirchhoff/Laplacian)', 30, mY);
+          ctx.globalAlpha = 1;
+          // GNM network visualization (vibrating springs)
+          drawGNMNetwork(140, mY + 40, s2A);
+          // Kirchhoff matrix mini-heatmap
+          var kx = 280, ky = mY + 5, kw = 120, kh = 80;
+          ctx.strokeStyle = 'rgba(6,182,212,' + (0.4 * s2A) + ')'; ctx.lineWidth = 1;
+          ctx.strokeRect(kx, ky, kw, kh);
+          ctx.fillStyle = '#06b6d4'; ctx.font = 'bold 8px ui-monospace'; ctx.textAlign = 'center';
+          ctx.fillText('Γ (Kirchhoff)', kx + kw/2, ky - 4);
+          // Diagonal = degree (bright), off-diagonal = -contact (dark)
+          var nK = 10;
+          var cellK = kw / nK;
+          for (var ki = 0; ki < nK; ki++) {
+            for (var kj = 0; kj < nK; kj++) {
+              var val;
+              if (ki === kj) val = 0.8;
+              else if (Math.abs(ki - kj) < 3) val = -0.4;
+              else val = -0.05;
+              var r2, g2, b2;
+              if (val > 0) { r2 = 16; g2 = 185; b2 = 129; }
+              else { r2 = 30; g2 = 30; b2 = 50; }
+              ctx.fillStyle = 'rgba(' + r2 + ',' + g2 + ',' + b2 + ',' + (Math.abs(val) * 0.9 * s2A) + ')';
+              ctx.fillRect(kx + kj * cellK, ky + ki * (kh/nK), cellK - 0.3, (kh/nK) - 0.3);
+            }
+          }
+          ctx.textAlign = 'left';
+          ctx.fillStyle = 'rgba(148,163,184,' + (0.6 * s2A) + ')'; ctx.font = '9px ui-monospace';
+          ctx.fillText('Contact map → adjacency A → Laplacian Γ = D − A', 30, mY + 90);
+        }
+
+        // ===== Stage 3: Normal mode analysis (eigenvalues) =====
+        if (stage >= 3) {
+          var s3A = stage === 3 ? stageProgress : (stage > 3 ? 1 : 0);
+          var eY = baseY + 310;
+          ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 11px ui-monospace'; ctx.globalAlpha = s3A;
+          ctx.fillText('3. Normal mode analysis — Γ v_k = λ_k v_k (eigenvalue decomposition)', 30, eY);
+          ctx.globalAlpha = 1;
+          // Mode spectrum bar chart
+          drawModeSpectrum(60, eY + 20, 300, 80, s3A);
+          // 3D chromatin with mode vibration
+          draw3DChromatin(500, eY + 60, 0.8, s3A, true);
+          ctx.fillStyle = 'rgba(148,163,184,' + (0.6 * s3A) + ')'; ctx.font = '9px ui-monospace';
+          ctx.fillText('slow modes = collective motion (green) → fast modes = local (purple)', 30, eY + 115);
+        }
+
+        // ===== Stage 4: Square fluctuations + cross-correlations =====
+        if (stage >= 4) {
+          var s4A = stage === 4 ? stageProgress : (stage > 4 ? 1 : 0);
+          var fY = baseY + 440;
+          ctx.fillStyle = '#ec4899'; ctx.font = 'bold 11px ui-monospace'; ctx.globalAlpha = s4A;
+          ctx.fillText('4. Square fluctuations + cross-correlations → accessibility + TADs', 30, fY);
+          ctx.globalAlpha = 1;
+          // Square fluctuations bar chart
+          drawSquareFluctuations(60, fY + 20, 300, 60, s4A);
+          // Cross-correlation heatmap
+          drawCrossCorrelation(400, fY + 20, 160, 120, s4A);
+        }
+
+        // ===== Stage 5: Biological mapping =====
+        if (stage >= 5) {
+          var s5A = stage === 5 ? stageProgress : 1;
+          var bY = baseY + 570;
+          // (This stage just shows a summary badge — the other stages already show the biology)
+          // The stage indicator text below handles the summary
+        }
+
+        ctx.restore();
+        var states = ['idle', 'chromosome → Hi-C', 'Gaussian Network Model', 'normal mode analysis', 'square fluctuations + cross-corr', 'biological mapping ✓'];
+        document.getElementById('stage-ind').textContent = 'stage ' + stage + '/' + maxStage + ' · ' + (states[stage] || '');
+        document.getElementById('state-display').textContent = 'Genomic GNM · ' + (states[stage] || 'idle');
+      }
+
+      function drawArrow(x1, y1, x2, y2, color, alpha, dashed) {
+        if (alpha === undefined) alpha = 1;
+        if (dashed === undefined) dashed = false;
+        ctx.save();
+        ctx.shadowColor = color; ctx.shadowBlur = 6;
+        ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.globalAlpha = alpha;
+        if (dashed) { ctx.setLineDash([6, 4]); ctx.lineDashOffset = -performance.now() * 0.04; }
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+        if (dashed) ctx.setLineDash([]);
+        var angle = Math.atan2(y2 - y1, x2 - x1);
+        ctx.fillStyle = color; ctx.globalAlpha = alpha;
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(x2 - 10 * Math.cos(angle - 0.3), y2 - 10 * Math.sin(angle - 0.3));
+        ctx.lineTo(x2 - 10 * Math.cos(angle + 0.3), y2 - 10 * Math.sin(angle + 0.3));
+        ctx.closePath(); ctx.fill();
+        ctx.restore();
+        ctx.globalAlpha = 1;
+      }
+
+      function tick(now){
+        if(stageProgress<1){
+          var dt=Math.min(0.05,(now-lastStageTime)/700);
+          stageProgress=Math.min(1,stageProgress+dt);
+          lastStageTime=now;
+        }
+        render();
+        requestAnimationFrame(tick);
+      }
+
+      function animate(){
+        stage=0;stageProgress=1;lastStageTime=performance.now();
+        function step(){
+          if(stage>maxStage){
+            isAnim=false;
+            document.getElementById('btn-play').disabled=false;
+            document.getElementById('btn-play').textContent='▶ Animate pipeline';
+            document.getElementById('stage-ind').textContent='done ✓ · TADs + compartments identified';
+            return;
+          }
+          stage++;stageProgress=0;lastStageTime=performance.now();
+          setTimeout(step,1400);
+        }
+        step();
+      }
+
+      document.getElementById('btn-play').addEventListener('click',function(){
+        if(isAnim)return;
+        isAnim=true;
+        document.getElementById('btn-play').disabled=true;
+        document.getElementById('btn-play').textContent='▶ running…';
+        animate();
+      });
+      document.getElementById('btn-step').addEventListener('click',function(){
+        if(isAnim)return;
+        if(stage>maxStage)return;
+        stage++;stageProgress=0;lastStageTime=performance.now();
+      });
+      document.getElementById('btn-reset').addEventListener('click',function(){
+        stage=0;stageProgress=1;isAnim=false;
+        document.getElementById('btn-play').disabled=false;
+        document.getElementById('btn-play').textContent='▶ Animate pipeline';
+      });
+      document.getElementById('zoom-in').addEventListener('click',function(){
+        zoom=Math.min(3,zoom+0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';
+      });
+      document.getElementById('zoom-out').addEventListener('click',function(){
+        zoom=Math.max(0.5,zoom-0.2);document.getElementById('zoom-label').textContent=Math.round(zoom*100)+'%';
+      });
+      document.getElementById('zoom-reset').addEventListener('click',function(){
+        zoom=1;document.getElementById('zoom-label').textContent='100%';
+      });
+
+      // Ribbon theme toggle
+      (function setupRibbonTheme(){
+        var KEY='aihpc-theme';
+        var body=document.body,icon=document.getElementById('ribbon-theme-icon');
+        function apply(theme){
+          if(theme==='light'){body.classList.add('light');if(icon)icon.textContent='☀';}
+          else{body.classList.remove('light');if(icon)icon.textContent='🌙';}
+        }
+        var initial='dark';
+        try{var stored=localStorage.getItem(KEY);if(stored==='light'||stored==='dark')initial=stored;else if(window.matchMedia&&window.matchMedia('(prefers-color-scheme:light)').matches)initial='light';}catch(e){}
+        apply(initial);
+      })();
+
+      lastStageTime=performance.now();
+      requestAnimationFrame(tick);
+    </script>
+    <script src="../zoom-loader.js"></script>
+    <script src="../header-banner.js"></script>
+    <script src="../accessibility.js"></script>
+    <script src="../particle-bg.js"></script>
+    <script src="../mobile-touch-polyfill.js"></script>
+  </body>
+</html>

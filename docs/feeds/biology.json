@@ -1,6 +1,6 @@
 {
   "domain": "biology",
-  "generated_at": "2026-10-22T06:29:11.265764Z",
+  "generated_at": "2026-10-23T08:16:22.239572Z",
   "total_entries": 59,
   "entries": [
     {
@@ -79,16 +79,6 @@
       "summary": "A massive prehistoric snake discovered in India may have rivaled the largest snake ever known. Called Vasuki indicus, the 47-million-year-old giant could have reached up to 50 feet long, making it comparable to the legendary Titanoboa. Scientists believe its enormous body made it a slow-moving ambus",
       "published": "Wed, 14 Oct 2026 01:44:39 EDT",
       "guid": "https://www.sciencedaily.com/releases/2026/10/261014001406.htm",
-      "feed_id": "science-daily-bio",
-      "journal": "Science Daily",
-      "domain": "biology"
-    },
-    {
-      "title": "Scientists finally see DNA “zip” itself together for the first time",
-      "link": "https://www.sciencedaily.com/releases/2026/09/260909231717.htm",
-      "summary": "Scientists have directly observed how two negatively charged DNA molecules can pair up despite normally repelling each other. Positively charged metal ions appear to bridge the gap, helping matching DNA helices align groove for groove like a molecular zipper. The discovery confirms a theory proposed",
-      "published": "Wed, 09 Sep 2026 23:17:17 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/09/260909231717.htm",
       "feed_id": "science-daily-bio",
       "journal": "Science Daily",
       "domain": "biology"
@@ -199,6 +189,36 @@
       "summary": "Scientists discovered two tiny new snail species in Montenegro, showing that even Europe still holds animals unknown to science. One lives in the threatened Komarnica Canyon, where a proposed hydropower reservoir could destroy habitat before its full biodiversity is understood.",
       "published": "Thu, 24 Sep 2026 07:59:43 EDT",
       "guid": "https://www.sciencedaily.com/releases/2026/09/260923035936.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Birds are more afraid of women than men. Scientists have no idea why",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261021231250.htm",
+      "summary": "Scientists have uncovered a strange pattern in urban bird behavior: Across five European countries and 37 species, birds consistently fled sooner when approached by women than men. Researchers have no clear explanation for the difference, raising intriguing questions about how birds recognize and re",
+      "published": "Thu, 22 Oct 2026 08:06:14 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261021231250.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Oxford scientists discover how viruses build themselves without a blueprint",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261021231248.htm",
+      "summary": "Scientists have captured virus-like particles assembling themselves step by step, revealing how a surprisingly simple process of trial and error produces complex structures with remarkable precision. The discovery uncovers a crucial molecular turning point that speeds up assembly and could lead to n",
+      "published": "Thu, 22 Oct 2026 07:42:05 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261021231248.htm",
+      "feed_id": "science-daily-bio",
+      "journal": "Science Daily",
+      "domain": "biology"
+    },
+    {
+      "title": "Scientists discover a surprising secret behind the human brain’s wrinkles",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261021231235.htm",
+      "summary": "Scientists have discovered why common marmosets have unusually small, smooth brains despite starting development much like other primates. The secret lies in subtle changes to brain-building cells that slow neuron production, revealing new clues about how the large, folded human brain evolved.",
+      "published": "Thu, 22 Oct 2026 06:10:23 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261021231235.htm",
       "feed_id": "science-daily-bio",
       "journal": "Science Daily",
       "domain": "biology"
@@ -559,26 +579,6 @@
       "summary": "Scientists have discovered a remarkable “Pac-Man enzyme” that helps bacteria devour certain types of plastic and may offer new hope in the fight against plastic pollution. Researchers found that several biodegradable plastics completely broke down in soil within about a year, while conventional plas",
       "published": "Fri, 16 Oct 2026 06:32:03 EDT",
       "guid": "https://www.sciencedaily.com/releases/2026/10/261014015509.htm",
-      "feed_id": "science-daily-bio",
-      "journal": "Science Daily",
-      "domain": "biology"
-    },
-    {
-      "title": "The secret to longer life may be hidden in bat DNA",
-      "link": "https://www.sciencedaily.com/releases/2026/09/260911003852.htm",
-      "summary": "Long-lived bats appear to combine powerful immune defenses with unusual strategies for eliminating damaged cells, potentially helping them avoid cancer and disease for decades. Researchers hope these genetic tricks could eventually reveal new ways to protect human health during aging.",
-      "published": "Fri, 11 Sep 2026 20:25:05 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/09/260911003852.htm",
-      "feed_id": "science-daily-bio",
-      "journal": "Science Daily",
-      "domain": "biology"
-    },
-    {
-      "title": "66-million-year-old feather in dinosaur poop may reveal why birds survived the asteroid",
-      "link": "https://www.sciencedaily.com/releases/2026/09/260911003849.htm",
-      "summary": "A feather discovered inside 66-million-year-old fossilized dinosaur poop may help explain why modern birds survived the asteroid catastrophe. The extinct bird it came from had more primitive insulating feathers, suggesting superior plumage may have helped the ancestors of living birds endure the dea",
-      "published": "Fri, 11 Sep 2026 19:47:16 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/09/260911003849.htm",
       "feed_id": "science-daily-bio",
       "journal": "Science Daily",
       "domain": "biology"

@@ -1,7 +1,7 @@
 {
   "domain": "physics",
-  "generated_at": "2026-10-22T06:29:11.265764Z",
-  "total_entries": 48,
+  "generated_at": "2026-10-23T08:16:22.239572Z",
+  "total_entries": 47,
   "entries": [
     {
       "title": "Caltech physicists finally measure a quantum energy ladder predicted 40 years ago",
@@ -144,6 +144,16 @@
       "domain": "physics"
     },
     {
+      "title": "Nearly 3,000 exploding stars challenge our understanding of the Universe",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261021231244.htm",
+      "summary": "A massive analysis of 2,884 exploding stars has uncovered new evidence that dark energy, the mysterious force accelerating the universe’s expansion, may change over time. The findings challenge a cornerstone of modern cosmology and could reshape our understanding of how the universe works.",
+      "published": "Thu, 22 Oct 2026 22:54:41 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261021231244.htm",
+      "feed_id": "science-daily-physics",
+      "journal": "Science Daily",
+      "domain": "physics"
+    },
+    {
       "title": "Scientists create brilliant white material without a drop of white pigment",
       "link": "https://www.sciencedaily.com/releases/2026/09/260909231712.htm",
       "summary": "Researchers have created a foam-based material that produces intense whiteness and water repellency without titanium dioxide pigments or PFAS chemicals. Inspired by natural structures in snow, clouds, flowers, and lotus leaves, the material uses tiny pores to scatter light while its rough surface re",
@@ -169,16 +179,6 @@
       "summary": "Scientists at the University of Chicago have uncovered a surprising quantum state in the layered magnetic material Fe5GeTe2, where huge numbers of electrons move together unusually slowly while remaining quantum coherent. The behavior contradicts existing theoretical predictions about how the materi",
       "published": "Thu, 01 Oct 2026 23:10:08 EDT",
       "guid": "https://www.sciencedaily.com/releases/2026/09/260929053548.htm",
-      "feed_id": "science-daily-physics",
-      "journal": "Science Daily",
-      "domain": "physics"
-    },
-    {
-      "title": "This strange “spacetime crystal” can suddenly become a black hole",
-      "link": "https://www.sciencedaily.com/releases/2026/08/260829035225.htm",
-      "summary": "Physicists have mathematically captured a bizarre “spacetime crystal” that can either dissolve or collapse into a microscopic black hole after only a tiny change in energy. Their breakthrough came from an unusual trick involving infinitely many dimensions, potentially giving researchers a new tool f",
-      "published": "Sun, 30 Aug 2026 11:05:09 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/08/260829035225.htm",
       "feed_id": "science-daily-physics",
       "journal": "Science Daily",
       "domain": "physics"
@@ -269,16 +269,6 @@
       "summary": "Tiny magnetic fields created shortly after the Big Bang may help explain the long-running disagreement over how fast the universe is expanding. Detailed simulations show that these primordial fields could have changed the formation of hydrogen in the early universe, affecting the cosmic microwave ba",
       "published": "Sun, 04 Oct 2026 08:05:54 EDT",
       "guid": "https://www.sciencedaily.com/releases/2026/10/261002080026.htm",
-      "feed_id": "science-daily-physics",
-      "journal": "Science Daily",
-      "domain": "physics"
-    },
-    {
-      "title": "The universe is still speeding up, but nobody knows why",
-      "link": "https://www.sciencedaily.com/releases/2026/08/260828082325.htm",
-      "summary": "A major new analysis challenges recent claims that the universe's expansion is slowing, finding that the evidence for cosmic acceleration remains strong. The findings preserve the leading role of dark energy, while leaving scientists with the enduring mystery of what this strange cosmic force actual",
-      "published": "Sat, 29 Aug 2026 07:41:30 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/08/260828082325.htm",
       "feed_id": "science-daily-physics",
       "journal": "Science Daily",
       "domain": "physics"

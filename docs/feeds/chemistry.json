@@ -1,6 +1,6 @@
 {
   "domain": "chemistry",
-  "generated_at": "2026-10-22T06:29:11.265764Z",
+  "generated_at": "2026-10-23T08:16:22.239572Z",
   "total_entries": 60,
   "entries": [
     {
@@ -204,6 +204,16 @@
       "domain": "chemistry"
     },
     {
+      "title": "A revolutionary new microscope could reveal the hidden machinery of life",
+      "link": "https://www.sciencedaily.com/releases/2026/10/261021231230.htm",
+      "summary": "Researchers have developed a revolutionary microscope that uses an incredibly powerful laser to make previously invisible cellular structures easier to see. The technology dramatically improves image clarity, allowing scientists to examine small proteins that conventional electron microscopes strugg",
+      "published": "Thu, 22 Oct 2026 07:30:49 EDT",
+      "guid": "https://www.sciencedaily.com/releases/2026/10/261021231230.htm",
+      "feed_id": "science-daily-chem",
+      "journal": "Science Daily",
+      "domain": "chemistry"
+    },
+    {
       "title": "Scientists discover a strange hidden state in “sandwich” molecules",
       "link": "https://www.sciencedaily.com/releases/2026/05/260521072352.htm",
       "summary": "Scientists have uncovered a strange hidden structure formed during the creation of metallocenes, a class of sandwich-like molecules used in everything from catalysis to medicine. The newly characterized intermediate features a rare “double ring-slip,” where both carbon rings partially detach from th",
@@ -369,16 +379,6 @@
       "summary": "A deep-sea microbe uses an exceptionally heat-resistant enzyme to turn atmospheric nitrogen into ammonia at temperatures that would destroy most proteins. Its unusual structure and a newly observed reaction state may reveal an ancient, shared mechanism behind nitrogen fixation and could eventually i",
       "published": "Sat, 19 Sep 2026 07:49:45 EDT",
       "guid": "https://www.sciencedaily.com/releases/2026/09/260918024810.htm",
-      "feed_id": "science-daily-chem",
-      "journal": "Science Daily",
-      "domain": "chemistry"
-    },
-    {
-      "title": "A lab mistake at Cambridge reveals a powerful new way to modify drug molecules",
-      "link": "https://www.sciencedaily.com/releases/2026/03/260313062539.htm",
-      "summary": "Cambridge scientists have discovered a light-powered chemical reaction that lets researchers modify complex drug molecules at the final stages of development. Unlike traditional methods that rely on toxic chemicals and harsh conditions, the new approach uses an LED lamp to create essential carbon–ca",
-      "published": "Sat, 14 Mar 2026 01:56:59 EDT",
-      "guid": "https://www.sciencedaily.com/releases/2026/03/260313062539.htm",
       "feed_id": "science-daily-chem",
       "journal": "Science Daily",
       "domain": "chemistry"

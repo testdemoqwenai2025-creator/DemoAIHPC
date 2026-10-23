@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-22T06:29:11.265764Z",
+  "generated_at": "2026-10-23T08:16:22.239572Z",
   "total_entries": 500,
   "feeds_polled": 12,
   "feeds_succeeded": 11,
@@ -45,19 +45,19 @@
       "id": "arxiv-cs-lg",
       "name": "arXiv — Machine Learning (cs.LG)",
       "status": "ok",
-      "entries": 379
+      "entries": 339
     },
     {
       "id": "arxiv-q-bio",
       "name": "arXiv — Quantitative Biology (q-bio)",
       "status": "ok",
-      "entries": 29
+      "entries": 27
     },
     {
       "id": "arxiv-physics",
       "name": "arXiv — Physics (physics)",
       "status": "ok",
-      "entries": 158
+      "entries": 156
     },
     {
       "id": "plos-bio",
